@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles } from 'lucide-react';
+import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem } from 'lucide-react';
 
 
 import { supabase } from '../../lib/supabaseClient';
@@ -203,9 +203,55 @@ const LearningPage = () => {
         return () => observer.disconnect();
     }, [unitsWithChapters]);
 
-    const handleChapterClick = (chapterId, isLocked) => {
+    const handleChapterClick = async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
-        navigate(`/study/${courseId}/${chapterId}`);
+
+        if (chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+            if (isCompleted) {
+                toast.info('আপনি ইতিমধ্যে এই পুরষ্কারটি দাবি করেছেন।');
+                return;
+            }
+
+            try {
+                // Determine field to update
+                const field = chapter.type === 'heart_box' ? 'hearts' : 'gems';
+                const currentVal = profile?.[field] || 0;
+                const reward = chapter.reward_amount || 0;
+
+                // 1. Update Profile
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .update({ [field]: currentVal + reward })
+                    .eq('id', user.id);
+
+                if (profileError) throw profileError;
+
+                // 2. Mark as completed in user_progress
+                const { error: progressError } = await supabase
+                    .from('user_progress')
+                    .insert([{
+                        user_id: user.id,
+                        course_id: courseId,
+                        chapter_id: chapter.id,
+                        is_completed: true,
+                        completed_at: new Date().toISOString()
+                    }]);
+
+                if (progressError) throw progressError;
+
+                // 3. Update local state
+                setProfile(prev => ({ ...prev, [field]: currentVal + reward }));
+                setProgress(prev => [...prev, { chapter_id: chapter.id, is_completed: true }]);
+
+                toast.success(`অভিনন্দন! আপনি ${reward}টি ${chapter.type === 'heart_box' ? 'হার্ট' : 'জেম'} পেয়েছেন।`);
+            } catch (err) {
+                console.error('Claim error:', err);
+                toast.error('পুরষ্কার দাবি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            }
+            return;
+        }
+
+        navigate(`/study/${courseId}/${chapter.id}`);
     };
 
     if (loading) return (
@@ -298,9 +344,17 @@ const LearningPage = () => {
                                             key={chapter.id}
                                             className={styles.nodeWrapper}
                                             style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
-                                            onClick={() => handleChapterClick(chapter.id, isLocked)}
+                                            onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
                                         >
-                                            <div className={`${styles.node} ${isActive ? styles.nodeActive : ''} ${isCompleted ? styles.nodeCompleted : ''} ${isLocked ? styles.nodeLocked : ''}`}>
+                                            <div className={cn(
+                                                styles.node,
+                                                isActive && styles.nodeActive,
+                                                isCompleted && styles.nodeCompleted,
+                                                isLocked && styles.nodeLocked,
+                                                chapter.type !== 'lesson' && styles.rewardNode,
+                                                chapter.type === 'heart_box' && styles.heartNode,
+                                                chapter.type === 'gems_box' && styles.gemsNode
+                                            )}>
                                                 <div className={styles.nodeRing}>
                                                     <div className={styles.nodeInner}>
                                                         {isLocked ? (
@@ -308,17 +362,37 @@ const LearningPage = () => {
                                                                 <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
                                                             </div>
                                                         ) : (
-                                                            (() => {
-                                                                const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
-                                                                return (
-                                                                    <IconComponent
-                                                                        size={32}
-                                                                        color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
-                                                                        strokeWidth={2.5}
+                                                            <>
+                                                                {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
+                                                                    <div
+                                                                        key={i}
+                                                                        className={styles.sparkle}
+                                                                        style={{
+                                                                            '--tx': Math.random() * 60 - 30,
+                                                                            '--ty': Math.random() * 60 - 30,
+                                                                            left: '50%',
+                                                                            top: '50%',
+                                                                            animationDelay: `${i * 0.3}s`
+                                                                        }}
                                                                     />
-
-                                                                );
-                                                            })()
+                                                                ))}
+                                                                {(() => {
+                                                                    if (chapter.type === 'heart_box') {
+                                                                        return <Heart size={36} color="#ff4b4b" fill={isCompleted ? "#ff4b4b" : "none"} strokeWidth={3} />;
+                                                                    }
+                                                                    if (chapter.type === 'gems_box') {
+                                                                        return <Gem size={36} color="#1cb0f6" fill={isCompleted ? "#1cb0f6" : "none"} strokeWidth={3} />;
+                                                                    }
+                                                                    const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
+                                                                    return (
+                                                                        <IconComponent
+                                                                            size={32}
+                                                                            color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
+                                                                            strokeWidth={2.5}
+                                                                        />
+                                                                    );
+                                                                })()}
+                                                            </>
                                                         )}
 
                                                     </div>

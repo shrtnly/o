@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem } from 'lucide-react';
+import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem, Gift } from 'lucide-react';
 
 
 import { supabase } from '../../lib/supabaseClient';
@@ -8,6 +8,8 @@ import styles from './LearningPage.module.css';
 import Sidebar from './components/Sidebar';
 import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
+import { cn } from '../../lib/utils';
+import { toast } from 'sonner';
 
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
@@ -206,22 +208,28 @@ const LearningPage = () => {
     const handleChapterClick = async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
 
-        if (chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+        if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
             if (isCompleted) {
                 toast.info('আপনি ইতিমধ্যে এই পুরষ্কারটি দাবি করেছেন।');
                 return;
             }
 
             try {
-                // Determine field to update
-                const field = chapter.type === 'heart_box' ? 'hearts' : 'gems';
-                const currentVal = profile?.[field] || 0;
-                const reward = chapter.reward_amount || 0;
+                const hReward = chapter.reward_hearts || 0;
+                const gReward = chapter.reward_gems || 0;
+
+                // For legacy data support if any
+                const legacyReward = chapter.reward_amount || 0;
+                const finalHReward = hReward || (chapter.type === 'heart_box' ? legacyReward : 0);
+                const finalGReward = gReward || (chapter.type === 'gems_box' ? legacyReward : 0);
 
                 // 1. Update Profile
                 const { error: profileError } = await supabase
                     .from('profiles')
-                    .update({ [field]: currentVal + reward })
+                    .update({
+                        hearts: (profile?.hearts || 0) + finalHReward,
+                        gems: (profile?.gems || 0) + finalGReward
+                    })
                     .eq('id', user.id);
 
                 if (profileError) throw profileError;
@@ -240,10 +248,17 @@ const LearningPage = () => {
                 if (progressError) throw progressError;
 
                 // 3. Update local state
-                setProfile(prev => ({ ...prev, [field]: currentVal + reward }));
+                setProfile(prev => ({
+                    ...prev,
+                    hearts: (prev?.hearts || 0) + finalHReward,
+                    gems: (prev?.gems || 0) + finalGReward
+                }));
                 setProgress(prev => [...prev, { chapter_id: chapter.id, is_completed: true }]);
 
-                toast.success(`অভিনন্দন! আপনি ${reward}টি ${chapter.type === 'heart_box' ? 'হার্ট' : 'জেম'} পেয়েছেন।`);
+                let msg = 'অভিনন্দন! আপনি পেয়েছেন: ';
+                if (finalHReward > 0) msg += `${finalHReward}টি হার্ট `;
+                if (finalGReward > 0) msg += `${finalHReward > 0 ? 'ও ' : ''}${finalGReward}টি জেম`;
+                toast.success(msg);
             } catch (err) {
                 console.error('Claim error:', err);
                 toast.error('পুরষ্কার দাবি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
@@ -352,12 +367,13 @@ const LearningPage = () => {
                                                 isCompleted && styles.nodeCompleted,
                                                 isLocked && styles.nodeLocked,
                                                 chapter.type !== 'lesson' && styles.rewardNode,
+                                                chapter.type === 'mystery_box' && styles.mysteryNode,
                                                 chapter.type === 'heart_box' && styles.heartNode,
                                                 chapter.type === 'gems_box' && styles.gemsNode
                                             )}>
                                                 <div className={styles.nodeRing}>
                                                     <div className={styles.nodeInner}>
-                                                        {isLocked ? (
+                                                        {isLocked && chapter.type === 'lesson' ? (
                                                             <div className={styles.lockOverlay}>
                                                                 <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
                                                             </div>
@@ -377,11 +393,8 @@ const LearningPage = () => {
                                                                     />
                                                                 ))}
                                                                 {(() => {
-                                                                    if (chapter.type === 'heart_box') {
-                                                                        return <Heart size={36} color="#ff4b4b" fill={isCompleted ? "#ff4b4b" : "none"} strokeWidth={3} />;
-                                                                    }
-                                                                    if (chapter.type === 'gems_box') {
-                                                                        return <Gem size={36} color="#1cb0f6" fill={isCompleted ? "#1cb0f6" : "none"} strokeWidth={3} />;
+                                                                    if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+                                                                        return <Gift size={36} color={isCompleted ? "#ffd700" : "#ffd700"} fill={isCompleted ? "#ffd700" : "none"} strokeWidth={3} />;
                                                                     }
                                                                     const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
                                                                     return (

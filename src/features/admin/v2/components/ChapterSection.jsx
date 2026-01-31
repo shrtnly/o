@@ -7,7 +7,8 @@ import {
     Clock,
     GripVertical,
     Heart,
-    Gem
+    Gem,
+    Gift
 } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { courseService } from '../../../../services/courseService';
@@ -37,13 +38,14 @@ const ChapterSection = ({ moduleId }) => {
 
     const handleAddChapter = async (type = 'lesson') => {
         try {
-            const title = type === 'lesson' ? 'New Chapter' : (type === 'heart_box' ? 'Heart Box' : 'Gemstones Box');
+            const title = type === 'lesson' ? 'New Chapter' : 'Mystery Box';
             const newChapter = await courseService.createChapter({
                 unit_id: moduleId,
                 title,
                 order_index: chapters.length + 1,
                 type,
-                reward_amount: type === 'lesson' ? 0 : 5
+                reward_hearts: type === 'mystery_box' ? 5 : 0,
+                reward_gems: type === 'mystery_box' ? 10 : 0
             });
             setChapters([...chapters, newChapter]);
             if (type === 'lesson') setExpandedChapterId(newChapter.id);
@@ -128,15 +130,26 @@ const ChapterSection = ({ moduleId }) => {
                                                     onBlur={(e) => handleUpdateChapter(chapter.id, { title: e.target.value })}
                                                 />
                                                 <div className="flex items-center gap-2">
-                                                    {chapter.type !== 'lesson' && (
-                                                        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-md">
-                                                            {chapter.type === 'heart_box' ? <Heart size={12} className="text-red-500" fill="currentColor" /> : <Gem size={12} className="text-blue-400" fill="currentColor" />}
-                                                            <input
-                                                                type="number"
-                                                                className="w-10 bg-transparent border-none p-0 text-xs font-bold outline-none"
-                                                                defaultValue={chapter.reward_amount || 0}
-                                                                onBlur={(e) => handleUpdateChapter(chapter.id, { reward_amount: parseInt(e.target.value) || 0 })}
-                                                            />
+                                                    {chapter.type === 'mystery_box' && (
+                                                        <div className="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-md border border-slate-200 dark:border-slate-700">
+                                                            <div className="flex items-center gap-1.5 border-right border-slate-300 pr-2">
+                                                                <Heart size={14} className="text-red-500" fill="currentColor" />
+                                                                <input
+                                                                    type="number"
+                                                                    className="w-12 bg-transparent border-none p-0 text-xs font-black text-slate-900 dark:text-white outline-none"
+                                                                    defaultValue={chapter.reward_hearts || 0}
+                                                                    onBlur={(e) => handleUpdateChapter(chapter.id, { reward_hearts: parseInt(e.target.value) || 0 })}
+                                                                />
+                                                            </div>
+                                                            <div className="flex items-center gap-1.5">
+                                                                <Gem size={14} className="text-blue-400" fill="currentColor" />
+                                                                <input
+                                                                    type="number"
+                                                                    className="w-12 bg-transparent border-none p-0 text-xs font-black text-slate-900 dark:text-white outline-none"
+                                                                    defaultValue={chapter.reward_gems || 0}
+                                                                    onBlur={(e) => handleUpdateChapter(chapter.id, { reward_gems: parseInt(e.target.value) || 0 })}
+                                                                />
+                                                            </div>
                                                         </div>
                                                     )}
                                                     {chapter.type === 'lesson' && (
@@ -181,11 +194,8 @@ const ChapterSection = ({ moduleId }) => {
                     <Plus size={14} /> Add Chapter
                 </button>
                 <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800"></div>
-                <button onClick={() => handleAddChapter('heart_box')} className="flex items-center gap-2 text-red-400/70 hover:text-red-500 font-bold text-xs p-2 transition-colors">
-                    <Heart size={14} /> Add Heart Box
-                </button>
-                <button onClick={() => handleAddChapter('gems_box')} className="flex items-center gap-2 text-blue-400/70 hover:text-blue-500 font-bold text-xs p-2 transition-colors">
-                    <Gem size={14} /> Add Gemstones Box
+                <button onClick={() => handleAddChapter('mystery_box')} className="flex items-center gap-2 text-purple-400/80 hover:text-purple-500 font-bold text-xs p-2 transition-colors">
+                    <Gift size={14} /> Add Mystery Box
                 </button>
             </div>
         </div>

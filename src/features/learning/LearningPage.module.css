@@ -240,7 +240,7 @@
 /* Reward Node Specifics */
 .rewardNode .nodeRing {
     background: linear-gradient(135deg, #ffd700, #ff8c00);
-    box-shadow: 0 5px 0 #b8860b, 0 0 15px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 5px 0 #b8860b, 0 0 8px rgba(255, 215, 0, 0.25);
 }
 
 .rewardNode:not(.nodeLocked) .nodeInner {
@@ -254,6 +254,34 @@
 .gemsNode:not(.nodeLocked) {
     animation: gemGlow 3s infinite ease-in-out;
 }
+
+.mysteryNode:not(.nodeLocked) {
+    animation: mysteryVibrate 3s infinite ease-in-out;
+}
+
+@keyframes mysteryVibrate {
+
+    0%,
+    100% {
+        transform: scale(1) rotate(0);
+    }
+
+    5%,
+    15% {
+        transform: rotate(-5deg);
+    }
+
+    10%,
+    20% {
+        transform: rotate(5deg);
+    }
+
+    25% {
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4));
+    }
+}
+
 
 @keyframes rewardPulse {
     0% {

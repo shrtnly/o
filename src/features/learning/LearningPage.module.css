@@ -247,16 +247,24 @@
     background: radial-gradient(circle at center, #2a3a42 0%, #1a2a30 100%);
 }
 
-.heartNode:not(.nodeLocked) {
+.heartNode:not(.nodeLocked):not(.nodeCompleted) {
     animation: rewardPulse 2s infinite ease-in-out;
 }
 
-.gemsNode:not(.nodeLocked) {
+.gemsNode:not(.nodeLocked):not(.nodeCompleted) {
     animation: gemGlow 3s infinite ease-in-out;
 }
 
-.mysteryNode:not(.nodeLocked) {
+.mysteryNode:not(.nodeLocked):not(.nodeCompleted) {
     animation: mysteryVibrate 3s infinite ease-in-out;
+}
+
+/* Ensure reward nodes keep their golden ring after completion */
+.rewardNode.nodeCompleted .nodeRing {
+    background: linear-gradient(135deg, #e5c100, #cc7a00);
+    box-shadow: 0 5px 0 #8b6508;
+    filter: brightness(0.85);
+    /* Slightly dimmed to show it's spent */
 }
 
 @keyframes mysteryVibrate {

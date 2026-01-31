@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem, Gift } from 'lucide-react';
+import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem, Gift, PackageOpen } from 'lucide-react';
 
 
 import { supabase } from '../../lib/supabaseClient';
@@ -10,6 +10,7 @@ import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
+import RewardModal from './components/RewardModal';
 
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
@@ -89,6 +90,9 @@ const LearningPage = () => {
 
     const [scrolled, setScrolled] = useState(false);
     const mainContentRef = useRef(null);
+
+    const [showRewardModal, setShowRewardModal] = useState(false);
+    const [lastReward, setLastReward] = useState({ hearts: 0, gems: 0 });
 
     const handleScroll = () => {
         if (mainContentRef.current) {
@@ -255,10 +259,9 @@ const LearningPage = () => {
                 }));
                 setProgress(prev => [...prev, { chapter_id: chapter.id, is_completed: true }]);
 
-                let msg = 'অভিনন্দন! আপনি পেয়েছেন: ';
-                if (finalHReward > 0) msg += `${finalHReward}টি হার্ট `;
-                if (finalGReward > 0) msg += `${finalHReward > 0 ? 'ও ' : ''}${finalGReward}টি জেম`;
-                toast.success(msg);
+                // 4. Show Gaming Modal
+                setLastReward({ hearts: finalHReward, gems: finalGReward });
+                setShowRewardModal(true);
             } catch (err) {
                 console.error('Claim error:', err);
                 toast.error('পুরষ্কার দাবি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
@@ -394,7 +397,10 @@ const LearningPage = () => {
                                                                 ))}
                                                                 {(() => {
                                                                     if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
-                                                                        return <Gift size={36} color={isCompleted ? "#ffd700" : "#ffd700"} fill={isCompleted ? "#ffd700" : "none"} strokeWidth={3} />;
+                                                                        if (isCompleted) {
+                                                                            return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
+                                                                        }
+                                                                        return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
                                                                     }
                                                                     const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
                                                                     return (
@@ -440,6 +446,12 @@ const LearningPage = () => {
                 currentCourseId={courseId}
             />
 
+            <RewardModal
+                isOpen={showRewardModal}
+                onClose={() => setShowRewardModal(false)}
+                hearts={lastReward.hearts}
+                gems={lastReward.gems}
+            />
         </div>
     );
 };

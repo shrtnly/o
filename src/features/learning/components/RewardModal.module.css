@@ -1,0 +1,157 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal {
+    background: #1a2a30;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 32px;
+    position: relative;
+    padding: 40px;
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+    overflow: hidden;
+    text-align: center;
+}
+
+.raysContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    z-index: 0;
+    pointer-events: none;
+    animation: rotateRays 20s linear infinite;
+}
+
+.ray {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 400px;
+    background: linear-gradient(to top, rgba(255, 215, 0, 0.4), transparent);
+    transform-origin: top center;
+    margin-left: -1px;
+}
+
+@keyframes rotateRays {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.sparklesContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+}
+
+.iconWrapper {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.mainIcon {
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #fff;
+    font-weight: 900;
+    margin-bottom: 8px;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle {
+    color: #afafaf;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+}
+
+.rewardsRow {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.rewardItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.rewardIconCircle {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.rewardValue {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.rewardLabel {
+    color: #afafaf;
+    font-weight: 800;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.claimButton {
+    width: 100%;
+    padding: 16px;
+    background: #58cc02;
+    border: none;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #46a302;
+    transition: transform 0.1s;
+}
+
+.claimButton:active {
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 #46a302;
+}

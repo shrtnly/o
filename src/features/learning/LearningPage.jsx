@@ -10,20 +10,60 @@ import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
 
 
-// Helper for SVG path
-const getPathData = (chapters, offsets) => {
-    if (chapters.length < 2) return '';
-    const nodeYStep = 180;
-    const startY = 50;
+// Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
+const getNodePos = (i, nodesPerRow) => {
+    // Basic spacings
+    let xSpacing = 160;
+    let ySpacing = 160;
+
+    // Scale spacing based on screen size (handled via window width in state)
+    const windowWidth = window.innerWidth;
+    if (windowWidth < 480) {
+        xSpacing = 90;
+        ySpacing = 130;
+    } else if (windowWidth < 768) {
+        xSpacing = 120;
+        ySpacing = 140;
+    }
+
+    const row = Math.floor(i / nodesPerRow);
+    const col = i % nodesPerRow;
+    const isEvenRow = row % 2 === 0;
+    const xCol = isEvenRow ? col : (nodesPerRow - 1 - col);
+
     const centerX = 320;
-    let d = `M ${centerX + offsets[0]},${startY}`;
-    for (let i = 1; i < chapters.length; i++) {
-        const prevX = centerX + offsets[i - 1];
-        const prevY = (i - 1) * nodeYStep + startY;
-        const currX = centerX + offsets[i];
-        const currY = i * nodeYStep + startY;
-        const midY = (prevY + currY) / 2;
-        d += ` C ${prevX},${midY} ${currX},${midY} ${currX},${currY}`;
+    const startY = 50;
+
+    const offsetFactor = (nodesPerRow - 1) / 2;
+    return {
+        x: centerX + (xCol - offsetFactor) * xSpacing,
+        y: startY + row * ySpacing
+    };
+};
+
+const getPathData = (chapters, nodesPerRow) => {
+    if (chapters.length < 2) return '';
+    let d = '';
+
+    // Scale curve tension
+    const windowWidth = window.innerWidth;
+    const curveTension = windowWidth < 480 ? 60 : (windowWidth < 768 ? 80 : 100);
+
+    for (let i = 0; i < chapters.length; i++) {
+        const pos = getNodePos(i, nodesPerRow);
+        if (i === 0) {
+            d = `M ${pos.x},${pos.y}`;
+        } else {
+            const prevPos = getNodePos(i - 1, nodesPerRow);
+            if (prevPos.y === pos.y) {
+                // Same row: Horizontal line
+                d += ` L ${pos.x},${pos.y}`;
+            } else {
+                // Next row: S-curve at the edge
+                const cpX = prevPos.x > 320 ? prevPos.x + curveTension : prevPos.x - curveTension;
+                d += ` C ${cpX},${prevPos.y} ${cpX},${pos.y} ${pos.x},${pos.y}`;
+            }
+        }
     }
     return d;
 };
@@ -43,6 +83,7 @@ const LearningPage = () => {
     const [courses, setCourses] = useState([]); // Added to store all enrolled courses
     const [loading, setLoading] = useState(true);
     const [activeUnit, setActiveUnit] = useState(null);
+    const [nodesPerRow, setNodesPerRow] = useState(3);
 
     const [scrolled, setScrolled] = useState(false);
     const mainContentRef = useRef(null);
@@ -55,6 +96,16 @@ const LearningPage = () => {
             }
         }
     };
+
+    useEffect(() => {
+        const updateLayout = () => {
+            // Force 3 nodes per row but can adjust if user wants different behavior
+            setNodesPerRow(3);
+        };
+        updateLayout();
+        window.addEventListener('resize', updateLayout);
+        return () => window.removeEventListener('resize', updateLayout);
+    }, []);
 
     useEffect(() => {
         const fetchDeepContent = async () => {
@@ -209,15 +260,15 @@ const LearningPage = () => {
 
                 {unitsWithChapters.map((unit, index) => {
                     const unitChapters = unit.chapters;
-                    const offsetPattern = [0, -100, 100, 0, -100, 100];
+                    const chaptersForPath = unitChapters;
+                    const pathD = getPathData(chaptersForPath, nodesPerRow);
 
-                    // Create an extended list including the trophy node for path calculation
-                    const chaptersForPath = [...unitChapters, { id: 'trophy' }];
-                    const offsets = chaptersForPath.map((_, i) =>
-                        i === chaptersForPath.length - 1 ? 0 : offsetPattern[i % offsetPattern.length]
-                    );
+                    const numRows = Math.ceil(chaptersForPath.length / nodesPerRow);
 
-                    const pathD = getPathData(chaptersForPath, offsets);
+                    // Dynamic height based on row count and device ySpacing
+                    const width = window.innerWidth;
+                    const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
+                    const containerHeight = (numRows - 1) * ySpacing + 120; // Reduced global padding
 
                     return (
                         <section
@@ -229,25 +280,24 @@ const LearningPage = () => {
                                 '--unit-color-border': getUnitColor(unit.order_index).border
                             }}
                         >
-                            <div className={styles.pathContainer}>
+                            <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
 
-                                <svg className={styles.connectingPath} viewBox="0 0 640 1200" preserveAspectRatio="xMinYMin meet">
+                                <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
                                     <path d={pathD} className={styles.pathLine} />
                                 </svg>
 
 
                                 {unitChapters.map((chapter, cIdx) => {
-                                    const offset = offsets[cIdx];
+                                    const pos = getNodePos(cIdx, nodesPerRow);
                                     const isCompleted = completedChapterIds.has(chapter.id);
                                     const isActive = chapter.id === activeChapterId;
                                     const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
-                                    const hueRotate = (cIdx * 70) % 360;
 
                                     return (
                                         <div
                                             key={chapter.id}
                                             className={styles.nodeWrapper}
-                                            style={{ transform: `translateX(${offset}px)` }}
+                                            style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
                                             onClick={() => handleChapterClick(chapter.id, isLocked)}
                                         >
                                             <div className={`${styles.node} ${isActive ? styles.nodeActive : ''} ${isCompleted ? styles.nodeCompleted : ''} ${isLocked ? styles.nodeLocked : ''}`}>
@@ -262,7 +312,7 @@ const LearningPage = () => {
                                                                 const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
                                                                 return (
                                                                     <IconComponent
-                                                                        size={42}
+                                                                        size={32}
                                                                         color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
                                                                         strokeWidth={2.5}
                                                                     />
@@ -273,23 +323,14 @@ const LearningPage = () => {
 
                                                     </div>
                                                 </div>
-                                                {isActive && <div className={styles.speechBubble}>শুরু করুন</div>}
+
                                                 <div className={styles.nodeLabel}>{chapter.title}</div>
                                             </div>
                                         </div>
                                     );
                                 })}
 
-                                <div className={styles.nodeWrapper} style={{ transform: 'translateX(0)' }}>
-                                    <div className={`${styles.node} ${styles.trophyNode}`}>
-                                        <div className={styles.nodeRing}>
-                                            <div className={styles.nodeInner}>
-                                                <Trophy size={40} color="#ffc800" fill="#ffc800" />
-                                            </div>
-                                        </div>
-                                        <div className={styles.nodeLabel}>সমাপ্তি</div>
-                                    </div>
-                                </div>
+
                             </div>
 
                             {index < unitsWithChapters.length - 1 && (

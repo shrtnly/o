@@ -129,42 +129,56 @@ export const courseService = {
         return points;
     },
     async saveLearningPoint(lpData) {
-        if (lpData.id) {
+        const { id, ...dataToSave } = lpData;
+        if (id) {
             const { data, error } = await supabase
                 .from('learning_points')
-                .update(lpData)
-                .eq('id', lpData.id)
+                .update(dataToSave)
+                .eq('id', id)
                 .select()
                 .single();
-            if (error) throw error;
+            if (error) {
+                console.error('Error updating learning point:', error);
+                throw error;
+            }
             return data;
         } else {
             const { data, error } = await supabase
                 .from('learning_points')
-                .insert([lpData])
+                .insert([dataToSave])
                 .select()
                 .single();
-            if (error) throw error;
+            if (error) {
+                console.error('Error inserting learning point:', error);
+                throw error;
+            }
             return data;
         }
     },
     async saveQuestion(qData) {
-        if (qData.id) {
+        const { id, ...dataToSave } = qData;
+        if (id) {
             const { data, error } = await supabase
                 .from('mcq_questions')
-                .update(qData)
-                .eq('id', qData.id)
+                .update(dataToSave)
+                .eq('id', id)
                 .select()
                 .single();
-            if (error) throw error;
+            if (error) {
+                console.error('Error updating question:', error);
+                throw error;
+            }
             return data;
         } else {
             const { data, error } = await supabase
                 .from('mcq_questions')
-                .insert([qData])
+                .insert([dataToSave])
                 .select()
                 .single();
-            if (error) throw error;
+            if (error) {
+                console.error('Error inserting question:', error);
+                throw error;
+            }
             return data;
         }
     },

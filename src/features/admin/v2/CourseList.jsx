@@ -57,12 +57,12 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Curriculum Design</h1>
-                    <p className="text-slate-500 mt-1 font-medium">Manage and organize your learning pathways.</p>
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Curriculum Design</h1>
+                    <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Manage and organize your learning pathways.</p>
                 </div>
                 <button
                     onClick={onCreateCourse}
-                    className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-sm hover:translate-y-[-1px] active:translate-y-[0px]"
+                    className="flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-100 dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-white text-white px-5 py-2.5 rounded-xl font-semibold transition-all shadow-sm hover:translate-y-[-1px] active:translate-y-[0px]"
                 >
                     <Plus size={20} />
                     <span>Create New Course</span>
@@ -70,7 +70,7 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
             </div>
 
             {/* Filter & View Bar */}
-            <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-4">
+            <div className="bg-white dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row gap-4">
                 <div className="relative flex-1">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                     <input
@@ -78,15 +78,15 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                         placeholder="Search courses..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-slate-900/5 transition-all outline-none text-slate-700 font-medium"
+                        className="w-full pl-10 pr-4 py-2 bg-slate-50 dark:bg-slate-800/50 border-none rounded-xl focus:ring-2 focus:ring-slate-900/5 dark:focus:ring-white/5 transition-all outline-none text-slate-700 dark:text-slate-200 font-medium"
                     />
                 </div>
-                <div className="flex items-center gap-2 bg-slate-50 p-1 rounded-xl">
+                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-800/50 p-1 rounded-xl">
                     <button
                         onClick={() => setViewMode('grid')}
                         className={cn(
                             "p-2 rounded-lg transition-all",
-                            viewMode === 'grid' ? "bg-white shadow-sm text-slate-900" : "text-slate-400 hover:text-slate-600"
+                            viewMode === 'grid' ? "bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
                         )}
                     >
                         <LayoutGrid size={18} />
@@ -95,7 +95,7 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                         onClick={() => setViewMode('list')}
                         className={cn(
                             "p-2 rounded-lg transition-all",
-                            viewMode === 'list' ? "bg-white shadow-sm text-slate-900" : "text-slate-400 hover:text-slate-600"
+                            viewMode === 'list' ? "bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white" : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
                         )}
                     >
                         <List size={18} />
@@ -107,11 +107,11 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
             {loading ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {[1, 2, 3].map(i => (
-                        <div key={i} className="bg-white h-72 rounded-3xl border border-slate-200 animate-pulse" />
+                        <div key={i} className="bg-white dark:bg-slate-900 h-72 rounded-3xl border border-slate-200 dark:border-slate-800 animate-pulse" />
                     ))}
                 </div>
             ) : filteredCourses.length === 0 ? (
-                <div className="bg-white py-20 rounded-3xl border border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400">
+                <div className="bg-white dark:bg-slate-900 p-20 rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 flex flex-col items-center justify-center text-slate-400 dark:text-slate-600">
                     <BookOpen size={64} className="mb-4 opacity-20" />
                     <p className="text-xl font-medium">No courses found matching your query</p>
                     <button onClick={() => setSearchQuery('')} className="mt-4 text-blue-500 hover:underline font-semibold">Clear search</button>
@@ -121,9 +121,9 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                     {filteredCourses.map(course => (
                         <div
                             key={course.id}
-                            className="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 overflow-hidden flex flex-col"
+                            className="group bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/50 transition-all duration-300 overflow-hidden flex flex-col"
                         >
-                            <div className="aspect-video bg-slate-100 relative overflow-hidden">
+                            <div className="aspect-video bg-slate-100 dark:bg-slate-800 relative overflow-hidden">
                                 {course.image_url ? (
                                     <img
                                         src={course.image_url}
@@ -138,13 +138,13 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                                 <div className="absolute top-4 right-4 flex gap-2">
                                     <button
                                         onClick={() => onEditCourse(course.id)}
-                                        className="p-2 bg-white/90 backdrop-blur-md rounded-xl text-slate-700 hover:bg-white hover:text-blue-600 shadow-sm transition-all"
+                                        className="p-2 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md rounded-xl text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-900 hover:text-blue-600 shadow-sm transition-all"
                                     >
                                         <Edit size={16} />
                                     </button>
                                     <button
                                         onClick={() => handleDelete(course.id)}
-                                        className="p-2 bg-white/90 backdrop-blur-md rounded-xl text-slate-700 hover:bg-white hover:text-red-600 shadow-sm transition-all"
+                                        className="p-2 bg-white/90 dark:bg-slate-950/90 backdrop-blur-md rounded-xl text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-900 hover:text-red-600 shadow-sm transition-all"
                                     >
                                         <Trash2 size={16} />
                                     </button>
@@ -156,11 +156,11 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                                 )}
                             </div>
                             <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">{course.title}</h3>
-                                <p className="text-slate-500 text-sm mt-2 line-clamp-2 leading-relaxed">
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">{course.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 line-clamp-2 leading-relaxed">
                                     {course.description || "No description provided for this course architecture."}
                                 </p>
-                                <div className="mt-auto pt-6 flex items-center justify-between border-t border-slate-50">
+                                <div className="mt-auto pt-6 flex items-center justify-between border-t border-slate-50 dark:border-slate-800/50">
                                     <div className="flex items-center gap-4">
                                         <div className="flex items-center gap-1.5 text-slate-500 font-semibold text-xs">
                                             <Users size={14} className="text-slate-400" />
@@ -173,7 +173,7 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                                     </div>
                                     <button
                                         onClick={() => onEditCourse(course.id)}
-                                        className="flex items-center gap-1.5 text-slate-900 font-bold text-sm hover:gap-2 transition-all"
+                                        className="flex items-center gap-1.5 text-slate-900 dark:text-slate-100 font-bold text-sm hover:gap-2 transition-all"
                                     >
                                         Settings <ExternalLink size={14} />
                                     </button>
@@ -183,27 +183,27 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                     ))}
                 </div>
             ) : (
-                <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
                     <table className="w-full text-left">
                         <thead>
-                            <tr className="border-b border-slate-100 bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                            <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">
                                 <th className="px-6 py-4">Course Name</th>
                                 <th className="px-6 py-4">Stats</th>
                                 <th className="px-6 py-4">Featured</th>
                                 <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-100 font-medium">
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 font-medium">
                             {filteredCourses.map(course => (
-                                <tr key={course.id} className="hover:bg-slate-50/50 transition-colors group">
+                                <tr key={course.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors group">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
+                                            <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                                                 {course.image_url && <img src={course.image_url} className="w-full h-full object-cover" />}
                                             </div>
                                             <div>
-                                                <div className="text-slate-900 group-hover:text-blue-600 transition-colors">{course.title}</div>
-                                                <div className="text-slate-400 text-xs mt-0.5">{course.category || 'Curriculum'}</div>
+                                                <div className="text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{course.title}</div>
+                                                <div className="text-slate-400 dark:text-slate-500 text-xs mt-0.5">{course.category || 'Curriculum'}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -224,13 +224,13 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                                         <div className="flex items-center justify-end gap-2">
                                             <button
                                                 onClick={() => onEditCourse(course.id)}
-                                                className="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-all"
+                                                className="p-2 text-slate-400 dark:text-slate-500 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all"
                                             >
                                                 <Edit size={16} />
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(course.id)}
-                                                className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                                className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-all"
                                             >
                                                 <Trash2 size={16} />
                                             </button>

@@ -469,6 +469,148 @@
     box-shadow: 0 2px 0 #d33131;
 }
 
+/* Results Modal */
+.resultModal {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(11, 17, 20, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.resultCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    border-radius: 40px;
+    padding: 60px 40px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+.chartContainer {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 50px;
+}
+
+.radialChart {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.chartBg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 8;
+}
+
+.chartFill {
+    fill: none;
+    stroke: #58cc02;
+    stroke-width: 8;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 8px rgba(88, 204, 2, 0.3));
+}
+
+.chartText {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.chartText span {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1;
+}
+
+.chartText p {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #58cc02;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+}
+
+.statsSummary {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 50px;
+}
+
+.summaryItem {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.summaryIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.summaryInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.summaryInfo span {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.summaryInfo strong {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.finishBtn {
+    width: 100%;
+    background-color: #1cb0f6;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 18px;
+    font-size: 1.15rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 6px 0 #1899d6;
+    transition: all 0.1s;
+    text-transform: uppercase;
+}
+
+.finishBtn:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 #1899d6;
+}
+
 /* Loading */
 .loadingContainer {
     height: 100vh;

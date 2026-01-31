@@ -70,53 +70,53 @@ const CourseEditor = ({ courseId, onBack }) => {
         }
     };
 
-    if (loading) return <div className="py-20 text-center text-slate-400">Loading...</div>;
+    if (loading) return <div className="py-20 text-center text-slate-400 dark:text-slate-600">Loading...</div>;
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">
             {/* Simple Header */}
-            <div className="flex items-center justify-between border-b border-slate-100 pb-6">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-6">
                 <div className="flex items-center gap-4">
-                    <button onClick={onBack} className="p-2 hover:bg-slate-100 rounded-lg text-slate-500">
+                    <button onClick={onBack} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-500">
                         <ArrowLeft size={20} />
                     </button>
                     <div>
-                        <h2 className="text-xl font-bold text-slate-900">{courseId ? 'Edit Course' : 'New Course'}</h2>
-                        {isSaving && <span className="text-xs text-blue-500 font-medium tracking-wide">Syncing changes...</span>}
+                        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">{courseId ? 'Edit Course' : 'New Course'}</h2>
+                        {isSaving && <span className="text-xs text-blue-500 dark:text-blue-400 font-medium tracking-wide">Syncing changes...</span>}
                     </div>
                 </div>
                 {!courseId && (
-                    <button onClick={handleInitialSave} className="bg-slate-900 text-white px-5 py-2 rounded-lg font-bold text-sm">
+                    <button onClick={handleInitialSave} className="bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white px-5 py-2 rounded-lg font-bold text-sm">
                         Create Course
                     </button>
                 )}
             </div>
 
             {/* Simple Tabs */}
-            <div className="flex gap-1 bg-slate-100 p-1 rounded-xl w-fit">
+            <div className="flex gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-xl w-fit border border-slate-200 dark:border-slate-800">
                 <button
                     onClick={() => setActiveTab('essentials')}
-                    className={cn("px-6 py-2 rounded-lg text-sm font-bold transition-all", activeTab === 'essentials' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+                    className={cn("px-6 py-2 rounded-lg text-sm font-bold transition-all", activeTab === 'essentials' ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300")}
                 >
                     1. General Info
                 </button>
                 <button
                     onClick={() => courseId ? setActiveTab('architecture') : toast.error('Save first')}
-                    className={cn("px-6 py-2 rounded-lg text-sm font-bold transition-all", activeTab === 'architecture' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+                    className={cn("px-6 py-2 rounded-lg text-sm font-bold transition-all", activeTab === 'architecture' ? "bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300")}
                 >
                     2. Course Content
                 </button>
             </div>
 
             {/* Simple Content Editor */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-8">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8">
                 {activeTab === 'essentials' ? (
                     <div className="max-w-2xl space-y-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-600">Course Title</label>
+                            <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Course Title</label>
                             <input
                                 type="text"
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 outline-none focus:border-slate-900 transition-all font-medium"
+                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium text-slate-900 dark:text-slate-100"
                                 value={course.title}
                                 onChange={(e) => setCourse({ ...course, title: e.target.value })}
                                 onBlur={(e) => handleAutoSave({ title: e.target.value })}
@@ -124,9 +124,9 @@ const CourseEditor = ({ courseId, onBack }) => {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-600">Category</label>
+                                <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Category</label>
                                 <select
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 outline-none focus:border-slate-900 transition-all font-medium"
+                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium text-slate-900 dark:text-slate-100"
                                     value={course.category}
                                     onChange={(e) => handleAutoSave({ category: e.target.value })}
                                 >
@@ -137,10 +137,10 @@ const CourseEditor = ({ courseId, onBack }) => {
                                 </select>
                             </div>
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-600">Thumbnail URL</label>
+                                <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Thumbnail URL</label>
                                 <input
                                     type="text"
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 outline-none focus:border-slate-900 transition-all font-medium"
+                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium text-slate-900 dark:text-slate-100"
                                     value={course.image_url}
                                     onChange={(e) => setCourse({ ...course, image_url: e.target.value })}
                                     onBlur={(e) => handleAutoSave({ image_url: e.target.value })}
@@ -148,9 +148,9 @@ const CourseEditor = ({ courseId, onBack }) => {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-600">Description</label>
+                            <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Description</label>
                             <textarea
-                                className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 outline-none focus:border-slate-900 transition-all font-medium min-h-[120px] resize-none"
+                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium min-h-[120px] resize-none text-slate-900 dark:text-slate-100"
                                 value={course.description}
                                 onChange={(e) => setCourse({ ...course, description: e.target.value })}
                                 onBlur={(e) => handleAutoSave({ description: e.target.value })}
@@ -159,9 +159,9 @@ const CourseEditor = ({ courseId, onBack }) => {
                     </div>
                 ) : (
                     <div className="space-y-6">
-                        <div className="flex items-center justify-between border-b border-slate-50 pb-4">
-                            <h3 className="text-lg font-bold text-slate-900">Curriculum Hierarchy</h3>
-                            <p className="text-slate-400 text-sm">Add modules and chapters below.</p>
+                        <div className="flex items-center justify-between border-b border-slate-50 dark:border-slate-800/50 pb-4">
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Curriculum Hierarchy</h3>
+                            <p className="text-slate-400 dark:text-slate-500 text-sm">Add modules and chapters below.</p>
                         </div>
                         <ModuleSection courseId={courseId} />
                     </div>

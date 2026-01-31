@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Heart, Check, Lightbulb, Trophy, Star, ArrowRight } from 'lucide-react';
+import { X, Heart, Check, Lightbulb, Star, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { supabase } from '../../lib/supabaseClient';
@@ -372,53 +372,85 @@ const StudyPage = () => {
                             transition={{ type: "spring", damping: 15 }}
                             className={styles.resultCard}
                         >
-                            <div className={styles.trophyHeader}>
-                                <motion.div
-                                    initial={{ scale: 0, rotate: -45 }}
-                                    animate={{ scale: 1, rotate: 0 }}
-                                    transition={{ delay: 0.3, type: "spring" }}
-                                    className="mb-8 flex justify-center"
-                                >
-                                    <div className="relative">
-                                        <Trophy size={100} color="#FFD700" strokeWidth={1.5} />
-                                        <motion.div
-                                            animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-                                            transition={{ duration: 2, repeat: Infinity }}
-                                            className="absolute inset-0 bg-yellow-400 blur-2xl opacity-20"
-                                        />
-                                    </div>
-                                </motion.div>
-                                <h1 className="text-3xl font-black mb-2">পাঠ সমাপ্ত!</h1>
-                                <p className="text-slate-400 mb-10">আপনি সাফল্যের সাথে পাঠটি সম্পন্ন করেছেন।</p>
+                            <div className={styles.chartContainer}>
+                                <svg viewBox="0 0 100 100" className={styles.radialChart}>
+                                    <circle
+                                        cx="50"
+                                        cy="50"
+                                        r="45"
+                                        className={styles.chartBg}
+                                    />
+                                    <motion.circle
+                                        cx="50"
+                                        cy="50"
+                                        r="45"
+                                        className={styles.chartFill}
+                                        initial={{ strokeDasharray: "0 283" }}
+                                        animate={{ strokeDasharray: `${(stats.correct / (stats.total || 1)) * 283} 283` }}
+                                        transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                                    />
+                                </svg>
+                                <div className={styles.chartText}>
+                                    <motion.span
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: 1 }}
+                                    >
+                                        {Math.round((stats.correct / (stats.total || 1)) * 100)}%
+                                    </motion.span>
+                                    <p>সফলতা</p>
+                                </div>
                             </div>
 
-                            <div className={styles.statsGrid}>
+                            <div className={styles.statsSummary}>
                                 <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.5 }}
-                                    className={styles.statBox}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 1.2 }}
+                                    className={styles.summaryItem}
                                 >
-                                    <Star size={24} color="#1cb0f6" fill="#1cb0f6" />
-                                    <strong>{Math.round((stats.correct / (stats.total || 1)) * 100)}%</strong>
-                                    <span>সফলতা</span>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(88, 204, 2, 0.1)' }}>
+                                        <Check size={20} color="#58cc02" />
+                                    </div>
+                                    <div className={styles.summaryInfo}>
+                                        <span>সঠিক উত্তর</span>
+                                        <strong>{stats.correct}</strong>
+                                    </div>
                                 </motion.div>
                                 <motion.div
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.6 }}
-                                    className={styles.statBox}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 1.3 }}
+                                    className={styles.summaryItem}
                                 >
-                                    <ArrowRight size={24} color="#58cc02" />
-                                    <strong>+{stats.correct * 10}</strong>
-                                    <span>অর্জিত XP</span>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 75, 75, 0.1)' }}>
+                                        <X size={20} color="#ff4b4b" />
+                                    </div>
+                                    <div className={styles.summaryInfo}>
+                                        <span>ভুল উত্তর</span>
+                                        <strong>{stats.total - stats.correct}</strong>
+                                    </div>
+                                </motion.div>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 1.4 }}
+                                    className={styles.summaryItem}
+                                >
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(28, 176, 246, 0.1)' }}>
+                                        <Star size={20} color="#1cb0f6" />
+                                    </div>
+                                    <div className={styles.summaryInfo}>
+                                        <span>অর্জিত XP</span>
+                                        <strong>+{stats.correct * 10}</strong>
+                                    </div>
                                 </motion.div>
                             </div>
 
                             <motion.button
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8 }}
+                                transition={{ delay: 1.6 }}
                                 className={styles.finishBtn}
                                 onClick={() => navigate(-1)}
                             >

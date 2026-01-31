@@ -101,10 +101,20 @@ const StudyPage = () => {
             setTimeout(() => setShake(false), 500);
 
             if (user) {
-                supabase.from('profiles')
-                    .update({ hearts: Math.max(0, hearts - 1) })
-                    .eq('id', user.id)
-                    .then();
+                // Use database function to deduct hearts with transaction tracking
+                supabase.rpc('deduct_user_hearts', {
+                    p_user_id: user.id,
+                    p_amount: 1
+                }).then(({ error }) => {
+                    if (error) {
+                        console.error('Error deducting hearts:', error);
+                        // Fallback to direct update
+                        supabase.from('profiles')
+                            .update({ hearts: Math.max(0, hearts - 1) })
+                            .eq('id', user.id)
+                            .then();
+                    }
+                });
             }
         }
 
@@ -121,10 +131,12 @@ const StudyPage = () => {
             // Chapter Completed!
             if (user && courseId && chapterId) {
                 try {
-                    // 1. Update Progress
+                    const earnedXp = stats.correct; // 1 XP per correct answer
+
+                    // 1. Update or Insert Progress with detailed statistics
                     const { data: existingProgress } = await supabase
                         .from('user_progress')
-                        .select('id')
+                        .select('id, xp_earned')
                         .eq('user_id', user.id)
                         .eq('chapter_id', chapterId)
                         .single();
@@ -135,26 +147,52 @@ const StudyPage = () => {
                             course_id: courseId,
                             chapter_id: chapterId,
                             is_completed: true,
-                            completed_at: new Date().toISOString()
+                            completed_at: new Date().toISOString(),
+                            total_questions: stats.total,
+                            correct_answers: stats.correct,
+                            xp_earned: earnedXp
                         });
                     } else {
                         await supabase.from('user_progress')
-                            .update({ is_completed: true, completed_at: new Date().toISOString() })
+                            .update({
+                                is_completed: true,
+                                completed_at: new Date().toISOString(),
+                                total_questions: stats.total,
+                                correct_answers: stats.correct,
+                                xp_earned: earnedXp
+                            })
                             .eq('id', existingProgress.id);
                     }
 
-                    // 2. Award XP (10 XP per correct answer)
-                    const earnedXp = stats.correct * 10;
+                    // 2. Award XP using database function (1 XP per correct answer)
                     if (earnedXp > 0) {
-                        const { data: profile } = await supabase
-                            .from('profiles')
-                            .select('xp')
-                            .eq('id', user.id)
-                            .single();
+                        const { data: xpResult, error: xpError } = await supabase
+                            .rpc('award_user_xp', {
+                                p_user_id: user.id,
+                                p_amount: earnedXp,
+                                p_source: 'mcq_correct',
+                                p_chapter_id: chapterId,
+                                p_course_id: courseId,
+                                p_metadata: {
+                                    total_questions: stats.total,
+                                    correct_answers: stats.correct,
+                                    accuracy: Math.round((stats.correct / stats.total) * 100)
+                                }
+                            });
 
-                        await supabase.from('profiles')
-                            .update({ xp: (profile?.xp || 0) + earnedXp })
-                            .eq('id', user.id);
+                        if (xpError) {
+                            console.error('Error awarding XP:', xpError);
+                            // Fallback: direct update if function doesn't exist yet
+                            const { data: profile } = await supabase
+                                .from('profiles')
+                                .select('xp')
+                                .eq('id', user.id)
+                                .single();
+
+                            await supabase.from('profiles')
+                                .update({ xp: (profile?.xp || 0) + earnedXp })
+                                .eq('id', user.id);
+                        }
                     }
                 } catch (err) {
                     console.error('Error updating progress:', err);
@@ -442,7 +480,7 @@ const StudyPage = () => {
                                     </div>
                                     <div className={styles.summaryInfo}>
                                         <span>অর্জিত XP</span>
-                                        <strong>+{stats.correct * 10}</strong>
+                                        <strong>+{stats.correct}</strong>
                                     </div>
                                 </motion.div>
                             </div>

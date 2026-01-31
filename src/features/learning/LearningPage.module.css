@@ -649,6 +649,36 @@
     color: #fff;
 }
 
+.courseDropdownDivider {
+    height: 2px;
+    background-color: #37464f;
+    margin: 4px 8px;
+    border-radius: 1px;
+}
+
+.addCourseOption {
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: background-color 0.2s;
+    background: none;
+    border: none;
+    width: 100%;
+    color: #1cb0f6;
+    text-align: left;
+}
+
+.addCourseOption:hover {
+    background-color: rgba(28, 176, 246, 0.1);
+}
+
+.addCourseOption .optionTitle {
+    color: #1cb0f6;
+}
+
 .statsRow {
 
     display: flex;
@@ -672,8 +702,44 @@
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.statItem span {
+    color: #ffffff;
+    font-weight: 900;
+}
+
 .statItem:hover {
     transform: scale(1.1);
+}
+
+/* Profile Button */
+.profileButton {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(28, 176, 246, 0.15) 0%, rgba(28, 176, 246, 0.05) 100%);
+    border: 2px solid rgba(28, 176, 246, 0.3);
+    border-radius: 16px;
+    color: #1cb0f6;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 8px;
+}
+
+.profileButton:hover {
+    background: linear-gradient(135deg, rgba(28, 176, 246, 0.25) 0%, rgba(28, 176, 246, 0.15) 100%);
+    border-color: rgba(28, 176, 246, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(28, 176, 246, 0.2);
+}
+
+.profileButtonContent {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .card {
@@ -786,6 +852,109 @@
     flex-direction: column;
     gap: 12px;
 }
+
+/* Daily Practices Tracker */
+.practiceTracker {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.practiceWeek {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.practiceDay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.dayLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #afafaf;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.practiceCheckbox {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: #202f36;
+    border: 2px solid #37464f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    color: transparent;
+}
+
+.practiceCheckbox:hover {
+    transform: scale(1.1);
+    border-color: #4b5a64;
+}
+
+.checkboxActive {
+    background: linear-gradient(135deg, #58cc02 0%, #46a302 100%);
+    border-color: #58cc02;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(88, 204, 2, 0.3);
+}
+
+.checkboxToday {
+    border-color: #1cb0f6;
+    border-width: 3px;
+    animation: todayPulse 2s infinite ease-in-out;
+}
+
+@keyframes todayPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(28, 176, 246, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(28, 176, 246, 0);
+    }
+}
+
+.practiceStats {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 16px;
+    border-top: 2px solid #37464f;
+}
+
+.practiceStatItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.statValue {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #58cc02;
+    line-height: 1;
+}
+
+.statLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #afafaf;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
 
 @media (max-width: 1200px) {
     .learningPage {

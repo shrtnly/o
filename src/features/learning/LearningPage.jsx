@@ -118,11 +118,21 @@ const LearningPage = () => {
             setLoading(true);
             try {
                 if (user) {
-                    // Fetch all courses for the selector
-                    const { data: coursesData } = await supabase
-                        .from('courses')
-                        .select('*');
-                    setCourses(coursesData || []);
+                    // Fetch only enrolled courses for the selector
+                    const { data: enrolledData, error: enrolledError } = await supabase
+                        .from('user_courses')
+                        .select('course_id, courses(*)')
+                        .eq('user_id', user.id);
+
+                    if (enrolledError) {
+                        console.error('Error fetching enrolled courses:', enrolledError);
+                        // Fallback to all courses if user_courses doesn't exist yet (for development)
+                        const { data: allCourses } = await supabase.from('courses').select('*');
+                        setCourses(allCourses || []);
+                    } else {
+                        const enrolledCourses = enrolledData?.map(d => d.courses).filter(Boolean) || [];
+                        setCourses(enrolledCourses);
+                    }
 
                     const { data: profileData } = await supabase
 
@@ -130,6 +140,12 @@ const LearningPage = () => {
                         .select('*')
                         .eq('id', user.id)
                         .single();
+
+                    console.log('LearningPage - Fetched profile data:', profileData);
+                    console.log('LearningPage - Profile XP:', profileData?.xp);
+                    console.log('LearningPage - Profile Gems:', profileData?.gems);
+                    console.log('LearningPage - Profile Hearts:', profileData?.hearts);
+
                     setProfile(profileData);
 
                     const { data: progressData } = await supabase

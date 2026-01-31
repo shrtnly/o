@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Gem, Heart, Shield, ChevronDown, Check, Play } from 'lucide-react';
+import { Zap, Gem, Heart, Shield, ChevronDown, Check, Play, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/ui/Button';
 import styles from '../LearningPage.module.css';
@@ -16,6 +16,14 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
             navigate(`/learning/${newId}`);
         }
     };
+
+    // Debug: Log profile data
+    React.useEffect(() => {
+        console.log('StatsSidebar - Profile data:', profile);
+        console.log('StatsSidebar - XP:', profile?.xp);
+        console.log('StatsSidebar - Gems:', profile?.gems);
+        console.log('StatsSidebar - Hearts:', profile?.hearts);
+    }, [profile]);
 
     return (
         <aside className={styles.rightSidebar}>
@@ -48,6 +56,14 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
                                 {course.id === currentCourseId && <Check size={16} color="#58cc02" strokeWidth={3} />}
                             </div>
                         ))}
+                        <div className={styles.courseDropdownDivider}></div>
+                        <button
+                            className={styles.addCourseOption}
+                            onClick={() => navigate('/courses')}
+                        >
+                            <Plus size={18} />
+                            <span className={styles.optionTitle}>কোর্স যোগ করুন</span>
+                        </button>
                     </div>
                 )}
             </div>
@@ -68,6 +84,46 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
             </div>
 
             <div style={{ height: '8px' }}></div>
+
+            {/* Daily Practices Tracker */}
+            <div className={styles.card}>
+                <div className={styles.cardHeader}>
+                    <h3 className={styles.cardTitle}>দৈনিক অনুশীলন</h3>
+                    <span className={styles.viewAll}>সব দেখুন</span>
+                </div>
+                <div className={styles.practiceTracker}>
+                    <div className={styles.practiceWeek}>
+                        {['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র', 'শনি'].map((day, index) => {
+                            // Mock data - replace with actual practice data from profile
+                            const today = new Date().getDay();
+                            const isPracticed = index < today; // Example: practiced on previous days
+                            const isToday = index === today;
+
+                            return (
+                                <div key={index} className={styles.practiceDay}>
+                                    <div className={styles.dayLabel}>{day}</div>
+                                    <div
+                                        className={`${styles.practiceCheckbox} ${isPracticed ? styles.checkboxActive : ''
+                                            } ${isToday ? styles.checkboxToday : ''}`}
+                                    >
+                                        {isPracticed && <Check size={14} strokeWidth={3} />}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className={styles.practiceStats}>
+                        <div className={styles.practiceStatItem}>
+                            <span className={styles.statValue}>0</span>
+                            <span className={styles.statLabel}>সপ্তাহের স্ট্রীক</span>
+                        </div>
+                        <div className={styles.practiceStatItem}>
+                            <span className={styles.statValue}>0</span>
+                            <span className={styles.statLabel}>মোট দিন</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div className={styles.card}>
                 <div className={styles.cardHeader}>

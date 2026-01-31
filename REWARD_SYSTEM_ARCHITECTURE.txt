@@ -1,0 +1,171 @@
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     O-SEKHA REWARD SYSTEM ARCHITECTURE                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              FRONTEND LAYER                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐        │
+│  │   StudyPage     │    │  LearningPage   │    │  StatsSidebar   │        │
+│  │                 │    │                 │    │                 │        │
+│  │ • MCQ Questions │    │ • Mystery Boxes │    │ • XP Display    │        │
+│  │ • +1 XP/correct │    │ • Gem Boxes     │    │ • Gem Display   │        │
+│  │ • -1 ♥/wrong    │    │ • Heart Boxes   │    │ • Heart Display │        │
+│  └────────┬────────┘    └────────┬────────┘    └────────┬────────┘        │
+│           │                      │                       │                  │
+│           └──────────────────────┴───────────────────────┘                  │
+│                                  │                                          │
+└──────────────────────────────────┼──────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            SERVICE LAYER                                     │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │                      rewardService.js                              │    │
+│  ├────────────────────────────────────────────────────────────────────┤    │
+│  │                                                                    │    │
+│  │  awardXP(userId, amount, source, metadata)                        │    │
+│  │    ├─► Try: RPC call to award_user_xp()                           │    │
+│  │    └─► Fallback: Direct profiles table update                     │    │
+│  │                                                                    │    │
+│  │  awardGems(userId, amount, source, metadata)                      │    │
+│  │    ├─► Try: RPC call to award_user_gems()                         │    │
+│  │    └─► Fallback: Direct profiles table update                     │    │
+│  │                                                                    │    │
+│  │  deductHearts(userId, amount)                                     │    │
+│  │    ├─► Try: RPC call to deduct_user_hearts()                      │    │
+│  │    └─► Fallback: Direct profiles table update                     │    │
+│  │                                                                    │    │
+│  │  getUserStats(userId)                                             │    │
+│  │    └─► Query: user_stats_summary view                             │    │
+│  │                                                                    │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                  │                                          │
+└──────────────────────────────────┼──────────────────────────────────────────┘
+                                   │
+                                   ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                          DATABASE LAYER (Supabase)                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                    PostgreSQL Functions                             │   │
+│  ├─────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                     │   │
+│  │  award_user_xp(p_user_id, p_amount, p_source, ...)                 │   │
+│  │    1. INSERT into user_reward_transactions                         │   │
+│  │    2. UPDATE profiles SET xp = xp + p_amount                       │   │
+│  │    3. RETURN new_xp, transaction_id                                │   │
+│  │                                                                     │   │
+│  │  award_user_gems(p_user_id, p_amount, p_source, ...)               │   │
+│  │    1. INSERT into user_reward_transactions                         │   │
+│  │    2. UPDATE profiles SET gems = gems + p_amount                   │   │
+│  │    3. RETURN new_gems, transaction_id                              │   │
+│  │                                                                     │   │
+│  │  deduct_user_hearts(p_user_id, p_amount)                           │   │
+│  │    1. INSERT into user_reward_transactions                         │   │
+│  │    2. UPDATE profiles SET hearts = GREATEST(0, hearts - p_amount)  │   │
+│  │    3. RETURN new_hearts, transaction_id                            │   │
+│  │                                                                     │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                          Database Tables                            │   │
+│  ├─────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                     │   │
+│  │  profiles                                                           │   │
+│  │  ├─ id (UUID)                                                       │   │
+│  │  ├─ xp (INTEGER)           ◄── Total XP                            │   │
+│  │  ├─ gems (INTEGER)         ◄── Total Gems                          │   │
+│  │  └─ hearts (INTEGER)       ◄── Current Hearts                      │   │
+│  │                                                                     │   │
+│  │  user_reward_transactions  ◄── TRANSACTION LOG                     │   │
+│  │  ├─ id (UUID)                                                       │   │
+│  │  ├─ user_id (UUID)                                                  │   │
+│  │  ├─ transaction_type (VARCHAR) ◄── 'xp_earned', 'heart_lost', etc. │   │
+│  │  ├─ amount (INTEGER)                                                │   │
+│  │  ├─ source (VARCHAR)       ◄── 'mcq_correct', 'mystery_box', etc.  │   │
+│  │  ├─ chapter_id (UUID)                                               │   │
+│  │  ├─ course_id (UUID)                                                │   │
+│  │  ├─ metadata (JSONB)       ◄── {accuracy, total_questions, etc.}   │   │
+│  │  └─ created_at (TIMESTAMPTZ)                                        │   │
+│  │                                                                     │   │
+│  │  user_progress             ◄── CHAPTER COMPLETION                  │   │
+│  │  ├─ id (UUID)                                                       │   │
+│  │  ├─ user_id (UUID)                                                  │   │
+│  │  ├─ chapter_id (UUID)                                               │   │
+│  │  ├─ course_id (UUID)                                                │   │
+│  │  ├─ is_completed (BOOLEAN)                                          │   │
+│  │  ├─ total_questions (INTEGER)    ◄── NEW                           │   │
+│  │  ├─ correct_answers (INTEGER)    ◄── NEW                           │   │
+│  │  ├─ xp_earned (INTEGER)          ◄── NEW                           │   │
+│  │  └─ completed_at (TIMESTAMPTZ)                                      │   │
+│  │                                                                     │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                         Database Views                              │   │
+│  ├─────────────────────────────────────────────────────────────────────┤   │
+│  │                                                                     │   │
+│  │  user_stats_summary        ◄── AGGREGATED STATISTICS               │   │
+│  │  ├─ user_id                                                         │   │
+│  │  ├─ xp                                                              │   │
+│  │  ├─ gems                                                            │   │
+│  │  ├─ hearts                                                          │   │
+│  │  ├─ chapters_completed                                              │   │
+│  │  ├─ courses_enrolled                                                │   │
+│  │  ├─ total_correct_answers                                           │   │
+│  │  ├─ total_questions_attempted                                       │   │
+│  │  └─ accuracy_percentage                                             │   │
+│  │                                                                     │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            REWARD FLOW EXAMPLE                               │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  User completes chapter with 10 questions, 7 correct                        │
+│                                                                              │
+│  1. StudyPage calls rewardService.awardXP(userId, 7, 'mcq_correct', {...})  │
+│                                                                              │
+│  2. rewardService calls supabase.rpc('award_user_xp', {...})                │
+│                                                                              │
+│  3. Database function executes:                                             │
+│     ┌────────────────────────────────────────────────────────────┐          │
+│     │ BEGIN TRANSACTION                                          │          │
+│     │   INSERT INTO user_reward_transactions                     │          │
+│     │     (user_id, type, amount, source, metadata)              │          │
+│     │     VALUES (userId, 'xp_earned', 7, 'mcq_correct', {...})  │          │
+│     │                                                            │          │
+│     │   UPDATE profiles                                          │          │
+│     │     SET xp = xp + 7                                        │          │
+│     │     WHERE id = userId                                      │          │
+│     │                                                            │          │
+│     │ COMMIT                                                     │          │
+│     └────────────────────────────────────────────────────────────┘          │
+│                                                                              │
+│  4. Returns: {new_xp: 157, transaction_id: 'uuid-...'}                      │
+│                                                                              │
+│  5. StatsSidebar automatically updates to show new XP value                 │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              KEY FEATURES                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ✅ Atomic Operations    - No race conditions, data always consistent       │
+│  ✅ Transaction Logging  - Complete audit trail for analytics               │
+│  ✅ Automatic Fallback   - Works even if DB functions not deployed yet      │
+│  ✅ Real-time Updates    - Sidebar reflects changes immediately             │
+│  ✅ Detailed Statistics  - Track accuracy, completion, performance          │
+│  ✅ Secure by Design     - RLS policies, SECURITY DEFINER functions         │
+│  ✅ Scalable            - Indexed for performance with large datasets       │
+│  ✅ Future-Ready        - Supports quests, leaderboards, achievements       │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘

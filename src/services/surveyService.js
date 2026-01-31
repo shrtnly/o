@@ -39,9 +39,35 @@ export const surveyService = {
     },
 
     async saveSurveyResponse(courseId, responses) {
-        // Normally you would save this to a table:
-        // const { data, error } = await supabase.from('survey_responses').insert([{ course_id: courseId, answers: responses }]);
-        console.log('Saving survey responses for course:', courseId, responses);
-        return { success: true };
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) throw new Error('User not authenticated');
+
+            // 1. Save survey responses
+            const { error: surveyError } = await supabase
+                .from('survey_responses')
+                .insert([{
+                    user_id: user.id,
+                    course_id: courseId,
+                    answers: responses
+                }]);
+
+            if (surveyError) console.error('Error saving survey:', surveyError);
+
+            // 2. Enroll user in the course
+            const { error: enrollError } = await supabase
+                .from('user_courses')
+                .upsert([{
+                    user_id: user.id,
+                    course_id: courseId
+                }], { onConflict: 'user_id,course_id' });
+
+            if (enrollError) throw enrollError;
+
+            return { success: true };
+        } catch (error) {
+            console.error('Error in saveSurveyResponse:', error);
+            throw error;
+        }
     }
 };

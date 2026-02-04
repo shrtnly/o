@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { formatLocalDate } from '../lib/dateUtils';
 
 /**
  * Reward Service - Handles XP, Gems, and Hearts operations
@@ -156,6 +157,110 @@ export const rewardService = {
     },
 
     /**
+     * Check and refill hearts if 3 hours have passed
+     * @param {string} userId - User ID
+     * @returns {Promise<{hearts: number, maxHearts: number, refilled: boolean, timeUntilRefill: string}>}
+     */
+    async checkAndRefillHearts(userId) {
+        try {
+            const { data, error } = await supabase.rpc('check_and_refill_hearts', {
+                p_user_id: userId
+            });
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                return {
+                    hearts: data[0].hearts,
+                    maxHearts: data[0].max_hearts,
+                    lastRefillAt: data[0].last_refill_at,
+                    refilled: data[0].refilled,
+                    timeUntilRefill: data[0].time_until_next_refill
+                };
+            }
+
+            return null;
+        } catch (error) {
+            console.error('Error checking heart refill:', error);
+
+            // Fallback: fetch from profiles
+            try {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('hearts, max_hearts, last_heart_refill_at')
+                    .eq('id', userId)
+                    .single();
+
+                return {
+                    hearts: profile?.hearts || 5,
+                    maxHearts: profile?.max_hearts || 5,
+                    lastRefillAt: profile?.last_heart_refill_at,
+                    refilled: false,
+                    timeUntilRefill: null
+                };
+            } catch (fallbackError) {
+                console.error('Fallback heart check failed:', fallbackError);
+                return null;
+            }
+        }
+    },
+
+    /**
+     * Award hearts to a user
+     * @param {string} userId - User ID
+     * @param {number} amount - Amount of hearts to award
+     * @param {string} source - Source of hearts
+     * @param {object} metadata - Additional metadata
+     * @returns {Promise<{success: boolean, newHearts: number, transactionId: string}>}
+     */
+    async awardHearts(userId, amount, source = 'mystery_box', metadata = {}) {
+        try {
+            const { data, error } = await supabase.rpc('award_user_hearts', {
+                p_user_id: userId,
+                p_amount: amount,
+                p_source: source,
+                p_chapter_id: metadata.chapterId || null,
+                p_course_id: metadata.courseId || null,
+                p_metadata: metadata
+            });
+
+            if (error) throw error;
+
+            return {
+                success: true,
+                newHearts: data?.[0]?.new_hearts || 0,
+                transactionId: data?.[0]?.transaction_id
+            };
+        } catch (error) {
+            console.error('Error awarding hearts:', error);
+
+            // Fallback: direct update
+            try {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('hearts, max_hearts')
+                    .eq('id', userId)
+                    .single();
+
+                const newHearts = Math.min(
+                    profile?.max_hearts || 5,
+                    (profile?.hearts || 0) + amount
+                );
+
+                await supabase
+                    .from('profiles')
+                    .update({ hearts: newHearts })
+                    .eq('id', userId);
+
+                return { success: true, newHearts, transactionId: null };
+            } catch (fallbackError) {
+                console.error('Fallback hearts award failed:', fallbackError);
+                return { success: false, newHearts: 0, transactionId: null };
+            }
+        }
+    },
+
+    /**
      * Get user statistics summary
      * @param {string} userId - User ID
      * @returns {Promise<object>}
@@ -197,6 +302,70 @@ export const rewardService = {
             return data || [];
         } catch (error) {
             console.error('Error fetching transactions:', error);
+            return [];
+        }
+    },
+
+    /**
+     * Get user streak information
+     * @param {string} userId - User ID
+     * @returns {Promise<object>}
+     */
+    async getUserStreak(userId) {
+        try {
+            const { data, error } = await supabase
+                .from('user_streaks')
+                .select('*')
+                .eq('user_id', userId)
+                .single();
+
+            if (error && error.code !== 'PGRST116') throw error;
+
+            return data || { current_streak: 0, longest_streak: 0, last_activity_date: null };
+        } catch (error) {
+            console.error('Error fetching user streak:', error);
+            return { current_streak: 0, longest_streak: 0, last_activity_date: null };
+        }
+    },
+
+    /**
+     * Get user activity history for calendar and charts
+     * @param {string} userId - User ID
+     * @param {number} days - Number of days to look back
+     * @returns {Promise<Array>}
+     */
+    async getActivityHistory(userId, days = 365) {
+        try {
+            const startDate = new Date();
+            startDate.setDate(startDate.getDate() - days);
+
+            const startDateStr = formatLocalDate(startDate);
+
+            console.log('getActivityHistory - Query params:', {
+                userId,
+                days,
+                startDateStr,
+                today: formatLocalDate(new Date())
+            });
+
+            const { data, error } = await supabase
+                .from('user_daily_activity')
+                .select('*')
+                .eq('user_id', userId)
+                .gte('activity_date', startDateStr)
+                .order('activity_date', { ascending: true });
+
+            console.log('getActivityHistory - Result:', {
+                dataCount: data?.length,
+                data,
+                error
+            });
+
+            if (error) throw error;
+
+            return data || [];
+        } catch (error) {
+            console.error('Error fetching activity history:', error);
             return [];
         }
     }

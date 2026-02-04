@@ -1,0 +1,454 @@
+.container {
+    padding: 0px;
+    color: #fff;
+    font-family: 'Din Round', 'Inter', sans-serif;
+    margin-top: 12px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    padding: 0 16px;
+}
+
+.titleSection h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin: 0;
+    color: #fff;
+}
+
+.titleSection p {
+    font-size: 13px;
+    color: #afafaf;
+    margin: 4px 0 0 0;
+}
+
+.goalBadge {
+    background-color: rgba(255, 150, 0, 0.1);
+    border: 1.5px solid rgba(255, 150, 0, 0.2);
+    padding: 4px 10px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #ff9600;
+}
+
+.goalIcon {
+    color: #ff9600;
+}
+
+.divider {
+    height: 1px;
+    background-color: #37464f;
+    margin: 16px 0;
+}
+
+/* Stats Row */
+.statsRow {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.statsDivider {
+    background-color: #37464f;
+    height: 60px;
+}
+
+.statBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.statLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: #afafaf;
+    margin-bottom: 2px;
+}
+
+.statMain {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.statValue {
+    font-size: 32px;
+    font-weight: 900;
+}
+
+.statSub {
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bestLabel {
+    color: #58cc02;
+    text-transform: uppercase;
+}
+
+.bestValue {
+    color: #58cc02;
+}
+
+.tagline {
+    font-size: 12px;
+    font-weight: 800;
+    color: #afafaf;
+    text-align: center;
+    margin-top: 2px;
+}
+
+
+/* Tracker Header */
+.trackerHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 16px;
+    margin-bottom: 16px;
+}
+
+.monthNav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+.trackerTitle {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.monthSelector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.monthYear {
+    font-size: 14px;
+    font-weight: 700;
+    color: #afafaf;
+}
+
+.navControls {
+    display: flex;
+    gap: 4px;
+}
+
+.navBtn {
+    background: transparent;
+    border: none;
+    color: #afafaf;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+/* View Switcher */
+.viewSwitcher {
+    background-color: #233138;
+    padding: 4px;
+    border-radius: 12px;
+    display: flex;
+    border: 1.5px solid #37464f;
+}
+
+.switchBtn {
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: #afafaf;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.switchBtnActive {
+    background-color: #fff;
+    color: #1a272d;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Sections */
+.calendarSection {
+    padding: 0 16px;
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.daySquare {
+    aspect-ratio: 1;
+    background-color: rgba(35, 49, 56, 0.3);
+    border: 1.5px solid rgba(55, 70, 79, 0.5);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.2s;
+    opacity: 0.4;
+}
+
+.dayNumber {
+    font-size: 13px;
+    font-weight: 700;
+    color: #afafaf;
+    z-index: 1;
+}
+
+.flameContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    filter: drop-shadow(0 2px 8px rgba(255, 150, 0, 0.4));
+}
+
+.dayAchieved {
+    background: linear-gradient(135deg, rgba(255, 200, 0, 0.3) 0%, rgba(255, 150, 0, 0.3) 100%);
+    border-color: #ff9600;
+    box-shadow: 0 0 12px rgba(255, 150, 0, 0.2);
+    opacity: 1;
+}
+
+.dayAchieved .dayNumber {
+    color: #ff9600;
+}
+
+.dayToday {
+    border-color: #1cb0f6;
+    box-shadow: 0 0 0 1.5px #1cb0f6 inset;
+    animation: todayPulse 2s ease-in-out infinite;
+}
+
+.dayToday.dayAchieved .flameContainer {
+    animation: flameFlicker 1.5s ease-in-out infinite;
+}
+
+@keyframes todayPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 1.5px #1cb0f6 inset, 0 0 8px rgba(28, 176, 246, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 0 2px #1cb0f6 inset, 0 0 16px rgba(28, 176, 246, 0.5);
+    }
+}
+
+@keyframes flameFlicker {
+
+    0%,
+    100% {
+        transform: scale(1) translateY(0);
+        filter: drop-shadow(0 2px 8px rgba(255, 150, 0, 0.4));
+    }
+
+    25% {
+        transform: scale(1.05) translateY(-1px);
+        filter: drop-shadow(0 3px 12px rgba(255, 150, 0, 0.6));
+    }
+
+    50% {
+        transform: scale(1.1) translateY(-2px);
+        filter: drop-shadow(0 4px 16px rgba(255, 150, 0, 0.8));
+    }
+
+    75% {
+        transform: scale(1.05) translateY(-1px);
+        filter: drop-shadow(0 3px 12px rgba(255, 150, 0, 0.6));
+    }
+}
+
+.dayFuture {
+    opacity: 0.7;
+    background-color: rgba(35, 49, 56, 0.5);
+    border-color: rgba(55, 70, 79, 0.7);
+}
+
+.dayFuture .dayNumber {
+    color: #afafaf;
+}
+
+.dayEmpty {
+    opacity: 0.1;
+    background: transparent;
+    border-style: dashed;
+}
+
+.todayIndicator {
+    position: absolute;
+    bottom: -6px;
+    width: 6px;
+    height: 6px;
+    background-color: #1cb0f6;
+    border-radius: 50%;
+}
+
+/* Weekly View */
+.weeklyView {
+    padding: 20px 0;
+}
+
+.weekTimeline {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 0 10px;
+}
+
+.timelineLine {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background-color: #37464f;
+    transform: translateY(-16px);
+    z-index: 0;
+}
+
+.weekNode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.weekCircle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #1a272d;
+    border: 2px solid #37464f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.weekCompleted {
+    background-color: #58cc02;
+    border-color: #58cc02;
+}
+
+.weekInProgress {
+    border-color: #58cc02;
+}
+
+.progressRing {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 3px solid #37464f;
+    border-top-color: #58cc02;
+    animation: spin 1s linear infinite;
+}
+
+.weekLabel {
+    font-size: 12px;
+    font-weight: 700;
+    color: #afafaf;
+}
+
+/* Legend */
+.legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+    padding-bottom: 24px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #afafaf;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.legendBox {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid #37464f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.legendBox.missed {
+    background-color: rgba(88, 204, 2, 0.05);
+}
+
+.legendBox.achieved {
+    background-color: #58cc02;
+}
+
+.legendBox.holiday {
+    background-color: rgba(255, 75, 75, 0.1);
+    border-color: #ff4b4b;
+    position: relative;
+    overflow: hidden;
+}
+
+.legendBox.holiday::after {
+    content: '';
+    position: absolute;
+    width: 150%;
+    height: 1px;
+    background-color: #ff4b4b;
+    transform: rotate(45deg);
+}
+
+.legendBox.paused {
+    background-color: #233138;
+}
+
+.legendBox.paused::before {
+    content: '||';
+    font-size: 8px;
+    color: #afafaf;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

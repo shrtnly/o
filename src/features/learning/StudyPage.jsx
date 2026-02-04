@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Heart, Check, Lightbulb, Star, ArrowRight } from 'lucide-react';
+import { X, Heart, Check, Lightbulb, Star, ArrowRight, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
+import { useHeartRefill } from '../../hooks/useHeartRefill';
 import styles from './StudyPage.module.css';
 
 const StudyPage = () => {
@@ -12,17 +13,28 @@ const StudyPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
 
+    // Use heart refill system
+    const {
+        hearts,
+        maxHearts,
+        refillTimeDisplay,
+        deductHeart,
+        canAnswer,
+        needsRefill,
+        loading: heartsLoading
+    } = useHeartRefill(user?.id);
+
     const [questions, setQuestions] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState(null);
     const [isAnswered, setIsAnswered] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
-    const [hearts, setHearts] = useState(5);
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
+    const [showNoHeartsModal, setShowNoHeartsModal] = useState(false);
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -56,18 +68,8 @@ const StudyPage = () => {
                     setStats(prev => ({ ...prev, total: enrichedQuestions.length }));
                 }
 
-                // Fetch current user profile for stats
-                if (user) {
-                    const { data: profile } = await supabase
-                        .from('profiles')
-                        .select('hearts, xp')
-                        .eq('id', user.id)
-                        .single();
-                    if (profile) {
-                        setHearts(profile.hearts);
-                        // Store current XP if needed later
-                    }
-                }
+                // Hearts are now managed by useHeartRefill hook
+                // No need to fetch hearts here
             } catch (err) {
                 console.error('Error fetching study content:', err);
             } finally {
@@ -83,8 +85,14 @@ const StudyPage = () => {
         setSelectedOption(optionId);
     };
 
-    const handleCheck = () => {
+    const handleCheck = async () => {
         if (!selectedOption || isAnswered) return;
+
+        // Check if user has hearts to answer
+        if (!canAnswer) {
+            setShowNoHeartsModal(true);
+            return;
+        }
 
         const currentQuestion = questions[currentIndex];
         const selected = currentQuestion.mcq_options.find(o => o.id === selectedOption);
@@ -96,25 +104,12 @@ const StudyPage = () => {
         if (correct) {
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
         } else {
-            setHearts(prev => Math.max(0, prev - 1));
+            // Deduct heart using the hook
             setShake(true);
             setTimeout(() => setShake(false), 500);
 
             if (user) {
-                // Use database function to deduct hearts with transaction tracking
-                supabase.rpc('deduct_user_hearts', {
-                    p_user_id: user.id,
-                    p_amount: 1
-                }).then(({ error }) => {
-                    if (error) {
-                        console.error('Error deducting hearts:', error);
-                        // Fallback to direct update
-                        supabase.from('profiles')
-                            .update({ hearts: Math.max(0, hearts - 1) })
-                            .eq('id', user.id)
-                            .then();
-                    }
-                });
+                await deductHeart(1);
             }
         }
 
@@ -166,11 +161,18 @@ const StudyPage = () => {
 
                     // 2. Award XP using database function (1 XP per correct answer)
                     if (earnedXp > 0) {
+                        console.log('StudyPage - Awarding XP:', {
+                            userId: user.id,
+                            amount: earnedXp,
+                            chapterId,
+                            courseId
+                        });
+
                         const { data: xpResult, error: xpError } = await supabase
                             .rpc('award_user_xp', {
                                 p_user_id: user.id,
                                 p_amount: earnedXp,
-                                p_source: 'mcq_correct',
+                                p_source: 'chapter_complete', // Changed from 'mcq_correct' to trigger lesson completion
                                 p_chapter_id: chapterId,
                                 p_course_id: courseId,
                                 p_metadata: {
@@ -179,6 +181,11 @@ const StudyPage = () => {
                                     accuracy: Math.round((stats.correct / stats.total) * 100)
                                 }
                             });
+
+                        console.log('StudyPage - XP Award Result:', {
+                            xpResult,
+                            xpError
+                        });
 
                         if (xpError) {
                             console.error('Error awarding XP:', xpError);
@@ -192,6 +199,8 @@ const StudyPage = () => {
                             await supabase.from('profiles')
                                 .update({ xp: (profile?.xp || 0) + earnedXp })
                                 .eq('id', user.id);
+                        } else {
+                            console.log('StudyPage - Successfully awarded XP and updated daily activity!');
                         }
                     }
                 } catch (err) {
@@ -254,6 +263,12 @@ const StudyPage = () => {
                         <Heart size={24} color="#ff4b4b" fill="#ff4b4b" strokeWidth={0} />
                     </motion.div>
                     <span className={styles.heartCount}>{hearts}</span>
+                    {needsRefill && refillTimeDisplay && (
+                        <span className={styles.refillTimer}>
+                            <Clock size={12} />
+                            {refillTimeDisplay}
+                        </span>
+                    )}
                 </div>
             </header>
 
@@ -531,7 +546,79 @@ const StudyPage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+
+            {/* No Hearts Modal */}
+            <AnimatePresence>
+                {showNoHeartsModal && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className={styles.resultModal}
+                        onClick={() => setShowNoHeartsModal(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            transition={{ type: "spring", damping: 15 }}
+                            className={styles.resultCard}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ maxWidth: '400px' }}
+                        >
+                            <div style={{ textAlign: 'center', padding: '20px' }}>
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1] }}
+                                    transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}
+                                    style={{ fontSize: '64px', marginBottom: '20px' }}
+                                >
+                                    💔
+                                </motion.div>
+
+                                <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '12px', color: '#fff' }}>
+                                    হার্ট শেষ হয়ে গেছে!
+                                </h2>
+
+                                <p style={{ fontSize: '14px', color: '#afafaf', marginBottom: '24px' }}>
+                                    আপনার সব হার্ট শেষ হয়ে গেছে। পরবর্তী রিফিলের জন্য অপেক্ষা করুন অথবা মিস্ট্রি বক্স থেকে হার্ট পান।
+                                </p>
+
+                                <div style={{
+                                    background: 'rgba(255, 75, 75, 0.1)',
+                                    border: '2px solid #ff4b4b',
+                                    borderRadius: '16px',
+                                    padding: '20px',
+                                    marginBottom: '24px'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '8px' }}>
+                                        <Heart size={32} fill="#ff4b4b" color="#ff4b4b" />
+                                        <span style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>
+                                            {hearts}
+                                        </span>
+                                    </div>
+
+                                    {refillTimeDisplay && (
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}>
+                                            <Clock size={20} color="#1cb0f6" />
+                                            <span style={{ fontSize: '18px', fontWeight: 700, color: '#1cb0f6' }}>
+                                                রিফিল হবে: {refillTimeDisplay}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <button
+                                    className={styles.finishBtn}
+                                    onClick={() => setShowNoHeartsModal(false)}
+                                    style={{ width: '100%' }}
+                                >
+                                    ঠিক আছে
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div >
     );
 };
 

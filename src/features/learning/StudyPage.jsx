@@ -145,7 +145,8 @@ const StudyPage = () => {
                             completed_at: new Date().toISOString(),
                             total_questions: stats.total,
                             correct_answers: stats.correct,
-                            xp_earned: earnedXp
+                            xp_earned: earnedXp,
+                            last_accessed: new Date().toISOString()
                         });
                     } else {
                         await supabase.from('user_progress')
@@ -154,7 +155,8 @@ const StudyPage = () => {
                                 completed_at: new Date().toISOString(),
                                 total_questions: stats.total,
                                 correct_answers: stats.correct,
-                                xp_earned: earnedXp
+                                xp_earned: earnedXp,
+                                last_accessed: new Date().toISOString()
                             })
                             .eq('id', existingProgress.id);
                     }

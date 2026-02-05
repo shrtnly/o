@@ -206,5 +206,38 @@ export const courseService = {
         const { error } = await supabase.from('learning_points').delete().eq('id', id);
         if (error) throw error;
         return true;
+    },
+
+    async getLastPracticedCourseId(userId) {
+        if (!userId) return null;
+
+        try {
+            // 1. Check user_progress for actual activity (most recent)
+            const { data: progressData } = await supabase
+                .from('user_progress')
+                .select('course_id')
+                .eq('user_id', userId)
+                .order('last_accessed', { ascending: false })
+                .limit(1);
+
+            if (progressData && progressData.length > 0) {
+                return progressData[0].course_id;
+            }
+
+            // 2. Fallback to latest enrollment if no progress yet
+            const { data: enrollmentData, error: enrollError } = await supabase
+                .from('user_courses')
+                .select('course_id')
+                .eq('user_id', userId)
+                .order('created_at', { ascending: false })
+                .limit(1);
+
+            if (enrollError) throw enrollError;
+
+            return enrollmentData && enrollmentData.length > 0 ? enrollmentData[0].course_id : null;
+        } catch (error) {
+            console.error('Error fetching last practiced course:', error);
+            return null;
+        }
     }
 };

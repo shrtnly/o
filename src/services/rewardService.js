@@ -341,12 +341,7 @@ export const rewardService = {
 
             const startDateStr = formatLocalDate(startDate);
 
-            console.log('getActivityHistory - Query params:', {
-                userId,
-                days,
-                startDateStr,
-                today: formatLocalDate(new Date())
-            });
+
 
             const { data, error } = await supabase
                 .from('user_daily_activity')
@@ -355,11 +350,7 @@ export const rewardService = {
                 .gte('activity_date', startDateStr)
                 .order('activity_date', { ascending: true });
 
-            console.log('getActivityHistory - Result:', {
-                dataCount: data?.length,
-                data,
-                error
-            });
+
 
             if (error) throw error;
 

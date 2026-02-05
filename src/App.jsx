@@ -10,6 +10,7 @@ import LoadingScreen from './components/ui/LoadingScreen';
 import LearningPage from './features/learning/LearningPage';
 import StudyPage from './features/learning/StudyPage';
 import ProfilePage from './features/profile/ProfilePage';
+import LeaderboardPage from './features/leaderboard/LeaderboardPage';
 import AdminDashboard from './features/admin/v2/AdminDashboardV2';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
@@ -67,6 +68,7 @@ function App() {
                 <Route path="/learn/:courseId" element={<LearningPage />} />
                 <Route path="/study/:courseId/:chapterId" element={<StudyPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/leaderboard" element={<LeaderboardPage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
               </Routes>
             </main>

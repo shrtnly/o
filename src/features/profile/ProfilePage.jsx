@@ -20,6 +20,8 @@ import {
     BookOpen,
     CheckCircle
 } from 'lucide-react';
+import ShieldIcon from '../../components/ShieldIcon';
+import { getShieldLevel } from '../../utils/shieldSystem';
 import styles from './ProfilePage.module.css';
 
 const ProfilePage = () => {
@@ -145,6 +147,12 @@ const ProfilePage = () => {
                         </div>
                         <div className={styles.profileInfo}>
                             <h2 className={styles.userName}>{profile?.full_name || 'শিক্ষার্থী'}</h2>
+                            <div className={styles.levelBadge} style={{
+                                background: getShieldLevel(profile?.xp || 0).gradient,
+                                marginBottom: '8px'
+                            }}>
+                                {getShieldLevel(profile?.xp || 0).icon} {getShieldLevel(profile?.xp || 0).nameBangla}
+                            </div>
                             <div className={styles.userMeta}>
                                 <Mail size={16} />
                                 <span>{user?.email}</span>
@@ -158,9 +166,9 @@ const ProfilePage = () => {
 
                     {/* Stats Grid */}
                     <div className={styles.statsGrid}>
-                        <div className={styles.statCard} style={{ '--accent-color': '#ff9600' }}>
+                        <div className={styles.statCard}>
                             <div className={styles.statIcon}>
-                                <Zap size={24} fill="#ff9600" />
+                                <ShieldIcon xp={profile?.xp || 0} size={24} />
                             </div>
                             <div className={styles.statContent}>
                                 <span className={styles.statLabel}>মোট XP</span>

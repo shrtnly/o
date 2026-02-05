@@ -141,12 +141,26 @@ const LearningPage = () => {
                         .eq('id', user.id)
                         .single();
 
-                    console.log('LearningPage - Fetched profile data:', profileData);
-                    console.log('LearningPage - Profile XP:', profileData?.xp);
-                    console.log('LearningPage - Profile Gems:', profileData?.gems);
-                    console.log('LearningPage - Profile Hearts:', profileData?.hearts);
+
 
                     setProfile(profileData);
+
+                    // Update last_accessed for this course
+                    if (courseId) {
+                        const { data: existingProgress } = await supabase
+                            .from('user_progress')
+                            .select('id')
+                            .eq('user_id', user.id)
+                            .eq('course_id', courseId)
+                            .limit(1);
+
+                        if (existingProgress && existingProgress.length > 0) {
+                            await supabase
+                                .from('user_progress')
+                                .update({ last_accessed: new Date().toISOString() })
+                                .eq('id', existingProgress[0].id);
+                        }
+                    }
 
                     const { data: progressData } = await supabase
                         .from('user_progress')

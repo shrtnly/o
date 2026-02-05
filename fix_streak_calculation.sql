@@ -12,46 +12,49 @@ DECLARE
     v_longest_streak INTEGER := 0;
     v_temp_streak INTEGER := 0;
     v_last_date DATE := NULL;
+    v_prev_date DATE := NULL;
     v_activity_record RECORD;
+    v_today DATE := CURRENT_DATE;
 BEGIN
-    -- Get all activity dates for the user, ordered by date descending
+    -- Get all activity dates for the user, ordered by date ASCENDING (oldest first)
     FOR v_activity_record IN
         SELECT DISTINCT activity_date::DATE as activity_date
         FROM user_daily_activity
         WHERE user_id = p_user_id
-        ORDER BY activity_date DESC
+        ORDER BY activity_date ASC
     LOOP
         -- First record
-        IF v_last_date IS NULL THEN
+        IF v_prev_date IS NULL THEN
             v_temp_streak := 1;
-            v_last_date := v_activity_record.activity_date;
-        -- Check if consecutive day
-        ELSIF v_activity_record.activity_date = v_last_date - INTERVAL '1 day' THEN
+            v_longest_streak := 1;
+        -- Check if consecutive day (current date = previous date + 1 day)
+        ELSIF v_activity_record.activity_date = v_prev_date + 1 THEN
             v_temp_streak := v_temp_streak + 1;
-            v_last_date := v_activity_record.activity_date;
-        -- Streak broken
-        ELSE
-            -- Update longest streak if needed
+            -- Update longest streak if current temp is longer
             IF v_temp_streak > v_longest_streak THEN
                 v_longest_streak := v_temp_streak;
             END IF;
-            -- Reset temp streak
-            v_temp_streak := 1;
-            v_last_date := v_activity_record.activity_date;
-        END IF;
-    END LOOP;
-
-    -- Check if current streak is still active (last activity was today or yesterday)
-    IF v_last_date IS NOT NULL THEN
-        IF v_last_date >= CURRENT_DATE - INTERVAL '1 day' THEN
-            v_current_streak := v_temp_streak;
+        -- Streak broken (gap in dates)
         ELSE
-            v_current_streak := 0;
+            v_temp_streak := 1;
         END IF;
         
-        -- Update longest streak one more time
-        IF v_temp_streak > v_longest_streak THEN
-            v_longest_streak := v_temp_streak;
+        v_prev_date := v_activity_record.activity_date;
+        v_last_date := v_activity_record.activity_date;
+    END LOOP;
+
+    -- Determine current streak
+    -- Current streak is only valid if last activity was today or yesterday
+    IF v_last_date IS NOT NULL THEN
+        IF v_last_date = v_today THEN
+            -- Last activity was today, current streak is the temp streak
+            v_current_streak := v_temp_streak;
+        ELSIF v_last_date = v_today - 1 THEN
+            -- Last activity was yesterday, current streak is still active
+            v_current_streak := v_temp_streak;
+        ELSE
+            -- Last activity was more than 1 day ago, streak is broken
+            v_current_streak := 0;
         END IF;
     END IF;
 
@@ -125,6 +128,25 @@ BEGIN
     
     RAISE NOTICE 'Streaks recalculated for all users';
 END $$;
+
+-- ============================================
+-- DEBUG QUERY - Check Activity Dates
+-- Run this to see what dates are in user_daily_activity
+-- ============================================
+
+SELECT 
+    user_id,
+    activity_date::DATE as activity_date,
+    activity_date::TIMESTAMPTZ as activity_timestamp,
+    CURRENT_DATE as today,
+    (activity_date::DATE - LAG(activity_date::DATE) OVER (PARTITION BY user_id ORDER BY activity_date::DATE)) as days_since_last,
+    CASE 
+        WHEN activity_date::DATE = CURRENT_DATE THEN 'Today'
+        WHEN activity_date::DATE = CURRENT_DATE - 1 THEN 'Yesterday'
+        ELSE (CURRENT_DATE - activity_date::DATE)::TEXT || ' days ago'
+    END as relative_date
+FROM user_daily_activity
+ORDER BY user_id, activity_date DESC;
 
 -- ============================================
 -- VERIFICATION QUERY

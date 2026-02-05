@@ -1,0 +1,480 @@
+.container {
+    display: grid;
+    grid-template-columns: 256px 1fr;
+    min-height: 100vh;
+    background-color: #0a1114;
+    color: #fff;
+}
+
+.mainContent {
+    padding: 60px 48px;
+    max-width: 900px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.header {
+    margin-bottom: 40px;
+}
+
+.titleSection {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.trophyIcon {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
+    animation: floating 3s infinite ease-in-out;
+}
+
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.titleSection h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 0%, #afafaf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.titleSection p {
+    color: #afafaf;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.tab {
+    padding: 14px 24px;
+    background-color: #1a272d;
+    border: 2px solid #37464f;
+    border-bottom: 5px solid #37464f;
+    border-radius: 16px;
+    color: #afafaf;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.tab:hover {
+    background-color: #233138;
+}
+
+.activeTab {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: var(--tier-color);
+    border-bottom-color: var(--tier-color);
+    color: #fff;
+}
+
+.activeTab::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, var(--tier-color), transparent 70%);
+    opacity: 0.15;
+}
+
+.leaderboardCard {
+    background-color: #1a272d;
+    border: 2px solid #37464f;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.tableHeader {
+    display: grid;
+    grid-template-columns: 100px 1fr 150px;
+    padding: 20px 24px;
+    background-color: #233138;
+    border-bottom: 2px solid #37464f;
+    font-weight: 800;
+    color: #afafaf;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 100px 1fr 150px;
+    padding: 20px 24px;
+    align-items: center;
+    border-bottom: 1px solid #37464f;
+    transition: all 0.2s ease;
+}
+
+.row:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.currentUserRow {
+    background-color: rgba(28, 176, 246, 0.1);
+    border-left: 4px solid #1cb0f6;
+}
+
+.rankCol {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rankNumber {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #37464f;
+}
+
+.userCol {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.avatarWrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #37464f;
+    border: 2px solid #4b5a64;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+    background: linear-gradient(135deg, #1cb0f6 0%, #0c96e0 100%);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.userName {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.tierTag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #afafaf;
+    text-transform: uppercase;
+}
+
+.xpCol {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 6px;
+}
+
+.xpValue {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.xpLabel {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #afafaf;
+}
+
+.loadingState {
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #37464f;
+    border-top-color: #1cb0f6;
+    border-radius: 50%;
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.emptyState {
+    padding: 80px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.emptyState p {
+    color: #afafaf;
+    font-weight: 600;
+    max-width: 400px;
+    line-height: 1.6;
+}
+
+.footerStatus {
+    position: fixed;
+    bottom: 24px;
+    left: 280px;
+    right: 24px;
+    background-color: #1cb0f6;
+    padding: 16px 32px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 40px rgba(28, 176, 246, 0.4);
+    z-index: 100;
+    animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.footerRank {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.shareBtn {
+    background-color: #fff;
+    color: #1cb0f6;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.shareBtn:hover {
+    transform: scale(1.05);
+}
+
+.introContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lockInfoBanner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background-color: #1a272d;
+    padding: 24px 32px;
+    border-radius: 20px;
+    border: 2px solid #37464f;
+}
+
+.lockIconBox {
+    width: 64px;
+    height: 64px;
+    background-color: #233138;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #afafaf;
+}
+
+.lockTextContent h2 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 4px;
+}
+
+.lockTextContent p {
+    color: #afafaf;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.introGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.introCard {
+    background-color: #1a272d;
+    padding: 32px;
+    border-radius: 20px;
+    border: 2px solid #37464f;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.2s;
+}
+
+.introCard:hover {
+    transform: translateY(-5px);
+}
+
+.introIconBox {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.introCard h3 {
+    font-size: 1.25rem;
+    font-weight: 900;
+}
+
+.introCard p {
+    color: #afafaf;
+    line-height: 1.6;
+    font-weight: 600;
+}
+
+.actionSection {
+    display: flex;
+    justify-content: center;
+    padding-top: 16px;
+}
+
+.startLearningBtn {
+    background-color: #1cb0f6;
+    color: #fff;
+    border: none;
+    padding: 16px 48px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #1899d6;
+    transition: all 0.1s;
+}
+
+.startLearningBtn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #1899d6;
+}
+
+@media (max-width: 1000px) {
+    .container {
+        grid-template-columns: 80px 1fr;
+    }
+
+    .footerStatus {
+        left: 100px;
+    }
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        padding: 40px 20px;
+    }
+
+    .headercol:first-child,
+    .rankCol {
+        display: none;
+    }
+
+    .row,
+    .tableHeader {
+        grid-template-columns: 1fr 100px;
+    }
+
+    .lockInfoBanner {
+        flex-direction: column;
+        text-align: center;
+        padding: 32px 24px;
+    }
+
+    .footerStatus {
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+}

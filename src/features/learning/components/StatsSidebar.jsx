@@ -1,12 +1,15 @@
 import React from 'react';
-import { Zap, Gem, Heart, Shield, ChevronDown, Check, Play, Plus, Flame } from 'lucide-react';
+import { Zap, Gem, Heart, Shield, ChevronDown, Check, Play, Plus, Flame, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { rewardService } from '../../../services/rewardService';
 import ConsistencyTracker from './ConsistencyTracker';
 import Button from '../../../components/ui/Button';
+import ShieldIcon from '../../../components/ShieldIcon';
 import styles from '../LearningPage.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
+import { leaderboardService } from '../../../services/leaderboardService';
+import { getShieldLevel } from '../../../utils/shieldSystem';
 
 const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
     const navigate = useNavigate();
@@ -26,6 +29,9 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
     const [weeklyActivity, setWeeklyActivity] = React.useState([]);
     const [fullHistory, setFullHistory] = React.useState([]);
 
+    const [userRank, setUserRank] = React.useState(null);
+    const [leaderboardData, setLeaderboardData] = React.useState([]);
+
     // Fetch streak and activity data
     React.useEffect(() => {
         if (!profile?.id) return;
@@ -38,15 +44,6 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
                     rewardService.getActivityHistory(profile.id, 365)
                 ]);
 
-                console.log('StatsSidebar - Fetched Data:', {
-                    profileId: profile.id,
-                    streakData,
-                    weeklyHistory: history,
-                    weeklyCount: history?.length,
-                    fullHistory: full,
-                    fullCount: full?.length
-                });
-
                 setStreak(streakData);
                 setWeeklyActivity(history);
                 setFullHistory(full);
@@ -55,8 +52,22 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
             }
         };
 
+        const fetchLeaderboard = async () => {
+            if (profile.xp > 0) {
+                const tier = getShieldLevel(profile.xp).level;
+                // Fetch top 2 for preview
+                const data = await leaderboardService.getLeaderboardByTier(tier, 2);
+                setLeaderboardData(data);
+
+                // Fetch rank
+                const rank = await leaderboardService.getUserRank(profile.id, tier);
+                setUserRank(rank);
+            }
+        };
+
         fetchStreakData();
-    }, [profile?.id]);
+        fetchLeaderboard();
+    }, [profile?.id, profile?.xp]);
 
     return (
         <aside className={styles.rightSidebar}>
@@ -103,25 +114,21 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
             </div>
 
             <div className={styles.statsRow}>
-                <div className={styles.statItem} style={{ color: '#ffc800' }} title="Total XP">
-                    <Zap size={24} fill="#ffc800" />
+                <div className={styles.statItem} title="Total XP">
+                    <ShieldIcon xp={profile?.xp || 0} size={40} />
                     <span>{profile?.xp || 0}</span>
                 </div>
                 <div className={styles.statItem} style={{ color: '#1cb0f6' }} title="Gems">
-                    <Gem size={24} fill="#1cb0f6" />
+                    <Gem size={34} fill="#1cb0f6" />
                     <span>{profile?.gems || 0}</span>
                 </div>
                 <div className={styles.statItem} style={{ color: '#ff4b4b' }} title="Hearts">
-                    <Heart size={24} fill="#ff4b4b" />
+                    <Heart size={34} fill="#ff4b4b" />
                     <span>{profile?.hearts || 0}</span>
-                </div>
-                <div className={styles.statItem} style={{ color: '#ff9600' }} title="Current Streak">
-                    <Flame size={24} fill="#ff9600" />
-                    <span>{streak?.current_streak || 0}</span>
                 </div>
             </div>
 
-            <div style={{ height: '8px' }}></div>
+
 
             {/* Daily Practices Tracker / Consistency Tracker */}
             <div className={styles.card} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
@@ -166,20 +173,7 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
                                     const isPracticed = weeklyActivity.some(a => a.activity_date === dateStr);
                                     const isToday = index === dayOfWeek;
 
-                                    // Debug logging (remove after testing)
-                                    if (index === 0) {
-                                        console.log('Weekly Flame Tracker Debug:', {
-                                            today: formatLocalDate(now),
-                                            dayOfWeek,
-                                            weeklyActivityCount: weeklyActivity.length,
-                                            weeklyActivityDates: weeklyActivity.map(a => a.activity_date)
-                                        });
-                                    }
-                                    console.log(`Day ${index} (${['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'][index]}):`, {
-                                        date: dateStr,
-                                        isPracticed,
-                                        isToday
-                                    });
+
 
                                     return (
                                         <div key={index} className={styles.flameContainer} title={dateStr}>
@@ -216,16 +210,76 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
                 </AnimatePresence>
             </div>
 
-            <div className={styles.card}>
+            <div className={styles.card} onClick={() => profile?.xp >= 100 && navigate('/leaderboard')} style={{ cursor: profile?.xp >= 100 ? 'pointer' : 'default' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>লিডারবোর্ড আনলক করুন!</h3>
+                    <h3 className={styles.cardTitle}>{profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}</h3>
                 </div>
-                <div className={styles.unlockContent}>
-                    <div className={styles.iconBox}>
-                        <Shield size={32} color="#4b4b4b" />
+                {profile?.xp >= 100 ? (
+                    <div className={styles.leaderboardPreview}>
+                        {leaderboardData && leaderboardData.length > 0 ? (
+                            leaderboardData.slice(0, 2).map((user, index) => {
+                                // Deterministic avatar for dummy users if no avatar_url
+                                const avatarSeed = index === 0 ? 'Felix' : 'Vivian'; // Boy for #1, Girl for #2
+                                const avatarUrl = user.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.id === profile.id ? (profile.display_name || profile.id) : avatarSeed}`;
+
+                                return (
+                                    <div
+                                        key={user.id}
+                                        className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
+                                    >
+                                        <div className={styles.leaderboardRowLeft}>
+                                            <span className={styles.rowRank}>{index + 1}</span>
+                                            <img
+                                                src={avatarUrl}
+                                                className={styles.rowAvatar}
+                                                alt={user.display_name || 'লার্নার'}
+                                            />
+                                            <span className={styles.rowName}>{user.display_name || 'লার্নার'}</span>
+                                        </div>
+                                        <div className={styles.leaderboardRowRight}>
+                                            <ShieldIcon xp={user.xp} size={22} showTooltip={false} />
+                                            <span className={styles.rowXP}>{user.xp}</span>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <div className={styles.loadingInfo} style={{ color: '#afafaf', textAlign: 'center', fontSize: '0.9rem', padding: '10px' }}>
+                                লিডারবোর্ড লোড হচ্ছে...
+                            </div>
+                        )}
+                        {userRank > 2 && (
+                            <>
+                                <div className={styles.leaderboardDivider}>•••</div>
+                                <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
+                                    <div className={styles.leaderboardRowLeft}>
+                                        <span className={styles.rowRank}>{userRank}</span>
+                                        <img
+                                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
+                                            className={styles.rowAvatar}
+                                            alt={profile.display_name || 'লার্নার'}
+                                        />
+                                        <span className={styles.rowName}>{profile.display_name || 'লার্নার'}</span>
+                                    </div>
+                                    <div className={styles.leaderboardRowRight}>
+                                        <ShieldIcon xp={profile.xp} size={22} showTooltip={false} />
+                                        <span className={styles.rowXP}>{profile.xp}</span>
+                                    </div>
+                                </div>
+                            </>
+                        )}
                     </div>
-                    <p className={styles.unlockText}>প্রতিযোগিতা শুরু করতে আরও ১০টি পাঠ সম্পূর্ণ করুন</p>
-                </div>
+                ) : (
+                    <div className={styles.unlockContent}>
+                        <div className={styles.iconBoxLocked}>
+                            <Lock size={40} className={styles.lockIconLarge} />
+                        </div>
+                        <div className={styles.unlockInfo}>
+                            <h4 className={styles.unlockTitle}>লিডারবোর্ড আনলক করুন!</h4>
+                            <p className={styles.unlockDesc}>প্রতিযোগিতা শুরু করতে 100 টি XP অর্জন করুন</p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <div className={styles.card}>

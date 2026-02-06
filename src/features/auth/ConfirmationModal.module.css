@@ -1,0 +1,183 @@
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modalContent {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    padding: 40px;
+    width: 90%;
+    max-width: 440px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: scaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.closeBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover {
+    color: var(--color-primary);
+    transform: rotate(90deg);
+}
+
+.iconWrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.checkBadge {
+    background: linear-gradient(135deg, var(--color-primary), #6366f1);
+    color: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+
+.pulseRing {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--color-primary);
+    opacity: 0.3;
+    animation: pulse 2s infinite;
+}
+
+.textContainer h2 {
+    font-size: 1.75rem;
+    color: var(--color-text);
+    margin-bottom: 12px;
+}
+
+.mainTask {
+    color: var(--color-text-muted);
+    margin-bottom: 16px;
+}
+
+.emailBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-bg-alt);
+    padding: 8px 16px;
+    border-radius: 99px;
+    border: 1px solid var(--color-border);
+    color: var(--color-primary);
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.instruction {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+}
+
+.tipsSection {
+    margin: 32px 0;
+    padding: 20px;
+    background-color: rgba(79, 70, 229, 0.05);
+    border-radius: 16px;
+    text-align: left;
+}
+
+.tipsSection h4 {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    margin-bottom: 12px;
+}
+
+.tipsSection ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tipsSection li {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    position: relative;
+    padding-left: 18px;
+    margin-bottom: 8px;
+}
+
+.tipsSection li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.finishBtn {
+    width: 100%;
+    padding: 14px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 1.1rem !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: scale(1.8);
+        opacity: 0;
+    }
+}

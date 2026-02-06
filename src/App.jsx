@@ -13,10 +13,13 @@ import ProfilePage from './features/profile/ProfilePage';
 import LeaderboardPage from './features/leaderboard/LeaderboardPage';
 import AdminDashboard from './features/admin/v2/AdminDashboardV2';
 import { ThemeProvider } from './context/ThemeContext';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { courseService } from './services/courseService';
+import { surveyService } from './services/surveyService';
+import { Navigate } from 'react-router-dom';
 
-// Landing Page Assembly
-const LandingPage = () => (
+// Landing Page UI Component
+const LandingPageContent = () => (
   <>
     <Navbar />
     <Hero />
@@ -42,6 +45,68 @@ const LandingPage = () => (
   </>
 );
 
+// Home Component with Redirect Logic
+const HomePage = () => {
+  const { user, loading: authLoading } = useAuth();
+  const [lastCourseId, setLastCourseId] = useState(null);
+  const [fetchingCourse, setFetchingCourse] = useState(true);
+
+  useEffect(() => {
+    const fetchLastCourse = async () => {
+      if (user) {
+        try {
+          // 1. Check for pending enrollment (from survey or guest click)
+          const pendingEnrollment = localStorage.getItem('pending_enrollment');
+          if (pendingEnrollment) {
+            const { courseId, selections } = JSON.parse(pendingEnrollment);
+
+            if (selections) {
+              await surveyService.saveSurveyResponse(courseId, selections);
+            } else {
+              await courseService.enrollUserInCourse(user.id, courseId);
+            }
+
+            localStorage.removeItem('pending_enrollment');
+            setLastCourseId(courseId);
+            setFetchingCourse(false);
+            return;
+          }
+
+          // 2. Otherwise get the actual last practiced course
+          const id = await courseService.getLastPracticedCourseId(user.id);
+          setLastCourseId(id);
+        } catch (error) {
+          console.error("Error fetching last course:", error);
+        }
+      }
+      setFetchingCourse(false);
+    };
+
+    if (!authLoading) {
+      if (user) {
+        fetchLastCourse();
+      } else {
+        setFetchingCourse(false);
+      }
+    }
+  }, [user, authLoading]);
+
+  if (authLoading || (user && fetchingCourse)) {
+    return <LoadingScreen />;
+  }
+
+  if (user) {
+    if (lastCourseId) {
+      return <Navigate to={`/learn/${lastCourseId}`} replace />;
+    } else {
+      // If no course found, redirect to the courses page
+      return <Navigate to="/courses" replace />;
+    }
+  }
+
+  return <LandingPageContent />;
+};
+
 function App() {
   const [initialLoading, setInitialLoading] = useState(true);
 
@@ -61,7 +126,7 @@ function App() {
           <div className="app-container">
             <main>
               <Routes>
-                <Route path="/" element={<LandingPage />} />
+                <Route path="/" element={<HomePage />} />
                 <Route path="/auth" element={<AuthPage />} />
                 <Route path="/courses" element={<CourseListPage />} />
                 <Route path="/survey/:courseId" element={<Survey />} />

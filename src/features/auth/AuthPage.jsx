@@ -1,25 +1,55 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, X, Chrome, Github, Loader2 } from 'lucide-react';
+import { Mail, Lock, X, Chrome, Github, Loader2, User } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import styles from './AuthPage.module.css';
 import { useAuth } from '../../context/AuthContext';
+import { courseService } from '../../services/courseService';
+import { surveyService } from '../../services/surveyService';
+import { supabase } from '../../lib/supabaseClient';
+import ConfirmationModal from './ConfirmationModal';
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const { user, signIn, signUp, signInWithOAuth } = useAuth();
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if (user) {
-            navigate('/');
-        }
+        const checkPendingAction = async () => {
+            if (user) {
+                const pendingEnrollment = localStorage.getItem('pending_enrollment');
+                if (pendingEnrollment) {
+                    try {
+                        const { courseId, selections } = JSON.parse(pendingEnrollment);
+
+                        // If we have survey selections, use surveyService which saves both survey and enrollment
+                        if (selections) {
+                            await surveyService.saveSurveyResponse(courseId, selections);
+                        } else {
+                            // Fallback to just enrollment if no survey data
+                            await courseService.enrollUserInCourse(user.id, courseId);
+                        }
+
+                        localStorage.removeItem('pending_enrollment');
+                        navigate(`/learn/${courseId}`);
+                        return;
+                    } catch (err) {
+                        console.error('Error in post-auth enrollment:', err);
+                    }
+                }
+                navigate('/');
+            }
+        };
+        checkPendingAction();
     }, [user, navigate]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -30,12 +60,22 @@ const AuthPage = () => {
             if (isLogin) {
                 const { error: signInError } = await signIn({ email, password });
                 if (signInError) throw signInError;
-                navigate('/');
             } else {
-                const { error: signUpError } = await signUp({ email, password });
+                const { data, error: signUpError } = await signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: name,
+                            display_name: name
+                        }
+                    }
+                });
                 if (signUpError) throw signUpError;
-                alert('নিবন্ধন সফল হয়েছে! অনুগ্রহ করে আপনার ইমেইল যাচাই করুন।');
-                setIsLogin(true);
+
+                if (!data?.user || data?.session === null) {
+                    setShowConfirmModal(true);
+                }
             }
         } catch (err) {
             console.error('Auth error:', err);
@@ -77,6 +117,24 @@ const AuthPage = () => {
                 {error && <div className={styles.errorMessage}>{error}</div>}
 
                 <form className={styles.authForm} onSubmit={handleSubmit}>
+
+                    {!isLogin && (
+                        <div className={styles.inputGroup}>
+                            <label htmlFor="name">আপনার নাম</label>
+                            <div className={styles.inputWrapper}>
+                                <User className={styles.inputIcon} size={18} />
+                                <input
+                                    type="text"
+                                    id="name"
+                                    placeholder="আপনার পুরো নাম লিখুন"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required={!isLogin}
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     <div className={styles.inputGroup}>
                         <label htmlFor="email">ইমেইল</label>
                         <div className={styles.inputWrapper}>
@@ -150,6 +208,15 @@ const AuthPage = () => {
                     </p>
                 </div>
             </div>
+
+            <ConfirmationModal
+                email={email}
+                isVisible={showConfirmModal}
+                onClose={() => {
+                    setShowConfirmModal(false);
+                    setIsLogin(true);
+                }}
+            />
         </div>
     );
 };

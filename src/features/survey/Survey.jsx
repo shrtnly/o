@@ -4,6 +4,8 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { ArrowLeft } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import { surveyService } from '../../services/surveyService';
+import { courseService } from '../../services/courseService';
+import { useAuth } from '../../context/AuthContext';
 import styles from './Survey.module.css';
 
 const Survey = () => {
@@ -13,6 +15,7 @@ const Survey = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [selections, setSelections] = useState({});
     const [loading, setLoading] = useState(true);
+    const { user } = useAuth();
 
     useEffect(() => {
         const loadQuestions = async () => {
@@ -34,9 +37,28 @@ const Survey = () => {
         if (currentStep < questions.length - 1) {
             setCurrentStep(currentStep + 1);
         } else {
-            // Save results and redirect to learning page
-            await surveyService.saveSurveyResponse(courseId, selections);
-            navigate(`/learn/${courseId}`);
+            if (user) {
+                // If logged in, save results, enroll and go to course
+                try {
+                    await surveyService.saveSurveyResponse(courseId, selections);
+                    // note: saveSurveyResponse already handles enrollment in its current implementation
+                    navigate(`/learn/${courseId}`);
+                } catch (error) {
+                    console.error("Error saving survey:", error);
+                    // Fallback to manual enrollment if survey save fails but user exists
+                    await courseService.enrollUserInCourse(user.id, courseId);
+                    navigate(`/learn/${courseId}`);
+                }
+            } else {
+                // If guest, save pending enrollment and go to auth
+                // We'll save the selections in localStorage so we can save them to DB after login
+                localStorage.setItem('pending_enrollment', JSON.stringify({
+                    courseId,
+                    selections,
+                    surveyCompleted: true
+                }));
+                navigate('/auth');
+            }
         }
     };
 

@@ -239,5 +239,33 @@ export const courseService = {
             console.error('Error fetching last practiced course:', error);
             return null;
         }
+    },
+
+    async checkEnrollment(userId, courseId) {
+        const { data, error } = await supabase
+            .from('user_courses')
+            .select('*')
+            .eq('user_id', userId)
+            .eq('course_id', courseId)
+            .maybeSingle();
+
+        if (error) throw error;
+        return !!data;
+    },
+
+    async enrollUserInCourse(userId, courseId) {
+        const isEnrolled = await this.checkEnrollment(userId, courseId);
+        if (isEnrolled) return true;
+
+        const { data, error } = await supabase
+            .from('user_courses')
+            .insert([{ user_id: userId, course_id: courseId }])
+            .select();
+
+        if (error) {
+            console.error('Error enrolling user:', error);
+            throw error;
+        }
+        return data;
     }
 };

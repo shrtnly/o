@@ -267,5 +267,15 @@ export const courseService = {
             throw error;
         }
         return data;
+    },
+
+    async getUserEnrolledCourses(userId) {
+        const { data, error } = await supabase
+            .from('user_course_progress')
+            .select('*')
+            .eq('user_id', userId);
+
+        if (error) throw error;
+        return data || [];
     }
 };

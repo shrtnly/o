@@ -31,6 +31,16 @@ export const AuthProvider = ({ children }) => {
         signIn: (data) => supabase.auth.signInWithPassword(data),
         signInWithOAuth: (data) => supabase.auth.signInWithOAuth(data),
         signOut: () => supabase.auth.signOut(),
+        updateProfile: async (updates) => {
+            const { data, error } = await supabase
+                .from('profiles')
+                .update(updates)
+                .eq('id', user?.id)
+                .select()
+                .single();
+            if (error) throw error;
+            return data;
+        },
         user,
         loading
     };

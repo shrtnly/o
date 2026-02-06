@@ -30,63 +30,72 @@
 }
 
 .unitHeader {
-    width: calc(100% - 32px);
-    max-width: 600px;
-    background-color: var(--unit-bg, #58cc02);
-    padding: 18px 24px;
+    width: 100%;
+    background: var(--unit-bg, #58cc02);
+    padding: 12px 24px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 0 var(--unit-border, #46a302);
+    justify-content: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
     position: sticky;
-    top: 16px;
+    top: 0;
     z-index: 101;
-    margin: 16px 16px 48px;
-    border-radius: 20px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0 0 40px 0;
+    border-radius: 0;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
 .unitHeaderScrolled {
-    top: 0;
-    margin-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    padding: 12px 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 4px 0 var(--unit-border, #46a302);
+    padding: 8px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .unitInfo h3 {
     text-transform: uppercase;
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 800;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 900;
     margin-bottom: 2px;
+    letter-spacing: 1px;
 }
 
 .unitInfo h2 {
     font-size: 1.25rem;
-    font-weight: 800;
+    font-weight: 900;
     color: #fff;
+    margin: 0;
 }
 
 .guideBtn {
-    background-color: rgba(0, 0, 0, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    border-radius: 14px;
-    padding: 10px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 12px 20px;
     color: #fff;
     font-weight: 800;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
     text-transform: uppercase;
-    font-size: 0.85rem;
-    transition: transform 0.1s ease;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.guideBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.1);
 }
 
 .guideBtn:active {
-    transform: scale(0.95);
+    transform: translateY(2px);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
 }
 
 /* Path & Section */

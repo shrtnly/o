@@ -345,10 +345,6 @@ const LearningPage = () => {
                             <h3 key={`idx-${activeUnit?.id}`}>ইউনিট {activeUnit?.order_index || 1}</h3>
                             <h2 key={`title-${activeUnit?.id}`}>{activeUnit?.title || 'লোড হচ্ছে...'}</h2>
                         </div>
-                        <button className={styles.guideBtn}>
-                            <BookOpen size={18} />
-                            গাইডবুক
-                        </button>
                     </div>
                 )}
 

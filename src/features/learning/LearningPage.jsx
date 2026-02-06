@@ -95,11 +95,39 @@ const LearningPage = () => {
     const [lastReward, setLastReward] = useState({ hearts: 0, gems: 0 });
 
     const handleScroll = () => {
-        if (mainContentRef.current) {
-            const isScrolled = mainContentRef.current.scrollTop > 10;
-            if (isScrolled !== scrolled) {
-                setScrolled(isScrolled);
+        if (!mainContentRef.current || unitsWithChapters.length === 0) return;
+
+        const container = mainContentRef.current;
+        const scrollTop = container.scrollTop;
+
+        // 1. Update scrolled state
+        const isScrolled = scrollTop > 20;
+        if (isScrolled !== scrolled) {
+            setScrolled(isScrolled);
+        }
+
+        // 2. Detect the active unit section
+        // We find the section that has currently passed the "header zone"
+        const sections = container.querySelectorAll('[data-unit-section]');
+        let currentActiveUnit = unitsWithChapters[0]; // Default to first unit
+
+        sections.forEach((section) => {
+            const rect = section.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            const relativeTop = rect.top - containerRect.top;
+
+            // If the section top is above or at the header (with a small 80px buffer)
+            if (relativeTop <= 80) {
+                const unitId = section.getAttribute('data-unit-section');
+                const unit = unitsWithChapters.find(u => u.id === unitId);
+                if (unit) {
+                    currentActiveUnit = unit;
+                }
             }
+        });
+
+        if (currentActiveUnit && activeUnit?.id !== currentActiveUnit.id) {
+            setActiveUnit(currentActiveUnit);
         }
     };
 
@@ -207,37 +235,6 @@ const LearningPage = () => {
         }
     }, [courseId, user]);
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                // Find all intersecting entries
-                const intersecting = entries
-                    .filter(entry => entry.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio); // Potentially useful but let's simplify
-
-                // We want the section that is currently crossing the "decision line"
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const unitId = entry.target.getAttribute('data-unit-section');
-                        const unit = unitsWithChapters.find(u => u.id === unitId);
-                        // Only update if it's different and we are intersecting the top area
-                        if (unit && activeUnit?.id !== unit.id) {
-                            setActiveUnit(unit);
-                        }
-                    }
-                });
-            },
-            {
-                threshold: [0, 0.1],
-                rootMargin: "-120px 0px -80% 0px" // Focus on a band near the sticky header
-            }
-        );
-
-        const sections = document.querySelectorAll(`[data-unit-section]`);
-        sections.forEach(s => observer.observe(s));
-
-        return () => observer.disconnect();
-    }, [unitsWithChapters]);
 
     const handleChapterClick = async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
@@ -314,7 +311,7 @@ const LearningPage = () => {
     const activeChapterId = firstIncompleteChapter?.id || (allChapters.length > 0 ? allChapters[allChapters.length - 1].id : null);
 
     const UNIT_COLORS = [
-        { bg: '#58cc02', border: '#46a302' }, // Green
+        { bg: '#00d1ff', border: '#009cc2' }, // Cyan
         { bg: '#1cb0f6', border: '#1899d6' }, // Blue
         { bg: '#ce82ff', border: '#af69e3' }, // Purple
         { bg: '#ff9600', border: '#e58600' }, // Orange
@@ -342,8 +339,9 @@ const LearningPage = () => {
                         }}
                     >
                         <div className={styles.unitInfo}>
-                            <h3 key={`idx-${activeUnit?.id}`}>ইউনিট {activeUnit?.order_index || 1}</h3>
-                            <h2 key={`title-${activeUnit?.id}`}>{activeUnit?.title || 'লোড হচ্ছে...'}</h2>
+                            <h2 key={`unit-header-${activeUnit?.id}`}>
+                                ইউনিট {activeUnit?.order_index || 1} : {activeUnit?.title || 'লোড হচ্ছে...'}
+                            </h2>
                         </div>
                     </div>
                 )}

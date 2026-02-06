@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabaseClient';
  * 
  * Features:
  * - Initial 5 hearts for new users
- * - Automatic refill to 5 hearts after 3 hours when hearts reach 0
+ * - Automatic refill to 5 hearts after 2 hours when hearts reach 0
  * - Real-time countdown to next refill
  * - Deduct hearts on wrong answers
  * 
@@ -22,7 +22,7 @@ export const useHeartRefill = (userId) => {
     const [loading, setLoading] = useState(true);
 
     /**
-     * Check and refill hearts if 3 hours have passed
+     * Check and refill hearts if 2 hours have passed
      */
     const checkAndRefillHearts = useCallback(async () => {
         if (!userId) return;
@@ -105,7 +105,7 @@ export const useHeartRefill = (userId) => {
                 // If hearts reached 0, start the 3-hour timer
                 if (newHearts === 0) {
                     setLastRefillAt(new Date().toISOString());
-                    setTimeUntilRefill(3 * 60 * 60 * 1000); // 3 hours in ms
+                    setTimeUntilRefill(2 * 60 * 60 * 1000); // 2 hours in ms
                 }
 
                 return { success: true, newHearts };

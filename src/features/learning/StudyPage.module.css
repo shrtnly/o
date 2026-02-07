@@ -4,7 +4,7 @@
     color: #fff;
     display: flex;
     flex-direction: column;
-    font-family: 'Hind Siliguri', 'Outfit', sans-serif;
+    font-family: 'Hind Siliguri', sans-serif;
     user-select: none;
     overflow-x: hidden;
 }

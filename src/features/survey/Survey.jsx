@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import { surveyService } from '../../services/surveyService';
@@ -38,20 +39,15 @@ const Survey = () => {
             setCurrentStep(currentStep + 1);
         } else {
             if (user) {
-                // If logged in, save results, enroll and go to course
                 try {
                     await surveyService.saveSurveyResponse(courseId, selections);
-                    // note: saveSurveyResponse already handles enrollment in its current implementation
                     navigate(`/learn/${courseId}`);
                 } catch (error) {
                     console.error("Error saving survey:", error);
-                    // Fallback to manual enrollment if survey save fails but user exists
                     await courseService.enrollUserInCourse(user.id, courseId);
                     navigate(`/learn/${courseId}`);
                 }
             } else {
-                // If guest, save pending enrollment and go to auth
-                // We'll save the selections in localStorage so we can save them to DB after login
                 localStorage.setItem('pending_enrollment', JSON.stringify({
                     courseId,
                     selections,
@@ -59,6 +55,14 @@ const Survey = () => {
                 }));
                 navigate('/auth');
             }
+        }
+    };
+
+    const handleBack = () => {
+        if (currentStep > 0) {
+            setCurrentStep(currentStep - 1);
+        } else {
+            navigate(-1);
         }
     };
 
@@ -72,7 +76,7 @@ const Survey = () => {
     return (
         <div className={styles.surveyWrapper}>
             <div className={styles.topBar}>
-                <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                <button className={styles.backBtn} onClick={handleBack}>
                     <ArrowLeft size={24} />
                 </button>
                 <div className={styles.progressContainer}>
@@ -85,28 +89,61 @@ const Survey = () => {
 
             <main className={styles.mainContent}>
                 <div className={styles.characterArea}>
-                    <div className={styles.lottieWrapper}>
+                    <motion.div
+                        key={`buddy-${currentStep}`}
+                        initial={{ opacity: 0, x: -50, scale: 0.7, rotate: -10 }}
+                        animate={{ opacity: 1, x: 0, scale: 1, rotate: 0 }}
+                        transition={{
+                            duration: 0.6,
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20
+                        }}
+                        className={styles.lottieWrapper}
+                    >
                         <DotLottieReact
-                            src="https://lottie.host/5bcd5231-cb69-4122-875d-aa86dfc0f832/6NuZNI7yn3.lottie"
+                            src="https://lottie.host/8ab6daa9-e871-43cd-bfcf-e5832fe9037d/YX1TPvuAvM.lottie"
                             loop
                             autoplay
                         />
-                    </div>
-                    <div className={styles.speechBubble}>
+                    </motion.div>
+                    <motion.div
+                        key={`question-${currentStep}`}
+                        initial={{ opacity: 0, x: 30, scale: 0.9 }}
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{
+                            delay: 0.3,
+                            duration: 0.5,
+                            type: "spring",
+                            stiffness: 200,
+                            damping: 15
+                        }}
+                        className={styles.speechBubble}
+                    >
                         {currentQuestion.question}
-                    </div>
+                    </motion.div>
                 </div>
 
                 <div className={styles.optionsGrid}>
                     {currentQuestion.options.map((option, index) => (
-                        <div
+                        <motion.div
                             key={option.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{
+                                delay: 0.5 + (index * 0.1),
+                                type: "spring",
+                                stiffness: 300,
+                                damping: 25
+                            }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                             className={`${styles.optionCard} ${selections[currentStep] === option.id ? styles.selected : ''}`}
                             onClick={() => handleSelect(option.id)}
                         >
                             <div className={styles.optionNumber}>{index + 1}</div>
                             <span>{option.text}</span>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </main>

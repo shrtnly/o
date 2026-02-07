@@ -7,12 +7,12 @@
 }
 
 .topBar {
-    padding: 24px;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     gap: 16px;
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 4px auto 0;
     width: 100%;
 }
 
@@ -54,46 +54,83 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 0 24px 100px;
-    max-width: 600px;
+    justify-content: flex-start;
+    padding: 60px 24px 20px;
+    max-width: 1000px;
     margin: 0 auto;
     width: 100%;
 }
 
 .characterArea {
     display: flex;
-    align-items: flex-end;
-    gap: 20px;
-    margin-bottom: 40px;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 48px;
     width: 100%;
 }
 
+@media (max-width: 768px) {
+    .characterArea {
+        flex-direction: column;
+        text-align: center;
+        gap: 0;
+        margin-bottom: 16px;
+    }
+
+    .lottieWrapper {
+        width: 75px;
+        height: 75px;
+    }
+
+    .speechBubble {
+        font-size: 1.25rem;
+        padding: 16px;
+    }
+
+    .speechBubble::after,
+    .speechBubble::before {
+        left: 50%;
+        top: -16px;
+        transform: translateX(-50%);
+        border-width: 0 10px 10px 10px;
+        border-color: transparent transparent var(--color-border) transparent;
+    }
+
+    .speechBubble::before {
+        top: -12px;
+        border-color: transparent transparent var(--color-bg-alt) transparent;
+    }
+}
+
 .lottieWrapper {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.15));
 }
 
 .speechBubble {
     position: relative;
     background: var(--color-bg-alt);
     border: 2px solid var(--color-border);
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 16px 24px;
-    flex: 1;
-    font-size: 1.25rem;
+    width: fit-content;
+    max-width: 80%;
+    font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.4;
     color: #fff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
 .speechBubble::after {
     content: '';
     position: absolute;
-    left: -10px;
+    left: -12px;
     top: 50%;
     transform: translateY(-50%);
-    border-width: 10px 10px 10px 0;
+    border-width: 12px 12px 12px 0;
     border-style: solid;
     border-color: transparent var(--color-border) transparent transparent;
     z-index: 1;
@@ -102,20 +139,32 @@
 .speechBubble::before {
     content: '';
     position: absolute;
-    left: -7px;
+    left: -9px;
     top: 50%;
     transform: translateY(-50%);
-    border-width: 10px 10px 10px 0;
+    border-width: 12px 12px 12px 0;
     border-style: solid;
     border-color: transparent var(--color-bg-alt) transparent transparent;
     z-index: 2;
 }
 
+/* Question typing style */
+.speechBubble span {
+    display: inline-block;
+}
+
 .optionsGrid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
     width: 100%;
+    max-width: 800px;
+}
+
+@media (max-width: 600px) {
+    .optionsGrid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .optionCard {
@@ -172,7 +221,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 24px;
+    padding: 12px 24px;
     border-top: 2px solid var(--color-border);
     background-color: var(--color-bg);
     display: flex;
@@ -192,9 +241,24 @@
     font-size: 1.1rem !important;
     text-transform: uppercase;
     letter-spacing: 1px;
+    transition: all 0.2s ease;
 }
 
-/* Light Mode Adjustments */
+.continueBtn:disabled {
+    background-color: var(--color-bg-alt) !important;
+    color: var(--color-text-muted) !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none !important;
+    border-bottom: none !important;
+}
+
+.continueBtn:not(:disabled) {
+    background-color: var(--color-primary);
+    color: #000;
+    box-shadow: 0 4px 0 var(--color-primary-dark);
+}
+
 :global(.light) .speechBubble {
     background: #fff;
     border-color: #e5e5e5;
@@ -208,6 +272,7 @@
 :global(.light) .speechBubble::before {
     border-right-color: #fff;
 }
+
 
 :global(.light) .optionCard {
     background: #fff;

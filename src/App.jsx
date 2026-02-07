@@ -12,6 +12,7 @@ import StudyPage from './features/learning/StudyPage';
 import ProfilePage from './features/profile/ProfilePage';
 import LeaderboardPage from './features/leaderboard/LeaderboardPage';
 import AdminDashboard from './features/admin/v2/AdminDashboardV2';
+import ShopPage from './features/shop/ShopPage';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { courseService } from './services/courseService';
@@ -134,6 +135,7 @@ function App() {
                 <Route path="/study/:courseId/:chapterId" element={<StudyPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/leaderboard" element={<LeaderboardPage />} />
+                <Route path="/shop" element={<ShopPage />} />
                 <Route path="/admin" element={<AdminDashboard />} />
               </Routes>
             </main>

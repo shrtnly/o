@@ -19,6 +19,7 @@ export const useHeartRefill = (userId) => {
     const [lastRefillAt, setLastRefillAt] = useState(null);
     const [timeUntilRefill, setTimeUntilRefill] = useState(null);
     const [isRefilling, setIsRefilling] = useState(false);
+    const [isPremium, setIsPremium] = useState(false);
     const [loading, setLoading] = useState(true);
 
     /**
@@ -39,6 +40,7 @@ export const useHeartRefill = (userId) => {
                 setHearts(result.hearts);
                 setMaxHearts(result.max_hearts);
                 setLastRefillAt(result.last_refill_at);
+                setIsPremium(result.is_premium || false);
 
                 // Parse interval to milliseconds for countdown
                 if (result.time_until_next_refill) {
@@ -73,6 +75,7 @@ export const useHeartRefill = (userId) => {
                     setHearts(profile.hearts || 5);
                     setMaxHearts(profile.max_hearts || 5);
                     setLastRefillAt(profile.last_heart_refill_at);
+                    setIsPremium(profile.is_premium || false);
                 }
             } catch (fallbackError) {
                 console.error('Fallback heart fetch failed:', fallbackError);
@@ -87,6 +90,11 @@ export const useHeartRefill = (userId) => {
      */
     const deductHeart = useCallback(async (amount = 1) => {
         if (!userId) return { success: false, newHearts: hearts };
+
+        // Skip deduction for premium users
+        if (isPremium) {
+            return { success: true, newHearts: 5 };
+        }
 
         try {
             setIsRefilling(true);
@@ -242,7 +250,8 @@ export const useHeartRefill = (userId) => {
         deductHeart,
         awardHearts,
         checkAndRefillHearts,
-        canAnswer: hearts > 0,
-        needsRefill: hearts === 0
+        isPremium,
+        canAnswer: isPremium || hearts > 0,
+        needsRefill: !isPremium && hearts === 0
     };
 };

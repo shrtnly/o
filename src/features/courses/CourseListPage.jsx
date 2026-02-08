@@ -61,6 +61,11 @@ const CourseListPage = () => {
         <div className={styles.pageWrapper}>
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
+                    <header className={styles.header}>
+                        <h1 className={styles.pageTitle}>সব কোর্সসমূহ</h1>
+                        <p className={styles.subtitle}>আপনার পছন্দের বিষয়টি বেছে নিন এবং আজই শেখা শুরু করুন।</p>
+                    </header>
+
                     <div className={styles.searchFilterBar}>
                         <div className={styles.categoryFilters}>
                             <button

@@ -332,8 +332,6 @@ const LearningPage = () => {
 
     return (
         <div className={styles.learningPage}>
-            <Sidebar />
-
             <main className={styles.mainContent} ref={mainContentRef} onScroll={handleScroll}>
                 {/* Single Unit Header at the Top */}
                 {unitsWithChapters.length > 0 && (

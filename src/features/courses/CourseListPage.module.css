@@ -1,6 +1,5 @@
 .pageWrapper {
-    display: grid;
-    grid-template-columns: 240px 1fr;
+    width: 100%;
     height: 100vh;
     background-color: #0a1114;
     color: #fff;
@@ -8,14 +7,15 @@
     overflow: hidden;
 }
 
-.main {
+.mainContainer {
+    height: 100%;
     padding: 40px 0;
     overflow-y: auto;
     scrollbar-width: none;
     background-color: #0a1114;
 }
 
-.main::-webkit-scrollbar {
+.mainContainer::-webkit-scrollbar {
     display: none;
 }
 
@@ -190,4 +190,18 @@
     .grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Guest Layout adjustments */
+.guestLayoutWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+}
+
+.guestLayoutWrapper .pageWrapper {
+    flex: 1;
+    height: auto;
+    overflow: hidden;
 }

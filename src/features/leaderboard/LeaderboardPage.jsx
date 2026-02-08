@@ -71,8 +71,6 @@ const LeaderboardPage = () => {
 
     return (
         <div className={styles.container}>
-            <Sidebar />
-
             <main className={styles.mainContent}>
                 <div className={styles.header}>
                     <div className={styles.titleSection}>

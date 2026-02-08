@@ -1,5 +1,6 @@
 .profilePage {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
     background-color: var(--color-bg);
     color: var(--color-text);
     padding-bottom: 80px;

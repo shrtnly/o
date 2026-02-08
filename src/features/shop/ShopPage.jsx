@@ -116,8 +116,6 @@ const ShopPage = () => {
 
     return (
         <div className={styles.shopPage}>
-            <Sidebar />
-
             <main className={styles.mainContent}>
                 <header className={styles.header}>
                     <h1>ও-শেখা স্টোর</h1>

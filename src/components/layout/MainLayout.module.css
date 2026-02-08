@@ -1,0 +1,22 @@
+.appLayout {
+    display: flex;
+    height: 100vh;
+    background-color: #0b0e11;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.mainContent {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Let child components handle their own scrolling if needed */
+}
+
+@media (max-width: 768px) {
+    .appLayout {
+        flex-direction: column-reverse;
+    }
+}

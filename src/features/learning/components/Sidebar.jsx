@@ -3,7 +3,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { Home, Trophy, Compass, Store, User, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { courseService } from '../../../services/courseService';
-import styles from '../LearningPage.module.css';
+import styles from './Sidebar.module.css';
 
 const Sidebar = () => {
     const { user } = useAuth();

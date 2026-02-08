@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../learning/components/Sidebar';
-import LoadingScreen from '../../components/ui/LoadingScreen';
+import InlineLoader from '../../components/ui/InlineLoader';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
@@ -60,9 +59,7 @@ const CourseListPage = () => {
 
     return (
         <div className={styles.pageWrapper}>
-            <Sidebar />
-
-            <main className={styles.main}>
+            <div className={styles.mainContainer}>
                 <div className={styles.container}>
                     <div className={styles.searchFilterBar}>
                         <div className={styles.categoryFilters}>
@@ -85,7 +82,7 @@ const CourseListPage = () => {
                     </div>
 
                     {loading ? (
-                        <LoadingScreen />
+                        <InlineLoader />
                     ) : (
                         <div className={styles.content}>
                             {/* Specific Category Section - only if filtered */}
@@ -128,7 +125,7 @@ const CourseListPage = () => {
                         </div>
                     )}
                 </div>
-            </main>
+            </div>
         </div>
     );
 };

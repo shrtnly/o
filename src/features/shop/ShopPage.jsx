@@ -11,6 +11,8 @@ import { shopService } from '../../services/shopService';
 import Sidebar from '../learning/components/Sidebar';
 import styles from './ShopPage.module.css';
 import { toast } from 'sonner';
+import LoadingScreen from '../../components/ui/LoadingScreen';
+import InlineLoader from '../../components/ui/InlineLoader';
 
 const GEM_PACKS = [
     { id: 'gem_p1', amount: 500, price: 100, label: 'জেম পকেট', icon: <Gem size={48} color="#1cb0f6" fill="#1cb0f6" /> },
@@ -108,128 +110,132 @@ const ShopPage = () => {
         }
     };
 
-    if (loading) return (
-        <div className={styles.shopPage} style={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Loader2 className={styles.spinnerPulse} size={48} color="#1cb0f6" />
-        </div>
-    );
+
 
     return (
         <div className={styles.shopPage}>
             <main className={styles.mainContent}>
-                <header className={styles.header}>
-                    <h1>ও-শেখা স্টোর</h1>
-                    <p>আপনার শেখার গতি বাড়াতে প্রয়োজনীয় রিসোর্স সংগ্রহ করুন।</p>
-                </header>
-
-                {/* SUPER Subscription Section */}
-                <section className={styles.section}>
-                    <div className={styles.superCard}>
-                        <div className={styles.superContent}>
-                            <div className={styles.superHeader}>
-                                <span className={styles.superTag}>SUPER MEMBERSHIP</span>
-                                <h2 className={styles.superTitle}>সুপার সাবস্ক্রিপশন</h2>
-                            </div>
-                            <div className={styles.superFeaturesCompact}>
-                                <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> আনলিমিটেড হার্ট</div>
-                                <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> অ্যাড-ফ্রি লার্নিং</div>
-                                <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> স্পেশাল প্রোফাইল ব্যাজ</div>
-                            </div>
-                        </div>
-
-                        <div className={styles.superRightArea}>
-                            <div className={styles.toggleContainer}>
-                                <div
-                                    className={styles.toggleIndicator}
-                                    style={{
-                                        width: '90px',
-                                        transform: planType === 'monthly' ? 'translateX(0)' : 'translateX(90px)'
-                                    }}
-                                />
-                                <button
-                                    className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
-                                    onClick={() => setPlanType('monthly')}
-                                >
-                                    মাসিক
-                                </button>
-                                <button
-                                    className={`${styles.toggleBtn} ${planType === 'yearly' ? styles.toggleBtnActive : ''}`}
-                                    onClick={() => setPlanType('yearly')}
-                                >
-                                    বার্ষিক
-                                    {planType === 'yearly' && <span className={styles.yearlyBadge}>-২০%</span>}
-                                </button>
-                            </div>
-
-                            <button
-                                className={styles.superAction}
-                                onClick={() => handlePurchase('subscription')}
-                                disabled={processing || profile?.is_premium}
-                            >
-                                {profile?.is_premium ? 'সক্রিয়' : (planType === 'monthly' ? '৳৪০০.০০ / মাস' : '৳৪০০০.০০ / বছর')}
-                                <ChevronRight size={22} />
-                            </button>
-                        </div>
+                {loading ? (
+                    <div className="flex items-center justify-center h-full w-full">
+                        <InlineLoader />
                     </div>
-                </section>
+                ) : (
+                    <>
+                        <header className={styles.header}>
+                            <h1>ও-শেখা স্টোর</h1>
+                            <p>আপনার শেখার গতি বাড়াতে প্রয়োজনীয় রিসোর্স সংগ্রহ করুন।</p>
+                        </header>
 
-                {/* Gem to Heart Converter Section */}
-                <section className={styles.section}>
-                    <h2 className={styles.sectionTitle}>জেম এক্সচেঞ্জ</h2>
-                    <div className={styles.convertCard}>
-                        <div className={styles.convertInputArea}>
-                            <h3 className={styles.convertTitle}>জেম থেকে হার্ট</h3>
-                            <p className={styles.convertDesc}>আপনার জেম ব্যবহার করে হার্ট রিফিল করুন। (১০ জেম = ১ হার্ট)</p>
-
-                            <div className={styles.controlBox}>
-                                <button className={styles.controlBtn} onClick={handleDecrement}><Minus size={20} /></button>
-                                <div className={styles.gemValue}>
-                                    <Gem size={28} color="#1cb0f6" fill="#1cb0f6" />
-                                    <span>{gemToConvert}</span>
+                        {/* SUPER Subscription Section */}
+                        <section className={styles.section}>
+                            <div className={styles.superCard}>
+                                <div className={styles.superContent}>
+                                    <div className={styles.superHeader}>
+                                        <span className={styles.superTag}>SUPER MEMBERSHIP</span>
+                                        <h2 className={styles.superTitle}>সুপার সাবস্ক্রিপশন</h2>
+                                    </div>
+                                    <div className={styles.superFeaturesCompact}>
+                                        <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> আনলিমিটেড হার্ট</div>
+                                        <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> অ্যাড-ফ্রি লার্নিং</div>
+                                        <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> স্পেশাল প্রোফাইল ব্যাজ</div>
+                                    </div>
                                 </div>
-                                <button className={styles.controlBtn} onClick={handleIncrement}><Plus size={20} /></button>
 
-                                <ArrowRight className={styles.arrowIcon} size={32} />
+                                <div className={styles.superRightArea}>
+                                    <div className={styles.toggleContainer}>
+                                        <div
+                                            className={styles.toggleIndicator}
+                                            style={{
+                                                width: '90px',
+                                                transform: planType === 'monthly' ? 'translateX(0)' : 'translateX(90px)'
+                                            }}
+                                        />
+                                        <button
+                                            className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
+                                            onClick={() => setPlanType('monthly')}
+                                        >
+                                            মাসিক
+                                        </button>
+                                        <button
+                                            className={`${styles.toggleBtn} ${planType === 'yearly' ? styles.toggleBtnActive : ''}`}
+                                            onClick={() => setPlanType('yearly')}
+                                        >
+                                            বার্ষিক
+                                            {planType === 'yearly' && <span className={styles.yearlyBadge}>-২০%</span>}
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        className={styles.superAction}
+                                        onClick={() => handlePurchase('subscription')}
+                                        disabled={processing || profile?.is_premium}
+                                    >
+                                        {profile?.is_premium ? 'সক্রিয়' : (planType === 'monthly' ? '৳৪০০.০০ / মাস' : '৳৪০০০.০০ / বছর')}
+                                        <ChevronRight size={22} />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </section>
 
-                        <div className={styles.convertResult}>
-                            <div className={styles.heartCount}>
-                                <Heart size={48} color="#ff4b4b" fill="#ff4b4b" />
-                                <span>+{calculatedHearts}</span>
+                        {/* Gem to Heart Converter Section */}
+                        <section className={styles.section}>
+                            <h2 className={styles.sectionTitle}>জেম এক্সচেঞ্জ</h2>
+                            <div className={styles.convertCard}>
+                                <div className={styles.convertInputArea}>
+                                    <h3 className={styles.convertTitle}>জেম থেকে হার্ট</h3>
+                                    <p className={styles.convertDesc}>আপনার জেম ব্যবহার করে হার্ট রিফিল করুন। (১০ জেম = ১ হার্ট)</p>
+
+                                    <div className={styles.controlBox}>
+                                        <button className={styles.controlBtn} onClick={handleDecrement}><Minus size={20} /></button>
+                                        <div className={styles.gemValue}>
+                                            <Gem size={28} color="#1cb0f6" fill="#1cb0f6" />
+                                            <span>{gemToConvert}</span>
+                                        </div>
+                                        <button className={styles.controlBtn} onClick={handleIncrement}><Plus size={20} /></button>
+
+                                        <ArrowRight className={styles.arrowIcon} size={32} />
+                                    </div>
+                                </div>
+
+                                <div className={styles.convertResult}>
+                                    <div className={styles.heartCount}>
+                                        <Heart size={48} color="#ff4b4b" fill="#ff4b4b" />
+                                        <span>+{calculatedHearts}</span>
+                                    </div>
+                                    <button
+                                        className={styles.convertBtn}
+                                        onClick={handleConvertAction}
+                                        disabled={processing || (profile?.gems < gemToConvert) || (profile?.hearts >= profile?.max_hearts)}
+                                    >
+                                        {processing ? <Loader2 className={styles.spinner} size={20} /> : 'কনভার্ট করুন'}
+                                    </button>
+                                </div>
                             </div>
-                            <button
-                                className={styles.convertBtn}
-                                onClick={handleConvertAction}
-                                disabled={processing || (profile?.gems < gemToConvert) || (profile?.hearts >= profile?.max_hearts)}
-                            >
-                                {processing ? <Loader2 className={styles.spinner} size={20} /> : 'কনভার্ট করুন'}
-                            </button>
-                        </div>
-                    </div>
-                </section>
+                        </section>
 
-                {/* Gem Packs Section */}
-                <section className={styles.section}>
-                    <h2 className={styles.sectionTitle}>জেম প্যাক কিনুন</h2>
-                    <div className={styles.packsGrid}>
-                        {GEM_PACKS.map((pack) => (
-                            <div
-                                key={pack.id}
-                                className={styles.packCard}
-                                onClick={() => handlePurchase('gems', pack)}
-                            >
-                                {pack.popular && <span className={styles.bestValue} style={{ background: '#1cb0f6', color: '#fff' }}>POPULAR</span>}
-                                {pack.best && <span className={styles.bestValue}>BEST VALUE</span>}
+                        {/* Gem Packs Section */}
+                        <section className={styles.section}>
+                            <h2 className={styles.sectionTitle}>জেম প্যাক কিনুন</h2>
+                            <div className={styles.packsGrid}>
+                                {GEM_PACKS.map((pack) => (
+                                    <div
+                                        key={pack.id}
+                                        className={styles.packCard}
+                                        onClick={() => handlePurchase('gems', pack)}
+                                    >
+                                        {pack.popular && <span className={styles.bestValue} style={{ background: '#1cb0f6', color: '#fff' }}>POPULAR</span>}
+                                        {pack.best && <span className={styles.bestValue}>BEST VALUE</span>}
 
-                                <div className={styles.packIcon}>{pack.icon}</div>
-                                <div className={styles.packAmount}>{pack.amount}</div>
-                                <div className={styles.packLabel}>{pack.label}</div>
-                                <div className={styles.packPrice}>৳{pack.price}.০০</div>
+                                        <div className={styles.packIcon}>{pack.icon}</div>
+                                        <div className={styles.packAmount}>{pack.amount}</div>
+                                        <div className={styles.packLabel}>{pack.label}</div>
+                                        <div className={styles.packPrice}>৳{pack.price}.০০</div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                </section>
+                        </section>
+                    </>
+                )}
             </main>
         </div>
     );

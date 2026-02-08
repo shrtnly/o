@@ -96,11 +96,12 @@ const AppContent = () => {
           <Route element={<MainLayout />}>
             <Route path="/courses" element={user ? <CourseListPage /> : <Navigate to="/guest/courses" replace />} />
             <Route path="/learn/:courseId" element={<LearningPage />} />
-            <Route path="/study/:courseId/:chapterId" element={<StudyPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/shop" element={<ShopPage />} />
           </Route>
+
+          <Route path="/study/:courseId/:chapterId" element={<StudyPage />} />
 
           {/* Guest Courses version */}
           <Route path="/guest/courses" element={<GuestCoursePage />} />

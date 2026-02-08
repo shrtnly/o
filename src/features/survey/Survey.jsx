@@ -4,6 +4,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import Button from '../../components/ui/Button';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 import { surveyService } from '../../services/surveyService';
 import { courseService } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
@@ -67,7 +68,7 @@ const Survey = () => {
     };
 
     if (loading || questions.length === 0) {
-        return <div className={styles.surveyWrapper}>Loading...</div>;
+        return <LoadingScreen />;
     }
 
     const currentQuestion = questions[currentStep];

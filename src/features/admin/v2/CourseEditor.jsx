@@ -13,6 +13,7 @@ import { courseService } from '../../../services/courseService';
 import { cn } from '../../../lib/utils';
 import { toast } from 'sonner';
 import ModuleSection from './components/ModuleSection';
+import InlineLoader from '../../../components/ui/InlineLoader';
 
 const CourseEditor = ({ courseId, onBack }) => {
     const [course, setCourse] = useState(null);
@@ -70,7 +71,7 @@ const CourseEditor = ({ courseId, onBack }) => {
         }
     };
 
-    if (loading) return <div className="py-20 text-center text-slate-400 dark:text-slate-600">Loading...</div>;
+    if (loading) return <div className="py-20 flex justify-center"><InlineLoader size={150} /></div>;
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500">

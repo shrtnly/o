@@ -7,6 +7,7 @@ import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 import styles from './StudyPage.module.css';
 
 const StudyPage = () => {
@@ -193,15 +194,7 @@ const StudyPage = () => {
         }
     };
 
-    if (loading) return (
-        <div className={styles.loadingContainer}>
-            <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className={styles.loader}
-            />
-        </div>
-    );
+    if (loading) return <LoadingScreen />;
 
     if (questions.length === 0) return (
         <div className={styles.loadingContainer}>

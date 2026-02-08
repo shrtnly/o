@@ -5,6 +5,8 @@ import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activ
 
 import { supabase } from '../../lib/supabaseClient';
 import styles from './LearningPage.module.css';
+import LoadingScreen from '../../components/ui/LoadingScreen';
+import InlineLoader from '../../components/ui/InlineLoader';
 import Sidebar from './components/Sidebar';
 import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
@@ -305,12 +307,6 @@ const LearningPage = () => {
         navigate(`/study/${courseId}/${chapter.id}`);
     };
 
-    if (loading) return (
-        <div className={styles.learningPage} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <h2 style={{ color: '#fff' }}>পড়া লোড হচ্ছে...</h2>
-        </div>
-    );
-
     const allChapters = unitsWithChapters.flatMap(u => u.chapters);
     const completedChapterIds = new Set(progress.filter(p => p.is_completed).map(p => p.chapter_id));
     const firstIncompleteChapter = allChapters.find(c => !completedChapterIds.has(c.id));
@@ -333,138 +329,133 @@ const LearningPage = () => {
     return (
         <div className={styles.learningPage}>
             <main className={styles.mainContent} ref={mainContentRef} onScroll={handleScroll}>
-                {/* Single Unit Header at the Top */}
-                {unitsWithChapters.length > 0 && (
-                    <div
-                        className={`${styles.unitHeader} ${scrolled ? styles.unitHeaderScrolled : ''}`}
-                        style={{
-                            '--unit-bg': currentColor.bg,
-                            '--unit-border': currentColor.border
-                        }}
-                    >
-                        <div className={styles.unitInfo}>
-                            <h2 key={`unit-header-${activeUnit?.id}`}>
-                                ইউনিট {activeUnit?.order_index || 1} : {activeUnit?.title || 'লোড হচ্ছে...'}
-                            </h2>
-                        </div>
+                {loading ? (
+                    <div className="flex items-center justify-center h-full w-full">
+                        <InlineLoader />
                     </div>
-                )}
+                ) : (
+                    <>
+                        {/* Single Unit Header at the Top */}
+                        {unitsWithChapters.length > 0 && (
+                            <div
+                                className={`${styles.unitHeader} ${scrolled ? styles.unitHeaderScrolled : ''}`}
+                                style={{
+                                    '--unit-bg': currentColor.bg,
+                                    '--unit-border': currentColor.border
+                                }}
+                            >
+                                <div className={styles.unitInfo}>
+                                    <h2 key={`unit-header-${activeUnit?.id}`}>
+                                        ইউনিট {activeUnit?.order_index || 1} : {activeUnit?.title || 'লোড হচ্ছে...'}
+                                    </h2>
+                                </div>
+                            </div>
+                        )}
 
-                {unitsWithChapters.map((unit, index) => {
-                    const unitChapters = unit.chapters;
-                    const chaptersForPath = unitChapters;
-                    const pathD = getPathData(chaptersForPath, nodesPerRow);
+                        {unitsWithChapters.map((unit, index) => {
+                            const unitChapters = unit.chapters;
+                            const pathD = getPathData(unitChapters, nodesPerRow);
+                            const numRows = Math.ceil(unitChapters.length / nodesPerRow);
 
-                    const numRows = Math.ceil(chaptersForPath.length / nodesPerRow);
+                            // Dynamic height based on row count and device ySpacing
+                            const width = window.innerWidth;
+                            const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
+                            const containerHeight = (numRows - 1) * ySpacing + 120;
 
-                    // Dynamic height based on row count and device ySpacing
-                    const width = window.innerWidth;
-                    const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
-                    const containerHeight = (numRows - 1) * ySpacing + 120; // Reduced global padding
+                            return (
+                                <section
+                                    key={unit.id}
+                                    data-unit-section={unit.id}
+                                    className={styles.unitSection}
+                                    style={{
+                                        '--unit-color-bg': getUnitColor(unit.order_index).bg,
+                                        '--unit-color-border': getUnitColor(unit.order_index).border
+                                    }}
+                                >
+                                    <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
 
-                    return (
-                        <section
-                            key={unit.id}
-                            data-unit-section={unit.id}
-                            className={styles.unitSection}
-                            style={{
-                                '--unit-color-bg': getUnitColor(unit.order_index).bg,
-                                '--unit-color-border': getUnitColor(unit.order_index).border
-                            }}
-                        >
-                            <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
-
-                                <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
-                                    <path d={pathD} className={styles.pathLine} />
-                                </svg>
+                                        <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
+                                            <path d={pathD} className={styles.pathLine} />
+                                        </svg>
 
 
-                                {unitChapters.map((chapter, cIdx) => {
-                                    const pos = getNodePos(cIdx, nodesPerRow);
-                                    const isCompleted = completedChapterIds.has(chapter.id);
-                                    const isActive = chapter.id === activeChapterId;
-                                    const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
+                                        {unitChapters.map((chapter, cIdx) => {
+                                            const pos = getNodePos(cIdx, nodesPerRow);
+                                            const isCompleted = completedChapterIds.has(chapter.id);
+                                            const isActive = chapter.id === activeChapterId;
+                                            const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
 
-                                    return (
-                                        <div
-                                            key={chapter.id}
-                                            className={styles.nodeWrapper}
-                                            style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
-                                            onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
-                                        >
-                                            <div className={cn(
-                                                styles.node,
-                                                isActive && styles.nodeActive,
-                                                isCompleted && styles.nodeCompleted,
-                                                isLocked && styles.nodeLocked,
-                                                chapter.type !== 'lesson' && styles.rewardNode,
-                                                chapter.type === 'mystery_box' && styles.mysteryNode,
-                                                chapter.type === 'heart_box' && styles.heartNode,
-                                                chapter.type === 'gems_box' && styles.gemsNode
-                                            )}>
-                                                <div className={styles.nodeRing}>
-                                                    <div className={styles.nodeInner}>
-                                                        {isLocked && chapter.type === 'lesson' ? (
-                                                            <div className={styles.lockOverlay}>
-                                                                <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
+                                            return (
+                                                <div
+                                                    key={chapter.id}
+                                                    className={styles.nodeWrapper}
+                                                    style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
+                                                    onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
+                                                >
+                                                    <div className={cn(
+                                                        styles.node,
+                                                        isActive && styles.nodeActive,
+                                                        isCompleted && styles.nodeCompleted,
+                                                        isLocked && styles.nodeLocked,
+                                                        chapter.type !== 'lesson' && styles.rewardNode,
+                                                        chapter.type === 'mystery_box' && styles.mysteryNode,
+                                                        chapter.type === 'heart_box' && styles.heartNode,
+                                                        chapter.type === 'gems_box' && styles.gemsNode
+                                                    )}>
+                                                        <div className={styles.nodeRing}>
+                                                            <div className={styles.nodeInner}>
+                                                                {isLocked && chapter.type === 'lesson' ? (
+                                                                    <div className={styles.lockOverlay}>
+                                                                        <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
+                                                                    </div>
+                                                                ) : (
+                                                                    <>
+                                                                        {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
+                                                                            <div
+                                                                                key={i}
+                                                                                className={styles.sparkle}
+                                                                                style={{
+                                                                                    '--tx': Math.random() * 60 - 30,
+                                                                                    '--ty': Math.random() * 60 - 30,
+                                                                                    left: '50%',
+                                                                                    top: '50%',
+                                                                                    animationDelay: `${i * 0.3}s`
+                                                                                }}
+                                                                            />
+                                                                        ))}
+                                                                        {(() => {
+                                                                            if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+                                                                                if (isCompleted) {
+                                                                                    return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
+                                                                                }
+                                                                                return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
+                                                                            }
+                                                                            const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
+                                                                            return (
+                                                                                <IconComponent
+                                                                                    size={32}
+                                                                                    color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
+                                                                                    strokeWidth={2.5}
+                                                                                />
+                                                                            );
+                                                                        })()}
+                                                                    </>
+                                                                )}
+
                                                             </div>
-                                                        ) : (
-                                                            <>
-                                                                {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
-                                                                    <div
-                                                                        key={i}
-                                                                        className={styles.sparkle}
-                                                                        style={{
-                                                                            '--tx': Math.random() * 60 - 30,
-                                                                            '--ty': Math.random() * 60 - 30,
-                                                                            left: '50%',
-                                                                            top: '50%',
-                                                                            animationDelay: `${i * 0.3}s`
-                                                                        }}
-                                                                    />
-                                                                ))}
-                                                                {(() => {
-                                                                    if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
-                                                                        if (isCompleted) {
-                                                                            return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
-                                                                        }
-                                                                        return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
-                                                                    }
-                                                                    const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
-                                                                    return (
-                                                                        <IconComponent
-                                                                            size={32}
-                                                                            color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
-                                                                            strokeWidth={2.5}
-                                                                        />
-                                                                    );
-                                                                })()}
-                                                            </>
-                                                        )}
+                                                        </div>
 
+                                                        <div className={styles.nodeLabel}>{chapter.title}</div>
                                                     </div>
                                                 </div>
-
-                                                <div className={styles.nodeLabel}>{chapter.title}</div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-
-
-                            </div>
-
-                            {index < unitsWithChapters.length - 1 && (
-                                <div className={styles.unitSeparator}>
-                                    <div className={styles.separatorLine}></div>
-                                    <div className={styles.separatorText}>{unitsWithChapters[index + 1].title}</div>
-                                    <div className={styles.separatorLine}></div>
-                                </div>
-                            )}
-                        </section>
-                    );
-                })}
-
+                                            );
+                                        })}
+                                    </div>
+                                </section>
+                            );
+                        })}
+                    </>
+                )}
             </main>
 
 

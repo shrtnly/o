@@ -1086,6 +1086,31 @@
 }
 
 
+@keyframes shimmer {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.skeleton {
+    background: #1a272d;
+    background-image: linear-gradient(to right,
+            #1a272d 0%,
+            #233138 20%,
+            #1a272d 40%,
+            #1a272d 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 104px;
+    display: inline-block;
+    position: relative;
+    animation: shimmer 1.5s infinite linear;
+    border-radius: 8px;
+}
+
 @media (max-width: 1200px) {
     .learningPage {
         grid-template-columns: 80px 1fr 300px;

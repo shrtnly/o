@@ -31,6 +31,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
 
     const [userRank, setUserRank] = React.useState(null);
     const [leaderboardData, setLeaderboardData] = React.useState([]);
+    const [internalLoading, setInternalLoading] = React.useState(true);
 
     // Fetch streak and activity data
     React.useEffect(() => {
@@ -65,86 +66,109 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             }
         };
 
-        fetchStreakData();
-        fetchLeaderboard();
+        const fetchData = async () => {
+            setInternalLoading(true);
+            try {
+                await Promise.all([fetchStreakData(), fetchLeaderboard()]);
+            } finally {
+                setInternalLoading(false);
+            }
+        };
+
+        fetchData();
     }, [profile?.id, profile?.xp]);
 
     return (
         <aside className={styles.rightSidebar}>
             {/* Course Selector */}
             <div className={styles.courseSelectorContainer}>
-                {/* ... existing course selector code ... */}
-                <button
-                    className={`${styles.courseSelectorBtn} ${isCourseOpen ? styles.btnOpen : ''}`}
-                    onClick={() => setIsCourseOpen(!isCourseOpen)}
-                >
-                    <div className={styles.courseBtnContent}>
-                        <div className={styles.courseIcon}>
-                            <Play size={18} fill="currentColor" />
-                        </div>
-                        <span className={styles.courseTitle}>
-                            {currentCourse?.title || 'কোর্স নির্বাচন করুন'}
-                        </span>
-                    </div>
-                    <ChevronDown size={20} className={`${styles.chevron} ${isCourseOpen ? styles.chevronRotate : ''}`} />
-                </button>
-
-                {isCourseOpen && (
-                    <div className={styles.courseDropdown}>
-                        {courses.map(course => (
-                            <div
-                                key={course.id}
-                                className={`${styles.courseOption} ${course.id === currentCourseId ? styles.optionActive : ''}`}
-                                onClick={() => handleCourseSwitch(course.id)}
-                            >
-                                <span className={styles.optionTitle}>{course.title}</span>
-                                {course.id === currentCourseId && <Check size={16} color="#58cc02" strokeWidth={3} />}
-                            </div>
-                        ))}
-                        <div className={styles.courseDropdownDivider}></div>
+                {(!currentCourse && courses.length === 0) ? (
+                    <div className={`${styles.courseSelectorBtn} ${styles.skeleton}`} style={{ height: '56px', width: '100%' }}></div>
+                ) : (
+                    <>
                         <button
-                            className={styles.addCourseOption}
-                            onClick={() => navigate('/courses')}
+                            className={`${styles.courseSelectorBtn} ${isCourseOpen ? styles.btnOpen : ''}`}
+                            onClick={() => setIsCourseOpen(!isCourseOpen)}
                         >
-                            <Plus size={18} />
-                            <span className={styles.optionTitle}>কোর্স যোগ করুন</span>
+                            <div className={styles.courseBtnContent}>
+                                <div className={styles.courseIcon}>
+                                    <Play size={18} fill="currentColor" />
+                                </div>
+                                <span className={styles.courseTitle}>
+                                    {currentCourse?.title || 'কোর্স নির্বাচন করুন'}
+                                </span>
+                            </div>
+                            <ChevronDown size={20} className={`${styles.chevron} ${isCourseOpen ? styles.chevronRotate : ''}`} />
                         </button>
-                    </div>
+
+                        {isCourseOpen && (
+                            <div className={styles.courseDropdown}>
+                                {courses.map(course => (
+                                    <div
+                                        key={course.id}
+                                        className={`${styles.courseOption} ${course.id === currentCourseId ? styles.optionActive : ''}`}
+                                        onClick={() => handleCourseSwitch(course.id)}
+                                    >
+                                        <span className={styles.optionTitle}>{course.title}</span>
+                                        {course.id === currentCourseId && <Check size={16} color="#58cc02" strokeWidth={3} />}
+                                    </div>
+                                ))}
+                                <div className={styles.courseDropdownDivider}></div>
+                                <button
+                                    className={styles.addCourseOption}
+                                    onClick={() => navigate('/courses')}
+                                >
+                                    <Plus size={18} />
+                                    <span className={styles.optionTitle}>কোর্স যোগ করুন</span>
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
 
             <div className={styles.statsRow}>
-                <div className={styles.statItem} title="Total XP">
-                    <ShieldIcon xp={profile?.xp || 0} size={40} />
-                    <span>{profile?.xp || 0}</span>
-                </div>
-                <div className={styles.statItem} style={{ color: '#1cb0f6' }} title="Gems">
-                    <Gem size={34} fill="#1cb0f6" />
-                    <span>{profile?.gems || 0}</span>
-                </div>
-                <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Hearts">
-                    {(hearts == 0 || Number(hearts) === 0) && refillTime ? (
-                        <HeartCrack size={34} color="#ff4b4b" strokeWidth={2.5} />
-                    ) : (
-                        <Heart size={34} fill="#ff4b4b" />
-                    )}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                        {!(Number(hearts) === 0 && refillTime) && (
-                            <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
-                        )}
-                        {refillTime && (
-                            <span style={{
-                                fontSize: '0.75rem',
-                                color: '#1cb0f6',
-                                marginTop: hearts === 0 ? '0' : '-4px',
-                                fontWeight: '900',
-                                display: 'block'
-                            }}>
-                                {refillTime}
-                            </span>
-                        )}
-                    </div>
-                </div>
+                {(!profile || internalLoading) ? (
+                    <>
+                        <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
+                        <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
+                        <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
+                    </>
+                ) : (
+                    <>
+                        <div className={styles.statItem} title="Total XP">
+                            <ShieldIcon xp={profile?.xp || 0} size={40} />
+                            <span>{profile?.xp || 0}</span>
+                        </div>
+                        <div className={styles.statItem} style={{ color: '#1cb0f6' }} title="Gems">
+                            <Gem size={34} fill="#1cb0f6" />
+                            <span>{profile?.gems || 0}</span>
+                        </div>
+                        <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Hearts">
+                            {(hearts == 0 || Number(hearts) === 0) && refillTime ? (
+                                <HeartCrack size={34} color="#ff4b4b" strokeWidth={2.5} />
+                            ) : (
+                                <Heart size={34} fill="#ff4b4b" />
+                            )}
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                {!(Number(hearts) === 0 && refillTime) && (
+                                    <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
+                                )}
+                                {refillTime && (
+                                    <span style={{
+                                        fontSize: '0.75rem',
+                                        color: '#1cb0f6',
+                                        marginTop: hearts === 0 ? '0' : '-4px',
+                                        fontWeight: '900',
+                                        display: 'block'
+                                    }}>
+                                        {refillTime}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
 
@@ -180,41 +204,47 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                 </defs>
                             </svg>
                             <div className={styles.flameRow}>
-                                {[...Array(7)].map((_, index) => {
-                                    const now = new Date();
-                                    const dayOfWeek = now.getDay(); // 0 = Sunday
+                                {(!profile || internalLoading) ? (
+                                    [...Array(7)].map((_, i) => (
+                                        <div key={i} className={`${styles.flameIcon} ${styles.skeleton}`} style={{ width: '32px', height: '32px', borderRadius: '50%' }}></div>
+                                    ))
+                                ) : (
+                                    [...Array(7)].map((_, index) => {
+                                        const now = new Date();
+                                        const dayOfWeek = now.getDay(); // 0 = Sunday
 
-                                    const d = new Date(now);
-                                    d.setDate(now.getDate() - dayOfWeek + index);
+                                        const d = new Date(now);
+                                        d.setDate(now.getDate() - dayOfWeek + index);
 
-                                    const dateStr = formatLocalDate(d);
-                                    const todayStr = formatLocalDate(now);
+                                        const dateStr = formatLocalDate(d);
+                                        const todayStr = formatLocalDate(now);
 
-                                    // Check if this date has any practice recorded
-                                    const isPracticed = weeklyActivity.some(a => {
-                                        const activityDate = typeof a.activity_date === 'string'
-                                            ? a.activity_date.split('T')[0]
-                                            : formatLocalDate(new Date(a.activity_date));
-                                        return activityDate === dateStr;
-                                    });
+                                        // Check if this date has any practice recorded
+                                        const isPracticed = weeklyActivity.some(a => {
+                                            const activityDate = typeof a.activity_date === 'string'
+                                                ? a.activity_date.split('T')[0]
+                                                : formatLocalDate(new Date(a.activity_date));
+                                            return activityDate === dateStr;
+                                        });
 
-                                    const isToday = dateStr === todayStr;
+                                        const isToday = dateStr === todayStr;
 
-                                    return (
-                                        <div key={index} className={styles.flameContainer} title={dateStr}>
-                                            <div className={`${styles.flameIcon} ${isPracticed ? styles.flameActive : ''} ${isToday ? styles.flameToday : ''}`}>
-                                                <Flame
-                                                    size={24}
-                                                    fill={isPracticed ? "url(#flameGradient)" : (isToday ? "rgba(255,150,0,0.1)" : "none")}
-                                                    stroke={isPracticed ? "none" : (isToday ? "#ff9600" : "#37464f")}
-                                                />
+                                        return (
+                                            <div key={index} className={styles.flameContainer} title={dateStr}>
+                                                <div className={`${styles.flameIcon} ${isPracticed ? styles.flameActive : ''} ${isToday ? styles.flameToday : ''}`}>
+                                                    <Flame
+                                                        size={24}
+                                                        fill={isPracticed ? "url(#flameGradient)" : (isToday ? "rgba(255,150,0,0.1)" : "none")}
+                                                        stroke={isPracticed ? "none" : (isToday ? "#ff9600" : "#37464f")}
+                                                    />
+                                                </div>
+                                                <span className={styles.flameDayLabel}>
+                                                    {['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'][index]}
+                                                </span>
                                             </div>
-                                            <span className={styles.flameDayLabel}>
-                                                {['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'][index]}
-                                            </span>
-                                        </div>
-                                    );
-                                })}
+                                        );
+                                    })
+                                )}
                             </div>
                         </motion.div>
                     ) : (
@@ -241,7 +271,12 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                 </div>
                 {profile?.xp >= 100 ? (
                     <div className={styles.leaderboardPreview}>
-                        {leaderboardData && leaderboardData.length > 0 ? (
+                        {(internalLoading || !leaderboardData?.length) ? (
+                            <div className={styles.leaderboardPreview}>
+                                <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
+                                <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
+                            </div>
+                        ) : (
                             leaderboardData.slice(0, 2).map((user, index) => {
                                 // Deterministic avatar for dummy users if no avatar_url
                                 const avatarSeed = index === 0 ? 'Felix' : 'Vivian'; // Boy for #1, Girl for #2
@@ -268,10 +303,6 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                     </div>
                                 );
                             })
-                        ) : (
-                            <div className={styles.loadingInfo} style={{ color: '#afafaf', textAlign: 'center', fontSize: '0.9rem', padding: '10px' }}>
-                                লিডারবোর্ড লোড হচ্ছে...
-                            </div>
                         )}
                         {userRank > 2 && (
                             <>
@@ -312,15 +343,19 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                     <h3 className={styles.cardTitle}>দৈনিক অনুসন্ধান</h3>
                     <span className={styles.viewAll}>সব দেখুন</span>
                 </div>
-                <div className={styles.questItem}>
-                    <Zap size={32} color="#ffc800" fill="#ffc800" />
-                    <div className={styles.progressContainer}>
-                        <div className={styles.questTitle}>১০ XP অর্জন করুন</div>
-                        <div className={styles.progressBar}>
-                            <div className={styles.progressFill} style={{ width: '0%' }}></div>
+                {(!profile || internalLoading) ? (
+                    <div className={`${styles.questItem} ${styles.skeleton}`} style={{ height: '60px', width: '100%' }}></div>
+                ) : (
+                    <div className={styles.questItem}>
+                        <Zap size={32} color="#ffc800" fill="#ffc800" />
+                        <div className={styles.progressContainer}>
+                            <div className={styles.questTitle}>১০ XP অর্জন করুন</div>
+                            <div className={styles.progressBar}>
+                                <div className={styles.progressFill} style={{ width: '0%' }}></div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
 
             {!profile && (

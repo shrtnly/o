@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Heart, Check, Lightbulb, Star, ArrowRight, Clock } from 'lucide-react';
+import { X, Heart, HeartCrack, Check, Lightbulb, Star, ArrowRight, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { supabase } from '../../lib/supabaseClient';
@@ -242,9 +242,15 @@ const StudyPage = () => {
                         animate={shake ? { x: [-5, 5, -5, 5, 0] } : {}}
                         transition={{ duration: 0.4 }}
                     >
-                        <Heart size={24} color="#ff4b4b" fill="#ff4b4b" strokeWidth={0} />
+                        {hearts == 0 && refillTimeDisplay ? (
+                            <HeartCrack size={24} color="#ff4b4b" strokeWidth={2.5} />
+                        ) : (
+                            <Heart size={24} color="#ff4b4b" fill="#ff4b4b" strokeWidth={0} />
+                        )}
                     </motion.div>
-                    <span className={styles.heartCount}>{hearts}</span>
+                    {!(hearts === 0 && refillTimeDisplay) && (
+                        <span className={styles.heartCount}>{hearts}</span>
+                    )}
                     {needsRefill && refillTimeDisplay && (
                         <span className={styles.refillTimer}>
                             <Clock size={12} />

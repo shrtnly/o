@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Gem, Heart, Shield, ChevronDown, Check, Play, Plus, Flame, Lock } from 'lucide-react';
+import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { rewardService } from '../../../services/rewardService';
@@ -123,9 +123,13 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                     <span>{profile?.gems || 0}</span>
                 </div>
                 <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Hearts">
-                    <Heart size={34} fill="#ff4b4b" />
+                    {(hearts == 0 || Number(hearts) === 0) && refillTime ? (
+                        <HeartCrack size={34} color="#ff4b4b" strokeWidth={2.5} />
+                    ) : (
+                        <Heart size={34} fill="#ff4b4b" />
+                    )}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                        {!(hearts === 0 && refillTime) && (
+                        {!(Number(hearts) === 0 && refillTime) && (
                             <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
                         )}
                         {refillTime && (

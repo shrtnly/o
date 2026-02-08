@@ -27,6 +27,17 @@ export const rewardService = {
 
             if (error) throw error;
 
+            // Log activity and force streak update
+            const today = formatLocalDate(new Date());
+            await supabase.from('user_daily_activity').upsert({
+                user_id: userId,
+                activity_date: today,
+                xp_earned: amount
+            }, { onConflict: 'user_id,activity_date' });
+
+            // Force recalculate streak in DB
+            await supabase.rpc('update_user_streaks', { p_user_id: userId });
+
             return {
                 success: true,
                 newXp: data?.[0]?.new_xp || 0,
@@ -49,6 +60,14 @@ export const rewardService = {
                     .from('profiles')
                     .update({ xp: newXp })
                     .eq('id', userId);
+
+                // Ensure activity is logged even in fallback
+                const today = formatLocalDate(new Date());
+                await supabase.from('user_daily_activity').upsert({
+                    user_id: userId,
+                    activity_date: today,
+                    xp_earned: amount
+                }, { onConflict: 'user_id,activity_date' });
 
                 return { success: true, newXp, transactionId: null };
             } catch (fallbackError) {

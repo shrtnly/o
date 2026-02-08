@@ -11,6 +11,7 @@
     transition: var(--transition);
     height: 100%;
     /* Ensure all cards in the row have the same height */
+    position: relative;
 }
 
 .card:hover {
@@ -20,9 +21,18 @@
     box-shadow: var(--shadow-card), 0 0 15px rgba(46, 204, 113, 0.1);
 }
 
+.cardBadge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
 .imageWrapper {
     width: 80px;
-    /* Reduced slightly for 4-column row */
     height: 80px;
     flex-shrink: 0;
     border-radius: var(--radius-sm);
@@ -58,6 +68,7 @@
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }

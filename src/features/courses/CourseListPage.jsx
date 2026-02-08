@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowLeft, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import CourseCard from '../landing/CourseCard';
-import Navbar from '../../components/layout/Navbar';
+import Sidebar from '../learning/components/Sidebar';
 import LoadingScreen from '../../components/ui/LoadingScreen';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
+import CourseCard from '../landing/CourseCard';
 import styles from './CourseListPage.module.css';
 
 const CATEGORIES = [
@@ -16,27 +17,36 @@ const CATEGORIES = [
 ];
 
 const CourseListPage = () => {
+    const { user } = useAuth();
     const [courses, setCourses] = useState([]);
+    const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCourses = async () => {
+        const fetchData = async () => {
             try {
-                const data = await courseService.getAllCourses();
-                console.log('Fetched courses:', data);
-                setCourses(data);
-                setFilteredCourses(data);
+                const [allCourses, enrolledData] = await Promise.all([
+                    courseService.getAllCourses(),
+                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : { data: [] }
+                ]);
+
+                setCourses(allCourses || []);
+                setFilteredCourses(allCourses || []);
+
+                if (enrolledData?.data) {
+                    setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
+                }
             } catch (error) {
-                console.error('Error fetching courses:', error);
+                console.error('Error fetching data:', error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchCourses();
-    }, []);
+        fetchData();
+    }, [user]);
 
     useEffect(() => {
         let result = courses;
@@ -50,7 +60,7 @@ const CourseListPage = () => {
 
     return (
         <div className={styles.pageWrapper}>
-            <Navbar />
+            <Sidebar />
 
             <main className={styles.main}>
                 <div className={styles.container}>
@@ -78,53 +88,20 @@ const CourseListPage = () => {
                         <LoadingScreen />
                     ) : (
                         <div className={styles.content}>
-                            {activeCategory === 'All' ? (
-                                // Grouped by Category View
-                                <>
-                                    {CATEGORIES.map(cat => {
-                                        const catCourses = courses.filter(c => c.category === cat.id);
-                                        if (catCourses.length === 0) return null;
-
-                                        return (
-                                            <section key={cat.id} className={styles.categorySection}>
-                                                <h2 className={styles.categoryTitle}>{cat.name}</h2>
-                                                <div className={styles.grid}>
-                                                    {catCourses.map(course => (
-                                                        <CourseCard key={course.id} course={course} />
-                                                    ))}
-                                                </div>
-                                            </section>
-                                        );
-                                    })}
-
-                                    {/* Fallback for courses with no category or unmatched category */}
-                                    {(() => {
-                                        const categorizedIds = new Set(CATEGORIES.map(c => c.id));
-                                        const uncategorized = courses.filter(c => !c.category || !categorizedIds.has(c.category));
-                                        if (uncategorized.length === 0) return null;
-
-                                        return (
-                                            <section className={styles.categorySection}>
-                                                <h2 className={styles.categoryTitle}>অন্যান্য কোর্স</h2>
-                                                <div className={styles.grid}>
-                                                    {uncategorized.map(course => (
-                                                        <CourseCard key={course.id} course={course} />
-                                                    ))}
-                                                </div>
-                                            </section>
-                                        );
-                                    })()}
-                                </>
-                            ) : (
-                                // Search/Filter Result View
-                                <div className={styles.resultView}>
-                                    <h2 className={styles.resultTitle}>
-                                        {filteredCourses.length} টি কোর্স পাওয়া গেছে
+                            {/* Specific Category Section - only if filtered */}
+                            {activeCategory !== 'All' && (
+                                <section className={styles.categorySection}>
+                                    <h2 className={styles.categoryTitle}>
+                                        {CATEGORIES.find(c => c.id === activeCategory)?.name}
                                     </h2>
                                     {filteredCourses.length > 0 ? (
                                         <div className={styles.grid}>
                                             {filteredCourses.map(course => (
-                                                <CourseCard key={course.id} course={course} />
+                                                <CourseCard
+                                                    key={course.id}
+                                                    course={course}
+                                                    isEnrolled={enrolledCourseIds.has(course.id)}
+                                                />
                                             ))}
                                         </div>
                                     ) : (
@@ -132,8 +109,22 @@ const CourseListPage = () => {
                                             কোনো কোর্স পাওয়া যায়নি।
                                         </div>
                                     )}
-                                </div>
+                                </section>
                             )}
+
+                            {/* All Courses Section - Always shown */}
+                            <section className={styles.categorySection}>
+                                <h2 className={styles.categoryTitle}>সব কোর্স</h2>
+                                <div className={styles.grid}>
+                                    {courses.map(course => (
+                                        <CourseCard
+                                            key={course.id}
+                                            course={course}
+                                            isEnrolled={enrolledCourseIds.has(course.id)}
+                                        />
+                                    ))}
+                                </div>
+                            </section>
                         </div>
                     )}
                 </div>

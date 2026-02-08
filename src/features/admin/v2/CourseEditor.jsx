@@ -24,7 +24,7 @@ const CourseEditor = ({ courseId, onBack }) => {
         if (courseId) {
             loadCourse();
         } else {
-            setCourse({ title: '', description: '', image_url: '', category: 'Language' });
+            setCourse({ title: '', description: '', image_url: '', category: 'Everyday Life Skills' });
             setLoading(false);
         }
     }, [courseId]);
@@ -130,10 +130,11 @@ const CourseEditor = ({ courseId, onBack }) => {
                                     value={course.category}
                                     onChange={(e) => handleAutoSave({ category: e.target.value })}
                                 >
-                                    <option>Language</option>
-                                    <option>Technology</option>
-                                    <option>Art</option>
-                                    <option>Business</option>
+                                    <option value="Everyday Life Skills">দৈনন্দিন জীবন দক্ষতা (Life Skills)</option>
+                                    <option value="Civic & Legal Awareness">নাগরিক ও আইনি সচেতনতা (Civic)</option>
+                                    <option value="Safety & Health">নিরাপত্তা ও স্বাস্থ্য (Health)</option>
+                                    <option value="Digital Literacy">ডিজিটাল লিটারেসি (Digital)</option>
+                                    <option value="Fun / Curiosity Learning">মজার / কৌতূহলী শিক্ষা (Fun)</option>
                                 </select>
                             </div>
                             <div className="space-y-2">

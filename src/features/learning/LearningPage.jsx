@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem, Gift, PackageOpen } from 'lucide-react';
 
 
@@ -11,6 +11,7 @@ import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
 import RewardModal from './components/RewardModal';
+import { useHeartRefill } from '../../hooks/useHeartRefill';
 
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
@@ -87,6 +88,14 @@ const LearningPage = () => {
     const [loading, setLoading] = useState(true);
     const [activeUnit, setActiveUnit] = useState(null);
     const [nodesPerRow, setNodesPerRow] = useState(3);
+    const location = useLocation();
+
+    // Use heart refill system
+    const {
+        hearts: refillHearts,
+        refillTimeDisplay,
+        checkAndRefillHearts
+    } = useHeartRefill(user?.id);
 
     const [scrolled, setScrolled] = useState(false);
     const mainContentRef = useRef(null);
@@ -163,13 +172,10 @@ const LearningPage = () => {
                     }
 
                     const { data: profileData } = await supabase
-
                         .from('profiles')
                         .select('*')
                         .eq('id', user.id)
                         .single();
-
-
 
                     setProfile(profileData);
 
@@ -232,9 +238,9 @@ const LearningPage = () => {
 
         if (courseId) {
             fetchDeepContent();
+            if (checkAndRefillHearts) checkAndRefillHearts();
         }
-    }, [courseId, user]);
-
+    }, [courseId, user, location.key]);
 
     const handleChapterClick = async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
@@ -466,6 +472,8 @@ const LearningPage = () => {
 
             <StatsSidebar
                 profile={profile}
+                hearts={refillHearts}
+                refillTime={refillTimeDisplay}
                 courses={courses}
                 currentCourseId={courseId}
             />

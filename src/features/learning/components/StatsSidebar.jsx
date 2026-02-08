@@ -11,7 +11,7 @@ import { formatLocalDate } from '../../../lib/dateUtils';
 import { leaderboardService } from '../../../services/leaderboardService';
 import { getShieldLevel } from '../../../utils/shieldSystem';
 
-const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
+const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourseId }) => {
     const navigate = useNavigate();
     const [isCourseOpen, setIsCourseOpen] = React.useState(false);
     const [isExpanded, setIsExpanded] = React.useState(false);
@@ -122,9 +122,24 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
                     <Gem size={34} fill="#1cb0f6" />
                     <span>{profile?.gems || 0}</span>
                 </div>
-                <div className={styles.statItem} style={{ color: '#ff4b4b' }} title="Hearts">
+                <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Hearts">
                     <Heart size={34} fill="#ff4b4b" />
-                    <span>{profile?.hearts || 0}</span>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                        {!(hearts === 0 && refillTime) && (
+                            <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
+                        )}
+                        {refillTime && (
+                            <span style={{
+                                fontSize: '0.75rem',
+                                color: '#1cb0f6',
+                                marginTop: hearts === 0 ? '0' : '-4px',
+                                fontWeight: '900',
+                                display: 'block'
+                            }}>
+                                {refillTime}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -163,17 +178,23 @@ const StatsSidebar = ({ profile, courses = [], currentCourseId }) => {
                             <div className={styles.flameRow}>
                                 {[...Array(7)].map((_, index) => {
                                     const now = new Date();
-                                    const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+                                    const dayOfWeek = now.getDay(); // 0 = Sunday
 
-                                    // Calculate the date for this index (0 = Sunday of current week)
                                     const d = new Date(now);
                                     d.setDate(now.getDate() - dayOfWeek + index);
 
                                     const dateStr = formatLocalDate(d);
-                                    const isPracticed = weeklyActivity.some(a => a.activity_date === dateStr);
-                                    const isToday = index === dayOfWeek;
+                                    const todayStr = formatLocalDate(now);
 
+                                    // Check if this date has any practice recorded
+                                    const isPracticed = weeklyActivity.some(a => {
+                                        const activityDate = typeof a.activity_date === 'string'
+                                            ? a.activity_date.split('T')[0]
+                                            : formatLocalDate(new Date(a.activity_date));
+                                        return activityDate === dateStr;
+                                    });
 
+                                    const isToday = dateStr === todayStr;
 
                                     return (
                                         <div key={index} className={styles.flameContainer} title={dateStr}>

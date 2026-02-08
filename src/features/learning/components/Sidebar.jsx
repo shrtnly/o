@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Home, Trophy, Target, Store, User, MoreHorizontal } from 'lucide-react';
+import { Home, Trophy, Compass, Store, User, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { courseService } from '../../../services/courseService';
 import styles from '../LearningPage.module.css';
@@ -41,14 +41,14 @@ const Sidebar = () => {
                 <span>শিখুন</span>
             </NavLink>
 
+            <NavLink to="/courses" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
+                <Compass size={24} />
+                <span>কোর্সসমূহ</span>
+            </NavLink>
+
             <NavLink to="/leaderboard" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <Trophy size={24} />
                 <span>লিডারবোর্ড</span>
-            </NavLink>
-
-            <NavLink to="/quests" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
-                <Target size={24} />
-                <span>অনুসন্ধান</span>
             </NavLink>
 
             <NavLink to="/shop" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>

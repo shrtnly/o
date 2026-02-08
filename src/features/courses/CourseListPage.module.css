@@ -1,18 +1,28 @@
 .pageWrapper {
-    min-height: 100vh;
-    background-color: var(--color-bg);
-    padding-top: 72px;
-    /* Navbar height */
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    height: 100vh;
+    background-color: #0a1114;
+    color: #fff;
+    font-family: 'Hind Siliguri', sans-serif;
+    overflow: hidden;
 }
 
 .main {
-    padding: 60px 0;
+    padding: 40px 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+    background-color: #0a1114;
+}
+
+.main::-webkit-scrollbar {
+    display: none;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 40px;
 }
 
 .header {
@@ -131,8 +141,8 @@
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
 }
 
 .resultTitle {

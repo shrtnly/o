@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
+import { rewardService } from '../../services/rewardService';
 import styles from './StudyPage.module.css';
 
 const StudyPage = () => {
@@ -161,48 +162,27 @@ const StudyPage = () => {
                             .eq('id', existingProgress.id);
                     }
 
-                    // 2. Award XP using database function (1 XP per correct answer)
+                    // 2. Award XP using reward service (Handles both RPC and manual fallback)
                     if (earnedXp > 0) {
-                        console.log('StudyPage - Awarding XP:', {
+                        console.log('StudyPage - Awarding XP via RewardService:', {
                             userId: user.id,
                             amount: earnedXp,
                             chapterId,
                             courseId
                         });
 
-                        const { data: xpResult, error: xpError } = await supabase
-                            .rpc('award_user_xp', {
-                                p_user_id: user.id,
-                                p_amount: earnedXp,
-                                p_source: 'chapter_complete', // Changed from 'mcq_correct' to trigger lesson completion
-                                p_chapter_id: chapterId,
-                                p_course_id: courseId,
-                                p_metadata: {
-                                    total_questions: stats.total,
-                                    correct_answers: stats.correct,
-                                    accuracy: Math.round((stats.correct / stats.total) * 100)
-                                }
-                            });
-
-                        console.log('StudyPage - XP Award Result:', {
-                            xpResult,
-                            xpError
+                        const result = await rewardService.awardXP(user.id, earnedXp, 'chapter_complete', {
+                            chapterId,
+                            courseId,
+                            total_questions: stats.total,
+                            correct_answers: stats.correct,
+                            accuracy: Math.round((stats.correct / (stats.total || 1)) * 100)
                         });
 
-                        if (xpError) {
-                            console.error('Error awarding XP:', xpError);
-                            // Fallback: direct update if function doesn't exist yet
-                            const { data: profile } = await supabase
-                                .from('profiles')
-                                .select('xp')
-                                .eq('id', user.id)
-                                .single();
-
-                            await supabase.from('profiles')
-                                .update({ xp: (profile?.xp || 0) + earnedXp })
-                                .eq('id', user.id);
+                        if (result.success) {
+                            console.log('StudyPage - Successfully awarded XP and logged activity!');
                         } else {
-                            console.log('StudyPage - Successfully awarded XP and updated daily activity!');
+                            console.error('StudyPage - Failed to award XP even with fallback.');
                         }
                     }
                 } catch (err) {

@@ -4,19 +4,30 @@ import { useNavigate } from 'react-router-dom';
 import CourseCard from './CourseCard';
 import Button from '../../components/ui/Button';
 import { courseService } from '../../services/courseService';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabaseClient';
 import InlineLoader from '../../components/ui/InlineLoader';
 import styles from './CourseSection.module.css';
 
 const CourseSection = () => {
+    const { user } = useAuth();
     const [courses, setCourses] = useState([]);
+    const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const data = await courseService.getFeaturedCourses();
-                setCourses(data);
+                const [data, enrolledData] = await Promise.all([
+                    courseService.getFeaturedCourses(),
+                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : { data: [] }
+                ]);
+
+                setCourses(data || []);
+                if (enrolledData?.data) {
+                    setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
+                }
             } catch (error) {
                 console.error('Error fetching courses:', error);
             } finally {
@@ -25,7 +36,7 @@ const CourseSection = () => {
         };
 
         fetchCourses();
-    }, []);
+    }, [user]);
 
     return (
         <section className={styles.section}>
@@ -41,7 +52,11 @@ const CourseSection = () => {
                     <>
                         <div className={styles.grid}>
                             {courses.map(course => (
-                                <CourseCard key={course.id} course={course} />
+                                <CourseCard
+                                    key={course.id}
+                                    course={course}
+                                    isEnrolled={enrolledCourseIds.has(course.id)}
+                                />
                             ))}
                         </div>
 

@@ -1,12 +1,25 @@
 import { useNavigate } from 'react-router-dom';
-import { Users, Star } from 'lucide-react';
+import { Users, Star, CheckCircle2 } from 'lucide-react';
 import styles from './CourseCard.module.css';
 
-const CourseCard = ({ course }) => {
+const CourseCard = ({ course, isEnrolled }) => {
     const navigate = useNavigate();
 
+    const handleClick = () => {
+        if (isEnrolled) {
+            navigate(`/learn/${course.id}`);
+        } else {
+            navigate(`/survey/${course.id}`);
+        }
+    };
+
     return (
-        <div className={styles.card} onClick={() => navigate(`/survey/${course.id}`)}>
+        <div className={styles.card} onClick={handleClick}>
+            {isEnrolled && (
+                <div className={styles.cardBadge}>
+                    <CheckCircle2 size={22} fill="#58cc02" color="#fff" />
+                </div>
+            )}
             <div className={styles.imageWrapper}>
                 <img src={course.image_url} alt={course.title} className={styles.image} />
             </div>

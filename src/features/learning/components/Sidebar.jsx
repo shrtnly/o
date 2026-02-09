@@ -1,14 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Home, Trophy, Compass, Store, User, MoreHorizontal } from 'lucide-react';
+import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircle, LogOut } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { courseService } from '../../../services/courseService';
+import { cn } from '../../../lib/utils';
 import styles from './Sidebar.module.css';
 
 const Sidebar = () => {
-    const { user } = useAuth();
+    const { user, signOut } = useAuth();
     const { courseId: currentCourseId } = useParams();
     const [lastCourseId, setLastCourseId] = useState(null);
+    const [moreOpen, setMoreOpen] = useState(false);
+
+    const handleLogout = async () => {
+        const confirmed = window.confirm('আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?');
+        if (confirmed) {
+            try {
+                await signOut();
+                // Subscriptions in AuthContext will handle state change
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        }
+    };
 
     useEffect(() => {
         const fetchLastCourse = async () => {
@@ -61,10 +75,46 @@ const Sidebar = () => {
                 <span>প্রোফাইল</span>
             </NavLink>
 
-            <button className={styles.navItem}>
-                <MoreHorizontal size={24} />
-                <span>আরও</span>
-            </button>
+            <div className={styles.moreContainer}>
+                <button
+                    className={cn(styles.navItem, moreOpen && styles.navItemActive)}
+                    onClick={() => setMoreOpen(!moreOpen)}
+                >
+                    <MoreHorizontal size={24} />
+                    <span>আরও</span>
+                </button>
+
+                {moreOpen && (
+                    <div className={styles.moreDropdown}>
+                        <NavLink
+                            to="/settings"
+                            className={styles.dropdownItem}
+                            onClick={() => setMoreOpen(false)}
+                        >
+                            <Settings size={20} />
+                            <span>সেটিংস</span>
+                        </NavLink>
+                        <NavLink
+                            to="/help"
+                            className={styles.dropdownItem}
+                            onClick={() => setMoreOpen(false)}
+                        >
+                            <HelpCircle size={20} />
+                            <span>সহায়তা</span>
+                        </NavLink>
+                        <button
+                            className={styles.logoutBtn}
+                            onClick={() => {
+                                setMoreOpen(false);
+                                handleLogout();
+                            }}
+                        >
+                            <LogOut size={20} />
+                            <span>লগআউট</span>
+                        </button>
+                    </div>
+                )}
+            </div>
         </aside>
     );
 };

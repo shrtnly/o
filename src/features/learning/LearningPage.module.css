@@ -533,10 +533,10 @@
 }
 
 .navItemActive {
-    background-color: rgba(28, 176, 246, 0.1);
-    color: #1cb0f6;
-    border: 2px solid #1cb0f6;
-    border-bottom: 4px solid #1899d6 !important;
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 2px solid #2ecc71;
+    border-bottom: 4px solid #27ae60 !important;
 }
 
 .navItem:active {
@@ -545,7 +545,7 @@
 
 /* Right Sidebar Redesign */
 .rightSidebar {
-    padding: 32px 12px;
+    padding: 32px 8px;
     display: flex;
     flex-direction: column;
     gap: 16px;

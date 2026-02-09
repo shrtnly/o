@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, X, Chrome, Github, Loader2, User } from 'lucide-react';
+import { Mail, Lock, X, Chrome, Phone, Loader2, User, Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import styles from './AuthPage.module.css';
 import { useAuth } from '../../context/AuthContext';
@@ -14,6 +14,7 @@ const AuthPage = () => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -97,115 +98,115 @@ const AuthPage = () => {
 
     return (
         <div className={styles.authWrapper}>
-            <div className={styles.backgroundGlow}></div>
+            <button className={styles.closeBtn} onClick={() => navigate('/')} aria-label="Close">
+                <X size={24} />
+            </button>
 
-            <div className={styles.authCard}>
-                <button className={styles.closeBtn} onClick={() => navigate('/')} aria-label="Close">
-                    <X size={24} />
-                </button>
-                <div className={styles.cardHeader}>
-                    <div className={styles.logo}>
-                        <div className={styles.logoIcon}>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                        </div>
-                        <span className={styles.logoText}>প্ল্যাটফর্ম</span>
-                    </div>
-                    <h1>{isLogin ? 'স্বাগতম!' : 'অ্যাকাউন্ট তৈরি করুন'}</h1>
-                    <p>{isLogin ? 'চালিয়ে যেতে আপনার অ্যাকাউন্টে লগইন করুন।' : 'নতুন অ্যাকাউন্ট তৈরি করে শেখা শুরু করুন।'}</p>
+            <div className={styles.authContainer}>
+                <div className={styles.header}>
+                    <h1>
+                        {isLogin ? (
+                            <>
+                                <span className={styles.highlight}>লগইন</span> করুন
+                            </>
+                        ) : (
+                            <>
+                                <span className={styles.highlight}>সাইন আপ</span> করুন
+                            </>
+                        )}
+                    </h1>
+                    <p>{isLogin ? 'আপনার শেখার যাত্রা চালিয়ে যেতে' : 'নতুন অ্যাকাউন্ট তৈরি করুন'}</p>
                 </div>
 
                 {error && <div className={styles.errorMessage}>{error}</div>}
 
-                <form className={styles.authForm} onSubmit={handleSubmit}>
-
+                <form className={styles.form} onSubmit={handleSubmit}>
                     {!isLogin && (
-                        <div className={styles.inputGroup}>
-                            <label htmlFor="name">আপনার নাম</label>
-                            <div className={styles.inputWrapper}>
-                                <User className={styles.inputIcon} size={18} />
-                                <input
-                                    type="text"
-                                    id="name"
-                                    placeholder="আপনার পুরো নাম লিখুন"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required={!isLogin}
-                                />
-                            </div>
+                        <div className={styles.field}>
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="আপনার নাম"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required={!isLogin}
+                                className={styles.input}
+                            />
                         </div>
                     )}
 
-                    <div className={styles.inputGroup}>
-                        <label htmlFor="email">ইমেইল</label>
-                        <div className={styles.inputWrapper}>
-                            <Mail className={styles.inputIcon} size={18} />
-                            <input
-                                type="email"
-                                id="email"
-                                placeholder="example@mail.com"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
+                    <div className={styles.field}>
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="ইমেইল"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className={styles.input}
+                        />
                     </div>
 
-                    <div className={styles.inputGroup}>
-                        <div className={styles.labelRow}>
-                            <label htmlFor="password">পাসওয়ার্ড</label>
-                            {isLogin && <a href="#" className={styles.forgotPass}>পাসওয়ার্ড ভুলে গেছেন?</a>}
-                        </div>
-                        <div className={styles.inputWrapper}>
-                            <Lock className={styles.inputIcon} size={18} />
+                    <div className={styles.field}>
+                        <div className={styles.passwordWrapper}>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="password"
-                                placeholder="••••••••"
+                                placeholder="পাসওয়ার্ড"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                className={styles.input}
                             />
+                            <button
+                                type="button"
+                                className={styles.eyeBtn}
+                                onClick={() => setShowPassword(!showPassword)}
+                                aria-label="Toggle password visibility"
+                            >
+                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                            </button>
                         </div>
+                        {isLogin && (
+                            <a href="#" className={styles.forgotLink}>পাসওয়ার্ড ভুলে গেছেন?</a>
+                        )}
                     </div>
 
-                    <Button
-                        variant="primary"
-                        className={styles.submitBtn}
+                    <button
                         type="submit"
                         disabled={loading}
+                        className={styles.submitBtn}
                     >
-                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isLogin ? 'লগইন করুন' : 'সাইন আপ করুন')}
-                    </Button>
+                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isLogin ? 'লগইন' : 'সাইন আপ')}
+                    </button>
                 </form>
 
                 <div className={styles.divider}>
                     <span>অথবা</span>
                 </div>
 
-                <div className={styles.socialAuth}>
+                <div className={styles.socialButtons}>
                     <button className={styles.socialBtn} onClick={() => handleSocialLogin('google')}>
-                        <Chrome size={20} />
-                        <span>গুগল</span>
+                        <Chrome size={18} />
+                        <span>Google</span>
                     </button>
-                    <button className={styles.socialBtn} onClick={() => handleSocialLogin('github')}>
-                        <Github size={20} />
-                        <span>গিটহাব</span>
+                    <button className={styles.socialBtn} onClick={() => handleSocialLogin('phone')}>
+                        <Phone size={18} />
+                        <span>Phone</span>
                     </button>
                 </div>
 
-                <div className={styles.cardFooter}>
-                    <p>
-                        {isLogin ? 'নতুন কোনো অ্যাকাউন্ট নেই?' : 'আগেই অ্যাকাউন্ট আছে?'}
-                        <button
-                            className={styles.toggleBtn}
-                            onClick={() => {
-                                setIsLogin(!isLogin);
-                                setError('');
-                            }}
-                        >
-                            {isLogin ? 'নিবন্ধন করুন' : 'লগইন করুন'}
-                        </button>
-                    </p>
+                <div className={styles.footer}>
+                    <span>{isLogin ? 'নতুন ব্যবহারকারী?' : 'আগে থেকেই অ্যাকাউন্ট আছে?'}</span>
+                    <button
+                        className={styles.switchBtn}
+                        onClick={() => {
+                            setIsLogin(!isLogin);
+                            setError('');
+                        }}
+                    >
+                        {isLogin ? 'সাইন আপ করুন' : 'লগইন করুন'}
+                    </button>
                 </div>
             </div>
 

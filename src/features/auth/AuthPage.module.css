@@ -3,173 +3,213 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-bg);
-    padding: 40px 20px;
+    background: linear-gradient(135deg, #0a1114 0%, #0f1419 100%);
+    padding: 20px;
     position: relative;
-    overflow: hidden;
-}
-
-.backgroundGlow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(46, 204, 113, 0.1) 0%, transparent 70%);
-    z-index: 0;
-    pointer-events: none;
-}
-
-.authCard {
-    position: relative;
-    /* Added for positioning the close button */
-    width: 100%;
-    max-width: 440px;
-    background: rgba(26, 29, 33, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 40px;
-    z-index: 1;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
 .closeBtn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #afafaf;
     cursor: pointer;
-    padding: 8px;
-    border-radius: 50%;
-    transition: var(--transition);
+    padding: 10px;
+    border-radius: 12px;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    z-index: 100;
 }
 
 .closeBtn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
     color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-.cardHeader {
-    text-align: center;
+.authContainer {
+    width: 100%;
+    max-width: 420px;
+    animation: fadeIn 0.5s ease-out;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    text-align: left;
     margin-bottom: 32px;
 }
 
-.logo {
+.header h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.5px;
+}
+
+.highlight {
+    color: #2ecc71;
+}
+
+.header p {
+    color: #afafaf;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.errorMessage {
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    color: #e74c3c;
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.form {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+    flex-direction: column;
+    gap: 16px;
     margin-bottom: 24px;
 }
 
-.logoIcon {
-    background-color: var(--color-primary);
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
+.field {
+    position: relative;
 }
 
-.logoText {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: #fff;
-}
-
-.cardHeader h1 {
-    font-size: 1.8rem;
-    color: #fff;
-    margin-bottom: 8px;
-}
-
-.cardHeader p {
-    color: var(--color-text-muted);
-    font-size: 0.95rem;
-}
-
-.authForm {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.inputGroup label {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-text);
-}
-
-.labelRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.forgotPass {
-    font-size: 0.8rem;
-    color: var(--color-primary);
-    text-decoration: none;
-}
-
-.inputWrapper {
+.passwordWrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.inputIcon {
+.eyeBtn {
     position: absolute;
-    left: 12px;
-    color: var(--color-text-muted);
+    right: 0;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    padding: 8px;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.inputWrapper input {
+.eyeBtn:hover {
+    color: #2ecc71;
+}
+
+.input {
     width: 100%;
-    padding: 12px 12px 12px 42px;
-    background: rgba(15, 17, 19, 0.6);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     color: #fff;
     font-size: 1rem;
-    transition: var(--transition);
+    transition: all 0.3s;
+    box-sizing: border-box;
 }
 
-.inputWrapper input:focus {
+.input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.input:focus {
     outline: none;
-    border-color: var(--color-primary);
-    background: rgba(15, 17, 19, 0.8);
-    box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+    border-bottom-color: #2ecc71;
+    background: transparent;
+}
+
+/* Remove white background on autofill */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+    transition: background-color 5000s ease-in-out 0s;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.input:-webkit-autofill:focus {
+    border-bottom-color: #2ecc71;
+}
+
+.forgotLink {
+    display: block;
+    text-align: right;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #2ecc71;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgotLink:hover {
+    color: #27ae60;
 }
 
 .submitBtn {
-    margin-top: 10px;
     width: 100%;
-    font-size: 1.1rem !important;
-    padding: 14px !important;
+    padding: 14px;
+    background: #2ecc71;
+    border: none;
+    border-radius: 16px;
+    border-bottom: 5px solid #27ae60;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.1s;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.submitBtn:hover:not(:disabled) {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.submitBtn:active:not(:disabled) {
+    transform: translateY(2px);
+    border-bottom-width: 0px;
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .divider {
     display: flex;
     align-items: center;
     margin: 24px 0;
-    color: var(--color-border);
+    gap: 16px;
 }
 
 .divider::before,
@@ -177,16 +217,15 @@
     content: "";
     flex: 1;
     height: 1px;
-    background-color: var(--color-border);
+    background: rgba(55, 70, 79, 0.5);
 }
 
 .divider span {
-    padding: 0 12px;
     font-size: 0.85rem;
-    color: var(--color-text-muted);
+    color: #6b7280;
 }
 
-.socialAuth {
+.socialButtons {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
@@ -194,51 +233,48 @@
 }
 
 .socialBtn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: 10px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s;
     font-weight: 600;
     font-size: 0.9rem;
 }
 
 .socialBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
 }
 
-.cardFooter {
+.footer {
     text-align: center;
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    color: #afafaf;
 }
 
-.toggleBtn {
+.switchBtn {
     background: none;
     border: none;
-    color: var(--color-primary);
+    color: #2ecc71;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     cursor: pointer;
     margin-left: 6px;
     padding: 0;
+    transition: color 0.2s;
 }
 
-.toggleBtn:hover {
+.switchBtn:hover {
+    color: #27ae60;
     text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-    .authCard {
-        padding: 30px 20px;
-    }
 }
 
 @keyframes spin {
@@ -255,13 +291,18 @@
     animation: spin 1s linear infinite;
 }
 
-.errorMessage {
-    background-color: rgba(231, 76, 60, 0.1);
-    border: 1px solid #e74c3c;
-    color: #e74c3c;
-    padding: 12px;
-    border-radius: var(--radius-md);
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-    text-align: center;
+@media (max-width: 480px) {
+    .authContainer {
+        max-width: 100%;
+    }
+
+    .header h1 {
+        font-size: 1.75rem;
+    }
+
+    .logoMark {
+        width: 56px;
+        height: 56px;
+        font-size: 1.75rem;
+    }
 }

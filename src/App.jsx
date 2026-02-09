@@ -19,6 +19,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { courseService } from './services/courseService';
 import CourseListPage from './features/courses/CourseListPage';
 import GuestCoursePage from './features/courses/GuestCoursePage';
+import SettingsPage from './features/settings/SettingsPage';
+import HelpPage from './features/help/HelpPage';
 
 // Landing Page UI Component
 const LandingPageContent = () => (
@@ -99,6 +101,8 @@ const AppContent = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/shop" element={<ShopPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/help" element={<HelpPage />} />
           </Route>
 
           <Route path="/study/:courseId/:chapterId" element={<StudyPage />} />

@@ -190,19 +190,21 @@
 .nodeRing {
     position: absolute;
     inset: 0;
-    border-radius: 50%;
-    padding: 4px;
+    border-radius: 20px;
+    padding: 3px;
     background: #37464f;
-    box-shadow: 0 5px 0 #202f36;
+    box-shadow: 0 8px 0 #202f36;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
 }
 
 @media (max-width: 480px) {
     .nodeRing {
         padding: 3px;
-        box-shadow: 0 4px 0 #202f36;
+        border-radius: 16px;
+        box-shadow: 0 6px 0 #202f36;
     }
 }
 
@@ -213,14 +215,14 @@
 .nodeActive .nodeRing,
 .nodeCompleted .nodeRing {
     background: var(--unit-color-bg, #58cc02);
-    box-shadow: 0 5px 0 var(--unit-color-border, #46a302);
+    box-shadow: 0 8px 0 var(--unit-color-border, #46a302);
 }
 
 @media (max-width: 480px) {
 
     .nodeActive .nodeRing,
     .nodeCompleted .nodeRing {
-        box-shadow: 0 4px 0 var(--unit-color-border, #46a302);
+        box-shadow: 0 6px 0 var(--unit-color-border, #46a302);
     }
 }
 
@@ -228,13 +230,15 @@
 .nodeInner {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
+    border-radius: 18px;
     background: #202f36;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 4px 0 rgba(255, 255, 255, 0.05);
 }
 
 .nodeActive .nodeInner,
@@ -245,7 +249,7 @@
 /* Reward Node Specifics */
 .rewardNode .nodeRing {
     background: linear-gradient(135deg, #ffd700, #ff8c00);
-    box-shadow: 0 5px 0 #b8860b, 0 0 8px rgba(255, 215, 0, 0.25);
+    box-shadow: 0 8px 0 #b8860b, 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
 .rewardNode:not(.nodeLocked) .nodeInner {
@@ -267,9 +271,8 @@
 /* Ensure reward nodes keep their golden ring after completion */
 .rewardNode.nodeCompleted .nodeRing {
     background: linear-gradient(135deg, #e5c100, #cc7a00);
-    box-shadow: 0 5px 0 #8b6508;
+    box-shadow: 0 8px 0 #8b6508;
     filter: brightness(0.85);
-    /* Slightly dimmed to show it's spent */
 }
 
 @keyframes mysteryVibrate {
@@ -422,24 +425,33 @@
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 20px;
-    margin: 30px 0 20px;
-    padding: 0 40px;
+    gap: 15px;
+    margin: 56px auto 28px;
+    padding: 0 20px;
+    max-width: 640px;
 }
 
 .separatorLine {
     flex: 1;
-    height: 4px;
-    background-color: #37464f;
-    border-radius: 2px;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(55, 70, 79, 0.2) 10%,
+            rgba(55, 70, 79, 1) 50%,
+            rgba(55, 70, 79, 0.2) 90%,
+            transparent 100%);
+    border-radius: 1px;
 }
 
 .separatorText {
     color: #afafaf;
     font-weight: 800;
-    font-size: 1.25rem;
+    font-size: 1rem;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 4px;
+    white-space: nowrap;
+    position: relative;
+    padding: 0 15px;
 }
 
 @keyframes bounce {
@@ -451,6 +463,20 @@
 
     50% {
         transform: translateY(-8px);
+    }
+}
+
+@media (max-width: 480px) {
+    .unitSeparator {
+        gap: 8px;
+        margin: 35px auto 18px;
+        padding: 0 15px;
+    }
+
+    .separatorText {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        padding: 0 8px;
     }
 }
 

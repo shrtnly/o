@@ -362,96 +362,106 @@ const LearningPage = () => {
                             const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
                             const containerHeight = (numRows - 1) * ySpacing + 120;
 
+                            const isSeparator = index > 0; // Hide for Unit 1, show for others
+
                             return (
-                                <section
-                                    key={unit.id}
-                                    data-unit-section={unit.id}
-                                    className={styles.unitSection}
-                                    style={{
-                                        '--unit-color-bg': getUnitColor(unit.order_index).bg,
-                                        '--unit-color-border': getUnitColor(unit.order_index).border
-                                    }}
-                                >
-                                    <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
+                                <React.Fragment key={unit.id}>
+                                    {isSeparator && (
+                                        <div className={styles.unitSeparator}>
+                                            <div className={styles.separatorLine} />
+                                            <div className={styles.separatorText}>ইউনিট {unit.order_index} : {unit.title}</div>
+                                            <div className={styles.separatorLine} />
+                                        </div>
+                                    )}
+                                    <section
+                                        data-unit-section={unit.id}
+                                        className={styles.unitSection}
+                                        style={{
+                                            '--unit-color-bg': getUnitColor(unit.order_index).bg,
+                                            '--unit-color-border': getUnitColor(unit.order_index).border
+                                        }}
+                                    >
+                                        <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
 
-                                        <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
-                                            <path d={pathD} className={styles.pathLine} />
-                                        </svg>
+                                            <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
+                                                <path d={pathD} className={styles.pathLine} />
+                                            </svg>
 
 
-                                        {unitChapters.map((chapter, cIdx) => {
-                                            const pos = getNodePos(cIdx, nodesPerRow);
-                                            const isCompleted = completedChapterIds.has(chapter.id);
-                                            const isActive = chapter.id === activeChapterId;
-                                            const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
+                                            {unitChapters.map((chapter, cIdx) => {
+                                                const pos = getNodePos(cIdx, nodesPerRow);
+                                                const isCompleted = completedChapterIds.has(chapter.id);
+                                                const isActive = chapter.id === activeChapterId;
+                                                const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
 
-                                            return (
-                                                <div
-                                                    key={chapter.id}
-                                                    className={styles.nodeWrapper}
-                                                    style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
-                                                    onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
-                                                >
-                                                    <div className={cn(
-                                                        styles.node,
-                                                        isActive && styles.nodeActive,
-                                                        isCompleted && styles.nodeCompleted,
-                                                        isLocked && styles.nodeLocked,
-                                                        chapter.type !== 'lesson' && styles.rewardNode,
-                                                        chapter.type === 'mystery_box' && styles.mysteryNode,
-                                                        chapter.type === 'heart_box' && styles.heartNode,
-                                                        chapter.type === 'gems_box' && styles.gemsNode
-                                                    )}>
-                                                        <div className={styles.nodeRing}>
-                                                            <div className={styles.nodeInner}>
-                                                                {isLocked && chapter.type === 'lesson' ? (
-                                                                    <div className={styles.lockOverlay}>
-                                                                        <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
-                                                                    </div>
-                                                                ) : (
-                                                                    <>
-                                                                        {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
-                                                                            <div
-                                                                                key={i}
-                                                                                className={styles.sparkle}
-                                                                                style={{
-                                                                                    '--tx': Math.random() * 60 - 30,
-                                                                                    '--ty': Math.random() * 60 - 30,
-                                                                                    left: '50%',
-                                                                                    top: '50%',
-                                                                                    animationDelay: `${i * 0.3}s`
-                                                                                }}
-                                                                            />
-                                                                        ))}
-                                                                        {(() => {
-                                                                            if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
-                                                                                if (isCompleted) {
-                                                                                    return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
-                                                                                }
-                                                                                return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
-                                                                            }
-                                                                            const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
-                                                                            return (
-                                                                                <IconComponent
-                                                                                    size={32}
-                                                                                    color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
-                                                                                    strokeWidth={2.5}
+                                                return (
+                                                    <div
+                                                        key={chapter.id}
+                                                        className={styles.nodeWrapper}
+                                                        style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
+                                                        onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
+                                                    >
+                                                        <div className={cn(
+                                                            styles.node,
+                                                            isActive && styles.nodeActive,
+                                                            isCompleted && styles.nodeCompleted,
+                                                            isLocked && styles.nodeLocked,
+                                                            chapter.type !== 'lesson' && styles.rewardNode,
+                                                            chapter.type === 'mystery_box' && styles.mysteryNode,
+                                                            chapter.type === 'heart_box' && styles.heartNode,
+                                                            chapter.type === 'gems_box' && styles.gemsNode
+                                                        )}>
+                                                            <div className={styles.nodeRing}>
+                                                                <div className={styles.nodeInner}>
+                                                                    {isLocked && chapter.type === 'lesson' ? (
+                                                                        <div className={styles.lockOverlay}>
+                                                                            <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
+                                                                        </div>
+                                                                    ) : (
+                                                                        <>
+                                                                            {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
+                                                                                <div
+                                                                                    key={i}
+                                                                                    className={styles.sparkle}
+                                                                                    style={{
+                                                                                        '--tx': Math.random() * 60 - 30,
+                                                                                        '--ty': Math.random() * 60 - 30,
+                                                                                        left: '50%',
+                                                                                        top: '50%',
+                                                                                        animationDelay: `${i * 0.3}s`
+                                                                                    }}
                                                                                 />
-                                                                            );
-                                                                        })()}
-                                                                    </>
-                                                                )}
+                                                                            ))}
+                                                                            {(() => {
+                                                                                if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+                                                                                    if (isCompleted) {
+                                                                                        return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
+                                                                                    }
+                                                                                    return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
+                                                                                }
+                                                                                const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
+                                                                                return (
+                                                                                    <IconComponent
+                                                                                        size={32}
+                                                                                        color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
+                                                                                        strokeWidth={2.5}
+                                                                                    />
+                                                                                );
+                                                                            })()}
+                                                                        </>
+                                                                    )}
 
+                                                                </div>
                                                             </div>
-                                                        </div>
 
-                                                        <div className={styles.nodeLabel}>{chapter.title}</div>
+                                                            <div className={styles.nodeLabel}>{chapter.title}</div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </section>
+                                                );
+                                            })}
+                                        </div>
+                                    </section>
+                                </React.Fragment>
                             );
                         })}
                     </>

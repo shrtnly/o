@@ -313,15 +313,17 @@ const LearningPage = () => {
     const activeChapterId = firstIncompleteChapter?.id || (allChapters.length > 0 ? allChapters[allChapters.length - 1].id : null);
 
     const UNIT_COLORS = [
-        { bg: '#00d1ff', border: '#009cc2' }, // Cyan
-        { bg: '#1cb0f6', border: '#1899d6' }, // Blue
-        { bg: '#ce82ff', border: '#af69e3' }, // Purple
-        { bg: '#ff9600', border: '#e58600' }, // Orange
-        { bg: '#ff4b4b', border: '#d33131' }, // Red
+        { bg: '#2ecc71', border: '#27ae60' }, // Green (Fixed for Unit 1)
+        { bg: '#3498db', border: '#2980b9' }, // Blue
+        { bg: '#9b59b6', border: '#8e44ad' }, // Purple
+        { bg: '#f1c40f', border: '#f39c12' }, // Yellow
+        { bg: '#e67e22', border: '#d35400' }, // Orange
+        { bg: '#e74c3c', border: '#c0392b' }, // Red
     ];
 
     const getUnitColor = (index) => {
-        return UNIT_COLORS[(index - 1) % UNIT_COLORS.length];
+        const idx = (index - 1) % UNIT_COLORS.length;
+        return UNIT_COLORS[idx >= 0 ? idx : 0];
     };
 
     const currentColor = getUnitColor(activeUnit?.order_index || 1);
@@ -369,7 +371,12 @@ const LearningPage = () => {
                                     {isSeparator && (
                                         <div className={styles.unitSeparator}>
                                             <div className={styles.separatorLine} />
-                                            <div className={styles.separatorText}>ইউনিট {unit.order_index} : {unit.title}</div>
+                                            <div
+                                                className={styles.separatorText}
+                                                style={{ color: getUnitColor(unit.order_index).border }}
+                                            >
+                                                ইউনিট {unit.order_index} : {unit.title}
+                                            </div>
                                             <div className={styles.separatorLine} />
                                         </div>
                                     )}

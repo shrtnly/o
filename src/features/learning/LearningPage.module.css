@@ -214,15 +214,15 @@
 
 .nodeActive .nodeRing,
 .nodeCompleted .nodeRing {
-    background: var(--unit-color-bg, #58cc02);
-    box-shadow: 0 8px 0 var(--unit-color-border, #46a302);
+    background: var(--unit-color-bg);
+    box-shadow: 0 8px 0 var(--unit-color-border);
 }
 
 @media (max-width: 480px) {
 
     .nodeActive .nodeRing,
     .nodeCompleted .nodeRing {
-        box-shadow: 0 6px 0 var(--unit-color-border, #46a302);
+        box-shadow: 0 6px 0 var(--unit-color-border);
     }
 }
 

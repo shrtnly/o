@@ -7,10 +7,20 @@
 }
 
 .mainContent {
-    padding: 60px 48px;
+    padding: 30px 48px 60px;
     max-width: 900px;
     margin: 0 auto;
     width: 100%;
+}
+
+.headerCol {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerCol:nth-child(2) {
+    justify-content: center;
 }
 
 .header {
@@ -58,10 +68,12 @@
 
 .tabs {
     display: flex;
-    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
     margin-bottom: 32px;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding: 0 0 10px;
     scrollbar-width: none;
 }
 
@@ -70,41 +82,32 @@
 }
 
 .tab {
-    padding: 14px 24px;
-    background-color: #1a272d;
-    border: 2px solid #37464f;
-    border-bottom: 5px solid #37464f;
-    border-radius: 16px;
-    color: #afafaf;
-    font-weight: 800;
-    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+    height: 60px;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    white-space: nowrap;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
-    overflow: hidden;
+    box-shadow: none;
 }
 
 .tab:hover {
-    background-color: #233138;
+    transform: translateY(-5px);
 }
 
 .activeTab {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: var(--tier-color);
-    border-bottom-color: var(--tier-color);
-    color: #fff;
+    transform: scale(1.2);
+    z-index: 2;
 }
 
 .activeTab::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, var(--tier-color), transparent 70%);
-    opacity: 0.15;
+    display: none;
 }
 
 .leaderboardCard {
@@ -118,8 +121,8 @@
 
 .tableHeader {
     display: grid;
-    grid-template-columns: 100px 1fr 150px;
-    padding: 20px 24px;
+    grid-template-columns: 60px 180px 1fr 180px;
+    padding: 10px 24px;
     background-color: #233138;
     border-bottom: 2px solid #37464f;
     font-weight: 800;
@@ -131,8 +134,8 @@
 
 .row {
     display: grid;
-    grid-template-columns: 100px 1fr 150px;
-    padding: 20px 24px;
+    grid-template-columns: 60px 180px 1fr 180px;
+    padding: 10px 24px;
     align-items: center;
     border-bottom: 1px solid #37464f;
     transition: all 0.2s ease;
@@ -163,15 +166,17 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    min-width: 0;
 }
 
 .avatarWrapper {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     overflow: hidden;
     background-color: #37464f;
     border: 2px solid #4b5a64;
+    flex-shrink: 0;
 }
 
 .avatar {
@@ -196,12 +201,18 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 
 .userName {
     font-size: 1.1rem;
     font-weight: 800;
     color: #fff;
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .tierTag {
@@ -217,8 +228,9 @@
 .xpCol {
     display: flex;
     align-items: baseline;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 6px;
+    position: relative;
 }
 
 .xpValue {
@@ -233,27 +245,90 @@
     color: #afafaf;
 }
 
-.loadingState {
-    padding: 60px;
+.shareIconBtn {
+    position: absolute;
+    right: 12px;
+    background: rgba(28, 176, 246, 0.1);
+    border: 1.5px solid #1cb0f6;
+    color: #1cb0f6;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 20px;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
 }
 
-.spinner {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #37464f;
-    border-top-color: #1cb0f6;
-    border-radius: 50%;
-    animation: spin 1s infinite linear;
+.shareIconBtn:hover {
+    background: #1cb0f6;
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(28, 176, 246, 0.4);
+}
+
+.shareIconBtn:active {
+    transform: scale(0.95);
 }
 
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
+}
+
+.skeleton {
+    background: #233138;
+    background: linear-gradient(90deg, #233138 25%, #2a3a42 50%, #233138 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeletonRank {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.skeletonAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.skeletonName {
+    width: 100px;
+    height: 18px;
+}
+
+.skeletonShield {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.skeletonBar {
+    flex: 1;
+    height: 10px;
+    border-radius: 10px;
+}
+
+.skeletonXP {
+    width: 60px;
+    height: 24px;
 }
 
 .emptyState {
@@ -273,19 +348,13 @@
 }
 
 .footerStatus {
-    position: fixed;
-    bottom: 24px;
-    left: 280px;
-    right: 24px;
-    background-color: #1cb0f6;
-    padding: 16px 32px;
-    border-radius: 20px;
+    margin-top: 32px;
+    padding: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 10px 40px rgba(28, 176, 246, 0.4);
-    z-index: 100;
-    animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-top: 2px solid #37464f;
+    width: 100%;
 }
 
 @keyframes slideUp {
@@ -306,19 +375,42 @@
     color: #fff;
 }
 
-.shareBtn {
-    background-color: #fff;
-    color: #1cb0f6;
-    border: none;
-    padding: 10px 24px;
-    border-radius: 12px;
-    font-weight: 900;
-    cursor: pointer;
-    transition: transform 0.2s;
+.paginationControls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.shareBtn:hover {
-    transform: scale(1.05);
+.pageBtn {
+    background-color: #1a272d;
+    border: 2px solid #37464f;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+    background-color: #37464f;
+    transform: translateY(-2px);
+}
+
+.pageBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.pageInfo {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #afafaf;
+    min-width: 100px;
+    text-align: center;
 }
 
 .introContainer {
@@ -442,10 +534,6 @@
     .container {
         grid-template-columns: 80px 1fr;
     }
-
-    .footerStatus {
-        left: 100px;
-    }
 }
 
 @media (max-width: 768px) {
@@ -453,14 +541,18 @@
         padding: 40px 20px;
     }
 
-    .headercol:first-child,
+    .headerCol:first-child,
     .rankCol {
+        display: none;
+    }
+
+    .progressCol {
         display: none;
     }
 
     .row,
     .tableHeader {
-        grid-template-columns: 1fr 100px;
+        grid-template-columns: 1fr 80px;
     }
 
     .lockInfoBanner {
@@ -470,11 +562,114 @@
     }
 
     .footerStatus {
-        bottom: 12px;
-        left: 12px;
-        right: 12px;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         text-align: center;
+        padding: 24px 12px;
     }
+}
+
+.progressSection {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.progressTitle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.progressTitle h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0;
+}
+
+.progressTitle p {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #afafaf;
+    margin: 0;
+}
+
+.xpHighlight {
+    color: #2ecc71;
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+
+.tabShield {
+    transition: all 0.3s ease;
+}
+
+.lockedTab {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    height: 80px;
+    padding: 0;
+}
+
+.lockOverlay {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #37464f;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #afafaf;
+    border: 2px solid #1a272d;
+}
+
+.headerCol:nth-child(3) {
+    padding: 0 20%;
+}
+
+.progressCol {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20%;
+}
+
+.progressCol img,
+.progressCol svg {
+    filter: none !important;
+}
+
+.progressBarWrapper {
+    flex: 1;
+    height: 10px;
+    background-color: #37464f;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+    border-radius: 10px;
+    transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
 }

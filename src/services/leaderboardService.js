@@ -7,19 +7,19 @@ export const leaderboardService = {
      * @param {number} limit - Number of users to fetch
      * @returns {Promise<Array>}
      */
-    async getLeaderboardByTier(tier, limit = 50) {
+    async getLeaderboardByTier(tier, limit = 50, offset = 0) {
         try {
-            const { data, error } = await supabase
+            const { data, count, error } = await supabase
                 .from('leaderboard_view')
-                .select('*')
+                .select('*', { count: 'exact' })
                 .eq('tier', tier.toUpperCase())
-                .limit(limit);
+                .range(offset, offset + limit - 1);
 
             if (error) throw error;
-            return data || [];
+            return { data: data || [], total: count || 0 };
         } catch (error) {
             console.error('Error fetching leaderboard:', error);
-            return [];
+            return { data: [], total: 0 };
         }
     },
 
@@ -33,8 +33,8 @@ export const leaderboardService = {
         try {
             // This is a bit complex in Supabase without a RPC, 
             // but for simple leaderboard we can fetch data and find index
-            const leaderboard = await this.getLeaderboardByTier(tier, 1000);
-            const rank = leaderboard.findIndex(user => user.id === userId);
+            const { data } = await this.getLeaderboardByTier(tier, 1000);
+            const rank = data.findIndex(user => user.id === userId);
             return rank !== -1 ? rank + 1 : null;
         } catch (error) {
             console.error('Error getting user rank:', error);

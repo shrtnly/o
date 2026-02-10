@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     Heart, Gem, Zap, Check, Shield, Star, ShoppingBag,
     Loader2, Sparkles, CreditCard, ChevronRight,
-    Minus, Plus, ArrowRight, TrendingUp
+    Minus, Plus, ArrowRight, TrendingUp, Award
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
@@ -11,14 +11,13 @@ import { shopService } from '../../services/shopService';
 import Sidebar from '../learning/components/Sidebar';
 import styles from './ShopPage.module.css';
 import { toast } from 'sonner';
-import LoadingScreen from '../../components/ui/LoadingScreen';
 import InlineLoader from '../../components/ui/InlineLoader';
 
 const GEM_PACKS = [
-    { id: 'gem_p1', amount: 500, price: 100, label: 'জেম পকেট', icon: <Gem size={48} color="#1cb0f6" fill="#1cb0f6" /> },
-    { id: 'gem_p2', amount: 1200, price: 200, label: 'জেম চেস্ট', icon: <div style={{ display: 'flex', gap: '-15px' }}><Gem size={40} color="#1cb0f6" fill="#1cb0f6" /><Gem size={40} color="#1cb0f6" fill="#1cb0f6" /></div>, popular: true },
-    { id: 'gem_p3', amount: 3000, price: 500, label: 'জেম কার্ট', icon: <ShoppingBag size={52} color="#1cb0f6" strokeWidth={1.5} /> },
-    { id: 'gem_p4', amount: 7500, price: 1000, label: 'জেম ভল্ট', icon: <TrendingUp size={52} color="#1cb0f6" />, best: true },
+    { id: 'gem_p1', amount: 500, price: 100, label: 'জেম পকেট', icon: <Gem size={40} color="#1cb0f6" fill="#1cb0f6" /> },
+    { id: 'gem_p2', amount: 1200, price: 200, label: 'জেম চেস্ট', icon: <div className="flex gap-[-10px]"><Gem size={32} color="#1cb0f6" fill="#1cb0f6" /><Gem size={32} color="#1cb0f6" fill="#1cb0f6" /></div>, popular: true },
+    { id: 'gem_p3', amount: 3000, price: 500, label: 'জেম কার্ট', icon: <ShoppingBag size={48} color="#1cb0f6" strokeWidth={1.5} /> },
+    { id: 'gem_p4', amount: 7500, price: 1000, label: 'জেম ভল্ট', icon: <Award size={48} color="#1cb0f6" />, best: true },
 ];
 
 const ShopPage = () => {
@@ -26,12 +25,9 @@ const ShopPage = () => {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
-
-    // Subscription Toggle State
     const [planType, setPlanType] = useState('monthly'); // 'monthly' or 'yearly'
-
-    // Gem Converter State
     const [gemToConvert, setGemToConvert] = useState(10);
+
     const calculatedHearts = Math.floor(gemToConvert / 10);
 
     const fetchProfile = async () => {
@@ -73,9 +69,7 @@ const ShopPage = () => {
                     gems: result.new_gems,
                     hearts: result.new_hearts
                 }));
-                toast.success(`${calculatedHearts}টি নতুন হার্ট যোগ করা হয়েছে!`, {
-                    description: 'আপনার জেম সফলভাবে কনভার্ট করা হয়েছে।'
-                });
+                toast.success(`${calculatedHearts}টি নতুন হার্ট যোগ করা হয়েছে!`);
             }
         } catch (err) {
             toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
@@ -98,58 +92,77 @@ const ShopPage = () => {
                 const subPrice = planType === 'monthly' ? 400 : 4000;
                 result = await shopService.subscribeToPremium(user.id, planType, subPrice);
                 if (result.success) {
-                    await fetchProfile(); // Refresh profile for is_premium
+                    await fetchProfile();
                     toast.success(`অভিনন্দন! আপনি এখন সুপার সাবস্ক্রাইবার (${planType})।`);
                 }
             }
         } catch (err) {
-            console.error('Purchase error:', err);
             toast.error('ক্রয় সম্পন্ন করা যায়নি। পুনরায় চেষ্টা করুন।');
         } finally {
             setProcessing(false);
         }
     };
 
-
-
     return (
         <div className={styles.shopPage}>
+            <Sidebar />
             <main className={styles.mainContent}>
                 {loading ? (
-                    <div className="flex items-center justify-center h-full w-full">
+                    <div className="flex items-center justify-center h-full">
                         <InlineLoader />
                     </div>
                 ) : (
                     <>
                         <header className={styles.header}>
                             <h1>ও-শেখা স্টোর</h1>
-                            <p>আপনার শেখার গতি বাড়াতে প্রয়োজনীয় রিসোর্স সংগ্রহ করুন।</p>
+                            <p>আপনার শেখার অভিজ্ঞতাকে আরও সমৃদ্ধ করুন</p>
                         </header>
+
+                        {/* Balance Bar */}
+                        <div className={styles.balanceOverview}>
+                            <div className={styles.balanceItem}>
+                                <div className={styles.balanceLabel}>আপনার জেম</div>
+                                <div className={styles.balanceValue}>
+                                    <Gem size={24} color="#1cb0f6" fill="#1cb0f6" className="inline mr-2" />
+                                    {profile?.gems || 0}
+                                </div>
+                            </div>
+                            <div className={styles.balanceItem}>
+                                <div className={styles.balanceLabel}>বর্তমান হার্ট</div>
+                                <div className={styles.balanceValue}>
+                                    <Heart size={24} color="#ff4b4b" fill="#ff4b4b" className="inline mr-2" />
+                                    {profile?.is_premium ? '∞' : (profile?.hearts || 0)}
+                                </div>
+                            </div>
+                        </div>
 
                         {/* SUPER Subscription Section */}
                         <section className={styles.section}>
                             <div className={styles.superCard}>
                                 <div className={styles.superContent}>
-                                    <div className={styles.superHeader}>
-                                        <span className={styles.superTag}>SUPER MEMBERSHIP</span>
-                                        <h2 className={styles.superTitle}>সুপার সাবস্ক্রিপশন</h2>
-                                    </div>
-                                    <div className={styles.superFeaturesCompact}>
-                                        <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> আনলিমিটেড হার্ট</div>
-                                        <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> অ্যাড-ফ্রি লার্নিং</div>
-                                        <div className={styles.compactFeature}><Check size={16} className={styles.featureCheck} /> স্পেশাল প্রোফাইল ব্যাজ</div>
+                                    <h2 className={styles.superTitle}>সুপার মেম্বারশিপ</h2>
+                                    <div className={styles.superFeatures}>
+                                        <div className={styles.feature}>
+                                            <div className={styles.featureIcon}><Heart size={14} fill="#fff" /></div>
+                                            আনলিমিটেড হার্ট
+                                        </div>
+                                        <div className={styles.feature}>
+                                            <div className={styles.featureIcon}><Star size={14} fill="#fff" /></div>
+                                            অ্যাড-ফ্রি অভিজ্ঞতা
+                                        </div>
+                                        <div className={styles.feature}>
+                                            <div className={styles.featureIcon}><Zap size={14} fill="#fff" /></div>
+                                            দ্রুত প্রগ্রেস
+                                        </div>
+                                        <div className={styles.feature}>
+                                            <div className={styles.featureIcon}><Shield size={14} fill="#fff" /></div>
+                                            স্পেশাল ব্যাজ
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className={styles.superRightArea}>
-                                    <div className={styles.toggleContainer}>
-                                        <div
-                                            className={styles.toggleIndicator}
-                                            style={{
-                                                width: '90px',
-                                                transform: planType === 'monthly' ? 'translateX(0)' : 'translateX(90px)'
-                                            }}
-                                        />
+                                <div className={styles.superActions}>
+                                    <div className={styles.planToggle}>
                                         <button
                                             className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
                                             onClick={() => setPlanType('monthly')}
@@ -161,17 +174,15 @@ const ShopPage = () => {
                                             onClick={() => setPlanType('yearly')}
                                         >
                                             বার্ষিক
-                                            {planType === 'yearly' && <span className={styles.yearlyBadge}>-২০%</span>}
+                                            <span className={styles.discountBadge}>-২০%</span>
                                         </button>
                                     </div>
-
                                     <button
-                                        className={styles.superAction}
+                                        className={styles.subscribeBtn}
                                         onClick={() => handlePurchase('subscription')}
                                         disabled={processing || profile?.is_premium}
                                     >
-                                        {profile?.is_premium ? 'সক্রিয়' : (planType === 'monthly' ? '৳৪০০.০০ / মাস' : '৳৪০০০.০০ / বছর')}
-                                        <ChevronRight size={22} />
+                                        {profile?.is_premium ? 'সক্রিয়' : (planType === 'monthly' ? '৳ ৪০০ / মাস' : '৳ ৪০০০ / বছর')}
                                     </button>
                                 </div>
                             </div>
@@ -179,35 +190,42 @@ const ShopPage = () => {
 
                         {/* Gem to Heart Converter Section */}
                         <section className={styles.section}>
-                            <h2 className={styles.sectionTitle}>জেম এক্সচেঞ্জ</h2>
+                            <h2 className={styles.sectionTitle}>
+                                <Zap size={24} color="#ff9600" />
+                                জেম এক্সচেঞ্জ
+                            </h2>
                             <div className={styles.convertCard}>
-                                <div className={styles.convertInputArea}>
+                                <div className={styles.convertInput}>
                                     <h3 className={styles.convertTitle}>জেম থেকে হার্ট</h3>
-                                    <p className={styles.convertDesc}>আপনার জেম ব্যবহার করে হার্ট রিফিল করুন। (১০ জেম = ১ হার্ট)</p>
+                                    <p className={styles.convertSub}>প্রতি ১০ জেমের বিনিময়ে ১টি হার্ট সংগ্রহ করুন</p>
 
-                                    <div className={styles.controlBox}>
-                                        <button className={styles.controlBtn} onClick={handleDecrement}><Minus size={20} /></button>
-                                        <div className={styles.gemValue}>
-                                            <Gem size={28} color="#1cb0f6" fill="#1cb0f6" />
+                                    <div className={styles.controlGroup}>
+                                        <button className={styles.stepBtn} onClick={handleDecrement} disabled={gemToConvert <= 10}>
+                                            <Minus size={20} />
+                                        </button>
+                                        <div className={styles.gemInputDisplay}>
+                                            <Gem size={24} color="#1cb0f6" fill="#1cb0f6" />
                                             <span>{gemToConvert}</span>
                                         </div>
-                                        <button className={styles.controlBtn} onClick={handleIncrement}><Plus size={20} /></button>
-
-                                        <ArrowRight className={styles.arrowIcon} size={32} />
+                                        <button className={styles.stepBtn} onClick={handleIncrement}>
+                                            <Plus size={20} />
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div className={styles.convertResult}>
-                                    <div className={styles.heartCount}>
-                                        <Heart size={48} color="#ff4b4b" fill="#ff4b4b" />
+                                <ArrowRight className={styles.convertArrow} size={32} />
+
+                                <div className={styles.convertOutput}>
+                                    <div className={styles.heartResult}>
+                                        <Heart size={40} color="#ff4b4b" fill="#ff4b4b" />
                                         <span>+{calculatedHearts}</span>
                                     </div>
                                     <button
-                                        className={styles.convertBtn}
+                                        className={styles.exchangeBtn}
                                         onClick={handleConvertAction}
                                         disabled={processing || (profile?.gems < gemToConvert) || (profile?.hearts >= profile?.max_hearts)}
                                     >
-                                        {processing ? <Loader2 className={styles.spinner} size={20} /> : 'কনভার্ট করুন'}
+                                        {processing ? <Loader2 className="animate-spin" /> : 'বিনিময় করুন'}
                                     </button>
                                 </div>
                             </div>
@@ -215,7 +233,10 @@ const ShopPage = () => {
 
                         {/* Gem Packs Section */}
                         <section className={styles.section}>
-                            <h2 className={styles.sectionTitle}>জেম প্যাক কিনুন</h2>
+                            <h2 className={styles.sectionTitle}>
+                                <ShoppingBag size={24} color="#1cb0f6" />
+                                জেম প্যাক
+                            </h2>
                             <div className={styles.packsGrid}>
                                 {GEM_PACKS.map((pack) => (
                                     <div
@@ -223,13 +244,13 @@ const ShopPage = () => {
                                         className={styles.packCard}
                                         onClick={() => handlePurchase('gems', pack)}
                                     >
-                                        {pack.popular && <span className={styles.bestValue} style={{ background: '#1cb0f6', color: '#fff' }}>POPULAR</span>}
-                                        {pack.best && <span className={styles.bestValue}>BEST VALUE</span>}
+                                        {pack.popular && <span className={styles.badge}>জনপ্রিয়</span>}
+                                        {pack.best && <span className={styles.badge} style={{ background: '#58cc02' }}>সেরা মূল্য</span>}
 
                                         <div className={styles.packIcon}>{pack.icon}</div>
                                         <div className={styles.packAmount}>{pack.amount}</div>
-                                        <div className={styles.packLabel}>{pack.label}</div>
-                                        <div className={styles.packPrice}>৳{pack.price}.০০</div>
+                                        <div className={styles.packName}>{pack.label}</div>
+                                        <div className={styles.priceTag}>৳ {pack.price}</div>
                                     </div>
                                 ))}
                             </div>

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ChevronDown, Filter } from 'lucide-react';
 import InlineLoader from '../../components/ui/InlineLoader';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
@@ -22,7 +23,20 @@ const CourseListPage = () => {
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All');
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
     const navigate = useNavigate();
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -62,40 +76,121 @@ const CourseListPage = () => {
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
                     <header className={styles.header}>
-                        <h1 className={styles.pageTitle}>সব কোর্সসমূহ</h1>
-                        <p className={styles.subtitle}>আপনার পছন্দের বিষয়টি বেছে নিন এবং আজই শেখা শুরু করুন।</p>
+                        <h1 className={styles.pageTitle}>আপনার পছন্দের <span className={styles.highlight}>কোর্সসমূহ</span> যুক্ত করুন</h1>
                     </header>
-
-                    <div className={styles.searchFilterBar}>
-                        <div className={styles.categoryFilters}>
-                            <button
-                                className={`${styles.filterBtn} ${activeCategory === 'All' ? styles.active : ''}`}
-                                onClick={() => setActiveCategory('All')}
-                            >
-                                সব কোর্স
-                            </button>
-                            {CATEGORIES.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    className={`${styles.filterBtn} ${activeCategory === cat.id ? styles.active : ''}`}
-                                    onClick={() => setActiveCategory(cat.id)}
-                                >
-                                    {cat.name}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
 
                     {loading ? (
                         <InlineLoader />
                     ) : (
                         <div className={styles.content}>
-                            {/* Specific Category Section - only if filtered */}
-                            {activeCategory !== 'All' && (
+                            {activeCategory === 'All' ? (
                                 <section className={styles.categorySection}>
-                                    <h2 className={styles.categoryTitle}>
-                                        {CATEGORIES.find(c => c.id === activeCategory)?.name}
-                                    </h2>
+                                    <div className={styles.sectionHeader}>
+                                        <h2 className={styles.categoryTitle}>সব কোর্স</h2>
+
+                                        <div className={styles.filterDropdown} ref={dropdownRef}>
+                                            <button
+                                                className={`${styles.dropdownToggle} ${isDropdownOpen ? styles.isOpen : ''}`}
+                                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                            >
+                                                <div className={styles.toggleContent}>
+                                                    <Filter size={18} className={styles.filterIcon} />
+                                                    <span>
+                                                        {activeCategory === 'All'
+                                                            ? 'সব কোর্স'
+                                                            : CATEGORIES.find(cat => cat.id === activeCategory)?.name}
+                                                    </span>
+                                                </div>
+                                                <ChevronDown size={20} className={styles.chevron} />
+                                            </button>
+
+                                            {isDropdownOpen && (
+                                                <div className={styles.dropdownMenu}>
+                                                    <div
+                                                        className={`${styles.dropdownItem} ${activeCategory === 'All' ? styles.active : ''}`}
+                                                        onClick={() => {
+                                                            setActiveCategory('All');
+                                                            setIsDropdownOpen(false);
+                                                        }}
+                                                    >
+                                                        সব কোর্স
+                                                    </div>
+                                                    {CATEGORIES.map(cat => (
+                                                        <div
+                                                            key={cat.id}
+                                                            className={`${styles.dropdownItem} ${activeCategory === cat.id ? styles.active : ''}`}
+                                                            onClick={() => {
+                                                                setActiveCategory(cat.id);
+                                                                setIsDropdownOpen(false);
+                                                            }}
+                                                        >
+                                                            {cat.name}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={styles.grid}>
+                                        {courses.map(course => (
+                                            <CourseCard
+                                                key={course.id}
+                                                course={course}
+                                                isEnrolled={enrolledCourseIds.has(course.id)}
+                                            />
+                                        ))}
+                                    </div>
+                                </section>
+                            ) : (
+                                <section className={styles.categorySection}>
+                                    <div className={styles.sectionHeader}>
+                                        <h2 className={styles.categoryTitle}>
+                                            {CATEGORIES.find(c => c.id === activeCategory)?.name}
+                                        </h2>
+
+                                        <div className={styles.filterDropdown} ref={dropdownRef}>
+                                            <button
+                                                className={`${styles.dropdownToggle} ${isDropdownOpen ? styles.isOpen : ''}`}
+                                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                                            >
+                                                <div className={styles.toggleContent}>
+                                                    <Filter size={18} className={styles.filterIcon} />
+                                                    <span>
+                                                        {activeCategory === 'All'
+                                                            ? 'সব কোর্স'
+                                                            : CATEGORIES.find(cat => cat.id === activeCategory)?.name}
+                                                    </span>
+                                                </div>
+                                                <ChevronDown size={20} className={styles.chevron} />
+                                            </button>
+
+                                            {isDropdownOpen && (
+                                                <div className={styles.dropdownMenu}>
+                                                    <div
+                                                        className={`${styles.dropdownItem} ${activeCategory === 'All' ? styles.active : ''}`}
+                                                        onClick={() => {
+                                                            setActiveCategory('All');
+                                                            setIsDropdownOpen(false);
+                                                        }}
+                                                    >
+                                                        সব কোর্স
+                                                    </div>
+                                                    {CATEGORIES.map(cat => (
+                                                        <div
+                                                            key={cat.id}
+                                                            className={`${styles.dropdownItem} ${activeCategory === cat.id ? styles.active : ''}`}
+                                                            onClick={() => {
+                                                                setActiveCategory(cat.id);
+                                                                setIsDropdownOpen(false);
+                                                            }}
+                                                        >
+                                                            {cat.name}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                     {filteredCourses.length > 0 ? (
                                         <div className={styles.grid}>
                                             {filteredCourses.map(course => (
@@ -108,25 +203,11 @@ const CourseListPage = () => {
                                         </div>
                                     ) : (
                                         <div className={styles.emptyState}>
-                                            কোনো কোর্স পাওয়া যায়নি।
+                                            এই ক্যাটাগরিতে কোনো কোর্স পাওয়া যায়নি।
                                         </div>
                                     )}
                                 </section>
                             )}
-
-                            {/* All Courses Section - Always shown */}
-                            <section className={styles.categorySection}>
-                                <h2 className={styles.categoryTitle}>সব কোর্স</h2>
-                                <div className={styles.grid}>
-                                    {courses.map(course => (
-                                        <CourseCard
-                                            key={course.id}
-                                            course={course}
-                                            isEnrolled={enrolledCourseIds.has(course.id)}
-                                        />
-                                    ))}
-                                </div>
-                            </section>
                         </div>
                     )}
                 </div>

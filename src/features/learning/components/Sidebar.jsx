@@ -4,6 +4,7 @@ import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircl
 import { useAuth } from '../../../context/AuthContext';
 import { courseService } from '../../../services/courseService';
 import { cn } from '../../../lib/utils';
+import logo from '../../../assets/shields/Logo_BeeLesson.png';
 import styles from './Sidebar.module.css';
 
 const Sidebar = () => {
@@ -44,7 +45,7 @@ const Sidebar = () => {
     return (
         <aside className={styles.leftSidebar}>
             <div className={styles.logoArea}>
-                <span className={styles.logoText}>ও-শেখা</span>
+                <img src={logo} alt="BeeLesson" className={styles.logoImg} />
             </div>
 
             <NavLink

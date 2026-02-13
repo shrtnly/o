@@ -11,20 +11,16 @@
 }
 
 .logoArea {
-    padding: 0 16px 48px;
+    padding: 0 16px 32px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
 }
 
-.logoText {
-    background: linear-gradient(135deg, #58cc02 0%, #23ac5e 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 2rem;
-    font-weight: 900;
-    letter-spacing: -1.5px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+.logoImg {
+    height: 64px;
+    width: auto;
+    object-fit: contain;
 }
 
 .navItem {

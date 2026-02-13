@@ -43,7 +43,7 @@ const AdminDashboardV2 = () => {
             )}>
                 <div className="p-6 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950">
                     <div className={cn("font-bold text-lg text-slate-900 dark:text-slate-100 truncate transition-opacity", !isSidebarOpen && "opacity-0")}>
-                        ও-শেখা Admin
+                        BeeLesson Admin
                     </div>
                     <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
                         {isSidebarOpen ? <ChevronLeft size={18} /> : <Menu size={18} />}

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Moon, Sun, LogOut, User } from 'lucide-react';
 import Button from '../ui/Button';
+import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './Navbar.module.css';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
@@ -13,10 +14,7 @@ const Navbar = () => {
         <nav className={styles.navbar}>
             <div className={styles.container}>
                 <Link to="/" className={styles.logo}>
-                    <div className={styles.logoIcon}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                    </div>
-                    <span className={styles.logoText}>প্ল্যাটফর্ম</span>
+                    <img src={logo} alt="BeeLesson" className={styles.navLogo} />
                 </Link>
 
                 <div className={styles.actions}>

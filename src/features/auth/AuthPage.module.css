@@ -50,6 +50,18 @@
     }
 }
 
+.logoWrapper {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+}
+
+.authLogo {
+    height: 110px;
+    width: auto;
+    object-fit: contain;
+}
+
 .header {
     text-align: left;
     margin-bottom: 32px;

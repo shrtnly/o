@@ -109,9 +109,29 @@
     padding: 24px 24px 180px;
 }
 
+.studyContentWrapper {
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+    justify-content: center;
+    max-width: 1000px;
+    width: 100%;
+}
+
 .questionSection {
+    flex: 1;
     max-width: 600px;
     width: 100%;
+}
+
+
+
+@media (max-width: 900px) {
+    .studyContentWrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
 }
 
 .contextBox {

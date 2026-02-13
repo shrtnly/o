@@ -230,7 +230,7 @@ const AdminDashboard = () => {
     return (
         <div className={styles.adminLayout}>
             <aside className={styles.sidebar}>
-                <div className={styles.logoArea}><div className={styles.logoText}>ও-শেখা Admin</div></div>
+                <div className={styles.logoArea}><div className={styles.logoText}>BeeLesson Admin</div></div>
                 <nav className={styles.navMenu}>
                     <div className={`${styles.navItem} ${view === 'courses' ? styles.activeNavItem : ''}`} onClick={() => handleNavigate('courses')}>
                         <LayoutDashboard size={20} /><span>Curriculum</span>

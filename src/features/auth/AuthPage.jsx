@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, X, Chrome, Phone, Loader2, User, Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/ui/Button';
+import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './AuthPage.module.css';
 import { useAuth } from '../../context/AuthContext';
 import { courseService } from '../../services/courseService';
@@ -103,6 +104,9 @@ const AuthPage = () => {
             </button>
 
             <div className={styles.authContainer}>
+                <div className={styles.logoWrapper}>
+                    <img src={logo} alt="BeeLesson" className={styles.authLogo} />
+                </div>
                 <div className={styles.header}>
                     <h1>
                         {isLogin ? (

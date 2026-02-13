@@ -37,7 +37,7 @@ const LandingPageContent = () => (
       </div>
     </section>
     <footer style={{ padding: '60px 0', borderTop: '2px solid var(--color-border)', textAlign: 'center', backgroundColor: 'var(--color-bg-alt)' }}>
-      <p>&copy; ২০২৪ ও-শেখ। সকল স্বত্ব সংরক্ষিত।</p>
+      <p>&copy; ২০২৪ BeeLesson. সকল স্বত্ব সংরক্ষিত।</p>
     </footer>
   </>
 );

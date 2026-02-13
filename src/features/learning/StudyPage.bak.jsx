@@ -2,7 +2,6 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { X, Heart, HeartCrack, Check, Lightbulb, Star, ArrowRight, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
@@ -38,59 +37,6 @@ const StudyPage = () => {
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
     const [showNoHeartsModal, setShowNoHeartsModal] = useState(false);
-    const [dotLottie, setDotLottie] = useState(null);
-    const [isSubLooping, setIsSubLooping] = useState(false);
-    const [isVanish, setIsVanish] = useState(false);
-    const hasStarted = React.useRef(false);
-    const hasPlayed = React.useRef(false);
-
-    useEffect(() => {
-        if (!dotLottie || hasPlayed.current) return;
-
-        // শুধু প্রথমবার সেগমেন্ট সেট করা
-        if (!hasStarted.current) {
-            dotLottie.setSegment(187, 330);
-            dotLottie.setLoop(true);
-            hasStarted.current = true;
-        }
-
-        const handleFrame = (event) => {
-            const frame = Math.floor(event.currentFrame);
-
-            // সাব-লুপ ট্রিগার
-            if (frame >= 293 && frame <= 298 && !isSubLooping && !hasPlayed.current) {
-                setIsSubLooping(true);
-                dotLottie.setSegment(293, 305);
-                dotLottie.setLoop(true);
-                setTimeout(() => dotLottie.setMode('bounce'), 50);
-
-                setTimeout(() => {
-                    setIsSubLooping(false);
-                    hasPlayed.current = true;
-
-                    // সরাসরি ভ্যানিশ করা
-                    setIsVanish(true);
-                    if (dotLottie) {
-                        dotLottie.stop();
-                        dotLottie.destroy();
-                    }
-                }, 6000);
-            }
-        };
-
-        dotLottie.addEventListener('frame', handleFrame);
-        return () => {
-            dotLottie.removeEventListener('frame', handleFrame);
-        };
-    }, [dotLottie, isSubLooping]);
-
-    // Cleanup effect when vanishing
-    useEffect(() => {
-        if (isVanish && dotLottie) {
-            dotLottie.stop();
-            dotLottie.destroy();
-        }
-    }, [isVanish, dotLottie]);
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -271,26 +217,6 @@ const StudyPage = () => {
 
             <main className={styles.mainContent}>
                 <div className={styles.studyContentWrapper}>
-                    <AnimatePresence>
-                        {!isVanish && (
-                            <motion.div
-                                className={styles.mascotArea}
-                                initial={{ opacity: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                                transition={{ duration: 0.5 }}
-                            >
-                                <div className={styles.mascotWrapper}>
-                                    <DotLottieReact
-                                        src="/models/NewBee.lottie"
-                                        autoplay={true}
-                                        speed={isSubLooping ? 0.4 : 1}
-                                        dotLottieRefCallback={setDotLottie}
-                                    />
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentIndex}

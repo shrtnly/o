@@ -121,16 +121,18 @@ const ShopPage = () => {
             <div className={styles.innerContent}>
                 {loading ? (
                     <div className={styles.loadingContainer}>
-                        <InlineLoader />
+                        <Loader2 className={styles.spinner} size={48} />
                     </div>
                 ) : (
                     <>
                         <div className={styles.shopLogoWrapper}>
-                            <img src={logo} alt="BeeLesson" className={styles.shopLogo} />
+                            <span className={styles.shopText}>
+                                <span className={styles.shopTextGreen}>বী-লেসন</span> শপ
+                            </span>
                         </div>
                         <header className={styles.header}>
-                            <h1>BeeLesson স্টোর</h1>
                             <p>আপনার শেখার অভিজ্ঞতাকে আরও সমৃদ্ধ করুন</p>
+                            <div className={styles.headerDivider}></div>
                         </header>
 
 

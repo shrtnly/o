@@ -24,14 +24,34 @@
 /* --- Navigation Header --- */
 .shopLogoWrapper {
     display: flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 16px;
+    gap: 16px;
+    margin-bottom: 0;
 }
 
 .shopLogo {
-    height: 100px;
+    height: 60px;
     width: auto;
     object-fit: contain;
+}
+
+.shopText {
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, #afafaf 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 0;
+}
+
+.shopTextGreen {
+    background: #2ecc71;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .header {

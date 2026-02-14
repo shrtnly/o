@@ -40,12 +40,20 @@ const StudyPage = () => {
     const [showNoHeartsModal, setShowNoHeartsModal] = useState(false);
     const [dotLottie, setDotLottie] = useState(null);
     const [isSubLooping, setIsSubLooping] = useState(false);
-    const [isVanish, setIsVanish] = useState(false);
+    const [selectedAnimation, setSelectedAnimation] = useState('1'); // Default to animation 1
     const hasStarted = React.useRef(false);
     const hasPlayed = React.useRef(false);
 
+    // Load animation preference from localStorage
     useEffect(() => {
-        if (!dotLottie || hasPlayed.current) return;
+        const savedAnimation = localStorage.getItem('studyPageAnimation');
+        if (savedAnimation) {
+            setSelectedAnimation(savedAnimation);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (!dotLottie || hasPlayed.current || selectedAnimation === 'none') return;
 
         // শুধু প্রথমবার সেগমেন্ট সেট করা
         if (!hasStarted.current) {
@@ -57,24 +65,14 @@ const StudyPage = () => {
         const handleFrame = (event) => {
             const frame = Math.floor(event.currentFrame);
 
-            // সাব-লুপ ট্রিগার
+            // সাব-লুপ ট্রিগার - infinite loop
             if (frame >= 293 && frame <= 298 && !isSubLooping && !hasPlayed.current) {
                 setIsSubLooping(true);
+                hasPlayed.current = true;
                 dotLottie.setSegment(293, 305);
                 dotLottie.setLoop(true);
                 setTimeout(() => dotLottie.setMode('bounce'), 50);
-
-                setTimeout(() => {
-                    setIsSubLooping(false);
-                    hasPlayed.current = true;
-
-                    // সরাসরি ভ্যানিশ করা
-                    setIsVanish(true);
-                    if (dotLottie) {
-                        dotLottie.stop();
-                        dotLottie.destroy();
-                    }
-                }, 6000);
+                // No timeout to stop - infinite loop
             }
         };
 
@@ -82,15 +80,7 @@ const StudyPage = () => {
         return () => {
             dotLottie.removeEventListener('frame', handleFrame);
         };
-    }, [dotLottie, isSubLooping]);
-
-    // Cleanup effect when vanishing
-    useEffect(() => {
-        if (isVanish && dotLottie) {
-            dotLottie.stop();
-            dotLottie.destroy();
-        }
-    }, [isVanish, dotLottie]);
+    }, [dotLottie, isSubLooping, selectedAnimation]);
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -272,7 +262,7 @@ const StudyPage = () => {
             <main className={styles.mainContent}>
                 <div className={styles.studyContentWrapper}>
                     <AnimatePresence>
-                        {!isVanish && (
+                        {selectedAnimation !== 'none' && (
                             <motion.div
                                 className={styles.mascotArea}
                                 initial={{ opacity: 1 }}
@@ -281,9 +271,17 @@ const StudyPage = () => {
                             >
                                 <div className={styles.mascotWrapper}>
                                     <DotLottieReact
-                                        src="/models/NewBee.lottie"
+                                        src={
+                                            selectedAnimation === '1' ? '/models/NewBee.lottie' :
+                                                selectedAnimation === '2' ? '/models/Bee - lounging.lottie' :
+                                                    selectedAnimation === '3' ? '/models/Bee looking.lottie' :
+                                                        selectedAnimation === '4' ? '/models/Loading Flying Beee.lottie' :
+                                                            selectedAnimation === '5' ? '/models/Happy Bee.lottie' :
+                                                                '/models/NewBee.lottie'
+                                        }
                                         autoplay={true}
-                                        speed={isSubLooping ? 0.4 : 1}
+                                        loop={true}
+                                        speed={selectedAnimation === '1' && isSubLooping ? 0.4 : 1}
                                         dotLottieRefCallback={setDotLottie}
                                     />
                                 </div>

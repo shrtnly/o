@@ -249,6 +249,37 @@ input:checked+.slider:before {
     transform: translateX(24px);
 }
 
+/* Animation Select Dropdown */
+.animationSelect {
+    background-color: #233138;
+    border: 2px solid #37464f;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    outline: none;
+    min-width: 180px;
+}
+
+.animationSelect:hover {
+    border-color: #1cb0f6;
+    background-color: rgba(28, 176, 246, 0.05);
+}
+
+.animationSelect:focus {
+    border-color: #2ecc71;
+    background-color: rgba(46, 204, 113, 0.05);
+}
+
+.animationSelect option {
+    background-color: #1a272d;
+    color: #fff;
+    padding: 10px;
+}
+
 @media (max-width: 1024px) {
     .layout {
         grid-template-columns: 1fr;

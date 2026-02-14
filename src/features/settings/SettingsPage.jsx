@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
@@ -7,6 +7,22 @@ import { useTheme } from '../../context/ThemeContext';
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();
     const [activeTab, setActiveTab] = useState('profile');
+    const [selectedAnimation, setSelectedAnimation] = useState('1');
+
+    // Load animation preference from localStorage
+    useEffect(() => {
+        const savedAnimation = localStorage.getItem('studyPageAnimation');
+        if (savedAnimation) {
+            setSelectedAnimation(savedAnimation);
+        }
+    }, []);
+
+    // Save animation preference to localStorage
+    const handleAnimationChange = (e) => {
+        const value = e.target.value;
+        setSelectedAnimation(value);
+        localStorage.setItem('studyPageAnimation', value);
+    };
 
     const menuItems = [
         { id: 'preferences', label: 'প্রেফারেন্স', icon: Sliders },
@@ -44,6 +60,30 @@ const SettingsPage = () => {
                                     />
                                     <span className={styles.slider}></span>
                                 </label>
+                            </div>
+
+                            <div className={styles.settingCard}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
+                                        <Sparkles size={20} />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>স্টাডি পেজ অ্যানিমেশন</h3>
+                                        <p>আপনার পছন্দের মৌমাছি অ্যানিমেশন নির্বাচন করুন</p>
+                                    </div>
+                                </div>
+                                <select
+                                    className={styles.animationSelect}
+                                    value={selectedAnimation}
+                                    onChange={handleAnimationChange}
+                                >
+                                    <option value="1">বাউন্সিং বি 🐝</option>
+                                    <option value="2">লাউঞ্জিং বি 🐝💤</option>
+                                    <option value="3">লুকিং বি 🐝👀</option>
+                                    <option value="4">ফ্লাইং বি 🐝✈️</option>
+                                    <option value="5">হ্যাপি বি 🐝😊</option>
+                                    <option value="none">কোনো অ্যানিমেশন নয়</option>
+                                </select>
                             </div>
 
                             <div className={styles.settingCard}>

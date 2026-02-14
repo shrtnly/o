@@ -54,15 +54,21 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
         };
 
         const fetchLeaderboard = async () => {
-            if (profile.xp > 0) {
-                const tier = getShieldLevel(profile.xp).level;
-                // Fetch top 2 for preview
-                const data = await leaderboardService.getLeaderboardByTier(tier, 2);
-                setLeaderboardData(data);
+            try {
+                if (profile.xp > 0) {
+                    const tier = getShieldLevel(profile.xp).level;
+                    // Fetch top 2 for preview
+                    const result = await leaderboardService.getLeaderboardByTier(tier, 2);
+                    setLeaderboardData(result.data || []);
 
-                // Fetch rank
-                const rank = await leaderboardService.getUserRank(profile.id, tier);
-                setUserRank(rank);
+                    // Fetch rank
+                    const rank = await leaderboardService.getUserRank(profile.id, tier);
+                    setUserRank(rank);
+                }
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+                setLeaderboardData([]);
+                setUserRank(null);
             }
         };
 

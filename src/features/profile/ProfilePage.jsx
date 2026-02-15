@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { rewardService } from '../../services/rewardService';
 import { courseService } from '../../services/courseService';
+import { storageService } from '../../services/storageService';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import InlineLoader from '../../components/ui/InlineLoader';
 import {
@@ -26,7 +27,9 @@ import {
     Building2,
     Edit3,
     X,
-    ExternalLink
+    ExternalLink,
+    Camera,
+    Flame
 } from 'lucide-react';
 import ShieldIcon from '../../components/ShieldIcon';
 import { getShieldLevel } from '../../utils/shieldSystem';
@@ -51,6 +54,16 @@ const ProfilePage = () => {
         bio: '',
         location: ''
     });
+
+    // Avatar upload states
+    const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const fileInputRef = useRef(null);
+
+    // Cover upload states
+    const [uploadingCover, setUploadingCover] = useState(false);
+    const coverInputRef = useRef(null);
+
+    const [streak, setStreak] = useState(null);
 
     useEffect(() => {
         if (!user) {
@@ -83,6 +96,10 @@ const ProfilePage = () => {
             // Fetch user stats
             const userStats = await rewardService.getUserStats(user.id);
             setStats(userStats);
+
+            // Fetch streak
+            const streakData = await rewardService.getUserStreak(user.id);
+            setStreak(streakData);
 
             // Fetch enrolled courses with progress
             const courseProgress = await courseService.getUserEnrolledCourses(user.id);
@@ -122,6 +139,71 @@ const ProfilePage = () => {
         }
     };
 
+    const handleAvatarClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setUploadingAvatar(true);
+
+            // Upload avatar and update profile
+            const updatedProfile = await storageService.changeAvatar(
+                file,
+                user.id,
+                profile?.avatar_url
+            );
+
+            setProfile(updatedProfile);
+
+            // Reset file input
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
+        } catch (error) {
+            console.error('Error uploading avatar:', error);
+            alert(error.message || 'ছবি আপলোড করতে সমস্যা হয়েছে');
+        } finally {
+            setUploadingAvatar(false);
+        }
+    };
+
+    const handleCoverClick = () => {
+        coverInputRef.current?.click();
+    };
+
+    const handleCoverChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setUploadingCover(true);
+
+            // Upload cover and update profile
+            const updatedProfile = await storageService.changeCover(
+                file,
+                user.id,
+                profile?.cover_url
+            );
+
+            setProfile(updatedProfile);
+
+            // Reset file input
+            if (coverInputRef.current) {
+                coverInputRef.current.value = '';
+            }
+        } catch (error) {
+            console.error('Error uploading cover:', error);
+            alert(error.message || 'কভার ছবি আপলোড করতে সমস্যা হয়েছে');
+        } finally {
+            setUploadingCover(false);
+        }
+    };
+
+
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
@@ -155,19 +237,43 @@ const ProfilePage = () => {
             ) : (
                 <>
                     {/* Top Hero Section */}
-                    <section className={styles.profileHero}>
-                        <div className={styles.heroPattern}></div>
+                    <section
+                        className={styles.profileHero}
+                        style={profile?.cover_url ? { backgroundImage: `url(${profile.cover_url})` } : {}}
+                    >
                         <div className={styles.heroGlow}></div>
 
-                        <div className={styles.topActions}>
-                            <button className={styles.actionBtn} onClick={() => setIsEditModalOpen(true)}>
-                                <Edit3 size={18} />
-                                <span>প্রোফাইল এডিট</span>
-                            </button>
-                            <button className={`${styles.actionBtn} ${styles.logoutBtn}`} onClick={handleLogout}>
-                                <LogOut size={18} />
-                                <span>লগআউট</span>
-                            </button>
+                        <button
+                            className={styles.coverUploadBtn}
+                            onClick={handleCoverClick}
+                            disabled={uploadingCover}
+                            title="কভার ছবি পরিবর্তন করুন"
+                        >
+                            <Camera size={18} />
+                            <span>কভার পরিবর্তন করুন</span>
+                        </button>
+
+                        <input
+                            ref={coverInputRef}
+                            type="file"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                            onChange={handleCoverChange}
+                            style={{ display: 'none' }}
+                        />
+
+                        {uploadingCover && (
+                            <div className={styles.coverLoader}>
+                                <InlineLoader />
+                            </div>
+                        )}
+
+                        <div className={styles.streakBar}>
+                            <div className={styles.streakContent}>
+                                <Flame size={20} className={styles.streakIcon} />
+                                <span className={styles.streakText}>
+                                    Current Streak: <strong>{streak?.current_streak || 0} Days</strong>
+                                </span>
+                            </div>
                         </div>
                     </section>
 
@@ -182,7 +288,27 @@ const ProfilePage = () => {
                                         ) : (
                                             <User size={60} />
                                         )}
+                                        {uploadingAvatar && (
+                                            <div className={styles.avatarLoader}>
+                                                <InlineLoader />
+                                            </div>
+                                        )}
                                     </div>
+                                    <button
+                                        className={styles.avatarUploadBtn}
+                                        onClick={handleAvatarClick}
+                                        disabled={uploadingAvatar}
+                                        title="প্রোফাইল ছবি পরিবর্তন করুন"
+                                    >
+                                        <Camera size={18} />
+                                    </button>
+                                    <input
+                                        ref={fileInputRef}
+                                        type="file"
+                                        accept="image/jpeg,image/jpg,image/png,image/webp"
+                                        onChange={handleAvatarChange}
+                                        style={{ display: 'none' }}
+                                    />
                                     <div className={styles.onlineBadge}></div>
                                 </div>
 
@@ -234,29 +360,22 @@ const ProfilePage = () => {
                         <main className={styles.mainContent}>
                             {/* Stats Overview */}
                             <div className={styles.statsSummary}>
-                                <div className={styles.miniStatCard}>
-                                    <div className={styles.statIcon}><Zap size={24} /></div>
+                                <div className={styles.miniStatCard} style={{ '--accent-color': '#ff9600' }}>
+                                    <div className={styles.statIcon} style={{ background: 'rgba(255, 150, 0, 0.1)', color: '#ff9600' }}><Zap size={20} /></div>
                                     <div className={styles.statInfo}>
                                         <span className={styles.statValue}>{profile?.xp || 0}</span>
-                                        <span className={styles.statLabel}>মোট XP</span>
+                                        <span className={styles.statLabel}>XP</span>
                                     </div>
                                 </div>
                                 <div className={styles.miniStatCard} style={{ '--accent-color': '#1cb0f6' }}>
-                                    <div className={styles.statIcon} style={{ background: 'rgba(28, 176, 246, 0.1)', color: '#1cb0f6' }}><Gem size={24} /></div>
+                                    <div className={styles.statIcon} style={{ background: 'rgba(28, 176, 246, 0.1)', color: '#1cb0f6' }}><Gem size={20} /></div>
                                     <div className={styles.statInfo}>
                                         <span className={styles.statValue}>{profile?.gems || 0}</span>
                                         <span className={styles.statLabel}>জেম</span>
                                     </div>
                                 </div>
-                                <div className={styles.miniStatCard} style={{ '--accent-color': '#ff4b4b' }}>
-                                    <div className={styles.statIcon} style={{ background: 'rgba(255, 75, 75, 0.1)', color: '#ff4b4b' }}><Heart size={24} /></div>
-                                    <div className={styles.statInfo}>
-                                        <span className={styles.statValue}>{profile?.hearts || 0}/{profile?.max_hearts || 10}</span>
-                                        <span className={styles.statLabel}>হার্ট</span>
-                                    </div>
-                                </div>
                                 <div className={styles.miniStatCard} style={{ '--accent-color': '#58cc02' }}>
-                                    <div className={styles.statIcon} style={{ background: 'rgba(88, 204, 2, 0.1)', color: '#58cc02' }}><CheckCircle size={24} /></div>
+                                    <div className={styles.statIcon} style={{ background: 'rgba(88, 204, 2, 0.1)', color: '#58cc02' }}><CheckCircle size={20} /></div>
                                     <div className={styles.statInfo}>
                                         <span className={styles.statValue}>{stats?.accuracy_percentage || 0}%</span>
                                         <span className={styles.statLabel}>নির্ভুলতা</span>

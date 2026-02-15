@@ -53,33 +53,37 @@ const StudyPage = () => {
     }, []);
 
     useEffect(() => {
-        if (!dotLottie || hasPlayed.current || selectedAnimation === 'none') return;
+        if (!dotLottie || selectedAnimation === 'none') return;
 
-        // শুধু প্রথমবার সেগমেন্ট সেট করা
-        if (!hasStarted.current) {
-            dotLottie.setSegment(187, 330);
-            dotLottie.setLoop(true);
-            hasStarted.current = true;
-        }
-
-        const handleFrame = (event) => {
-            const frame = Math.floor(event.currentFrame);
-
-            // সাব-লুপ ট্রিগার - infinite loop
-            if (frame >= 293 && frame <= 298 && !isSubLooping && !hasPlayed.current) {
-                setIsSubLooping(true);
-                hasPlayed.current = true;
-                dotLottie.setSegment(293, 305);
+        // শুধু animation 1 এর জন্য বিশেষ লজিক
+        if (selectedAnimation === '1') {
+            // শুধু প্রথমবার সেগমেন্ট সেট করা
+            if (!hasStarted.current) {
+                dotLottie.setSegment(187, 330);
                 dotLottie.setLoop(true);
-                setTimeout(() => dotLottie.setMode('bounce'), 50);
-                // No timeout to stop - infinite loop
+                hasStarted.current = true;
             }
-        };
 
-        dotLottie.addEventListener('frame', handleFrame);
-        return () => {
-            dotLottie.removeEventListener('frame', handleFrame);
-        };
+            const handleFrame = (event) => {
+                const frame = Math.floor(event.currentFrame);
+
+                // সাব-লুপ ট্রিগার - infinite loop
+                if (frame >= 293 && frame <= 298 && !isSubLooping && !hasPlayed.current) {
+                    setIsSubLooping(true);
+                    hasPlayed.current = true;
+                    dotLottie.setSegment(293, 305);
+                    dotLottie.setLoop(true);
+                    setTimeout(() => dotLottie.setMode('bounce'), 50);
+                    // No timeout to stop - infinite loop
+                }
+            };
+
+            dotLottie.addEventListener('frame', handleFrame);
+            return () => {
+                dotLottie.removeEventListener('frame', handleFrame);
+            };
+        }
+        // অন্য অ্যানিমেশনগুলো শুধু infinite loop করবে (কোনো বিশেষ frame handling নেই)
     }, [dotLottie, isSubLooping, selectedAnimation]);
 
     useEffect(() => {

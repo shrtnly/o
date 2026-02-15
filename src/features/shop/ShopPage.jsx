@@ -126,7 +126,7 @@ const ShopPage = () => {
                 ) : (
                     <>
                         <div className={styles.shopLogoWrapper}>
-                            <span className={styles.shopText}>
+                            <span className={styles.shopTexlearnt}>
                                 <span className={styles.shopTextGreen}>বী-লেসন</span> শপ
                             </span>
                         </div>

@@ -143,7 +143,11 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                 ) : (
                     <>
                         <div className={styles.statItem} title="Total XP">
-                            <ShieldIcon xp={profile?.xp || 0} size={40} />
+                            <ShieldIcon
+                                xp={profile?.xp || 0}
+                                size={40}
+                                showShadow={getShieldLevel(profile?.xp || 0).level !== 'SILVER'}
+                            />
                             <span>{profile?.xp || 0}</span>
                         </div>
                         <div className={styles.statItem} style={{ color: '#1cb0f6' }} title="Gems">
@@ -303,7 +307,12 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                             <span className={styles.rowName}>{user.display_name || 'লার্নার'}</span>
                                         </div>
                                         <div className={styles.leaderboardRowRight}>
-                                            <ShieldIcon xp={user.xp} size={22} showTooltip={false} />
+                                            <ShieldIcon
+                                                xp={user.xp}
+                                                size={22}
+                                                showTooltip={false}
+                                                showShadow={getShieldLevel(user.xp).level !== 'SILVER'}
+                                            />
                                             <span className={styles.rowXP}>{user.xp}</span>
                                         </div>
                                     </div>
@@ -324,7 +333,12 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                         <span className={styles.rowName}>{profile.display_name || 'লার্নার'}</span>
                                     </div>
                                     <div className={styles.leaderboardRowRight}>
-                                        <ShieldIcon xp={profile.xp} size={22} showTooltip={false} />
+                                        <ShieldIcon
+                                            xp={profile.xp}
+                                            size={22}
+                                            showTooltip={false}
+                                            showShadow={getShieldLevel(profile.xp).level !== 'SILVER'}
+                                        />
                                         <span className={styles.rowXP}>{profile.xp}</span>
                                     </div>
                                 </div>

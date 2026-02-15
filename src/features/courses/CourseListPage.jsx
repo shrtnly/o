@@ -9,11 +9,11 @@ import CourseCard from '../landing/CourseCard';
 import styles from './CourseListPage.module.css';
 
 const CATEGORIES = [
-    { id: 'Everyday Life Skills', name: 'দৈনন্দিন জীবন দক্ষতা' },
-    { id: 'Civic & Legal Awareness', name: 'নাগরিক ও আইনি সচেতনতা' },
-    { id: 'Safety & Health', name: 'নিরাপত্তা ও স্বাস্থ্য' },
+    { id: 'Digital safety', name: 'ডিজিটাল নিরাপত্তা' },
+    { id: 'Legal Awareness', name: 'আইনি সচেতনতা' },
     { id: 'Digital Literacy', name: 'ডিজিটাল লিটারেসি' },
-    { id: 'Fun / Curiosity Learning', name: 'মজার / কৌতূহলী শিক্ষা' }
+    { id: 'Financial Literacy', name: 'আর্থিক সচেতনতা' },
+    { id: 'Career & Skill', name: 'ক্যারিয়ার ও দক্ষতা' }
 ];
 
 const CourseListPage = () => {

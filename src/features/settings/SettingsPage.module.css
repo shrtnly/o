@@ -135,9 +135,9 @@
 }
 
 .sectionHeader h2 {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin: 0 0 8px 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
 }
 
 .sectionHeader p {
@@ -149,6 +149,9 @@
 .tabContent {
     width: 100%;
     animation: slideIn 0.3s ease-out;
+    background-color: transparent;
+    /* Full minimal */
+    padding: 0;
 }
 
 @keyframes slideIn {
@@ -166,21 +169,23 @@
 .cardList {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0;
+    /* No gap for null background strategy */
     width: 100%;
 }
 
 .settingCard {
-    background-color: #1a272d;
-    border: 2px solid #37464f;
-    border-bottom: 4px solid #37464f;
-    border-radius: 20px;
-    padding: 24px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #233138;
+    padding: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 120px;
-    /* Unified minimum height */
+}
+
+.settingCard:last-child {
+    border-bottom: none;
 }
 
 .cardHeaderArea {
@@ -190,26 +195,24 @@
 }
 
 .iconCircle {
-    width: 44px;
-    height: 44px;
-    background-color: #233138;
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #2ecc71;
+    color: #afafaf;
 }
 
 .cardText h3 {
-    margin: 0 0 4px 0;
-    font-size: 1.2rem;
-    font-weight: 900;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
 }
 
 .cardText p {
-    margin: 0;
-    color: #afafaf;
-    font-size: 0.95rem;
+    margin: 4px 0 0 0;
+    color: #888;
+    font-size: 0.85rem;
 }
 
 .secondaryBtn {
@@ -378,23 +381,22 @@ input:not(:checked)+.slider .offIcon {
 .courseManageList {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0;
 }
 
 .courseManageCard {
-    background-color: #1a272d;
-    border: 2px solid #37464f;
-    border-bottom: 4px solid #37464f;
-    border-radius: 20px;
-    padding: 24px;
-    /* Consistent with settingCard */
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #233138;
+    padding: 16px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 20px;
-    transition: transform 0.2s;
-    min-height: 120px;
-    /* Unified minimum height */
+}
+
+.courseManageCard:last-child {
+    border-bottom: none;
 }
 
 @media (max-width: 640px) {

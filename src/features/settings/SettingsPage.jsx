@@ -3,19 +3,79 @@ import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Su
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
+import { courseService } from '../../services/courseService';
+import ConfirmModal from '../../components/ui/ConfirmModal';
+import { RotateCcw, AlertTriangle, Check, X } from 'lucide-react';
+import { toast } from 'sonner';
 
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();
-    const [activeTab, setActiveTab] = useState('profile');
+    const { user } = useAuth();
+    const [activeTab, setActiveTab] = useState('courses');
     const [selectedAnimation, setSelectedAnimation] = useState('1');
+    const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [loadingCourses, setLoadingCourses] = useState(false);
 
-    // Load animation preference from localStorage
+    // Modal states
+    const [confirmModal, setConfirmModal] = useState({
+        isOpen: false,
+        type: 'danger',
+        title: '',
+        message: '',
+        confirmText: '',
+        icon: RotateCcw,
+        onConfirm: () => { }
+    });
+
     useEffect(() => {
         const savedAnimation = localStorage.getItem('studyPageAnimation');
         if (savedAnimation) {
             setSelectedAnimation(savedAnimation);
         }
     }, []);
+
+    useEffect(() => {
+        if (activeTab === 'courses' && user) {
+            fetchEnrolledCourses();
+        }
+    }, [activeTab, user]);
+
+    const fetchEnrolledCourses = async () => {
+        setLoadingCourses(true);
+        try {
+            const data = await courseService.getUserEnrolledCourses(user.id);
+            setEnrolledCourses(data);
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            toast.error('কোর্স তালিকা লোড করতে সমস্যা হয়েছে');
+        } finally {
+            setLoadingCourses(false);
+        }
+    };
+
+    const handleResetCourse = (course) => {
+        setConfirmModal({
+            isOpen: true,
+            type: 'danger',
+            title: 'কোর্স রিসেট',
+            message: `আপনি কি নিশ্চিত যে "${course.course_title}" কোর্সের সকল প্রগতি মুছে ফেলতে চান? এটি আর ফিরিয়ে আনা সম্ভব নয়।`,
+            confirmText: 'হ্যাঁ',
+            icon: RotateCcw,
+            onConfirm: async () => {
+                try {
+                    await courseService.resetCourseProgress(user.id, course.course_id);
+                    toast.success('কোর্স প্রগতি রিসেট করা হয়েছে');
+                    fetchEnrolledCourses();
+                } catch (error) {
+                    console.error('Error resetting course:', error);
+                    toast.error('রিসেট করতে সমস্যা হয়েছে');
+                }
+            }
+        });
+    };
+
+
 
     // Save animation preference to localStorage
     const handleAnimationChange = (e) => {
@@ -58,7 +118,11 @@ const SettingsPage = () => {
                                         checked={isDark}
                                         onChange={toggleTheme}
                                     />
-                                    <span className={styles.slider}></span>
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            {isDark ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
+                                        </span>
+                                    </span>
                                 </label>
                             </div>
 
@@ -116,7 +180,12 @@ const SettingsPage = () => {
                                 </div>
                                 <label className={styles.switch}>
                                     <input type="checkbox" defaultChecked />
-                                    <span className={styles.slider}></span>
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            <Check size={14} strokeWidth={4} className={styles.onIcon} />
+                                            <X size={14} strokeWidth={4} className={styles.offIcon} />
+                                        </span>
+                                    </span>
                                 </label>
                             </div>
                             <div className={styles.settingCard}>
@@ -144,7 +213,12 @@ const SettingsPage = () => {
                                 </div>
                                 <label className={styles.switch}>
                                     <input type="checkbox" defaultChecked />
-                                    <span className={styles.slider}></span>
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            <Check size={14} strokeWidth={4} className={styles.onIcon} />
+                                            <X size={14} strokeWidth={4} className={styles.offIcon} />
+                                        </span>
+                                    </span>
                                 </label>
                             </div>
                             <div className={styles.settingCard}>
@@ -154,9 +228,75 @@ const SettingsPage = () => {
                                 </div>
                                 <label className={styles.switch}>
                                     <input type="checkbox" />
-                                    <span className={styles.slider}></span>
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            <Check size={14} strokeWidth={4} className={styles.onIcon} />
+                                            <X size={14} strokeWidth={4} className={styles.offIcon} />
+                                        </span>
+                                    </span>
                                 </label>
                             </div>
+                        </div>
+                    </div>
+                );
+            case 'courses':
+                return (
+                    <div className={styles.tabContent}>
+                        <div className={styles.sectionHeader}>
+                            <h2>কোর্স সেটিংস</h2>
+                            <p>আপনার এনরোল করা কোর্সসমূহ পরিচালনা করুন</p>
+                        </div>
+
+                        {loadingCourses ? (
+                            <div className={styles.loaderContainer}>
+                                <div className={styles.spinner}></div>
+                                <p>লোড হচ্ছে...</p>
+                            </div>
+                        ) : enrolledCourses.length > 0 ? (
+                            <div className={styles.courseManageList}>
+                                {enrolledCourses.map((course) => (
+                                    <div key={course.course_id} className={styles.courseManageCard}>
+                                        <div className={styles.courseMainInfo}>
+                                            <img src={course.image_url} alt={course.course_title} className={styles.courseThumb} />
+                                            <div className={styles.courseDetails}>
+                                                <h3>{course.course_title}</h3>
+                                                <div className={styles.progressRow}>
+                                                    <div className={styles.miniProgressBar}>
+                                                        <div
+                                                            className={styles.miniProgressFill}
+                                                            style={{ width: `${course.progress_percentage}%` }}
+                                                        ></div>
+                                                    </div>
+                                                    <span>{course.progress_percentage}% সম্পন্ন</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.courseActions}>
+                                            <button
+                                                className={cn(styles.actionBtn, styles.resetBtn)}
+                                                onClick={() => handleResetCourse(course)}
+                                                title="রিসেট করুন"
+                                            >
+                                                <RotateCcw size={18} />
+                                                <span>রিসেট</span>
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className={styles.emptyCourses}>
+                                <BookOpen size={48} className={styles.emptyIcon} />
+                                <h3>কোনো কোর্স পাওয়া যায়নি</h3>
+                                <p>আপনি এখনও কোনো কোর্সে এনরোল করেননি।</p>
+                            </div>
+                        )}
+
+                        <div className={styles.warningNote}>
+                            <AlertTriangle size={18} />
+                            <span>সতর্কতা: প্রগতি রিসেট বা কোর্স ডিলিট করলে তা আর পুনরুদ্ধার করা সম্ভব নয়।</span>
                         </div>
                     </div>
                 );
@@ -205,6 +345,17 @@ const SettingsPage = () => {
                     </div>
                 </aside>
             </div>
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                onClose={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                onConfirm={confirmModal.onConfirm}
+                title={confirmModal.title}
+                message={confirmModal.message}
+                confirmText={confirmModal.confirmText}
+                icon={confirmModal.icon}
+                type={confirmModal.type}
+            />
         </div>
     );
 };

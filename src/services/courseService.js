@@ -277,5 +277,18 @@ export const courseService = {
 
         if (error) throw error;
         return data || [];
-    }
+    },
+
+    async resetCourseProgress(userId, courseId) {
+        const { error } = await supabase
+            .from('user_progress')
+            .delete()
+            .eq('user_id', userId)
+            .eq('course_id', courseId);
+
+        if (error) throw error;
+        return true;
+    },
+
+
 };

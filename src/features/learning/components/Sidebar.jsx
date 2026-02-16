@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams, useNavigate } from 'react-router-dom';
 import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircle, LogOut } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { courseService } from '../../../services/courseService';
 import { cn } from '../../../lib/utils';
 import logo from '../../../assets/shields/Logo_BeeLesson.png';
 import styles from './Sidebar.module.css';
+import ConfirmModal from '../../../components/ui/ConfirmModal';
 
 const Sidebar = () => {
     const { user, signOut } = useAuth();
     const { courseId: currentCourseId } = useParams();
+    const navigate = useNavigate();
     const [lastCourseId, setLastCourseId] = useState(null);
     const [moreOpen, setMoreOpen] = useState(false);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
 
     const handleLogout = async () => {
-        const confirmed = window.confirm('আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?');
-        if (confirmed) {
-            try {
-                await signOut();
-                // Subscriptions in AuthContext will handle state change
-            } catch (error) {
-                console.error('Error signing out:', error);
-            }
+        try {
+            await signOut();
+            navigate('/auth');
+        } catch (error) {
+            console.error('Error signing out:', error);
         }
     };
 
@@ -107,7 +107,7 @@ const Sidebar = () => {
                             className={styles.logoutBtn}
                             onClick={() => {
                                 setMoreOpen(false);
-                                handleLogout();
+                                setShowLogoutModal(true);
                             }}
                         >
                             <LogOut size={20} />
@@ -116,6 +116,12 @@ const Sidebar = () => {
                     </div>
                 )}
             </div>
+
+            <ConfirmModal
+                isOpen={showLogoutModal}
+                onClose={() => setShowLogoutModal(false)}
+                onConfirm={handleLogout}
+            />
         </aside>
     );
 };

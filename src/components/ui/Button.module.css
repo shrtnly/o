@@ -15,7 +15,7 @@
 
 .primary {
     background-color: var(--color-primary);
-    color: #000;
+    color: var(--color-on-primary);
 }
 
 .primary:hover {
@@ -25,12 +25,12 @@
 
 .secondary {
     background-color: var(--color-bg-alt);
-    color: #fff;
+    color: var(--color-text);
     border: 1px solid var(--color-border);
 }
 
 .secondary:hover {
-    background-color: #23272b;
+    background-color: var(--color-bg-hover);
     transform: translateY(-2px);
 }
 

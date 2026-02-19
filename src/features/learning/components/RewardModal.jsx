@@ -87,8 +87,8 @@ const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
                                         transition={{ delay: 0.5 }}
                                         className={styles.rewardItem}
                                     >
-                                        <div className={styles.rewardIconCircle} style={{ background: 'rgba(28, 176, 246, 0.1)' }}>
-                                            <Gem size={32} color="#1cb0f6" fill="#1cb0f6" />
+                                        <div className={styles.rewardIconCircle} style={{ background: 'rgba(46, 204, 113, 0.1)' }}>
+                                            <Gem size={32} color="#2ecc71" fill="#2ecc71" />
                                         </div>
                                         <span className={styles.rewardValue}>+{gems}</span>
                                         <span className={styles.rewardLabel}>জেম</span>

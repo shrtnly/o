@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Heart, HeartCrack, Check, Lightbulb, Star, ArrowRight, Clock } from 'lucide-react';
+import { X, Heart, HeartCrack, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -303,12 +303,13 @@ const StudyPage = () => {
                         >
                             {(currentQuestion.narrative || currentQuestion.explanation) && (
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={styles.contextText}>
-                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#1cb0f6" /></span>
+                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#2ecc71" /></span>
                                     {currentQuestion.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
                                 </motion.div>
                             )}
 
                             <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className={styles.questionTitle}>
+                                <HelpCircle className={styles.questionIcon} size={28} />
                                 {currentQuestion.question_text || "সফলভাবে শেখার জন্য সঠিক উত্তরটি নির্বাচন করুন"}
                             </motion.h2>
 
@@ -392,7 +393,7 @@ const StudyPage = () => {
                                     <div className={styles.summaryInfo}><span>ভুল উত্তর</span><strong>{stats.total - stats.correct}</strong></div>
                                 </div>
                                 <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(28, 176, 246, 0.1)' }}><Star size={20} color="#1cb0f6" /></div>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(46, 204, 113, 0.1)' }}><Star size={20} color="#2ecc71" /></div>
                                     <div className={styles.summaryInfo}><span>অর্জিত XP</span><strong>+{stats.correct}</strong></div>
                                 </div>
                             </div>
@@ -416,7 +417,7 @@ const StudyPage = () => {
                                     </div>
                                     {refillTimeDisplay && (
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}>
-                                            <Clock size={20} color="#1cb0f6" /><span style={{ fontSize: '18px', fontWeight: 700, color: '#1cb0f6' }}>রিফিল হবে: {refillTimeDisplay}</span>
+                                            <Clock size={20} color="#2ecc71" /><span style={{ fontSize: '18px', fontWeight: 700, color: '#2ecc71' }}>রিফিল হবে: {refillTimeDisplay}</span>
                                         </div>
                                     )}
                                 </div>

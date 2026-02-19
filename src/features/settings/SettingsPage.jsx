@@ -8,11 +8,13 @@ import { courseService } from '../../services/courseService';
 import ConfirmModal from '../../components/ui/ConfirmModal';
 import { RotateCcw, AlertTriangle, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '../../context/LanguageContext';
 
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();
+    const { language, toggleLanguage, t } = useLanguage();
     const { user } = useAuth();
-    const [activeTab, setActiveTab] = useState('courses');
+    const [activeTab, setActiveTab] = useState('preferences');
     const [selectedAnimation, setSelectedAnimation] = useState('1');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(false);
@@ -48,7 +50,7 @@ const SettingsPage = () => {
             setEnrolledCourses(data);
         } catch (error) {
             console.error('Error fetching courses:', error);
-            toast.error('কোর্স তালিকা লোড করতে সমস্যা হয়েছে');
+            toast.error(t('error_fetch_courses'));
         } finally {
             setLoadingCourses(false);
         }
@@ -58,9 +60,9 @@ const SettingsPage = () => {
         setConfirmModal({
             isOpen: true,
             type: 'danger',
-            title: 'কোর্স রিসেট',
-            message: `আপনি কি নিশ্চিত যে "${course.course_title}" কোর্সের সকল প্রগতি মুছে ফেলতে চান? এটি আর ফিরিয়ে আনা সম্ভব নয়।`,
-            confirmText: 'হ্যাঁ',
+            title: t('reset_course'),
+            message: `${t('confirm_reset_msg')} "${course.course_title}"? ${t('irreversible')}`,
+            confirmText: t('confirm'),
             icon: RotateCcw,
             onConfirm: async () => {
                 try {
@@ -85,11 +87,11 @@ const SettingsPage = () => {
     };
 
     const menuItems = [
-        { id: 'preferences', label: 'প্রেফারেন্স', icon: Sliders },
-        { id: 'profile', label: 'প্রোফাইল', icon: User },
-        { id: 'notifications', label: 'নোটিফিকেশন', icon: Bell },
-        { id: 'courses', label: 'কোর্স', icon: BookOpen },
-        { id: 'privacy', label: 'প্রাইভেসি', icon: Shield },
+        { id: 'preferences', label: t('preferences'), icon: Sliders },
+        { id: 'profile', label: t('profile'), icon: User },
+        { id: 'notifications', label: t('notifications'), icon: Bell },
+        { id: 'courses', label: t('courses'), icon: BookOpen },
+        { id: 'privacy', label: t('privacy'), icon: Shield },
     ];
 
     const renderContent = () => {
@@ -156,11 +158,13 @@ const SettingsPage = () => {
                                         <Globe size={20} />
                                     </div>
                                     <div className={styles.cardText}>
-                                        <h3>ভাষা (Language)</h3>
-                                        <p>আপনার পছন্দের ভাষা নির্বাচন করুন</p>
+                                        <h3>{t('language')} (Language)</h3>
+                                        <p>{t('lang_desc')}</p>
                                     </div>
                                 </div>
-                                <button className={styles.secondaryBtn}>বাংলা</button>
+                                <button className={styles.secondaryBtn} onClick={toggleLanguage}>
+                                    {language === 'bn' ? 'English' : 'বাংলা'}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -315,7 +319,7 @@ const SettingsPage = () => {
             <header className={styles.pageHeader}>
                 <div className={styles.headerTitle}>
                     <Settings className={styles.headerIcon} />
-                    <h1>সেটিংস</h1>
+                    <h1>{t('settings')}</h1>
                 </div>
             </header>
 

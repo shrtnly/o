@@ -348,7 +348,7 @@ const LearningPage = () => {
                             >
                                 <div className={styles.unitInfo}>
                                     <h2 key={`unit-header-${activeUnit?.id}`}>
-                                        ইউনিট {activeUnit?.order_index || 1} : {activeUnit?.title || 'লোড হচ্ছে...'}
+                                        {activeUnit?.title || 'লোড হচ্ছে...'}
                                     </h2>
                                 </div>
                             </div>
@@ -375,7 +375,7 @@ const LearningPage = () => {
                                                 className={styles.separatorText}
                                                 style={{ color: getUnitColor(unit.order_index).border }}
                                             >
-                                                ইউনিট {unit.order_index} : {unit.title}
+                                                {unit.title}
                                             </div>
                                             <div className={styles.separatorLine} />
                                         </div>

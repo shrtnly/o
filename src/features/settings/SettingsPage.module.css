@@ -6,7 +6,7 @@
     width: 100%;
     /* Ensure it takes full width of container */
     margin: 0 auto;
-    color: #fff;
+    color: var(--color-text);
     height: 100%;
     overflow-y: auto;
     scrollbar-width: none;
@@ -74,9 +74,9 @@
 }
 
 .menuBox {
-    background-color: #1a272d;
-    border: 2px solid #37464f;
-    border-bottom: 5px solid #37464f;
+    background-color: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
+    border-bottom: 5px solid var(--color-border);
     border-radius: 24px;
     padding: 12px;
     display: flex;
@@ -93,14 +93,14 @@
     background: none;
     border: none;
     border-radius: 16px;
-    color: #afafaf;
+    color: var(--color-text-muted);
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .menuItem:hover {
-    background-color: #233138;
-    color: #fff;
+    background-color: var(--color-bg-deep);
+    color: var(--color-text);
     padding-left: 20px;
 }
 
@@ -141,7 +141,7 @@
 }
 
 .sectionHeader p {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-size: 1.1rem;
     margin: 0;
 }
@@ -200,7 +200,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .cardText h3 {
@@ -217,7 +217,7 @@
 
 .secondaryBtn {
     background: none;
-    border: 2px solid #37464f;
+    border: 2px solid var(--color-border);
     color: #1cb0f6;
     padding: 10px 20px;
     border-radius: 14px;
@@ -236,7 +236,7 @@
 .emptyState {
     padding: 60px 20px;
     text-align: center;
-    background-color: #1a272d;
+    background-color: var(--color-bg-alt);
     border: 2px dashed #37464f;
     border-radius: 24px;
 }
@@ -247,7 +247,7 @@
 }
 
 .emptyState p {
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 /* Switch styling */
@@ -268,10 +268,10 @@
     position: absolute;
     cursor: pointer;
     inset: 0;
-    background-color: #233138;
+    background-color: var(--color-bg-deep);
     transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 12px;
-    border: 2px solid #37464f;
+    border: 2px solid var(--color-border);
     border-bottom: 4px solid #37464f;
 }
 
@@ -281,7 +281,7 @@
     width: 24px;
     left: 4px;
     top: 2px;
-    background-color: #fff;
+    background-color: var(--color-text);
     transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 8px;
     display: flex;
@@ -320,9 +320,9 @@ input:not(:checked)+.slider .offIcon {
 
 /* Animation Select Dropdown */
 .animationSelect {
-    background-color: #233138;
-    border: 2px solid #37464f;
-    color: #fff;
+    background-color: var(--color-bg-deep);
+    border: 2px solid var(--color-border);
+    color: var(--color-text);
     padding: 10px 16px;
     border-radius: 14px;
     font-weight: 700;
@@ -344,8 +344,8 @@ input:not(:checked)+.slider .offIcon {
 }
 
 .animationSelect option {
-    background-color: #1a272d;
-    color: #fff;
+    background-color: var(--color-bg-alt);
+    color: var(--color-text);
     padding: 10px;
 }
 
@@ -418,7 +418,7 @@ input:not(:checked)+.slider .offIcon {
     height: 80px;
     border-radius: 12px;
     object-fit: cover;
-    background-color: #233138;
+    background-color: var(--color-bg-deep);
 }
 
 .courseDetails h3 {
@@ -431,7 +431,7 @@ input:not(:checked)+.slider .offIcon {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-size: 0.85rem;
     font-weight: 700;
 }
@@ -439,7 +439,7 @@ input:not(:checked)+.slider .offIcon {
 .miniProgressBar {
     width: 120px;
     height: 8px;
-    background-color: #233138;
+    background-color: var(--color-bg-deep);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -470,7 +470,7 @@ input:not(:checked)+.slider .offIcon {
 }
 
 .resetBtn {
-    background-color: #233138;
+    background-color: var(--color-bg-deep);
     color: #ff9600;
     box-shadow: 0 3px 0 #1a2327;
 }
@@ -519,7 +519,7 @@ input:not(:checked)+.slider .offIcon {
 }
 
 .emptyCourses p {
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .loaderContainer {
@@ -529,7 +529,7 @@ input:not(:checked)+.slider .offIcon {
     justify-content: center;
     padding: 60px;
     gap: 16px;
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .spinner {

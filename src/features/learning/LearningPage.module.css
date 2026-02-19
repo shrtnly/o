@@ -3,7 +3,7 @@
     grid-template-columns: 1fr 400px;
     height: 100vh;
     width: 100%;
-    background-color: #0a1114;
+    background-color: var(--color-bg-deep);
     color: #fff;
     font-family: 'Hind Siliguri', sans-serif;
     overflow: hidden;
@@ -23,7 +23,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     overscroll-behavior: contain;
-    background-color: #0a1114;
+    background-color: var(--color-bg-deep);
 }
 
 .mainContent::-webkit-scrollbar {
@@ -32,7 +32,7 @@
 
 .unitHeader {
     width: 100%;
-    background-color: #0a1114;
+    background-color: var(--color-bg-deep);
     padding: 16px 24px;
     display: flex;
     align-items: center;
@@ -123,7 +123,7 @@
 
 .pathLine {
     fill: none;
-    stroke: #37464f;
+    stroke: var(--color-border);
     stroke-width: 8;
     stroke-dasharray: 1 18;
     stroke-linecap: round;
@@ -193,7 +193,7 @@
     inset: 0;
     border-radius: 20px;
     padding: 3px;
-    background: #37464f;
+    background: var(--color-border);
     box-shadow: 0 8px 0 #202f36;
     display: flex;
     align-items: center;
@@ -450,7 +450,7 @@
 }
 
 .separatorText {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-weight: 800;
     font-size: 1rem;
     text-transform: uppercase;
@@ -488,7 +488,7 @@
 
 /* Sidebar Left Redesign */
 .leftSidebar {
-    border-right: 2px solid #37464f;
+    border-right: 2px solid var(--color-border);
     padding: 32px 16px;
     height: 100vh;
     position: sticky;
@@ -497,7 +497,7 @@
     flex-direction: column;
     gap: 8px;
     overflow-y: hidden;
-    background-color: #0a1114;
+    background-color: var(--color-bg-deep);
 }
 
 .logoArea {
@@ -524,7 +524,7 @@
     padding: 14px 16px;
     border-radius: 16px;
     text-decoration: none;
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-weight: 800;
     font-size: 0.95rem;
     text-transform: uppercase;
@@ -534,8 +534,8 @@
 }
 
 .navItem:hover {
-    background-color: #1a272d;
-    color: #fff;
+    background-color: var(--color-bg-hover);
+    color: var(--color-text-hover);
 }
 
 .navItemActive {
@@ -559,8 +559,8 @@
     position: sticky;
     top: 0;
     overflow-y: auto;
-    border-left: 2px solid #37464f;
-    background-color: #0a1114;
+    border-left: 2px solid var(--color-border);
+    background-color: var(--color-bg-deep);
     scrollbar-width: none;
 }
 
@@ -581,17 +581,17 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background-color: #1a272d;
-    border: 2px solid #37464f;
+    background-color: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
     border-bottom: 4px solid #37464f;
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.1s ease;
-    color: #fff;
+    color: var(--color-text);
 }
 
 .courseSelectorBtn:hover {
-    background-color: #233138;
+    background-color: var(--color-bg-hover);
     border-color: #4b5a64;
 }
 
@@ -626,7 +626,7 @@
 
 .chevron {
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .chevronRotate {
@@ -638,8 +638,8 @@
     top: calc(100% + 12px);
     left: 0;
     right: 0;
-    background-color: #1a272d;
-    border: 2px solid #37464f;
+    background-color: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     z-index: 1000;
@@ -704,16 +704,16 @@
     background: none;
     border: none;
     width: 100%;
-    color: #1cb0f6;
+    color: #2ecc71;
     text-align: left;
 }
 
 .addCourseOption:hover {
-    background-color: rgba(28, 176, 246, 0.1);
+    background-color: rgba(46, 204, 113, 0.1);
 }
 
 .addCourseOption .optionTitle {
-    color: #1cb0f6;
+    color: #2ecc71;
 }
 
 .statsRow {
@@ -723,9 +723,9 @@
     gap: 16px;
     margin-bottom: 0;
     padding: 10px 16px;
-    background-color: #1a272d;
+    background-color: var(--color-bg-alt);
     border-radius: 20px;
-    border: 2px solid #37464f;
+    border: 2px solid var(--color-border);
     border-bottom: 5px solid #37464f;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
@@ -759,10 +759,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 14px 16px;
-    background: linear-gradient(135deg, rgba(28, 176, 246, 0.15) 0%, rgba(28, 176, 246, 0.05) 100%);
-    border: 2px solid rgba(28, 176, 246, 0.3);
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.05) 100%);
+    border: 2px solid rgba(46, 204, 113, 0.3);
     border-radius: 16px;
-    color: #1cb0f6;
+    color: #2ecc71;
     font-weight: 700;
     font-size: 0.95rem;
     cursor: pointer;
@@ -771,10 +771,10 @@
 }
 
 .profileButton:hover {
-    background: linear-gradient(135deg, rgba(28, 176, 246, 0.25) 0%, rgba(28, 176, 246, 0.15) 100%);
-    border-color: rgba(28, 176, 246, 0.5);
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.25) 0%, rgba(46, 204, 113, 0.15) 100%);
+    border-color: rgba(46, 204, 113, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(28, 176, 246, 0.2);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
 }
 
 .profileButtonContent {
@@ -784,8 +784,8 @@
 }
 
 .card {
-    background-color: #1a272d;
-    border: 2px solid #37464f;
+    background-color: var(--color-bg-alt);
+    border: 2px solid var(--color-border);
     border-bottom: 5px solid #37464f;
     border-radius: 20px;
     padding: 24px 12px;
@@ -855,7 +855,7 @@
 
 .rowRank {
     font-weight: 900;
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-size: 0.9rem;
     min-width: 20px;
 }
@@ -869,7 +869,7 @@
     height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #37464f;
+    border: 2px solid var(--color-border);
 }
 
 .rowName {
@@ -891,7 +891,7 @@
 .rowXP {
     font-weight: 900;
     font-size: 1rem;
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .leaderboardRowActive .rowXP {
@@ -930,7 +930,7 @@
 }
 
 .tierNameCompact {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-weight: 700;
     font-size: 0.85rem;
     text-transform: uppercase;
@@ -991,7 +991,7 @@
 }
 
 .unlockDesc {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-weight: 700;
     font-size: 0.85rem;
     margin: 0;
@@ -1108,7 +1108,7 @@
 .flameDayLabel {
     font-size: 0.7rem;
     font-weight: 800;
-    color: #afafaf;
+    color: var(--color-text-muted);
     margin-top: 4px;
     text-transform: uppercase;
 }

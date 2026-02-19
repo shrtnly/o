@@ -9,7 +9,6 @@ import LoadingScreen from '../../components/ui/LoadingScreen';
 import InlineLoader from '../../components/ui/InlineLoader';
 import {
     User,
-    Mail,
     Calendar,
     Zap,
     Gem,
@@ -18,16 +17,11 @@ import {
     Target,
     TrendingUp,
     LogOut,
-    Settings,
     ChevronRight,
     BookOpen,
-    CheckCircle,
     MapPin,
-    Briefcase,
-    Building2,
     Edit3,
     X,
-    ExternalLink,
     Camera,
     Flame
 } from 'lucide-react';
@@ -35,10 +29,12 @@ import ShieldIcon from '../../components/ShieldIcon';
 import { getShieldLevel } from '../../utils/shieldSystem';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ProfilePage = () => {
     const { user, signOut, updateProfile } = useAuth();
     const navigate = useNavigate();
+    const { t, language } = useLanguage();
     const [profile, setProfile] = useState(null);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -124,12 +120,12 @@ const ProfilePage = () => {
             setIsEditModalOpen(false);
         } catch (error) {
             console.error('Error updating profile:', error);
-            alert('প্রোফাইল আপডেট করতে সমস্যা হয়েছে।');
+            alert(t('update_error'));
         }
     };
 
     const handleLogout = async () => {
-        if (window.confirm('আপনি কি নিশ্চিত যে লগআউট করতে চান?')) {
+        if (window.confirm(t('confirm_logout_msg'))) {
             try {
                 await signOut();
                 navigate('/');
@@ -207,7 +203,7 @@ const ProfilePage = () => {
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
-        return date.toLocaleDateString('bn-BD', {
+        return date.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
@@ -216,239 +212,234 @@ const ProfilePage = () => {
 
     const getTransactionIcon = (type) => {
         switch (type) {
-            case 'xp_earned': return <Zap size={16} color="#ff9600" />;
-            case 'gem_earned': return <Gem size={16} color="#1cb0f6" />;
-            case 'heart_lost': return <Heart size={16} color="#ff4b4b" />;
-            case 'heart_gained': return <Heart size={16} color="#58cc02" />;
+            case 'xp_earned': return <Zap size={16} color="#ffa502" />;
+            case 'gem_earned': return <Gem size={16} color="#0fbcf9" />;
+            case 'heart_lost': return <Heart size={16} color="#ff4d4d" />;
+            case 'heart_gained': return <Heart size={16} color="#2ecc71" />;
             default: return <Zap size={16} />;
         }
     };
-
-
 
     const shield = getShieldLevel(profile?.xp || 0);
 
     return (
         <div className={styles.profilePage}>
             {loading ? (
-                <div className="flex items-center justify-center h-full w-full min-h-[400px]">
+                <div className={styles.loadingContainer}>
                     <InlineLoader />
                 </div>
             ) : (
-                <>
-                    {/* Top Hero Section */}
-                    <section
-                        className={styles.profileHero}
-                        style={profile?.cover_url ? { backgroundImage: `url(${profile.cover_url})` } : {}}
-                    >
-                        <div className={styles.heroGlow}></div>
-
-                        <button
-                            className={styles.coverUploadBtn}
-                            onClick={handleCoverClick}
-                            disabled={uploadingCover}
-                            title="কভার ছবি পরিবর্তন করুন"
+                <div className={styles.container}>
+                    {/* Header / Cover Section */}
+                    <header className={styles.profileHeader}>
+                        <div
+                            className={styles.coverImage}
+                            style={profile?.cover_url ? { backgroundImage: `url(${profile.cover_url})` } : {}}
                         >
-                            <Camera size={18} />
-                            <span>কভার পরিবর্তন করুন</span>
-                        </button>
-
-                        <input
-                            ref={coverInputRef}
-                            type="file"
-                            accept="image/jpeg,image/jpg,image/png,image/webp"
-                            onChange={handleCoverChange}
-                            style={{ display: 'none' }}
-                        />
-
-                        {uploadingCover && (
-                            <div className={styles.coverLoader}>
-                                <InlineLoader />
-                            </div>
-                        )}
-
-                        <div className={styles.streakBar}>
-                            <div className={styles.streakContent}>
-                                <Flame size={20} className={styles.streakIcon} />
-                                <span className={styles.streakText}>
-                                    Current Streak: <strong>{streak?.current_streak || 0} Days</strong>
-                                </span>
-                            </div>
+                            <div className={styles.coverOverlay}></div>
+                            <button className={styles.editCoverBtn} onClick={handleCoverClick} title={t('change_cover')}>
+                                <Camera size={16} />
+                                <span>{t('change_cover')}</span>
+                            </button>
+                            <input
+                                ref={coverInputRef}
+                                type="file"
+                                accept="image/jpeg,image/jpg,image/png,image/webp"
+                                onChange={handleCoverChange}
+                                style={{ display: 'none' }}
+                            />
                         </div>
-                    </section>
 
-                    <div className={styles.container}>
-                        {/* Left Sidebar */}
-                        <aside className={styles.profileSidebar}>
-                            <div className={styles.sidebarCard}>
-                                <div className={styles.avatarWrapper}>
-                                    <div className={styles.avatar}>
-                                        {profile?.avatar_url ? (
-                                            <img src={profile.avatar_url} alt="Avatar" className={styles.avatarImg} />
-                                        ) : (
-                                            <User size={60} />
-                                        )}
-                                        {uploadingAvatar && (
-                                            <div className={styles.avatarLoader}>
-                                                <InlineLoader />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <button
-                                        className={styles.avatarUploadBtn}
-                                        onClick={handleAvatarClick}
-                                        disabled={uploadingAvatar}
-                                        title="প্রোফাইল ছবি পরিবর্তন করুন"
-                                    >
-                                        <Camera size={18} />
-                                    </button>
-                                    <input
-                                        ref={fileInputRef}
-                                        type="file"
-                                        accept="image/jpeg,image/jpg,image/png,image/webp"
-                                        onChange={handleAvatarChange}
-                                        style={{ display: 'none' }}
-                                    />
-                                    <div className={styles.onlineBadge}></div>
-                                </div>
-
-                                <h2 className={styles.userName}>{profile?.full_name || 'শিক্ষার্থী'}</h2>
-                                <p className={styles.userTagline}>
-                                    {profile?.designation ? `${profile.designation} ${profile.department ? '@ ' + profile.department : ''}` : 'শেখার যাত্রায় আপনাকে স্বাগতম'}
-                                </p>
-
-                                {profile?.bio && <p className={styles.userBio}>{profile.bio}</p>}
-
-                                <div className={styles.metaList}>
-                                    <div className={styles.metaItem}>
-                                        <Mail size={16} />
-                                        <span>{user?.email}</span>
-                                    </div>
-                                    {profile?.location && (
-                                        <div className={styles.metaItem}>
-                                            <MapPin size={16} />
-                                            <span>{profile.location}</span>
+                        <div className={styles.profileHeaderContent}>
+                            <div className={styles.profileMetaBar}>
+                                <div className={styles.profileIdentity}>
+                                    <div className={styles.avatarContainer}>
+                                        <div className={styles.avatar}>
+                                            {profile?.avatar_url ? (
+                                                <img src={profile.avatar_url} alt="Profile" />
+                                            ) : (
+                                                <User size={40} />
+                                            )}
+                                            {uploadingAvatar && <div className={styles.loaderOverlay}><InlineLoader /></div>}
                                         </div>
-                                    )}
-                                    <div className={styles.metaItem}>
-                                        <Calendar size={16} />
-                                        <span>যোগদান: {formatDate(profile?.created_at)}</span>
+                                        <button className={styles.avatarEditBtn} onClick={handleAvatarClick}>
+                                            <Camera size={14} />
+                                        </button>
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                                            onChange={handleAvatarChange}
+                                            style={{ display: 'none' }}
+                                        />
+                                    </div>
+                                    <div className={styles.userInfo}>
+                                        <h1 className={styles.userName}>{profile?.full_name || t('learner')}</h1>
+                                        <p className={styles.userRole}>
+                                            {profile?.designation ? `${profile.designation} ${profile.department ? '• ' + profile.department : ''}` : t('welcome_tagline')}
+                                        </p>
+                                        <div className={styles.userLocationDate}>
+                                            {profile?.location && (
+                                                <span className={styles.locationItem}>
+                                                    <MapPin size={14} /> {profile.location}
+                                                </span>
+                                            )}
+                                            <span className={styles.dateItem}>
+                                                <Calendar size={14} /> {t('joined')}: {formatDate(profile?.created_at)}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className={styles.sidebarCard}>
-                                <h3 style={{ fontSize: '1rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Trophy size={18} color="gold" />
-                                    অর্জিত শিল্ড
-                                </h3>
-                                <div className={styles.shieldPreview} style={{
-                                    padding: '20px',
-                                    background: shield.gradient,
-                                    borderRadius: '16px',
-                                    color: 'white',
-                                    textAlign: 'center'
-                                }}>
-                                    <div style={{ fontSize: '32px', marginBottom: '8px' }}>{shield.icon}</div>
-                                    <div style={{ fontWeight: '700', fontSize: '1.2rem' }}>{shield.nameBangla}</div>
-                                    <div style={{ fontSize: '0.8rem', opacity: '0.8', marginTop: '4px' }}>লেভেল: {shield.level}</div>
-                                </div>
-                            </div>
-                        </aside>
-
-                        {/* Main Content Area */}
-                        <main className={styles.mainContent}>
-                            {/* Stats Overview */}
-                            <div className={styles.statsSummary}>
-                                <div className={styles.miniStatCard} style={{ '--accent-color': '#ff9600' }}>
-                                    <div className={styles.statIcon} style={{ background: 'rgba(255, 150, 0, 0.1)', color: '#ff9600' }}><Zap size={20} /></div>
-                                    <div className={styles.statInfo}>
+                            {/* Stats Row - Now separate */}
+                            <div className={styles.statsRow}>
+                                <div className={styles.statItem}>
+                                    <div className={styles.statIcon} style={{ color: '#ffa502', background: 'rgba(255, 165, 2, 0.1)' }}>
+                                        <Zap size={20} />
+                                    </div>
+                                    <div className={styles.statContent}>
                                         <span className={styles.statValue}>{profile?.xp || 0}</span>
                                         <span className={styles.statLabel}>XP</span>
                                     </div>
                                 </div>
-                                <div className={styles.miniStatCard} style={{ '--accent-color': '#1cb0f6' }}>
-                                    <div className={styles.statIcon} style={{ background: 'rgba(28, 176, 246, 0.1)', color: '#1cb0f6' }}><Gem size={20} /></div>
-                                    <div className={styles.statInfo}>
+                                <div className={styles.statItem}>
+                                    <div className={styles.statIcon} style={{ color: '#0fbcf9', background: 'rgba(15, 188, 249, 0.1)' }}>
+                                        <Gem size={20} />
+                                    </div>
+                                    <div className={styles.statContent}>
                                         <span className={styles.statValue}>{profile?.gems || 0}</span>
-                                        <span className={styles.statLabel}>জেম</span>
+                                        <span className={styles.statLabel}>{language === 'bn' ? 'জেম' : 'Gems'}</span>
                                     </div>
                                 </div>
-                                <div className={styles.miniStatCard} style={{ '--accent-color': '#58cc02' }}>
-                                    <div className={styles.statIcon} style={{ background: 'rgba(88, 204, 2, 0.1)', color: '#58cc02' }}><CheckCircle size={20} /></div>
-                                    <div className={styles.statInfo}>
+                                <div className={styles.statItem}>
+                                    <div className={styles.statIcon} style={{ color: '#ff4d4d', background: 'rgba(255, 77, 77, 0.1)' }}>
+                                        <Flame size={20} />
+                                    </div>
+                                    <div className={styles.statContent}>
+                                        <span className={styles.statValue}>{streak?.current_streak || 0}</span>
+                                        <span className={styles.statLabel}>{t('days')}</span>
+                                    </div>
+                                </div>
+                                <div className={styles.statItem}>
+                                    <div className={styles.statIcon} style={{ color: '#2ecc71', background: 'rgba(46, 204, 113, 0.1)' }}>
+                                        <Target size={20} />
+                                    </div>
+                                    <div className={styles.statContent}>
                                         <span className={styles.statValue}>{stats?.accuracy_percentage || 0}%</span>
-                                        <span className={styles.statLabel}>নির্ভুলতা</span>
+                                        <span className={styles.statLabel}>{t('efficiency')}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div className={styles.contentGrid}>
+                        {/* LEFT COLUMN - Shield & Bio */}
+                        <aside className={styles.leftColumn}>
+
+                            {/* Shield / League Card */}
+                            <div className={styles.shieldCard}>
+                                <div className={styles.shieldHeader}>
+                                    <Trophy size={18} className={styles.trophyIcon} />
+                                    <h3>{t('earned_shield')}</h3>
+                                </div>
+                                <div className={styles.shieldBody} style={{ background: shield.gradient }}>
+                                    <div className={styles.shieldIcon}>{shield.icon}</div>
+                                    <div className={styles.shieldInfo}>
+                                        <h4>{language === 'bn' ? shield.nameBangla : shield.nameEnglish}</h4>
+                                        <span>{t('level')}: {shield.level}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Continued Learning */}
-                            <section className={styles.learningSection}>
-                                <div className={styles.sectionHeader}>
-                                    <h3><BookOpen size={20} /> আমার কোর্সসমূহ</h3>
-                                    <button className={styles.textBtn} onClick={() => navigate('/courses')}>সবগুলো দেখুন</button>
+                            {/* Bio Section if exists */}
+                            {profile?.bio && (
+                                <div className={styles.bioCard}>
+                                    <h3>{t('bio')}</h3>
+                                    <p>{profile.bio}</p>
                                 </div>
-                                <div className={styles.courseGrid}>
-                                    {enrolledCourses.length > 0 ? enrolledCourses.map(course => (
-                                        <div key={course.course_id} className={styles.courseProgressCard} onClick={() => navigate(`/learn/${course.course_id}`)}>
-                                            <img src={course.image_url} alt={course.course_title} className={styles.courseThumb} />
-                                            <div className={styles.courseInfo}>
-                                                <h4>{course.course_title}</h4>
-                                                <div className={styles.progressLabel}>
-                                                    <span>অগ্রগতি: {course.progress_percentage}%</span>
-                                                    <span>{course.chapters_completed}/{course.total_chapters} অধ্যায়</span>
+                            )}
+
+                        </aside>
+
+                        {/* RIGHT COLUMN - Courses & Activity */}
+                        <div className={styles.rightColumn}>
+                            {/* Courses Section */}
+                            <section className={styles.section}>
+                                <div className={styles.sectionHeader}>
+                                    <h3>{t('my_courses')}</h3>
+                                    {enrolledCourses.length > 0 && (
+                                        <button className={styles.seeAllBtn} onClick={() => navigate('/courses')}>
+                                            {t('see_all')} <ChevronRight size={16} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                {enrolledCourses.length > 0 ? (
+                                    <div className={styles.coursesList}>
+                                        {enrolledCourses.map(course => (
+                                            <div key={course.course_id} className={styles.courseItem} onClick={() => navigate(`/learn/${course.course_id}`)}>
+                                                <img src={course.image_url} alt="" className={styles.courseThumb} />
+                                                <div className={styles.courseDetails}>
+                                                    <h4>{course.course_title}</h4>
+                                                    <div className={styles.progressBarWrapper}>
+                                                        <div className={styles.progressFill} style={{ width: `${course.progress_percentage}%` }}></div>
+                                                    </div>
+                                                    <div className={styles.progressMeta}>
+                                                        <span>{course.progress_percentage}% {t('completed')}</span>
+                                                        <span>{course.chapters_completed}/{course.total_chapters} {t('chapters')}</span>
+                                                    </div>
                                                 </div>
-                                                <div className={styles.progressBar}>
-                                                    <div className={styles.progressFill} style={{ width: `${course.progress_percentage}%` }}></div>
+                                                <div className={styles.playIcon}>
+                                                    <ChevronRight size={20} />
                                                 </div>
                                             </div>
-                                        </div>
-                                    )) : (
-                                        <div className={styles.emptyState}>
-                                            <p>এখনও কোনো কোর্সে ভর্তি হননি।</p>
-                                            <Button variant="primary" onClick={() => navigate('/courses')}>কোর্স শুরু করুন</Button>
-                                        </div>
-                                    )}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={styles.emptyState}>
+                                        <p>{language === 'bn' ? 'এখনও কোনো কোর্সে ভর্তি হননি।' : "You haven't enrolled in any courses yet."}</p>
+                                        <Button variant="primary" onClick={() => navigate('/courses')}>{t('start_course')}</Button>
+                                    </div>
+                                )}
                             </section>
 
-                            {/* Activity Feed */}
-                            <section className={styles.activitySection}>
+                            {/* Activity Section */}
+                            <section className={styles.section}>
                                 <div className={styles.sectionHeader}>
-                                    <h3><TrendingUp size={20} /> সাম্প্রতিক কার্যকলাপ</h3>
+                                    <h3>{t('recent_activity')}</h3>
                                 </div>
-                                <div className={styles.activityCard}>
-                                    {recentTransactions.length > 0 ? (
-                                        <div className={styles.activityList}>
-                                            {recentTransactions.map(item => (
-                                                <div key={item.id} className={styles.activityItem}>
-                                                    <div className={styles.actIcon}>
-                                                        {getTransactionIcon(item.transaction_type)}
-                                                    </div>
-                                                    <div className={styles.actContent}>
-                                                        <div className={styles.actTitle}>
-                                                            {item.transaction_type === 'xp_earned' && 'অনুশীলন সম্পন্ন করে XP পেয়েছেন'}
-                                                            {item.transaction_type === 'gem_earned' && 'পুরস্কারস্বরূপ জেম পেয়েছেন'}
-                                                            {item.transaction_type === 'heart_lost' && 'ভুল উত্তরের জন্য হার্ট হারিয়েছেন'}
-                                                            {item.transaction_type === 'heart_gained' && 'হার্ট রিফিল হয়েছে'}
-                                                        </div>
-                                                        <div className={styles.actTime}>{formatDate(item.created_at)}</div>
-                                                    </div>
-                                                    <div className={`${styles.actAmount} ${item.transaction_type.includes('lost') ? styles.minus : styles.plus}`}>
-                                                        {item.transaction_type.includes('lost') ? '-' : '+'}{item.amount}
-                                                    </div>
+
+                                {recentTransactions.length > 0 ? (
+                                    <div className={styles.activityFeed}>
+                                        {recentTransactions.map(item => (
+                                            <div key={item.id} className={styles.activityRow}>
+                                                <div className={styles.activityTypeIcon}>
+                                                    {getTransactionIcon(item.transaction_type)}
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className={styles.emptyState}>
-                                            <p>কোনো কার্যকলাপের রেকর্ড পাওয়া যায়নি।</p>
-                                        </div>
-                                    )}
-                                </div>
+                                                <div className={styles.activityDetails}>
+                                                    <span className={styles.activityText}>
+                                                        {item.transaction_type === 'xp_earned' && t('practice_xp')}
+                                                        {item.transaction_type === 'gem_earned' && t('reward_gems')}
+                                                        {item.transaction_type === 'heart_lost' && t('lost_hearts')}
+                                                        {item.transaction_type === 'heart_gained' && t('refilled_hearts')}
+                                                    </span>
+                                                    <span className={styles.activityDate}>{formatDate(item.created_at)}</span>
+                                                </div>
+                                                <div className={`${styles.activityAmount} ${item.transaction_type.includes('lost') ? styles.negative : styles.positive}`}>
+                                                    {item.transaction_type.includes('lost') ? '-' : '+'}{item.amount}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={styles.emptyState}>
+                                        <p>{t('no_activity')}</p>
+                                    </div>
+                                )}
                             </section>
-                        </main>
+                        </div>
                     </div>
 
                     {/* Edit Profile Modal */}
@@ -456,12 +447,12 @@ const ProfilePage = () => {
                         <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
                             <div className={styles.modal} onClick={e => e.stopPropagation()}>
                                 <div className={styles.modalHeader}>
-                                    <h3>প্রোফাইল সম্পাদন করুন</h3>
-                                    <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}><X size={24} /></button>
+                                    <h3>{t('edit_profile')}</h3>
+                                    <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}><X size={20} /></button>
                                 </div>
                                 <form className={styles.editForm} onSubmit={handleUpdateProfile}>
                                     <div className={styles.fieldGroup}>
-                                        <label>পুরো নাম</label>
+                                        <label>{t('full_name')}</label>
                                         <input
                                             type="text"
                                             value={editForm.full_name}
@@ -469,26 +460,28 @@ const ProfilePage = () => {
                                             required
                                         />
                                     </div>
-                                    <div className={styles.fieldGroup}>
-                                        <label>পদবী (Designation)</label>
-                                        <input
-                                            type="text"
-                                            placeholder="উদা: Executive, Officer"
-                                            value={editForm.designation}
-                                            onChange={e => setEditForm({ ...editForm, designation: e.target.value })}
-                                        />
+                                    <div className={styles.rowGroup}>
+                                        <div className={styles.fieldGroup}>
+                                            <label>{t('designation')}</label>
+                                            <input
+                                                type="text"
+                                                placeholder={language === 'bn' ? "উদা: Executive" : "e.g. Executive"}
+                                                value={editForm.designation}
+                                                onChange={e => setEditForm({ ...editForm, designation: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className={styles.fieldGroup}>
+                                            <label>{t('dept')}</label>
+                                            <input
+                                                type="text"
+                                                placeholder={language === 'bn' ? "উদা: IT" : "e.g. IT"}
+                                                value={editForm.department}
+                                                onChange={e => setEditForm({ ...editForm, department: e.target.value })}
+                                            />
+                                        </div>
                                     </div>
                                     <div className={styles.fieldGroup}>
-                                        <label>বিভাগ/দপ্তর (Department)</label>
-                                        <input
-                                            type="text"
-                                            placeholder="উদা: HR, Sales, IT"
-                                            value={editForm.department}
-                                            onChange={e => setEditForm({ ...editForm, department: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className={styles.fieldGroup}>
-                                        <label>আপনার সম্পর্কে (Bio)</label>
+                                        <label>{t('bio')}</label>
                                         <textarea
                                             rows="3"
                                             value={editForm.bio}
@@ -496,7 +489,7 @@ const ProfilePage = () => {
                                         />
                                     </div>
                                     <div className={styles.fieldGroup}>
-                                        <label>অবস্থান (Location)</label>
+                                        <label>{t('location')}</label>
                                         <input
                                             type="text"
                                             value={editForm.location}
@@ -504,14 +497,14 @@ const ProfilePage = () => {
                                         />
                                     </div>
                                     <div className={styles.modalActions}>
-                                        <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>বাতিল</Button>
-                                        <Button variant="primary" type="submit">সংরক্ষণ করুন</Button>
+                                        <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>{t('cancel')}</Button>
+                                        <Button variant="primary" type="submit">{t('save')}</Button>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     )}
-                </>
+                </div>
             )}
         </div>
     );

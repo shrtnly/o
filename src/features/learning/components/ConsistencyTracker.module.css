@@ -242,8 +242,8 @@
 }
 
 .dayToday {
-    border-color: #1cb0f6;
-    box-shadow: 0 0 0 1.5px #1cb0f6 inset;
+    border-color: #2ecc71;
+    box-shadow: 0 0 0 1.5px #2ecc71 inset;
     animation: todayPulse 2s ease-in-out infinite;
 }
 
@@ -255,11 +255,11 @@
 
     0%,
     100% {
-        box-shadow: 0 0 0 1.5px #1cb0f6 inset, 0 0 8px rgba(28, 176, 246, 0.3);
+        box-shadow: 0 0 0 1.5px #2ecc71 inset, 0 0 8px rgba(46, 204, 113, 0.3);
     }
 
     50% {
-        box-shadow: 0 0 0 2px #1cb0f6 inset, 0 0 16px rgba(28, 176, 246, 0.5);
+        box-shadow: 0 0 0 2px #2ecc71 inset, 0 0 16px rgba(46, 204, 113, 0.5);
     }
 }
 
@@ -308,7 +308,7 @@
     bottom: -6px;
     width: 6px;
     height: 6px;
-    background-color: #1cb0f6;
+    background-color: #2ecc71;
     border-radius: 50%;
 }
 

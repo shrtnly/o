@@ -72,7 +72,7 @@
 }
 
 .header p {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 24px;
@@ -104,9 +104,9 @@
 
 /* ========== SUPER MEMBERSHIP CARD (Minimal & Premium) ========== */
 .superCard {
-    background: #1a272d;
-    border: 3px solid #37464f;
-    border-bottom: 8px solid #233138;
+    background: var(--color-bg-alt);
+    border: 3px solid var(--color-border);
+    border-bottom: 8px solid var(--color-border);
     border-radius: 20px;
     padding: 32px 40px;
     display: flex;
@@ -115,13 +115,13 @@
     gap: 40px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-card);
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .superCard:hover {
     transform: scale(1.02);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-hover);
 }
 
 
@@ -335,8 +335,8 @@
 
 /* ========== GEM EXCHANGE (Minimal & 3D) ========== */
 .convertCard {
-    background: #1a272d;
-    border: 3px solid #37464f;
+    background: var(--color-bg-alt);
+    border: 3px solid var(--color-border);
     border-bottom: 8px solid #233138;
     border-radius: 20px;
     padding: 32px 40px;
@@ -345,7 +345,7 @@
     justify-content: space-between;
     gap: 32px;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-card);
 }
 
 .convertCard:hover {
@@ -417,7 +417,7 @@
 }
 
 .gemInputDisplay {
-    background: #0a1114;
+    background: var(--color-bg-deep);
     border: 2px solid #233138;
     padding: 8px 20px;
     border-radius: 12px;
@@ -578,7 +578,7 @@
 }
 
 .packCard {
-    background: #1a272d;
+    background: var(--color-bg-alt);
     border: 2px solid #233138;
     border-radius: 24px;
     padding: 32px 24px;
@@ -630,7 +630,7 @@
 .packName {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #afafaf;
+    color: var(--color-text-muted);
     margin-bottom: 24px;
 }
 
@@ -719,8 +719,8 @@
 }
 
 .checkoutModal {
-    background: #1a272d;
-    border: 3px solid #37464f;
+    background: var(--color-bg-alt);
+    border: 3px solid var(--color-border);
     border-bottom: 10px solid #233138;
     border-radius: 24px;
     width: 100%;
@@ -754,7 +754,7 @@
 }
 
 .checkoutHeader p {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-size: 0.9rem;
 }
 
@@ -790,7 +790,7 @@
 
 .methodBtn {
     background: #233138;
-    border: 3px solid #37464f;
+    border: 3px solid var(--color-border);
     border-bottom: 6px solid #1a272d;
     padding: 16px;
     border-radius: 16px;
@@ -805,7 +805,7 @@
 }
 
 .methodBtn:hover {
-    background: #37464f;
+    background: var(--color-border);
     transform: translateY(-2px);
 }
 
@@ -822,7 +822,7 @@
 .cancelBtn {
     flex: 1;
     background: transparent;
-    border: 3px solid #37464f;
+    border: 3px solid var(--color-border);
     color: #fff;
     padding: 14px;
     border-radius: 14px;

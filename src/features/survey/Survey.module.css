@@ -120,7 +120,7 @@
     font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.4;
-    color: #fff;
+    color: var(--color-text);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
@@ -260,27 +260,26 @@
 }
 
 :global(.light) .speechBubble {
-    background: #fff;
-    border-color: #e5e5e5;
-    color: #3c3c3c;
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 :global(.light) .speechBubble::after {
-    border-right-color: #e5e5e5;
+    border-right-color: var(--color-border);
 }
 
 :global(.light) .speechBubble::before {
-    border-right-color: #fff;
+    border-right-color: var(--color-bg-alt);
 }
 
-
 :global(.light) .optionCard {
-    background: #fff;
-    border-color: #e5e5e5;
-    color: #3c3c3c;
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
 }
 
 :global(.light) .continueBtn:disabled {
-    background-color: #e5e5e5;
-    color: #afafaf;
+    background-color: var(--color-bg-alt);
+    color: var(--color-text-muted);
 }

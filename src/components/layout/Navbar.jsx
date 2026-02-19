@@ -5,10 +5,12 @@ import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './Navbar.module.css';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
+    const { t } = useLanguage();
 
     return (
         <nav className={styles.navbar}>
@@ -35,7 +37,7 @@ const Navbar = () => {
                             <button
                                 className={styles.logoutBtn}
                                 onClick={() => signOut()}
-                                title="লগ আউট"
+                                title={t('logout')}
                             >
                                 <LogOut size={20} />
                             </button>
@@ -43,7 +45,7 @@ const Navbar = () => {
                     ) : (
                         <Link to="/auth">
                             <Button variant="primary" className={styles.loginBtn}>
-                                লগইন করুন
+                                {t('login_btn')}
                             </Button>
                         </Link>
                     )}

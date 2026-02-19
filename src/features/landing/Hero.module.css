@@ -27,7 +27,15 @@
 .overlay {
     position: absolute;
     inset: 0;
+    transition: background 0.3s ease;
+}
+
+:global(.dark) .overlay {
     background: radial-gradient(circle at center, rgba(11, 14, 17, 0.4) 0%, rgba(11, 14, 17, 0.9) 100%);
+}
+
+:global(.light) .overlay {
+    background: radial-gradient(circle at center, rgba(248, 250, 252, 0.4) 0%, rgba(248, 250, 252, 0.9) 100%);
 }
 
 .container {
@@ -60,7 +68,7 @@
     font-size: clamp(2.5rem, 6vw, 4.5rem);
     font-weight: 800;
     line-height: 1.1;
-    color: #fff;
+    color: var(--color-text);
 }
 
 .highlight {

@@ -10,6 +10,8 @@ import { supabase } from '../../lib/supabaseClient';
 import { shopService } from '../../services/shopService';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './ShopPage.module.css';
+import { useLanguage } from '../../context/LanguageContext';
+import { toast } from 'sonner';
 
 const GEM_PACKS = [
     { id: 'gem_p1', amount: 500, price: 100, label: 'জেম পকেট', icon: <Gem size={40} color="#1cb0f6" fill="#1cb0f6" /> },
@@ -20,6 +22,7 @@ const GEM_PACKS = [
 
 const ShopPage = () => {
     const { user } = useAuth();
+    const { t, language } = useLanguage();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
@@ -127,11 +130,13 @@ const ShopPage = () => {
                     <>
                         <div className={styles.shopLogoWrapper}>
                             <span className={styles.shopTexlearnt}>
-                                <span className={styles.shopTextGreen}>বী-লেসন</span> শপ
+                                <span className={styles.shopTextGreen}>
+                                    {language === 'bn' ? 'বী-লেসন' : 'BeeLesson'}
+                                </span> {t('shop')}
                             </span>
                         </div>
                         <header className={styles.header}>
-                            <p>আপনার শেখার অভিজ্ঞতাকে আরও সমৃদ্ধ করুন</p>
+                            <p>{t('shop_subtitle')}</p>
                             <div className={styles.headerDivider}></div>
                         </header>
 
@@ -142,14 +147,14 @@ const ShopPage = () => {
                                 <div className={styles.premiumCard}>
                                     <div className={styles.premiumBadge}>
                                         <Shield size={14} fill="#fff" />
-                                        সুপার মেম্বার
+                                        {t('super_membership')}
                                     </div>
                                     <div className={styles.superContent}>
                                         <h2 className={`${styles.superTitle} ${styles.premiumTitle}`}>
-                                            সুপার সদস্যপদ সক্রিয়
+                                            {t('active_super')}
                                         </h2>
                                         <p className={styles.convertSub} style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '16px' }}>
-                                            আপনি এখন আনলিমিটেড হার্ট এবং অ্যাড-ফ্রি অভিজ্ঞতা উপভোগ করছেন।
+                                            {t('super_desc')}
                                         </p>
                                         <div className={styles.superFeatures}>
                                             <div className={styles.feature}>
@@ -172,23 +177,23 @@ const ShopPage = () => {
                             ) : (
                                 <div className={styles.superCard}>
                                     <div className={styles.superContent}>
-                                        <h2 className={styles.superTitle}>সুপার মেম্বারশিপ</h2>
+                                        <h2 className={styles.superTitle}>{t('super_membership')}</h2>
                                         <div className={styles.superFeatures}>
                                             <div className={styles.feature}>
                                                 <div className={styles.featureIcon}><Heart size={14} fill="#fff" /></div>
-                                                আনলিমিটেড হার্ট
+                                                {t('unlimited_hearts')}
                                             </div>
                                             <div className={styles.feature}>
                                                 <div className={styles.featureIcon}><Star size={14} fill="#fff" /></div>
-                                                অ্যাড-ফ্রি অভিজ্ঞতা
+                                                {t('ad_free')}
                                             </div>
                                             <div className={styles.feature}>
                                                 <div className={styles.featureIcon}><Zap size={14} fill="#fff" /></div>
-                                                দ্রুত প্রগ্রেস
+                                                {t('quick_progress')}
                                             </div>
                                             <div className={styles.feature}>
                                                 <div className={styles.featureIcon}><Shield size={14} fill="#fff" /></div>
-                                                স্পেশাল ব্যাজ
+                                                {t('special_badge')}
                                             </div>
                                         </div>
                                     </div>
@@ -199,14 +204,14 @@ const ShopPage = () => {
                                                 className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
                                                 onClick={() => setPlanType('monthly')}
                                             >
-                                                মাসিক
+                                                {t('monthly')}
                                             </button>
                                             <button
                                                 className={`${styles.toggleBtn} ${planType === 'yearly' ? styles.toggleBtnActive : ''}`}
                                                 onClick={() => setPlanType('yearly')}
                                             >
-                                                বার্ষিক
-                                                <span className={styles.discountBadge}>-২০%</span>
+                                                {t('yearly')}
+                                                <span className={styles.discountBadge}>{t('discount')}</span>
                                             </button>
                                         </div>
                                         <button
@@ -225,7 +230,7 @@ const ShopPage = () => {
                         <section className={styles.section}>
                             <h2 className={styles.sectionTitle}>
                                 <Zap size={24} color="#ffa202" fill="#ffa202" />
-                                জেম এক্সচেঞ্জ
+                                {t('gem_exchange')}
                             </h2>
                             <div className={styles.convertCard}>
                                 <div className={styles.convertLeft}>
@@ -260,7 +265,7 @@ const ShopPage = () => {
                                         {processing ? <Loader2 className={styles.spinner} /> : (
                                             <>
                                                 <Settings size={18} className={styles.btnIcon} />
-                                                এক্সচেঞ্জ
+                                                {t('exchange')}
                                             </>
                                         )}
                                     </button>
@@ -272,7 +277,7 @@ const ShopPage = () => {
                         <section className={styles.section}>
                             <h2 className={styles.sectionTitle}>
                                 <ShoppingBag size={24} color="#1cb0f6" />
-                                জেম প্যাক
+                                {t('gem_packs')}
                             </h2>
                             <div className={styles.packsGrid}>
                                 {GEM_PACKS.map((pack) => (
@@ -301,17 +306,17 @@ const ShopPage = () => {
                 <div className={styles.checkoutOverlay}>
                     <div className={styles.checkoutModal}>
                         <div className={styles.checkoutHeader}>
-                            <h2>পেমেন্ট নিশ্চিত করুন</h2>
-                            <p>আপনার অর্ডারটি সম্পন্ন করতে পেমেন্ট মেথড নির্বাচন করুন</p>
+                            <h2>{t('confirm_payment')}</h2>
+                            <p>{t('payment_desc')}</p>
                         </div>
 
                         <div className={styles.orderSummary}>
                             <div className={styles.summaryRow}>
-                                <span>আইটেম:</span>
+                                <span>{t('item')}:</span>
                                 <span>{showCheckout.data.label}</span>
                             </div>
                             <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-                                <span>মোট মূল্য:</span>
+                                <span>{t('total_price')}:</span>
                                 <span>৳ {showCheckout.data.price}</span>
                             </div>
                         </div>
@@ -319,7 +324,7 @@ const ShopPage = () => {
                         <div className={styles.paymentMethods}>
                             <button className={`${styles.methodBtn} ${styles.methodBtnActive}`}>
                                 <CreditCard size={24} />
-                                <span>বিকাশ</span>
+                                <span>{language === 'bn' ? 'বিকাশ' : 'bKash'}</span>
                             </button>
                             <button className={styles.methodBtn}>
                                 <ShoppingBag size={24} />
@@ -333,14 +338,14 @@ const ShopPage = () => {
                                 onClick={() => setShowCheckout(null)}
                                 disabled={processing}
                             >
-                                বাতিল
+                                {t('cancel')}
                             </button>
                             <button
                                 className={styles.confirmBtn}
                                 onClick={completeCheckout}
                                 disabled={processing}
                             >
-                                {processing ? <Loader2 className={styles.spinner} /> : 'পেমেন্ট সম্পন্ন করুন'}
+                                {processing ? <Loader2 className={styles.spinner} /> : t('pay_now')}
                             </button>
                         </div>
                     </div>

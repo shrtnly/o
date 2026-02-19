@@ -7,17 +7,19 @@ import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
 import CourseCard from '../landing/CourseCard';
 import styles from './CourseListPage.module.css';
+import { useLanguage } from '../../context/LanguageContext';
 
-const CATEGORIES = [
-    { id: 'Digital safety', name: 'ডিজিটাল নিরাপত্তা' },
-    { id: 'Legal Awareness', name: 'আইনি সচেতনতা' },
-    { id: 'Digital Literacy', name: 'ডিজিটাল লিটারেসি' },
-    { id: 'Financial Literacy', name: 'আর্থিক সচেতনতা' },
-    { id: 'Career & Skill', name: 'ক্যারিয়ার ও দক্ষতা' }
+const getCategories = (t) => [
+    { id: 'Digital Literacy & Security', name: t('cat_digital_security_literacy') },
+    { id: 'Legal Awareness & Citizen Rights', name: t('cat_legal_rights') },
+    { id: 'Financial Awareness & Smart Banking', name: t('cat_finance_banking') },
+    { id: 'Career & Skills', name: t('cat_career_skills') }
 ];
 
 const CourseListPage = () => {
     const { user } = useAuth();
+    const { t } = useLanguage();
+    const categories = getCategories(t);
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [filteredCourses, setFilteredCourses] = useState([]);
@@ -76,7 +78,9 @@ const CourseListPage = () => {
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
                     <header className={styles.header}>
-                        <h1 className={styles.pageTitle}>আপনার পছন্দের <span className={styles.highlight}>কোর্সসমূহ</span> যুক্ত করুন</h1>
+                        <h1 className={styles.pageTitle}>
+                            {t('courses_title')} <span className={styles.highlight}>{t('courses_highlight')}</span> {t('courses_suffix')}
+                        </h1>
                     </header>
 
                     {loading ? (
@@ -97,8 +101,8 @@ const CourseListPage = () => {
                                                     <Filter size={18} className={styles.filterIcon} />
                                                     <span>
                                                         {activeCategory === 'All'
-                                                            ? 'সব কোর্স'
-                                                            : CATEGORIES.find(cat => cat.id === activeCategory)?.name}
+                                                            ? t('all_courses')
+                                                            : categories.find(cat => cat.id === activeCategory)?.name}
                                                     </span>
                                                 </div>
                                                 <ChevronDown size={20} className={styles.chevron} />
@@ -113,9 +117,9 @@ const CourseListPage = () => {
                                                             setIsDropdownOpen(false);
                                                         }}
                                                     >
-                                                        সব কোর্স
+                                                        {t('all_courses')}
                                                     </div>
-                                                    {CATEGORIES.map(cat => (
+                                                    {categories.map(cat => (
                                                         <div
                                                             key={cat.id}
                                                             className={`${styles.dropdownItem} ${activeCategory === cat.id ? styles.active : ''}`}
@@ -145,7 +149,7 @@ const CourseListPage = () => {
                                 <section className={styles.categorySection}>
                                     <div className={styles.sectionHeader}>
                                         <h2 className={styles.categoryTitle}>
-                                            {CATEGORIES.find(c => c.id === activeCategory)?.name}
+                                            {categories.find(c => c.id === activeCategory)?.name}
                                         </h2>
 
                                         <div className={styles.filterDropdown} ref={dropdownRef}>
@@ -157,8 +161,8 @@ const CourseListPage = () => {
                                                     <Filter size={18} className={styles.filterIcon} />
                                                     <span>
                                                         {activeCategory === 'All'
-                                                            ? 'সব কোর্স'
-                                                            : CATEGORIES.find(cat => cat.id === activeCategory)?.name}
+                                                            ? t('all_courses')
+                                                            : categories.find(cat => cat.id === activeCategory)?.name}
                                                     </span>
                                                 </div>
                                                 <ChevronDown size={20} className={styles.chevron} />
@@ -173,9 +177,9 @@ const CourseListPage = () => {
                                                             setIsDropdownOpen(false);
                                                         }}
                                                     >
-                                                        সব কোর্স
+                                                        {t('all_courses')}
                                                     </div>
-                                                    {CATEGORIES.map(cat => (
+                                                    {categories.map(cat => (
                                                         <div
                                                             key={cat.id}
                                                             className={`${styles.dropdownItem} ${activeCategory === cat.id ? styles.active : ''}`}
@@ -203,7 +207,7 @@ const CourseListPage = () => {
                                         </div>
                                     ) : (
                                         <div className={styles.emptyState}>
-                                            এই ক্যাটাগরিতে কোনো কোর্স পাওয়া যায়নি।
+                                            {t('no_courses_cat')}
                                         </div>
                                     )}
                                 </section>

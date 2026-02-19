@@ -24,7 +24,9 @@
 
 @layer base {
   body {
-    @apply font-sans antialiased text-slate-900 bg-slate-50;
+    @apply font-sans antialiased;
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 
   h1,

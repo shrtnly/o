@@ -25,7 +25,7 @@ const CourseEditor = ({ courseId, onBack }) => {
         if (courseId) {
             loadCourse();
         } else {
-            setCourse({ title: '', description: '', image_url: '', category: 'Digital safety' });
+            setCourse({ title: '', description: '', image_url: '', category: 'Digital Literacy & Security' });
             setLoading(false);
         }
     }, [courseId]);
@@ -131,11 +131,10 @@ const CourseEditor = ({ courseId, onBack }) => {
                                     value={course.category}
                                     onChange={(e) => handleAutoSave({ category: e.target.value })}
                                 >
-                                    <option value="Digital safety">ডিজিটাল নিরাপত্তা (Digital safety)</option>
-                                    <option value="Legal Awareness">আইনি সচেতনতা (Legal Awareness)</option>
-                                    <option value="Digital Literacy">ডিজিটাল লিটারেসি (Digital Literacy)</option>
-                                    <option value="Financial Literacy">আর্থিক সচেতনতা (Financial Literacy)</option>
-                                    <option value="Career & Skill">ক্যারিয়ার ও দক্ষতা (Career & Skill)</option>
+                                    <option value="Digital Literacy & Security">ডিজিটাল লিটারেসি ও নিরাপত্তা (Digital Literacy & Security)</option>
+                                    <option value="Legal Awareness & Citizen Rights">আইনি সচেতনতা ও নাগরিক অধিকার (Legal Awareness & Citizen Rights)</option>
+                                    <option value="Financial Awareness & Smart Banking">আর্থিক সচেতনতা ও স্মার্ট ব্যাংকিং (Financial Awareness & Smart Banking)</option>
+                                    <option value="Career & Skills">ক্যারিয়ার ও দক্ষতা (Career & Skills)</option>
                                 </select>
                             </div>
                             <div className="space-y-2">

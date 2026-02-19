@@ -16,6 +16,7 @@ import MainLayout from './components/layout/MainLayout';
 import TopProgressBar from './components/layout/TopProgressBar';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { courseService } from './services/courseService';
 import CourseListPage from './features/courses/CourseListPage';
 import GuestCoursePage from './features/courses/GuestCoursePage';
@@ -23,24 +24,28 @@ import SettingsPage from './features/settings/SettingsPage';
 import HelpPage from './features/help/HelpPage';
 
 // Landing Page UI Component
-const LandingPageContent = () => (
-  <>
-    <Navbar />
-    <Hero />
-    <CourseSection />
-    <section style={{ padding: '100px 0', textAlign: 'center', backgroundColor: 'var(--color-bg)' }}>
-      <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
-        <h2 style={{ fontSize: '2.5rem', color: 'var(--color-primary)', marginBottom: '24px' }}>বৈজ্ঞানিকভাবে প্রমাণিত</h2>
-        <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>
-          আমাদের পাঠদান পদ্ধতি গবেষণালব্ধ এবং কার্যকর। প্রতিটি পাঠ ডিজাইন করা হয়েছে যাতে আপনি দ্রুত এবং আনন্দদায়ক উপায়ে শিখতে পারেন।
-        </p>
-      </div>
-    </section>
-    <footer style={{ padding: '60px 0', borderTop: '2px solid var(--color-border)', textAlign: 'center', backgroundColor: 'var(--color-bg-alt)' }}>
-      <p>&copy; ২০২৪ BeeLesson. সকল স্বত্ব সংরক্ষিত।</p>
-    </footer>
-  </>
-);
+const LandingPageContent = () => {
+  const { t } = useLanguage();
+  return (
+    <>
+      <Navbar />
+      <Hero />
+      <CourseSection />
+      <section style={{ padding: '100px 0', textAlign: 'center', backgroundColor: 'var(--color-bg)' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
+          <h2 style={{ fontSize: '2.5rem', color: 'var(--color-primary)', marginBottom: '24px' }}>{t('proven_title')}</h2>
+          <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>
+            {t('proven_desc')}
+          </p>
+        </div>
+      </section>
+      <footer style={{ padding: '60px 0', borderTop: '2px solid var(--color-border)', textAlign: 'center', backgroundColor: 'var(--color-bg-alt)' }}>
+        <p>&copy; {t('footer_copy')}</p>
+      </footer>
+    </>
+  );
+};
+
 
 const HomePage = () => {
   const { user } = useAuth();
@@ -121,9 +126,11 @@ const AppContent = () => {
 function App() {
   return (
     <AuthProvider>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
+      </LanguageProvider>
     </AuthProvider>
   );
 }

@@ -54,11 +54,11 @@
 
 .progressFill {
     height: 100%;
-    background: linear-gradient(90deg, #1cb0f6 0%, #00cdff 100%);
+    background: #2ecc71;
     border-radius: 99px;
     transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
-    box-shadow: 0 0 10px rgba(28, 176, 246, 0.5);
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
 }
 
 .progressFill::after {
@@ -92,11 +92,11 @@
     gap: 4px;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #1cb0f6;
-    background: rgba(28, 176, 246, 0.1);
+    color: #2ecc71;
+    background: rgba(46, 204, 113, 0.1);
     padding: 4px 8px;
     border-radius: 8px;
-    border: 1px solid rgba(28, 176, 246, 0.2);
+    border: 1px solid rgba(46, 204, 113, 0.2);
 }
 
 
@@ -151,7 +151,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #1cb0f6;
+    color: #2ecc71;
     font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
@@ -162,7 +162,7 @@
 .labelSquare {
     width: 12px;
     height: 12px;
-    background-color: #1cb0f6;
+    background-color: #2ecc71;
     border-radius: 2px;
 }
 
@@ -190,6 +190,15 @@
     color: #fff;
     line-height: 1.4;
     padding: 0 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.questionIcon {
+    color: #2ecc71;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
 .optionsList {
@@ -228,14 +237,14 @@
 }
 
 .selected {
-    border-color: #a06fed !important;
-    background-color: rgba(160, 111, 237, 0.05) !important;
-    box-shadow: 0 4px 0 #8a53e3 !important;
+    border-color: #1cb0f6 !important;
+    background-color: rgba(28, 176, 246, 0.05) !important;
+    box-shadow: 0 4px 0 #1899d6 !important;
 }
 
 .selected .optionIndex {
-    background-color: #a06fed;
-    border-color: #a06fed;
+    background-color: #1cb0f6;
+    border-color: #1cb0f6;
     color: #fff;
 }
 
@@ -254,11 +263,7 @@
     flex-shrink: 0;
 }
 
-.selected .optionIndex {
-    background-color: #a06fed;
-    border-color: #a06fed;
-    color: #fff;
-}
+
 
 .optionText {
     font-size: 1.15rem;
@@ -268,14 +273,14 @@
 
 /* Answer States */
 .correct {
-    border-color: #1cb0f6 !important;
-    background-color: rgba(28, 176, 246, 0.05) !important;
-    box-shadow: 0 4px 0 #1899d6 !important;
+    border-color: #2ecc71 !important;
+    background-color: rgba(46, 204, 113, 0.05) !important;
+    box-shadow: 0 4px 0 #27ae60 !important;
 }
 
 .correct .optionIndex {
-    background-color: #1cb0f6 !important;
-    border-color: #1cb0f6 !important;
+    background-color: #2ecc71 !important;
+    border-color: #2ecc71 !important;
     color: #fff !important;
 }
 
@@ -301,7 +306,7 @@
 }
 
 .correctIcon {
-    color: #1cb0f6;
+    color: #2ecc71;
 }
 
 .incorrectIcon {
@@ -346,15 +351,15 @@
 }
 
 .checkBtn:not(:disabled) {
-    background-color: #1cb0f6;
+    background-color: #2ecc71;
     color: #fff;
     cursor: pointer;
-    box-shadow: 0 4px 0 #1899d6;
+    box-shadow: 0 4px 0 #27ae60;
 }
 
 .checkBtn:not(:disabled):active {
     transform: translateY(2px);
-    box-shadow: 0 2px 0 #1899d6;
+    box-shadow: 0 2px 0 #27ae60;
 }
 
 /* Result Overlay Footer */
@@ -476,9 +481,9 @@
 }
 
 .footerCorrect .continueBtn {
-    background-color: #1cb0f6;
+    background-color: #2ecc71;
     color: #fff;
-    box-shadow: 0 6px 0 #1899d6;
+    box-shadow: 0 6px 0 #27ae60;
 }
 
 .footerIncorrect .continueBtn {
@@ -497,7 +502,7 @@
 }
 
 .footerCorrect .continueBtn:active {
-    box-shadow: 0 2px 0 #1899d6;
+    box-shadow: 0 2px 0 #27ae60;
 }
 
 .footerIncorrect .continueBtn:active {
@@ -628,7 +633,7 @@
 
 .finishBtn {
     width: 100%;
-    background-color: #1cb0f6;
+    background-color: #2ecc71;
     color: #fff;
     border: none;
     border-radius: 20px;
@@ -636,14 +641,14 @@
     font-size: 1.15rem;
     font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 6px 0 #1899d6;
+    box-shadow: 0 6px 0 #27ae60;
     transition: all 0.1s;
     text-transform: uppercase;
 }
 
 .finishBtn:active {
     transform: translateY(4px);
-    box-shadow: 0 2px 0 #1899d6;
+    box-shadow: 0 2px 0 #27ae60;
 }
 
 /* Loading */
@@ -659,7 +664,7 @@
     width: 40px;
     height: 40px;
     border: 4px solid #37464f;
-    border-top-color: #1cb0f6;
+    border-top-color: #2ecc71;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }

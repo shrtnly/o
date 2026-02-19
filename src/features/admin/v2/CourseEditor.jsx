@@ -135,6 +135,7 @@ const CourseEditor = ({ courseId, onBack }) => {
                                     <option value="Legal Awareness & Citizen Rights">আইনি সচেতনতা ও নাগরিক অধিকার (Legal Awareness & Citizen Rights)</option>
                                     <option value="Financial Awareness & Smart Banking">আর্থিক সচেতনতা ও স্মার্ট ব্যাংকিং (Financial Awareness & Smart Banking)</option>
                                     <option value="Career & Skills">ক্যারিয়ার ও দক্ষতা (Career & Skills)</option>
+                                    <option value="Mental Health & Self-Development">মানসিক স্বাস্থ্য ও আত্মউন্নয়ন (Mental Health & Self-Development)</option>
                                 </select>
                             </div>
                             <div className="space-y-2">

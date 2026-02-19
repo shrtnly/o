@@ -136,6 +136,7 @@ const translations = {
         cat_legal_rights: "আইনি সচেতনতা ও নাগরিক অধিকার",
         cat_finance_banking: "আর্থিক সচেতনতা ও স্মার্ট ব্যাংকিং",
         cat_career_skills: "ক্যারিয়ার ও দক্ষতা",
+        cat_mental_health: "মানসিক স্বাস্থ্য ও আত্মউন্নয়ন",
 
         // Landing Page Generic
         proven_title: "বৈজ্ঞানিকভাবে প্রমাণিত",
@@ -221,6 +222,7 @@ const translations = {
         cat_legal_rights: "Legal Awareness & Citizen Rights",
         cat_finance_banking: "Financial Awareness & Smart Banking",
         cat_career_skills: "Career & Skills",
+        cat_mental_health: "Mental Health & Self-Development",
 
         notif_desc: "Control how you receive updates and reminders",
         push_notif: "Push Notifications",

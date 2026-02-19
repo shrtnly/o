@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
@@ -8,6 +8,7 @@ import { courseService } from '../../services/courseService';
 import ConfirmModal from '../../components/ui/ConfirmModal';
 import { RotateCcw, AlertTriangle, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
+import { storageService } from '../../services/storageService';
 import { useLanguage } from '../../context/LanguageContext';
 
 const SettingsPage = () => {
@@ -18,6 +19,8 @@ const SettingsPage = () => {
     const [selectedAnimation, setSelectedAnimation] = useState('1');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(false);
+    const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const fileInputRef = useRef(null);
 
     // Modal states
     const [confirmModal, setConfirmModal] = useState({
@@ -86,6 +89,27 @@ const SettingsPage = () => {
         localStorage.setItem('studyPageAnimation', value);
     };
 
+    const handleAvatarClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+            setUploadingAvatar(true);
+            await storageService.changeAvatar(file, user.id);
+            toast.success(t('profile_updated') || 'প্রোফাইল ছবি পরিবর্তন করা হয়েছে');
+        } catch (error) {
+            console.error('Error uploading avatar:', error);
+            toast.error('ছবি আপলোড করতে সমস্যা হয়েছে');
+        } finally {
+            setUploadingAvatar(false);
+            if (fileInputRef.current) fileInputRef.current.value = '';
+        }
+    };
+
     const menuItems = [
         { id: 'preferences', label: t('preferences'), icon: Sliders },
         { id: 'profile', label: t('profile'), icon: User },
@@ -100,8 +124,8 @@ const SettingsPage = () => {
                 return (
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
-                            <h2>প্রেফারেন্স সেটিংস</h2>
-                            <p>আপনার ব্যক্তিগত ব্যবহারের অভিজ্ঞতা কাস্টমাইজ করুন</p>
+                            <h2>{t('pref_settings')}</h2>
+                            <p>{t('pref_desc')}</p>
                         </div>
                         <div className={styles.cardList}>
                             <div className={styles.settingCard}>
@@ -110,8 +134,8 @@ const SettingsPage = () => {
                                         {isDark ? <Moon size={20} /> : <Sun size={20} />}
                                     </div>
                                     <div className={styles.cardText}>
-                                        <h3>ডার্ক মুড</h3>
-                                        <p>চোখের আরামের জন্য কালো থিম ব্যবহার করুন</p>
+                                        <h3>{t('dark_mode')}</h3>
+                                        <p>{t('dark_mode_desc')}</p>
                                     </div>
                                 </div>
                                 <label className={styles.switch}>
@@ -134,8 +158,8 @@ const SettingsPage = () => {
                                         <Sparkles size={20} />
                                     </div>
                                     <div className={styles.cardText}>
-                                        <h3>স্টাডি পেজ অ্যানিমেশন</h3>
-                                        <p>আপনার পছন্দের মৌমাছি অ্যানিমেশন নির্বাচন করুন</p>
+                                        <h3>{t('study_anim')}</h3>
+                                        <p>{t('study_anim_desc')}</p>
                                     </div>
                                 </div>
                                 <select
@@ -162,7 +186,7 @@ const SettingsPage = () => {
                                         <p>{t('lang_desc')}</p>
                                     </div>
                                 </div>
-                                <button className={styles.secondaryBtn} onClick={toggleLanguage}>
+                                <button type="button" className={styles.secondaryBtn} onClick={toggleLanguage}>
                                     {language === 'bn' ? 'English' : 'বাংলা'}
                                 </button>
                             </div>
@@ -173,14 +197,14 @@ const SettingsPage = () => {
                 return (
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
-                            <h2>প্রোফাইল সেটিংস</h2>
-                            <p>আপনার ব্যক্তিগত তথ্য এবং প্রোফাইল দৃশ্যমানতা পরিচালনা করুন</p>
+                            <h2>{t('profile_settings')}</h2>
+                            <p>{t('profile_desc')}</p>
                         </div>
                         <div className={styles.cardList}>
                             <div className={styles.settingCard}>
                                 <div className={styles.cardText}>
-                                    <h3>পাবলিক প্রোফাইল</h3>
-                                    <p>অন্যান্য ব্যবহারকারীরা আপনার শেখার অগ্রগতি দেখতে পারবে</p>
+                                    <h3>{t('public_profile')}</h3>
+                                    <p>{t('public_profile_desc')}</p>
                                 </div>
                                 <label className={styles.switch}>
                                     <input type="checkbox" defaultChecked />
@@ -194,10 +218,24 @@ const SettingsPage = () => {
                             </div>
                             <div className={styles.settingCard}>
                                 <div className={styles.cardText}>
-                                    <h3>প্রোফাইল প্রোফাইল পিকচার</h3>
-                                    <p>একটি নতুন প্রোফাইল ছবি আপলোড করুন</p>
+                                    <h3>{t('profile')} {t('language') === 'Language' ? 'Picture' : 'ছবি'}</h3>
+                                    <p>{t('language') === 'Language' ? 'Upload a new profile picture' : 'একটি নতুন প্রোফাইল ছবি আপলোড করুন'}</p>
                                 </div>
-                                <button className={styles.secondaryBtn}>পরিবর্তন</button>
+                                <button
+                                    type="button"
+                                    className={styles.secondaryBtn}
+                                    onClick={handleAvatarClick}
+                                    disabled={uploadingAvatar}
+                                >
+                                    {uploadingAvatar ? t('loading') : t('change_pic')}
+                                </button>
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleAvatarChange}
+                                    style={{ display: 'none' }}
+                                />
                             </div>
                         </div>
                     </div>
@@ -206,14 +244,14 @@ const SettingsPage = () => {
                 return (
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
-                            <h2>নোটিফিকেশন সেটিংস</h2>
-                            <p>আপনি কিভাবে আপডেট এবং স্মরণিকা পাবেন তা নিয়ন্ত্রণ করুন</p>
+                            <h2>{t('notif_settings')}</h2>
+                            <p>{t('notif_desc')}</p>
                         </div>
                         <div className={styles.cardList}>
                             <div className={styles.settingCard}>
                                 <div className={styles.cardText}>
-                                    <h3>পুশ নোটিফিকেশন</h3>
-                                    <p>আপনার মোবাইল বা ব্রাউজারে সরাসরি আপডেট পান</p>
+                                    <h3>{t('push_notif')}</h3>
+                                    <p>{t('push_notif_desc')}</p>
                                 </div>
                                 <label className={styles.switch}>
                                     <input type="checkbox" defaultChecked />
@@ -227,8 +265,8 @@ const SettingsPage = () => {
                             </div>
                             <div className={styles.settingCard}>
                                 <div className={styles.cardText}>
-                                    <h3>ইমেল নোটিফিকেশন</h3>
-                                    <p>সাপ্তাহিক প্রগতি রিপোর্ট এবং গুরুত্বপূর্ণ আপডেট পান</p>
+                                    <h3>{t('email_notif')}</h3>
+                                    <p>{t('email_notif_desc')}</p>
                                 </div>
                                 <label className={styles.switch}>
                                     <input type="checkbox" />
@@ -247,14 +285,14 @@ const SettingsPage = () => {
                 return (
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
-                            <h2>কোর্স সেটিংস</h2>
-                            <p>আপনার এনরোল করা কোর্সসমূহ পরিচালনা করুন</p>
+                            <h2>{t('course_settings')}</h2>
+                            <p>{t('course_settings_desc')}</p>
                         </div>
 
                         {loadingCourses ? (
                             <div className={styles.loaderContainer}>
                                 <div className={styles.spinner}></div>
-                                <p>লোড হচ্ছে...</p>
+                                <p>{t('loading')}</p>
                             </div>
                         ) : enrolledCourses.length > 0 ? (
                             <div className={styles.courseManageList}>
@@ -271,7 +309,7 @@ const SettingsPage = () => {
                                                             style={{ width: `${course.progress_percentage}%` }}
                                                         ></div>
                                                     </div>
-                                                    <span>{course.progress_percentage}% সম্পন্ন</span>
+                                                    <span>{course.progress_percentage}% {t('completed')}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,7 +321,7 @@ const SettingsPage = () => {
                                                 title="রিসেট করুন"
                                             >
                                                 <RotateCcw size={18} />
-                                                <span>রিসেট</span>
+                                                <span>{t('reset')}</span>
                                             </button>
 
                                         </div>
@@ -293,14 +331,14 @@ const SettingsPage = () => {
                         ) : (
                             <div className={styles.emptyCourses}>
                                 <BookOpen size={48} className={styles.emptyIcon} />
-                                <h3>কোনো কোর্স পাওয়া যায়নি</h3>
-                                <p>আপনি এখনও কোনো কোর্সে এনরোল করেননি।</p>
+                                <h3>{t('no_courses')}</h3>
+                                <p>{t('no_courses_desc')}</p>
                             </div>
                         )}
 
                         <div className={styles.warningNote}>
                             <AlertTriangle size={18} />
-                            <span>সতর্কতা: প্রগতি রিসেট বা কোর্স ডিলিট করলে তা আর পুনরুদ্ধার করা সম্ভব নয়।</span>
+                            <span>{t('warning_reset')}</span>
                         </div>
                     </div>
                 );

@@ -13,7 +13,8 @@ const getCategories = (t) => [
     { id: 'Digital Literacy & Security', name: t('cat_digital_security_literacy') },
     { id: 'Legal Awareness & Citizen Rights', name: t('cat_legal_rights') },
     { id: 'Financial Awareness & Smart Banking', name: t('cat_finance_banking') },
-    { id: 'Career & Skills', name: t('cat_career_skills') }
+    { id: 'Career & Skills', name: t('cat_career_skills') },
+    { id: 'Mental Health & Self-Development', name: t('cat_mental_health') }
 ];
 
 const CourseListPage = () => {

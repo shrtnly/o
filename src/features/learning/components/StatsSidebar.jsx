@@ -1,5 +1,6 @@
 import React from 'react';
 import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock } from 'lucide-react';
+import HoneyDropIcon from '../../../components/HoneyDropIcon';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { rewardService } from '../../../services/rewardService';
@@ -154,12 +155,11 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                             <Gem size={34} fill="#1cb0f6" />
                             <span>{profile?.gems || 0}</span>
                         </div>
-                        <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Hearts">
-                            {(hearts == 0 || Number(hearts) === 0) && refillTime ? (
-                                <HeartCrack size={34} color="#ff4b4b" strokeWidth={2.5} />
-                            ) : (
-                                <Heart size={34} fill="#ff4b4b" />
-                            )}
+                        <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Honey Drops 🍯">
+                            <HoneyDropIcon
+                                size={24}
+                                isEmpty={(hearts == 0 || Number(hearts) === 0) && refillTime}
+                            />
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 {!(Number(hearts) === 0 && refillTime) && (
                                     <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
@@ -186,7 +186,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             {/* Daily Practices Tracker / Consistency Tracker */}
             <div className={styles.card} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>দৈনিক অনুশীলন</h3>
+                    <h3 className={styles.cardTitle}>⚡ Buzz Streak</h3>
                     <span
                         className={styles.viewAll}
                         onClick={() => setIsExpanded(!isExpanded)}

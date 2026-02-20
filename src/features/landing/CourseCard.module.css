@@ -16,9 +16,9 @@
 
 .card:hover {
     background-color: #23272b;
-    border-color: var(--color-primary);
+    border-color: #ff9902;
     transform: translateY(-5px);
-    box-shadow: var(--shadow-card), 0 0 15px rgba(46, 204, 113, 0.1);
+    box-shadow: var(--shadow-card), 0 0 15px rgba(255, 153, 2, 0.1);
 }
 
 .cardBadge {

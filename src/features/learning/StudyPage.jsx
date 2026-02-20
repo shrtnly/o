@@ -1,9 +1,10 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Heart, HeartCrack, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle } from 'lucide-react';
+import { X, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
+import HoneyDropIcon from '../../components/HoneyDropIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
@@ -221,7 +222,7 @@ const StudyPage = () => {
         <div className={styles.loadingContainer}>
             <div className="text-center space-y-4">
                 <h2 className="text-xl font-bold">এই অধ্যায়ে কোনো প্রশ্ন পাওয়া যায়নি।</h2>
-                <button onClick={() => navigate(-1)} className="bg-blue-500 text-white px-6 py-2 rounded-xl">ফিরে যান</button>
+                <button onClick={() => navigate(-1)} className="bg-[#ff9902] text-white px-6 py-2 rounded-xl shadow-[0_4px_0_#e68a00] active:translate-y-1 active:shadow-none transition-all">ফিরে যান</button>
             </div>
         </div>
     );
@@ -247,11 +248,10 @@ const StudyPage = () => {
                 </div>
                 <div className={styles.heartsContainer}>
                     <motion.div animate={shake ? { x: [-5, 5, -5, 5, 0] } : {}} transition={{ duration: 0.4 }}>
-                        {hearts == 0 && refillTimeDisplay ? (
-                            <HeartCrack size={24} color="#ff4b4b" strokeWidth={2.5} />
-                        ) : (
-                            <Heart size={24} color="#ff4b4b" fill="#ff4b4b" strokeWidth={0} />
-                        )}
+                        <HoneyDropIcon
+                            size={28}
+                            isEmpty={hearts === 0 && refillTimeDisplay}
+                        />
                     </motion.div>
                     {!(hearts === 0 && refillTimeDisplay) && <span className={styles.heartCount}>{hearts}</span>}
                     {needsRefill && refillTimeDisplay && (
@@ -303,7 +303,7 @@ const StudyPage = () => {
                         >
                             {(currentQuestion.narrative || currentQuestion.explanation) && (
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={styles.contextText}>
-                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#2ecc71" /></span>
+                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#ff9902" /></span>
                                     {currentQuestion.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
                                 </motion.div>
                             )}
@@ -346,7 +346,7 @@ const StudyPage = () => {
                 <div className={styles.footerContent}>
                     {!isAnswered ? (
                         <>
-                            <button className={styles.skipBtn} onClick={handleNext}>এগিয়ে যান</button>
+                            <button className={styles.skipBtn} onClick={handleNext}>এগিয়ে যান</button>
                             <button className={styles.checkBtn} disabled={!selectedOption} onClick={handleCheck}>যাচাই করুন</button>
                         </>
                     ) : (
@@ -355,12 +355,19 @@ const StudyPage = () => {
                                 <div className={styles.resultStatus}>
                                     <div className={styles.statusHeader}>
                                         <div className={styles.statusIcon}>{isCorrect ? <Check size={24} strokeWidth={4} /> : <X size={24} strokeWidth={4} />}</div>
-                                        <h3>{isCorrect ? "সঠিক উত্তর" : "ভুল উত্তর"}</h3>
+                                        <h3>{isCorrect ? "সঠিক উত্তর! 🍯" : "ওহ নো! একটি হানি ড্রপ হারিয়ে গেল! 🐝"}</h3>
                                     </div>
-                                    <p className={styles.explanationText}>{isCorrect ? "আপনার উত্তরটি সঠিক হয়েছে।" : currentQuestion.explanation || "পরের বার আরও ভালো করবেন।"}</p>
+                                    <p className={styles.explanationText}>
+                                        {isCorrect
+                                            ? "আপনার উত্তরটি সঠিক হয়েছে।"
+                                            : currentQuestion.explanation
+                                                ? `ভুল থেকে শেখাই আসল শেখা। ${currentQuestion.explanation}`
+                                                : `ভুল থেকে শেখাই আসল শেখা। আপনার কাছে আর মাত্র ${hearts}টি Honey Drop আছে।`
+                                        }
+                                    </p>
                                 </div>
                                 <button className={styles.continueBtn} onClick={handleNext}>
-                                    <span>{currentIndex < questions.length - 1 ? "চালিয়ে যান" : "সম্পন্ন করুন"}</span>
+                                    <span>{currentIndex < questions.length - 1 ? "আবার চেষ্টা করি" : "সম্পন্ন করুন"}</span>
                                     <ArrowRight size={20} strokeWidth={3} />
                                 </button>
                             </div>
@@ -385,7 +392,7 @@ const StudyPage = () => {
                             </div>
                             <div className={styles.statsSummary}>
                                 <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(88, 204, 2, 0.1)' }}><Check size={20} color="#58cc02" /></div>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 153, 2, 0.1)' }}><Check size={20} color="#ff9902" /></div>
                                     <div className={styles.summaryInfo}><span>সঠিক উত্তর</span><strong>{stats.correct}</strong></div>
                                 </div>
                                 <div className={styles.summaryItem}>
@@ -393,7 +400,7 @@ const StudyPage = () => {
                                     <div className={styles.summaryInfo}><span>ভুল উত্তর</span><strong>{stats.total - stats.correct}</strong></div>
                                 </div>
                                 <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(46, 204, 113, 0.1)' }}><Star size={20} color="#2ecc71" /></div>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 153, 2, 0.1)' }}><Star size={20} color="#ff9902" /></div>
                                     <div className={styles.summaryInfo}><span>অর্জিত XP</span><strong>+{stats.correct}</strong></div>
                                 </div>
                             </div>
@@ -406,22 +413,96 @@ const StudyPage = () => {
             <AnimatePresence>
                 {showNoHeartsModal && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.resultModal} onClick={() => setShowNoHeartsModal(false)}>
-                        <motion.div initial={{ scale: 0.8, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} transition={{ type: "spring", damping: 15 }} className={styles.resultCard} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
-                            <div style={{ textAlign: 'center', padding: '20px' }}>
-                                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }} style={{ fontSize: '64px', marginBottom: '20px' }}>💔</motion.div>
-                                <h2 style={{ fontSize: '24px', fontWeight: 800, marginBottom: '12px', color: '#fff' }}>হার্ট শেষ হয়ে গেছে!</h2>
-                                <p style={{ fontSize: '14px', color: '#afafaf', marginBottom: '24px' }}>আপনার সব হার্ট শেষ হয়ে গেছে। পরবর্তী রিফিলের জন্য অপেক্ষা করুন অথবা মিস্ট্রি বক্স থেকে হার্ট পান।</p>
-                                <div style={{ background: 'rgba(255, 75, 75, 0.1)', border: '2px solid #ff4b4b', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '8px' }}>
-                                        <Heart size={32} fill="#ff4b4b" color="#ff4b4b" /><span style={{ fontSize: '32px', fontWeight: 900, color: '#fff' }}>{hearts}</span>
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            transition={{ type: "spring", damping: 15 }}
+                            className={styles.resultCard}
+                            onClick={(e) => e.stopPropagation()}
+                            style={{ maxWidth: '420px', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}
+                        >
+                            <div style={{ textAlign: 'center', padding: '28px 24px' }}>
+                                {/* Header */}
+                                <motion.div
+                                    animate={{ rotate: [-5, 5, -5, 5, 0] }}
+                                    transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 2 }}
+                                    style={{ fontSize: '72px', marginBottom: '16px', lineHeight: 1 }}
+                                >🍯</motion.div>
+
+                                <h2 style={{
+                                    fontSize: '22px',
+                                    fontWeight: 900,
+                                    marginBottom: '8px',
+                                    color: '#ffa202',
+                                    textShadow: '0 0 20px rgba(255,162,2,0.4)'
+                                }}>আপনার মৌচাকে মধু শেষ!</h2>
+
+                                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginBottom: '20px', lineHeight: 1.6 }}>
+                                    নতুন হানি ড্রপ রিফিল হতে সময় লাগবে।<br />
+                                    আপনি কি অপেক্ষা করবেন, নাকি এখনই ওড়া শুরু করতে চান?
+                                </p>
+
+                                {/* Refill Timer Card */}
+                                {refillTimeDisplay && (
+                                    <div style={{
+                                        background: 'rgba(255, 162, 2, 0.1)',
+                                        border: '2px solid rgba(255,162,2,0.4)',
+                                        borderRadius: '14px',
+                                        padding: '14px 20px',
+                                        marginBottom: '20px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '10px'
+                                    }}>
+                                        <Clock size={20} color="#ffa202" />
+                                        <span style={{ fontSize: '16px', fontWeight: 700, color: '#ffa202' }}>রিফিল হবে: {refillTimeDisplay}</span>
                                     </div>
-                                    {refillTimeDisplay && (
-                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '12px' }}>
-                                            <Clock size={20} color="#2ecc71" /><span style={{ fontSize: '18px', fontWeight: 700, color: '#2ecc71' }}>রিফিল হবে: {refillTimeDisplay}</span>
-                                        </div>
-                                    )}
+                                )}
+
+                                {/* Options */}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                                    {/* Queen Bee Option */}
+                                    <button
+                                        onClick={() => { setShowNoHeartsModal(false); window.location.href = '/shop'; }}
+                                        style={{
+                                            background: 'linear-gradient(135deg, #ffa202 0%, #ff6b00 100%)',
+                                            border: 'none',
+                                            borderRadius: '14px',
+                                            padding: '14px 20px',
+                                            color: '#fff',
+                                            fontWeight: 900,
+                                            fontSize: '15px',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '8px',
+                                            boxShadow: '0 4px 20px rgba(255,162,2,0.4)',
+                                            width: '100%'
+                                        }}
+                                    >
+                                        <span>👑</span> Queen Bee হন মাত্র ৯৯ টাকায়!
+                                    </button>
+
+                                    {/* Wait Option */}
+                                    <button
+                                        onClick={() => setShowNoHeartsModal(false)}
+                                        style={{
+                                            background: 'rgba(255,255,255,0.08)',
+                                            border: '1px solid rgba(255,255,255,0.15)',
+                                            borderRadius: '14px',
+                                            padding: '12px 20px',
+                                            color: 'rgba(255,255,255,0.7)',
+                                            fontWeight: 600,
+                                            fontSize: '14px',
+                                            cursor: 'pointer',
+                                            width: '100%'
+                                        }}
+                                    >
+                                        🕐 আমি অপেক্ষা করবো
+                                    </button>
                                 </div>
-                                <button className={styles.finishBtn} onClick={() => setShowNoHeartsModal(false)} style={{ width: '100%' }}>ঠিক আছে</button>
                             </div>
                         </motion.div>
                     </motion.div>

@@ -6,13 +6,13 @@ import { rewardService } from '../../services/rewardService';
 import { courseService } from '../../services/courseService';
 import { storageService } from '../../services/storageService';
 import LoadingScreen from '../../components/ui/LoadingScreen';
+import HoneyDropIcon from '../../components/HoneyDropIcon';
 import InlineLoader from '../../components/ui/InlineLoader';
 import {
     User,
     Calendar,
     Zap,
     Gem,
-    Heart,
     Trophy,
     Target,
     TrendingUp,
@@ -214,8 +214,8 @@ const ProfilePage = () => {
         switch (type) {
             case 'xp_earned': return <Zap size={16} color="#ffa502" />;
             case 'gem_earned': return <Gem size={16} color="#0fbcf9" />;
-            case 'heart_lost': return <Heart size={16} color="#ff4d4d" />;
-            case 'heart_gained': return <Heart size={16} color="#2ecc71" />;
+            case 'heart_lost': return <HoneyDropIcon size={18} />;
+            case 'heart_gained': return <HoneyDropIcon size={18} />;
             default: return <Zap size={16} />;
         }
     };
@@ -360,6 +360,99 @@ const ProfilePage = () => {
                                     <p>{profile.bio}</p>
                                 </div>
                             )}
+
+                            {/* === THE HIVE CARD === */}
+                            <div className={styles.hiveCard}>
+                                {/* Header */}
+                                <div className={styles.hiveHeader}>
+                                    <span className={styles.hiveBeeEmoji}>🐝</span>
+                                    <div>
+                                        <h3 className={styles.hiveTitle}>The Hive</h3>
+                                        <p className={styles.hiveSubtitle}>আপনার মৌচাকের অগ্রগতি</p>
+                                    </div>
+                                </div>
+
+                                {/* Worker Bee Status */}
+                                {(() => {
+                                    const xp = profile?.xp || 0;
+                                    const lessonsCompleted = Math.floor(xp / 100);
+                                    const beeRanks = [
+                                        { name: 'Baby Bee', threshold: 0, nextName: 'Worker Bee', nextThreshold: 5, emoji: '🐛' },
+                                        { name: 'Worker Bee', threshold: 5, nextName: 'Scout Bee', nextThreshold: 10, emoji: '🐝' },
+                                        { name: 'Scout Bee', threshold: 10, nextName: 'Guard Bee', nextThreshold: 20, emoji: '🦋' },
+                                        { name: 'Guard Bee', threshold: 20, nextName: 'Drone Bee', nextThreshold: 35, emoji: '🛡️' },
+                                        { name: 'Drone Bee', threshold: 35, nextName: 'Queen Bee', nextThreshold: 50, emoji: '👑' },
+                                        { name: 'Queen Bee', threshold: 50, nextName: null, nextThreshold: null, emoji: '👑' },
+                                    ];
+
+                                    const currentRank = beeRanks.reduce((acc, rank) => {
+                                        return lessonsCompleted >= rank.threshold ? rank : acc;
+                                    }, beeRanks[0]);
+
+                                    const progressInRank = currentRank.nextThreshold
+                                        ? lessonsCompleted - currentRank.threshold
+                                        : currentRank.threshold;
+                                    const progressNeeded = currentRank.nextThreshold
+                                        ? currentRank.nextThreshold - currentRank.threshold
+                                        : 1;
+                                    const progressPercent = Math.min(100, Math.round((progressInRank / progressNeeded) * 100));
+
+                                    // Honey petals visualization (5 flowers)
+                                    const totalPetals = 5;
+                                    const filledPetals = Math.min(totalPetals, Math.floor(progressPercent / 20));
+
+                                    return (
+                                        <>
+                                            <div className={styles.hiveBeeStatus}>
+                                                <span className={styles.hiveRankEmoji}>{currentRank.emoji}</span>
+                                                <div className={styles.hiveRankInfo}>
+                                                    <span className={styles.hiveRankName}>{currentRank.name}</span>
+                                                    {currentRank.nextName ? (
+                                                        <span className={styles.hiveRankNext}>
+                                                            {currentRank.nextName} হতে আরও {progressNeeded - progressInRank}টি লেসন বাকি!
+                                                        </span>
+                                                    ) : (
+                                                        <span className={styles.hiveRankNext}>🌟 সর্বোচ্চ স্তরে পৌঁছেছেন!</span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Honey Flower Progress */}
+                                            <div className={styles.honeyFlowerRow}>
+                                                {Array.from({ length: totalPetals }).map((_, i) => (
+                                                    <div
+                                                        key={i}
+                                                        className={`${styles.honeyFlower} ${i < filledPetals ? styles.honeyFlowerFilled : ''}`}
+                                                        title={`ফুল ${i + 1}`}
+                                                    >
+                                                        <span className={styles.flowerEmoji}>
+                                                            {i < filledPetals ? '🌻' : '🌾'}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+
+                                            {/* Progress Bar */}
+                                            <div className={styles.hiveProgressWrapper}>
+                                                <div className={styles.hiveProgressBar}>
+                                                    <div
+                                                        className={styles.hiveProgressFill}
+                                                        style={{ width: `${progressPercent}%` }}
+                                                    />
+                                                </div>
+                                                <span className={styles.hiveProgressLabel}>{progressPercent}%</span>
+                                            </div>
+                                        </>
+                                    );
+                                })()}
+
+                                {/* Buzz Streak */}
+                                <div className={styles.buzzStreakRow}>
+                                    <span className={styles.buzzStreakIcon}>⚡</span>
+                                    <span className={styles.buzzStreakLabel}>Buzz Streak</span>
+                                    <span className={styles.buzzStreakValue}>{streak?.current_streak || 0} Days</span>
+                                </div>
+                            </div>
 
                         </aside>
 

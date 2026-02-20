@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Heart, Gem, Zap, Check, Shield, Star, ShoppingBag,
+    Gem, Zap, Check, Shield, Star, ShoppingBag,
     Loader2, Sparkles, CreditCard, ChevronRight,
     Minus, Plus, ArrowRightLeft, TrendingUp, Award, Settings
 } from 'lucide-react';
@@ -11,6 +11,7 @@ import { shopService } from '../../services/shopService';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './ShopPage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
+import HoneyDropIcon from '../../components/HoneyDropIcon';
 import { toast } from 'sonner';
 
 const GEM_PACKS = [
@@ -18,6 +19,13 @@ const GEM_PACKS = [
     { id: 'gem_p2', amount: 1200, price: 200, label: 'জেম চেস্ট', icon: <div className={styles.gemStack}><Gem size={32} color="#1cb0f6" fill="#1cb0f6" /><Gem size={32} color="#1cb0f6" fill="#1cb0f6" /></div>, popular: true },
     { id: 'gem_p3', amount: 3000, price: 500, label: 'জেম কার্ট', icon: <ShoppingBag size={48} color="#1cb0f6" strokeWidth={1.5} /> },
     { id: 'gem_p4', amount: 7500, price: 1000, label: 'জেম ভল্ট', icon: <Award size={48} color="#1cb0f6" />, best: true },
+];
+
+const QUEEN_BEE_FEATURES = [
+    { emoji: '🍯', text: 'Unlimited Honey Drops: ভুল করলেও শেখা থামবে না।' },
+    { emoji: '🚫', text: 'No Interruption: কোনো অ্যাড নেই, শুধু পিওর লার্নিং।' },
+    { emoji: '📜', text: 'Golden Certificates: কোর্সের শেষে বিশেষ কুইন বি সার্টিফিকেট।' },
+    { emoji: '⚡', text: 'Priority Access: নতুন কোর্স সবার আগে আপনার জন্য।' },
 ];
 
 const ShopPage = () => {
@@ -71,10 +79,10 @@ const ShopPage = () => {
                     gems: result.new_gems,
                     hearts: result.new_hearts
                 }));
-                toast.success(`${calculatedHearts}টি নতুন হার্ট যোগ করা হয়েছে!`);
+                toast.success(`${calculatedHearts}টি নতুন Honey Drop যোগ করা হয়েছে! 🍯`);
             }
         } catch (err) {
-            toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
+            toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
         } finally {
             setProcessing(false);
         }
@@ -85,7 +93,7 @@ const ShopPage = () => {
         if (type === 'subscription' && profile?.is_premium) return;
 
         const checkoutData = type === 'subscription'
-            ? { id: 'premium', amount: 1, price: planType === 'monthly' ? 400 : 4000, label: `সুপার মেম্বারশিপ (${planType === 'monthly' ? 'মাসিক' : 'বার্ষিক'})` }
+            ? { id: 'premium', amount: 1, price: planType === 'monthly' ? 99 : 999, label: `Queen Bee Mode (${planType === 'monthly' ? 'মাসিক' : 'বার্ষিক'})` }
             : data;
 
         setShowCheckout({ type, data: checkoutData });
@@ -102,18 +110,18 @@ const ShopPage = () => {
                 result = await shopService.buyGems(user.id, data.amount, data.price, data.id);
                 if (result.success) {
                     setProfile(prev => ({ ...prev, gems: result.new_gems }));
-                    toast.success(`${data.amount}টি জেম যোগ করা হয়েছে!`);
+                    toast.success(`${data.amount}টি জেম যোগ করা হয়েছে!`);
                 }
             } else if (type === 'subscription') {
                 result = await shopService.subscribeToPremium(user.id, planType, data.price);
                 if (result.success) {
                     await fetchProfile();
-                    toast.success(`অভিনন্দন! আপনি এখন সুপার সাবস্ক্রাইবার।`);
+                    toast.success(`অভিনন্দন! আপনি এখন Queen Bee! 👑`);
                 }
             }
             setShowCheckout(null);
         } catch (err) {
-            toast.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।');
+            toast.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।');
         } finally {
             setProcessing(false);
         }
@@ -136,69 +144,74 @@ const ShopPage = () => {
                             </span>
                         </div>
                         <header className={styles.header}>
-                            <p>{t('shop_subtitle')}</p>
+                            <p>মৌচাকের রাজা বা রানী হোন! আনলিমিটেড মধু নিয়ে শিখতে থাকুন 🐝</p>
                             <div className={styles.headerDivider}></div>
                         </header>
 
 
-                        {/* Membership Section */}
+                        {/* Queen Bee Membership Section */}
                         <section className={styles.section}>
                             {profile?.is_premium ? (
                                 <div className={styles.premiumCard}>
                                     <div className={styles.premiumBadge}>
-                                        <Shield size={14} fill="#fff" />
-                                        {t('super_membership')}
+                                        <span>👑</span>
+                                        Queen Bee Mode সক্রিয়
                                     </div>
                                     <div className={styles.superContent}>
                                         <h2 className={`${styles.superTitle} ${styles.premiumTitle}`}>
-                                            {t('active_super')}
+                                            🎉 আপনি এখন Queen Bee!
                                         </h2>
-                                        <p className={styles.convertSub} style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '16px' }}>
-                                            {t('super_desc')}
+                                        <p className={styles.convertSub} style={{ color: 'rgba(255,255,255,0.75)', marginBottom: '20px' }}>
+                                            আনলিমিটেড Honey Drop এবং অ্যাড-ফ্রি শিক্ষার অভিজ্ঞতা উপভোগ করুন।
                                         </p>
-                                        <div className={styles.superFeatures}>
-                                            <div className={styles.feature}>
-                                                <div className={styles.featureIcon} style={{ background: '#ffa202' }}><Heart size={12} fill="#fff" /></div>
-                                                আনলিমিটেড হার্টস
-                                            </div>
-                                            <div className={styles.feature}>
-                                                <div className={styles.featureIcon} style={{ background: '#ffa202' }}><Star size={12} fill="#fff" /></div>
-                                                অ্যাড-ফ্রি লার্নিং
-                                            </div>
+                                        <div className={styles.queenBeeFeatureGrid}>
+                                            {QUEEN_BEE_FEATURES.map((f, i) => (
+                                                <div key={i} className={styles.queenBeeFeatureItem}>
+                                                    <span className={styles.queenBeeFeatureEmoji}>{f.emoji}</span>
+                                                    <span>{f.text}</span>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
                                     <div className={styles.superActions}>
                                         <div className={styles.premiumStatus}>
                                             <Sparkles color="#ffa202" size={32} />
-                                            <span style={{ color: '#ffa202', fontWeight: 900 }}>প্রিমিয়াম স্ট্যাটাস</span>
+                                            <span style={{ color: '#ffa202', fontWeight: 900 }}>প্রিমিয়াম স্ট্যাটাস সক্রিয় আছে</span>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
-                                <div className={styles.superCard}>
-                                    <div className={styles.superContent}>
-                                        <h2 className={styles.superTitle}>{t('super_membership')}</h2>
-                                        <div className={styles.superFeatures}>
-                                            <div className={styles.feature}>
-                                                <div className={styles.featureIcon}><Heart size={14} fill="#fff" /></div>
-                                                {t('unlimited_hearts')}
-                                            </div>
-                                            <div className={styles.feature}>
-                                                <div className={styles.featureIcon}><Star size={14} fill="#fff" /></div>
-                                                {t('ad_free')}
-                                            </div>
-                                            <div className={styles.feature}>
-                                                <div className={styles.featureIcon}><Zap size={14} fill="#fff" /></div>
-                                                {t('quick_progress')}
-                                            </div>
-                                            <div className={styles.feature}>
-                                                <div className={styles.featureIcon}><Shield size={14} fill="#fff" /></div>
-                                                {t('special_badge')}
-                                            </div>
+                                <div className={styles.queenBeeCard}>
+                                    {/* Decorative hexagon pattern */}
+                                    <div className={styles.hexPattern} aria-hidden="true">
+                                        {['⬡', '⬡', '⬡', '⬡', '⬡', '⬡'].map((h, i) => (
+                                            <span key={i} className={styles.hexItem} style={{ opacity: 0.08 + i * 0.02, fontSize: `${28 + i * 6}px` }}>{h}</span>
+                                        ))}
+                                    </div>
+
+                                    <div className={styles.queenBeeHeader}>
+                                        <div className={styles.queenBeeCrown}>👑</div>
+                                        <div>
+                                            <h2 className={styles.queenBeeTitle}>Queen Bee Mode</h2>
+                                            <p className={styles.queenBeeTagline}>মৌচাকের রানী হোন!</p>
                                         </div>
                                     </div>
 
-                                    <div className={styles.superActions}>
+                                    {/* Features List */}
+                                    <div className={styles.queenBeeFeatureList}>
+                                        {QUEEN_BEE_FEATURES.map((feature, idx) => (
+                                            <div key={idx} className={styles.queenBeeFeatureRow}>
+                                                <div className={styles.featureEmojiBox}>
+                                                    {feature.emoji === '🍯' ? <HoneyDropIcon size={20} /> : feature.emoji}
+                                                </div>
+                                                <span className={styles.featureText}>{feature.text}</span>
+                                                <Check size={16} color="#ffa202" strokeWidth={3} className={styles.featureCheck} />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Plan Toggle + CTA */}
+                                    <div className={styles.queenBeePricing}>
                                         <div className={styles.planToggle}>
                                             <button
                                                 className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
@@ -214,23 +227,28 @@ const ShopPage = () => {
                                                 <span className={styles.discountBadge}>{t('discount')}</span>
                                             </button>
                                         </div>
+
                                         <button
-                                            className={styles.subscribeBtn}
+                                            className={styles.queenBeeCtaBtn}
                                             onClick={() => handlePurchase('subscription')}
                                             disabled={processing}
                                         >
-                                            {planType === 'monthly' ? '৳ ৪০০ / মাস' : '৳ ৪০০০ / বছর'}
+                                            <span>👑</span>
+                                            {planType === 'monthly' ? '৯৯ টাকায় Queen Bee Mode শুরু করুন' : '৯৯৯ টাকায় বার্ষিক সদস্যপদ নিন'}
                                         </button>
+                                        <p className={styles.queenBeeCtaSub}>
+                                            {planType === 'monthly' ? 'মাত্র ৳৯৯/মাস • যেকোনো সময় বাতিল করুন' : 'মাত্র ৳৯৯৯/বছর • ২ মাস বিনামূল্যে!'}
+                                        </p>
                                     </div>
                                 </div>
                             )}
                         </section>
 
-                        {/* Gem to Heart Converter Section */}
+                        {/* Honey Drop (Gem to Heart) Converter Section */}
                         <section className={styles.section}>
                             <h2 className={styles.sectionTitle}>
-                                <Zap size={24} color="#ffa202" fill="#ffa202" />
-                                {t('gem_exchange')}
+                                <HoneyDropIcon size={28} />
+                                Honey Drop রিফিল করুন
                             </h2>
                             <div className={styles.convertCard}>
                                 <div className={styles.convertLeft}>
@@ -254,7 +272,7 @@ const ShopPage = () => {
 
                                 <div className={styles.convertRight}>
                                     <div className={styles.heartResultMinimal}>
-                                        <Heart size={28} color="#ff4b4b" fill="#ff4b4b" />
+                                        <HoneyDropIcon size={28} />
                                         <span>+{calculatedHearts}</span>
                                     </div>
                                     <button
@@ -286,7 +304,7 @@ const ShopPage = () => {
                                         className={styles.packCard}
                                         onClick={() => handlePurchase('gems', pack)}
                                     >
-                                        {pack.popular && <span className={styles.badge}>জনপ্রিয়</span>}
+                                        {pack.popular && <span className={styles.badge}>জনপ্রিয়</span>}
                                         {pack.best && <span className={styles.badge} style={{ background: '#58cc02' }}>সেরা মূল্য</span>}
 
                                         <div className={styles.packIcon}>{pack.icon}</div>

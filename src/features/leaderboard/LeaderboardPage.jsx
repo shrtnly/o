@@ -106,7 +106,7 @@ const LeaderboardPage = () => {
 
                                 <div className={styles.introGrid}>
                                     <div className={styles.introCard}>
-                                        <div className={styles.introIconBox} style={{ backgroundColor: 'rgba(28, 176, 246, 0.1)', color: '#1cb0f6' }}>
+                                        <div className={styles.introIconBox} style={{ backgroundColor: 'rgba(255, 153, 2, 0.1)', color: '#ff9902' }}>
                                             <Zap size={32} />
                                         </div>
                                         <h3>কিভাবে XP অর্জন করবেন?</h3>
@@ -114,11 +114,11 @@ const LeaderboardPage = () => {
                                     </div>
 
                                     <div className={styles.introCard}>
-                                        <div className={styles.introIconBox} style={{ backgroundColor: 'rgba(88, 204, 2, 0.1)', color: '#58cc02' }}>
+                                        <div className={styles.introIconBox} style={{ backgroundColor: 'rgba(255, 153, 2, 0.1)', color: '#ff9902' }}>
                                             <Trophy size={32} />
                                         </div>
-                                        <h3>টীমের পরিচিতি</h3>
-                                        <p>BeeLesson-এ ৪টি টীম আছে: সিলভার, গোল্ড, প্ল্যাটিনাম এবং ডায়মন্ড। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী টীমে উন্নীত হয়।</p>
+                                        <h3>বী-র পরিচিতি</h3>
+                                        <p>BeeLesson-এ ৪টি বী আছে: সিলভার, গোল্ড, প্ল্যাটিনাম এবং ডায়মন্ড। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী বী-তে উন্নীত হয়।</p>
                                     </div>
 
                                     <div className={styles.introCard}>
@@ -176,16 +176,16 @@ const LeaderboardPage = () => {
                                     return (
                                         <div className={styles.progressSection}>
                                             <div className={styles.progressTitle}>
-                                                <h1>{currentTierInfo?.nameBn || ''} টীম</h1>
+                                                <h1>{currentTierInfo?.nameBn || ''} বী</h1>
                                                 <p>
                                                     {nextLevel
                                                         ? (
                                                             <>
-                                                                {TIERS.find(t => t.id === nextLevel.level)?.nameBn || 'Next'} লার্নার টীমে যোগ দিতে আপনার দরকার
+                                                                {TIERS.find(t => t.id === nextLevel.level)?.nameBn || 'Next'} লার্নার বী-তে যোগ দিতে আপনার দরকার
                                                                 <span className={styles.xpHighlight}> +{progress.remaining} XP</span>
                                                             </>
                                                         )
-                                                        : 'আপনি ডায়মন্ড লার্নার টীমে পৌঁছে গেছেন!'}
+                                                        : 'আপনি ডায়মন্ড লার্নার বী-তে পৌঁছে গেছেন!'}
                                                 </p>
                                             </div>
                                         </div>
@@ -237,7 +237,7 @@ const LeaderboardPage = () => {
                                                 {leaderboardData.length === 0 ? (
                                                     <div className={styles.emptyState}>
                                                         <Award size={64} color="#37464f" />
-                                                        <p>এই টীমে এখনো কোনো শিক্ষার্থী নেই। পড়াশোনা শুরু করুন এবং জায়গা করে নিন!</p>
+                                                        <p>এই বী-তে এখনো কোনো শিক্ষার্থী নেই। পড়াশোনা শুরু করুন এবং জায়গা করে নিন!</p>
                                                     </div>
                                                 ) : (
                                                     leaderboardData.map((item, index) => (
@@ -280,7 +280,7 @@ const LeaderboardPage = () => {
                                                                         onClick={(e) => {
                                                                             e.stopPropagation();
                                                                             const actualRank = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
-                                                                            const text = `I'm ranked #${actualRank} in the ${activeTier} Team on O-sekha! Can you beat my ${item.xp} XP?`;
+                                                                            const text = `I'm ranked #${actualRank} in the ${activeTier} Bee on O-sekha! Can you beat my ${item.xp} XP?`;
                                                                             if (navigator.share) {
                                                                                 navigator.share({
                                                                                     title: 'O-sekha Leaderboard',

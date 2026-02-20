@@ -54,11 +54,11 @@
 
 .progressFill {
     height: 100%;
-    background: #2ecc71;
+    background: #ff9902;
     border-radius: 99px;
     transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
-    box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+    box-shadow: 0 0 10px rgba(255, 153, 2, 0.5);
 }
 
 .progressFill::after {
@@ -81,22 +81,22 @@
 }
 
 .heartCount {
-    font-size: 1.25rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    color: #ff4b4b;
+    color: #ff9902;
 }
 
 .refillTimer {
     display: flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    color: #2ecc71;
-    background: rgba(46, 204, 113, 0.1);
+    color: #ff9902;
+    background: rgba(255, 153, 2, 0.1);
     padding: 4px 8px;
     border-radius: 8px;
-    border: 1px solid rgba(46, 204, 113, 0.2);
+    border: 1px solid rgba(255, 153, 2, 0.2);
 }
 
 
@@ -151,7 +151,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #2ecc71;
+    color: #ff9902;
     font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
@@ -162,7 +162,7 @@
 .labelSquare {
     width: 12px;
     height: 12px;
-    background-color: #2ecc71;
+    background-color: #ff9902;
     border-radius: 2px;
 }
 
@@ -196,7 +196,7 @@
 }
 
 .questionIcon {
-    color: #2ecc71;
+    color: #ff9902;
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -273,14 +273,14 @@
 
 /* Answer States */
 .correct {
-    border-color: #2ecc71 !important;
-    background-color: rgba(46, 204, 113, 0.05) !important;
-    box-shadow: 0 4px 0 #27ae60 !important;
+    border-color: #ff9902 !important;
+    background-color: rgba(255, 153, 2, 0.05) !important;
+    box-shadow: 0 4px 0 #e68a00 !important;
 }
 
 .correct .optionIndex {
-    background-color: #2ecc71 !important;
-    border-color: #2ecc71 !important;
+    background-color: #ff9902 !important;
+    border-color: #ff9902 !important;
     color: #fff !important;
 }
 
@@ -306,7 +306,7 @@
 }
 
 .correctIcon {
-    color: #2ecc71;
+    color: #ff9902;
 }
 
 .incorrectIcon {
@@ -351,21 +351,21 @@
 }
 
 .checkBtn:not(:disabled) {
-    background-color: #2ecc71;
+    background-color: #ff9902;
     color: #fff;
     cursor: pointer;
-    box-shadow: 0 4px 0 #27ae60;
+    box-shadow: 0 4px 0 #e68a00;
 }
 
 .checkBtn:not(:disabled):active {
     transform: translateY(2px);
-    box-shadow: 0 2px 0 #27ae60;
+    box-shadow: 0 2px 0 #e68a00;
 }
 
 /* Result Overlay Footer */
 .footerCorrect {
     background-color: #0b1114;
-    border-top: 2px solid #16422b;
+    border-top: 2px solid #422b16;
 }
 
 .footerIncorrect {
@@ -399,8 +399,8 @@
 }
 
 .footerCorrect .resultStatus {
-    background: #0d1d14;
-    border-color: #16422b;
+    background: #1d140d;
+    border-color: #422b16;
 }
 
 .footerIncorrect .resultStatus {
@@ -422,7 +422,7 @@
 
 .footerCorrect .statusIcon,
 .footerCorrect .statusHeader h3 {
-    color: #58cc02;
+    color: #ff9902;
 }
 
 .footerIncorrect .statusIcon,
@@ -481,9 +481,9 @@
 }
 
 .footerCorrect .continueBtn {
-    background-color: #2ecc71;
+    background-color: #ff9902;
     color: #fff;
-    box-shadow: 0 6px 0 #27ae60;
+    box-shadow: 0 6px 0 #e68a00;
 }
 
 .footerIncorrect .continueBtn {
@@ -502,7 +502,7 @@
 }
 
 .footerCorrect .continueBtn:active {
-    box-shadow: 0 2px 0 #27ae60;
+    box-shadow: 0 2px 0 #e68a00;
 }
 
 .footerIncorrect .continueBtn:active {
@@ -554,10 +554,10 @@
 
 .chartFill {
     fill: none;
-    stroke: #58cc02;
+    stroke: #ff9902;
     stroke-width: 8;
     stroke-linecap: round;
-    filter: drop-shadow(0 0 8px rgba(88, 204, 2, 0.3));
+    filter: drop-shadow(0 0 8px rgba(255, 153, 2, 0.3));
 }
 
 .chartText {
@@ -579,7 +579,7 @@
 .chartText p {
     font-size: 0.75rem;
     font-weight: 800;
-    color: #58cc02;
+    color: #ff9902;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-top: 4px;
@@ -633,7 +633,7 @@
 
 .finishBtn {
     width: 100%;
-    background-color: #2ecc71;
+    background-color: #ff9902;
     color: #fff;
     border: none;
     border-radius: 20px;
@@ -641,14 +641,14 @@
     font-size: 1.15rem;
     font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 6px 0 #27ae60;
+    box-shadow: 0 6px 0 #e68a00;
     transition: all 0.1s;
     text-transform: uppercase;
 }
 
 .finishBtn:active {
     transform: translateY(4px);
-    box-shadow: 0 2px 0 #27ae60;
+    box-shadow: 0 2px 0 #e68a00;
 }
 
 /* Loading */
@@ -664,7 +664,7 @@
     width: 40px;
     height: 40px;
     border: 4px solid #37464f;
-    border-top-color: #2ecc71;
+    border-top-color: #ff9902;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }

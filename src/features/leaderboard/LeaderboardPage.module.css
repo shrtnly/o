@@ -112,7 +112,7 @@
 
 .leaderboardCard {
     background-color: #1a272d;
-    border: 2px solid #37464f;
+    border: 2px solid rgba(255, 153, 2, 0.2);
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -124,7 +124,7 @@
     grid-template-columns: 60px 180px 1fr 180px;
     padding: 10px 24px;
     background-color: #233138;
-    border-bottom: 2px solid #37464f;
+    border-bottom: 2px solid rgba(255, 153, 2, 0.2);
     font-weight: 800;
     color: #afafaf;
     text-transform: uppercase;
@@ -137,17 +137,30 @@
     grid-template-columns: 60px 180px 1fr 180px;
     padding: 10px 24px;
     align-items: center;
-    border-bottom: 1px solid #37464f;
+    border-bottom: 1px solid rgba(255, 153, 2, 0.1);
     transition: all 0.2s ease;
 }
 
 .row:hover {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: rgba(255, 153, 2, 0.04);
 }
 
 .currentUserRow {
-    background-color: rgba(28, 176, 246, 0.1);
-    border-left: 4px solid #1cb0f6;
+    background: linear-gradient(90deg, rgba(255, 153, 2, 0.2) 0%, rgba(255, 153, 2, 0.05) 100%);
+    border-left: 5px solid #ff9902;
+    box-shadow: inset 2px 0 15px rgba(255, 153, 2, 0.08);
+}
+
+.currentUserRow .userName {
+    color: #ff9902;
+}
+
+.currentUserRow .xpValue {
+    color: #ff9902;
+}
+
+.currentUserRow .rankNumber {
+    color: #ff9902;
 }
 
 .rankCol {
@@ -159,7 +172,7 @@
 .rankNumber {
     font-size: 1.2rem;
     font-weight: 900;
-    color: #37464f;
+    color: #fff;
 }
 
 .userCol {
@@ -194,7 +207,7 @@
     font-size: 1.5rem;
     font-weight: 900;
     color: #fff;
-    background: linear-gradient(135deg, #1cb0f6 0%, #0c96e0 100%);
+    background: linear-gradient(135deg, #ff9902 0%, #e68a00 100%);
 }
 
 .userInfo {
@@ -248,9 +261,9 @@
 .shareIconBtn {
     position: absolute;
     right: 12px;
-    background: rgba(28, 176, 246, 0.1);
-    border: 1.5px solid #1cb0f6;
-    color: #1cb0f6;
+    background: rgba(255, 153, 2, 0.1);
+    border: 1.5px solid #ff9902;
+    color: #ff9902;
     width: 32px;
     height: 32px;
     border-radius: 8px;
@@ -263,10 +276,10 @@
 }
 
 .shareIconBtn:hover {
-    background: #1cb0f6;
+    background: #ff9902;
     color: #fff;
     transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(28, 176, 246, 0.4);
+    box-shadow: 0 0 10px rgba(255, 153, 2, 0.4);
 }
 
 .shareIconBtn:active {
@@ -353,7 +366,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 2px solid #37464f;
+    border-top: 2px solid rgba(255, 153, 2, 0.2);
     width: 100%;
 }
 
@@ -383,7 +396,7 @@
 
 .pageBtn {
     background-color: #1a272d;
-    border: 2px solid #37464f;
+    border: 2px solid rgba(255, 153, 2, 0.3);
     color: #fff;
     width: 40px;
     height: 40px;
@@ -513,7 +526,7 @@
 }
 
 .startLearningBtn {
-    background-color: #1cb0f6;
+    background-color: #ff9902;
     color: #fff;
     border: none;
     padding: 16px 48px;
@@ -521,13 +534,13 @@
     font-size: 1.1rem;
     font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 5px 0 #1899d6;
+    box-shadow: 0 5px 0 #e68a00;
     transition: all 0.1s;
 }
 
 .startLearningBtn:active {
     transform: translateY(3px);
-    box-shadow: 0 2px 0 #1899d6;
+    box-shadow: 0 2px 0 #e68a00;
 }
 
 @media (max-width: 1000px) {
@@ -601,7 +614,7 @@
 }
 
 .xpHighlight {
-    color: #2ecc71;
+    color: #ff9902;
     font-weight: 900;
     font-size: 1.2rem;
 }
@@ -668,8 +681,8 @@
 
 .progressBar {
     height: 100%;
-    background: linear-gradient(90deg, #2ecc71 0%, #27ae60 100%);
+    background: linear-gradient(90deg, #ff9902 0%, #e68a00 100%);
     border-radius: 10px;
     transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+    box-shadow: 0 0 10px rgba(255, 153, 2, 0.3);
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Heart, Gem, Gift, PackageOpen } from 'lucide-react';
+import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Gem, Gift, PackageOpen } from 'lucide-react';
 
 
 import { supabase } from '../../lib/supabaseClient';
@@ -313,7 +313,7 @@ const LearningPage = () => {
     const activeChapterId = firstIncompleteChapter?.id || (allChapters.length > 0 ? allChapters[allChapters.length - 1].id : null);
 
     const UNIT_COLORS = [
-        { bg: '#2ecc71', border: '#27ae60' }, // Green (Fixed for Unit 1)
+        { bg: '#ff9902', border: '#e68a00' }, // Bee Orange (Sync with theme)
         { bg: '#3498db', border: '#2980b9' }, // Blue
         { bg: '#9b59b6', border: '#8e44ad' }, // Purple
         { bg: '#f1c40f', border: '#f39c12' }, // Yellow

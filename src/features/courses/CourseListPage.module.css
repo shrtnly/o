@@ -57,7 +57,7 @@
 }
 
 .highlight {
-    color: #ff9902;
+    color: #f1c40f;
 }
 
 .subtitle {
@@ -99,8 +99,8 @@
 
 .searchWrapper input:focus {
     outline: none;
-    border-color: #ff9902;
-    box-shadow: 0 0 0 4px rgba(255, 153, 2, 0.1);
+    border-color: #f1c40f;
+    box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
 }
 
 .sectionHeader {
@@ -147,13 +147,13 @@
 }
 
 .dropdownToggle:hover {
-    border-color: #ff9902;
-    background-color: rgba(255, 153, 2, 0.05);
+    border-color: #f1c40f;
+    background-color: rgba(241, 196, 15, 0.05);
 }
 
 .dropdownToggle.isOpen {
-    border-color: #ff9902;
-    box-shadow: 0 0 0 4px rgba(255, 153, 2, 0.1);
+    border-color: #f1c40f;
+    box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
 }
 
 .chevron {
@@ -207,8 +207,8 @@
 }
 
 .dropdownItem.active {
-    background-color: rgba(255, 153, 2, 0.1);
-    color: #ff9902;
+    background-color: rgba(241, 196, 15, 0.1);
+    color: #f1c40f;
     font-weight: 700;
 }
 
@@ -219,9 +219,9 @@
 .categoryTitle {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ff9902;
+    color: #f1c40f;
     padding-left: 12px;
-    border-left: 4px solid #ff9902;
+    border-left: 4px solid #f1c40f;
 }
 
 .grid {

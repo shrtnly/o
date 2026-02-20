@@ -285,7 +285,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             <div className={styles.card} onClick={() => profile?.xp >= 100 && navigate('/leaderboard')} style={{ cursor: profile?.xp >= 100 ? 'pointer' : 'default' }}>
                 <div className={styles.cardHeader}>
                     <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Trophy size={18} color="#ff9902" fill="rgba(255, 153, 2, 0.2)" strokeWidth={2.5} />
+                        <Trophy size={18} color="#f1c40f" fill="rgba(241, 196, 15, 0.2)" strokeWidth={2.5} />
                         {profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}
                     </h3>
                     {profile?.xp >= 100 && (

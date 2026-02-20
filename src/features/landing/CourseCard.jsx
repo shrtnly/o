@@ -17,7 +17,7 @@ const CourseCard = ({ course, isEnrolled }) => {
         <div className={styles.card} onClick={handleClick}>
             {isEnrolled && (
                 <div className={styles.cardBadge}>
-                    <CheckCircle2 size={22} fill="#ff9902" color="#fff" />
+                    <CheckCircle2 size={22} fill="#f1c40f" color="#fff" />
                 </div>
             )}
             <div className={styles.imageWrapper}>

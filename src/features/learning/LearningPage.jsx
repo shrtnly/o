@@ -313,7 +313,7 @@ const LearningPage = () => {
     const activeChapterId = firstIncompleteChapter?.id || (allChapters.length > 0 ? allChapters[allChapters.length - 1].id : null);
 
     const UNIT_COLORS = [
-        { bg: '#ff9902', border: '#e68a00' }, // Bee Orange (Sync with theme)
+        { bg: '#f1c40f', border: '#d4ac0d' }, // Honey Golden (Bee Theme)
         { bg: '#3498db', border: '#2980b9' }, // Blue
         { bg: '#9b59b6', border: '#8e44ad' }, // Purple
         { bg: '#f1c40f', border: '#f39c12' }, // Yellow

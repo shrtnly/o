@@ -50,10 +50,10 @@
 }
 
 .navItemActive {
-    background-color: rgba(255, 153, 2, 0.05) !important;
-    color: #ff9902 !important;
-    border: 2px solid #ff9902 !important;
-    border-bottom: 4px solid #e68a00 !important;
+    background-color: rgba(241, 196, 15, 0.05) !important;
+    color: #f1c40f !important;
+    border: 2px solid #f1c40f !important;
+    border-bottom: 4px solid #d4ac0d !important;
 }
 
 .navItemActive:hover {

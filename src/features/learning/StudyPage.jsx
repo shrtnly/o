@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle } from 'lucide-react';
+import { X, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle, Infinity } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -25,6 +25,7 @@ const StudyPage = () => {
         deductHeart,
         canAnswer,
         needsRefill,
+        isPremium,
         loading: heartsLoading
     } = useHeartRefill(user?.id);
 
@@ -253,7 +254,13 @@ const StudyPage = () => {
                             isEmpty={hearts === 0 && refillTimeDisplay}
                         />
                     </motion.div>
-                    {!(hearts === 0 && refillTimeDisplay) && <span className={styles.heartCount}>{hearts}</span>}
+                    {!(hearts === 0 && refillTimeDisplay) && (
+                        isPremium ? (
+                            <Infinity size={24} strokeWidth={3} style={{ marginLeft: '4px', color: '#ff4b4b' }} />
+                        ) : (
+                            <span className={styles.heartCount}>{hearts}</span>
+                        )
+                    )}
                     {needsRefill && refillTimeDisplay && (
                         <span className={styles.refillTimer}>
                             <Clock size={12} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Gem, Zap, Check, Shield, Star, ShoppingBag,
+    Zap, Check, Shield, Star, ShoppingBag,
     Loader2, Sparkles, CreditCard, ChevronRight,
     Minus, Plus, ArrowRightLeft, TrendingUp, Award, Settings
 } from 'lucide-react';
@@ -12,13 +12,14 @@ import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './ShopPage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 import HoneyDropIcon from '../../components/HoneyDropIcon';
+import PollenIcon from '../../components/PollenIcon';
 import { toast } from 'sonner';
 
 const GEM_PACKS = [
-    { id: 'gem_p1', amount: 500, price: 100, label: 'জেম পকেট', icon: <Gem size={40} color="#1cb0f6" fill="#1cb0f6" /> },
-    { id: 'gem_p2', amount: 1200, price: 200, label: 'জেম চেস্ট', icon: <div className={styles.gemStack}><Gem size={32} color="#1cb0f6" fill="#1cb0f6" /><Gem size={32} color="#1cb0f6" fill="#1cb0f6" /></div>, popular: true },
-    { id: 'gem_p3', amount: 3000, price: 500, label: 'জেম কার্ট', icon: <ShoppingBag size={48} color="#1cb0f6" strokeWidth={1.5} /> },
-    { id: 'gem_p4', amount: 7500, price: 1000, label: 'জেম ভল্ট', icon: <Award size={48} color="#1cb0f6" />, best: true },
+    { id: 'gem_p1', amount: 500, price: 100, labelKey: 'gem_pocket', icon: <PollenIcon size={40} /> },
+    { id: 'gem_p2', amount: 1200, price: 200, labelKey: 'gem_chest', icon: <div className={styles.gemStack}><PollenIcon size={32} /><PollenIcon size={32} /></div>, popular: true },
+    { id: 'gem_p3', amount: 3000, price: 500, labelKey: 'gem_cart', icon: <PollenIcon size={48} /> },
+    { id: 'gem_p4', amount: 7500, price: 1000, labelKey: 'gem_vault', icon: <PollenIcon size={54} />, best: true },
 ];
 
 const QUEEN_BEE_FEATURES = [
@@ -66,7 +67,7 @@ const ShopPage = () => {
 
     const handleConvertAction = async () => {
         if (!profile || profile.gems < gemToConvert) {
-            toast.error('আপনার কাছে যথেষ্ট জেম নেই।');
+            toast.error(t('insufficient_gems'));
             return;
         }
 
@@ -79,7 +80,8 @@ const ShopPage = () => {
                     gems: result.new_gems,
                     hearts: result.new_hearts
                 }));
-                toast.success(`${calculatedHearts}টি নতুন Honey Drop যোগ করা হয়েছে! 🍯`);
+                const unit = language === 'bn' ? 'টি' : '';
+                toast.success(`${calculatedHearts}${unit} ${language === 'bn' ? 'নতুন Honey Drop যোগ করা হয়েছে!' : 'new Honey Drops have been added!'} 🍯`);
             }
         } catch (err) {
             toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
@@ -93,8 +95,8 @@ const ShopPage = () => {
         if (type === 'subscription' && profile?.is_premium) return;
 
         const checkoutData = type === 'subscription'
-            ? { id: 'premium', amount: 1, price: planType === 'monthly' ? 99 : 999, label: `Queen Bee Mode (${planType === 'monthly' ? 'মাসিক' : 'বার্ষিক'})` }
-            : data;
+            ? { id: 'premium', amount: 1, price: planType === 'monthly' ? 99 : 999, label: `Queen Bee Mode (${planType === 'monthly' ? t('monthly') : t('yearly')})` }
+            : { ...data, label: t(data.labelKey) };
 
         setShowCheckout({ type, data: checkoutData });
     };
@@ -110,7 +112,7 @@ const ShopPage = () => {
                 result = await shopService.buyGems(user.id, data.amount, data.price, data.id);
                 if (result.success) {
                     setProfile(prev => ({ ...prev, gems: result.new_gems }));
-                    toast.success(`${data.amount}টি জেম যোগ করা হয়েছে!`);
+                    toast.success(t('gems_added').replace('টি', `${data.amount}টি`));
                 }
             } else if (type === 'subscription') {
                 result = await shopService.subscribeToPremium(user.id, planType, data.price);
@@ -257,7 +259,7 @@ const ShopPage = () => {
                                             <Minus size={20} />
                                         </button>
                                         <div className={styles.gemInputDisplay}>
-                                            <Gem size={24} color="#1cb0f6" fill="#1cb0f6" />
+                                            <PollenIcon size={24} />
                                             <span>{gemToConvert}</span>
                                         </div>
                                         <button className={styles.stepBtn} onClick={handleIncrement}>
@@ -291,10 +293,10 @@ const ShopPage = () => {
                             </div>
                         </section>
 
-                        {/* Gem Packs Section */}
+                        {/* Pollen Packs Section */}
                         <section className={styles.section}>
                             <h2 className={styles.sectionTitle}>
-                                <ShoppingBag size={24} color="#1cb0f6" />
+                                <PollenIcon size={28} />
                                 {t('gem_packs')}
                             </h2>
                             <div className={styles.packsGrid}>
@@ -309,7 +311,7 @@ const ShopPage = () => {
 
                                         <div className={styles.packIcon}>{pack.icon}</div>
                                         <div className={styles.packAmount}>{pack.amount}</div>
-                                        <div className={styles.packName}>{pack.label}</div>
+                                        <div className={styles.packName}>{t(pack.labelKey)}</div>
                                         <div className={styles.priceTag}>৳ {pack.price}</div>
                                     </div>
                                 ))}

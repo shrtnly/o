@@ -7,6 +7,7 @@ import { courseService } from '../../services/courseService';
 import { storageService } from '../../services/storageService';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import HoneyDropIcon from '../../components/HoneyDropIcon';
+import PollenIcon from '../../components/PollenIcon';
 import InlineLoader from '../../components/ui/InlineLoader';
 import {
     User,
@@ -213,7 +214,7 @@ const ProfilePage = () => {
     const getTransactionIcon = (type) => {
         switch (type) {
             case 'xp_earned': return <Zap size={16} color="#ffa502" />;
-            case 'gem_earned': return <Gem size={16} color="#0fbcf9" />;
+            case 'gem_earned': return <PollenIcon size={18} />;
             case 'heart_lost': return <HoneyDropIcon size={18} />;
             case 'heart_gained': return <HoneyDropIcon size={18} />;
             default: return <Zap size={16} />;
@@ -304,12 +305,12 @@ const ProfilePage = () => {
                                     </div>
                                 </div>
                                 <div className={styles.statItem}>
-                                    <div className={styles.statIcon} style={{ color: '#0fbcf9', background: 'rgba(15, 188, 249, 0.1)' }}>
-                                        <Gem size={20} />
+                                    <div className={styles.statIcon} style={{ color: '#ffc800', background: 'rgba(255, 200, 0, 0.1)' }}>
+                                        <PollenIcon size={20} />
                                     </div>
                                     <div className={styles.statContent}>
                                         <span className={styles.statValue}>{profile?.gems || 0}</span>
-                                        <span className={styles.statLabel}>{language === 'bn' ? 'জেম' : 'Gems'}</span>
+                                        <span className={styles.statLabel}>{t('pollen')}</span>
                                     </div>
                                 </div>
                                 <div className={styles.statItem}>
@@ -449,8 +450,8 @@ const ProfilePage = () => {
                                 {/* Buzz Streak */}
                                 <div className={styles.buzzStreakRow}>
                                     <span className={styles.buzzStreakIcon}>⚡</span>
-                                    <span className={styles.buzzStreakLabel}>Buzz Streak</span>
-                                    <span className={styles.buzzStreakValue}>{streak?.current_streak || 0} Days</span>
+                                    <span className={styles.buzzStreakLabel}>{t('buzz_streak')}</span>
+                                    <span className={styles.buzzStreakValue}>{streak?.current_streak || 0} {t('days')}</span>
                                 </div>
                             </div>
 

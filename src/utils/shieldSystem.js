@@ -6,8 +6,8 @@
 
 export const SHIELD_LEVELS = {
     SILVER: {
-        name: 'Silver Shield',
-        nameBangla: 'সিলভার শিল্ড',
+        name: 'Scout Bee',
+        nameBangla: 'স্কাউট বী',
         minXP: 0,
         maxXP: 2499,
         color: '#8B7355',
@@ -18,8 +18,8 @@ export const SHIELD_LEVELS = {
         winGradient: 'linear-gradient(45deg, #4A3728 0%, #8B7355 100%)'
     },
     GOLD: {
-        name: 'Gold Shield',
-        nameBangla: 'গোল্ড শিল্ড',
+        name: 'Elite Drone',
+        nameBangla: 'এলিট ড্রোন',
         minXP: 2500,
         maxXP: 4999,
         color: '#FFD700',
@@ -30,8 +30,8 @@ export const SHIELD_LEVELS = {
         winGradient: 'linear-gradient(45deg, #B8860B 0%, #FFD700 100%)'
     },
     PLATINUM: {
-        name: 'Platinum Shield',
-        nameBangla: 'প্ল্যাটিনাম শিল্ড',
+        name: 'Hive Master',
+        nameBangla: 'হাইভ মাস্টার',
         minXP: 5000,
         maxXP: 9999,
         color: '#5B7C99',
@@ -42,8 +42,8 @@ export const SHIELD_LEVELS = {
         winGradient: 'linear-gradient(45deg, #374151 0%, #5B7C99 100%)'
     },
     DIAMOND: {
-        name: 'Diamond Shield',
-        nameBangla: 'ডায়মন্ড শিল্ড',
+        name: 'Legendary Queen',
+        nameBangla: 'লিজেন্ডারি কুইন',
         minXP: 10000,
         maxXP: Infinity,
         color: '#B9F2FF',
@@ -74,7 +74,7 @@ export const getShieldLevel = (xp = 0) => {
  */
 export const getLevelProgress = (xp = 0) => {
     const currentLevel = getShieldLevel(xp);
-    
+
     // If max level, return 100%
     if (currentLevel.level === 'DIAMOND') {
         return {
@@ -108,7 +108,7 @@ export const getLevelProgress = (xp = 0) => {
 const getNextLevel = (currentLevel) => {
     const levels = ['SILVER', 'GOLD', 'PLATINUM', 'DIAMOND'];
     const currentIndex = levels.indexOf(currentLevel);
-    
+
     if (currentIndex === -1 || currentIndex === levels.length - 1) {
         return null;
     }

@@ -70,11 +70,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0px;
-    margin-bottom: 32px;
+    gap: 4px;
+    margin-bottom: 50px;
     overflow-x: auto;
-    padding: 0 0 10px;
+    padding: 25px 0;
     scrollbar-width: none;
+    position: relative;
 }
 
 .tabs::-webkit-scrollbar {
@@ -85,38 +86,71 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 60px;
-    height: 60px;
-    padding: 0;
-    background-color: transparent;
+    width: 60px;
+    height: 70px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     border: none;
-    border-radius: 50%;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
-    box-shadow: none;
+    padding: 0;
+    filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.5));
+    /* 3D Base Shadow */
+}
+
+.tab::before {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    /* Ultra-thin 3D border */
+    background: #161b22;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    z-index: 1;
+    transition: background 0.3s ease;
+}
+
+.tabShield {
+    z-index: 2;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 .tab:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.5)) brightness(1.2);
 }
 
 .activeTab {
-    transform: scale(1.2);
-    z-index: 2;
+    width: 95px;
+    height: 110px;
+    background: linear-gradient(180deg, #F1C40F 0%, #B8860B 100%);
+    transform: translateY(4px) scale(1.1);
+    /* Pushed-down 3D effect */
+    z-index: 10;
+    filter: drop-shadow(0 0 20px rgba(241, 196, 15, 0.4)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.6));
 }
 
-.activeTab::after {
-    display: none;
+.activeTab::before {
+    background: linear-gradient(180deg, #1a272d 0%, #0d1117 100%);
+    inset: 2px;
+    /* Thinner sophisticated border */
+}
+
+.activeTab .tabShield {
+    filter: drop-shadow(0 0 12px rgba(241, 196, 15, 0.6));
+    transform: scale(1.1);
 }
 
 .leaderboardCard {
-    background-color: #1a272d;
-    border: 2px solid rgba(255, 153, 2, 0.2);
-    border-radius: 20px;
+    background-color: rgba(26, 39, 45, 0.8);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(241, 196, 15, 0.2);
+    border-radius: 24px;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    margin-bottom: 40px;
 }
 
 .tableHeader {
@@ -137,7 +171,7 @@
     grid-template-columns: 60px 180px 1fr 180px;
     padding: 10px 24px;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 153, 2, 0.1);
+    border-bottom: 1px solid rgba(46, 204, 113, 0.1);
     transition: all 0.2s ease;
 }
 
@@ -146,9 +180,27 @@
 }
 
 .currentUserRow {
-    background: linear-gradient(90deg, rgba(255, 153, 2, 0.2) 0%, rgba(255, 153, 2, 0.05) 100%);
-    border-left: 5px solid #ff9902;
-    box-shadow: inset 2px 0 15px rgba(255, 153, 2, 0.08);
+    background: linear-gradient(90deg, rgba(241, 196, 15, 0.15) 0%, rgba(241, 196, 15, 0.02) 100%);
+    border: 2px solid #F1C40F !important;
+    border-radius: 12px;
+    margin: 4px 12px;
+    box-shadow: 0 0 20px rgba(241, 196, 15, 0.2), inset 0 0 10px rgba(241, 196, 15, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.currentUserRow::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(45deg, #F1C40F, #2ecc71);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 .currentUserRow .userName {
@@ -252,10 +304,49 @@
     color: #fff;
 }
 
-.xpLabel {
-    font-size: 0.85rem;
+.xpScoreWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.pollenLabel {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.1rem;
     font-weight: 800;
-    color: #afafaf;
+    color: #F1C40F;
+    background: rgba(241, 196, 15, 0.15);
+    padding: 6px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.1);
+}
+
+.medalWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 8px rgba(241, 196, 15, 0.3));
+    animation: medalPulse 2s infinite ease-in-out;
+}
+
+@keyframes medalPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.xpLabel {
+    display: none;
 }
 
 .shareIconBtn {
@@ -600,14 +691,15 @@
 }
 
 .progressTitle h1 {
-    font-size: 2.2rem;
+    font-size: 2.8rem;
     font-weight: 900;
-    color: #fff;
+    color: #F1C40F;
     margin: 0;
+    text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
 }
 
 .progressTitle p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #afafaf;
     margin: 0;
@@ -628,28 +720,17 @@
     cursor: not-allowed;
 }
 
-.tab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 80px;
-    height: 80px;
-    padding: 0;
-}
 
 .lockOverlay {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background: #37464f;
-    border-radius: 50%;
-    width: 22px;
-    height: 22px;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #afafaf;
-    border: 2px solid #1a272d;
+    color: #F1C40F;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 5;
+    pointer-events: none;
 }
 
 .headerCol:nth-child(3) {
@@ -681,8 +762,21 @@
 
 .progressBar {
     height: 100%;
-    background: linear-gradient(90deg, #ff9902 0%, #e68a00 100%);
+    background: linear-gradient(90deg, #F1C40F 0%, #ff8200 100%);
     border-radius: 10px;
     transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 10px rgba(255, 153, 2, 0.3);
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+.progressBar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%);
+    opacity: 0.6;
 }

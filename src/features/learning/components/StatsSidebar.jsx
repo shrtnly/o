@@ -1,6 +1,7 @@
 import React from 'react';
-import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock } from 'lucide-react';
+import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity } from 'lucide-react';
 import HoneyDropIcon from '../../../components/HoneyDropIcon';
+import PollenIcon from '../../../components/PollenIcon';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { rewardService } from '../../../services/rewardService';
@@ -11,9 +12,11 @@ import styles from '../LearningPage.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
 import { leaderboardService } from '../../../services/leaderboardService';
 import { getShieldLevel } from '../../../utils/shieldSystem';
+import { useLanguage } from '../../../context/LanguageContext';
 
 const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourseId }) => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
     const [isCourseOpen, setIsCourseOpen] = React.useState(false);
     const [isExpanded, setIsExpanded] = React.useState(false);
 
@@ -151,18 +154,22 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                             />
                             <span>{profile?.xp || 0}</span>
                         </div>
-                        <div className={styles.statItem} style={{ color: '#1cb0f6' }} title="Gems">
-                            <Gem size={34} fill="#1cb0f6" />
+                        <div className={styles.statItem} style={{ color: '#ffc800' }} title={t('pollen')}>
+                            <PollenIcon size={32} />
                             <span>{profile?.gems || 0}</span>
                         </div>
                         <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Honey Drops 🍯">
                             <HoneyDropIcon
-                                size={24}
+                                size={30}
                                 isEmpty={(hearts == 0 || Number(hearts) === 0) && refillTime}
                             />
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 {!(Number(hearts) === 0 && refillTime) && (
-                                    <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
+                                    profile?.is_premium ? (
+                                        <Infinity size={24} strokeWidth={3} style={{ marginTop: '2px' }} />
+                                    ) : (
+                                        <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
+                                    )
                                 )}
                                 {refillTime && (
                                     <span style={{
@@ -186,7 +193,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             {/* Daily Practices Tracker / Consistency Tracker */}
             <div className={styles.card} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>⚡ Buzz Streak</h3>
+                    <h3 className={styles.cardTitle}>⚡ {t('buzz_streak')}</h3>
                     <span
                         className={styles.viewAll}
                         onClick={() => setIsExpanded(!isExpanded)}
@@ -277,7 +284,13 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
 
             <div className={styles.card} onClick={() => profile?.xp >= 100 && navigate('/leaderboard')} style={{ cursor: profile?.xp >= 100 ? 'pointer' : 'default' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>{profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}</h3>
+                    <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <Trophy size={18} color="#ff9902" fill="rgba(255, 153, 2, 0.2)" strokeWidth={2.5} />
+                        {profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}
+                    </h3>
+                    {profile?.xp >= 100 && (
+                        <span className={styles.viewAll}>সব দেখুন</span>
+                    )}
                 </div>
                 {profile?.xp >= 100 ? (
                     <div className={styles.leaderboardPreview}>

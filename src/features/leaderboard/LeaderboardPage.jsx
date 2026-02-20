@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Medal, ChevronLeft, ChevronRight, Search, Flame, Target, Award, Lock, Shield, Zap, TrendingUp, Share2 } from 'lucide-react';
+import { Trophy, Medal, ChevronLeft, ChevronRight, Search, Flame, Target, Award, Lock, Shield, Zap, TrendingUp, Share2, Star } from 'lucide-react';
+import PollenIcon from '../../components/PollenIcon';
 import InlineLoader from '../../components/ui/InlineLoader';
 import { useNavigate } from 'react-router-dom';
 import { leaderboardService } from '../../services/leaderboardService';
@@ -12,10 +13,10 @@ import styles from './LeaderboardPage.module.css';
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
 const TIERS = [
-    { id: 'SILVER', name: 'Silver Learner', nameBn: 'সিলভার', color: '#8B7355', minXP: SHIELD_LEVELS.SILVER.minXP },
-    { id: 'GOLD', name: 'Gold Learner', nameBn: 'গোল্ড', color: '#FFD700', minXP: SHIELD_LEVELS.GOLD.minXP },
-    { id: 'PLATINUM', name: 'Platinum Learner', nameBn: 'প্ল্যাটিনাম', color: '#E5E4E2', minXP: SHIELD_LEVELS.PLATINUM.minXP },
-    { id: 'DIAMOND', name: 'Diamond Learner', nameBn: 'ডায়মন্ড', color: '#B9F2FF', minXP: SHIELD_LEVELS.DIAMOND.minXP }
+    { id: 'SILVER', name: 'Scout Bee', nameBn: 'স্কাউট বী', color: '#CD7F32', minXP: SHIELD_LEVELS.SILVER.minXP },
+    { id: 'GOLD', name: 'Elite Drone', nameBn: 'এলিট ড্রোন', color: '#C0C0C0', minXP: SHIELD_LEVELS.GOLD.minXP },
+    { id: 'PLATINUM', name: 'Hive Master', nameBn: 'হাইভ মাস্টার', color: '#FFD700', minXP: SHIELD_LEVELS.PLATINUM.minXP },
+    { id: 'DIAMOND', name: 'Legendary Queen', nameBn: 'লিজেন্ডারি কুইন', color: '#B9F2FF', minXP: SHIELD_LEVELS.DIAMOND.minXP }
 ];
 
 const ITEMS_PER_PAGE = 20;
@@ -74,9 +75,9 @@ const LeaderboardPage = () => {
 
     const getRankIcon = (index) => {
         const rank = (currentPage - 1) * ITEMS_PER_PAGE + index;
-        if (rank === 0) return <Trophy size={26} color="#FFD700" fill="rgba(255, 215, 0, 0.2)" />;
-        if (rank === 1) return <Trophy size={24} color="#E5E4E2" fill="rgba(229, 228, 226, 0.2)" />;
-        if (rank === 2) return <Trophy size={22} color="#CD7F32" fill="rgba(205, 127, 50, 0.2)" />;
+        if (rank === 0) return <div className={styles.medalWrapper}><Medal size={32} color="#F1C40F" fill="rgba(241, 196, 15, 0.2)" strokeWidth={2.5} /></div>;
+        if (rank === 1) return <div className={styles.medalWrapper}><Medal size={28} color="#C0C0C0" fill="rgba(192, 192, 192, 0.2)" strokeWidth={2.5} /></div>;
+        if (rank === 2) return <div className={styles.medalWrapper}><Medal size={24} color="#CD7F32" fill="rgba(205, 127, 50, 0.2)" strokeWidth={2.5} /></div>;
         return <span className={styles.rankNumber}>{rank + 1}</span>;
     };
 
@@ -118,7 +119,7 @@ const LeaderboardPage = () => {
                                             <Trophy size={32} />
                                         </div>
                                         <h3>বী-র পরিচিতি</h3>
-                                        <p>BeeLesson-এ ৪টি বী আছে: সিলভার, গোল্ড, প্ল্যাটিনাম এবং ডায়মন্ড। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী বী-তে উন্নীত হয়।</p>
+                                        <p>BeeLesson-এ ৪টি র্যাঙ্ক আছে: স্কাউট বী, এলিট ড্রোন, হাইভ মাস্টার এবং লিজেন্ডারি কুইন। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী র্যাঙ্কে উন্নীত হয়।</p>
                                     </div>
 
                                     <div className={styles.introCard}>
@@ -154,7 +155,7 @@ const LeaderboardPage = () => {
                                                 style={{ '--tier-color': tier.color }}
                                             >
                                                 <div className={styles.tabShield}>
-                                                    <ShieldIcon xp={tier.minXP} size={activeTier === tier.id ? 72 : 48} showTooltip={false} />
+                                                    <ShieldIcon xp={tier.minXP} size={activeTier === tier.id ? 72 : 32} showTooltip={false} />
                                                 </div>
                                                 {isTierLocked && (
                                                     <div className={styles.lockOverlay}>
@@ -176,12 +177,12 @@ const LeaderboardPage = () => {
                                     return (
                                         <div className={styles.progressSection}>
                                             <div className={styles.progressTitle}>
-                                                <h1>{currentTierInfo?.nameBn || ''} বী</h1>
+                                                <h1>{currentTierInfo?.nameBn || ''}</h1>
                                                 <p>
                                                     {nextLevel
                                                         ? (
                                                             <>
-                                                                {TIERS.find(t => t.id === nextLevel.level)?.nameBn || 'Next'} লার্নার বী-তে যোগ দিতে আপনার দরকার
+                                                                {TIERS.find(t => t.id === nextLevel.level)?.nameBn || 'Next'} লার্নার লিগে যোগ দিতে আপনার দরকার
                                                                 <span className={styles.xpHighlight}> +{progress.remaining} XP</span>
                                                             </>
                                                         )
@@ -272,8 +273,12 @@ const LeaderboardPage = () => {
                                                                 </div>
                                                             </div>
                                                             <div className={styles.xpCol}>
-                                                                <span className={styles.xpValue}>{item.xp}</span>
-                                                                <span className={styles.xpLabel}>XP</span>
+                                                                <div className={styles.xpScoreWrapper}>
+                                                                    <div className={styles.pollenLabel}>
+                                                                        <PollenIcon size={14} />
+                                                                        <span>{item.xp}</span>
+                                                                    </div>
+                                                                </div>
                                                                 {user?.id === item.id && (
                                                                     <button
                                                                         className={styles.shareIconBtn}

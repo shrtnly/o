@@ -729,16 +729,16 @@
     border-radius: 20px;
     border: 2px solid rgba(255, 162, 2, 0.4);
     border-bottom: 5px solid #855300;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(255, 162, 2, 0.1);
     transition: all 0.2s ease;
 }
 
 .statItem {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     font-weight: 900;
-    font-size: 1.4rem;
+    font-size: 1.7rem;
     padding: 6px 10px;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -859,13 +859,13 @@
 
 .rowRank {
     font-weight: 900;
-    color: var(--color-text-muted);
+    color: #fff;
     font-size: 0.9rem;
     min-width: 20px;
 }
 
 .leaderboardRowActive .rowRank {
-    color: #1cb0f6;
+    color: #ff9902;
 }
 
 .rowAvatar {

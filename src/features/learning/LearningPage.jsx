@@ -103,7 +103,7 @@ const LearningPage = () => {
     const mainContentRef = useRef(null);
 
     const [showRewardModal, setShowRewardModal] = useState(false);
-    const [lastReward, setLastReward] = useState({ hearts: 0, gems: 0 });
+    const [lastReward, setLastReward] = useState({ hearts: 0, gems: 0 }); // Note: 'gems' here refers to the pollen count in DB
 
     const handleScroll = () => {
         if (!mainContentRef.current || unitsWithChapters.length === 0) return;
@@ -247,7 +247,7 @@ const LearningPage = () => {
     const handleChapterClick = async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
 
-        if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+        if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
             if (isCompleted) {
                 toast.info('আপনি ইতিমধ্যে এই পুরষ্কারটি দাবি করেছেন।');
                 return;
@@ -260,7 +260,7 @@ const LearningPage = () => {
                 // For legacy data support if any
                 const legacyReward = chapter.reward_amount || 0;
                 const finalHReward = hReward || (chapter.type === 'heart_box' ? legacyReward : 0);
-                const finalGReward = gReward || (chapter.type === 'gems_box' ? legacyReward : 0);
+                const finalGReward = gReward || (chapter.type === 'pollen_box' ? legacyReward : 0);
 
                 // 1. Update Profile
                 const { error: profileError } = await supabase
@@ -416,7 +416,7 @@ const LearningPage = () => {
                                                             chapter.type !== 'lesson' && styles.rewardNode,
                                                             chapter.type === 'mystery_box' && styles.mysteryNode,
                                                             chapter.type === 'heart_box' && styles.heartNode,
-                                                            chapter.type === 'gems_box' && styles.gemsNode
+                                                            chapter.type === 'pollen_box' && styles.gemsNode
                                                         )}>
                                                             <div className={styles.nodeRing}>
                                                                 <div className={styles.nodeInner}>
@@ -440,7 +440,7 @@ const LearningPage = () => {
                                                                                 />
                                                                             ))}
                                                                             {(() => {
-                                                                                if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'gems_box') {
+                                                                                if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
                                                                                     if (isCompleted) {
                                                                                         return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
                                                                                     }

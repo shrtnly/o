@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Gift, Gem, Sparkles } from 'lucide-react';
+import { Gift, Sparkles } from 'lucide-react';
 import HoneyDropIcon from '../../../components/HoneyDropIcon';
+import PollenIcon from '../../../components/PollenIcon';
 import styles from './RewardModal.module.css';
 
 const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
@@ -88,11 +89,11 @@ const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
                                         transition={{ delay: 0.5 }}
                                         className={styles.rewardItem}
                                     >
-                                        <div className={styles.rewardIconCircle} style={{ background: 'rgba(46, 204, 113, 0.1)' }}>
-                                            <Gem size={32} color="#2ecc71" fill="#2ecc71" />
+                                        <div className={styles.rewardIconCircle} style={{ background: 'rgba(255, 200, 0, 0.1)' }}>
+                                            <PollenIcon size={34} />
                                         </div>
                                         <span className={styles.rewardValue}>+{gems}</span>
-                                        <span className={styles.rewardLabel}>জেম</span>
+                                        <span className={styles.rewardLabel}>পরাগরেণু</span>
                                     </motion.div>
                                 )}
                             </div>

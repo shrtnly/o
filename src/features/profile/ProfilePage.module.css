@@ -875,6 +875,37 @@
     flex: 1;
 }
 
+.genderToggle {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.genderBtn {
+    flex: 1;
+    padding: 12px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.genderBtn:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
+}
+
+.genderBtnActive {
+    background: rgba(241, 196, 15, 0.1) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.1);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .contentGrid {

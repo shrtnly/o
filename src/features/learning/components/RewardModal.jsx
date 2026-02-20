@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Gift, Sparkles } from 'lucide-react';
 import HoneyDropIcon from '../../../components/HoneyDropIcon';
 import PollenIcon from '../../../components/PollenIcon';
+import { useLanguage } from '../../../context/LanguageContext';
 import styles from './RewardModal.module.css';
 
 const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
+    const { t } = useLanguage();
     return (
         <AnimatePresence>
             {isOpen && (
@@ -78,7 +80,7 @@ const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
                                             <HoneyDropIcon size={36} />
                                         </div>
                                         <span className={styles.rewardValue}>+{hearts}</span>
-                                        <span className={styles.rewardLabel}>হানি ড্রপ</span>
+                                        <span className={styles.rewardLabel}>{t('honey_drop')}</span>
                                     </motion.div>
                                 )}
 

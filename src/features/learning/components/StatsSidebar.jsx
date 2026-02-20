@@ -158,7 +158,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                             <PollenIcon size={32} />
                             <span>{profile?.gems || 0}</span>
                         </div>
-                        <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title="Honey Drops 🍯">
+                        <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title={t('honey_drop')}>
                             <HoneyDropIcon
                                 size={30}
                                 isEmpty={(hearts == 0 || Number(hearts) === 0) && refillTime}

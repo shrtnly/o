@@ -49,7 +49,8 @@ const ProfilePage = () => {
         designation: '',
         department: '',
         bio: '',
-        location: ''
+        location: '',
+        gender: 'female'
     });
 
     // Avatar upload states
@@ -87,7 +88,8 @@ const ProfilePage = () => {
                 designation: profileData?.designation || '',
                 department: profileData?.department || '',
                 bio: profileData?.bio || '',
-                location: profileData?.location || ''
+                location: profileData?.location || '',
+                gender: profileData?.gender || 'female'
             });
 
             // Fetch user stats
@@ -382,8 +384,8 @@ const ProfilePage = () => {
                                         { name: 'Worker Bee', threshold: 5, nextName: 'Scout Bee', nextThreshold: 10, emoji: '🐝' },
                                         { name: 'Scout Bee', threshold: 10, nextName: 'Guard Bee', nextThreshold: 20, emoji: '🦋' },
                                         { name: 'Guard Bee', threshold: 20, nextName: 'Drone Bee', nextThreshold: 35, emoji: '🛡️' },
-                                        { name: 'Drone Bee', threshold: 35, nextName: 'Queen Bee', nextThreshold: 50, emoji: '👑' },
-                                        { name: 'Queen Bee', threshold: 50, nextName: null, nextThreshold: null, emoji: '👑' },
+                                        { name: 'Drone Bee', threshold: 35, nextName: profile?.gender === 'male' ? 'King Bee' : 'Queen Bee', nextThreshold: 50, emoji: '👑' },
+                                        { name: profile?.gender === 'male' ? 'King Bee' : 'Queen Bee', threshold: 50, nextName: null, nextThreshold: null, emoji: '👑' },
                                     ];
 
                                     const currentRank = beeRanks.reduce((acc, rank) => {
@@ -589,6 +591,25 @@ const ProfilePage = () => {
                                             value={editForm.location}
                                             onChange={e => setEditForm({ ...editForm, location: e.target.value })}
                                         />
+                                    </div>
+                                    <div className={styles.fieldGroup}>
+                                        <label>{language === 'bn' ? 'লিঙ্গ (Gender)' : 'Gender'}</label>
+                                        <div className={styles.genderToggle}>
+                                            <button
+                                                type="button"
+                                                className={`${styles.genderBtn} ${editForm.gender === 'male' ? styles.genderBtnActive : ''}`}
+                                                onClick={() => setEditForm({ ...editForm, gender: 'male' })}
+                                            >
+                                                {language === 'bn' ? 'পুরুষ (Male)' : 'Male'}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`${styles.genderBtn} ${editForm.gender === 'female' ? styles.genderBtnActive : ''}`}
+                                                onClick={() => setEditForm({ ...editForm, gender: 'female' })}
+                                            >
+                                                {language === 'bn' ? 'নারী (Female)' : 'Female'}
+                                            </button>
+                                        </div>
                                     </div>
                                     <div className={styles.modalActions}>
                                         <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>{t('cancel')}</Button>

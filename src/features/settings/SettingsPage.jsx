@@ -167,11 +167,11 @@ const SettingsPage = () => {
                                     value={selectedAnimation}
                                     onChange={handleAnimationChange}
                                 >
-                                    <option value="1">বাউন্সিং বি 🐝</option>
-                                    <option value="2">লাউঞ্জিং বি 🐝💤</option>
-                                    <option value="3">লুকিং বি 🐝👀</option>
-                                    <option value="4">ফ্লাইং বি 🐝✈️</option>
-                                    <option value="5">হ্যাপি বি 🐝😊</option>
+                                    <option value="1">বাউন্সিং বী 🐝</option>
+                                    <option value="2">লাউঞ্জিং বী 🐝💤</option>
+                                    <option value="3">লুকিং বী 🐝👀</option>
+                                    <option value="4">ফ্লাইং বী 🐝✈️</option>
+                                    <option value="5">হ্যাপি বী 🐝😊</option>
                                     <option value="none">কোনো অ্যানিমেশন নয়</option>
                                 </select>
                             </div>

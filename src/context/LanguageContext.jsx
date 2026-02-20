@@ -23,6 +23,12 @@ const translations = {
         reset_course: "কোর্স রিসেট",
         confirm_reset_msg: "আপনি কি নিশ্চিত যে এই কোর্সের সকল প্রগতি মুছে ফেলতে চান?",
         irreversible: "এটি আর ফিরিয়ে আনা সম্ভব নয়।",
+        honey_drop: "হানি ড্রপ",
+        king_bee_mode: "কিং বী মোড",
+        queen_bee_mode: "কুইন বী মোড",
+        only_for_99: "হন মাত্র ৯৯ টাকায়!",
+        hearts_added_msg: "নতুন হানি ড্রপ যোগ করা হয়েছে!",
+        heart_refill_5: "৫টি হানি ড্রপ রিফিল",
 
         // Settings
         pref_settings: "প্রেফারেন্স সেটিংস",
@@ -167,6 +173,12 @@ const translations = {
         reset_course: "Reset Course",
         confirm_reset_msg: "Are you sure you want to delete all progress for this course?",
         irreversible: "This action cannot be undone.",
+        honey_drop: "Honey Drop",
+        king_bee_mode: "King Bee Mode",
+        queen_bee_mode: "Queen Bee Mode",
+        only_for_99: "only for ৳99!",
+        hearts_added_msg: "new honey drops have been added!",
+        heart_refill_5: "5 Honey Drop Refill",
 
         // Settings
         pref_settings: "Preference Settings",

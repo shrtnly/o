@@ -8,6 +8,7 @@ import HoneyDropIcon from '../../components/HoneyDropIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
+import { useLanguage } from '../../context/LanguageContext';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 
 import styles from './StudyPage.module.css';
@@ -16,6 +17,7 @@ const StudyPage = () => {
     const { courseId, chapterId } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { t } = useLanguage();
 
     // Use heart refill system
     const {
@@ -45,14 +47,22 @@ const StudyPage = () => {
     const [selectedAnimation, setSelectedAnimation] = useState('1'); // Default to animation 1
     const hasStarted = React.useRef(false);
     const hasPlayed = React.useRef(false);
+    const [profile, setProfile] = useState(null);
 
-    // Load animation preference from localStorage
+    // Load animation preference and profile from localStorage/DB
     useEffect(() => {
         const savedAnimation = localStorage.getItem('studyPageAnimation');
         if (savedAnimation) {
             setSelectedAnimation(savedAnimation);
         }
-    }, []);
+
+        const fetchProfile = async () => {
+            if (!user) return;
+            const { data } = await supabase.from('profiles').select('gender').eq('id', user.id).single();
+            setProfile(data);
+        };
+        fetchProfile();
+    }, [user]);
 
     useEffect(() => {
         if (!dotLottie || selectedAnimation === 'none') return;
@@ -362,14 +372,14 @@ const StudyPage = () => {
                                 <div className={styles.resultStatus}>
                                     <div className={styles.statusHeader}>
                                         <div className={styles.statusIcon}>{isCorrect ? <Check size={24} strokeWidth={4} /> : <X size={24} strokeWidth={4} />}</div>
-                                        <h3>{isCorrect ? "সঠিক উত্তর! 🍯" : "ওহ নো! একটি হানি ড্রপ হারিয়ে গেল! 🐝"}</h3>
+                                        <h3>{isCorrect ? "সঠিক উত্তর! 🍯" : `ওহ নো! একটি ${t('honey_drop')} হারিয়ে গেল! 🐝`}</h3>
                                     </div>
                                     <p className={styles.explanationText}>
                                         {isCorrect
                                             ? "আপনার উত্তরটি সঠিক হয়েছে।"
                                             : currentQuestion.explanation
                                                 ? `ভুল থেকে শেখাই আসল শেখা। ${currentQuestion.explanation}`
-                                                : `ভুল থেকে শেখাই আসল শেখা। আপনার কাছে আর মাত্র ${hearts}টি Honey Drop আছে।`
+                                                : `ভুল থেকে শেখাই আসল শেখা। আপনার কাছে আর মাত্র ${hearts}টি ${t('honey_drop')} আছে।`
                                         }
                                     </p>
                                 </div>
@@ -445,7 +455,7 @@ const StudyPage = () => {
                                 }}>আপনার মৌচাকে মধু শেষ!</h2>
 
                                 <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginBottom: '20px', lineHeight: 1.6 }}>
-                                    নতুন হানি ড্রপ রিফিল হতে সময় লাগবে।<br />
+                                    নতুন {t('honey_drop')} রিফিল হতে সময় লাগবে।<br />
                                     আপনি কি অপেক্ষা করবেন, নাকি এখনই ওড়া শুরু করতে চান?
                                 </p>
 
@@ -473,7 +483,7 @@ const StudyPage = () => {
                                     <button
                                         onClick={() => { setShowNoHeartsModal(false); window.location.href = '/shop'; }}
                                         style={{
-                                            background: 'linear-gradient(135deg, #ffa202 0%, #ff6b00 100%)',
+                                            background: 'linear-gradient(135deg, #f1c40f 0%, #ff6b00 100%)',
                                             border: 'none',
                                             borderRadius: '14px',
                                             padding: '14px 20px',
@@ -485,11 +495,11 @@ const StudyPage = () => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             gap: '8px',
-                                            boxShadow: '0 4px 20px rgba(255,162,2,0.4)',
+                                            boxShadow: '0 4px 20px rgba(241,196,15,0.4)',
                                             width: '100%'
                                         }}
                                     >
-                                        <span>👑</span> Queen Bee হন মাত্র ৯৯ টাকায়!
+                                        <span>👑</span> {profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} {t('only_for_99')}
                                     </button>
 
                                     {/* Wait Option */}

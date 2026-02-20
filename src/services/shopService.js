@@ -62,6 +62,21 @@ export const shopService = {
     },
 
     /**
+     * Buy hearts directly
+     */
+    async buyHearts(userId, amount, price, itemId) {
+        const { data, error } = await supabase.rpc('process_heart_purchase', {
+            p_user_id: userId,
+            p_heart_amount: amount,
+            p_price: price,
+            p_item_id: itemId
+        });
+
+        if (error) throw error;
+        return data;
+    },
+
+    /**
      * Fetch user transactions
      */
     async getTransactions(userId) {

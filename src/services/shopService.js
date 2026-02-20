@@ -5,9 +5,7 @@ export const shopService = {
      * Convert gems to hearts
      * Rate: 10 gems = 1 heart
      */
-    async convertGemsToHearts(userId, heartsToBuy) {
-        const gemCost = heartsToBuy * 10;
-
+    async convertGemsToHearts(userId, heartsToBuy, gemCost) {
         const { data, error } = await supabase.rpc('convert_gems_to_hearts', {
             p_user_id: userId,
             p_hearts_amount: heartsToBuy,

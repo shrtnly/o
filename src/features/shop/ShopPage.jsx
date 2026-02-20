@@ -40,10 +40,11 @@ const ShopPage = () => {
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
     const [planType, setPlanType] = useState('monthly'); // 'monthly' or 'yearly'
-    const [gemToConvert, setGemToConvert] = useState(10);
+    const [gemToConvert, setGemToConvert] = useState(20);
     const [showCheckout, setShowCheckout] = useState(null); // { type, data }
+    const [showConvertConfirmation, setShowConvertConfirmation] = useState(false);
 
-    const calculatedHearts = Math.floor(gemToConvert / 10);
+    const calculatedHearts = Math.floor(gemToConvert / 20);
 
     const fetchProfile = async () => {
         if (!user) return;
@@ -66,8 +67,8 @@ const ShopPage = () => {
         fetchProfile();
     }, [user]);
 
-    const handleIncrement = () => setGemToConvert(prev => prev + 10);
-    const handleDecrement = () => setGemToConvert(prev => Math.max(10, prev - 10));
+    const handleIncrement = () => setGemToConvert(prev => prev + 20);
+    const handleDecrement = () => setGemToConvert(prev => Math.max(20, prev - 20));
 
     const handleConvertAction = async () => {
         if (!profile || profile.gems < gemToConvert) {
@@ -75,9 +76,14 @@ const ShopPage = () => {
             return;
         }
 
+        if (profile.hearts >= profile.max_hearts) {
+            toast.error('আপনার মৌচাকে ইতিমধ্যে পর্যাপ্ত মধু আছে! 🍯');
+            return;
+        }
+
         setProcessing(true);
         try {
-            const result = await shopService.convertGemsToHearts(user.id, calculatedHearts);
+            const result = await shopService.convertGemsToHearts(user.id, calculatedHearts, gemToConvert);
             if (result.success) {
                 setProfile(prev => ({
                     ...prev,
@@ -315,12 +321,12 @@ const ShopPage = () => {
                         <section className={styles.section}>
                             <h2 className={styles.sectionTitle}>
                                 <HoneyDropIcon size={28} />
-                                {t('honey_drop')} রিফিল করুন
+                                পরাগরেণু এক্সচেঞ্জ করুন
                             </h2>
                             <div className={styles.convertCard}>
                                 <div className={styles.convertLeft}>
                                     <div className={styles.convertInputContainer}>
-                                        <button className={styles.stepBtn} onClick={handleDecrement} disabled={gemToConvert <= 10}>
+                                        <button className={styles.stepBtn} onClick={handleDecrement} disabled={gemToConvert <= 20}>
                                             <Minus size={20} />
                                         </button>
                                         <div className={styles.gemInputDisplay}>
@@ -344,8 +350,8 @@ const ShopPage = () => {
                                     </div>
                                     <button
                                         className={styles.exchangeBtnMinimal}
-                                        onClick={handleConvertAction}
-                                        disabled={processing || (profile?.gems < gemToConvert) || (profile?.hearts >= profile?.max_hearts)}
+                                        onClick={() => setShowConvertConfirmation(true)}
+                                        disabled={processing || (profile?.gems < gemToConvert)}
                                     >
                                         {processing ? <Loader2 className={styles.spinner} /> : (
                                             <>
@@ -432,6 +438,83 @@ const ShopPage = () => {
                                 disabled={processing}
                             >
                                 {processing ? <Loader2 className={styles.spinner} /> : t('pay_now')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showConvertConfirmation && (
+                <div className={styles.checkoutOverlay} onClick={() => setShowConvertConfirmation(false)}>
+                    <div className={styles.checkoutModal} onClick={e => e.stopPropagation()} style={{ textAlign: 'center' }}>
+                        <div className={styles.checkoutHeader}>
+                            <div style={{ marginBottom: '20px' }}>
+                                <HoneyDropIcon size={72} />
+                            </div>
+                            <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '12px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
+                            <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '24px' }}>
+                                আপনি কি <strong>{gemToConvert}টি</strong> পরাগরেণু দিয়ে <strong>{calculatedHearts}টি</strong> হানি ড্রপ নিতে চান?
+                            </p>
+                        </div>
+
+                        {profile?.is_premium && (
+                            <div style={{
+                                background: 'rgba(241, 196, 15, 0.1)',
+                                border: '1px solid #f1c40f',
+                                borderRadius: '15px',
+                                padding: '16px',
+                                marginBottom: '24px',
+                                color: '#f1c40f',
+                                fontSize: '0.9rem',
+                                fontWeight: 700,
+                                lineHeight: 1.5,
+                                textAlign: 'left',
+                                display: 'flex',
+                                gap: '12px',
+                                alignItems: 'center'
+                            }}>
+                                <span style={{ fontSize: '1.5rem' }}>👑</span>
+                                <span>আপনি একজন কিং বী! আপনার হানি ড্রপ কখনো শেষ হবে না, তাই এক্সচেঞ্জ করার প্রয়োজন নেই।</span>
+                            </div>
+                        )}
+
+                        <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
+                            <button
+                                onClick={() => setShowConvertConfirmation(false)}
+                                style={{
+                                    flex: 1,
+                                    padding: '16px',
+                                    borderRadius: '16px',
+                                    border: '2px solid #37464f',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    color: '#fff',
+                                    fontWeight: 900,
+                                    fontSize: '1.1rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                না
+                            </button>
+                            <button
+                                onClick={() => {
+                                    handleConvertAction();
+                                    setShowConvertConfirmation(false);
+                                }}
+                                style={{
+                                    flex: 1,
+                                    padding: '16px',
+                                    borderRadius: '16px',
+                                    background: '#f1c40f',
+                                    color: '#000',
+                                    border: 'none',
+                                    fontWeight: 900,
+                                    fontSize: '1.1rem',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 4px 0 #9a7d0a',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                হ্যাঁ
                             </button>
                         </div>
                     </div>

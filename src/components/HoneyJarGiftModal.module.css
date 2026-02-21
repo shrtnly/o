@@ -1,0 +1,269 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(6px);
+    animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal {
+    background: linear-gradient(145deg, #1a1200, #2c1e00);
+    border: 1.5px solid rgba(241, 196, 15, 0.3);
+    border-bottom: 4px solid rgba(241, 196, 15, 0.2);
+    border-radius: 28px;
+    width: calc(100% - 40px);
+    max-width: 360px;
+    padding: 28px 24px 24px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(40px) scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.closeBtn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(255, 255, 255, 0.07);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.closeBtn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Sparkle Row ─── */
+.sparkleRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sparkleText {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #F1C40F;
+    letter-spacing: 0.5px;
+}
+
+.sparkleIcon {
+    color: #F1C40F;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ─── Gift Box Area ─── */
+.giftBox {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.giftEmoji {
+    font-size: 4.5rem;
+    line-height: 1;
+    opacity: 0;
+    transform: scale(0.4) rotate(-20deg);
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 0 20px var(--gift-color, #F1C40F));
+}
+
+.emojiReveal {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+}
+
+/* ─── Jar Overflow Animation ─── */
+.jarOverflow {
+    position: absolute;
+    top: -8px;
+    width: 70px;
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.jarOverflow.visible {
+    opacity: 1;
+}
+
+.overflowHoney {
+    width: 10px;
+    height: 10px;
+    background: #F1C40F;
+    border-radius: 50%;
+    animation: drip 1.5s ease-in-out infinite;
+}
+
+.overflowHoney:nth-child(2) {
+    animation-delay: 0.25s;
+}
+
+.overflowHoney:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+@keyframes drip {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(24px);
+        opacity: 0;
+    }
+}
+
+/* ─── Gift Info ─── */
+.giftInfo {
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease 0.3s;
+}
+
+.giftInfo.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.giftTitle {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin: 0 0 6px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.giftSubtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+    font-family: 'Hind Siliguri', sans-serif;
+    line-height: 1.4;
+}
+
+/* ─── Claim Button ─── */
+.claimBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #F1C40F, #F0A30A);
+    color: #000;
+    font-size: 0.95rem;
+    font-weight: 800;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(241, 196, 15, 0.4);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    width: 100%;
+    justify-content: center;
+}
+
+.claimBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(241, 196, 15, 0.5);
+}
+
+.claimBtn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.claimBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.claimingText {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    font-family: 'Hind Siliguri', sans-serif;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.claimedText {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4caf50;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Hind Siliguri', sans-serif;
+    animation: fadeIn 0.4s ease;
+}
+
+/* ─── Badge Note ─── */
+.badgeNote {
+    font-size: 0.75rem;
+    color: rgba(255, 165, 0, 0.8);
+    text-align: center;
+    margin: -8px 0 0;
+    font-family: 'Hind Siliguri', sans-serif;
+}

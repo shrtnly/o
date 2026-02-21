@@ -261,10 +261,7 @@ export const rewardService = {
                     .eq('id', userId)
                     .single();
 
-                const newHearts = Math.min(
-                    profile?.max_hearts || 5,
-                    (profile?.hearts || 0) + amount
-                );
+                const newHearts = (profile?.hearts || 0) + amount;
 
                 await supabase
                     .from('profiles')

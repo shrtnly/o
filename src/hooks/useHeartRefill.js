@@ -169,7 +169,7 @@ export const useHeartRefill = (userId) => {
             console.error('Error awarding hearts:', error);
 
             // Fallback
-            const newHearts = Math.min(maxHearts, hearts + amount);
+            const newHearts = (hearts || 0) + amount;
             setHearts(newHearts);
 
             try {

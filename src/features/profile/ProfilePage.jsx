@@ -1,19 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { rewardService } from '../../services/rewardService';
 import { courseService } from '../../services/courseService';
 import { storageService } from '../../services/storageService';
+import { honeyJarService } from '../../services/honeyJarService';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import HoneyDropIcon from '../../components/HoneyDropIcon';
 import PollenIcon from '../../components/PollenIcon';
 import InlineLoader from '../../components/ui/InlineLoader';
+import HoneyJarGiftModal from '../../components/HoneyJarGiftModal';
 import {
     User, Calendar, Zap, Gem, Trophy, Target,
     BookOpen, Camera, X, Settings, Share2,
     Users, Edit3, Crown, Star, Lock, MapPin,
-    Shield, Flame, Compass
+    Shield, Flame, Compass, Gift
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
@@ -43,6 +45,13 @@ const ProfilePage = () => {
     const [streak, setStreak] = useState(null);
     const [showShareCard, setShowShareCard] = useState(false);
 
+    // Honey Jar states
+    const [jarProgress, setJarProgress] = useState({ fill_percent: 0, pollen_in_cycle: 0, is_full: false });
+    const [pendingGift, setPendingGift] = useState(null);
+    const [showGiftModal, setShowGiftModal] = useState(false);
+    const [flamingBadge, setFlamingBadge] = useState(null);
+    const [jarSplash, setJarSplash] = useState(false);
+
     // Modal states
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState({
@@ -57,7 +66,34 @@ const ProfilePage = () => {
     useEffect(() => {
         if (!user) { navigate('/auth'); return; }
         fetchProfileData();
+        fetchJarData();
     }, [user, navigate]);
+
+    // Real-time jar progress subscription
+    useEffect(() => {
+        if (!user) return;
+        const channel = honeyJarService.subscribeToJarProgress(user.id, (newData) => {
+            setJarProgress(newData);
+            // Trigger splash animation when pollen is added
+            setJarSplash(true);
+            setTimeout(() => setJarSplash(false), 800);
+            // When jar becomes full, generate a mystery gift
+            if (newData.is_full) {
+                handleJarFull();
+            }
+        });
+        // Also subscribe to new gifts
+        const giftChannel = honeyJarService.subscribeToGifts(user.id, (newGift) => {
+            if (!newGift.is_claimed) {
+                setPendingGift(newGift);
+                setShowGiftModal(true);
+            }
+        });
+        return () => {
+            supabase.removeChannel(channel);
+            supabase.removeChannel(giftChannel);
+        };
+    }, [user]);
 
     const fetchProfileData = async () => {
         try {
@@ -84,6 +120,54 @@ const ProfilePage = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const fetchJarData = async () => {
+        if (!user) return;
+        try {
+            const [progress, gift, badge] = await Promise.all([
+                honeyJarService.getJarProgress(user.id),
+                honeyJarService.getUnclaimedGift(user.id),
+                honeyJarService.getActiveFlamingBadge(user.id),
+            ]);
+            setJarProgress(progress || { fill_percent: 0, pollen_in_cycle: 0, is_full: false });
+            if (gift) {
+                setPendingGift(gift);
+                // DO NOT auto-open modal on page load — user clicks the button
+            }
+            setFlamingBadge(badge);
+        } catch (err) {
+            console.error('fetchJarData error:', err);
+        }
+    };
+
+    const handleJarFull = async () => {
+        try {
+            const gift = await honeyJarService.generateMysteryGift(user.id);
+            if (gift) {
+                setPendingGift(gift);
+                // Small delay for the overflow animation to play
+                setTimeout(() => setShowGiftModal(true), 1500);
+            }
+        } catch (err) {
+            console.error('handleJarFull error:', err);
+        }
+    };
+
+    const handleClaimGift = async (giftId) => {
+        const result = await honeyJarService.claimMysteryGift(user.id, giftId);
+        if (result?.success) {
+            // Refresh profile (pollen/honey may have changed)
+            await fetchProfileData();
+            // Refresh jar (reset to 0)
+            const progress = await honeyJarService.getJarProgress(user.id);
+            setJarProgress(progress);
+            setPendingGift(null);
+            // Refresh flaming badge
+            const badge = await honeyJarService.getActiveFlamingBadge(user.id);
+            setFlamingBadge(badge);
+        }
+        return result;
     };
 
     const handleUpdateProfile = async (e) => {
@@ -251,16 +335,24 @@ const ProfilePage = () => {
                     {/* ========== SECTION 3: HONEY JAR PROGRESS ========== */}
                     <section className={styles.jarSection}>
                         <h2 className={styles.sectionTitle}>
-                            <span>🍯</span> আপনার মৌচাকের অগ্রগতি
+                            <span>🍯</span> মধু-পূর্ণতা
                         </h2>
                         <div className={styles.jarLayout}>
                             {/* Honey Jar */}
                             <div className={styles.honeyJarContainer}>
                                 <div className={styles.honeyJar}>
+                                    {/* Overflow animation when full */}
+                                    {jarProgress.is_full && (
+                                        <div className={styles.jarOverflowDrips}>
+                                            <div className={styles.overflowDrip} />
+                                            <div className={styles.overflowDrip} style={{ animationDelay: '0.3s' }} />
+                                            <div className={styles.overflowDrip} style={{ animationDelay: '0.6s' }} />
+                                        </div>
+                                    )}
                                     <div className={styles.jarLid}></div>
                                     <div className={styles.jarBody}>
-                                        <div className={styles.jarGlass}>
-                                            <div className={styles.jarFill} style={{ height: `${honeyJarPercent}%` }}>
+                                        <div className={`${styles.jarGlass} ${jarSplash ? styles.jarSplash : ''}`}>
+                                            <div className={styles.jarFill} style={{ height: `${jarProgress.fill_percent}%` }}>
                                                 <div className={styles.liquidWave}></div>
                                                 <div className={styles.liquidBubble} style={{ left: '20%', animationDelay: '0s' }}></div>
                                                 <div className={styles.liquidBubble} style={{ left: '55%', animationDelay: '0.8s' }}></div>
@@ -272,37 +364,66 @@ const ProfilePage = () => {
                                         <div className={styles.jarBase}></div>
                                     </div>
                                     <div className={styles.jarPercentOverlay}>
-                                        <span>{honeyJarPercent}%</span>
+                                        <span>{jarProgress.fill_percent}%</span>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Progress Info */}
                             <div className={styles.jarInfo}>
-                                <p className={styles.jarLabel}>
-                                    আপনার মৌচাকটি <strong>{honeyJarPercent}%</strong> পূর্ণ হয়েছে
-                                </p>
-                                <div className={styles.rankPill}>
-                                    <span>🐝</span>
-                                    <span>{currentRank.name}</span>
-                                </div>
-                                {currentRank.nextThreshold && (
-                                    <p className={styles.jarNextRank}>
-                                        পরবর্তী স্তরে যেতে আরও{' '}
-                                        <strong>{progressNeeded - progressInRank}টি</strong> লেসন বাকি
+                                {jarProgress.is_full ? (
+                                    <button
+                                        className={styles.claimGiftBtn}
+                                        onClick={() => setShowGiftModal(true)}
+                                    >
+                                        <Gift size={16} />
+                                        <span>মৌ-উপহার সংগ্রহ করুন!</span>
+                                    </button>
+                                ) : (
+                                    <p className={styles.jarLabel}>
+                                        জারটি <strong>{jarProgress.fill_percent}%</strong> পূর্ণ হয়েছে
                                     </p>
                                 )}
-                                {/* XP Bar */}
+
+
+
+                                {/* Pollen counter */}
+                                <p className={styles.pollenCounter}>
+                                    🌼 <strong>{jarProgress.pollen_in_cycle || 0}</strong> পরাগরেণু সংগ্রহ হয়েছে
+                                    &nbsp;·&nbsp; প্রতি ৩টিতে ১% পূর্ণ হয়
+                                </p>
+
+                                {/* XP Progress Bar */}
                                 <div className={styles.xpBarWrapper}>
                                     <div className={styles.xpBar}>
-                                        <div className={styles.xpFill} style={{ width: `${honeyJarPercent}%` }}></div>
+                                        <div
+                                            className={`${styles.xpFill} ${jarProgress.is_full ? styles.xpFillFull : ''}`}
+                                            style={{ width: `${jarProgress.fill_percent}%` }}
+                                        ></div>
                                     </div>
-                                    <span className={styles.xpPct}>{honeyJarPercent}%</span>
+                                    <span className={styles.xpPct}>{jarProgress.fill_percent}%</span>
                                 </div>
-                                <p className={styles.xpTotal}>মোট XP: <strong>{xp}</strong></p>
+
+                                <p className={styles.xpTotal}>মোট পরাগরেণু: <strong>{profile?.gems || 0}</strong></p>
+
+                                {/* Flaming Badge status */}
+                                {flamingBadge && (
+                                    <div className={styles.flamingBadgeActive}>
+                                        🔥 ফ্লেমিং ব্যাজ সক্রিয় আছে!
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </section>
+
+                    {/* Mystery Gift Modal */}
+                    {showGiftModal && pendingGift && (
+                        <HoneyJarGiftModal
+                            gift={pendingGift}
+                            onClaim={handleClaimGift}
+                            onClose={() => setShowGiftModal(false)}
+                        />
+                    )}
 
                     {/* ========== SECTION 4: ACHIEVEMENT GALLERY ========== */}
                     <section className={styles.badgesSection}>

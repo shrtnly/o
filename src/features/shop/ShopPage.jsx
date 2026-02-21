@@ -94,7 +94,7 @@ const ShopPage = () => {
                 setProfile(prev => ({
                     ...prev,
                     gems: result.new_gems ?? (prev.gems - gemToConvert),
-                    hearts: result.new_hearts ?? Math.min(prev.max_hearts, prev.hearts + calculatedHearts)
+                    hearts: result.new_hearts ?? (prev.hearts + calculatedHearts)
                 }));
 
                 // Then fetch fresh data as backup

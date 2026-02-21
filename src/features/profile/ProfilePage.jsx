@@ -271,16 +271,16 @@ const ProfilePage = () => {
                                 {flamingBadge && <FlamingBadge size={22} className={styles.nameBadge} />}
                                 {profile?.full_name || 'শিক্ষার্থী'}
                             </h1>
-                            <p className={styles.profileMeta}>@{user?.email?.split('@')[0]}</p>
-                            <p className={styles.memberSince}>
-                                <Calendar size={13} />
-                                যোগদান: {formatDate(profile?.created_at)}
-                            </p>
-                            {profile?.location && (
-                                <p className={styles.locationLine}>
-                                    <MapPin size={13} />{profile.location}
-                                </p>
-                            )}
+                            <div className={styles.metaRow}>
+                                {profile?.location && (
+                                    <span className={styles.metaItem}>
+                                        <MapPin size={13} /> {profile.location}
+                                    </span>
+                                )}
+                                <span className={styles.metaItem}>
+                                    <Calendar size={13} /> যোগদান: {formatDate(profile?.created_at)}
+                                </span>
+                            </div>
 
                             {/* Rank Badge */}
                             <div className={styles.rankBadge}>

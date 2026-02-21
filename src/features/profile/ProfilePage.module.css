@@ -1286,3 +1286,38 @@
     right: -5px;
     z-index: 10;
 }
+
+.nameBadge {
+    margin-right: 8px;
+    flex-shrink: 0;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.profileName {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+}
+
+.metaRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}

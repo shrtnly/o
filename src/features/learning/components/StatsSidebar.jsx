@@ -321,15 +321,15 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                     >
                                         <div className={styles.leaderboardRowLeft}>
                                             <span className={styles.rowRank}>{index + 1}</span>
-                                            <div className={styles.rowAvatarWrapper}>
-                                                <img
-                                                    src={avatarUrl}
-                                                    className={styles.rowAvatar}
-                                                    alt={user.display_name || 'লার্নার'}
-                                                />
-                                                {user.is_flaming && <FlamingBadge size={14} className={styles.sidebarBadge} />}
-                                            </div>
-                                            <span className={styles.rowName}>{user.display_name || 'লার্নার'}</span>
+                                            <img
+                                                src={avatarUrl}
+                                                className={styles.rowAvatar}
+                                                alt={user.display_name || 'লার্নার'}
+                                            />
+                                            <span className={styles.rowName}>
+                                                {user.is_flaming && <FlamingBadge size={14} className={styles.nameBadge} />}
+                                                {user.display_name || 'লার্নার'}
+                                            </span>
                                         </div>
                                         <div className={styles.leaderboardRowRight}>
                                             <ShieldIcon
@@ -350,15 +350,15 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                 <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
                                     <div className={styles.leaderboardRowLeft}>
                                         <span className={styles.rowRank}>{userRank}</span>
-                                        <div className={styles.rowAvatarWrapper}>
-                                            <img
-                                                src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
-                                                className={styles.rowAvatar}
-                                                alt={profile.display_name || 'লার্নার'}
-                                            />
-                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.sidebarBadge} />}
-                                        </div>
-                                        <span className={styles.rowName}>{profile.display_name || 'লার্নার'}</span>
+                                        <img
+                                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
+                                            className={styles.rowAvatar}
+                                            alt={profile.display_name || 'লার্নার'}
+                                        />
+                                        <span className={styles.rowName}>
+                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
+                                            {profile.display_name || 'লার্নার'}
+                                        </span>
                                     </div>
                                     <div className={styles.leaderboardRowRight}>
                                         <ShieldIcon

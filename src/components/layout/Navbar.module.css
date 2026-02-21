@@ -118,3 +118,8 @@
     right: -5px;
     z-index: 5;
 }
+
+.nameBadge {
+    margin-right: 6px;
+    flex-shrink: 0;
+}

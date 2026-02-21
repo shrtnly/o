@@ -53,10 +53,7 @@ const Navbar = () => {
                     {user ? (
                         <div className={styles.userSection}>
                             <div className={styles.userInfo}>
-                                <div className={styles.avatarMiniWrapper}>
-                                    <User size={18} />
-                                    {flamingBadge && <FlamingBadge size={14} className={styles.miniFlame} />}
-                                </div>
+                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                                 <span className={styles.userName}>{user.email.split('@')[0]}</span>
                             </div>
                             <button

@@ -244,10 +244,11 @@
 
 .planToggle {
     display: flex;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 4px;
-    border-radius: 12px;
-    width: 220px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    min-width: 280px;
 }
 
 .toggleBtn {
@@ -339,7 +340,7 @@
     border: 3px solid var(--color-border);
     border-bottom: 8px solid #233138;
     border-radius: 20px;
-    padding: 32px 40px;
+    padding: 32px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -354,9 +355,25 @@
 
 .convertLeft {
     display: flex;
-    align-items: center;
-    gap: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
     flex: 1;
+}
+
+.gemBalanceInfo {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 2px;
+}
+
+.gemBalanceInfo span {
+    color: #f1c40f;
+    font-weight: 900;
 }
 
 .convertCenter {
@@ -578,24 +595,26 @@
 }
 
 .packCard {
-    background: var(--color-bg-alt);
-    border: 2px solid #233138;
+    background: linear-gradient(135deg, #2d1a00 0%, #3d2800 40%, #1a1200 100%);
+    border: 2px solid rgba(241, 196, 15, 0.25);
+    border-bottom: 6px solid rgba(255, 130, 0, 0.35);
     border-radius: 24px;
     padding: 32px 24px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-shadow: 0 8px 24px rgba(241, 196, 15, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .packCard:hover {
-    transform: scale(1.05);
-    border-color: #ffa202;
-    background: #233138;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    transform: translateY(-4px);
+    border-color: rgba(241, 196, 15, 0.5);
+    background: linear-gradient(135deg, #3d2400 0%, #4e3400 40%, #251900 100%);
+    box-shadow: 0 16px 40px rgba(241, 196, 15, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .packCardLandscape {
@@ -618,8 +637,10 @@
 
 .packCardLandscape .priceTag {
     margin-top: 0 !important;
-    padding: 8px 24px !important;
-    font-size: 1rem !important;
+    padding: 8px 20px !important;
+    font-size: 1.4rem !important;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
 }
 
 .badge {
@@ -633,6 +654,7 @@
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 1px;
+    z-index: 2;
 }
 
 .packIcon {
@@ -660,13 +682,16 @@
 .priceTag {
     margin-top: auto;
     background: #ffa202;
-    color: #fff;
+    color: #fff !important;
     padding: 10px 28px;
     border-radius: 12px;
     font-weight: 900;
-    font-size: 1.1rem;
+    font-size: 2.2rem;
     box-shadow: 0 5px 0 #9a7d0a;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 160px;
+    text-align: center;
+    -webkit-text-fill-color: #fff !important;
 }
 
 .priceTag:hover {
@@ -872,19 +897,19 @@
 /* ========== QUEEN BEE MODE CARD ========== */
 .queenBeeCard {
     background: linear-gradient(135deg, #2d1a00 0%, #3d2800 40%, #1a1200 100%);
-    border: 2px solid rgba(241, 196, 15, 0.4);
-    border-bottom: 6px solid rgba(255, 130, 0, 0.6);
+    border: 2px solid rgba(241, 196, 15, 0.25);
+    border-bottom: 6px solid rgba(255, 130, 0, 0.35);
     border-radius: 24px;
     padding: 24px 28px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 15px 50px rgba(241, 196, 15, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 24px rgba(241, 196, 15, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.04);
     transition: all 0.3s ease;
 }
 
 .queenBeeCard:hover {
-    border-color: rgba(241, 196, 15, 0.7);
-    box-shadow: 0 20px 60px rgba(241, 196, 15, 0.25);
+    border-color: rgba(241, 196, 15, 0.45);
+    box-shadow: 0 12px 36px rgba(241, 196, 15, 0.12);
     transform: translateY(-2px);
 }
 
@@ -1056,16 +1081,16 @@
     background: linear-gradient(135deg, #f1c40f 0%, #ff6b00 100%);
     border: none;
     border-radius: 16px;
-    padding: 14px 24px;
+    padding: 16px 28px;
     color: #fff;
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     font-weight: 900;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    box-shadow: 0 6px 0 rgba(154, 125, 10, 0.8), 0 15px 40px rgba(241, 196, 15, 0.35);
+    box-shadow: 0 6px 0 rgba(154, 125, 10, 0.8), 0 8px 20px rgba(241, 196, 15, 0.12);
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
@@ -1086,7 +1111,7 @@
 
 .queenBeeCtaBtn:hover:not(:disabled) {
     transform: translateY(-4px);
-    box-shadow: 0 10px 0 rgba(180, 80, 0, 0.8), 0 20px 50px rgba(255, 162, 2, 0.5);
+    box-shadow: 0 10px 0 rgba(180, 80, 0, 0.8), 0 12px 28px rgba(255, 162, 2, 0.18);
     filter: brightness(1.1);
 }
 
@@ -1098,6 +1123,19 @@
 .queenBeeCtaBtn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+}
+
+.ctaPrice {
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.5px;
+}
+
+.ctaLabel {
+    font-size: 1.25rem;
+    font-weight: 700;
+    opacity: 0.9;
 }
 
 .queenBeeCtaSub {

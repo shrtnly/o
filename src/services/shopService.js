@@ -13,20 +13,6 @@ export const shopService = {
         });
 
         if (error) throw error;
-
-        // Log transaction for conversion (optional, but good for tracking)
-        try {
-            await supabase.from('transactions').insert({
-                user_id: userId,
-                item_type: 'hearts',
-                item_id: 'gem_conversion',
-                amount: heartsToBuy,
-                price: 0
-            });
-        } catch (e) {
-            console.error('Transaction logging failed:', e);
-        }
-
         return data;
     },
 

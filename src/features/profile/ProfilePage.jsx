@@ -10,27 +10,27 @@ import HoneyDropIcon from '../../components/HoneyDropIcon';
 import PollenIcon from '../../components/PollenIcon';
 import InlineLoader from '../../components/ui/InlineLoader';
 import {
-    User,
-    Calendar,
-    Zap,
-    Gem,
-    Trophy,
-    Target,
-    TrendingUp,
-    LogOut,
-    ChevronRight,
-    BookOpen,
-    MapPin,
-    Edit3,
-    X,
-    Camera,
-    Flame
+    User, Calendar, Zap, Gem, Trophy, Target,
+    BookOpen, Camera, X, Settings, Share2,
+    Users, Edit3, Crown, Star, Lock, MapPin,
+    Shield, Flame, Compass
 } from 'lucide-react';
-import ShieldIcon from '../../components/ShieldIcon';
-import { getShieldLevel } from '../../utils/shieldSystem';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
+import { getShieldLevel } from '../../utils/shieldSystem';
+
+// --- Achievement Badge Data ---
+const BADGE_LIST = [
+    { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ', unlocked: true },
+    { id: 'streak_7', emoji: '🔥', label: '৭ দিনের স্ট্রিক', unlocked: true },
+    { id: 'honey_100', emoji: '🍯', label: '১০০ মধু', unlocked: true },
+    { id: 'quiz_ace', emoji: '🏆', label: 'কুইজ মাস্টার', unlocked: false },
+    { id: 'course_complete', emoji: '🎓', label: 'কোর্স সম্পন্ন', unlocked: false },
+    { id: 'streak_30', emoji: '⚡', label: '৩০ দিনের স্ট্রিক', unlocked: false },
+    { id: 'rank_top10', emoji: '👑', label: 'টপ ১০', unlocked: false },
+    { id: 'bee_master', emoji: '🐝', label: 'Bee মাস্টার', unlocked: false },
+];
 
 const ProfilePage = () => {
     const { user, signOut, updateProfile } = useAuth();
@@ -39,49 +39,31 @@ const ProfilePage = () => {
     const [profile, setProfile] = useState(null);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [recentTransactions, setRecentTransactions] = useState([]);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [streak, setStreak] = useState(null);
+    const [showShareCard, setShowShareCard] = useState(false);
 
     // Modal states
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editForm, setEditForm] = useState({
-        full_name: '',
-        designation: '',
-        department: '',
-        bio: '',
-        location: '',
-        gender: 'female'
+        full_name: '', designation: '', department: '',
+        bio: '', location: '', gender: 'female'
     });
 
     // Avatar upload states
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const fileInputRef = useRef(null);
 
-    // Cover upload states
-    const [uploadingCover, setUploadingCover] = useState(false);
-    const coverInputRef = useRef(null);
-
-    const [streak, setStreak] = useState(null);
-
     useEffect(() => {
-        if (!user) {
-            navigate('/auth');
-            return;
-        }
+        if (!user) { navigate('/auth'); return; }
         fetchProfileData();
     }, [user, navigate]);
 
     const fetchProfileData = async () => {
         try {
             setLoading(true);
-
-            // Fetch profile
             const { data: profileData } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
-
+                .from('profiles').select('*').eq('id', user.id).single();
             setProfile(profileData);
             setEditForm({
                 full_name: profileData?.full_name || '',
@@ -91,23 +73,12 @@ const ProfilePage = () => {
                 location: profileData?.location || '',
                 gender: profileData?.gender || 'female'
             });
-
-            // Fetch user stats
             const userStats = await rewardService.getUserStats(user.id);
             setStats(userStats);
-
-            // Fetch streak
             const streakData = await rewardService.getUserStreak(user.id);
             setStreak(streakData);
-
-            // Fetch enrolled courses with progress
             const courseProgress = await courseService.getUserEnrolledCourses(user.id);
             setEnrolledCourses(courseProgress);
-
-            // Fetch recent transactions
-            const transactions = await rewardService.getRecentTransactions(user.id, 5);
-            setRecentTransactions(transactions);
-
         } catch (error) {
             console.error('Error fetching profile:', error);
         } finally {
@@ -127,41 +98,14 @@ const ProfilePage = () => {
         }
     };
 
-    const handleLogout = async () => {
-        if (window.confirm(t('confirm_logout_msg'))) {
-            try {
-                await signOut();
-                navigate('/');
-            } catch (error) {
-                console.error('Error signing out:', error);
-            }
-        }
-    };
-
-    const handleAvatarClick = () => {
-        fileInputRef.current?.click();
-    };
-
     const handleAvatarChange = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
         try {
             setUploadingAvatar(true);
-
-            // Upload avatar and update profile
-            const updatedProfile = await storageService.changeAvatar(
-                file,
-                user.id,
-                profile?.avatar_url
-            );
-
+            const updatedProfile = await storageService.changeAvatar(file, user.id, profile?.avatar_url);
             setProfile(updatedProfile);
-
-            // Reset file input
-            if (fileInputRef.current) {
-                fileInputRef.current.value = '';
-            }
+            if (fileInputRef.current) fileInputRef.current.value = '';
         } catch (error) {
             console.error('Error uploading avatar:', error);
             alert(error.message || 'ছবি আপলোড করতে সমস্যা হয়েছে');
@@ -170,455 +114,342 @@ const ProfilePage = () => {
         }
     };
 
-    const handleCoverClick = () => {
-        coverInputRef.current?.click();
-    };
-
-    const handleCoverChange = async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        try {
-            setUploadingCover(true);
-
-            // Upload cover and update profile
-            const updatedProfile = await storageService.changeCover(
-                file,
-                user.id,
-                profile?.cover_url
-            );
-
-            setProfile(updatedProfile);
-
-            // Reset file input
-            if (coverInputRef.current) {
-                coverInputRef.current.value = '';
-            }
-        } catch (error) {
-            console.error('Error uploading cover:', error);
-            alert(error.message || 'কভার ছবি আপলোড করতে সমস্যা হয়েছে');
-        } finally {
-            setUploadingCover(false);
-        }
-    };
-
-
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
         return date.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+            year: 'numeric', month: 'long', day: 'numeric'
         });
     };
 
-    const getTransactionIcon = (type) => {
-        switch (type) {
-            case 'xp_earned': return <Zap size={16} color="#ffa502" />;
-            case 'gem_earned': return <PollenIcon size={18} />;
-            case 'heart_lost': return <HoneyDropIcon size={18} />;
-            case 'heart_gained': return <HoneyDropIcon size={18} />;
-            default: return <Zap size={16} />;
-        }
-    };
+    // Progress calculation for honey jar
+    const xp = profile?.xp || 0;
+    const lessonsCompleted = Math.floor(xp / 100);
+    const beeRanks = [
+        { name: 'Baby Bee', threshold: 0, nextThreshold: 5 },
+        { name: 'Worker Bee', threshold: 5, nextThreshold: 10 },
+        { name: 'Scout Bee', threshold: 10, nextThreshold: 20 },
+        { name: 'Guard Bee', threshold: 20, nextThreshold: 35 },
+        { name: 'Drone Bee', threshold: 35, nextThreshold: 50 },
+        { name: 'Queen Bee', threshold: 50, nextThreshold: null },
+    ];
+    const currentRank = beeRanks.reduce((acc, rank) =>
+        lessonsCompleted >= rank.threshold ? rank : acc, beeRanks[0]);
+    const progressInRank = currentRank.nextThreshold
+        ? lessonsCompleted - currentRank.threshold : currentRank.threshold;
+    const progressNeeded = currentRank.nextThreshold
+        ? currentRank.nextThreshold - currentRank.threshold : 1;
+    const honeyJarPercent = Math.min(100, Math.round((progressInRank / progressNeeded) * 100));
 
-    const shield = getShieldLevel(profile?.xp || 0);
+    const globalRank = stats ? Math.max(1, 9999 - Math.floor((profile?.xp || 0) / 10)) : '—';
 
     return (
         <div className={styles.profilePage}>
             {loading ? (
-                <div className={styles.loadingContainer}>
-                    <InlineLoader />
-                </div>
+                <div className={styles.loadingContainer}><InlineLoader /></div>
             ) : (
                 <div className={styles.container}>
-                    {/* Header / Cover Section */}
-                    <header className={styles.profileHeader}>
-                        <div
-                            className={styles.coverImage}
-                            style={profile?.cover_url ? { backgroundImage: `url(${profile.cover_url})` } : {}}
-                        >
-                            <div className={styles.coverOverlay}></div>
-                            <button className={styles.editCoverBtn} onClick={handleCoverClick} title={t('change_cover')}>
-                                <Camera size={16} />
-                                <span>{t('change_cover')}</span>
-                            </button>
-                            <input
-                                ref={coverInputRef}
-                                type="file"
-                                accept="image/jpeg,image/jpg,image/png,image/webp"
-                                onChange={handleCoverChange}
-                                style={{ display: 'none' }}
-                            />
-                        </div>
 
-                        <div className={styles.profileHeaderContent}>
-                            <div className={styles.profileMetaBar}>
-                                <div className={styles.profileIdentity}>
-                                    <div className={styles.avatarContainer}>
-                                        <div className={styles.avatar}>
-                                            {profile?.avatar_url ? (
-                                                <img src={profile.avatar_url} alt="Profile" />
-                                            ) : (
-                                                <User size={40} />
-                                            )}
-                                            {uploadingAvatar && <div className={styles.loaderOverlay}><InlineLoader /></div>}
-                                        </div>
-                                        <button className={styles.avatarEditBtn} onClick={handleAvatarClick}>
-                                            <Camera size={14} />
-                                        </button>
-                                        <input
-                                            ref={fileInputRef}
-                                            type="file"
-                                            accept="image/jpeg,image/jpg,image/png,image/webp"
-                                            onChange={handleAvatarChange}
-                                            style={{ display: 'none' }}
-                                        />
-                                    </div>
-                                    <div className={styles.userInfo}>
-                                        <h1 className={styles.userName}>{profile?.full_name || t('learner')}</h1>
-                                        <p className={styles.userRole}>
-                                            {profile?.designation ? `${profile.designation} ${profile.department ? '• ' + profile.department : ''}` : t('welcome_tagline')}
-                                        </p>
-                                        <div className={styles.userLocationDate}>
-                                            {profile?.location && (
-                                                <span className={styles.locationItem}>
-                                                    <MapPin size={14} /> {profile.location}
-                                                </span>
-                                            )}
-                                            <span className={styles.dateItem}>
-                                                <Calendar size={14} /> {t('joined')}: {formatDate(profile?.created_at)}
-                                            </span>
-                                        </div>
-                                    </div>
+                    {/* ========== SECTION 1: ROYAL HEADER ========== */}
+                    <section className={styles.royalHeader}>
+                        {/* Glow Avatar */}
+                        <div className={styles.avatarWrapper}>
+                            <div className={styles.avatarGlow}></div>
+                            <div className={styles.avatar} onClick={() => fileInputRef.current?.click()}>
+                                {profile?.avatar_url
+                                    ? <img src={profile.avatar_url} alt="Profile" />
+                                    : <User size={44} color="#F1C40F" />
+                                }
+                                <div className={styles.avatarOverlay}>
+                                    <Camera size={20} />
                                 </div>
+                                {uploadingAvatar && <div className={styles.loaderOverlay}><InlineLoader /></div>}
                             </div>
 
-                            {/* Stats Row - Now separate */}
-                            <div className={styles.statsRow}>
-                                <div className={styles.statItem}>
-                                    <div className={styles.statIcon} style={{ color: '#ffa502', background: 'rgba(255, 165, 2, 0.1)' }}>
-                                        <Zap size={20} />
-                                    </div>
-                                    <div className={styles.statContent}>
-                                        <span className={styles.statValue}>{profile?.xp || 0}</span>
-                                        <span className={styles.statLabel}>XP</span>
-                                    </div>
-                                </div>
-                                <div className={styles.statItem}>
-                                    <div className={styles.statIcon} style={{ color: '#ffc800', background: 'rgba(255, 200, 0, 0.1)' }}>
-                                        <PollenIcon size={20} />
-                                    </div>
-                                    <div className={styles.statContent}>
-                                        <span className={styles.statValue}>{profile?.gems || 0}</span>
-                                        <span className={styles.statLabel}>{t('pollen')}</span>
-                                    </div>
-                                </div>
-                                <div className={styles.statItem}>
-                                    <div className={styles.statIcon} style={{ color: '#ff4d4d', background: 'rgba(255, 77, 77, 0.1)' }}>
-                                        <Flame size={20} />
-                                    </div>
-                                    <div className={styles.statContent}>
-                                        <span className={styles.statValue}>{streak?.current_streak || 0}</span>
-                                        <span className={styles.statLabel}>{t('days')}</span>
-                                    </div>
-                                </div>
-                                <div className={styles.statItem}>
-                                    <div className={styles.statIcon} style={{ color: '#2ecc71', background: 'rgba(46, 204, 113, 0.1)' }}>
-                                        <Target size={20} />
-                                    </div>
-                                    <div className={styles.statContent}>
-                                        <span className={styles.statValue}>{stats?.accuracy_percentage || 0}%</span>
-                                        <span className={styles.statLabel}>{t('efficiency')}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-
-                    <div className={styles.contentGrid}>
-                        {/* LEFT COLUMN - Shield & Bio */}
-                        <aside className={styles.leftColumn}>
-
-                            {/* Shield / League Card */}
-                            <div className={styles.shieldCard}>
-                                <div className={styles.shieldHeader}>
-                                    <Trophy size={18} className={styles.trophyIcon} />
-                                    <h3>{t('earned_shield')}</h3>
-                                </div>
-                                <div className={styles.shieldBody} style={{ background: shield.gradient }}>
-                                    <div className={styles.shieldIcon}>{shield.icon}</div>
-                                    <div className={styles.shieldInfo}>
-                                        <h4>{language === 'bn' ? shield.nameBangla : shield.nameEnglish}</h4>
-                                        <span>{t('level')}: {shield.level}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Bio Section if exists */}
-                            {profile?.bio && (
-                                <div className={styles.bioCard}>
-                                    <h3>{t('bio')}</h3>
-                                    <p>{profile.bio}</p>
+                            {/* Desktop Rank Badge on Avatar */}
+                            {xp >= 1 && (
+                                <div className={styles.avatarBadge}>
+                                    <img
+                                        alt={getShieldLevel(profile?.xp || 0).name}
+                                        src={`/src/assets/shields/${getShieldLevel(profile?.xp || 0).level.toLowerCase()}-shield.png`}
+                                    />
                                 </div>
                             )}
+                            <input ref={fileInputRef} type="file"
+                                accept="image/jpeg,image/jpg,image/png,image/webp"
+                                onChange={handleAvatarChange} style={{ display: 'none' }} />
+                        </div>
 
-                            {/* === THE HIVE CARD === */}
-                            <div className={styles.hiveCard}>
-                                {/* Header */}
-                                <div className={styles.hiveHeader}>
-                                    <span className={styles.hiveBeeEmoji}>🐝</span>
-                                    <div>
-                                        <h3 className={styles.hiveTitle}>The Hive</h3>
-                                        <p className={styles.hiveSubtitle}>আপনার মৌচাকের অগ্রগতি</p>
-                                    </div>
+                        {/* User Info */}
+                        <div className={styles.headerInfo}>
+                            <div className={styles.nameSection}>
+                                <h1 className={styles.userName}>
+                                    {profile?.full_name || 'শিক্ষার্থী'}
+                                </h1>
+                            </div>
+                            <p className={styles.memberSince}>
+                                <Calendar size={13} />
+                                যোগদান: {formatDate(profile?.created_at)}
+                            </p>
+                            {profile?.location && (
+                                <p className={styles.locationLine}>
+                                    <MapPin size={13} />{profile.location}
+                                </p>
+                            )}
+
+                            {/* Rank Badge */}
+                            <div className={styles.rankBadge}>
+                                <Crown size={14} className={styles.crownIcon} />
+                                <span>
+                                    {language === 'bn'
+                                        ? `রয়্যাল জেলি ${getShieldLevel(profile?.xp || 0).nameBangla}`
+                                        : `Royal Jelly ${getShieldLevel(profile?.xp || 0).name}`
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* ========== SECTION 2: HONEY STATS GRID ========== */}
+                    <section className={styles.statsSection}>
+                        <div className={styles.statsGrid}>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <span className={styles.statEmoji}>🍯</span>
+                                    <span className={styles.statCardValue}>{profile?.xp || 0}</span>
+                                    <span className={styles.statCardDivider}>-</span>
+                                    <span className={styles.statCardLabel}>মোট মধু</span>
                                 </div>
+                            </div>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <Compass size={18} className={styles.statIconCompass} />
+                                    <span className={styles.statCardValue}>{enrolledCourses.length}</span>
+                                    <span className={styles.statCardDivider}>-</span>
+                                    <span className={styles.statCardLabel}>শেখার কোর্সসমূহ</span>
+                                </div>
+                            </div>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <Flame size={18} className={styles.statIconStreak} />
+                                    <span className={styles.statCardValue}>{streak?.current_streak || 0} দিন</span>
+                                    <span className={styles.statCardDivider}>-</span>
+                                    <span className={styles.statCardLabel}>গুনগুন স্ট্রিক</span>
+                                </div>
+                            </div>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <Trophy size={18} className={styles.statIconRank} />
+                                    <span className={styles.statCardValue}>#{globalRank}</span>
+                                    <span className={styles.statCardDivider}>-</span>
+                                    <span className={styles.statCardLabel}>লিডারবোর্ড র‌্যাঙ্কিং</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-                                {/* Worker Bee Status */}
-                                {(() => {
-                                    const xp = profile?.xp || 0;
-                                    const lessonsCompleted = Math.floor(xp / 100);
-                                    const beeRanks = [
-                                        { name: 'Baby Bee', threshold: 0, nextName: 'Worker Bee', nextThreshold: 5, emoji: '🐛' },
-                                        { name: 'Worker Bee', threshold: 5, nextName: 'Scout Bee', nextThreshold: 10, emoji: '🐝' },
-                                        { name: 'Scout Bee', threshold: 10, nextName: 'Guard Bee', nextThreshold: 20, emoji: '🦋' },
-                                        { name: 'Guard Bee', threshold: 20, nextName: 'Drone Bee', nextThreshold: 35, emoji: '🛡️' },
-                                        { name: 'Drone Bee', threshold: 35, nextName: profile?.gender === 'male' ? 'King Bee' : 'Queen Bee', nextThreshold: 50, emoji: '👑' },
-                                        { name: profile?.gender === 'male' ? 'King Bee' : 'Queen Bee', threshold: 50, nextName: null, nextThreshold: null, emoji: '👑' },
-                                    ];
-
-                                    const currentRank = beeRanks.reduce((acc, rank) => {
-                                        return lessonsCompleted >= rank.threshold ? rank : acc;
-                                    }, beeRanks[0]);
-
-                                    const progressInRank = currentRank.nextThreshold
-                                        ? lessonsCompleted - currentRank.threshold
-                                        : currentRank.threshold;
-                                    const progressNeeded = currentRank.nextThreshold
-                                        ? currentRank.nextThreshold - currentRank.threshold
-                                        : 1;
-                                    const progressPercent = Math.min(100, Math.round((progressInRank / progressNeeded) * 100));
-
-                                    // Honey petals visualization (5 flowers)
-                                    const totalPetals = 5;
-                                    const filledPetals = Math.min(totalPetals, Math.floor(progressPercent / 20));
-
-                                    return (
-                                        <>
-                                            <div className={styles.hiveBeeStatus}>
-                                                <span className={styles.hiveRankEmoji}>{currentRank.emoji}</span>
-                                                <div className={styles.hiveRankInfo}>
-                                                    <span className={styles.hiveRankName}>{currentRank.name}</span>
-                                                    {currentRank.nextName ? (
-                                                        <span className={styles.hiveRankNext}>
-                                                            {currentRank.nextName} হতে আরও {progressNeeded - progressInRank}টি লেসন বাকি!
-                                                        </span>
-                                                    ) : (
-                                                        <span className={styles.hiveRankNext}>🌟 সর্বোচ্চ স্তরে পৌঁছেছেন!</span>
-                                                    )}
-                                                </div>
+                    {/* ========== SECTION 3: HONEY JAR PROGRESS ========== */}
+                    <section className={styles.jarSection}>
+                        <h2 className={styles.sectionTitle}>
+                            <span>🍯</span> আপনার মৌচাকের অগ্রগতি
+                        </h2>
+                        <div className={styles.jarLayout}>
+                            {/* Honey Jar */}
+                            <div className={styles.honeyJarContainer}>
+                                <div className={styles.honeyJar}>
+                                    <div className={styles.jarLid}></div>
+                                    <div className={styles.jarBody}>
+                                        <div className={styles.jarGlass}>
+                                            <div className={styles.jarFill} style={{ height: `${honeyJarPercent}%` }}>
+                                                <div className={styles.liquidWave}></div>
+                                                <div className={styles.liquidBubble} style={{ left: '20%', animationDelay: '0s' }}></div>
+                                                <div className={styles.liquidBubble} style={{ left: '55%', animationDelay: '0.8s' }}></div>
+                                                <div className={styles.liquidBubble} style={{ left: '75%', animationDelay: '1.6s' }}></div>
                                             </div>
-
-                                            {/* Honey Flower Progress */}
-                                            <div className={styles.honeyFlowerRow}>
-                                                {Array.from({ length: totalPetals }).map((_, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className={`${styles.honeyFlower} ${i < filledPetals ? styles.honeyFlowerFilled : ''}`}
-                                                        title={`ফুল ${i + 1}`}
-                                                    >
-                                                        <span className={styles.flowerEmoji}>
-                                                            {i < filledPetals ? '🌻' : '🌾'}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-
-                                            {/* Progress Bar */}
-                                            <div className={styles.hiveProgressWrapper}>
-                                                <div className={styles.hiveProgressBar}>
-                                                    <div
-                                                        className={styles.hiveProgressFill}
-                                                        style={{ width: `${progressPercent}%` }}
-                                                    />
-                                                </div>
-                                                <span className={styles.hiveProgressLabel}>{progressPercent}%</span>
-                                            </div>
-                                        </>
-                                    );
-                                })()}
-
-                                {/* Buzz Streak */}
-                                <div className={styles.buzzStreakRow}>
-                                    <span className={styles.buzzStreakIcon}>⚡</span>
-                                    <span className={styles.buzzStreakLabel}>{t('buzz_streak')}</span>
-                                    <span className={styles.buzzStreakValue}>{streak?.current_streak || 0} {t('days')}</span>
+                                            <div className={styles.jarGlossLeft}></div>
+                                            <div className={styles.jarGlossTop}></div>
+                                        </div>
+                                        <div className={styles.jarBase}></div>
+                                    </div>
+                                    <div className={styles.jarPercentOverlay}>
+                                        <span>{honeyJarPercent}%</span>
+                                    </div>
                                 </div>
                             </div>
 
-                        </aside>
-
-                        {/* RIGHT COLUMN - Courses & Activity */}
-                        <div className={styles.rightColumn}>
-                            {/* Courses Section */}
-                            <section className={styles.section}>
-                                <div className={styles.sectionHeader}>
-                                    <h3>{t('my_courses')}</h3>
-                                    {enrolledCourses.length > 0 && (
-                                        <button className={styles.seeAllBtn} onClick={() => navigate('/courses')}>
-                                            {t('see_all')} <ChevronRight size={16} />
-                                        </button>
-                                    )}
+                            {/* Progress Info */}
+                            <div className={styles.jarInfo}>
+                                <p className={styles.jarLabel}>
+                                    আপনার মৌচাকটি <strong>{honeyJarPercent}%</strong> পূর্ণ হয়েছে
+                                </p>
+                                <div className={styles.rankPill}>
+                                    <span>🐝</span>
+                                    <span>{currentRank.name}</span>
                                 </div>
-
-                                {enrolledCourses.length > 0 ? (
-                                    <div className={styles.coursesList}>
-                                        {enrolledCourses.map(course => (
-                                            <div key={course.course_id} className={styles.courseItem} onClick={() => navigate(`/learn/${course.course_id}`)}>
-                                                <img src={course.image_url} alt="" className={styles.courseThumb} />
-                                                <div className={styles.courseDetails}>
-                                                    <h4>{course.course_title}</h4>
-                                                    <div className={styles.progressBarWrapper}>
-                                                        <div className={styles.progressFill} style={{ width: `${course.progress_percentage}%` }}></div>
-                                                    </div>
-                                                    <div className={styles.progressMeta}>
-                                                        <span>{course.progress_percentage}% {t('completed')}</span>
-                                                        <span>{course.chapters_completed}/{course.total_chapters} {t('chapters')}</span>
-                                                    </div>
-                                                </div>
-                                                <div className={styles.playIcon}>
-                                                    <ChevronRight size={20} />
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className={styles.emptyState}>
-                                        <p>{language === 'bn' ? 'এখনও কোনো কোর্সে ভর্তি হননি।' : "You haven't enrolled in any courses yet."}</p>
-                                        <Button variant="primary" onClick={() => navigate('/courses')}>{t('start_course')}</Button>
-                                    </div>
+                                {currentRank.nextThreshold && (
+                                    <p className={styles.jarNextRank}>
+                                        পরবর্তী স্তরে যেতে আরও{' '}
+                                        <strong>{progressNeeded - progressInRank}টি</strong> লেসন বাকি
+                                    </p>
                                 )}
-                            </section>
-
-                            {/* Activity Section */}
-                            <section className={styles.section}>
-                                <div className={styles.sectionHeader}>
-                                    <h3>{t('recent_activity')}</h3>
+                                {/* XP Bar */}
+                                <div className={styles.xpBarWrapper}>
+                                    <div className={styles.xpBar}>
+                                        <div className={styles.xpFill} style={{ width: `${honeyJarPercent}%` }}></div>
+                                    </div>
+                                    <span className={styles.xpPct}>{honeyJarPercent}%</span>
                                 </div>
+                                <p className={styles.xpTotal}>মোট XP: <strong>{xp}</strong></p>
+                            </div>
+                        </div>
+                    </section>
 
-                                {recentTransactions.length > 0 ? (
-                                    <div className={styles.activityFeed}>
-                                        {recentTransactions.map(item => (
-                                            <div key={item.id} className={styles.activityRow}>
-                                                <div className={styles.activityTypeIcon}>
-                                                    {getTransactionIcon(item.transaction_type)}
-                                                </div>
-                                                <div className={styles.activityDetails}>
-                                                    <span className={styles.activityText}>
-                                                        {item.transaction_type === 'xp_earned' && t('practice_xp')}
-                                                        {item.transaction_type === 'gem_earned' && t('reward_gems')}
-                                                        {item.transaction_type === 'heart_lost' && t('lost_hearts')}
-                                                        {item.transaction_type === 'heart_gained' && t('refilled_hearts')}
-                                                    </span>
-                                                    <span className={styles.activityDate}>{formatDate(item.created_at)}</span>
-                                                </div>
-                                                <div className={`${styles.activityAmount} ${item.transaction_type.includes('lost') ? styles.negative : styles.positive}`}>
-                                                    {item.transaction_type.includes('lost') ? '-' : '+'}{item.amount}
-                                                </div>
-                                            </div>
-                                        ))}
+                    {/* ========== SECTION 4: ACHIEVEMENT GALLERY ========== */}
+                    <section className={styles.badgesSection}>
+                        <h2 className={styles.sectionTitle}>
+                            <span>🏅</span> অর্জিত পদক
+                        </h2>
+                        <div className={styles.badgesGrid}>
+                            {BADGE_LIST.map(badge => (
+                                <div
+                                    key={badge.id}
+                                    className={`${styles.badgeItem} ${badge.unlocked ? styles.badgeUnlocked : styles.badgeLocked}`}
+                                    title={badge.label}
+                                >
+                                    <div className={styles.badgeCircle}>
+                                        {badge.unlocked
+                                            ? <span className={styles.badgeEmoji}>{badge.emoji}</span>
+                                            : <Lock size={16} className={styles.lockIcon} />
+                                        }
                                     </div>
-                                ) : (
-                                    <div className={styles.emptyState}>
-                                        <p>{t('no_activity')}</p>
-                                    </div>
-                                )}
-                            </section>
+                                    <span className={styles.badgeLabel}>{badge.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* ========== SECTION 5: ACTIONS & SETTINGS ========== */}
+                    <section className={styles.actionsSection}>
+                        <button className={styles.actionOutline}
+                            onClick={() => setIsEditModalOpen(true)}>
+                            <Edit3 size={16} />
+                            প্রোফাইল এডিট করুন
+                        </button>
+                        <button className={styles.actionSolid}>
+                            <Users size={16} />
+                            বন্ধুদের চ্যালেঞ্জ করুন
+                        </button>
+                        <button className={styles.actionMinimal}
+                            onClick={() => navigate('/settings')}>
+                            <Settings size={18} />
+                        </button>
+                    </section>
+
+                </div>
+            )}
+
+            {/* === FLOATING SHARE BUTTON === */}
+            {!loading && (
+                <button className={styles.shareFab} onClick={() => setShowShareCard(true)}
+                    title="শেয়ার করুন">
+                    <Share2 size={20} />
+                </button>
+            )}
+
+            {/* === SHARE CARD MODAL === */}
+            {showShareCard && (
+                <div className={styles.modalOverlay} onClick={() => setShowShareCard(false)}>
+                    <div className={styles.shareCard} onClick={e => e.stopPropagation()}>
+                        <button className={styles.shareCloseBtn} onClick={() => setShowShareCard(false)}>
+                            <X size={18} />
+                        </button>
+                        <div className={styles.shareCardInner}>
+                            <div className={styles.shareCardHeader}>
+                                <span className={styles.shareBeeIcon}>🐝</span>
+                                <h3>beeLesson</h3>
+                                <p>আমার শেখার সারসংক্ষেপ</p>
+                            </div>
+                            <div className={styles.shareCardAvatar}>
+                                {profile?.avatar_url
+                                    ? <img src={profile.avatar_url} alt="avatar" />
+                                    : <User size={32} color="#F1C40F" />}
+                            </div>
+                            <h4 className={styles.shareCardName}>{profile?.full_name || 'শিক্ষার্থী'}</h4>
+                            <div className={styles.shareStatsRow}>
+                                <div className={styles.shareStat}><strong>{profile?.xp || 0}</strong><span>মধু (XP)</span></div>
+                                <div className={styles.shareStat}><strong>{streak?.current_streak || 0}</strong><span>দিনের স্ট্রিক</span></div>
+                                <div className={styles.shareStat}><strong>{enrolledCourses.length}</strong><span>কোর্স</span></div>
+                            </div>
+                            <div className={styles.shareRankBadge}>
+                                <Crown size={13} /> রয়্যাল জেলি হাইভ মাস্টর্স
+                            </div>
+                            <button className={styles.shareDownload}>📸 স্ক্রিনশট নিন</button>
                         </div>
                     </div>
+                </div>
+            )}
 
-                    {/* Edit Profile Modal */}
-                    {isEditModalOpen && (
-                        <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
-                            <div className={styles.modal} onClick={e => e.stopPropagation()}>
-                                <div className={styles.modalHeader}>
-                                    <h3>{t('edit_profile')}</h3>
-                                    <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}><X size={20} /></button>
-                                </div>
-                                <form className={styles.editForm} onSubmit={handleUpdateProfile}>
-                                    <div className={styles.fieldGroup}>
-                                        <label>{t('full_name')}</label>
-                                        <input
-                                            type="text"
-                                            value={editForm.full_name}
-                                            onChange={e => setEditForm({ ...editForm, full_name: e.target.value })}
-                                            required
-                                        />
-                                    </div>
-                                    <div className={styles.rowGroup}>
-                                        <div className={styles.fieldGroup}>
-                                            <label>{t('designation')}</label>
-                                            <input
-                                                type="text"
-                                                placeholder={language === 'bn' ? "উদা: Executive" : "e.g. Executive"}
-                                                value={editForm.designation}
-                                                onChange={e => setEditForm({ ...editForm, designation: e.target.value })}
-                                            />
-                                        </div>
-                                        <div className={styles.fieldGroup}>
-                                            <label>{t('dept')}</label>
-                                            <input
-                                                type="text"
-                                                placeholder={language === 'bn' ? "উদা: IT" : "e.g. IT"}
-                                                value={editForm.department}
-                                                onChange={e => setEditForm({ ...editForm, department: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className={styles.fieldGroup}>
-                                        <label>{t('bio')}</label>
-                                        <textarea
-                                            rows="3"
-                                            value={editForm.bio}
-                                            onChange={e => setEditForm({ ...editForm, bio: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className={styles.fieldGroup}>
-                                        <label>{t('location')}</label>
-                                        <input
-                                            type="text"
-                                            value={editForm.location}
-                                            onChange={e => setEditForm({ ...editForm, location: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className={styles.fieldGroup}>
-                                        <label>{language === 'bn' ? 'লিঙ্গ (Gender)' : 'Gender'}</label>
-                                        <div className={styles.genderToggle}>
-                                            <button
-                                                type="button"
-                                                className={`${styles.genderBtn} ${editForm.gender === 'male' ? styles.genderBtnActive : ''}`}
-                                                onClick={() => setEditForm({ ...editForm, gender: 'male' })}
-                                            >
-                                                {language === 'bn' ? 'পুরুষ (Male)' : 'Male'}
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className={`${styles.genderBtn} ${editForm.gender === 'female' ? styles.genderBtnActive : ''}`}
-                                                onClick={() => setEditForm({ ...editForm, gender: 'female' })}
-                                            >
-                                                {language === 'bn' ? 'নারী (Female)' : 'Female'}
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className={styles.modalActions}>
-                                        <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>{t('cancel')}</Button>
-                                        <Button variant="primary" type="submit">{t('save')}</Button>
-                                    </div>
-                                </form>
-                            </div>
+            {/* === EDIT PROFILE MODAL === */}
+            {isEditModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
+                    <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h3>প্রোফাইল এডিট</h3>
+                            <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}>
+                                <X size={20} />
+                            </button>
                         </div>
-                    )}
+                        <form className={styles.editForm} onSubmit={handleUpdateProfile}>
+                            <div className={styles.fieldGroup}>
+                                <label>পূর্ণ নাম</label>
+                                <input type="text" value={editForm.full_name}
+                                    onChange={e => setEditForm({ ...editForm, full_name: e.target.value })} required />
+                            </div>
+                            <div className={styles.rowGroup}>
+                                <div className={styles.fieldGroup}>
+                                    <label>পদবি</label>
+                                    <input type="text" placeholder="উদা: Executive"
+                                        value={editForm.designation}
+                                        onChange={e => setEditForm({ ...editForm, designation: e.target.value })} />
+                                </div>
+                                <div className={styles.fieldGroup}>
+                                    <label>বিভাগ</label>
+                                    <input type="text" placeholder="উদা: IT"
+                                        value={editForm.department}
+                                        onChange={e => setEditForm({ ...editForm, department: e.target.value })} />
+                                </div>
+                            </div>
+                            <div className={styles.fieldGroup}>
+                                <label>পরিচয়</label>
+                                <textarea rows="3" value={editForm.bio}
+                                    onChange={e => setEditForm({ ...editForm, bio: e.target.value })} />
+                            </div>
+                            <div className={styles.fieldGroup}>
+                                <label>অবস্থান</label>
+                                <input type="text" value={editForm.location}
+                                    onChange={e => setEditForm({ ...editForm, location: e.target.value })} />
+                            </div>
+                            <div className={styles.fieldGroup}>
+                                <label>লিঙ্গ</label>
+                                <div className={styles.genderToggle}>
+                                    <button type="button"
+                                        className={`${styles.genderBtn} ${editForm.gender === 'male' ? styles.genderBtnActive : ''}`}
+                                        onClick={() => setEditForm({ ...editForm, gender: 'male' })}>
+                                        পুরুষ
+                                    </button>
+                                    <button type="button"
+                                        className={`${styles.genderBtn} ${editForm.gender === 'female' ? styles.genderBtnActive : ''}`}
+                                        onClick={() => setEditForm({ ...editForm, gender: 'female' })}>
+                                        নারী
+                                    </button>
+                                </div>
+                            </div>
+                            <div className={styles.modalActions}>
+                                <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>বাতিল</Button>
+                                <Button variant="primary" type="submit">সংরক্ষণ করুন</Button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>

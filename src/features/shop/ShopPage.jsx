@@ -33,6 +33,9 @@ const QUEEN_BEE_FEATURES = [
     { emoji: '⚡', text: 'নতুন কোর্স সবার আগে আপনার জন্য।' },
 ];
 
+const toBanglaNum = (num) =>
+    String(num).replace(/[0-9]/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+
 const ShopPage = () => {
     const { user } = useAuth();
     const { t, language } = useLanguage();
@@ -76,24 +79,34 @@ const ShopPage = () => {
             return;
         }
 
-        if (profile.hearts >= profile.max_hearts) {
-            toast.error('আপনার মৌচাকে ইতিমধ্যে পর্যাপ্ত মধু আছে! 🍯');
+        if (profile.is_premium) {
+            toast.error('আপনি একজন কিং বী! আপনার হানি ড্রপ আনলিমিটেড, এক্সচেঞ্জ করার প্রয়োজন নেই। 👑');
             return;
         }
 
         setProcessing(true);
+        console.log('Starting conversion:', { userId: user.id, hearts: calculatedHearts, gems: gemToConvert });
         try {
             const result = await shopService.convertGemsToHearts(user.id, calculatedHearts, gemToConvert);
-            if (result.success) {
+            console.log('Conversion result:', result);
+            if (result && result.success) {
+                // Manually update local state first for instant feedback
                 setProfile(prev => ({
                     ...prev,
-                    gems: result.new_gems,
-                    hearts: result.new_hearts
+                    gems: result.new_gems ?? (prev.gems - gemToConvert),
+                    hearts: result.new_hearts ?? Math.min(prev.max_hearts, prev.hearts + calculatedHearts)
                 }));
+
+                // Then fetch fresh data as backup
+                await fetchProfile();
+
                 const unit = language === 'bn' ? 'টি' : '';
                 toast.success(`${calculatedHearts}${unit} ${t('hearts_added_msg')} 🍯`);
+            } else {
+                toast.error(result?.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
             }
         } catch (err) {
+            console.error('Conversion error:', err);
             toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
         } finally {
             setProcessing(false);
@@ -126,7 +139,7 @@ const ShopPage = () => {
             if (type === 'gems') {
                 result = await shopService.buyGems(user.id, data.amount, data.price, data.id);
                 if (result.success) {
-                    setProfile(prev => ({ ...prev, gems: result.new_gems }));
+                    await fetchProfile();
                     toast.success(t('gems_added').replace('টি', `${data.amount}টি`));
                 }
             } else if (type === 'subscription') {
@@ -139,7 +152,7 @@ const ShopPage = () => {
             } else if (type === 'hearts') {
                 result = await shopService.buyHearts(user.id, data.amount, data.price, data.id);
                 if (result.success) {
-                    setProfile(prev => ({ ...prev, hearts: result.new_hearts }));
+                    await fetchProfile();
                     toast.success(t('hearts_added').replace('টি', `${data.amount}টি`));
                 }
             }
@@ -217,18 +230,35 @@ const ShopPage = () => {
                                         ))}
                                     </div>
 
-                                    <div className={styles.queenBeeHeader}>
-                                        <div className={styles.queenBeeCrown}>👑</div>
-                                        <div>
-                                            <h2 className={styles.queenBeeTitle}>
-                                                {profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')}
-                                            </h2>
-                                            <p className={styles.queenBeeTagline}>
-                                                {profile?.gender === 'male'
-                                                    ? (language === 'bn' ? 'মৌচাকের রাজা হোন!' : 'Be the King of the Hive!')
-                                                    : (language === 'bn' ? 'মৌচাকের রানী হোন!' : 'Be the Queen of the Hive!')
-                                                }
-                                            </p>
+                                    <div className={styles.queenBeeHeader} style={{ justifyContent: 'space-between' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                            <div className={styles.queenBeeCrown}>👑</div>
+                                            <div>
+                                                <h2 className={styles.queenBeeTitle}>
+                                                    {profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')}
+                                                </h2>
+                                                <p className={styles.queenBeeTagline}>
+                                                    {profile?.gender === 'male'
+                                                        ? (language === 'bn' ? 'মৌচাকের রাজা হোন!' : 'Be the King of the Hive!')
+                                                        : (language === 'bn' ? 'মৌচাকের রানী হোন!' : 'Be the Queen of the Hive!')
+                                                    }
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.planToggle}>
+                                            <button
+                                                className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
+                                                onClick={() => setPlanType('monthly')}
+                                            >
+                                                {t('monthly')}
+                                            </button>
+                                            <button
+                                                className={`${styles.toggleBtn} ${planType === 'yearly' ? styles.toggleBtnActive : ''}`}
+                                                onClick={() => setPlanType('yearly')}
+                                            >
+                                                {t('yearly')}
+                                                <span className={styles.discountBadge}>{t('discount')}</span>
+                                            </button>
                                         </div>
                                     </div>
 
@@ -250,24 +280,8 @@ const ShopPage = () => {
                                         })}
                                     </div>
 
-                                    {/* Plan Toggle + CTA */}
+                                    {/* Pricing CTA */}
                                     <div className={styles.queenBeePricing}>
-                                        <div className={styles.planToggle}>
-                                            <button
-                                                className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
-                                                onClick={() => setPlanType('monthly')}
-                                            >
-                                                {t('monthly')}
-                                            </button>
-                                            <button
-                                                className={`${styles.toggleBtn} ${planType === 'yearly' ? styles.toggleBtnActive : ''}`}
-                                                onClick={() => setPlanType('yearly')}
-                                            >
-                                                {t('yearly')}
-                                                <span className={styles.discountBadge}>{t('discount')}</span>
-                                            </button>
-                                        </div>
-
                                         <button
                                             className={styles.queenBeeCtaBtn}
                                             onClick={() => handlePurchase('subscription')}
@@ -275,8 +289,8 @@ const ShopPage = () => {
                                         >
                                             <span>👑</span>
                                             {planType === 'monthly'
-                                                ? `৯৯ টাকায় ${profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} শুরু করুন`
-                                                : '৯৯৯ টাকায় বার্ষিক সদস্যপদ নিন'}
+                                                ? <><span className={styles.ctaPrice}>৯৯</span><span className={styles.ctaLabel}> টাকায় শুরু করুন</span></>
+                                                : <><span className={styles.ctaPrice}>৯৯৯</span><span className={styles.ctaLabel}> টাকায় বার্ষিক</span></>}
                                         </button>
                                         <p className={styles.queenBeeCtaSub}>
                                             {planType === 'monthly' ? 'মাত্র ৳৯৯/মাস • যেকোনো সময় বাতিল করুন' : 'মাত্র ৳৯৯৯/বছর • ২ মাস বিনামূল্যে!'}
@@ -310,8 +324,8 @@ const ShopPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className={styles.priceTag} style={{ background: '#f1c40f', color: '#000' }}>৳ {pack.price}</div>
-                                        <span className={styles.badge} style={{ background: '#f1c40f', color: '#000', left: '24px', top: '-10px' }}>ইনস্ট্যান্ট</span>
+                                        <div className={styles.priceTag} style={{ background: '#f1c40f' }}>৳ {toBanglaNum(pack.price)}</div>
+                                        <span className={styles.badge} style={{ background: '#f1c40f', color: '#fff', left: '24px', top: '-10px' }}>ইনস্ট্যান্ট</span>
                                     </div>
                                 ))}
                             </div>
@@ -320,7 +334,7 @@ const ShopPage = () => {
                         {/* Honey Drop (Gem to Heart) Converter Section */}
                         <section className={styles.section}>
                             <h2 className={styles.sectionTitle}>
-                                <HoneyDropIcon size={28} />
+                                <Settings size={28} />
                                 পরাগরেণু এক্সচেঞ্জ করুন
                             </h2>
                             <div className={styles.convertCard}>
@@ -336,6 +350,9 @@ const ShopPage = () => {
                                         <button className={styles.stepBtn} onClick={handleIncrement}>
                                             <Plus size={20} />
                                         </button>
+                                    </div>
+                                    <div className={styles.gemBalanceInfo}>
+                                        আপনার পরাগরেণু: <PollenIcon size={14} /> <span>{(profile?.gems || 0) - gemToConvert}</span>
                                     </div>
                                 </div>
 
@@ -384,7 +401,7 @@ const ShopPage = () => {
                                         <div className={styles.packIcon}>{pack.icon}</div>
                                         <div className={styles.packAmount}>{pack.amount}</div>
                                         <div className={styles.packName}>{t(pack.labelKey)}</div>
-                                        <div className={styles.priceTag}>৳ {pack.price}</div>
+                                        <div className={styles.priceTag}>৳ {toBanglaNum(pack.price)}</div>
                                     </div>
                                 ))}
                             </div>
@@ -394,132 +411,136 @@ const ShopPage = () => {
                 }
             </div >
 
-            {showCheckout && (
-                <div className={styles.checkoutOverlay}>
-                    <div className={styles.checkoutModal}>
-                        <div className={styles.checkoutHeader}>
-                            <h2>{t('confirm_payment')}</h2>
-                            <p>{t('payment_desc')}</p>
-                        </div>
-
-                        <div className={styles.orderSummary}>
-                            <div className={styles.summaryRow}>
-                                <span>{t('item')}:</span>
-                                <span>{showCheckout.data.label}</span>
+            {
+                showCheckout && (
+                    <div className={styles.checkoutOverlay}>
+                        <div className={styles.checkoutModal}>
+                            <div className={styles.checkoutHeader}>
+                                <h2>{t('confirm_payment')}</h2>
+                                <p>{t('payment_desc')}</p>
                             </div>
-                            <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
-                                <span>{t('total_price')}:</span>
-                                <span>৳ {showCheckout.data.price}</span>
+
+                            <div className={styles.orderSummary}>
+                                <div className={styles.summaryRow}>
+                                    <span>{t('item')}:</span>
+                                    <span>{showCheckout.data.label}</span>
+                                </div>
+                                <div className={`${styles.summaryRow} ${styles.summaryTotal}`}>
+                                    <span>{t('total_price')}:</span>
+                                    <span>৳ {showCheckout.data.price}</span>
+                                </div>
                             </div>
-                        </div>
 
-                        <div className={styles.paymentMethods}>
-                            <button className={`${styles.methodBtn} ${styles.methodBtnActive}`}>
-                                <CreditCard size={24} />
-                                <span>{language === 'bn' ? 'বিকাশ' : 'bKash'}</span>
-                            </button>
-                            <button className={styles.methodBtn}>
-                                <ShoppingBag size={24} />
-                                <span>নগদ</span>
-                            </button>
-                        </div>
+                            <div className={styles.paymentMethods}>
+                                <button className={`${styles.methodBtn} ${styles.methodBtnActive}`}>
+                                    <CreditCard size={24} />
+                                    <span>{language === 'bn' ? 'বিকাশ' : 'bKash'}</span>
+                                </button>
+                                <button className={styles.methodBtn}>
+                                    <ShoppingBag size={24} />
+                                    <span>নগদ</span>
+                                </button>
+                            </div>
 
-                        <div className={styles.checkoutActions}>
-                            <button
-                                className={styles.cancelBtn}
-                                onClick={() => setShowCheckout(null)}
-                                disabled={processing}
-                            >
-                                {t('cancel')}
-                            </button>
-                            <button
-                                className={styles.confirmBtn}
-                                onClick={completeCheckout}
-                                disabled={processing}
-                            >
-                                {processing ? <Loader2 className={styles.spinner} /> : t('pay_now')}
-                            </button>
+                            <div className={styles.checkoutActions}>
+                                <button
+                                    className={styles.cancelBtn}
+                                    onClick={() => setShowCheckout(null)}
+                                    disabled={processing}
+                                >
+                                    {t('cancel')}
+                                </button>
+                                <button
+                                    className={styles.confirmBtn}
+                                    onClick={completeCheckout}
+                                    disabled={processing}
+                                >
+                                    {processing ? <Loader2 className={styles.spinner} /> : t('pay_now')}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-            {showConvertConfirmation && (
-                <div className={styles.checkoutOverlay} onClick={() => setShowConvertConfirmation(false)}>
-                    <div className={styles.checkoutModal} onClick={e => e.stopPropagation()} style={{ textAlign: 'center' }}>
-                        <div className={styles.checkoutHeader}>
-                            <div style={{ marginBottom: '20px' }}>
-                                <HoneyDropIcon size={72} />
+                )
+            }
+            {
+                showConvertConfirmation && (
+                    <div className={styles.checkoutOverlay} onClick={() => setShowConvertConfirmation(false)}>
+                        <div className={styles.checkoutModal} onClick={e => e.stopPropagation()} style={{ textAlign: 'center' }}>
+                            <div className={styles.checkoutHeader}>
+                                <div style={{ marginBottom: '20px' }}>
+                                    <HoneyDropIcon size={72} />
+                                </div>
+                                <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '12px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
+                                <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '24px' }}>
+                                    আপনি কি <strong>{gemToConvert}টি</strong> পরাগরেণু দিয়ে <strong>{calculatedHearts}টি</strong> হানি ড্রপ নিতে চান?
+                                </p>
                             </div>
-                            <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '12px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
-                            <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '24px' }}>
-                                আপনি কি <strong>{gemToConvert}টি</strong> পরাগরেণু দিয়ে <strong>{calculatedHearts}টি</strong> হানি ড্রপ নিতে চান?
-                            </p>
-                        </div>
 
-                        {profile?.is_premium && (
-                            <div style={{
-                                background: 'rgba(241, 196, 15, 0.1)',
-                                border: '1px solid #f1c40f',
-                                borderRadius: '15px',
-                                padding: '16px',
-                                marginBottom: '24px',
-                                color: '#f1c40f',
-                                fontSize: '0.9rem',
-                                fontWeight: 700,
-                                lineHeight: 1.5,
-                                textAlign: 'left',
-                                display: 'flex',
-                                gap: '12px',
-                                alignItems: 'center'
-                            }}>
-                                <span style={{ fontSize: '1.5rem' }}>👑</span>
-                                <span>আপনি একজন কিং বী! আপনার হানি ড্রপ কখনো শেষ হবে না, তাই এক্সচেঞ্জ করার প্রয়োজন নেই।</span>
+                            {profile?.is_premium && (
+                                <div style={{
+                                    background: 'rgba(241, 196, 15, 0.1)',
+                                    border: '1px solid #f1c40f',
+                                    borderRadius: '15px',
+                                    padding: '16px',
+                                    marginBottom: '24px',
+                                    color: '#f1c40f',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 700,
+                                    lineHeight: 1.5,
+                                    textAlign: 'left',
+                                    display: 'flex',
+                                    gap: '12px',
+                                    alignItems: 'center'
+                                }}>
+                                    <span style={{ fontSize: '1.5rem' }}>👑</span>
+                                    <span>আপনি একজন কিং বী! আপনার হানি ড্রপ কখনো শেষ হবে না, তাই এক্সচেঞ্জ করার প্রয়োজন নেই।</span>
+                                </div>
+                            )}
+
+                            <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
+                                <button
+                                    onClick={() => setShowConvertConfirmation(false)}
+                                    style={{
+                                        flex: 1,
+                                        padding: '16px',
+                                        borderRadius: '16px',
+                                        border: '2px solid #37464f',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        color: '#fff',
+                                        fontWeight: 900,
+                                        fontSize: '1.1rem',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    না
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        handleConvertAction();
+                                        setShowConvertConfirmation(false);
+                                    }}
+                                    style={{
+                                        flex: 1,
+                                        padding: '16px',
+                                        borderRadius: '16px',
+                                        background: '#f1c40f',
+                                        color: '#000',
+                                        border: 'none',
+                                        fontWeight: 900,
+                                        fontSize: '1.1rem',
+                                        cursor: 'pointer',
+                                        boxShadow: '0 4px 0 #9a7d0a',
+                                        transition: 'all 0.2s'
+                                    }}
+                                >
+                                    হ্যাঁ
+                                </button>
                             </div>
-                        )}
-
-                        <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
-                            <button
-                                onClick={() => setShowConvertConfirmation(false)}
-                                style={{
-                                    flex: 1,
-                                    padding: '16px',
-                                    borderRadius: '16px',
-                                    border: '2px solid #37464f',
-                                    background: 'rgba(255,255,255,0.05)',
-                                    color: '#fff',
-                                    fontWeight: 900,
-                                    fontSize: '1.1rem',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s'
-                                }}
-                            >
-                                না
-                            </button>
-                            <button
-                                onClick={() => {
-                                    handleConvertAction();
-                                    setShowConvertConfirmation(false);
-                                }}
-                                style={{
-                                    flex: 1,
-                                    padding: '16px',
-                                    borderRadius: '16px',
-                                    background: '#f1c40f',
-                                    color: '#000',
-                                    border: 'none',
-                                    fontWeight: 900,
-                                    fontSize: '1.1rem',
-                                    cursor: 'pointer',
-                                    boxShadow: '0 4px 0 #9a7d0a',
-                                    transition: 'all 0.2s'
-                                }}
-                            >
-                                হ্যাঁ
-                            </button>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
         </main >
     );
 };

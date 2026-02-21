@@ -18,6 +18,7 @@ import {
     Shield, Flame, Compass, Gift
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
+import FlamingBadge from '../../components/FlamingBadge';
 import styles from './ProfilePage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel } from '../../utils/shieldSystem';
@@ -265,12 +266,12 @@ const ProfilePage = () => {
                         </div>
 
                         {/* User Info */}
-                        <div className={styles.headerInfo}>
-                            <div className={styles.nameSection}>
-                                <h1 className={styles.userName}>
-                                    {profile?.full_name || 'শিক্ষার্থী'}
-                                </h1>
-                            </div>
+                        <div className={styles.profileInfo}>
+                            <h1 className={styles.profileName}>
+                                {flamingBadge && <FlamingBadge size={22} className={styles.nameBadge} />}
+                                {profile?.full_name || 'শিক্ষার্থী'}
+                            </h1>
+                            <p className={styles.profileMeta}>@{user?.email?.split('@')[0]}</p>
                             <p className={styles.memberSince}>
                                 <Calendar size={13} />
                                 যোগদান: {formatDate(profile?.created_at)}
@@ -495,7 +496,10 @@ const ProfilePage = () => {
                                     ? <img src={profile.avatar_url} alt="avatar" />
                                     : <User size={32} color="#F1C40F" />}
                             </div>
-                            <h4 className={styles.shareCardName}>{profile?.full_name || 'শিক্ষার্থী'}</h4>
+                            <h4 className={styles.shareCardName}>
+                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
+                                {profile?.full_name || 'শিক্ষার্থী'}
+                            </h4>
                             <div className={styles.shareStatsRow}>
                                 <div className={styles.shareStat}><strong>{profile?.xp || 0}</strong><span>মধু (XP)</span></div>
                                 <div className={styles.shareStat}><strong>{streak?.current_streak || 0}</strong><span>দিনের স্ট্রিক</span></div>

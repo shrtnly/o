@@ -1167,3 +1167,16 @@
         grid-template-columns: 80px 1fr;
     }
 }
+.rowAvatarWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebarBadge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    z-index: 5;
+}

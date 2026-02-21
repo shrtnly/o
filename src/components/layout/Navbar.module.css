@@ -105,3 +105,16 @@
     background-color: #e74c3c;
     color: #fff;
 }
+.avatarMiniWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.miniFlame {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    z-index: 5;
+}

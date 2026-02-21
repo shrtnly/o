@@ -9,6 +9,7 @@ import Sidebar from '../learning/components/Sidebar';
 import ShieldIcon from '../../components/ShieldIcon';
 import { supabase } from '../../lib/supabaseClient';
 import styles from './LeaderboardPage.module.css';
+import FlamingBadge from '../../components/FlamingBadge';
 
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
@@ -260,7 +261,10 @@ const LeaderboardPage = () => {
                                                                     )}
                                                                 </div>
                                                                 <div className={styles.userInfo}>
-                                                                    <span className={styles.userName}>{item.display_name}</span>
+                                                                    <span className={styles.userName}>
+                                                                        {item.is_flaming && <FlamingBadge size={16} className={styles.nameBadge} />}
+                                                                        {item.display_name}
+                                                                    </span>
                                                                 </div>
                                                             </div>
                                                             <div className={styles.progressCol}>

@@ -8,6 +8,7 @@ import { rewardService } from '../../../services/rewardService';
 import ConsistencyTracker from './ConsistencyTracker';
 import Button from '../../../components/ui/Button';
 import ShieldIcon from '../../../components/ShieldIcon';
+import FlamingBadge from '../../../components/FlamingBadge';
 import styles from '../LearningPage.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
 import { leaderboardService } from '../../../services/leaderboardService';
@@ -36,10 +37,18 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
     const [userRank, setUserRank] = React.useState(null);
     const [leaderboardData, setLeaderboardData] = React.useState([]);
     const [internalLoading, setInternalLoading] = React.useState(true);
+    const [myFlamingBadge, setMyFlamingBadge] = React.useState(null);
 
     // Fetch streak and activity data
     React.useEffect(() => {
         if (!profile?.id) return;
+
+        const fetchBadge = async () => {
+            const { honeyJarService } = await import('../../../services/honeyJarService');
+            const badge = await honeyJarService.getActiveFlamingBadge(profile.id);
+            setMyFlamingBadge(badge);
+        };
+        fetchBadge();
 
         const fetchStreakData = async () => {
             try {
@@ -312,11 +321,14 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                     >
                                         <div className={styles.leaderboardRowLeft}>
                                             <span className={styles.rowRank}>{index + 1}</span>
-                                            <img
-                                                src={avatarUrl}
-                                                className={styles.rowAvatar}
-                                                alt={user.display_name || 'লার্নার'}
-                                            />
+                                            <div className={styles.rowAvatarWrapper}>
+                                                <img
+                                                    src={avatarUrl}
+                                                    className={styles.rowAvatar}
+                                                    alt={user.display_name || 'লার্নার'}
+                                                />
+                                                {user.is_flaming && <FlamingBadge size={14} className={styles.sidebarBadge} />}
+                                            </div>
                                             <span className={styles.rowName}>{user.display_name || 'লার্নার'}</span>
                                         </div>
                                         <div className={styles.leaderboardRowRight}>
@@ -338,11 +350,14 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                 <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
                                     <div className={styles.leaderboardRowLeft}>
                                         <span className={styles.rowRank}>{userRank}</span>
-                                        <img
-                                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
-                                            className={styles.rowAvatar}
-                                            alt={profile.display_name || 'লার্নার'}
-                                        />
+                                        <div className={styles.rowAvatarWrapper}>
+                                            <img
+                                                src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
+                                                className={styles.rowAvatar}
+                                                alt={profile.display_name || 'লার্নার'}
+                                            />
+                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.sidebarBadge} />}
+                                        </div>
                                         <span className={styles.rowName}>{profile.display_name || 'লার্নার'}</span>
                                     </div>
                                     <div className={styles.leaderboardRowRight}>

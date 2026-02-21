@@ -1187,3 +1187,11 @@
     display: inline-flex;
     vertical-align: middle;
 }
+
+.nameBadge {
+    margin-left: 4px;
+    margin-right: 0;
+    flex-shrink: 0;
+    display: inline-flex;
+    vertical-align: middle;
+}

@@ -327,8 +327,8 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                                 alt={user.display_name || 'লার্নার'}
                                             />
                                             <span className={styles.rowName}>
-                                                {user.is_flaming && <FlamingBadge size={14} className={styles.nameBadge} />}
                                                 {user.display_name || 'লার্নার'}
+                                                {user.is_flaming && <FlamingBadge size={14} className={styles.nameBadge} />}
                                             </span>
                                         </div>
                                         <div className={styles.leaderboardRowRight}>
@@ -356,8 +356,8 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                             alt={profile.display_name || 'লার্নার'}
                                         />
                                         <span className={styles.rowName}>
-                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
                                             {profile.display_name || 'লার্নার'}
+                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
                                         </span>
                                     </div>
                                     <div className={styles.leaderboardRowRight}>

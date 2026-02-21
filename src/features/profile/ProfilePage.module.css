@@ -1322,3 +1322,8 @@
     font-size: 0.8rem;
     color: var(--color-text-muted);
 }
+.nameBadge {
+    margin-left: 6px;
+    margin-right: 0;
+    flex-shrink: 0;
+}

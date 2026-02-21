@@ -53,8 +53,8 @@ const Navbar = () => {
                     {user ? (
                         <div className={styles.userSection}>
                             <div className={styles.userInfo}>
-                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                                 <span className={styles.userName}>{user.email.split('@')[0]}</span>
+                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                             </div>
                             <button
                                 className={styles.logoutBtn}

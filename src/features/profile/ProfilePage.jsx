@@ -268,8 +268,8 @@ const ProfilePage = () => {
                         {/* User Info */}
                         <div className={styles.profileInfo}>
                             <h1 className={styles.profileName}>
-                                {flamingBadge && <FlamingBadge size={22} className={styles.nameBadge} />}
                                 {profile?.full_name || 'শিক্ষার্থী'}
+                                {flamingBadge && <FlamingBadge size={22} className={styles.nameBadge} />}
                             </h1>
                             <div className={styles.metaRow}>
                                 {profile?.location && (
@@ -497,8 +497,8 @@ const ProfilePage = () => {
                                     : <User size={32} color="#F1C40F" />}
                             </div>
                             <h4 className={styles.shareCardName}>
-                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                                 {profile?.full_name || 'শিক্ষার্থী'}
+                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                             </h4>
                             <div className={styles.shareStatsRow}>
                                 <div className={styles.shareStat}><strong>{profile?.xp || 0}</strong><span>মধু (XP)</span></div>

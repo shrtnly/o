@@ -262,8 +262,8 @@ const LeaderboardPage = () => {
                                                                 </div>
                                                                 <div className={styles.userInfo}>
                                                                     <span className={styles.userName}>
-                                                                        {item.is_flaming && <FlamingBadge size={16} className={styles.nameBadge} />}
                                                                         {item.display_name}
+                                                                        {item.is_flaming && <FlamingBadge size={16} className={styles.nameBadge} />}
                                                                     </span>
                                                                 </div>
                                                             </div>

@@ -792,3 +792,9 @@
     margin-right: 6px;
     flex-shrink: 0;
 }
+
+.nameBadge {
+    margin-left: 6px;
+    margin-right: 0;
+    flex-shrink: 0;
+}

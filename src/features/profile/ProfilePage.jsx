@@ -300,15 +300,15 @@ const ProfilePage = () => {
                         <div className={styles.statsGrid}>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <span className={styles.statEmoji}>🍯</span>
-                                    <span className={styles.statCardValue}>{profile?.xp || 0}</span>
+                                    <PollenIcon size={28} className={styles.statIconPollen} />
+                                    <span className={styles.statCardValue}>{profile?.gems || 0}</span>
                                     <span className={styles.statCardDivider}>-</span>
-                                    <span className={styles.statCardLabel}>মোট মধু</span>
+                                    <span className={styles.statCardLabel}>পরাগরেণু</span>
                                 </div>
                             </div>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <Compass size={18} className={styles.statIconCompass} />
+                                    <Compass size={22} className={styles.statIconCompass} />
                                     <span className={styles.statCardValue}>{enrolledCourses.length}</span>
                                     <span className={styles.statCardDivider}>-</span>
                                     <span className={styles.statCardLabel}>শেখার কোর্সসমূহ</span>
@@ -316,7 +316,7 @@ const ProfilePage = () => {
                             </div>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <Flame size={18} className={styles.statIconStreak} />
+                                    <Flame size={22} className={styles.statIconStreak} />
                                     <span className={styles.statCardValue}>{streak?.current_streak || 0} দিন</span>
                                     <span className={styles.statCardDivider}>-</span>
                                     <span className={styles.statCardLabel}>গুনগুন স্ট্রিক</span>
@@ -324,7 +324,7 @@ const ProfilePage = () => {
                             </div>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <Trophy size={18} className={styles.statIconRank} />
+                                    <Trophy size={22} className={styles.statIconRank} />
                                     <span className={styles.statCardValue}>#{globalRank}</span>
                                     <span className={styles.statCardDivider}>-</span>
                                     <span className={styles.statCardLabel}>লিডারবোর্ড র‌্যাঙ্কিং</span>
@@ -390,7 +390,7 @@ const ProfilePage = () => {
 
                                 {/* Pollen counter */}
                                 <p className={styles.pollenCounter}>
-                                    🌼 <strong>{jarProgress.pollen_in_cycle || 0}</strong> পরাগরেণু সংগ্রহ হয়েছে
+                                    🌼 <strong>{jarProgress.pollen_in_cycle || 0}</strong> মধু ফোঁটা সংগ্রহ হয়েছে
                                     &nbsp;·&nbsp; প্রতি ৩টিতে ১% পূর্ণ হয়
                                 </p>
 
@@ -405,7 +405,7 @@ const ProfilePage = () => {
                                     <span className={styles.xpPct}>{jarProgress.fill_percent}%</span>
                                 </div>
 
-                                <p className={styles.xpTotal}>মোট পরাগরেণু: <strong>{profile?.gems || 0}</strong></p>
+                                <p className={styles.xpTotal}>মোট মধু : <strong>{profile?.xp || 0}</strong></p>
 
                                 {/* Flaming Badge status */}
                                 {flamingBadge && (

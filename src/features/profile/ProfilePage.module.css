@@ -276,7 +276,7 @@
 .statCardContent {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     width: 100%;
 }
 
@@ -299,7 +299,7 @@
 }
 
 .statCardValue {
-    font-size: 1rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #F1C40F;
     line-height: 1;
@@ -307,12 +307,12 @@
 
 .statCardDivider {
     color: rgba(241, 196, 15, 0.3);
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: 400;
 }
 
 .statCardLabel {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     color: var(--color-text-muted);
     font-weight: 600;
     white-space: nowrap;
@@ -1273,6 +1273,7 @@
         gap: 16px;
     }
 }
+
 .profileAvatarFlame {
     position: absolute;
     bottom: 5px;

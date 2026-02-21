@@ -8,6 +8,7 @@ import HoneyDropIcon from '../../components/HoneyDropIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
+import { honeyJarService } from '../../services/honeyJarService';
 import { useLanguage } from '../../context/LanguageContext';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 
@@ -159,6 +160,10 @@ const StudyPage = () => {
 
         if (correct) {
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            if (user) {
+                rewardService.awardXP(user.id, 1, 'correct_answer');
+                honeyJarService.addPollenToJar(user.id, 1);
+            }
         } else {
             setShake(true);
             setTimeout(() => setShake(false), 500);
@@ -208,16 +213,6 @@ const StudyPage = () => {
                                 last_accessed: new Date().toISOString()
                             })
                             .eq('id', existingProgress.id);
-                    }
-
-                    if (earnedXp > 0) {
-                        await rewardService.awardXP(user.id, earnedXp, 'chapter_complete', {
-                            chapterId,
-                            courseId,
-                            total_questions: stats.total,
-                            correct_answers: stats.correct,
-                            accuracy: Math.round((stats.correct / (stats.total || 1)) * 100)
-                        });
                     }
                 } catch (err) {
                     console.error('Error updating progress:', err);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Gem, Gift, PackageOpen } from 'lucide-react';
 
@@ -14,6 +14,7 @@ import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
 import RewardModal from './components/RewardModal';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
+import { courseService } from '../../services/courseService';
 
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
@@ -77,6 +78,71 @@ const getPathData = (chapters, nodesPerRow) => {
 // Pool of icons for chapters
 const CHAPTER_ICONS = [BookOpen, PenTool, Play, Star, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles];
 
+// Optimized Chapter Node component
+const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, iconIdx, onClick }) => {
+    return (
+        <div
+            className={styles.nodeWrapper}
+            style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
+            onClick={onClick}
+        >
+            <div className={cn(
+                styles.node,
+                isActive && styles.nodeActive,
+                isCompleted && styles.nodeCompleted,
+                isLocked && styles.nodeLocked,
+                chapter.type !== 'lesson' && styles.rewardNode,
+                chapter.type === 'mystery_box' && styles.mysteryNode,
+                chapter.type === 'heart_box' && styles.heartNode,
+                chapter.type === 'pollen_box' && styles.gemsNode
+            )}>
+                <div className={styles.nodeRing}>
+                    <div className={styles.nodeInner}>
+                        {isLocked && chapter.type === 'lesson' ? (
+                            <div className={styles.lockOverlay}>
+                                <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
+                            </div>
+                        ) : (
+                            <>
+                                {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
+                                    <div
+                                        key={i}
+                                        className={styles.sparkle}
+                                        style={{
+                                            '--tx': Math.random() * 60 - 30,
+                                            '--ty': Math.random() * 60 - 30,
+                                            left: '50%',
+                                            top: '50%',
+                                            animationDelay: `${i * 0.3}s`
+                                        }}
+                                    />
+                                ))}
+                                {(() => {
+                                    if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
+                                        if (isCompleted) {
+                                            return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
+                                        }
+                                        return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
+                                    }
+                                    const IconComponent = CHAPTER_ICONS[iconIdx % CHAPTER_ICONS.length];
+                                    return (
+                                        <IconComponent
+                                            size={32}
+                                            color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
+                                            strokeWidth={2.5}
+                                        />
+                                    );
+                                })()}
+                            </>
+                        )}
+                    </div>
+                </div>
+                <div className={styles.nodeLabel}>{chapter.title}</div>
+            </div>
+        </div>
+    );
+});
+
 const LearningPage = () => {
 
 
@@ -117,25 +183,27 @@ const LearningPage = () => {
             setScrolled(isScrolled);
         }
 
-        // 2. Detect the active unit section
-        // We find the section that has currently passed the "header zone"
+        // 2. Detect the active unit section more efficiently
         const sections = container.querySelectorAll('[data-unit-section]');
-        let currentActiveUnit = unitsWithChapters[0]; // Default to first unit
+        if (sections.length === 0) return;
 
-        sections.forEach((section) => {
+        let currentActiveUnit = activeUnit;
+        const containerTop = container.getBoundingClientRect().top;
+
+        for (const section of sections) {
             const rect = section.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            const relativeTop = rect.top - containerRect.top;
-
-            // If the section top is above or at the header (with a small 80px buffer)
-            if (relativeTop <= 80) {
+            // A buffer of 100px from top of container
+            if (rect.top - containerTop <= 100) {
                 const unitId = section.getAttribute('data-unit-section');
                 const unit = unitsWithChapters.find(u => u.id === unitId);
                 if (unit) {
                     currentActiveUnit = unit;
                 }
+            } else {
+                // Since sections are in order, we can break once we find one below the threshold
+                break;
             }
-        });
+        }
 
         if (currentActiveUnit && activeUnit?.id !== currentActiveUnit.id) {
             setActiveUnit(currentActiveUnit);
@@ -156,63 +224,74 @@ const LearningPage = () => {
         const fetchDeepContent = async () => {
             setLoading(true);
             try {
-                if (user) {
-                    // Fetch only enrolled courses for the selector
-                    const { data: enrolledData, error: enrolledError } = await supabase
-                        .from('user_courses')
-                        .select('course_id, courses(*)')
-                        .eq('user_id', user.id);
+                const promises = [];
 
-                    if (enrolledError) {
-                        console.error('Error fetching enrolled courses:', enrolledError);
-                        // Fallback to all courses if user_courses doesn't exist yet (for development)
-                        const { data: allCourses } = await supabase.from('courses').select('*');
-                        setCourses(allCourses || []);
-                    } else {
-                        const enrolledCourses = enrolledData?.map(d => d.courses).filter(Boolean) || [];
-                        setCourses(enrolledCourses);
-                    }
-
-                    const { data: profileData } = await supabase
-                        .from('profiles')
-                        .select('*')
-                        .eq('id', user.id)
-                        .single();
-
-                    setProfile(profileData);
-
-                    // Update last_accessed for this course
-                    if (courseId) {
-                        const { data: existingProgress } = await supabase
-                            .from('user_progress')
-                            .select('id')
-                            .eq('user_id', user.id)
-                            .eq('course_id', courseId)
-                            .limit(1);
-
-                        if (existingProgress && existingProgress.length > 0) {
-                            await supabase
-                                .from('user_progress')
-                                .update({ last_accessed: new Date().toISOString() })
-                                .eq('id', existingProgress[0].id);
-                        }
-                    }
-
-                    const { data: progressData } = await supabase
-                        .from('user_progress')
-                        .select('*')
-                        .eq('user_id', user.id);
-                    setProgress(progressData || []);
-                }
-
-                const { data: unitsData, error: unitsError } = await supabase
+                // 1. Universal data for units (Doesn't depend on user)
+                promises.push(supabase
                     .from('units')
                     .select('*')
                     .eq('course_id', courseId)
-                    .order('order_index', { ascending: true });
+                    .order('order_index', { ascending: true })
+                );
 
-                if (unitsError) throw unitsError;
+                // 2. User-specific data
+                if (user) {
+                    promises.push(supabase
+                        .from('user_courses')
+                        .select('course_id, courses(*)')
+                        .eq('user_id', user.id)
+                    );
+                    promises.push(supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', user.id)
+                        .single()
+                    );
+                    promises.push(supabase
+                        .from('user_progress')
+                        .select('*')
+                        .eq('user_id', user.id)
+                    );
 
+                    // Update last practiced tracking in background
+                    courseService.getLastPracticedCourseId(user.id).then(() => {
+                        supabase.from('user_progress')
+                            .select('id')
+                            .eq('user_id', user.id)
+                            .eq('course_id', courseId)
+                            .limit(1)
+                            .then(({ data: existing }) => {
+                                if (existing?.length > 0) {
+                                    supabase.from('user_progress')
+                                        .update({ last_accessed: new Date().toISOString() })
+                                        .eq('id', existing[0].id)
+                                        .then(() => { });
+                                }
+                            });
+                    });
+                }
+
+                const results = await Promise.all(promises);
+
+                let unitsData = results[0]?.data;
+                let enrolledCoursesData = results[1]?.data;
+                let profileData = results[2]?.data;
+                let progressData = results[3]?.data;
+
+                // Set course selector data
+                if (enrolledCoursesData) {
+                    const enrolledCourses = enrolledCoursesData.map(d => d.courses).filter(Boolean);
+                    setCourses(enrolledCourses);
+                } else if (user) {
+                    // Fallback
+                    const { data: all } = await supabase.from('courses').select('*');
+                    setCourses(all || []);
+                }
+
+                if (profileData) setProfile(profileData);
+                if (progressData) setProgress(progressData);
+
+                // 3. Fetch chapters for the identified units
                 if (unitsData && unitsData.length > 0) {
                     const unitIds = unitsData.map(u => u.id);
                     const { data: chaptersData, error: chaptersError } = await supabase
@@ -244,7 +323,7 @@ const LearningPage = () => {
         }
     }, [courseId, user, location.key]);
 
-    const handleChapterClick = async (chapter, isLocked, isCompleted) => {
+    const handleChapterClick = useCallback(async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
 
         if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
@@ -305,7 +384,7 @@ const LearningPage = () => {
         }
 
         navigate(`/study/${courseId}/${chapter.id}`);
-    };
+    }, [courseId, user, profile, navigate]);
 
     const allChapters = unitsWithChapters.flatMap(u => u.chapters);
     const completedChapterIds = new Set(progress.filter(p => p.is_completed).map(p => p.chapter_id));
@@ -327,6 +406,73 @@ const LearningPage = () => {
     };
 
     const currentColor = getUnitColor(activeUnit?.order_index || 1);
+
+    // Optimized Units Calculation moved to top level (Hook)
+    const unitSections = useMemo(() => unitsWithChapters.map((unit, index) => {
+        const unitChapters = unit.chapters;
+        const pathD = getPathData(unitChapters, nodesPerRow);
+        const numRows = Math.ceil(unitChapters.length / nodesPerRow);
+
+        // Dynamic height
+        const width = window.innerWidth;
+        const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
+        const containerHeight = (numRows - 1) * ySpacing + 120;
+
+        const isSeparator = index > 0;
+
+        return (
+            <React.Fragment key={unit.id}>
+                {isSeparator && (
+                    <div className={styles.unitSeparator}>
+                        <div className={styles.separatorLine} />
+                        <div
+                            className={styles.separatorText}
+                            style={{ color: getUnitColor(unit.order_index).border }}
+                        >
+                            {unit.title}
+                        </div>
+                        <div className={styles.separatorLine} />
+                    </div>
+                )}
+                <section
+                    data-unit-section={unit.id}
+                    className={styles.unitSection}
+                    style={{
+                        '--unit-color-bg': getUnitColor(unit.order_index).bg,
+                        '--unit-color-border': getUnitColor(unit.order_index).border
+                    }}
+                >
+                    <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
+
+                        <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
+                            <path d={pathD} className={styles.pathLine} />
+                        </svg>
+
+
+                        {unitChapters.map((chapter, cIdx) => {
+                            const pos = getNodePos(cIdx, nodesPerRow);
+                            const isCompleted = completedChapterIds.has(chapter.id);
+                            const isActive = chapter.id === activeChapterId;
+                            const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
+
+                            return (
+                                <ChapterNode
+                                    key={chapter.id}
+                                    chapter={chapter}
+                                    pos={pos}
+                                    isCompleted={isCompleted}
+                                    isActive={isActive}
+                                    isLocked={isLocked}
+                                    iconIdx={cIdx}
+                                    onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
+                                />
+                            );
+                        })}
+                    </div>
+                </section>
+            </React.Fragment>
+        );
+    }), [unitsWithChapters, completedChapterIds, activeChapterId, nodesPerRow, allChapters, handleChapterClick]);
 
     return (
         <div className={styles.learningPage}>
@@ -354,123 +500,7 @@ const LearningPage = () => {
                             </div>
                         )}
 
-                        {unitsWithChapters.map((unit, index) => {
-                            const unitChapters = unit.chapters;
-                            const pathD = getPathData(unitChapters, nodesPerRow);
-                            const numRows = Math.ceil(unitChapters.length / nodesPerRow);
-
-                            // Dynamic height based on row count and device ySpacing
-                            const width = window.innerWidth;
-                            const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
-                            const containerHeight = (numRows - 1) * ySpacing + 120;
-
-                            const isSeparator = index > 0; // Hide for Unit 1, show for others
-
-                            return (
-                                <React.Fragment key={unit.id}>
-                                    {isSeparator && (
-                                        <div className={styles.unitSeparator}>
-                                            <div className={styles.separatorLine} />
-                                            <div
-                                                className={styles.separatorText}
-                                                style={{ color: getUnitColor(unit.order_index).border }}
-                                            >
-                                                {unit.title}
-                                            </div>
-                                            <div className={styles.separatorLine} />
-                                        </div>
-                                    )}
-                                    <section
-                                        data-unit-section={unit.id}
-                                        className={styles.unitSection}
-                                        style={{
-                                            '--unit-color-bg': getUnitColor(unit.order_index).bg,
-                                            '--unit-color-border': getUnitColor(unit.order_index).border
-                                        }}
-                                    >
-                                        <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
-
-                                            <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
-                                                <path d={pathD} className={styles.pathLine} />
-                                            </svg>
-
-
-                                            {unitChapters.map((chapter, cIdx) => {
-                                                const pos = getNodePos(cIdx, nodesPerRow);
-                                                const isCompleted = completedChapterIds.has(chapter.id);
-                                                const isActive = chapter.id === activeChapterId;
-                                                const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
-
-                                                return (
-                                                    <div
-                                                        key={chapter.id}
-                                                        className={styles.nodeWrapper}
-                                                        style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
-                                                        onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
-                                                    >
-                                                        <div className={cn(
-                                                            styles.node,
-                                                            isActive && styles.nodeActive,
-                                                            isCompleted && styles.nodeCompleted,
-                                                            isLocked && styles.nodeLocked,
-                                                            chapter.type !== 'lesson' && styles.rewardNode,
-                                                            chapter.type === 'mystery_box' && styles.mysteryNode,
-                                                            chapter.type === 'heart_box' && styles.heartNode,
-                                                            chapter.type === 'pollen_box' && styles.gemsNode
-                                                        )}>
-                                                            <div className={styles.nodeRing}>
-                                                                <div className={styles.nodeInner}>
-                                                                    {isLocked && chapter.type === 'lesson' ? (
-                                                                        <div className={styles.lockOverlay}>
-                                                                            <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
-                                                                        </div>
-                                                                    ) : (
-                                                                        <>
-                                                                            {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
-                                                                                <div
-                                                                                    key={i}
-                                                                                    className={styles.sparkle}
-                                                                                    style={{
-                                                                                        '--tx': Math.random() * 60 - 30,
-                                                                                        '--ty': Math.random() * 60 - 30,
-                                                                                        left: '50%',
-                                                                                        top: '50%',
-                                                                                        animationDelay: `${i * 0.3}s`
-                                                                                    }}
-                                                                                />
-                                                                            ))}
-                                                                            {(() => {
-                                                                                if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
-                                                                                    if (isCompleted) {
-                                                                                        return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
-                                                                                    }
-                                                                                    return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
-                                                                                }
-                                                                                const IconComponent = CHAPTER_ICONS[cIdx % CHAPTER_ICONS.length];
-                                                                                return (
-                                                                                    <IconComponent
-                                                                                        size={32}
-                                                                                        color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
-                                                                                        strokeWidth={2.5}
-                                                                                    />
-                                                                                );
-                                                                            })()}
-                                                                        </>
-                                                                    )}
-
-                                                                </div>
-                                                            </div>
-
-                                                            <div className={styles.nodeLabel}>{chapter.title}</div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </section>
-                                </React.Fragment>
-                            );
-                        })}
+                        {unitSections}
                     </>
                 )}
             </main>

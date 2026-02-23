@@ -3,21 +3,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-bg-deep);
+    background: var(--color-bg);
     padding: 20px;
     position: relative;
+    overflow: hidden;
 }
 
 .closeBtn {
     position: fixed;
     top: 24px;
     right: 24px;
-    background: var(--color-bg-alt);
-    border: 1px solid var(--color-border);
+    background: transparent;
+    border: none;
     color: var(--color-text-muted);
     cursor: pointer;
     padding: 10px;
-    border-radius: 12px;
     transition: all 0.2s;
     display: flex;
     align-items: center;
@@ -26,22 +26,22 @@
 }
 
 .closeBtn:hover {
-    background: var(--color-bg-hover);
-    color: var(--color-text);
-    border-color: var(--color-border);
+    color: var(--color-primary);
+    transform: scale(1.1);
 }
 
 .authContainer {
     width: 100%;
-    max-width: 420px;
-    animation: fadeIn 0.5s ease-out;
+    max-width: 380px;
+    animation: fadeIn 0.6s ease-out;
     position: relative;
+    z-index: 1;
 }
 
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
 
     to {
@@ -52,55 +52,53 @@
 
 .logoWrapper {
     display: flex;
-    justify-content: flex-start;
-    margin-bottom: 24px;
+    justify-content: center;
+    margin-bottom: 32px;
 }
 
 .authLogo {
-    height: 110px;
+    height: 80px;
     width: auto;
     object-fit: contain;
 }
 
 .header {
-    text-align: left;
-    margin-bottom: 32px;
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .header h1 {
-    font-size: 2rem;
-    font-weight: 900;
+    font-size: 1.75rem;
+    font-weight: 800;
     color: var(--color-text);
-    margin: 0 0 4px 0;
-    letter-spacing: -0.5px;
+    margin: 0 0 8px 0;
 }
 
 .highlight {
-    color: #2ecc71;
+    color: var(--color-primary);
 }
 
 .header p {
     color: var(--color-text-muted);
-    font-size: 1rem;
+    font-size: 0.95rem;
     margin: 0;
 }
 
 .errorMessage {
-    background: rgba(231, 76, 60, 0.1);
-    border: 1px solid rgba(231, 76, 60, 0.3);
     color: #e74c3c;
-    padding: 14px;
+    background: rgba(231, 76, 60, 0.1);
+    padding: 12px;
     border-radius: 12px;
     margin-bottom: 24px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-align: center;
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 24px;
+    margin-bottom: 32px;
 }
 
 .field {
@@ -128,19 +126,19 @@
 }
 
 .eyeBtn:hover {
-    color: #2ecc71;
+    color: var(--color-primary);
 }
 
 .input {
     width: 100%;
-    padding: 12px 16px;
+    padding: 12px 0;
     background: transparent;
     border: none;
-    border-bottom: 2px solid var(--color-border);
+    border-bottom: 1.5px solid var(--color-border);
     color: var(--color-text);
     font-size: 1rem;
-    transition: all 0.3s;
-    box-sizing: border-box;
+    transition: all 0.2s;
+    border-radius: 0;
 }
 
 .input::placeholder {
@@ -149,71 +147,51 @@
 
 .input:focus {
     outline: none;
-    border-bottom-color: #2ecc71;
-    background: transparent;
-}
-
-/* Remove white background on autofill */
-.input:-webkit-autofill,
-.input:-webkit-autofill:hover,
-.input:-webkit-autofill:focus {
-    -webkit-text-fill-color: var(--color-text);
-    -webkit-box-shadow: 0 0 0px 1000px transparent inset;
-    transition: background-color 5000s ease-in-out 0s;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.input:-webkit-autofill:focus {
-    border-bottom-color: #2ecc71;
+    border-bottom-color: var(--color-primary);
 }
 
 .forgotLink {
     display: block;
     text-align: right;
     margin-top: 8px;
-    font-size: 0.85rem;
-    color: #2ecc71;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
     text-decoration: none;
-    transition: color 0.2s;
 }
 
 .forgotLink:hover {
-    color: #27ae60;
+    color: var(--color-primary);
 }
 
 .submitBtn {
     width: 100%;
     padding: 14px;
-    background: #2ecc71;
+    background: var(--color-primary);
     border: none;
-    border-radius: 16px;
-    border-bottom: 5px solid #27ae60;
-    color: var(--color-on-primary);
-    font-size: 1.05rem;
-    font-weight: 800;
+    border-radius: 12px;
+    color: #000;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.1s;
+    transition: all 0.2s;
     margin-top: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
 }
 
 .submitBtn:hover:not(:disabled) {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 .submitBtn:active:not(:disabled) {
-    transform: translateY(2px);
-    border-bottom-width: 0px;
+    transform: translateY(0);
 }
 
 .submitBtn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
@@ -229,63 +207,60 @@
     content: "";
     flex: 1;
     height: 1px;
-    background: rgba(55, 70, 79, 0.5);
+    background: var(--color-border);
+    opacity: 0.5;
 }
 
 .divider span {
-    font-size: 0.85rem;
-    color: #6b7280;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
 }
 
 .socialButtons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
     margin-bottom: 32px;
 }
 
 .socialBtn {
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 12px;
     color: var(--color-text);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
     transition: all 0.2s;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 0.9rem;
 }
 
 .socialBtn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    background: var(--color-bg-alt);
+    border-color: var(--color-primary);
 }
 
 .footer {
     text-align: center;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--color-text-muted);
 }
 
 .switchBtn {
     background: none;
     border: none;
-    color: #2ecc71;
-    font-weight: 700;
-    font-size: 0.95rem;
+    color: var(--color-primary);
+    font-weight: 600;
     cursor: pointer;
-    margin-left: 6px;
+    margin-left: 4px;
     padding: 0;
-    transition: color 0.2s;
 }
 
 .switchBtn:hover {
-    color: #27ae60;
     text-decoration: underline;
 }
 
@@ -305,16 +280,6 @@
 
 @media (max-width: 480px) {
     .authContainer {
-        max-width: 100%;
-    }
-
-    .header h1 {
-        font-size: 1.75rem;
-    }
-
-    .logoMark {
-        width: 56px;
-        height: 56px;
-        font-size: 1.75rem;
+        padding: 0 10px;
     }
 }

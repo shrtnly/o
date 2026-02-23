@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles } from 'lucide-react';
+import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2 } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
@@ -20,6 +20,7 @@ const SettingsPage = () => {
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
+    const [soundEnabled, setSoundEnabled] = useState(true);
     const fileInputRef = useRef(null);
 
     // Modal states
@@ -37,6 +38,11 @@ const SettingsPage = () => {
         const savedAnimation = localStorage.getItem('studyPageAnimation');
         if (savedAnimation) {
             setSelectedAnimation(savedAnimation);
+        }
+
+        const savedSound = localStorage.getItem('soundEffectsEnabled');
+        if (savedSound !== null) {
+            setSoundEnabled(savedSound === 'true');
         }
     }, []);
 
@@ -70,11 +76,11 @@ const SettingsPage = () => {
             onConfirm: async () => {
                 try {
                     await courseService.resetCourseProgress(user.id, course.course_id);
-                    toast.success('কোর্স প্রগতি রিসেট করা হয়েছে');
+                    toast.success(t('reset_success'));
                     fetchEnrolledCourses();
                 } catch (error) {
                     console.error('Error resetting course:', error);
-                    toast.error('রিসেট করতে সমস্যা হয়েছে');
+                    toast.error(t('reset_error'));
                 }
             }
         });
@@ -89,6 +95,17 @@ const SettingsPage = () => {
         localStorage.setItem('studyPageAnimation', value);
     };
 
+    const toggleSound = () => {
+        const newValue = !soundEnabled;
+        setSoundEnabled(newValue);
+        localStorage.setItem('soundEffectsEnabled', String(newValue));
+        if (newValue) {
+            toast.success(t('sound_on'));
+        } else {
+            toast.info(t('sound_off'));
+        }
+    };
+
     const handleAvatarClick = () => {
         fileInputRef.current?.click();
     };
@@ -100,10 +117,10 @@ const SettingsPage = () => {
         try {
             setUploadingAvatar(true);
             await storageService.changeAvatar(file, user.id);
-            toast.success(t('profile_updated') || 'প্রোফাইল ছবি পরিবর্তন করা হয়েছে');
+            toast.success(t('profile_updated'));
         } catch (error) {
             console.error('Error uploading avatar:', error);
-            toast.error('ছবি আপলোড করতে সমস্যা হয়েছে');
+            toast.error(t('upload_error'));
         } finally {
             setUploadingAvatar(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -155,6 +172,30 @@ const SettingsPage = () => {
                             <div className={styles.settingCard}>
                                 <div className={styles.cardHeaderArea}>
                                     <div className={styles.iconCircle}>
+                                        <Volume2 size={20} />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>{t('sound_effects')}</h3>
+                                        <p>{t('sound_effects_desc')}</p>
+                                    </div>
+                                </div>
+                                <label className={styles.switch}>
+                                    <input
+                                        type="checkbox"
+                                        checked={soundEnabled}
+                                        onChange={toggleSound}
+                                    />
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            {soundEnabled ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div className={styles.settingCard}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
                                         <Sparkles size={20} />
                                     </div>
                                     <div className={styles.cardText}>
@@ -167,12 +208,12 @@ const SettingsPage = () => {
                                     value={selectedAnimation}
                                     onChange={handleAnimationChange}
                                 >
-                                    <option value="1">বাউন্সিং বী 🐝</option>
-                                    <option value="2">লাউঞ্জিং বী 🐝💤</option>
-                                    <option value="3">লুকিং বী 🐝👀</option>
-                                    <option value="4">ফ্লাইং বী 🐝✈️</option>
-                                    <option value="5">হ্যাপি বী 🐝😊</option>
-                                    <option value="none">কোনো অ্যানিমেশন নয়</option>
+                                    <option value="1">{t('bouncing_bee')}</option>
+                                    <option value="2">{t('lounging_bee')}</option>
+                                    <option value="3">{t('looking_bee')}</option>
+                                    <option value="4">{t('flying_bee')}</option>
+                                    <option value="5">{t('happy_bee')}</option>
+                                    <option value="none">{t('no_animation')}</option>
                                 </select>
                             </div>
 
@@ -218,8 +259,8 @@ const SettingsPage = () => {
                             </div>
                             <div className={styles.settingCard}>
                                 <div className={styles.cardText}>
-                                    <h3>{t('profile')} {t('language') === 'Language' ? 'Picture' : 'ছবি'}</h3>
-                                    <p>{t('language') === 'Language' ? 'Upload a new profile picture' : 'একটি নতুন প্রোফাইল ছবি আপলোড করুন'}</p>
+                                    <h3>{t('profile_picture')}</h3>
+                                    <p>{t('upload_new_pic')}</p>
                                 </div>
                                 <button
                                     type="button"
@@ -345,8 +386,8 @@ const SettingsPage = () => {
             default:
                 return (
                     <div className={styles.emptyState}>
-                        <h3>{menuItems.find(m => m.id === activeTab)?.label} সেটিংস</h3>
-                        <p>এই সেকশনটি বর্তমানে ডেভেলপমেন্টাধীন আছে।</p>
+                        <h3>{menuItems.find(m => m.id === activeTab)?.label} {t('section_settings')}</h3>
+                        <p>{t('under_development')}.</p>
                     </div>
                 );
         }
@@ -356,7 +397,10 @@ const SettingsPage = () => {
         <div className={styles.settingsPage}>
             <header className={styles.pageHeader}>
                 <div className={styles.headerTitle}>
-                    <Settings className={styles.headerIcon} />
+                    <div className={styles.headerIconWrapper}>
+                        <Settings className={styles.headerIcon} />
+                        <Sparkles className={styles.sparkleIcon} />
+                    </div>
                     <h1>{t('settings')}</h1>
                 </div>
             </header>

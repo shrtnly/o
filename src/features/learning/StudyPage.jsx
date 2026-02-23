@@ -111,15 +111,32 @@ const StudyPage = () => {
     const completeAudio = React.useRef(null);
 
     useEffect(() => {
-        // Initialize audio objects
-        correctAudio.current = new Audio('/sound/Correct_answer.mp3');
-        wrongAudio.current = new Audio('/sound/Wrong_answer.mp3');
-        completeAudio.current = new Audio('/sound/Chapter_complete.mp3');
+        // Initialize and pre-load sounds
+        const sounds = {
+            correct: '/sound/Correct_answer.mp3',
+            wrong: '/sound/Wrong_answer.mp3',
+            complete: '/sound/Chapter_complete.mp3'
+        };
 
-        // Pre-load sounds
-        correctAudio.current.load();
-        wrongAudio.current.load();
-        completeAudio.current.load();
+        const initAudio = (path, ref) => {
+            const audio = new Audio(path);
+            audio.preload = 'auto';
+            audio.load();
+            ref.current = audio;
+        };
+
+        initAudio(sounds.correct, correctAudio);
+        initAudio(sounds.wrong, wrongAudio);
+        initAudio(sounds.complete, completeAudio);
+
+        return () => {
+            [correctAudio, wrongAudio, completeAudio].forEach(ref => {
+                if (ref.current) {
+                    ref.current.pause();
+                    ref.current.src = "";
+                }
+            });
+        };
     }, []);
 
     const handleNoHeartsCheckout = (type) => {
@@ -274,9 +291,19 @@ const StudyPage = () => {
 
         if (correct) {
             // Play success sound
-            if (correctAudio.current) {
-                correctAudio.current.currentTime = 0;
-                correctAudio.current.play().catch(e => console.error("Audio playback failed:", e));
+            const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
+            if (correctAudio.current && soundEnabled) {
+                try {
+                    correctAudio.current.currentTime = 0;
+                    correctAudio.current.play().catch(e => {
+                        console.error("Audio playback failed, retrying...", e);
+                        // Re-initialize if it lost source
+                        correctAudio.current.src = '/sound/Correct_answer.mp3';
+                        correctAudio.current.play();
+                    });
+                } catch (err) {
+                    console.error("Audio error:", err);
+                }
             }
 
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
@@ -286,9 +313,18 @@ const StudyPage = () => {
             }
         } else {
             // Play error sound
-            if (wrongAudio.current) {
-                wrongAudio.current.currentTime = 0;
-                wrongAudio.current.play().catch(e => console.error("Audio playback failed:", e));
+            const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
+            if (wrongAudio.current && soundEnabled) {
+                try {
+                    wrongAudio.current.currentTime = 0;
+                    wrongAudio.current.play().catch(e => {
+                        console.error("Audio playback failed, retrying...", e);
+                        wrongAudio.current.src = '/sound/Wrong_answer.mp3';
+                        wrongAudio.current.play();
+                    });
+                } catch (err) {
+                    console.error("Audio error:", err);
+                }
             }
 
             setShake(true);
@@ -349,9 +385,18 @@ const StudyPage = () => {
                 }
             }
             // Play completion sound
-            if (completeAudio.current) {
-                completeAudio.current.currentTime = 0;
-                completeAudio.current.play().catch(e => console.error("Audio playback failed:", e));
+            const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
+            if (completeAudio.current && soundEnabled) {
+                try {
+                    completeAudio.current.currentTime = 0;
+                    completeAudio.current.play().catch(e => {
+                        console.error("Audio playback failed, retrying...", e);
+                        completeAudio.current.src = '/sound/Chapter_complete.mp3';
+                        completeAudio.current.play();
+                    });
+                } catch (err) {
+                    console.error("Audio error:", err);
+                }
             }
 
             setShowResults(true);

@@ -108,18 +108,7 @@ const AuthPage = () => {
                     <img src={logo} alt="BeeLesson" className={styles.authLogo} />
                 </div>
                 <div className={styles.header}>
-                    <h1>
-                        {isLogin ? (
-                            <>
-                                <span className={styles.highlight}>লগইন</span> করুন
-                            </>
-                        ) : (
-                            <>
-                                <span className={styles.highlight}>সাইন আপ</span> করুন
-                            </>
-                        )}
-                    </h1>
-                    <p>{isLogin ? 'আপনার শেখার যাত্রা চালিয়ে যেতে' : 'নতুন অ্যাকাউন্ট তৈরি করুন'}</p>
+                    <h1>মধু আহরণ করতে লগইন করুন</h1>
                 </div>
 
                 {error && <div className={styles.errorMessage}>{error}</div>}
@@ -130,7 +119,7 @@ const AuthPage = () => {
                             <input
                                 type="text"
                                 id="name"
-                                placeholder="আপনার নাম"
+                                placeholder="আপনার পূর্ণ নাম"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required={!isLogin}
@@ -143,7 +132,7 @@ const AuthPage = () => {
                         <input
                             type="email"
                             id="email"
-                            placeholder="ইমেইল"
+                            placeholder="আপনার ইমেইল ঠিকানা"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required

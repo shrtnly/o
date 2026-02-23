@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle, Infinity } from 'lucide-react';
+import { X, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -9,10 +9,63 @@ import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
 import { honeyJarService } from '../../services/honeyJarService';
+import { shopService } from '../../services/shopService';
 import { useLanguage } from '../../context/LanguageContext';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 
 import styles from './StudyPage.module.css';
+
+const SparkleBurst = ({ large = false }) => {
+    const spreadX = large ? 2.6 : 0.75;
+    const spreadY = large ? 1.8 : 0.75;
+    const elements = [
+        { Icon: Sparkles, tx: -30 * spreadX, ty: -40 * spreadY, delay: 0, size: large ? 22 : 18 },
+        { Icon: Star, tx: 35 * spreadX, ty: -35 * spreadY, delay: 0.1, size: large ? 16 : 14, filled: true },
+        { Icon: Square, tx: -45 * spreadX, ty: -60 * spreadY, delay: 0.15, size: large ? 12 : 10, filled: true },
+        { Icon: Sparkles, tx: 0 * spreadX, ty: -65 * spreadY, delay: 0.2, size: large ? 24 : 20 },
+        { Icon: Circle, tx: 45 * spreadX, ty: -25 * spreadY, delay: 0.25, size: large ? 10 : 8, filled: true },
+        { Icon: Star, tx: -50 * spreadX, ty: -25 * spreadY, delay: 0.3, size: large ? 16 : 14, filled: true },
+        { Icon: Square, tx: 30 * spreadX, ty: -45 * spreadY, delay: 0.2, size: large ? 11 : 9, filled: false },
+        { Icon: Sparkles, tx: 50 * spreadX, ty: -55 * spreadY, delay: 0.15, size: large ? 20 : 16 },
+        { Icon: Square, tx: 20 * spreadX, ty: -70 * spreadY, delay: 0.35, size: large ? 10 : 8, filled: true },
+        { Icon: Circle, tx: -35 * spreadX, ty: -50 * spreadY, delay: 0.3, size: large ? 9 : 7, filled: false },
+        { Icon: Star, tx: -15 * spreadX, ty: -50 * spreadY, delay: 0.25, size: large ? 14 : 12, filled: true },
+        { Icon: Circle, tx: -25 * spreadX, ty: -75 * spreadY, delay: 0.1, size: large ? 12 : 10, filled: true },
+        { Icon: Sparkles, tx: 15 * spreadX, ty: -60 * spreadY, delay: 0.05, size: large ? 18 : 16 }
+    ];
+
+    return (
+        <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'visible' }}>
+            {elements.map((el, i) => (
+                <motion.div
+                    key={i}
+                    initial={{ scale: 0, opacity: 0, x: "-50%", y: "-50%" }}
+                    animate={{
+                        scale: [0, 1.2, 0],
+                        opacity: [1, 1, 0],
+                        x: `calc(-50% + ${el.tx}px)`,
+                        y: `calc(-50% + ${el.ty}px)`,
+                        rotate: [0, 180]
+                    }}
+                    transition={{
+                        duration: 2,
+                        delay: el.delay,
+                        ease: "easeOut"
+                    }}
+                    style={{ position: 'absolute', left: '50%', top: large ? '0%' : '50%' }}
+                >
+                    <el.Icon
+                        size={el.size}
+                        color="#FFD700"
+                        fill={el.filled ? "#FFD700" : "none"}
+                        strokeWidth={1.5}
+                        style={{ filter: `drop-shadow(0 0 ${large ? '10px' : '6px'} rgba(255, 215, 0, 0.6))` }}
+                    />
+                </motion.div>
+            ))}
+        </div>
+    );
+};
 
 const StudyPage = () => {
     const { courseId, chapterId } = useParams();
@@ -43,12 +96,73 @@ const StudyPage = () => {
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
     const [showNoHeartsModal, setShowNoHeartsModal] = useState(false);
+    const [showNoHeartsCheckout, setShowNoHeartsCheckout] = useState(null); // { type, label, price }
+    const [checkoutProcessing, setCheckoutProcessing] = useState(false);
     const [dotLottie, setDotLottie] = useState(null);
     const [isSubLooping, setIsSubLooping] = useState(false);
-    const [selectedAnimation, setSelectedAnimation] = useState('1'); // Default to animation 1
+    const [selectedAnimation, setSelectedAnimation] = useState('1');
     const hasStarted = React.useRef(false);
     const hasPlayed = React.useRef(false);
     const [profile, setProfile] = useState(null);
+
+    // Audio pre-loading
+    const correctAudio = React.useRef(null);
+    const wrongAudio = React.useRef(null);
+    const completeAudio = React.useRef(null);
+
+    useEffect(() => {
+        // Initialize audio objects
+        correctAudio.current = new Audio('/sound/Correct_answer.mp3');
+        wrongAudio.current = new Audio('/sound/Wrong_answer.mp3');
+        completeAudio.current = new Audio('/sound/Chapter_complete.mp3');
+
+        // Pre-load sounds
+        correctAudio.current.load();
+        wrongAudio.current.load();
+        completeAudio.current.load();
+    }, []);
+
+    const handleNoHeartsCheckout = (type) => {
+        if (type === 'hearts') {
+            setShowNoHeartsCheckout({ type: 'hearts', label: '১৪০পি ইনস্ট্যান্ট রিফিল', price: 5 });
+        } else if (type === 'subscription') {
+            const beeName = profile?.gender === 'male' ? t('king_bee_mode') : 'কুইন বী মোড';
+            setShowNoHeartsCheckout({ type: 'subscription', label: `${beeName} (মাসিক)`, price: 99 });
+        }
+    };
+
+    const completeNoHeartsCheckout = async () => {
+        if (!showNoHeartsCheckout || !user) return;
+        setCheckoutProcessing(true);
+        try {
+            const { type, price } = showNoHeartsCheckout;
+            let result;
+            if (type === 'hearts') {
+                result = await shopService.buyHearts(user.id, 5, price, 'heart_p1');
+                if (result?.success) {
+                    setShowNoHeartsCheckout(null);
+                    setShowNoHeartsModal(false);
+                    toast?.success('৪টি হানি ড্রপ যোক্ত হয়েছে! 🍯');
+                }
+            } else if (type === 'subscription') {
+                result = await shopService.subscribeToPremium(user.id, 'monthly', price);
+                if (result?.success) {
+                    setShowNoHeartsCheckout(null);
+                    setShowNoHeartsModal(false);
+                    const beeName = profile?.gender === 'male' ? t('king_bee_mode') : 'কুইন বী মোড';
+                    toast?.success(`অভিনন্দন! আপনি এখন ${beeName}! 👑`);
+                }
+            }
+            if (!result?.success) {
+                toast?.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।');
+            }
+        } catch (err) {
+            console.error('Checkout error:', err);
+            toast?.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।');
+        } finally {
+            setCheckoutProcessing(false);
+        }
+    };
 
     // Load animation preference and profile from localStorage/DB
     useEffect(() => {
@@ -159,12 +273,24 @@ const StudyPage = () => {
         setIsAnswered(true);
 
         if (correct) {
+            // Play success sound
+            if (correctAudio.current) {
+                correctAudio.current.currentTime = 0;
+                correctAudio.current.play().catch(e => console.error("Audio playback failed:", e));
+            }
+
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
             if (user) {
                 rewardService.awardXP(user.id, 1, 'correct_answer');
                 honeyJarService.addPollenToJar(user.id, 1);
             }
         } else {
+            // Play error sound
+            if (wrongAudio.current) {
+                wrongAudio.current.currentTime = 0;
+                wrongAudio.current.play().catch(e => console.error("Audio playback failed:", e));
+            }
+
             setShake(true);
             setTimeout(() => setShake(false), 500);
             if (user) await deductHeart(1);
@@ -175,6 +301,10 @@ const StudyPage = () => {
 
     const handleNext = async () => {
         if (currentIndex < questions.length - 1) {
+            if (!isPremium && hearts === 0) {
+                setShowNoHeartsModal(true);
+                return;
+            }
             setCurrentIndex(prev => prev + 1);
             setSelectedOption(null);
             setIsAnswered(false);
@@ -218,6 +348,12 @@ const StudyPage = () => {
                     console.error('Error updating progress:', err);
                 }
             }
+            // Play completion sound
+            if (completeAudio.current) {
+                completeAudio.current.currentTime = 0;
+                completeAudio.current.play().catch(e => console.error("Audio playback failed:", e));
+            }
+
             setShowResults(true);
         }
     };
@@ -228,7 +364,7 @@ const StudyPage = () => {
         <div className={styles.loadingContainer}>
             <div className="text-center space-y-4">
                 <h2 className="text-xl font-bold">এই অধ্যায়ে কোনো প্রশ্ন পাওয়া যায়নি।</h2>
-                <button onClick={() => navigate(-1)} className="bg-[#ff9902] text-white px-6 py-2 rounded-xl shadow-[0_4px_0_#e68a00] active:translate-y-1 active:shadow-none transition-all">ফিরে যান</button>
+                <button onClick={() => navigate(-1)} className="bg-[#ffa202] text-white px-6 py-2 rounded-xl shadow-[0_4px_0_#e69200] active:translate-y-1 active:shadow-none transition-all">ফিরে যান</button>
             </div>
         </div>
     );
@@ -315,7 +451,7 @@ const StudyPage = () => {
                         >
                             {(currentQuestion.narrative || currentQuestion.explanation) && (
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={styles.contextText}>
-                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#ff9902" /></span>
+                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
                                     {currentQuestion.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
                                 </motion.div>
                             )}
@@ -332,19 +468,22 @@ const StudyPage = () => {
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.4 + (idx * 0.1) }}
-                                        whileHover={!isAnswered ? { scale: 1.01 } : {}}
                                         whileTap={!isAnswered ? { scale: 0.98 } : {}}
                                         className={`${styles.optionBtn} ${selectedOption === option.id ? styles.selected : ''} ${isAnswered && option.is_correct && isCorrect ? styles.correct : ''} ${isAnswered && selectedOption === option.id && !option.is_correct ? styles.incorrect : ''}`}
                                         onClick={() => handleOptionSelect(option.id)}
                                         disabled={isAnswered}
                                     >
-                                        <div className={styles.optionIndex}>{optionLabels[idx] || (idx + 1)}</div>
+                                        <div className={styles.optionIndex}>
+                                            {optionLabels[idx] || (idx + 1)}
+                                        </div>
                                         <span className={styles.optionText}>{option.option_text}</span>
                                         {isAnswered && option.is_correct && isCorrect && (
-                                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className={styles.correctIcon}><Check size={20} strokeWidth={3} /></motion.div>
+                                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className={styles.correctIcon}>
+                                                <CircleCheckBig size={20} strokeWidth={1.5} />
+                                            </motion.div>
                                         )}
                                         {isAnswered && selectedOption === option.id && !option.is_correct && (
-                                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className={styles.incorrectIcon}><X size={20} strokeWidth={3} /></motion.div>
+                                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className={styles.incorrectIcon}><CircleX size={20} strokeWidth={1.5} /></motion.div>
                                         )}
                                     </motion.button>
                                 ))}
@@ -366,20 +505,21 @@ const StudyPage = () => {
                             <div className={styles.resultCardInner}>
                                 <div className={styles.resultStatus}>
                                     <div className={styles.statusHeader}>
-                                        <div className={styles.statusIcon}>{isCorrect ? <Check size={24} strokeWidth={4} /> : <X size={24} strokeWidth={4} />}</div>
-                                        <h3>{isCorrect ? "সঠিক উত্তর! 🍯" : `ওহ নো! একটি ${t('honey_drop')} হারিয়ে গেল! 🐝`}</h3>
+                                        <div className={styles.statusIcon}>{isCorrect ? <CircleCheckBig size={24} strokeWidth={1.5} /> : <CircleX size={24} strokeWidth={1.5} />}</div>
+                                        <h3>{isCorrect ? "সঠিক উত্তর !" : "ভুল উত্তর !"}</h3>
                                     </div>
                                     <p className={styles.explanationText}>
                                         {isCorrect
                                             ? "আপনার উত্তরটি সঠিক হয়েছে।"
                                             : currentQuestion.explanation
-                                                ? `ভুল থেকে শেখাই আসল শেখা। ${currentQuestion.explanation}`
+                                                ? `সঠিক উত্তর : ${currentQuestion.explanation}`
                                                 : `ভুল থেকে শেখাই আসল শেখা। আপনার কাছে আর মাত্র ${hearts}টি ${t('honey_drop')} আছে।`
                                         }
                                     </p>
                                 </div>
                                 <button className={styles.continueBtn} onClick={handleNext}>
-                                    <span>{currentIndex < questions.length - 1 ? "আবার চেষ্টা করি" : "সম্পন্ন করুন"}</span>
+                                    {isCorrect && <SparkleBurst large={true} />}
+                                    <span>{currentIndex < questions.length - 1 ? (isCorrect ? "এগিয়ে যান" : "আবার চেষ্টা করি") : "সম্পন্ন করুন"}</span>
                                     <ArrowRight size={20} strokeWidth={3} />
                                 </button>
                             </div>
@@ -404,15 +544,15 @@ const StudyPage = () => {
                             </div>
                             <div className={styles.statsSummary}>
                                 <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 153, 2, 0.1)' }}><Check size={20} color="#ff9902" /></div>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 162, 2, 0.1)' }}><CircleCheckBig size={20} color="#ffa202" strokeWidth={1.5} /></div>
                                     <div className={styles.summaryInfo}><span>সঠিক উত্তর</span><strong>{stats.correct}</strong></div>
                                 </div>
                                 <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 75, 75, 0.1)' }}><X size={20} color="#ff4b4b" /></div>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 75, 75, 0.1)' }}><CircleX size={20} color="#ff4b4b" strokeWidth={1.5} /></div>
                                     <div className={styles.summaryInfo}><span>ভুল উত্তর</span><strong>{stats.total - stats.correct}</strong></div>
                                 </div>
                                 <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 153, 2, 0.1)' }}><Star size={20} color="#ff9902" /></div>
+                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 162, 2, 0.1)' }}><Star size={20} color="#ffa202" /></div>
                                     <div className={styles.summaryInfo}><span>অর্জিত XP</span><strong>+{stats.correct}</strong></div>
                                 </div>
                             </div>
@@ -424,95 +564,74 @@ const StudyPage = () => {
 
             <AnimatePresence>
                 {showNoHeartsModal && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.resultModal} onClick={() => setShowNoHeartsModal(false)}>
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className={styles.resultModal}
+                        onClick={() => setShowNoHeartsModal(false)}
+                    >
                         <motion.div
-                            initial={{ scale: 0.8, opacity: 0, y: 20 }}
+                            initial={{ scale: 0.88, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
-                            transition={{ type: "spring", damping: 15 }}
-                            className={styles.resultCard}
+                            exit={{ scale: 0.88, opacity: 0, y: 20 }}
+                            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+                            className={`${styles.resultCard} ${styles.noHeartsCard}`}
                             onClick={(e) => e.stopPropagation()}
-                            style={{ maxWidth: '420px', background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}
                         >
-                            <div style={{ textAlign: 'center', padding: '28px 24px' }}>
-                                {/* Header */}
-                                <motion.div
-                                    animate={{ rotate: [-5, 5, -5, 5, 0] }}
-                                    transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 2 }}
-                                    style={{ fontSize: '72px', marginBottom: '16px', lineHeight: 1 }}
-                                >🍯</motion.div>
+                            {/* Close Button */}
+                            <button className={styles.modalCloseBtn} onClick={() => setShowNoHeartsModal(false)}>
+                                <X size={18} strokeWidth={2.5} />
+                            </button>
 
-                                <h2 style={{
-                                    fontSize: '22px',
-                                    fontWeight: 900,
-                                    marginBottom: '8px',
-                                    color: '#ffa202',
-                                    textShadow: '0 0 20px rgba(255,162,2,0.4)'
-                                }}>আপনার মৌচাকে মধু শেষ!</h2>
+                            <div className={styles.noHeartsContent}>
+                                {/* Hero Area */}
+                                <div className={styles.noHeartsHero}>
+                                    <div className={styles.honeyEmoji}>🍯</div>
+                                    <div className={styles.noHeartsTextBlock}>
+                                        <h2 className={styles.noHeartsTitle}>আপনার মৌচাকে মধু শেষ!</h2>
+                                        <p className={styles.noHeartsSub}>চিন্তা নেই! মৌমাছিরা আবার মধু সংগ্রহের জন্য প্রস্তুত।</p>
+                                    </div>
+                                </div>
 
-                                <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginBottom: '20px', lineHeight: 1.6 }}>
-                                    নতুন {t('honey_drop')} রিফিল হতে সময় লাগবে।<br />
-                                    আপনি কি অপেক্ষা করবেন, নাকি এখনই ওড়া শুরু করতে চান?
-                                </p>
-
-                                {/* Refill Timer Card */}
+                                {/* Refill Timer */}
                                 {refillTimeDisplay && (
-                                    <div style={{
-                                        background: 'rgba(255, 162, 2, 0.1)',
-                                        border: '2px solid rgba(255,162,2,0.4)',
-                                        borderRadius: '14px',
-                                        padding: '14px 20px',
-                                        marginBottom: '20px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '10px'
-                                    }}>
-                                        <Clock size={20} color="#ffa202" />
-                                        <span style={{ fontSize: '16px', fontWeight: 700, color: '#ffa202' }}>রিফিল হবে: {refillTimeDisplay}</span>
+                                    <div className={styles.refillTimerRow}>
+                                        <div className={styles.refillTimerLeft}>
+                                            <Clock size={15} />
+                                            <span>রিফিল হবে {refillTimeDisplay}-এ</span>
+                                        </div>
+                                        <button
+                                            className={styles.shopInlineBtn}
+                                            onClick={() => { setShowNoHeartsModal(false); window.location.href = '/shop'; }}
+                                        >
+                                            <ShoppingBag size={14} />
+                                            <span>শপ এ যান</span>
+                                        </button>
                                     </div>
                                 )}
 
-                                {/* Options */}
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                    {/* Queen Bee Option */}
+                                {/* Divider */}
+                                <div className={styles.noHeartsDivider} />
+
+                                {/* Action Buttons */}
+                                <div className={styles.noHeartsButtons}>
+                                    {/* Primary: Instant Refill */}
                                     <button
-                                        onClick={() => { setShowNoHeartsModal(false); window.location.href = '/shop'; }}
-                                        style={{
-                                            background: 'linear-gradient(135deg, #f1c40f 0%, #ff6b00 100%)',
-                                            border: 'none',
-                                            borderRadius: '14px',
-                                            padding: '14px 20px',
-                                            color: '#fff',
-                                            fontWeight: 900,
-                                            fontSize: '15px',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '8px',
-                                            boxShadow: '0 4px 20px rgba(241,196,15,0.4)',
-                                            width: '100%'
-                                        }}
+                                        className={`${styles.btn3d} ${styles.instantRefillBtn}`}
+                                        onClick={() => handleNoHeartsCheckout('hearts')}
                                     >
-                                        <span>👑</span> {profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} {t('only_for_99')}
+                                        <Zap size={18} fill="currentColor" strokeWidth={0} />
+                                        <span>আনলিমিটেড ২৪ ঘন্টা - মাত্র ৪ টাকা</span>
                                     </button>
 
-                                    {/* Wait Option */}
+                                    {/* Secondary: Premium Mode */}
                                     <button
-                                        onClick={() => setShowNoHeartsModal(false)}
-                                        style={{
-                                            background: 'rgba(255,255,255,0.08)',
-                                            border: '1px solid rgba(255,255,255,0.15)',
-                                            borderRadius: '14px',
-                                            padding: '12px 20px',
-                                            color: 'rgba(255,255,255,0.7)',
-                                            fontWeight: 600,
-                                            fontSize: '14px',
-                                            cursor: 'pointer',
-                                            width: '100%'
-                                        }}
+                                        className={`${styles.btn3d} ${styles.premiumCardBtn}`}
+                                        onClick={() => handleNoHeartsCheckout('subscription')}
                                     >
-                                        🕐 আমি অপেক্ষা করবো
+                                        <span>👑</span>
+                                        <span>{profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} — যাত্রা মাত্র ৯৯ টাকা</span>
                                     </button>
                                 </div>
                             </div>
@@ -520,6 +639,73 @@ const StudyPage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* No Hearts Checkout Modal */}
+            {showNoHeartsCheckout && (
+                <div className={styles.checkoutOverlay} onClick={() => setShowNoHeartsCheckout(null)}>
+                    <motion.div
+                        initial={{ scale: 0.88, opacity: 0, y: 30 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.88, opacity: 0 }}
+                        transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                        className={styles.checkoutCard}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className={styles.checkoutCardHeader}>
+                            <div className={styles.checkoutCardIcon}>
+                                {showNoHeartsCheckout.type === 'hearts' ? '🍯' : '👑'}
+                            </div>
+                            <h2 className={styles.checkoutCardTitle}>পেমেন্ট কনফার্ম করুন</h2>
+                            <p className={styles.checkoutCardSub}>নিচের বিবরণ যাচাই করুন</p>
+                        </div>
+
+                        {/* Order summary */}
+                        <div className={styles.checkoutSummary}>
+                            <div className={styles.checkoutSummaryRow}>
+                                <span>আইটেম</span>
+                                <span>{showNoHeartsCheckout.label}</span>
+                            </div>
+                            <div className={`${styles.checkoutSummaryRow} ${styles.checkoutSummaryTotal}`}>
+                                <span>মোট</span>
+                                <span>৳ {showNoHeartsCheckout.price}</span>
+                            </div>
+                        </div>
+
+                        {/* Payment methods */}
+                        <div className={styles.checkoutMethods}>
+                            <div className={`${styles.checkoutMethodBtn} ${styles.checkoutMethodActive}`}>
+                                <CreditCard size={22} />
+                                <span>বিকাশ</span>
+                            </div>
+                            <div className={styles.checkoutMethodBtn}>
+                                <ShoppingBag size={22} />
+                                <span>নগদ</span>
+                            </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className={styles.checkoutCardActions}>
+                            <button
+                                className={styles.checkoutCancelBtn}
+                                onClick={() => setShowNoHeartsCheckout(null)}
+                                disabled={checkoutProcessing}
+                            >
+                                বাতিল
+                            </button>
+                            <button
+                                className={styles.checkoutConfirmBtn}
+                                onClick={completeNoHeartsCheckout}
+                                disabled={checkoutProcessing}
+                            >
+                                {checkoutProcessing
+                                    ? <Loader2 size={20} className={styles.spinnerIcon} />
+                                    : 'এখনই পে করুন'}
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
         </div>
     );
 };

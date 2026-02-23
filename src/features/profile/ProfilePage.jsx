@@ -9,6 +9,7 @@ import { honeyJarService } from '../../services/honeyJarService';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import HoneyDropIcon from '../../components/HoneyDropIcon';
 import PollenIcon from '../../components/PollenIcon';
+import { leaderboardService } from '../../services/leaderboardService';
 import InlineLoader from '../../components/ui/InlineLoader';
 import HoneyJarGiftModal from '../../components/HoneyJarGiftModal';
 import {
@@ -23,16 +24,16 @@ import styles from './ProfilePage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel } from '../../utils/shieldSystem';
 
-// --- Achievement Badge Data ---
-const BADGE_LIST = [
-    { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ', unlocked: true },
-    { id: 'streak_7', emoji: '🔥', label: '৭ দিনের স্ট্রিক', unlocked: true },
-    { id: 'honey_100', emoji: '🍯', label: '১০০ মধু', unlocked: true },
-    { id: 'quiz_ace', emoji: '🏆', label: 'কুইজ মাস্টার', unlocked: false },
-    { id: 'course_complete', emoji: '🎓', label: 'কোর্স সম্পন্ন', unlocked: false },
-    { id: 'streak_30', emoji: '⚡', label: '৩০ দিনের স্ট্রিক', unlocked: false },
-    { id: 'rank_top10', emoji: '👑', label: 'টপ ১০', unlocked: false },
-    { id: 'bee_master', emoji: '🐝', label: 'Bee মাস্টার', unlocked: false },
+// --- Achievement Badge Constants ---
+const BADGE_DEFS = [
+    { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ' },
+    { id: 'streak_7', emoji: '🔥', label: '7 দিনের স্ট্রিক' },
+    { id: 'honey_100', emoji: '🍯', label: '100 মধু' },
+    { id: 'quiz_ace', emoji: '🏆', label: 'কুইজ মাস্টার' },
+    { id: 'course_complete', emoji: '🎓', label: 'কোর্স সম্পন্ন' },
+    { id: 'streak_30', emoji: '⚡', label: '30 দিনের স্ট্রিক' },
+    { id: 'rank_top10', emoji: '👑', label: 'টপ 10' },
+    { id: 'bee_master', emoji: '�', label: 'সার্টিফিকেট' },
 ];
 
 const ProfilePage = () => {
@@ -52,6 +53,7 @@ const ProfilePage = () => {
     const [showGiftModal, setShowGiftModal] = useState(false);
     const [flamingBadge, setFlamingBadge] = useState(null);
     const [jarSplash, setJarSplash] = useState(false);
+    const [globalRank, setGlobalRank] = useState('—');
 
     // Modal states
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -116,6 +118,22 @@ const ProfilePage = () => {
             setStreak(streakData);
             const courseProgress = await courseService.getUserEnrolledCourses(user.id);
             setEnrolledCourses(courseProgress);
+
+            // Fetch real rank from leaderboard
+            try {
+                const { data: rankData } = await supabase
+                    .from('leaderboard_view')
+                    .select('tier')
+                    .eq('id', user.id)
+                    .maybeSingle();
+
+                if (rankData) {
+                    const rank = await leaderboardService.getUserRank(user.id, rankData.tier);
+                    if (rank) setGlobalRank(rank);
+                }
+            } catch (rankErr) {
+                console.error('Error fetching global rank:', rankErr);
+            }
         } catch (error) {
             console.error('Error fetching profile:', error);
         } finally {
@@ -226,7 +244,40 @@ const ProfilePage = () => {
         ? currentRank.nextThreshold - currentRank.threshold : 1;
     const honeyJarPercent = Math.min(100, Math.round((progressInRank / progressNeeded) * 100));
 
-    const globalRank = stats ? Math.max(1, 9999 - Math.floor((profile?.xp || 0) / 10)) : '—';
+    // Calculate Badges Unlocked Status
+    const badges = BADGE_DEFS.map(badge => {
+        let unlocked = false;
+        switch (badge.id) {
+            case 'first_lesson':
+                unlocked = stats?.chapters_completed >= 1;
+                break;
+            case 'streak_7':
+                unlocked = streak?.current_streak >= 7;
+                break;
+            case 'honey_100':
+                unlocked = (profile?.xp || 0) >= 100;
+                break;
+            case 'quiz_ace':
+                unlocked = stats?.chapters_completed >= 50;
+                break;
+            case 'course_complete':
+                unlocked = enrolledCourses.some(c => parseFloat(c.progress_percentage) >= 100);
+                break;
+            case 'streak_30':
+                unlocked = streak?.current_streak >= 30;
+                break;
+            case 'rank_top10':
+                unlocked = typeof globalRank === 'number' && globalRank <= 10;
+                break;
+            case 'bee_master':
+                // For now, true if at least one course is 100% complete OR as defined by user requirement hint
+                unlocked = enrolledCourses.some(c => parseFloat(c.progress_percentage) >= 100);
+                break;
+            default:
+                break;
+        }
+        return { ...badge, unlocked };
+    });
 
     return (
         <div className={styles.profilePage}>
@@ -391,7 +442,7 @@ const ProfilePage = () => {
                                 {/* Pollen counter */}
                                 <p className={styles.pollenCounter}>
                                     🌼 <strong>{jarProgress.pollen_in_cycle || 0}</strong> মধু ফোঁটা সংগ্রহ হয়েছে
-                                    &nbsp;·&nbsp; প্রতি ৩টিতে ১% পূর্ণ হয়
+                                    &nbsp;·&nbsp; প্রতি 3 টিতে 1% পূর্ণ হয়
                                 </p>
 
                                 {/* XP Progress Bar */}
@@ -432,7 +483,7 @@ const ProfilePage = () => {
                             <span>🏅</span> অর্জিত পদক
                         </h2>
                         <div className={styles.badgesGrid}>
-                            {BADGE_LIST.map(badge => (
+                            {badges.map(badge => (
                                 <div
                                     key={badge.id}
                                     className={`${styles.badgeItem} ${badge.unlocked ? styles.badgeUnlocked : styles.badgeLocked}`}
@@ -467,6 +518,8 @@ const ProfilePage = () => {
                         </button>
                     </section>
 
+                    {/* Bottom Spacer for extra scrolling room */}
+                    <div className={styles.bottomSpacer} />
                 </div>
             )}
 

@@ -76,7 +76,7 @@ const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
                                         transition={{ delay: 0.3 }}
                                         className={styles.rewardItem}
                                     >
-                                        <div className={styles.rewardIconCircle} style={{ background: 'rgba(255, 153, 2, 0.1)' }}>
+                                        <div className={styles.rewardIconCircle} style={{ background: 'rgba(255, 162, 2, 0.1)' }}>
                                             <HoneyDropIcon size={36} />
                                         </div>
                                         <span className={styles.rewardValue}>+{hearts}</span>

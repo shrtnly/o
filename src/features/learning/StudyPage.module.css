@@ -54,11 +54,11 @@
 
 .progressFill {
     height: 100%;
-    background: #ff9902;
+    background: #ffa202;
     border-radius: 99px;
     transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
-    box-shadow: 0 0 10px rgba(255, 153, 2, 0.5);
+    box-shadow: 0 0 10px rgba(255, 162, 2, 0.5);
 }
 
 .progressFill::after {
@@ -83,7 +83,7 @@
 .heartCount {
     font-size: 1.75rem;
     font-weight: 800;
-    color: #ff9902;
+    color: #ffa202;
 }
 
 .refillTimer {
@@ -92,11 +92,11 @@
     gap: 4px;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #ff9902;
-    background: rgba(255, 153, 2, 0.1);
+    color: #ffa202;
+    background: rgba(255, 162, 2, 0.1);
     padding: 4px 8px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 153, 2, 0.2);
+    border: 1px solid rgba(255, 162, 2, 0.2);
 }
 
 
@@ -151,7 +151,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #ff9902;
+    color: #ffa202;
     font-size: 0.75rem;
     font-weight: 900;
     text-transform: uppercase;
@@ -162,7 +162,7 @@
 .labelSquare {
     width: 12px;
     height: 12px;
-    background-color: #ff9902;
+    background-color: #ffa202;
     border-radius: 2px;
 }
 
@@ -196,7 +196,7 @@
 }
 
 .questionIcon {
-    color: #ff9902;
+    color: #ffa202;
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -208,38 +208,38 @@
 }
 
 .optionBtn {
-    background-color: transparent;
-    border: 2px solid #233138;
-    border-radius: 16px;
-    padding: 14px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1.5px solid rgba(241, 196, 15, 0.15);
+    border-bottom: 3px solid rgba(241, 196, 15, 0.12);
+    border-radius: 18px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     gap: 16px;
     cursor: pointer;
-    transition: all 0.1s ease;
+    transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     text-align: left;
     width: 100%;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 0 #233138;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
 }
 
 .optionBtn:hover:not(:disabled) {
-    background-color: rgba(255, 255, 255, 0.03);
-    border-color: #37464f;
-    box-shadow: 0 4px 0 #37464f;
+    transform: translateY(-2px);
+    background-color: rgba(241, 196, 15, 0.04);
+    border-color: rgba(241, 196, 15, 0.3);
+    border-bottom-width: 5px;
 }
 
 .optionBtn:active:not(:disabled) {
     transform: translateY(2px);
-    box-shadow: 0 2px 0 #37464f;
+    border-bottom-width: 1.5px;
 }
 
 .selected {
     border-color: #1cb0f6 !important;
-    background-color: rgba(28, 176, 246, 0.05) !important;
-    box-shadow: 0 4px 0 #1899d6 !important;
+    border-bottom-color: #1899d6 !important;
 }
 
 .selected .optionIndex {
@@ -249,18 +249,20 @@
 }
 
 .optionIndex {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border: 2px solid #233138;
-    border-radius: 10px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
-    font-weight: 900;
+    font-size: 0.95rem;
+    font-weight: 800;
     color: #4b5a64;
     transition: all 0.2s;
     flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 
@@ -273,21 +275,44 @@
 
 /* Answer States */
 .correct {
-    border-color: #ff9902 !important;
-    background-color: rgba(255, 153, 2, 0.05) !important;
-    box-shadow: 0 4px 0 #e68a00 !important;
+    border-color: #ffa202 !important;
+    border-bottom-color: #e69200 !important;
+    background-color: transparent !important;
+    animation: correctPulse 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes correctPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 .correct .optionIndex {
-    background-color: #ff9902 !important;
-    border-color: #ff9902 !important;
+    background-color: #ffa202 !important;
+    border-color: #ffa202 !important;
     color: #fff !important;
+}
+
+.sparkleParticle {
+    position: absolute;
+    pointer-events: none;
+    background: #ffa202;
+    border-radius: 50%;
+    z-index: 10;
 }
 
 .incorrect {
     border-color: #ff4b4b !important;
-    background-color: rgba(255, 75, 75, 0.05) !important;
-    box-shadow: 0 4px 0 #d33131 !important;
+    border-bottom-color: #d33131 !important;
+    background-color: rgba(255, 75, 75, 0.1) !important;
 }
 
 .incorrect .optionIndex {
@@ -306,7 +331,7 @@
 }
 
 .correctIcon {
-    color: #ff9902;
+    color: #ffa202;
 }
 
 .incorrectIcon {
@@ -351,26 +376,24 @@
 }
 
 .checkBtn:not(:disabled) {
-    background-color: #ff9902;
+    background-color: #ffa202;
     color: #fff;
     cursor: pointer;
-    box-shadow: 0 4px 0 #e68a00;
+    box-shadow: 0 4px 0 #e69200;
 }
 
 .checkBtn:not(:disabled):active {
     transform: translateY(2px);
-    box-shadow: 0 2px 0 #e68a00;
+    box-shadow: 0 2px 0 #e69200;
 }
 
 /* Result Overlay Footer */
 .footerCorrect {
     background-color: #0b1114;
-    border-top: 2px solid #422b16;
 }
 
 .footerIncorrect {
     background-color: #0b1114;
-    border-top: 2px solid #421616;
 }
 
 .resultOverlay {
@@ -389,23 +412,10 @@
 
 .resultStatus {
     flex: 1;
-    background: rgba(255, 255, 255, 0.03);
-    border: 2px solid transparent;
-    border-radius: 20px;
     padding: 16px 24px;
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-.footerCorrect .resultStatus {
-    background: #1d140d;
-    border-color: #422b16;
-}
-
-.footerIncorrect .resultStatus {
-    background: #1d0d0d;
-    border-color: #421616;
 }
 
 .statusHeader {
@@ -422,7 +432,7 @@
 
 .footerCorrect .statusIcon,
 .footerCorrect .statusHeader h3 {
-    color: #ff9902;
+    color: #ffa202;
 }
 
 .footerIncorrect .statusIcon,
@@ -464,6 +474,7 @@
 }
 
 .continueBtn {
+    position: relative;
     height: 52px;
     padding: 0 32px;
     border-radius: 16px;
@@ -481,9 +492,9 @@
 }
 
 .footerCorrect .continueBtn {
-    background-color: #ff9902;
+    background-color: #ffa202;
     color: #fff;
-    box-shadow: 0 6px 0 #e68a00;
+    box-shadow: 0 6px 0 #e69200;
 }
 
 .footerIncorrect .continueBtn {
@@ -502,7 +513,7 @@
 }
 
 .footerCorrect .continueBtn:active {
-    box-shadow: 0 2px 0 #e68a00;
+    box-shadow: 0 2px 0 #e69200;
 }
 
 .footerIncorrect .continueBtn:active {
@@ -554,10 +565,10 @@
 
 .chartFill {
     fill: none;
-    stroke: #ff9902;
+    stroke: #ffa202;
     stroke-width: 8;
     stroke-linecap: round;
-    filter: drop-shadow(0 0 8px rgba(255, 153, 2, 0.3));
+    filter: drop-shadow(0 0 8px rgba(255, 162, 2, 0.3));
 }
 
 .chartText {
@@ -579,7 +590,7 @@
 .chartText p {
     font-size: 0.75rem;
     font-weight: 800;
-    color: #ff9902;
+    color: #ffa202;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-top: 4px;
@@ -633,7 +644,7 @@
 
 .finishBtn {
     width: 100%;
-    background-color: #ff9902;
+    background-color: #ffa202;
     color: #fff;
     border: none;
     border-radius: 20px;
@@ -641,14 +652,14 @@
     font-size: 1.15rem;
     font-weight: 900;
     cursor: pointer;
-    box-shadow: 0 6px 0 #e68a00;
+    box-shadow: 0 6px 0 #e69200;
     transition: all 0.1s;
     text-transform: uppercase;
 }
 
 .finishBtn:active {
     transform: translateY(4px);
-    box-shadow: 0 2px 0 #e68a00;
+    box-shadow: 0 2px 0 #e69200;
 }
 
 /* Loading */
@@ -664,7 +675,7 @@
     width: 40px;
     height: 40px;
     border: 4px solid #37464f;
-    border-top-color: #ff9902;
+    border-top-color: #ffa202;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -736,4 +747,388 @@
         width: 70px;
         height: 70px;
     }
+}
+
+
+/* ─── No Hearts Modal — Minimal Dark UI ─── */
+
+/* Card Shell */
+.noHeartsCard {
+    max-width: 420px !important;
+    padding: 28px 28px 32px !important;
+    background: #141414 !important;
+    backdrop-filter: blur(24px) !important;
+    -webkit-backdrop-filter: blur(24px) !important;
+    border: 1px solid rgba(255, 162, 2, 0.25) !important;
+    border-radius: 28px !important;
+    position: relative;
+    box-shadow:
+        0 8px 0 rgba(255, 162, 2, 0.18),
+        0 10px 32px rgba(0, 0, 0, 0.6) !important;
+    transform: translateY(-2px);
+}
+
+/* Close Button */
+.modalCloseBtn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.25s;
+    z-index: 10;
+}
+
+.modalCloseBtn:hover {
+    background: rgba(255, 75, 75, 0.12);
+    color: #ff6b6b;
+    transform: rotate(90deg);
+}
+
+/* Content wrapper */
+.noHeartsContent {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+}
+
+/* Hero: emoji + text side by side */
+.noHeartsHero {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.honeyEmoji {
+    font-size: 48px;
+    line-height: 1;
+    flex-shrink: 0;
+    filter: drop-shadow(0 4px 12px rgba(255, 162, 2, 0.35));
+}
+
+.noHeartsTextBlock {
+    text-align: left;
+}
+
+.noHeartsTitle {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 5px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.noHeartsSub {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.45);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Refill timer row */
+.refillTimerRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 7px;
+    background: rgba(255, 162, 2, 0.08);
+    border: 1px solid rgba(255, 162, 2, 0.15);
+    border-radius: 10px;
+    padding: 8px 8px 8px 14px;
+    margin-bottom: 20px;
+}
+
+.refillTimerLeft {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #ffa202;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.shopInlineBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.shopInlineBtn:hover {
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Thin divider */
+.noHeartsDivider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin-bottom: 20px;
+}
+
+/* Buttons stack */
+.noHeartsButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Base 3D Button */
+.btn3d {
+    position: relative;
+    padding: 15px 20px;
+    border-radius: 16px;
+    font-size: 0.98rem;
+    font-weight: 800;
+    font-family: 'Hind Siliguri', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    letter-spacing: 0.01em;
+}
+
+.btn3d:active {
+    transform: translateY(4px);
+    box-shadow: none !important;
+}
+
+/* Primary — Honey Amber (most important action) */
+.instantRefillBtn {
+    background: linear-gradient(160deg, #ffb300 0%, #ff8c00 100%);
+    color: #fff;
+    box-shadow: 0 5px 0 #b85e00;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* Secondary — Dark charcoal (premium mode) */
+.premiumCardBtn {
+    background: #1f1f1f;
+    color: #ffb300;
+    border: 1px solid rgba(255, 179, 0, 0.25);
+    box-shadow: 0 5px 0 #000;
+}
+
+/* Tertiary — Ghost/outline (shop link) */
+.shopBtn {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+    font-size: 0.88rem;
+    padding: 11px 20px;
+}
+
+.shopBtn:hover {
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* Legacy — keep to avoid dead refs */
+.noHeartsHeader {
+    display: none;
+}
+
+.largeRefillTimer {
+    display: none;
+}
+
+.premiumIcon {
+    font-size: 1.2rem;
+}
+
+/* ─── Checkout Modal (Study Page) ─── */
+
+.checkoutOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+
+.checkoutCard {
+    background: #141414;
+    border: 1px solid rgba(255, 162, 2, 0.2);
+    border-radius: 28px;
+    width: 100%;
+    max-width: 400px;
+    padding: 32px 28px 28px;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9);
+}
+
+.checkoutCardHeader {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.checkoutCardIcon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 4px 12px rgba(255, 162, 2, 0.4));
+}
+
+.checkoutCardTitle {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
+}
+
+.checkoutCardSub {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+.checkoutSummary {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+}
+
+.checkoutSummaryRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    padding: 4px 0;
+}
+
+.checkoutSummaryTotal {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 10px;
+    padding-top: 12px;
+    color: #ffb300;
+    font-size: 1.1rem;
+    font-weight: 900;
+}
+
+.checkoutMethods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.checkoutMethodBtn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.checkoutMethodActive {
+    border-color: #ffb300;
+    color: #ffb300;
+    background: rgba(255, 179, 0, 0.08);
+}
+
+.checkoutCardActions {
+    display: flex;
+    gap: 10px;
+}
+
+.checkoutCancelBtn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.checkoutCancelBtn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.checkoutConfirmBtn {
+    flex: 2;
+    background: linear-gradient(160deg, #ffb300 0%, #ff8c00 100%);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 900;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #b85e00;
+    transition: all 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.checkoutConfirmBtn:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+.checkoutConfirmBtn:disabled,
+.checkoutCancelBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spinnerIcon {
+    animation: spin 0.8s linear infinite;
 }

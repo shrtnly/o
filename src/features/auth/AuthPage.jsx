@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mail, Lock, X, Chrome, Phone, Loader2, User, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, X, Chrome, Phone, Loader2, User, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './AuthPage.module.css';
@@ -9,15 +9,39 @@ import { courseService } from '../../services/courseService';
 import { surveyService } from '../../services/surveyService';
 import { supabase } from '../../lib/supabaseClient';
 import ConfirmationModal from './ConfirmationModal';
+import CustomSelect from '../../components/ui/CustomSelect';
+
+const GENDER_OPTIONS = [
+    { value: 'male', label: 'পুরুষ' },
+    { value: 'female', label: 'নারী' },
+    { value: 'other', label: 'অন্যান্য' }
+];
+
+const LOCATION_OPTIONS = [
+    { value: 'Dhaka', label: 'ঢাকা' },
+    { value: 'Chattogram', label: 'চট্টগ্রাম' },
+    { value: 'Rajshahi', label: 'রাজশাহী' },
+    { value: 'Khulna', label: 'খুলনা' },
+    { value: 'Barishal', label: 'বরিশাল' },
+    { value: 'Sylhet', label: 'সিলেট' },
+    { value: 'Rangpur', label: 'রংপুর' },
+    { value: 'Mymensingh', label: 'ময়মনসিংহ' },
+    { value: 'Overseas', label: 'দেশের বাইরে' }
+];
 
 const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
+    const [gender, setGender] = useState('');
+    const [location, setLocation] = useState('');
+    const [agreeToTerms, setAgreeToTerms] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const { user, signIn, signUp, signInWithOAuth } = useAuth();
@@ -59,29 +83,97 @@ const AuthPage = () => {
         setError('');
 
         try {
+            if (isForgotPassword) {
+                const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: `${window.location.origin}/reset-password`,
+                });
+                if (resetError) throw resetError;
+                setError('');
+                setSuccess('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে। অনুগ্রহ করে ইনবক্স চেক করুন।');
+
+                // Hide success message and go back to login after 5 seconds
+                setTimeout(() => {
+                    setSuccess('');
+                    setIsForgotPassword(false);
+                    setIsLogin(true);
+                }, 5000);
+
+                setLoading(false);
+                return;
+            }
+
             if (isLogin) {
                 const { error: signInError } = await signIn({ email, password });
                 if (signInError) throw signInError;
             } else {
+                if (!agreeToTerms) {
+                    setError('আমাদের টার্মস এবং কন্ডিশনস এর সাথে সম্মত হওয়া আবশ্যক।');
+                    setLoading(false);
+                    return;
+                }
+
+                // Manual check for existing user if email enumeration protection is on
+                const { data: existingUser } = await supabase
+                    .from('profiles')
+                    .select('id')
+                    .eq('email', email)
+                    .maybeSingle();
+
+                if (existingUser) {
+                    setError('এই ইমেইল দিয়ে ইতঃপূর্বেই অ্যাকাউন্ট তৈরি করা হয়েছে।');
+                    setLoading(false);
+                    return;
+                }
+
                 const { data, error: signUpError } = await signUp({
                     email,
                     password,
                     options: {
                         data: {
                             full_name: name,
-                            display_name: name
+                            display_name: name,
+                            email: email,
+                            gender: gender,
+                            location: location
                         }
                     }
                 });
                 if (signUpError) throw signUpError;
 
-                if (!data?.user || data?.session === null) {
-                    setShowConfirmModal(true);
+                if (!data?.user || (data?.session === null && !data?.user?.identities?.length)) {
+                    // This is another way Supabase indicates existing user with protection on
+                    setError('এই ইমেইল দিয়ে ইতঃপূর্বেই অ্যাকাউন্ট তৈরি করা হয়েছে।');
+                    setLoading(false);
+                    return;
+                }
+
+                if (!data?.session) {
+                    setSuccess('সাইন আপ সফল হয়েছে! আপনার ইমেইল ইনবক্স চেক করে অ্যাকাউন্ট ভেরিফাই করুন।');
+                    // Go back to login after showing message
+                    setTimeout(() => {
+                        setSuccess('');
+                        setIsLogin(true);
+                    }, 6000);
                 }
             }
         } catch (err) {
             console.error('Auth error:', err);
-            setError(err.message || 'একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            let message = err.message || 'একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+
+            const lowMessage = message.toLowerCase();
+            if (lowMessage.includes('invalid login credentials')) {
+                message = 'ভুল ইমেইল বা পাসওয়ার্ড। আবার চেষ্টা করুন।';
+            } else if (lowMessage.includes('at least 6 characters')) {
+                message = 'পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে।';
+            } else if (lowMessage.includes('email not confirmed')) {
+                message = 'আপনার ইমেইলটি এখনো ভেরিফাই করা হয়নি। অনুগ্রহ করে ইনবক্স চেক করুন।';
+            } else if (lowMessage.includes('already registered') ||
+                lowMessage.includes('already been registered') ||
+                lowMessage.includes('email already in use')) {
+                message = 'এই ইমেইল দিয়ে ইতঃপূর্বেই অ্যাকাউন্ট তৈরি করা হয়েছে।';
+            }
+
+            setError(message);
         } finally {
             setLoading(false);
         }
@@ -109,7 +201,11 @@ const AuthPage = () => {
                 </div>
                 <div className={styles.header}>
                     <h1>
-                        {isLogin ? (
+                        {isForgotPassword ? (
+                            <>
+                                পাসওয়ার্ড <span className={styles.highlight}>রিসেট</span> করুন
+                            </>
+                        ) : isLogin ? (
                             <>
                                 মধু আহরণ করতে <span className={styles.highlight}>লগইন</span> করুন
                             </>
@@ -122,6 +218,12 @@ const AuthPage = () => {
                 </div>
 
                 {error && <div className={styles.errorMessage}>{error}</div>}
+                {success && (
+                    <div className={styles.successMessage}>
+                        <CheckCircle2 size={24} />
+                        <span>{success}</span>
+                    </div>
+                )}
 
                 <form className={styles.form} onSubmit={handleSubmit}>
                     {!isLogin && (
@@ -150,37 +252,84 @@ const AuthPage = () => {
                         />
                     </div>
 
-                    <div className={styles.field}>
-                        <div className={styles.passwordWrapper}>
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                id="password"
-                                placeholder="পাসওয়ার্ড"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className={styles.input}
-                            />
-                            <button
-                                type="button"
-                                className={styles.eyeBtn}
-                                onClick={() => setShowPassword(!showPassword)}
-                                aria-label="Toggle password visibility"
-                            >
-                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </button>
+                    {!isForgotPassword && (
+                        <div className={styles.field}>
+                            <div className={styles.passwordWrapper}>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    id="password"
+                                    placeholder="পাসওয়ার্ড"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className={styles.input}
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.eyeBtn}
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    aria-label="Toggle password visibility"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                            {isLogin && (
+                                <button
+                                    type="button"
+                                    className={styles.forgotLink}
+                                    onClick={() => setIsForgotPassword(true)}
+                                >
+                                    পাসওয়ার্ড ভুলে গেছেন?
+                                </button>
+                            )}
                         </div>
-                        {isLogin && (
-                            <a href="#" className={styles.forgotLink}>পাসওয়ার্ড ভুলে গেছেন?</a>
-                        )}
-                    </div>
+                    )}
+
+                    {!isLogin && !isForgotPassword && (
+                        <div className={styles.row}>
+                            <div className={styles.field}>
+                                <CustomSelect
+                                    value={gender}
+                                    onChange={(e) => setGender(e.target.value)}
+                                    options={GENDER_OPTIONS}
+                                    placeholder="লিঙ্গ নির্বাচন করুন"
+                                    required
+                                />
+                            </div>
+
+                            <div className={styles.field}>
+                                <CustomSelect
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    options={LOCATION_OPTIONS}
+                                    placeholder="অবস্থান"
+                                    required
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {!isLogin && !isForgotPassword && (
+                        <div className={styles.agreement}>
+                            <input
+                                type="checkbox"
+                                id="agree"
+                                checked={agreeToTerms}
+                                onChange={(e) => setAgreeToTerms(e.target.checked)}
+                                className={styles.checkbox}
+                            />
+                            <label htmlFor="agree">
+                                আমি <a href="/terms" target="_blank">টার্মস এবং কন্ডিশনস</a> ও <a href="/privacy" target="_blank">প্রাইভেসি</a> পলিসির সাথে একমত
+                            </label>
+                        </div>
+                    )}
 
                     <button
                         type="submit"
                         disabled={loading}
                         className={styles.submitBtn}
                     >
-                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isLogin ? 'লগইন' : 'সাইন আপ')}
+                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isForgotPassword ? 'রিসেট লিঙ্ক পাঠান' : isLogin ? 'লগইন' : 'সাইন আপ')}
                     </button>
                 </form>
 
@@ -205,16 +354,27 @@ const AuthPage = () => {
                 </div>
 
                 <div className={styles.footer}>
-                    <span>{isLogin ? 'নতুন ব্যবহারকারী?' : 'আগে থেকেই অ্যাকাউন্ট আছে?'}</span>
-                    <button
-                        className={styles.switchBtn}
-                        onClick={() => {
-                            setIsLogin(!isLogin);
-                            setError('');
-                        }}
-                    >
-                        {isLogin ? 'সাইন আপ করুন' : 'লগইন করুন'}
-                    </button>
+                    {isForgotPassword ? (
+                        <button
+                            className={styles.switchBtn}
+                            onClick={() => setIsForgotPassword(false)}
+                        >
+                            লগইন পেজে ফিরে যান
+                        </button>
+                    ) : (
+                        <>
+                            <span>{isLogin ? 'নতুন ব্যবহারকারী?' : 'আগে থেকেই অ্যাকাউন্ট আছে?'}</span>
+                            <button
+                                className={styles.switchBtn}
+                                onClick={() => {
+                                    setIsLogin(!isLogin);
+                                    setError('');
+                                }}
+                            >
+                                {isLogin ? 'সাইন আপ করুন' : 'লগইন করুন'}
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
 

@@ -23,6 +23,10 @@ import GuestCoursePage from './features/courses/GuestCoursePage';
 import SettingsPage from './features/settings/SettingsPage';
 import HelpPage from './features/help/HelpPage';
 
+import ResetPassword from './features/auth/ResetPassword';
+import TermsPage from './features/legal/TermsPage';
+import PrivacyPage from './features/legal/PrivacyPage';
+
 // Landing Page UI Component
 const LandingPageContent = () => {
   const { t } = useLanguage();
@@ -97,6 +101,9 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/survey/:courseId" element={<Survey />} />
 
           {/* All protected routes inside MainLayout to ensure Sidebar stays stable */}

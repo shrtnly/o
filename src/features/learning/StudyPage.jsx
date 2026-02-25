@@ -16,18 +16,18 @@ import LoadingScreen from '../../components/ui/LoadingScreen';
 import styles from './StudyPage.module.css';
 
 const SparkleBurst = ({ large = false }) => {
-    const spreadX = large ? 2.6 : 0.75;
-    const spreadY = large ? 1.8 : 0.75;
+    const spreadX = large ? 2.21 : 0.64;
+    const spreadY = large ? 1.53 : 0.64;
     const elements = [
         { Icon: Sparkles, tx: -30 * spreadX, ty: -40 * spreadY, delay: 0, size: large ? 22 : 18 },
         { Icon: Star, tx: 35 * spreadX, ty: -35 * spreadY, delay: 0.1, size: large ? 16 : 14, filled: true },
-        { Icon: Square, tx: -45 * spreadX, ty: -60 * spreadY, delay: 0.15, size: large ? 12 : 10, filled: true },
+        { Icon: Square, tx: -45 * spreadX, ty: -60 * spreadY, delay: 0.15, size: large ? 12 : 10, filled: false },
         { Icon: Sparkles, tx: 0 * spreadX, ty: -65 * spreadY, delay: 0.2, size: large ? 24 : 20 },
         { Icon: Circle, tx: 45 * spreadX, ty: -25 * spreadY, delay: 0.25, size: large ? 10 : 8, filled: true },
         { Icon: Star, tx: -50 * spreadX, ty: -25 * spreadY, delay: 0.3, size: large ? 16 : 14, filled: true },
         { Icon: Square, tx: 30 * spreadX, ty: -45 * spreadY, delay: 0.2, size: large ? 11 : 9, filled: false },
         { Icon: Sparkles, tx: 50 * spreadX, ty: -55 * spreadY, delay: 0.15, size: large ? 20 : 16 },
-        { Icon: Square, tx: 20 * spreadX, ty: -70 * spreadY, delay: 0.35, size: large ? 10 : 8, filled: true },
+        { Icon: Square, tx: 20 * spreadX, ty: -70 * spreadY, delay: 0.35, size: large ? 10 : 8, filled: false },
         { Icon: Circle, tx: -35 * spreadX, ty: -50 * spreadY, delay: 0.3, size: large ? 9 : 7, filled: false },
         { Icon: Star, tx: -15 * spreadX, ty: -50 * spreadY, delay: 0.25, size: large ? 14 : 12, filled: true },
         { Icon: Circle, tx: -25 * spreadX, ty: -75 * spreadY, delay: 0.1, size: large ? 12 : 10, filled: true },

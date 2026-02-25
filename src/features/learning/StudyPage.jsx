@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Check, Lightbulb, Star, ArrowRight, Clock, HelpCircle, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle } from 'lucide-react';
+import { X, Lightbulb, Star, ArrowRight, Clock, HelpCircle, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -31,35 +31,30 @@ const SparkleBurst = ({ large = false }) => {
         { Icon: Circle, tx: -35 * spreadX, ty: -50 * spreadY, delay: 0.3, size: large ? 9 : 7, filled: false },
         { Icon: Star, tx: -15 * spreadX, ty: -50 * spreadY, delay: 0.25, size: large ? 14 : 12, filled: true },
         { Icon: Circle, tx: -25 * spreadX, ty: -75 * spreadY, delay: 0.1, size: large ? 12 : 10, filled: true },
-        { Icon: Sparkles, tx: 15 * spreadX, ty: -60 * spreadY, delay: 0.05, size: large ? 18 : 16 }
+        { Icon: Sparkles, tx: 15 * spreadX, ty: -60 * spreadY, delay: 0.05, size: large ? 18 : 16 },
     ];
-
     return (
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'visible' }}>
             {elements.map((el, i) => (
                 <motion.div
                     key={i}
-                    initial={{ scale: 0, opacity: 0, x: "-50%", y: "-50%" }}
+                    initial={{ scale: 0, opacity: 0, x: '-50%', y: '-50%' }}
                     animate={{
                         scale: [0, 1.2, 0],
                         opacity: [1, 1, 0],
                         x: `calc(-50% + ${el.tx}px)`,
                         y: `calc(-50% + ${el.ty}px)`,
-                        rotate: [0, 180]
+                        rotate: [0, 180],
                     }}
-                    transition={{
-                        duration: 2,
-                        delay: el.delay,
-                        ease: "easeOut"
-                    }}
+                    transition={{ duration: 2, delay: el.delay, ease: 'easeOut' }}
                     style={{ position: 'absolute', left: '50%', top: large ? '0%' : '50%' }}
                 >
                     <el.Icon
                         size={el.size}
-                        color="#FFD700"
-                        fill={el.filled ? "#FFD700" : "none"}
+                        color="#f1c40f"
+                        fill={el.filled ? '#f1c40f' : 'none'}
                         strokeWidth={1.5}
-                        style={{ filter: `drop-shadow(0 0 ${large ? '10px' : '6px'} rgba(255, 215, 0, 0.6))` }}
+                        style={{ filter: `drop-shadow(0 0 ${large ? '8px' : '5px'} rgba(241,196,15,0.7))` }}
                     />
                 </motion.div>
             ))}

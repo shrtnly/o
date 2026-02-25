@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import styles from './TopProgressBar.module.css';
 
@@ -6,27 +6,39 @@ const TopProgressBar = () => {
     const location = useLocation();
     const [progress, setProgress] = useState(0);
     const [visible, setVisible] = useState(false);
+    const [fading, setFading] = useState(false);
+    const timers = useRef([]);
+
+    const clearAll = () => timers.current.forEach(clearTimeout);
 
     useEffect(() => {
-        // Start progress on location change
+        clearAll();
+        timers.current = [];
+
+        // Reset and kick off
+        setFading(false);
         setVisible(true);
-        setProgress(30);
+        setProgress(0);
 
-        const timer1 = setTimeout(() => setProgress(60), 100);
-        const timer2 = setTimeout(() => setProgress(90), 400);
-        const timer3 = setTimeout(() => {
+        // Staggered progress steps mimicking NProgress
+        timers.current.push(setTimeout(() => setProgress(20), 0));
+        timers.current.push(setTimeout(() => setProgress(50), 150));
+        timers.current.push(setTimeout(() => setProgress(75), 400));
+        timers.current.push(setTimeout(() => setProgress(90), 700));
+        timers.current.push(setTimeout(() => {
             setProgress(100);
-            setTimeout(() => {
-                setVisible(false);
-                setProgress(0);
-            }, 300);
-        }, 600);
+            // Fade out after reaching 100%
+            timers.current.push(setTimeout(() => {
+                setFading(true);
+                timers.current.push(setTimeout(() => {
+                    setVisible(false);
+                    setProgress(0);
+                    setFading(false);
+                }, 400));
+            }, 200));
+        }, 900));
 
-        return () => {
-            clearTimeout(timer1);
-            clearTimeout(timer2);
-            clearTimeout(timer3);
-        };
+        return () => clearAll();
     }, [location.pathname]);
 
     if (!visible) return null;
@@ -35,7 +47,10 @@ const TopProgressBar = () => {
         <div className={styles.progressContainer}>
             <div
                 className={styles.progressBar}
-                style={{ width: `${progress}%` }}
+                style={{
+                    width: `${progress}%`,
+                    opacity: fading ? 0 : 1,
+                }}
             />
         </div>
     );

@@ -21,6 +21,7 @@ const SettingsPage = () => {
     const [loadingCourses, setLoadingCourses] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [soundEnabled, setSoundEnabled] = useState(true);
+    const [sparkleEnabled, setSparkleEnabled] = useState(true);
     const fileInputRef = useRef(null);
 
     // Modal states
@@ -43,6 +44,11 @@ const SettingsPage = () => {
         const savedSound = localStorage.getItem('soundEffectsEnabled');
         if (savedSound !== null) {
             setSoundEnabled(savedSound === 'true');
+        }
+
+        const savedSparkle = localStorage.getItem('sparkleEffectsEnabled');
+        if (savedSparkle !== null) {
+            setSparkleEnabled(savedSparkle === 'true');
         }
     }, []);
 
@@ -103,6 +109,17 @@ const SettingsPage = () => {
             toast.success(t('sound_on'));
         } else {
             toast.info(t('sound_off'));
+        }
+    };
+
+    const toggleSparkleBurst = () => {
+        const newValue = !sparkleEnabled;
+        setSparkleEnabled(newValue);
+        localStorage.setItem('sparkleEffectsEnabled', String(newValue));
+        if (newValue) {
+            toast.success(t('sparkle_effects') + ' ' + t('on'));
+        } else {
+            toast.info(t('sparkle_effects') + ' ' + t('off'));
         }
     };
 
@@ -215,6 +232,30 @@ const SettingsPage = () => {
                                     <option value="5">{t('happy_bee')}</option>
                                     <option value="none">{t('no_animation')}</option>
                                 </select>
+                            </div>
+
+                            <div className={styles.settingCard}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
+                                        <Sparkles size={20} color="#f1c40f" />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>{t('sparkle_effects')}</h3>
+                                        <p>{t('sparkle_desc')}</p>
+                                    </div>
+                                </div>
+                                <label className={styles.switch}>
+                                    <input
+                                        type="checkbox"
+                                        checked={sparkleEnabled}
+                                        onChange={toggleSparkleBurst}
+                                    />
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            {sparkleEnabled ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
+                                        </span>
+                                    </span>
+                                </label>
                             </div>
 
                             <div className={styles.settingCard}>

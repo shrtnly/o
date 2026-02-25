@@ -39,6 +39,8 @@ const translations = {
         lang_desc: "আপনার পছন্দের ভাষা নির্বাচন করুন",
         sound_effects: "সাউন্ড ইফেক্ট",
         sound_effects_desc: "শেখার সময় শব্দ সংকেত চালু বা বন্ধ রাখুন",
+        sparkle_effects: "স্পার্কল ইফেক্টস",
+        sparkle_desc: "সঠিক উত্তরের সময় ঝলমলে আবহ তৈরি করুন",
 
         profile_settings: "প্রোফাইল সেটিংস",
         profile_desc: "আপনার ব্যক্তিগত তথ্য এবং প্রোফাইল দৃশ্যমানতা পরিচালনা করুন",
@@ -61,6 +63,8 @@ const translations = {
         sound_off: "সাউন্ড ইফেক্ট বন্ধ করা হয়েছে",
         upload_error: "ছবি আপলোড করতে সমস্যা হয়েছে",
         profile_updated: "প্রোফাইল আপডেট করা হয়েছে",
+        on: "চালু",
+        off: "বন্ধ",
         // Profile
         change_cover: "কভার পরিবর্তন করুন",
         current_streak: "বর্তমান স্ট্রিক",
@@ -207,6 +211,8 @@ const translations = {
         lang_desc: "Select your preferred language",
         sound_effects: "Sound Effects",
         sound_effects_desc: "Turn sound signals on or off during learning",
+        sparkle_effects: "Sparkle Effects",
+        sparkle_desc: "Create a sparkling atmosphere on correct answers",
 
         profile_settings: "Profile Settings",
         profile_desc: "Manage your personal information and profile visibility",
@@ -229,6 +235,8 @@ const translations = {
         sound_off: "Sound effects disabled",
         upload_error: "Error uploading image",
         profile_updated: "Profile updated successfully",
+        on: "On",
+        off: "Off",
         // Profile
         change_cover: "Change Cover",
         current_streak: "Current Streak",

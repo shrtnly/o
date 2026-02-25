@@ -225,26 +225,41 @@ const LearningPointSection = ({ chapterId }) => {
                                             const opt = options.find(o => o.order_index === oIdx) || {};
 
                                             return (
-                                                <div key={oIdx} className={cn(
-                                                    "group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300",
-                                                    opt.is_correct
-                                                        ? "border-emerald-500 bg-white dark:bg-slate-900 shadow-lg shadow-emerald-500/10 dark:shadow-emerald-500/5"
-                                                        : "border-transparent bg-white dark:bg-slate-900 shadow-sm hover:border-slate-200 dark:hover:border-slate-700"
-                                                )}>
-                                                    <button
-                                                        onClick={() => handleUpdateOption(node, oIdx, opt.option_text || '', true)}
+                                                <div
+                                                    key={oIdx}
+                                                    className={cn(
+                                                        "group relative flex items-center gap-4 p-5 rounded-3xl border-2 transition-all duration-400 cursor-pointer overflow-hidden",
+                                                        opt.is_correct
+                                                            ? "border-emerald-500 bg-emerald-50/5 dark:bg-emerald-500/5 shadow-xl shadow-emerald-500/10"
+                                                            : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-600"
+                                                    )}
+                                                    onClick={(e) => {
+                                                        const input = e.currentTarget.querySelector('input');
+                                                        const currentVal = input ? input.value : (opt.option_text || '');
+                                                        if (!opt.is_correct) handleUpdateOption(node, oIdx, currentVal, true);
+                                                    }}
+                                                >
+                                                    {opt.is_correct && (
+                                                        <div className="absolute top-0 right-0 pt-1.5 pr-4">
+                                                            <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-bl-lg">Correct</span>
+                                                        </div>
+                                                    )}
+
+                                                    <div
                                                         className={cn(
-                                                            "w-8 h-8 rounded-full flex items-center justify-center transition-all",
+                                                            "w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 flex-shrink-0",
                                                             opt.is_correct
-                                                                ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/50"
-                                                                : "bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 text-slate-200 dark:text-slate-700 group-hover:border-slate-300 dark:group-hover:border-slate-600"
+                                                                ? "bg-emerald-500 text-white rotate-0 scale-110 shadow-lg shadow-emerald-500/40"
+                                                                : "bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 -rotate-12 group-hover:rotate-0"
                                                         )}
                                                     >
-                                                        {opt.is_correct ? <CheckCircle2 size={16} /> : <Circle size={16} />}
-                                                    </button>
+                                                        {opt.is_correct ? <CheckCircle2 size={20} /> : <span className="text-xs font-black">{oIdx + 1}</span>}
+                                                    </div>
+
                                                     <input
-                                                        className="bg-transparent border-none p-0 text-sm font-bold w-full outline-none placeholder:text-slate-200 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100"
-                                                        placeholder={`Option ${oIdx + 1}`}
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="bg-transparent border-none p-0 text-sm font-bold w-full outline-none placeholder:text-slate-300 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100"
+                                                        placeholder={`Define Option ${oIdx + 1}...`}
                                                         defaultValue={opt.option_text || ''}
                                                         onBlur={(e) => handleUpdateOption(node, oIdx, e.target.value)}
                                                     />
@@ -252,7 +267,6 @@ const LearningPointSection = ({ chapterId }) => {
                                             );
                                         })}
                                     </div>
-                                    <p className="text-[10px] text-slate-400 dark:text-slate-600 font-bold italic opacity-60">* Option D disabled to simplify student cognition.</p>
                                 </div>
                             </div>
                         </div>

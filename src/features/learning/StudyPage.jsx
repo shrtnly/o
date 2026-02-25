@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Lightbulb, Star, ArrowRight, Clock, HelpCircle, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle } from 'lucide-react';
+import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -99,6 +99,10 @@ const StudyPage = () => {
     const hasStarted = React.useRef(false);
     const hasPlayed = React.useRef(false);
     const [profile, setProfile] = useState(null);
+    const [sparkleEnabled, setSparkleEnabled] = useState(() => {
+        const saved = localStorage.getItem('sparkleEffectsEnabled');
+        return saved !== null ? saved === 'true' : true;
+    });
 
     // Audio pre-loading
     const correctAudio = React.useRef(null);
@@ -497,7 +501,6 @@ const StudyPage = () => {
                             )}
 
                             <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className={styles.questionTitle}>
-                                <HelpCircle className={styles.questionIcon} size={28} />
                                 {currentQuestion.question_text || "সফলভাবে শেখার জন্য সঠিক উত্তরটি নির্বাচন করুন"}
                             </motion.h2>
 
@@ -558,7 +561,7 @@ const StudyPage = () => {
                                     </p>
                                 </div>
                                 <button className={styles.continueBtn} onClick={handleNext}>
-                                    {isCorrect && <SparkleBurst large={true} />}
+                                    {isCorrect && sparkleEnabled && <SparkleBurst large={true} />}
                                     <span>{currentIndex < questions.length - 1 ? (isCorrect ? "এগিয়ে যান" : "আবার চেষ্টা করি") : "সম্পন্ন করুন"}</span>
                                     <ArrowRight size={20} strokeWidth={3} />
                                 </button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     LayoutDashboard, Plus, Search, Edit2, Trash2, ChevronRight,
-    BookOpen, Layers, Target, HelpCircle, ArrowLeft, Save
+    BookOpen, Layers, Target, HelpCircle, ArrowLeft, Save, CheckCircle2
 } from 'lucide-react';
 import { courseService } from '../../services/courseService';
 import { supabase } from '../../lib/supabaseClient';
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
                     mcq: {
                         id: mcq.id,
                         question_text: mcq.question_text,
-                        options: mcq.mcq_options || [{}, {}, {}, {}]
+                        options: mcq.mcq_options || [{}, {}, {}]
                     }
                 });
             } else {
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
             setFormData({
                 title: '',
                 order_index: data.length + 1,
-                mcq: { question_text: '', options: [{}, {}, {}, {}] }
+                mcq: { question_text: '', options: [{}, {}, {}] }
             });
         }
         setIsModalOpen(true);
@@ -342,30 +342,37 @@ const AdminDashboard = () => {
                                             </div>
 
                                             <div className={styles.optionsList}>
-                                                <label className={styles.label}>Options (Mark the bullet for correct answer)</label>
-                                                {[0, 1, 2, 3].map(idx => (
-                                                    <div key={idx} className={styles.optionRow}>
-                                                        <input
-                                                            type="radio" name="correct"
-                                                            checked={formData.mcq?.options?.[idx]?.is_correct === true}
-                                                            onChange={() => {
-                                                                const opts = [...(formData.mcq?.options || [{}, {}, {}, {}])];
+                                                <label className={styles.label}>Options (Click a card to mark it as correct)</label>
+                                                {[0, 1, 2].map(idx => {
+                                                    const isCorrect = formData.mcq?.options?.[idx]?.is_correct === true;
+                                                    return (
+                                                        <div
+                                                            key={idx}
+                                                            className={`${styles.optionRow} ${isCorrect ? styles.optionRowActive : ''}`}
+                                                            onClick={() => {
+                                                                const opts = [...(formData.mcq?.options || [{}, {}, {}])];
                                                                 opts.forEach((o, i) => o.is_correct = (i === idx));
                                                                 setFormData({ ...formData, mcq: { ...formData.mcq, options: opts } });
                                                             }}
-                                                        />
-                                                        <input
-                                                            type="text" className={styles.input}
-                                                            placeholder={`Option ${idx + 1}`}
-                                                            value={formData.mcq?.options?.[idx]?.option_text || ''}
-                                                            onChange={e => {
-                                                                const opts = [...(formData.mcq?.options || [{}, {}, {}, {}])];
-                                                                opts[idx] = { ...opts[idx], option_text: e.target.value };
-                                                                setFormData({ ...formData, mcq: { ...formData.mcq, options: opts } });
-                                                            }}
-                                                        />
-                                                    </div>
-                                                ))}
+                                                        >
+                                                            <div className={`${styles.radioCircle} ${isCorrect ? styles.radioCircleActive : ''}`}>
+                                                                {isCorrect && <CheckCircle2 size={12} className={styles.checkIcon} />}
+                                                            </div>
+                                                            <input
+                                                                type="text" className={styles.input}
+                                                                style={{ border: 'none', background: 'transparent', padding: '4px 0' }}
+                                                                placeholder={`Option ${idx + 1}`}
+                                                                value={formData.mcq?.options?.[idx]?.option_text || ''}
+                                                                onClick={(e) => e.stopPropagation()}
+                                                                onChange={e => {
+                                                                    const opts = [...(formData.mcq?.options || [{}, {}, {}])];
+                                                                    opts[idx] = { ...opts[idx], option_text: e.target.value };
+                                                                    setFormData({ ...formData, mcq: { ...formData.mcq, options: opts } });
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     </>

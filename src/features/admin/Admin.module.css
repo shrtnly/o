@@ -289,3 +289,54 @@
 .submitBtn:hover {
     background-color: #2ea043;
 }
+
+.optionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.optionRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    padding: 12px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.optionRowActive {
+    border-color: #238636;
+    background-color: rgba(35, 134, 54, 0.05);
+    box-shadow: 0 0 0 1px #238636;
+}
+
+.optionRow:hover:not(.optionRowActive) {
+    border-color: #444c56;
+}
+
+.radioCircle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #30363d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.radioCircleActive {
+    border-color: #238636;
+    background-color: #238636;
+}
+
+.checkIcon {
+    color: white;
+    font-size: 12px;
+}

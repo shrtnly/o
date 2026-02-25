@@ -7,15 +7,22 @@ import {
     CheckCircle2,
     Circle,
     MessageSquare,
-    Type
+    Type,
+    ChevronDown,
+    ChevronUp,
+    ArrowUp,
+    ArrowDown
 } from 'lucide-react';
 import { courseService } from '../../../../services/courseService';
 import { cn } from '../../../../lib/utils';
 import { toast } from 'sonner';
+import { supabase } from '../../../../lib/supabaseClient';
+import StorytellingManager from './StorytellingManager';
 
 const LearningPointSection = ({ chapterId }) => {
     const [nodes, setNodes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [collapsedNodes, setCollapsedNodes] = useState(new Set());
 
     useEffect(() => {
         loadNodes();
@@ -32,16 +39,29 @@ const LearningPointSection = ({ chapterId }) => {
         }
     };
 
-    const handleAddNode = async () => {
+    const handleAddNode = async (type = 'standard') => {
         try {
             const lp = await courseService.saveLearningPoint({
                 chapter_id: chapterId,
-                title: 'New Node',
-                content: '',
-                order_index: nodes.length + 1
+                title: type === 'standard' ? 'New Node' : 'New Storytelling Scenario',
+                content: type === 'standard' ? '' : '[]',
+                order_index: nodes.length + 1,
+                type: type
             });
-            setNodes([...nodes, { ...lp, mcq_questions: [] }]);
-            toast.success('Node created');
+
+            let initialQuestions = [];
+            if (type === 'standard') {
+                const q = await courseService.saveQuestion({
+                    learning_point_id: lp.id,
+                    question_text: 'New Question',
+                    explanation: '',
+                    order_index: 0
+                });
+                initialQuestions = [{ ...q, mcq_options: [] }];
+            }
+
+            setNodes([...nodes, { ...lp, mcq_questions: initialQuestions }]);
+            toast.success(type === 'standard' ? 'Node created' : 'Storytelling scenario initialized');
         } catch (err) {
             toast.error('Failed to create node');
         }
@@ -61,39 +81,61 @@ const LearningPointSection = ({ chapterId }) => {
         }
     };
 
-    const handleUpdateMCQ = async (node, updates) => {
+    const handleUpdateMCQ = async (node, questionId, updates) => {
         try {
-            const mcq = node.mcq_questions?.[0] || {};
-
-            // If it's a new question and no text is provided yet, don't save
-            if (!mcq.id && !updates.question_text && !mcq.question_text) {
-                return;
-            }
-
             const res = await courseService.saveQuestion({
-                id: mcq.id,
+                id: questionId,
                 learning_point_id: node.id,
-                question_text: mcq.question_text || '',
-                explanation: mcq.explanation || '',
-                order_index: 0,
                 ...updates
             });
-            setNodes(nodes.map(n => n.id === node.id ? { ...n, mcq_questions: [res] } : n));
+            setNodes(nodes.map(n => n.id === node.id ? {
+                ...n,
+                mcq_questions: n.mcq_questions.map(q => q.id === questionId ? { ...q, ...res } : q)
+            } : n));
         } catch (err) {
             console.error('Failed to save question:', err);
             toast.error('Failed to save question');
         }
     };
 
-    const handleUpdateOption = async (node, optionIdx, text, isCorrect = null) => {
+    const handleAddQuestion = async (node) => {
         try {
-            const mcq = node.mcq_questions?.[0];
-            if (!mcq) {
-                toast.error('Please enter question text first');
-                return;
-            }
+            const res = await courseService.saveQuestion({
+                learning_point_id: node.id,
+                question_text: 'New Question',
+                explanation: '',
+                narrative: node.type === 'storytelling' ? '[]' : '',
+                order_index: (node.mcq_questions?.length || 0) + 1
+            });
+            setNodes(nodes.map(n => n.id === node.id ? {
+                ...n,
+                mcq_questions: [...(n.mcq_questions || []), { ...res, mcq_options: [] }]
+            } : n));
+            toast.success('Question added');
+        } catch (err) {
+            toast.error('Failed to add question');
+        }
+    };
 
-            // Build full set of 3 options to solve index jumps
+    const handleDeleteQuestion = async (nodeId, questionId) => {
+        if (!window.confirm('Delete this question?')) return;
+        try {
+            await supabase.from('mcq_questions').delete().eq('id', questionId);
+            setNodes(nodes.map(n => n.id === nodeId ? {
+                ...n,
+                mcq_questions: n.mcq_questions.filter(q => q.id !== questionId)
+            } : n));
+            toast.success('Question removed');
+        } catch (err) {
+            toast.error('Delete failed');
+        }
+    };
+
+    const handleUpdateOption = async (node, qId, optionIdx, text, isCorrect = null) => {
+        try {
+            const mcq = node.mcq_questions?.find(q => q.id === qId);
+            if (!mcq) return;
+
             const currentOptions = mcq.mcq_options || [];
             const slots = [{}, {}, {}];
             currentOptions.forEach(opt => {
@@ -115,16 +157,18 @@ const LearningPointSection = ({ chapterId }) => {
                 newOptions.forEach((o, i) => { if (i !== optionIdx) o.is_correct = false; });
             }
 
-            // Validation: Don't allow marking empty option as correct
             if (isCorrect === true && (!text || text.trim() === '')) {
-                toast.error('Please enter option text before marking as correct');
+                toast.error('Please enter option text first');
                 return;
             }
 
-            await courseService.saveOptions(mcq.id, newOptions);
-            loadNodes(); // Refresh
+            const saved = await courseService.saveOptions(qId, newOptions);
+            setNodes(nodes.map(n => n.id === node.id ? {
+                ...n,
+                mcq_questions: n.mcq_questions.map(q => q.id === qId ? { ...q, mcq_options: saved } : q)
+            } : n));
         } catch (err) {
-            toast.error('Save failed: ' + (err.message || 'Check database constraints'));
+            toast.error('Save failed');
         }
     };
 
@@ -139,15 +183,73 @@ const LearningPointSection = ({ chapterId }) => {
         }
     };
 
+    const handleMoveNode = async (nodeId, direction) => {
+        const index = nodes.findIndex(n => n.id === nodeId);
+        if (direction === 'up' && index === 0) return;
+        if (direction === 'down' && index === nodes.length - 1) return;
+
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+        const currentNode = nodes[index];
+        const targetNode = nodes[targetIndex];
+
+        try {
+            // Use current timestamps to ensure relative ordering if order_index is identical
+            const oldOrder = currentNode.order_index || index;
+            const newOrder = targetNode.order_index || targetIndex;
+
+            await Promise.all([
+                courseService.saveLearningPoint({ ...currentNode, order_index: newOrder }),
+                courseService.saveLearningPoint({ ...targetNode, order_index: oldOrder })
+            ]);
+
+            const updatedNodes = [...nodes];
+            updatedNodes[index] = { ...targetNode, order_index: oldOrder };
+            updatedNodes[targetIndex] = { ...currentNode, order_index: newOrder };
+            setNodes(updatedNodes.sort((a, b) => a.order_index - b.order_index));
+            toast.success('Position updated');
+        } catch (err) {
+            console.error('Move node error:', err);
+            toast.error('Failed to move node');
+        }
+    };
+
+    const toggleCollapse = (nodeId) => {
+        setCollapsedNodes(prev => {
+            const next = new Set(prev);
+            if (next.has(nodeId)) next.delete(nodeId);
+            else next.add(nodeId);
+            return next;
+        });
+    };
+
     if (loading) return <div className="py-10 text-center text-slate-400 dark:text-slate-600 text-xs">Synchronizing segments...</div>;
 
     return (
         <div className="space-y-10">
             {nodes.map((node, nodeIdx) => (
-                <div key={node.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 space-y-8 shadow-sm transition-all">
+                <div key={node.id} className={cn(
+                    "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 shadow-sm transition-all",
+                    collapsedNodes.has(node.id) ? "space-y-0" : "space-y-8"
+                )}>
                     {/* Compact Header */}
-                    <div className="flex items-center justify-between border-b border-slate-50 dark:border-slate-800 pb-6">
+                    <div className="flex items-center justify-between border-b border-slate-50 dark:border-slate-800 pb-6 group/header">
                         <div className="flex items-center gap-4">
+                            <div className="flex flex-col gap-1 mr-2 opacity-0 group-hover/header:opacity-100 transition-opacity">
+                                <button
+                                    onClick={() => handleMoveNode(node.id, 'up')}
+                                    disabled={nodeIdx === 0}
+                                    className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 disabled:opacity-0"
+                                >
+                                    <ArrowUp size={14} />
+                                </button>
+                                <button
+                                    onClick={() => handleMoveNode(node.id, 'down')}
+                                    disabled={nodeIdx === nodes.length - 1}
+                                    className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-400 disabled:opacity-0"
+                                >
+                                    <ArrowDown size={14} />
+                                </button>
+                            </div>
                             <span className="w-10 h-10 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-2xl flex items-center justify-center text-xs font-black">
                                 {nodeIdx + 1}
                             </span>
@@ -160,132 +262,177 @@ const LearningPointSection = ({ chapterId }) => {
                                 />
                             </div>
                         </div>
-                        <button onClick={() => handleDeleteNode(node.id)} className="p-3 text-slate-300 dark:text-slate-700 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all">
-                            <Trash2 size={20} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => toggleCollapse(node.id)}
+                                className="p-3 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all"
+                            >
+                                {collapsedNodes.has(node.id) ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                            </button>
+                            <button onClick={() => handleDeleteNode(node.id)} className="p-3 text-slate-300 dark:text-slate-700 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all">
+                                <Trash2 size={20} />
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-10">
-                        {/* Section 1: Narrative Context */}
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-                                <FileText size={16} className="text-blue-500" /> 1. Read and Respond (Context)
-                            </label>
-                            <textarea
-                                className="w-full bg-slate-50 dark:bg-slate-950/20 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 outline-none focus:ring-4 focus:ring-blue-500/5 focus:bg-white dark:focus:bg-slate-900 transition-all text-sm min-h-[120px] resize-none leading-relaxed font-medium text-slate-700 dark:text-slate-300 placeholder:text-slate-300 dark:placeholder:text-slate-700"
-                                placeholder="Explain the concept or provide instructions..."
-                                defaultValue={node.content}
-                                onBlur={(e) => handleUpdateNode(node.id, { content: e.target.value })}
-                            />
-                        </div>
-
-                        {/* Section 2: Interactive Logic */}
-                        <div className="bg-slate-50/50 dark:bg-slate-950/20 rounded-[2rem] p-8 space-y-8 border border-slate-100 dark:border-slate-800">
-                            <div className="flex items-center gap-2">
-                                <HelpCircle size={18} className="text-amber-500" />
-                                <span className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider">2. MCQ Logic Configuration</span>
-                            </div>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                                {/* Question Pillar */}
-                                <div className="space-y-8">
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                                            <Type size={16} className="text-slate-900 dark:text-slate-100" /> Question Prompt
-                                        </label>
-                                        <input
-                                            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-sm font-bold placeholder:text-slate-200 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all shadow-sm"
-                                            placeholder="e.g. প্রশ্ন ১: এই পদের জন্য সঠিক উত্তরটি নির্বাচন করুন।"
-                                            defaultValue={node.mcq_questions?.[0]?.question_text || ''}
-                                            onBlur={(e) => handleUpdateMCQ(node, { question_text: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                                            <MessageSquare size={16} className="text-emerald-500" /> Answer Explanation
-                                        </label>
-                                        <textarea
-                                            className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-sm font-medium placeholder:text-slate-200 dark:placeholder:text-slate-700 text-slate-700 dark:text-slate-300 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all min-h-[120px] resize-none shadow-sm"
-                                            placeholder="e.g. এইচটিএমএল স্ট্যান্ডার্ড অনুযায়ী এটিই সঠিক নিয়ম।"
-                                            defaultValue={node.mcq_questions?.[0]?.explanation || ''}
-                                            onBlur={(e) => handleUpdateMCQ(node, { explanation: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Option Pillar */}
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                        <Plus size={16} className="text-blue-500" /> Valid Options (Locked to 3)
+                    {!collapsedNodes.has(node.id) && (
+                        <div className="grid grid-cols-1 gap-10">
+                            {node.type === 'standard' && (
+                                <div className="space-y-3">
+                                    <label className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                                        <FileText size={16} className="text-blue-500" /> 1. Read and Respond (Context)
                                     </label>
-                                    <div className="space-y-3">
-                                        {[0, 1, 2].map((oIdx) => {
-                                            // Robust mapping: find option by order_index
-                                            const options = node.mcq_questions?.[0]?.mcq_options || [];
-                                            const opt = options.find(o => o.order_index === oIdx) || {};
+                                    <textarea
+                                        className="w-full bg-slate-50 dark:bg-slate-950/20 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 outline-none focus:ring-4 focus:ring-blue-500/5 focus:bg-white dark:focus:bg-slate-900 transition-all text-sm min-h-[120px] resize-none leading-relaxed font-medium text-slate-700 dark:text-slate-300 placeholder:text-slate-300 dark:placeholder:text-slate-700"
+                                        placeholder="Explain the concept or provide instructions..."
+                                        defaultValue={node.content}
+                                        onBlur={(e) => handleUpdateNode(node.id, { content: e.target.value })}
+                                    />
+                                </div>
+                            )}
 
-                                            return (
-                                                <div
-                                                    key={oIdx}
-                                                    className={cn(
-                                                        "group relative flex items-center gap-4 p-5 rounded-3xl border-2 transition-all duration-400 cursor-pointer overflow-hidden",
-                                                        opt.is_correct
-                                                            ? "border-emerald-500 bg-emerald-50/5 dark:bg-emerald-500/5 shadow-xl shadow-emerald-500/10"
-                                                            : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-600"
-                                                    )}
-                                                    onClick={(e) => {
-                                                        const input = e.currentTarget.querySelector('input');
-                                                        const currentVal = input ? input.value : (opt.option_text || '');
-                                                        if (!opt.is_correct) handleUpdateOption(node, oIdx, currentVal, true);
-                                                    }}
-                                                >
-                                                    {opt.is_correct && (
-                                                        <div className="absolute top-0 right-0 pt-1.5 pr-4">
-                                                            <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-bl-lg">Correct</span>
-                                                        </div>
-                                                    )}
+                            <div className="space-y-6">
+                                {(node.mcq_questions || []).map((q, qIdx) => (
+                                    <div key={q.id || qIdx} className="bg-slate-50/50 dark:bg-slate-950/20 rounded-[2rem] p-8 space-y-8 border border-slate-100 dark:border-slate-800 relative group/mcq">
+                                        <button
+                                            onClick={() => handleDeleteQuestion(node.id, q.id)}
+                                            className="absolute top-6 right-6 p-2 text-slate-300 hover:text-red-500 transition-all opacity-0 group-hover/mcq:opacity-100"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
 
-                                                    <div
-                                                        className={cn(
-                                                            "w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 flex-shrink-0",
-                                                            opt.is_correct
-                                                                ? "bg-emerald-500 text-white rotate-0 scale-110 shadow-lg shadow-emerald-500/40"
-                                                                : "bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 -rotate-12 group-hover:rotate-0"
-                                                        )}
-                                                    >
-                                                        {opt.is_correct ? <CheckCircle2 size={20} /> : <span className="text-xs font-black">{oIdx + 1}</span>}
-                                                    </div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg flex items-center justify-center text-[10px] font-black">
+                                                {qIdx + 1}
+                                            </div>
+                                            <span className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider">Question Configuration</span>
+                                        </div>
 
+                                        {/* Storytelling Dialogue for this specific question */}
+                                        {node.type === 'storytelling' && (
+                                            <div className="space-y-3">
+                                                <label className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                                                    <MessageSquare size={16} className="text-amber-500" /> Story Dialogue (Before Question)
+                                                </label>
+                                                <StorytellingManager
+                                                    content={q.narrative}
+                                                    onUpdate={(newContent) => handleUpdateMCQ(node, q.id, { narrative: newContent })}
+                                                />
+                                            </div>
+                                        )}
+
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                                            <div className="space-y-8">
+                                                <div className="space-y-4">
+                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                                        <Type size={16} className="text-slate-900 dark:text-slate-100" /> Question Prompt
+                                                    </label>
                                                     <input
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        className="bg-transparent border-none p-0 text-sm font-bold w-full outline-none placeholder:text-slate-300 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100"
-                                                        placeholder={`Define Option ${oIdx + 1}...`}
-                                                        defaultValue={opt.option_text || ''}
-                                                        onBlur={(e) => handleUpdateOption(node, oIdx, e.target.value)}
+                                                        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-sm font-bold placeholder:text-slate-200 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all shadow-sm"
+                                                        placeholder="Enter question..."
+                                                        defaultValue={q.question_text || ''}
+                                                        onBlur={(e) => handleUpdateMCQ(node, q.id, { question_text: e.target.value })}
                                                     />
                                                 </div>
-                                            );
-                                        })}
+                                                <div className="space-y-4">
+                                                    <label className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                                        <MessageSquare size={16} className="text-emerald-500" /> Answer Explanation
+                                                    </label>
+                                                    <textarea
+                                                        className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-sm font-medium placeholder:text-slate-200 dark:placeholder:text-slate-700 text-slate-700 dark:text-slate-300 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all min-h-[120px] resize-none shadow-sm"
+                                                        placeholder="Explain the answer..."
+                                                        defaultValue={q.explanation || ''}
+                                                        onBlur={(e) => handleUpdateMCQ(node, q.id, { explanation: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                    <Plus size={16} className="text-blue-500" /> Options (3)
+                                                </label>
+                                                <div className="space-y-3">
+                                                    {[0, 1, 2].map((oIdx) => {
+                                                        const opt = q.mcq_options?.find(o => o.order_index === oIdx) || {};
+                                                        return (
+                                                            <div
+                                                                key={oIdx}
+                                                                className={cn(
+                                                                    "group relative flex items-center gap-4 p-5 rounded-3xl border-2 transition-all duration-400 cursor-pointer overflow-hidden",
+                                                                    opt.is_correct
+                                                                        ? "border-emerald-500 bg-emerald-50/5 dark:bg-emerald-500/5 shadow-xl shadow-emerald-500/10"
+                                                                        : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-600"
+                                                                )}
+                                                                onClick={() => !opt.is_correct && handleUpdateOption(node, q.id, oIdx, opt.option_text || '', true)}
+                                                            >
+                                                                {opt.is_correct && (
+                                                                    <div className="absolute top-0 right-0 pt-1.5 pr-4">
+                                                                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-bl-lg">Correct</span>
+                                                                    </div>
+                                                                )}
+                                                                <div className={cn(
+                                                                    "w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 flex-shrink-0",
+                                                                    opt.is_correct ? "bg-emerald-500 text-white scale-110 shadow-lg" : "bg-slate-100 dark:bg-slate-800 text-slate-300"
+                                                                )}>
+                                                                    {opt.is_correct ? <CheckCircle2 size={20} /> : <span className="text-xs font-black">{oIdx + 1}</span>}
+                                                                </div>
+                                                                <input
+                                                                    onClick={(e) => e.stopPropagation()}
+                                                                    className="bg-transparent border-none p-0 text-sm font-bold w-full outline-none placeholder:text-slate-300 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100"
+                                                                    placeholder={`Option ${oIdx + 1}...`}
+                                                                    defaultValue={opt.option_text || ''}
+                                                                    onBlur={(e) => handleUpdateOption(node, q.id, oIdx, e.target.value)}
+                                                                />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
+
+                                {node.type === 'storytelling' && (
+                                    <button
+                                        onClick={() => handleAddQuestion(node)}
+                                        className="w-full py-6 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 transition-all flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest"
+                                    >
+                                        <Plus size={16} /> Add Another Question & Dialogue
+                                    </button>
+                                )}
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             ))}
 
-            <button
-                onClick={handleAddNode}
-                className="w-full py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2.5rem] text-slate-400 dark:text-slate-600 font-black hover:bg-white dark:hover:bg-slate-900 hover:border-slate-900 dark:hover:border-slate-100 hover:text-slate-900 dark:hover:text-slate-100 transition-all flex flex-col items-center justify-center gap-4 group bg-slate-50/30 dark:bg-slate-900/10"
-            >
-                <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-slate-800 shadow-sm group-hover:scale-110 transition-transform">
-                    <Plus size={32} />
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                    <span className="text-sm uppercase tracking-[0.2em]">Deploy Knowledge Segment</span>
-                    <span className="text-[9px] font-bold text-slate-300 dark:text-slate-700 uppercase tracking-widest">Context + MCQ Configuration</span>
-                </div>
-            </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button
+                    onClick={() => handleAddNode('standard')}
+                    className="py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-[2.5rem] text-slate-400 dark:text-slate-600 font-black hover:bg-white dark:hover:bg-slate-900 hover:border-slate-900 dark:hover:border-slate-100 hover:text-slate-900 dark:hover:text-slate-100 transition-all flex flex-col items-center justify-center gap-4 group bg-slate-50/30 dark:bg-slate-900/10"
+                >
+                    <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-100 dark:border-slate-800 shadow-sm group-hover:scale-110 transition-transform">
+                        <Plus size={32} />
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                        <span className="text-sm uppercase tracking-[0.2em]">Deploy Knowledge Segment</span>
+                        <span className="text-[9px] font-bold text-slate-300 dark:text-slate-700 uppercase tracking-widest">Context + MCQ Configuration</span>
+                    </div>
+                </button>
+
+                <button
+                    onClick={() => handleAddNode('storytelling')}
+                    className="py-12 border-2 border-dashed border-amber-200 dark:border-amber-900/30 rounded-[2.5rem] text-amber-600/60 dark:text-amber-500/40 font-black hover:bg-amber-50 dark:hover:bg-amber-900/10 hover:border-amber-500 dark:hover:border-amber-500 hover:text-amber-600 dark:hover:text-amber-500 transition-all flex flex-col items-center justify-center gap-4 group bg-amber-50/30 dark:bg-amber-950/5"
+                >
+                    <div className="w-16 h-16 bg-white dark:bg-slate-900 rounded-2xl flex items-center justify-center border border-amber-100 dark:border-amber-900/20 shadow-sm group-hover:scale-110 transition-transform">
+                        <MessageSquare size={32} className="text-amber-500" />
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                        <span className="text-sm uppercase tracking-[0.2em] text-amber-600 dark:text-amber-500">Deploy Storytelling Scenario</span>
+                        <span className="text-[9px] font-bold text-amber-400 dark:text-amber-700 uppercase tracking-widest">Character Dialogue + MCQ</span>
+                    </div>
+                </button>
+            </div>
         </div>
     );
 };

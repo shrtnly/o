@@ -129,7 +129,7 @@ export const courseService = {
         return points;
     },
     async saveLearningPoint(lpData) {
-        const { id, ...dataToSave } = lpData;
+        const { id, mcq_questions, ...dataToSave } = lpData;
         if (id) {
             const { data, error } = await supabase
                 .from('learning_points')
@@ -156,7 +156,7 @@ export const courseService = {
         }
     },
     async saveQuestion(qData) {
-        const { id, ...dataToSave } = qData;
+        const { id, mcq_options, ...dataToSave } = qData;
         if (id) {
             const { data, error } = await supabase
                 .from('mcq_questions')

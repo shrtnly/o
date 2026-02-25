@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle } from 'lucide-react';
+import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -14,6 +14,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 
 import styles from './StudyPage.module.css';
+import { cn } from '../../lib/utils';
 
 const SparkleBurst = ({ large = false }) => {
     const spreadX = large ? 2.21 : 0.64;
@@ -62,6 +63,47 @@ const SparkleBurst = ({ large = false }) => {
     );
 };
 
+const StorytellingDisplay = ({ content, visibleCount }) => {
+    let dialogues = [];
+    try {
+        dialogues = JSON.parse(content || '[]');
+    } catch (e) {
+        return null;
+    }
+
+    if (!Array.isArray(dialogues) || dialogues.length === 0) return null;
+
+    const characters = {
+        rakib: { label: 'রাকিব', class: styles.rakibBubble, avatarClass: styles.rakibAvatar },
+        lisa: { label: 'লিসা', class: styles.lisaBubble, avatarClass: styles.lisaAvatar },
+        assistant: { label: 'সহকারী', class: styles.assistantBubble, avatarClass: styles.assistantAvatar }
+    };
+
+    return (
+        <div className={styles.dialogueContainer}>
+            {dialogues.slice(0, visibleCount + 1).map((d, i) => {
+                const char = characters[d.avatar] || characters.rakib;
+                return (
+                    <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className={styles.dialogueItem}
+                    >
+                        <div className={cn(styles.avatarCircle, char.avatarClass)}>
+                            <User size={20} color="white" />
+                        </div>
+                        <div className={cn(styles.speechBubble, char.class)}>
+                            <span className={styles.speakerName}>{char.label}</span>
+                            {d.text}
+                        </div>
+                    </motion.div>
+                );
+            })}
+        </div>
+    );
+};
+
 const StudyPage = () => {
     const { courseId, chapterId } = useParams();
     const navigate = useNavigate();
@@ -103,6 +145,26 @@ const StudyPage = () => {
         const saved = localStorage.getItem('sparkleEffectsEnabled');
         return saved !== null ? saved === 'true' : true;
     });
+
+    const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
+    const [answersHistory, setAnswersHistory] = useState({}); // { [index]: { selectedOption, isCorrect } }
+    const scrollRef = React.useRef(null);
+
+    const dialogues = React.useMemo(() => {
+        if (questions[currentIndex]?.type === 'storytelling') {
+            try { return JSON.parse(questions[currentIndex].narrative || '[]'); } catch (e) { return []; }
+        }
+        return [];
+    }, [questions, currentIndex]);
+
+    const isStoryInProgress = questions[currentIndex]?.type === 'storytelling' && activeDialogueIndex < dialogues.length;
+
+    // Auto-scroll to bottom when new items appear
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    }, [currentIndex, activeDialogueIndex, isAnswered]);
 
     // Audio pre-loading
     const correctAudio = React.useRef(null);
@@ -248,7 +310,9 @@ const StudyPage = () => {
                             point.mcq_questions.sort((a, b) => a.order_index - b.order_index).forEach(q => {
                                 enrichedQuestions.push({
                                     ...q,
-                                    narrative: point.content,
+                                    learning_point_id: point.id,
+                                    narrative: q.narrative || point.content,
+                                    type: point.type,
                                     mcq_options: q.mcq_options.sort((a, b) => a.order_index - b.order_index)
                                 });
                             });
@@ -331,6 +395,11 @@ const StudyPage = () => {
             if (user) await deductHeart(1);
         }
 
+        setAnswersHistory(prev => ({
+            ...prev,
+            [currentIndex]: { selectedOption, isCorrect: correct }
+        }));
+
         setProgress(((currentIndex + 1) / questions.length) * 100);
     };
 
@@ -344,6 +413,7 @@ const StudyPage = () => {
             setSelectedOption(null);
             setIsAnswered(false);
             setIsCorrect(false);
+            setActiveDialogueIndex(0);
         } else {
             if (user && courseId && chapterId) {
                 try {
@@ -486,52 +556,93 @@ const StudyPage = () => {
                     </AnimatePresence>
 
                     <AnimatePresence mode="wait">
-                        <motion.div
-                            key={currentIndex}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className={styles.questionSection}
-                        >
-                            {(currentQuestion.narrative || currentQuestion.explanation) && (
-                                <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className={styles.contextText}>
-                                    <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
-                                    {currentQuestion.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
-                                </motion.div>
-                            )}
+                        <div className="space-y-12">
+                            {(() => {
+                                const currentLPId = questions[currentIndex]?.learning_point_id;
+                                // Find the first index of the current node group
+                                let startIdx = currentIndex;
+                                while (startIdx > 0 && questions[startIdx - 1].learning_point_id === currentLPId) {
+                                    startIdx--;
+                                }
 
-                            <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className={styles.questionTitle}>
-                                {currentQuestion.question_text || "সফলভাবে শেখার জন্য সঠিক উত্তরটি নির্বাচন করুন"}
-                            </motion.h2>
+                                return questions.slice(startIdx, currentIndex + 1).map((q, arrayIdx) => {
+                                    const globalIdx = startIdx + arrayIdx;
+                                    const isLatest = globalIdx === currentIndex;
+                                    const isStory = q.type === 'storytelling';
+                                    const answer = answersHistory[globalIdx];
 
-                            <div className={styles.optionsList}>
-                                {(currentQuestion.mcq_options || []).map((option, idx) => (
-                                    <motion.button
-                                        key={option.id}
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.4 + (idx * 0.1) }}
-                                        whileTap={!isAnswered ? { scale: 0.98 } : {}}
-                                        className={`${styles.optionBtn} ${selectedOption === option.id ? styles.selected : ''} ${isAnswered && option.is_correct && isCorrect ? styles.correct : ''} ${isAnswered && selectedOption === option.id && !option.is_correct ? styles.incorrect : ''}`}
-                                        onClick={() => handleOptionSelect(option.id)}
-                                        disabled={isAnswered}
-                                    >
-                                        <div className={styles.optionIndex}>
-                                            {optionLabels[idx] || (idx + 1)}
-                                        </div>
-                                        <span className={styles.optionText}>{option.option_text}</span>
-                                        {isAnswered && option.is_correct && isCorrect && (
-                                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className={styles.correctIcon}>
-                                                <CircleCheckBig size={20} strokeWidth={1.5} />
-                                            </motion.div>
-                                        )}
-                                        {isAnswered && selectedOption === option.id && !option.is_correct && (
-                                            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className={styles.incorrectIcon}><CircleX size={20} strokeWidth={1.5} /></motion.div>
-                                        )}
-                                    </motion.button>
-                                ))}
-                            </div>
-                        </motion.div>
+                                    // Narrative logic: Only show narrative if it changed or it's the start of the node
+                                    const hasPrevSameNarrative = arrayIdx > 0 && questions[startIdx + arrayIdx - 1].narrative === q.narrative;
+                                    const showStory = isStory && (!hasPrevSameNarrative || isLatest);
+                                    const showMCQ = !isStory || (isLatest ? !isStoryInProgress : true);
+
+                                    return (
+                                        <motion.div
+                                            key={q.id}
+                                            initial={isLatest ? { opacity: 0, y: 20 } : false}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className={cn(styles.questionSection, !isLatest && "opacity-60 grayscale-[0.5] scale-[0.98] transition-all")}
+                                        >
+                                            {showStory && (
+                                                <StorytellingDisplay
+                                                    content={q.narrative}
+                                                    visibleCount={isLatest ? activeDialogueIndex : 999}
+                                                />
+                                            )}
+
+                                            {showMCQ && (
+                                                <motion.div
+                                                    initial={isLatest ? { opacity: 0, y: 10 } : false}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    className="space-y-8"
+                                                >
+                                                    {!isStory && (q.narrative || q.explanation) && (
+                                                        <div className={styles.contextText}>
+                                                            <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
+                                                            {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
+                                                        </div>
+                                                    )}
+
+                                                    <h2 className={styles.questionTitle}>{q.question_text}</h2>
+
+                                                    <div className={styles.optionsList}>
+                                                        {(q.mcq_options || []).map((option, optIdx) => {
+                                                            const isSelected = (isLatest ? selectedOption : answer?.selectedOption) === option.id;
+                                                            const isCorrectOpt = option.is_correct;
+                                                            const showResult = isLatest ? isAnswered : true;
+
+                                                            return (
+                                                                <button
+                                                                    key={option.id}
+                                                                    className={cn(
+                                                                        styles.optionBtn,
+                                                                        isSelected && styles.selected,
+                                                                        showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect) && styles.correct,
+                                                                        showResult && isSelected && !isCorrectOpt && styles.incorrect
+                                                                    )}
+                                                                    onClick={() => isLatest && handleOptionSelect(option.id)}
+                                                                    disabled={!isLatest || isAnswered}
+                                                                >
+                                                                    <div className={styles.optionIndex}>{optionLabels[optIdx]}</div>
+                                                                    <span className={styles.optionText}>{option.option_text}</span>
+                                                                    {showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect) && (
+                                                                        <div className={styles.correctIcon}><CircleCheckBig size={20} /></div>
+                                                                    )}
+                                                                    {showResult && isSelected && !isCorrectOpt && (
+                                                                        <div className={styles.incorrectIcon}><CircleX size={20} /></div>
+                                                                    )}
+                                                                </button>
+                                                            );
+                                                        })}
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                            {isLatest && <div ref={scrollRef} className="h-4" />}
+                                        </motion.div>
+                                    );
+                                });
+                            })()}
+                        </div>
                     </AnimatePresence>
                 </div>
             </main>
@@ -540,8 +651,21 @@ const StudyPage = () => {
                 <div className={styles.footerContent}>
                     {!isAnswered ? (
                         <>
-                            <button className={styles.skipBtn} onClick={handleNext}>এগিয়ে যান</button>
-                            <button className={styles.checkBtn} disabled={!selectedOption} onClick={handleCheck}>যাচাই করুন</button>
+                            {isStoryInProgress ? (
+                                <div className="w-full flex justify-end">
+                                    <button
+                                        className={styles.checkBtn}
+                                        onClick={() => setActiveDialogueIndex(prev => prev + 1)}
+                                    >
+                                        আগিয়ে যান
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <button className={styles.skipBtn} onClick={handleNext}>এগিয়ে যান</button>
+                                    <button className={styles.checkBtn} disabled={!selectedOption} onClick={handleCheck}>যাচাই করুন</button>
+                                </>
+                            )}
                         </>
                     ) : (
                         <motion.div initial={{ y: 100 }} animate={{ y: 0 }} className={styles.resultOverlay}>

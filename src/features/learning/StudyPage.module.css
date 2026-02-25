@@ -164,6 +164,100 @@
     margin-top: 2px;
 }
 
+/* ── Storytelling Dialogue ── */
+.dialogueContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.dialogueItem {
+    display: flex;
+    gap: 12px;
+    max-width: 85%;
+    animation: slideInDialog 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes slideInDialog {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.avatarCircle {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.rakibAvatar {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.lisaAvatar {
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+}
+
+.assistantAvatar {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+}
+
+.speechBubble {
+    padding: 14px 18px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.rakibBubble {
+    background: #1a2633;
+    color: #d1e3f3;
+    border: 1px solid #2c3e50;
+    border-top-left-radius: 4px;
+}
+
+.lisaBubble {
+    background: #2a1b22;
+    color: #fce4ec;
+    border: 1px solid #4a148c;
+    border-top-left-radius: 4px;
+}
+
+.assistantBubble {
+    background: #1b2a22;
+    color: #e8f5e9;
+    border: 1px solid #1b5e20;
+    border-top-left-radius: 4px;
+}
+
+.speakerName {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    opacity: 0.6;
+}
+
 /* ── Question Title ── */
 .questionTitle {
     font-size: 1.3rem;

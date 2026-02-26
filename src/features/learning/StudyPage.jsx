@@ -94,7 +94,6 @@ const StorytellingDisplay = ({ content, visibleCount }) => {
                             <User size={20} color="white" />
                         </div>
                         <div className={cn(styles.speechBubble, char.class)}>
-                            <span className={styles.speakerName}>{char.label}</span>
                             {d.text}
                         </div>
                     </motion.div>

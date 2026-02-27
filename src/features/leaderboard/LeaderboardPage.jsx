@@ -14,10 +14,10 @@ import FlamingBadge from '../../components/FlamingBadge';
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
 const TIERS = [
-    { id: 'SILVER', name: 'Scout Bee', nameBn: 'স্কাউট বী', color: '#CD7F32', minXP: SHIELD_LEVELS.SILVER.minXP },
-    { id: 'GOLD', name: 'Elite Drone', nameBn: 'এলিট ড্রোন', color: '#C0C0C0', minXP: SHIELD_LEVELS.GOLD.minXP },
-    { id: 'PLATINUM', name: 'Hive Master', nameBn: 'হাইভ মাস্টার', color: '#FFD700', minXP: SHIELD_LEVELS.PLATINUM.minXP },
-    { id: 'DIAMOND', name: 'Legendary Queen', nameBn: 'লিজেন্ডারি কুইন', color: '#B9F2FF', minXP: SHIELD_LEVELS.DIAMOND.minXP }
+    { id: 'SILVER', name: 'Bee Kid', nameBn: 'Bee Kid', color: '#CD7F32', minXP: SHIELD_LEVELS.SILVER.minXP },
+    { id: 'GOLD', name: 'Bee Warrior', nameBn: 'Bee Warrior', color: '#C0C0C0', minXP: SHIELD_LEVELS.GOLD.minXP },
+    { id: 'PLATINUM', name: 'Bee Master', nameBn: 'Bee Master', color: '#FFD700', minXP: SHIELD_LEVELS.PLATINUM.minXP },
+    { id: 'DIAMOND', name: 'Bee Legendary', nameBn: 'Bee Legendary', color: '#B9F2FF', minXP: SHIELD_LEVELS.DIAMOND.minXP }
 ];
 
 const ITEMS_PER_PAGE = 20;
@@ -120,7 +120,7 @@ const LeaderboardPage = () => {
                                             <Trophy size={32} />
                                         </div>
                                         <h3>বী-র পরিচিতি</h3>
-                                        <p>BeeLesson-এ ৪টি র্যাঙ্ক আছে: স্কাউট বী, এলিট ড্রোন, হাইভ মাস্টার এবং লিজেন্ডারি কুইন। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী র্যাঙ্কে উন্নীত হয়।</p>
+                                        <p>BeeLesson-এ ৪টি র্যাঙ্ক আছে: Bee Kid, Bee Warrior, Bee Master এবং Bee Legendary। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী র্যাঙ্কে উন্নীত হয়।</p>
                                     </div>
 
                                     <div className={styles.introCard}>
@@ -187,7 +187,7 @@ const LeaderboardPage = () => {
                                                                 <span className={styles.xpHighlight}> +{progress.remaining} XP</span>
                                                             </>
                                                         )
-                                                        : 'আপনি ডায়মন্ড লার্নার বী-তে পৌঁছে গেছেন!'}
+                                                        : 'আপনি Bee Legendary-তে পৌঁছে গেছেন!'}
                                                 </p>
                                             </div>
                                         </div>

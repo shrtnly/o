@@ -6,8 +6,8 @@
 
 export const SHIELD_LEVELS = {
     SILVER: {
-        name: 'Scout Bee',
-        nameBangla: 'স্কাউট বী',
+        name: 'Bee Kid',
+        nameBangla: 'Bee Kid',
         minXP: 0,
         maxXP: 2499,
         color: '#8B7355',
@@ -18,8 +18,8 @@ export const SHIELD_LEVELS = {
         winGradient: 'linear-gradient(45deg, #4A3728 0%, #8B7355 100%)'
     },
     GOLD: {
-        name: 'Elite Drone',
-        nameBangla: 'এলিট ড্রোন',
+        name: 'Bee Warrior',
+        nameBangla: 'Bee Warrior',
         minXP: 2500,
         maxXP: 4999,
         color: '#FFD700',
@@ -30,8 +30,8 @@ export const SHIELD_LEVELS = {
         winGradient: 'linear-gradient(45deg, #B8860B 0%, #FFD700 100%)'
     },
     PLATINUM: {
-        name: 'Hive Master',
-        nameBangla: 'হাইভ মাস্টার',
+        name: 'Bee Master',
+        nameBangla: 'Bee Master',
         minXP: 5000,
         maxXP: 9999,
         color: '#5B7C99',
@@ -42,8 +42,8 @@ export const SHIELD_LEVELS = {
         winGradient: 'linear-gradient(45deg, #374151 0%, #5B7C99 100%)'
     },
     DIAMOND: {
-        name: 'Legendary Queen',
-        nameBangla: 'লিজেন্ডারি কুইন',
+        name: 'Bee Legendary',
+        nameBangla: 'Bee Legendary',
         minXP: 10000,
         maxXP: Infinity,
         color: '#B9F2FF',

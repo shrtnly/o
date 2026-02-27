@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, User, UserCircle, MessageCircle } from 'lucide-react';
 import { cn } from '../../../../lib/utils';
+import { createAvatar } from '@dicebear/core';
+import { lorelei } from '@dicebear/collection';
 
 const CHARACTERS = [
-    { id: 'rakib', name: 'Rakib (Male)', label: 'রাকিব', color: 'blue' },
-    { id: 'lisa', name: 'Lisa (Female)', label: 'লিসা', color: 'rose' },
-    { id: 'assistant', name: 'AI Assistant', label: 'সহকারী', color: 'emerald' }
+    { id: 'rakib', name: 'Rakib (Male)', label: 'রাকিব', color: 'blue', seed: 'Emery' },
+    { id: 'lisa', name: 'Lisa (Female)', label: 'লিসা', color: 'rose', seed: 'Eliza' },
+    { id: 'assistant', name: 'AI Assistant', label: 'সহকারী', color: 'emerald', seed: 'Eden' },
+    { id: 'andrea', name: 'Andrea', label: 'আন্দ্রেয়া', color: 'amber', seed: 'Andrea' }
 ];
+
+const AvatarPreview = ({ seed, className }) => {
+    const avatar = createAvatar(lorelei, {
+        seed: seed,
+        backgroundType: ["transparent"]
+    });
+
+    return (
+        <div
+            className={className}
+            dangerouslySetInnerHTML={{ __html: avatar.toString() }}
+        />
+    );
+};
 
 const StorytellingManager = ({ content, onUpdate }) => {
     const [dialogues, setDialogues] = useState(() => {
@@ -45,24 +62,19 @@ const StorytellingManager = ({ content, onUpdate }) => {
                             <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter">Avatar</label>
                             <div className="flex flex-col gap-1">
                                 {CHARACTERS.map(char => {
-                                    const colorMap = {
-                                        blue: "bg-blue-500 border-blue-600 shadow-blue-500/20",
-                                        rose: "bg-rose-500 border-rose-600 shadow-rose-500/20",
-                                        emerald: "bg-emerald-500 border-emerald-600 shadow-emerald-500/20"
-                                    };
                                     return (
                                         <button
                                             key={char.id}
                                             onClick={() => handleUpdateDialogue(idx, { avatar: char.id })}
                                             className={cn(
-                                                "w-8 h-8 rounded-lg flex items-center justify-center transition-all border-2",
+                                                "w-10 h-10 rounded-full flex items-center justify-center transition-all border",
                                                 dialogue.avatar === char.id
-                                                    ? `${colorMap[char.color]} text-white shadow-lg`
-                                                    : "bg-white dark:bg-slate-800 border-transparent text-slate-400 hover:border-slate-200 dark:hover:border-slate-700"
+                                                    ? "border-blue-500"
+                                                    : "border-transparent hover:bg-slate-100 dark:hover:bg-slate-800"
                                             )}
                                             title={char.name}
                                         >
-                                            <User size={14} />
+                                            <AvatarPreview seed={char.seed} className="w-8 h-8" />
                                         </button>
                                     );
                                 })}

@@ -29,6 +29,107 @@
     width: 100%;
 }
 
+/* ── Matching Style ── */
+.matchingContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.matchingColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.matchingCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.1);
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.matchingCard:hover:not(.matched) {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.selectedCard {
+    border-color: #f1c40f !important;
+    background: rgba(241, 196, 15, 0.05) !important;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.1);
+    color: #f1c40f;
+}
+
+.matched {
+    border-color: #2ecc71 !important;
+    background: rgba(46, 204, 113, 0.1) !important;
+    color: #2ecc71;
+    cursor: default;
+}
+
+.mismatch {
+    border-color: #e74c3c !important;
+    background: rgba(231, 76, 60, 0.1) !important;
+    color: #e74c3c;
+    animation: shake 0.4s ease-in-out;
+}
+
+/* Green pulsing hint: shown on the correct right card after a wrong attempt */
+.hintCard {
+    border-color: #2ecc71 !important;
+    background: rgba(46, 204, 113, 0.06) !important;
+    color: #2ecc71;
+    animation: hintPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px rgba(46, 204, 113, 0);
+    }
+}
+
+/* Subtle amber glow: left card that has been tried but is still unmatched */
+.hasFailed {
+    border-color: rgba(241, 196, 15, 0.5) !important;
+    background: rgba(241, 196, 15, 0.04) !important;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
 .closeBtn {
     background: transparent;
     border: none;
@@ -193,70 +294,104 @@
     }
 }
 
+@keyframes speakingPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4);
+        transform: scale(1);
+    }
+
+    50% {
+        box-shadow: 0 0 0 12px rgba(241, 196, 15, 0);
+        transform: scale(1.02);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+        transform: scale(1);
+    }
+}
+
+@keyframes bubbleRadiance {
+
+    0%,
+    100% {
+        border-color: rgba(241, 196, 15, 0.2);
+    }
+
+    50% {
+        border-color: rgba(241, 196, 15, 0.5);
+    }
+}
+
 .avatarCircle {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    border: 2px solid rgba(255, 255, 255, 0.1);
+    background: transparent !important;
+    border: 0.5px solid rgba(241, 196, 15, 0.15);
+    border-radius: 50%;
+    box-shadow: none;
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
-.rakibAvatar {
-    background: linear-gradient(135deg, #3498db, #2980b9);
+.speakingAvatar {
+    animation: speakingPulse 2s infinite ease-in-out;
+    border-color: rgba(241, 196, 15, 0.4);
 }
 
-.lisaAvatar {
-    background: linear-gradient(135deg, #e91e63, #c2185b);
-}
-
-.assistantAvatar {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
+.rakibAvatar,
+.lisaAvatar,
+.assistantAvatar,
+.andreaAvatar {
+    background: transparent;
 }
 
 .speechBubble {
-    padding: 14px 18px;
-    border-radius: 18px;
-    font-size: 0.95rem;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 0.92rem;
     font-weight: 500;
     line-height: 1.5;
     position: relative;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-top-left-radius: 0;
+}
+
+.activeSpeechBubble {
+    border-color: rgba(241, 196, 15, 0.4) !important;
+    background: rgba(241, 196, 15, 0.04) !important;
+    animation: bubbleRadiance 2s infinite ease-in-out;
 }
 
 .rakibBubble {
-    background: #1a2633;
-    color: #d1e3f3;
-    border: 1px solid #2c3e50;
-    border-top-left-radius: 4px;
+    background: rgba(52, 152, 219, 0.05);
+    color: #74b9ef;
+    border: 1px solid rgba(241, 196, 15, 0.15);
 }
 
 .lisaBubble {
-    background: #2a1b22;
-    color: #fce4ec;
-    border: 1px solid #4a148c;
-    border-top-left-radius: 4px;
+    background: rgba(233, 30, 99, 0.05);
+    color: #f48fb1;
+    border: 1px solid rgba(241, 196, 15, 0.15);
 }
 
 .assistantBubble {
-    background: #1b2a22;
-    color: #e8f5e9;
-    border: 1px solid #1b5e20;
-    border-top-left-radius: 4px;
+    background: rgba(46, 204, 113, 0.05);
+    color: #a5d6a7;
+    border: 1px solid rgba(241, 196, 15, 0.15);
 }
 
-.speakerName {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-    opacity: 0.6;
+.andreaBubble {
+    background: rgba(243, 156, 18, 0.05);
+    color: #ffcc80;
+    border: 1px solid rgba(241, 196, 15, 0.15);
 }
+
+
 
 /* ── Question Title ── */
 .questionTitle {
@@ -279,6 +414,21 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.booleanRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.booleanRow .optionBtn {
+    justify-content: center;
+    padding: 20px;
+}
+
+.booleanRow .optionIndex {
+    display: none;
 }
 
 .optionBtn {

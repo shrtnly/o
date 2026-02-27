@@ -231,10 +231,10 @@ const ProfilePage = () => {
     const beeRanks = [
         { name: 'Baby Bee', threshold: 0, nextThreshold: 5 },
         { name: 'Worker Bee', threshold: 5, nextThreshold: 10 },
-        { name: 'Scout Bee', threshold: 10, nextThreshold: 20 },
+        { name: 'Bee Kid', threshold: 10, nextThreshold: 20 },
         { name: 'Guard Bee', threshold: 20, nextThreshold: 35 },
-        { name: 'Drone Bee', threshold: 35, nextThreshold: 50 },
-        { name: 'Queen Bee', threshold: 50, nextThreshold: null },
+        { name: 'Bee Warrior', threshold: 35, nextThreshold: 50 },
+        { name: 'Bee Legendary', threshold: 50, nextThreshold: null },
     ];
     const currentRank = beeRanks.reduce((acc, rank) =>
         lessonsCompleted >= rank.threshold ? rank : acc, beeRanks[0]);
@@ -559,7 +559,7 @@ const ProfilePage = () => {
                                 <div className={styles.shareStat}><strong>{enrolledCourses.length}</strong><span>কোর্স</span></div>
                             </div>
                             <div className={styles.shareRankBadge}>
-                                <Crown size={13} /> রয়্যাল জেলি হাইভ মাস্টর্স
+                                <Crown size={13} /> {language === 'bn' ? `রয়্যাল জেলি ${getShieldLevel(profile?.xp || 0).nameBangla}` : `Royal Jelly ${getShieldLevel(profile?.xp || 0).name}`}
                             </div>
                             <button className={styles.shareDownload}>📸 স্ক্রিনশট নিন</button>
                         </div>

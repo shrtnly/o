@@ -11,7 +11,11 @@ import {
     ChevronDown,
     ChevronUp,
     ArrowUp,
-    ArrowDown
+    ArrowDown,
+    Layers,
+    CheckSquare,
+    Link,
+    Contrast
 } from 'lucide-react';
 import { courseService } from '../../../../services/courseService';
 import { cn } from '../../../../lib/utils';
@@ -136,28 +140,37 @@ const LearningPointSection = ({ chapterId }) => {
             const mcq = node.mcq_questions?.find(q => q.id === qId);
             if (!mcq) return;
 
+            const isCheckmark = mcq.question_type === 'checkmark';
             const currentOptions = mcq.mcq_options || [];
-            const slots = [{}, {}, {}];
-            currentOptions.forEach(opt => {
-                if (opt.order_index >= 0 && opt.order_index < 3) slots[opt.order_index] = opt;
+
+            // Maintain at least 3 slots, or more if current options exceed 3
+            const slotCount = Math.max(3, currentOptions.length, optionIdx + 1);
+            const slots = Array.from({ length: slotCount }, (_, i) => {
+                const existing = currentOptions.find(o => o.order_index === i);
+                return existing ? { ...existing } : { order_index: i, option_text: '', is_correct: false };
             });
 
             const targetOption = slots[optionIdx];
+            const newIsCorrect = isCorrect !== null ? isCorrect : !!targetOption.is_correct;
+
             const updatedOption = {
                 ...targetOption,
                 option_text: text,
-                is_correct: isCorrect !== null ? isCorrect : !!targetOption.is_correct,
+                is_correct: newIsCorrect,
                 order_index: optionIdx
             };
 
             const newOptions = [...slots];
             newOptions[optionIdx] = updatedOption;
 
-            if (isCorrect === true) {
-                newOptions.forEach((o, i) => { if (i !== optionIdx) o.is_correct = false; });
+            // Enforcement: If NOT checkmark and we just enabled correct, disable others
+            if (newIsCorrect === true && !isCheckmark) {
+                newOptions.forEach((o, i) => {
+                    if (i !== optionIdx) o.is_correct = false;
+                });
             }
 
-            if (isCorrect === true && (!text || text.trim() === '')) {
+            if (newIsCorrect === true && (!text || text.trim() === '')) {
                 toast.error('Please enter option text first');
                 return;
             }
@@ -301,11 +314,35 @@ const LearningPointSection = ({ chapterId }) => {
                                             <Trash2 size={14} />
                                         </button>
 
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-6 h-6 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg flex items-center justify-center text-[10px] font-black">
-                                                {qIdx + 1}
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-6 h-6 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg flex items-center justify-center text-[10px] font-black">
+                                                    {qIdx + 1}
+                                                </div>
+                                                <span className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider">Question Configuration</span>
                                             </div>
-                                            <span className="text-sm font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider">Question Configuration</span>
+                                            <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                                                {[
+                                                    { id: 'mcq', icon: Layers, label: 'MCQ' },
+                                                    { id: 'checkmark', icon: CheckSquare, label: 'Checkmark' },
+                                                    { id: 'matching', icon: Link, label: 'Match' },
+                                                    { id: 'boolean', icon: Contrast, label: 'Y/N' }
+                                                ].map(type => (
+                                                    <button
+                                                        key={type.id}
+                                                        onClick={() => handleUpdateMCQ(node, q.id, { question_type: type.id })}
+                                                        className={cn(
+                                                            "px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all",
+                                                            (q.question_type || 'mcq') === type.id
+                                                                ? "bg-white dark:bg-slate-700 shadow-sm text-slate-900 dark:text-white"
+                                                                : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                                                        )}
+                                                    >
+                                                        <type.icon size={14} />
+                                                        <span className="text-[10px] font-bold uppercase tracking-tighter">{type.label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
 
                                         {/* Storytelling Dialogue for this specific question */}
@@ -348,44 +385,147 @@ const LearningPointSection = ({ chapterId }) => {
                                             </div>
 
                                             <div className="space-y-4">
-                                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                                    <Plus size={16} className="text-blue-500" /> Options (3)
-                                                </label>
+                                                <div className="flex items-center justify-between">
+                                                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                        {q.question_type === 'matching' ? <Link size={16} className="text-blue-500" /> : <Plus size={16} className="text-blue-500" />}
+                                                        {q.question_type === 'matching' ? 'Pairs (Left to Right)' : q.question_type === 'boolean' ? 'Logic Options' : 'Options (3)'}
+                                                    </label>
+                                                </div>
+
                                                 <div className="space-y-3">
-                                                    {[0, 1, 2].map((oIdx) => {
-                                                        const opt = q.mcq_options?.find(o => o.order_index === oIdx) || {};
-                                                        return (
-                                                            <div
-                                                                key={oIdx}
-                                                                className={cn(
-                                                                    "group relative flex items-center gap-4 p-5 rounded-3xl border-2 transition-all duration-400 cursor-pointer overflow-hidden",
-                                                                    opt.is_correct
-                                                                        ? "border-emerald-500 bg-emerald-50/5 dark:bg-emerald-500/5 shadow-xl shadow-emerald-500/10"
-                                                                        : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-600"
-                                                                )}
-                                                                onClick={() => !opt.is_correct && handleUpdateOption(node, q.id, oIdx, opt.option_text || '', true)}
-                                                            >
-                                                                {opt.is_correct && (
-                                                                    <div className="absolute top-0 right-0 pt-1.5 pr-4">
-                                                                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-bl-lg">Correct</span>
+                                                    {q.question_type === 'matching' ? (
+                                                        <div className="space-y-3">
+                                                            {(q.metadata?.pairs || [{}, {}, {}]).map((pair, pIdx) => {
+                                                                const pairs = q.metadata?.pairs || [];
+                                                                return (
+                                                                    <div key={pIdx} className="grid grid-cols-[1fr,1fr,auto] gap-3 p-4 bg-white dark:bg-slate-900/40 rounded-3xl border border-slate-100 dark:border-slate-800">
+                                                                        <input
+                                                                            placeholder="Left Item (Leave empty for Distractor)..."
+                                                                            className="bg-transparent border-none p-0 text-xs font-bold outline-none text-slate-900 dark:text-slate-100 placeholder:text-slate-200"
+                                                                            defaultValue={pair.left}
+                                                                            onBlur={(e) => {
+                                                                                const newPairs = [...pairs];
+                                                                                while (newPairs.length <= pIdx) newPairs.push({ left: '', right: '' });
+                                                                                newPairs[pIdx] = { ...newPairs[pIdx], left: e.target.value };
+                                                                                handleUpdateMCQ(node, q.id, { metadata: { ...q.metadata, pairs: newPairs } });
+                                                                            }}
+                                                                        />
+                                                                        <input
+                                                                            placeholder="Right Match..."
+                                                                            className="bg-transparent border-l border-slate-100 dark:border-slate-800 pl-3 text-xs font-bold outline-none text-blue-500 placeholder:text-slate-300"
+                                                                            defaultValue={pair.right}
+                                                                            onBlur={(e) => {
+                                                                                const newPairs = [...pairs];
+                                                                                while (newPairs.length <= pIdx) newPairs.push({ left: '', right: '' });
+                                                                                newPairs[pIdx] = { ...newPairs[pIdx], right: e.target.value };
+                                                                                handleUpdateMCQ(node, q.id, { metadata: { ...q.metadata, pairs: newPairs } });
+                                                                            }}
+                                                                        />
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                const newPairs = pairs.filter((_, i) => i !== pIdx);
+                                                                                handleUpdateMCQ(node, q.id, { metadata: { ...q.metadata, pairs: newPairs } });
+                                                                            }}
+                                                                            className="p-1 text-slate-300 hover:text-red-500 transition-colors"
+                                                                        >
+                                                                            <Trash2 size={12} />
+                                                                        </button>
                                                                     </div>
-                                                                )}
-                                                                <div className={cn(
-                                                                    "w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 flex-shrink-0",
-                                                                    opt.is_correct ? "bg-emerald-500 text-white scale-110 shadow-lg" : "bg-slate-100 dark:bg-slate-800 text-slate-300"
-                                                                )}>
-                                                                    {opt.is_correct ? <CheckCircle2 size={20} /> : <span className="text-xs font-black">{oIdx + 1}</span>}
+                                                                );
+                                                            })}
+                                                            <button
+                                                                onClick={() => {
+                                                                    const pairs = q.metadata?.pairs || [];
+                                                                    const newPairs = [...pairs, { left: '', right: '' }];
+                                                                    handleUpdateMCQ(node, q.id, { metadata: { ...q.metadata, pairs: newPairs } });
+                                                                }}
+                                                                className="w-full py-2 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-all"
+                                                            >
+                                                                + Add Pair
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        [0, 1, 2, 3, 4, 5].slice(0, Math.max(q.mcq_options?.length || 0, q.question_type === 'boolean' ? 2 : 3)).map((oIdx) => {
+                                                            const opt = q.mcq_options?.find(o => o.order_index === oIdx) || {};
+                                                            if (q.question_type === 'boolean' && !opt.option_text) {
+                                                                opt.option_text = oIdx === 0 ? 'হ্যাঁ' : 'না';
+                                                            }
+                                                            return (
+                                                                <div className="space-y-3">
+                                                                    {[0, 1, 2, 3, 4, 5, 6, 7].slice(0, Math.max(q.mcq_options?.length || 0, q.question_type === 'boolean' ? 2 : 3)).map((oIdx) => {
+                                                                        const opt = q.mcq_options?.find(o => o.order_index === oIdx) || {};
+                                                                        if (q.question_type === 'boolean' && !opt.option_text) {
+                                                                            opt.option_text = oIdx === 0 ? 'হ্যাঁ' : 'না';
+                                                                        }
+                                                                        return (
+                                                                            <div
+                                                                                key={oIdx}
+                                                                                className={cn(
+                                                                                    "group relative flex items-center gap-4 p-5 rounded-3xl border-2 transition-all duration-400 cursor-pointer overflow-hidden",
+                                                                                    opt.is_correct
+                                                                                        ? "border-emerald-500 bg-emerald-50/5 dark:bg-emerald-500/5 shadow-xl shadow-emerald-500/10"
+                                                                                        : "border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-slate-300 dark:hover:border-slate-600"
+                                                                                )}
+                                                                                onClick={() => handleUpdateOption(node, q.id, oIdx, opt.option_text || '', !opt.is_correct)}
+                                                                            >
+                                                                                {opt.is_correct && (
+                                                                                    <div className="absolute top-0 right-0 pt-1.5 pr-4">
+                                                                                        <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-bl-lg">Correct</span>
+                                                                                    </div>
+                                                                                )}
+                                                                                <div className={cn(
+                                                                                    "w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 flex-shrink-0",
+                                                                                    opt.is_correct ? "bg-emerald-500 text-white scale-110 shadow-lg" : "bg-slate-100 dark:bg-slate-800 text-slate-300"
+                                                                                )}>
+                                                                                    {opt.is_correct ? <CheckCircle2 size={20} /> : <span className="text-xs font-black">{oIdx + 1}</span>}
+                                                                                </div>
+                                                                                <div className="flex-1 flex items-center gap-2">
+                                                                                    <input
+                                                                                        onClick={(e) => e.stopPropagation()}
+                                                                                        readOnly={q.question_type === 'boolean'}
+                                                                                        className={cn(
+                                                                                            "bg-transparent border-none p-0 text-sm font-bold w-full outline-none placeholder:text-slate-300 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100",
+                                                                                            q.question_type === 'boolean' && "cursor-default"
+                                                                                        )}
+                                                                                        placeholder={`Option ${oIdx + 1}...`}
+                                                                                        value={opt.option_text || ''}
+                                                                                        onChange={() => { }} // Controlled by blur for others
+                                                                                        onBlur={(e) => q.question_type !== 'boolean' && handleUpdateOption(node, q.id, oIdx, e.target.value)}
+                                                                                    />
+                                                                                    {q.question_type !== 'boolean' && (
+                                                                                        <button
+                                                                                            onClick={async (e) => {
+                                                                                                e.stopPropagation();
+                                                                                                const isConfirmed = window.confirm('Delete this option?');
+                                                                                                if (!isConfirmed) return;
+                                                                                                const newOptions = (q.mcq_options || []).filter(o => o.order_index !== oIdx);
+                                                                                                const saved = await courseService.saveOptions(q.id, newOptions);
+                                                                                                setNodes(nodes.map(n => n.id === node.id ? {
+                                                                                                    ...n,
+                                                                                                    mcq_questions: n.mcq_questions.map(mq => mq.id === q.id ? { ...mq, mcq_options: saved } : mq)
+                                                                                                } : n));
+                                                                                            }}
+                                                                                            className="p-2 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                                                                        >
+                                                                                            <Trash2 size={14} />
+                                                                                        </button>
+                                                                                    )}
+                                                                                </div>
+                                                                            </div>
+                                                                        );
+                                                                    })}
+                                                                    {q.question_type !== 'boolean' && (
+                                                                        <button
+                                                                            onClick={() => handleUpdateOption(node, q.id, (q.mcq_options?.length || 0), '', false)}
+                                                                            className="w-full py-2 border border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-all"
+                                                                        >
+                                                                            + Add Option
+                                                                        </button>
+                                                                    )}
                                                                 </div>
-                                                                <input
-                                                                    onClick={(e) => e.stopPropagation()}
-                                                                    className="bg-transparent border-none p-0 text-sm font-bold w-full outline-none placeholder:text-slate-300 dark:placeholder:text-slate-700 text-slate-900 dark:text-slate-100"
-                                                                    placeholder={`Option ${oIdx + 1}...`}
-                                                                    defaultValue={opt.option_text || ''}
-                                                                    onBlur={(e) => handleUpdateOption(node, q.id, oIdx, e.target.value)}
-                                                                />
-                                                            </div>
-                                                        );
-                                                    })}
+                                                            );
+                                                        })
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

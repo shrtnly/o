@@ -13,6 +13,7 @@ const FlamingBadge = ({ size = 20, className }) => {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className={styles.flameSvg}
+                    style={{ transform: 'scaleX(-1)' }}
                 >
                     <path
                         d="M12 2C12 2 10 6 10 9C10 11.5 11.5 13 13 13C14.5 13 16 11.5 16 9C16 11.5 19 13.5 19 17C19 20.5 16 23 12 23C8 23 5 20.5 5 17C5 13 8 9 12 2Z"

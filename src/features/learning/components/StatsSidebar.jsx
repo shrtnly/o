@@ -202,14 +202,23 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             {/* Daily Practices Tracker / Consistency Tracker */}
             <div className={styles.card} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>⚡ {t('buzz_streak')}</h3>
-                    <span
-                        className={styles.viewAll}
+                    <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Zap size={22} color="#f1c40f" fill="#f1c40f" style={{ filter: 'drop-shadow(0 0 5px rgba(241, 196, 15, 0.3))', flexShrink: 0 }} />
+                        <span>{t('buzz_streak')}</span>
+                    </h3>
+                    <div
                         onClick={() => setIsExpanded(!isExpanded)}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}
                     >
-                        {isExpanded ? 'সংক্ষেপ করুন' : 'সব দেখুন'}
-                    </span>
+                        <ChevronDown
+                            size={20}
+                            color="#ffffff"
+                            style={{
+                                transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.3s ease'
+                            }}
+                        />
+                    </div>
                 </div>
 
                 <AnimatePresence mode="wait">
@@ -224,8 +233,9 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                             <svg width="0" height="0" style={{ position: 'absolute' }}>
                                 <defs>
                                     <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" style={{ stopColor: '#ff9600', stopOpacity: 1 }} />
-                                        <stop offset="100%" style={{ stopColor: '#ff4b4b', stopOpacity: 1 }} />
+                                        <stop offset="0%" style={{ stopColor: '#00E5FF', stopOpacity: 1 }} />
+                                        <stop offset="50%" style={{ stopColor: '#0091FF', stopOpacity: 1 }} />
+                                        <stop offset="100%" style={{ stopColor: '#004CFF', stopOpacity: 1 }} />
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -257,15 +267,20 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
 
                                         return (
                                             <div key={index} className={styles.flameContainer} title={dateStr}>
-                                                <div className={`${styles.flameIcon} ${isPracticed ? styles.flameActive : ''} ${isToday ? styles.flameToday : ''}`}>
-                                                    <Flame
-                                                        size={24}
-                                                        fill={isPracticed ? "url(#flameGradient)" : (isToday ? "rgba(255,150,0,0.1)" : "none")}
-                                                        stroke={isPracticed ? "none" : (isToday ? "#ff9600" : "#37464f")}
-                                                    />
+                                                <div className={`${styles.flameIcon} ${isPracticed ? styles.flameActive : ''} ${isToday ? styles.flameToday : ''}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    {isPracticed ? (
+                                                        <FlamingBadge size={24} />
+                                                    ) : (
+                                                        <Flame
+                                                            size={24}
+                                                            fill={isToday ? "rgba(241, 196, 15, 0.1)" : "none"}
+                                                            stroke={isToday ? "#f1c40f" : "#37464f"}
+                                                            style={isToday ? { filter: 'drop-shadow(0 0 4px rgba(241, 196, 15, 0.4))' } : {}}
+                                                        />
+                                                    )}
                                                 </div>
                                                 <span className={styles.flameDayLabel}>
-                                                    {['র', 'সো', 'ম', 'বু', 'বৃ', 'শু', 'শ'][index]}
+                                                    {['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'][index]}
                                                 </span>
                                             </div>
                                         );

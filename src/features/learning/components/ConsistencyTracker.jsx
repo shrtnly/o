@@ -5,11 +5,13 @@ import {
     TrendingUp,
     Info,
     ChevronLeft,
-    ChevronRight
+    ChevronRight,
+    Check
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import styles from './ConsistencyTracker.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
+import FlamingBadge from '../../../components/FlamingBadge';
 
 const ConsistencyTracker = ({ profile, streak, history = [] }) => {
     const [viewMode, setViewMode] = useState('daily');
@@ -147,7 +149,7 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                 <div className={styles.statBox}>
                     <span className={styles.statLabel}>Current Streak</span>
                     <div className={styles.statMain}>
-                        <Flame size={40} color="#ff9600" fill="#ff9600" />
+                        <FlamingBadge size={40} />
                         <span className={styles.statValue}>{stats.currentStreak}</span>
                     </div>
                     <div className={styles.statSub}>
@@ -229,7 +231,7 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                                 >
                                     {day.type === 'achieved' ? (
                                         <div className={styles.flameContainer}>
-                                            <Flame size={20} fill="#ff9600" color="#ff9600" />
+                                            <FlamingBadge size={20} />
                                         </div>
                                     ) : (
                                         (day.type === 'future' || day.isToday) && day.day && <span className={styles.dayNumber}>{day.day}</span>

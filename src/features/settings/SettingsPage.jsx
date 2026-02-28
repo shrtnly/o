@@ -16,7 +16,7 @@ const SettingsPage = () => {
     const { language, toggleLanguage, t } = useLanguage();
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('preferences');
-    const [selectedAnimation, setSelectedAnimation] = useState('1');
+    const [selectedAnimation, setSelectedAnimation] = useState('random');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
@@ -95,10 +95,15 @@ const SettingsPage = () => {
 
 
     // Save animation preference to localStorage
-    const handleAnimationChange = (e) => {
-        const value = e.target.value;
-        setSelectedAnimation(value);
-        localStorage.setItem('studyPageAnimation', value);
+    const toggleAnimation = () => {
+        const newValue = selectedAnimation === 'none' ? 'random' : 'none';
+        setSelectedAnimation(newValue);
+        localStorage.setItem('studyPageAnimation', newValue);
+        if (newValue === 'random') {
+            toast.success(t('random_animation') + ' ' + t('on'));
+        } else {
+            toast.info(t('random_animation') + ' ' + t('off'));
+        }
     };
 
     const toggleSound = () => {
@@ -216,22 +221,22 @@ const SettingsPage = () => {
                                         <Sparkles size={20} />
                                     </div>
                                     <div className={styles.cardText}>
-                                        <h3>{t('study_anim')}</h3>
+                                        <h3>{t('random_animation')}</h3>
                                         <p>{t('study_anim_desc')}</p>
                                     </div>
                                 </div>
-                                <select
-                                    className={styles.animationSelect}
-                                    value={selectedAnimation}
-                                    onChange={handleAnimationChange}
-                                >
-                                    <option value="1">{t('bouncing_bee')}</option>
-                                    <option value="2">{t('lounging_bee')}</option>
-                                    <option value="3">{t('looking_bee')}</option>
-                                    <option value="4">{t('flying_bee')}</option>
-                                    <option value="5">{t('happy_bee')}</option>
-                                    <option value="none">{t('no_animation')}</option>
-                                </select>
+                                <label className={styles.switch}>
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedAnimation !== 'none'}
+                                        onChange={toggleAnimation}
+                                    />
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            {selectedAnimation !== 'none' ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
+                                        </span>
+                                    </span>
+                                </label>
                             </div>
 
                             <div className={styles.settingCard}>

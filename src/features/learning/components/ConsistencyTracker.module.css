@@ -27,8 +27,8 @@
 }
 
 .goalBadge {
-    background-color: rgba(255, 150, 0, 0.1);
-    border: 1.5px solid rgba(255, 150, 0, 0.2);
+    background-color: rgba(0, 229, 255, 0.1);
+    border: 1.5px solid rgba(0, 229, 255, 0.2);
     padding: 4px 10px;
     border-radius: 12px;
     display: flex;
@@ -36,11 +36,11 @@
     gap: 6px;
     font-size: 12px;
     font-weight: 800;
-    color: #ff9600;
+    color: #00E5FF;
 }
 
 .goalIcon {
-    color: #ff9600;
+    color: #00E5FF;
 }
 
 .divider {
@@ -227,23 +227,24 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    filter: drop-shadow(0 2px 8px rgba(255, 150, 0, 0.4));
+    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.3));
 }
 
 .dayAchieved {
-    background: linear-gradient(135deg, rgba(255, 200, 0, 0.3) 0%, rgba(255, 150, 0, 0.3) 100%);
-    border-color: #ff9600;
-    box-shadow: 0 0 12px rgba(255, 150, 0, 0.2);
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(0, 145, 255, 0.05) 100%);
+    border-color: #00E5FF;
+    box-shadow: 0 0 3px rgba(0, 229, 255, 0.1);
     opacity: 1;
 }
 
 .dayAchieved .dayNumber {
-    color: #ff9600;
+    color: #00E5FF;
+    text-shadow: 0 0 4px rgba(0, 229, 255, 0.3);
 }
 
 .dayToday {
-    border-color: #2ecc71;
-    box-shadow: 0 0 0 1.5px #2ecc71 inset;
+    border-color: #f1c40f;
+    box-shadow: 0 0 0 1.5px #f1c40f inset;
     animation: todayPulse 2s ease-in-out infinite;
 }
 
@@ -255,11 +256,11 @@
 
     0%,
     100% {
-        box-shadow: 0 0 0 1.5px #2ecc71 inset, 0 0 8px rgba(46, 204, 113, 0.3);
+        box-shadow: 0 0 0 1.5px #f1c40f inset, 0 0 8px rgba(241, 196, 15, 0.3);
     }
 
     50% {
-        box-shadow: 0 0 0 2px #2ecc71 inset, 0 0 16px rgba(46, 204, 113, 0.5);
+        box-shadow: 0 0 0 2px #f1c40f inset, 0 0 16px rgba(241, 196, 15, 0.5);
     }
 }
 
@@ -268,22 +269,22 @@
     0%,
     100% {
         transform: scale(1) translateY(0);
-        filter: drop-shadow(0 2px 8px rgba(255, 150, 0, 0.4));
+        filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.4));
     }
 
     25% {
         transform: scale(1.05) translateY(-1px);
-        filter: drop-shadow(0 3px 12px rgba(255, 150, 0, 0.6));
+        filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
     }
 
     50% {
         transform: scale(1.1) translateY(-2px);
-        filter: drop-shadow(0 4px 16px rgba(255, 150, 0, 0.8));
+        filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
     }
 
     75% {
         transform: scale(1.05) translateY(-1px);
-        filter: drop-shadow(0 3px 12px rgba(255, 150, 0, 0.6));
+        filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
     }
 }
 

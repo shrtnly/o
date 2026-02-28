@@ -160,14 +160,19 @@ const StudyPage = () => {
     const [showResults, setShowResults] = useState(false);
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
+
+    // Missing heart/checkout states
     const [showNoHeartsModal, setShowNoHeartsModal] = useState(false);
     const [showNoHeartsCheckout, setShowNoHeartsCheckout] = useState(null); // { type, label, price }
     const [checkoutProcessing, setCheckoutProcessing] = useState(false);
+
+    // Animation states
     const [dotLottie, setDotLottie] = useState(null);
-    const [isSubLooping, setIsSubLooping] = useState(false);
-    const [selectedAnimation, setSelectedAnimation] = useState('1');
-    const hasStarted = React.useRef(false);
-    const hasPlayed = React.useRef(false);
+    const [selectedAnimation, setSelectedAnimation] = useState(() => {
+        const saved = localStorage.getItem('studyPageAnimation');
+        return saved || 'random';
+    });
+    const [currentModel, setCurrentModel] = useState('/models/NewBee.lottie');
     const [profile, setProfile] = useState(null);
     const [sparkleEnabled, setSparkleEnabled] = useState(() => {
         const saved = localStorage.getItem('sparkleEffectsEnabled');
@@ -293,37 +298,28 @@ const StudyPage = () => {
 
     useEffect(() => {
         if (!dotLottie || selectedAnimation === 'none') return;
+        // All animations will just loop normally
+        dotLottie.setLoop(true);
+        dotLottie.play();
+    }, [dotLottie, selectedAnimation, currentModel]);
 
-        // শুধু animation 1 এর জন্য বিশেষ লজিক
-        if (selectedAnimation === '1') {
-            // শুধু প্রথমবার সেগমেন্ট সেট করা
-            if (!hasStarted.current) {
-                dotLottie.setSegment(187, 330);
-                dotLottie.setLoop(true);
-                hasStarted.current = true;
-            }
-
-            const handleFrame = (event) => {
-                const frame = Math.floor(event.currentFrame);
-
-                // সাব-লুপ ট্রিগার - infinite loop
-                if (frame >= 293 && frame <= 298 && !isSubLooping && !hasPlayed.current) {
-                    setIsSubLooping(true);
-                    hasPlayed.current = true;
-                    dotLottie.setSegment(293, 305);
-                    dotLottie.setLoop(true);
-                    setTimeout(() => dotLottie.setMode('bounce'), 50);
-                    // No timeout to stop - infinite loop
-                }
-            };
-
-            dotLottie.addEventListener('frame', handleFrame);
-            return () => {
-                dotLottie.removeEventListener('frame', handleFrame);
-            };
+    // Randomize mascot every question if animation is enabled
+    useEffect(() => {
+        if (selectedAnimation !== 'none') {
+            const models = [
+                '/models/Bee - lounging.lottie',
+                '/models/Bee looking.lottie',
+                '/models/Ceras bee.lottie',
+                '/models/Happy Bee.lottie',
+                '/models/Honey bee.lottie',
+                '/models/Loading Flying Beee.lottie',
+                '/models/NewBee.lottie',
+                '/models/awkward bee.lottie'
+            ];
+            const randomModel = models[Math.floor(Math.random() * models.length)];
+            setCurrentModel(randomModel);
         }
-        // অন্য অ্যানিমেশনগুলো শুধু infinite loop করবে (কোনো বিশেষ frame handling নেই)
-    }, [dotLottie, isSubLooping, selectedAnimation]);
+    }, [currentIndex, selectedAnimation]);
 
     useEffect(() => {
         const fetchContent = async () => {
@@ -675,33 +671,7 @@ const StudyPage = () => {
 
             <main className={styles.mainContent}>
                 <div className={styles.studyContentWrapper}>
-                    <AnimatePresence>
-                        {selectedAnimation !== 'none' && (
-                            <motion.div
-                                className={styles.mascotArea}
-                                initial={{ opacity: 1 }}
-                                exit={{ opacity: 0, scale: 0.8 }}
-                                transition={{ duration: 0.5 }}
-                            >
-                                <div className={styles.mascotWrapper}>
-                                    <DotLottieReact
-                                        src={
-                                            selectedAnimation === '1' ? '/models/NewBee.lottie' :
-                                                selectedAnimation === '2' ? '/models/Bee - lounging.lottie' :
-                                                    selectedAnimation === '3' ? '/models/Bee looking.lottie' :
-                                                        selectedAnimation === '4' ? '/models/Loading Flying Beee.lottie' :
-                                                            selectedAnimation === '5' ? '/models/Happy Bee.lottie' :
-                                                                '/models/NewBee.lottie'
-                                        }
-                                        autoplay={true}
-                                        loop={true}
-                                        speed={selectedAnimation === '1' && isSubLooping ? 0.4 : 1}
-                                        dotLottieRefCallback={setDotLottie}
-                                    />
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+
 
                     <AnimatePresence mode="wait">
                         <div className="space-y-12">
@@ -751,7 +721,22 @@ const StudyPage = () => {
                                                         </div>
                                                     )}
 
-                                                    <h2 className={styles.questionTitle}>{q.question_text}</h2>
+                                                    <h2 className={styles.questionTitle}>
+                                                        {isLatest && selectedAnimation !== 'none' && (
+                                                            <span className={styles.mascotMini}>
+                                                                <DotLottieReact
+                                                                    key={currentModel}
+                                                                    src={currentModel}
+                                                                    autoplay={true}
+                                                                    loop={true}
+                                                                    speed={1}
+                                                                    renderConfig={{ renderer: 'svg' }}
+                                                                    dotLottieRefCallback={setDotLottie}
+                                                                />
+                                                            </span>
+                                                        )}
+                                                        {q.question_text}
+                                                    </h2>
 
                                                     <div className={cn(styles.optionsList, q.question_type === 'boolean' && styles.booleanRow)}>
                                                         {q.question_type === 'matching' ? (

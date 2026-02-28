@@ -155,16 +155,16 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                     </>
                 ) : (
                     <>
-                        <div className={styles.statItem} title="Total XP">
+                        <div className={styles.statItem} title="মোট মধু">
                             <ShieldIcon
                                 xp={profile?.xp || 0}
-                                size={40}
+                                size={30}
                                 showShadow={getShieldLevel(profile?.xp || 0).level !== 'SILVER'}
                             />
                             <span>{profile?.xp || 0}</span>
                         </div>
                         <div className={styles.statItem} style={{ color: '#ffc800' }} title={t('pollen')}>
-                            <PollenIcon size={32} />
+                            <PollenIcon size={30} />
                             <span>{profile?.gems || 0}</span>
                         </div>
                         <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title={t('honey_drop')}>
@@ -175,7 +175,22 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 {!(Number(hearts) === 0 && refillTime) && (
                                     profile?.is_premium ? (
-                                        <Infinity size={24} strokeWidth={3} style={{ marginTop: '2px' }} />
+                                        <>
+                                            <svg width="0" height="0" style={{ position: 'absolute' }}>
+                                                <defs>
+                                                    <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                        <stop offset="0%" stopColor="#00E5FF" />
+                                                        <stop offset="100%" stopColor="#0091FF" />
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                            <Infinity
+                                                size={28}
+                                                strokeWidth={3}
+                                                stroke="url(#infinityGradient)"
+                                                style={{ marginTop: '2px' }}
+                                            />
+                                        </>
                                     ) : (
                                         <span>{hearts !== undefined ? hearts : (profile?.hearts || 0)}</span>
                                     )
@@ -313,9 +328,34 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                         {profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}
                     </h3>
                     {profile?.xp >= 100 && (
-                        <span className={styles.viewAll}>সব দেখুন</span>
+                        <span className={styles.viewAll}></span>
                     )}
                 </div>
+                <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
+                    <div className={styles.leaderboardRowLeft}>
+                        <span className={styles.rowRank}>{userRank}</span>
+                        <img
+                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
+                            className={styles.rowAvatar}
+                            alt={profile.display_name || 'লার্নার'}
+                        />
+                        <span className={styles.rowName}>
+                            {profile.display_name || 'লার্নার'}
+                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
+                        </span>
+                    </div>
+                    <div className={styles.leaderboardRowRight}>
+                        <ShieldIcon
+                            xp={profile.xp}
+                            size={22}
+                            showTooltip={false}
+                            showShadow={getShieldLevel(profile.xp).level !== 'SILVER'}
+                        />
+                        <span className={styles.rowXP}>{profile.xp}</span>
+                    </div>
+                </div>
+                <div className={styles.leaderboardDivider}>•••</div>
+
                 {profile?.xp >= 100 ? (
                     <div className={styles.leaderboardPreview}>
                         {(internalLoading || !leaderboardData?.length) ? (
@@ -361,30 +401,8 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                         )}
                         {userRank > 2 && (
                             <>
-                                <div className={styles.leaderboardDivider}>•••</div>
-                                <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
-                                    <div className={styles.leaderboardRowLeft}>
-                                        <span className={styles.rowRank}>{userRank}</span>
-                                        <img
-                                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
-                                            className={styles.rowAvatar}
-                                            alt={profile.display_name || 'লার্নার'}
-                                        />
-                                        <span className={styles.rowName}>
-                                            {profile.display_name || 'লার্নার'}
-                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
-                                        </span>
-                                    </div>
-                                    <div className={styles.leaderboardRowRight}>
-                                        <ShieldIcon
-                                            xp={profile.xp}
-                                            size={22}
-                                            showTooltip={false}
-                                            showShadow={getShieldLevel(profile.xp).level !== 'SILVER'}
-                                        />
-                                        <span className={styles.rowXP}>{profile.xp}</span>
-                                    </div>
-                                </div>
+
+
                             </>
                         )}
                     </div>
@@ -404,7 +422,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             <div className={styles.card}>
                 <div className={styles.cardHeader}>
                     <h3 className={styles.cardTitle}>দৈনিক অনুসন্ধান</h3>
-                    <span className={styles.viewAll}>সব দেখুন</span>
+                    <span className={styles.viewAll}></span>
                 </div>
                 {(!profile || internalLoading) ? (
                     <div className={`${styles.questItem} ${styles.skeleton}`} style={{ height: '60px', width: '100%' }}></div>

@@ -35,7 +35,7 @@ const ShieldIcon = ({ xp = 0, size = 24, showTooltip = true, useImage = true, sh
                     width: size,
                     height: size
                 }}
-                title={showTooltip ? `${level.name} (${xp} XP)` : ''}
+                title={showTooltip ? level.name : ''}
             >
                 <img
                     src={shieldImage}
@@ -67,7 +67,7 @@ const ShieldIcon = ({ xp = 0, size = 24, showTooltip = true, useImage = true, sh
                 height: size,
                 transform: `scale(${scale})`
             }}
-            title={showTooltip ? `${level.name} (${xp} XP)` : ''}
+            title={showTooltip ? level.name : ''}
         >
             <svg
                 width="150"

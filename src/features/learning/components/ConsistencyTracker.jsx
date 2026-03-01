@@ -6,7 +6,8 @@ import {
     Info,
     ChevronLeft,
     ChevronRight,
-    Check
+    Check,
+    X
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import styles from './ConsistencyTracker.module.css';
@@ -102,14 +103,22 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
         // Find all days for the month
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-        for (let w = 0; w < 5; w++) {
-            const weekStart = w * 7 + 1;
-            const weekEnd = Math.min((w + 1) * 7, daysInMonth);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-            if (weekStart > daysInMonth) break;
+        for (let w = 0; w < 5; w++) {
+            const weekStartDay = w * 7 + 1;
+            const weekEndDay = Math.min((w + 1) * 7, daysInMonth);
+
+            if (weekStartDay > daysInMonth) break;
+
+            const weekStartDate = new Date(year, month, weekStartDay);
+            weekStartDate.setHours(0, 0, 0, 0);
+            const weekEndDate = new Date(year, month, weekEndDay);
+            weekEndDate.setHours(0, 0, 0, 0);
 
             let achievedCount = 0;
-            for (let d = weekStart; d <= weekEnd; d++) {
+            for (let d = weekStartDay; d <= weekEndDay; d++) {
                 const dateObj = new Date(year, month, d);
                 const dateStr = formatLocalDate(dateObj);
                 if (history.some(h => h.activity_date === dateStr)) {
@@ -117,14 +126,20 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                 }
             }
 
-            const totalDaysInWeek = (weekEnd - weekStart) + 1;
+            const totalDaysInWeek = (weekEndDay - weekStartDay) + 1;
             const progress = (achievedCount / totalDaysInWeek) * 100;
+
+            const isPast = weekEndDate < today;
+            const isCurrent = today >= weekStartDate && today <= weekEndDate;
 
             weeks.push({
                 label: `Week ${w + 1}`,
                 progress,
                 isCompleted: progress === 100,
-                isStarted: progress > 0
+                isIncomplete: progress < 100,
+                isStarted: progress > 0,
+                isPast,
+                isCurrent
             });
         }
         return weeks;
@@ -250,10 +265,12 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                                     <div className={`
                                         ${styles.weekCircle} 
                                         ${week.isCompleted ? styles.weekCompleted : ''}
-                                        ${week.isStarted && !week.isCompleted ? styles.weekInProgress : ''}
+                                        ${(!week.isCompleted && week.isPast) ? styles.weekIncomplete : ''}
+                                        ${week.isCurrent && week.progress < 100 ? styles.weekInProgress : ''}
                                     `}>
                                         {week.isCompleted && <Check size={14} color="#fff" strokeWidth={4} />}
-                                        {week.isStarted && !week.isCompleted && (
+                                        {!week.isCompleted && week.isPast && <X size={14} color="#fff" strokeWidth={4} />}
+                                        {week.isCurrent && week.progress < 100 && (
                                             <div className={styles.progressRing} style={{ '--progress': `${week.progress}%` }} />
                                         )}
                                     </div>

@@ -33,7 +33,7 @@
 .unitHeader {
     width: 100%;
     background-color: var(--color-bg-deep);
-    padding: 16px 24px;
+    padding: 12px 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,14 +55,14 @@
 }
 
 .unitInfo h2 {
-    font-size: 1.25rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: var(--unit-bg);
     margin: 0;
-    letter-spacing: -0.2px;
+    letter-spacing: -0.4px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
 .guideBtn {
@@ -108,7 +108,7 @@
     padding: 0;
     width: 100%;
     max-width: 640px;
-    margin: 60px auto 0;
+    margin: 24px auto 0;
 }
 
 .connectingPath {
@@ -124,36 +124,27 @@
 .pathLine {
     fill: none;
     stroke: var(--color-border);
-    stroke-width: 8;
-    stroke-dasharray: 1 18;
+    stroke-width: 6;
+    stroke-dasharray: 1 12;
     stroke-linecap: round;
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 .nodeWrapper {
     position: absolute;
-    width: 120px;
-    height: 120px;
-    margin-left: -60px;
-    margin-top: -60px;
+    width: 90px;
+    height: 90px;
+    margin-left: -45px;
+    margin-top: -45px;
     z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     text-align: center;
 }
 
 @media (max-width: 768px) {
-    .nodeWrapper {
-        width: 100px;
-        height: 100px;
-        margin-left: -50px;
-        margin-top: -50px;
-    }
-}
-
-@media (max-width: 480px) {
     .nodeWrapper {
         width: 80px;
         height: 80px;
@@ -162,9 +153,18 @@
     }
 }
 
+@media (max-width: 480px) {
+    .nodeWrapper {
+        width: 70px;
+        height: 70px;
+        margin-left: -35px;
+        margin-top: -35px;
+    }
+}
+
 .node {
-    width: 72px;
-    height: 72px;
+    width: 64px;
+    height: 64px;
     position: relative;
     cursor: pointer;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -172,15 +172,15 @@
 
 @media (max-width: 768px) {
     .node {
-        width: 64px;
-        height: 64px;
+        width: 58px;
+        height: 58px;
     }
 }
 
 @media (max-width: 480px) {
     .node {
-        width: 52px;
-        height: 52px;
+        width: 48px;
+        height: 48px;
     }
 }
 
@@ -194,7 +194,7 @@
     border-radius: 20px;
     padding: 3px;
     background: var(--color-border);
-    box-shadow: 0 8px 0 #202f36;
+    box-shadow: 0 4px 0 #202f36;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -205,7 +205,7 @@
     .nodeRing {
         padding: 3px;
         border-radius: 16px;
-        box-shadow: 0 6px 0 #202f36;
+        box-shadow: 0 3px 0 #202f36;
     }
 }
 
@@ -216,14 +216,14 @@
 .nodeActive .nodeRing,
 .nodeCompleted .nodeRing {
     background: var(--unit-color-bg);
-    box-shadow: 0 8px 0 var(--unit-color-border);
+    box-shadow: 0 4px 0 var(--unit-color-border);
 }
 
 @media (max-width: 480px) {
 
     .nodeActive .nodeRing,
     .nodeCompleted .nodeRing {
-        box-shadow: 0 6px 0 var(--unit-color-border);
+        box-shadow: 0 3px 0 var(--unit-color-border);
     }
 }
 
@@ -231,7 +231,8 @@
 .nodeInner {
     width: 100%;
     height: 100%;
-    border-radius: 18px;
+    border-radius: 16px;
+    /* Adjusted for more circular/minimal */
     background: #202f36;
     display: flex;
     align-items: center;
@@ -250,7 +251,20 @@
 /* Reward Node Specifics */
 .rewardNode .nodeRing {
     background: linear-gradient(135deg, #ffd700, #ff8c00);
-    box-shadow: 0 8px 0 #b8860b, 0 0 15px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 4px 0 #b8860b, 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.rewardNode.nodeLocked .nodeRing {
+    background: #2a3a42;
+    box-shadow: 0 4px 0 #1a2a30;
+    filter: grayscale(1);
+    opacity: 1;
+    /* Ensure path dots don't show through */
+}
+
+.rewardNode.nodeLocked .nodeInner {
+    background: #1a272d;
+    border: 2px solid rgba(255, 255, 255, 0.05);
 }
 
 .rewardNode:not(.nodeLocked) .nodeInner {
@@ -272,8 +286,31 @@
 /* Ensure reward nodes keep their golden ring after completion */
 .rewardNode.nodeCompleted .nodeRing {
     background: linear-gradient(135deg, #e5c100, #cc7a00);
-    box-shadow: 0 8px 0 #8b6508;
+    box-shadow: 0 4px 0 #8b6508;
     filter: brightness(0.85);
+}
+
+.nodeLabel {
+    margin-top: 8px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+    max-width: 140px;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+    text-transform: capitalize;
+}
+
+.nodeCompleted+.nodeLabel,
+.nodeActive+.nodeLabel {
+    color: #fff;
+}
+
+@media (max-width: 480px) {
+    .nodeLabel {
+        font-size: 0.85rem;
+        max-width: 110px;
+    }
 }
 
 @keyframes mysteryVibrate {
@@ -367,7 +404,8 @@
     transition: filter 0.3s ease;
 }
 
-.nodeLocked .nodeImage {
+.nodeLocked .nodeImage,
+.nodeLocked .nodeInner svg {
     filter: grayscale(1) opacity(0.3);
 }
 
@@ -432,7 +470,7 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    margin: 56px auto 28px;
+    margin: 32px auto 20px;
     padding: 0 20px;
     max-width: 640px;
 }
@@ -824,6 +862,12 @@
     filter: brightness(1.2);
 }
 
+.leaderboardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .leaderboardPreview {
     display: flex;
     flex-direction: column;
@@ -907,8 +951,9 @@
     color: #37464f;
     font-weight: 900;
     font-size: 1.2rem;
-    margin: -4px 0;
+    margin: -8px 0;
     letter-spacing: 4px;
+    line-height: 1;
 }
 
 .rankBadge {
@@ -1201,4 +1246,66 @@
     flex-shrink: 0;
     display: inline-flex;
     vertical-align: middle;
+}
+
+/* Floating Navigation Scroll Buttons */
+.scrollNav {
+    position: fixed;
+    bottom: 24px;
+    right: 424px;
+    /* Adjusting for right sidebar width 400px + padding */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1001;
+    pointer-events: none;
+}
+
+@media (max-width: 1200px) {
+    .scrollNav {
+        right: 324px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .scrollNav {
+        right: 32px;
+    }
+}
+
+.scrollBtn {
+    width: 60px;
+    height: 60px;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    color: rgba(241, 196, 15, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: auto;
+}
+
+.scrollBtn:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.2);
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+    color: #f1c40f;
+    filter: drop-shadow(0 0 12px rgba(241, 196, 15, 0.3));
+}
+
+.scrollBtn:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+.scrollBtnPrimary {
+    color: #f1c40f;
+}
+
+.scrollBtnPrimary:hover {
+    opacity: 1;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { BookOpen, Star, Lock, Trophy, Check, Play, PenTool, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles, Gem, Gift, PackageOpen } from 'lucide-react';
+import { BookOpen, Star, Lock, Play, PenTool, Globe, Activity, Sparkles, Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor } from 'lucide-react';
 
 
 import { supabase } from '../../lib/supabaseClient';
@@ -76,7 +76,7 @@ const getPathData = (chapters, nodesPerRow) => {
 };
 
 // Pool of icons for chapters
-const CHAPTER_ICONS = [BookOpen, PenTool, Play, Star, Music, Globe, Activity, Cpu, Tv, Headphones, Camera, Sparkles];
+const CHAPTER_ICONS = [Play, BookOpen, PenTool, Star, Globe, Activity, Send, Shapes, Sparkles, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor];
 
 // Optimized Chapter Node component
 const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, iconIdx, onClick }) => {
@@ -120,16 +120,16 @@ const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked,
                                 {(() => {
                                     if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
                                         if (isCompleted) {
-                                            return <PackageOpen size={36} color="#ffd700" fill="#ffd700" strokeWidth={3} opacity={0.7} />;
+                                            return <PackageOpen size={32} color="#ffd700" fill="none" strokeWidth={2} />;
                                         }
-                                        return <Gift size={36} color="#ffd700" fill="none" strokeWidth={3} />;
+                                        return <Gift size={32} color="#ffd700" fill="none" strokeWidth={2} />;
                                     }
                                     const IconComponent = CHAPTER_ICONS[iconIdx % CHAPTER_ICONS.length];
                                     return (
                                         <IconComponent
                                             size={32}
                                             color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
-                                            strokeWidth={2.5}
+                                            strokeWidth={2}
                                         />
                                     );
                                 })()}
@@ -208,7 +208,30 @@ const LearningPage = () => {
         if (currentActiveUnit && activeUnit?.id !== currentActiveUnit.id) {
             setActiveUnit(currentActiveUnit);
         }
+
+        // 3. Detect if we should show 'Up' or 'Down' and if active node is visible
+        const activeNode = container.querySelector(`.${styles.nodeActive}`);
+        if (activeNode) {
+            const activeRect = activeNode.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            // A node is visible if it is within the vertical bounds of the container
+            // adding a small buffer of 20px
+            const visible = activeRect.top >= containerRect.top - 20 &&
+                activeRect.bottom <= containerRect.bottom + 20;
+
+            setIsActiveNodeVisible(visible);
+
+            const containerCenter = containerRect.top + container.clientHeight / 2;
+
+            // If the active node is above center or we've scrolled deep, show Up.
+            // If the active node is significantly below center, show Down.
+            setScrolledPastActive(activeRect.top < containerCenter - 100);
+        }
     };
+
+    const [scrolledPastActive, setScrolledPastActive] = useState(false);
+    const [isActiveNodeVisible, setIsActiveNodeVisible] = useState(true);
 
     useEffect(() => {
         const updateLayout = () => {
@@ -222,7 +245,10 @@ const LearningPage = () => {
 
     useEffect(() => {
         const fetchDeepContent = async () => {
-            setLoading(true);
+            // Only show full loading if we have no data yet
+            if (unitsWithChapters.length === 0) {
+                setLoading(true);
+            }
             try {
                 const promises = [];
 
@@ -321,7 +347,18 @@ const LearningPage = () => {
             fetchDeepContent();
             if (checkAndRefillHearts) checkAndRefillHearts();
         }
-    }, [courseId, user, location.key]);
+    }, [courseId, user?.id]);
+
+    // Auto-scroll to active node on mount/load
+    useEffect(() => {
+        if (!loading && unitsWithChapters.length > 0) {
+            // Give a tiny delay for React to finish rendering the DOM
+            const timer = setTimeout(() => {
+                scrollToActive();
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [loading, unitsWithChapters.length]);
 
     const handleChapterClick = useCallback(async (chapter, isLocked, isCompleted) => {
         if (isLocked) return;
@@ -390,6 +427,19 @@ const LearningPage = () => {
     const completedChapterIds = new Set(progress.filter(p => p.is_completed).map(p => p.chapter_id));
     const firstIncompleteChapter = allChapters.find(c => !completedChapterIds.has(c.id));
     const activeChapterId = firstIncompleteChapter?.id || (allChapters.length > 0 ? allChapters[allChapters.length - 1].id : null);
+
+    const scrollToTop = () => {
+        if (mainContentRef.current) {
+            mainContentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
+    const scrollToActive = () => {
+        const activeNode = mainContentRef.current?.querySelector(`.${styles.nodeActive}`);
+        if (activeNode) {
+            activeNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
 
     const UNIT_COLORS = [
         { bg: '#f1c40f', border: '#d4ac0d' }, // Honey Golden (Bee Theme)
@@ -501,6 +551,19 @@ const LearningPage = () => {
                         )}
 
                         {unitSections}
+
+                        {/* Single Dynamic Floating Navigation Button - Hidden when active node is visible */}
+                        {!isActiveNodeVisible && (
+                            <div className={styles.scrollNav}>
+                                <button
+                                    className={`${styles.scrollBtn} ${styles.scrollBtnPrimary}`}
+                                    onClick={scrollToActive}
+                                    title="বর্তমান পাঠে যান"
+                                >
+                                    {scrolledPastActive ? <ArrowUp size={28} /> : <ArrowDown size={28} />}
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </main>

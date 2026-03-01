@@ -12,7 +12,7 @@ import FlamingBadge from '../../../components/FlamingBadge';
 import styles from '../LearningPage.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
 import { leaderboardService } from '../../../services/leaderboardService';
-import { getShieldLevel } from '../../../utils/shieldSystem';
+import { getShieldLevel, getLevelProgress } from '../../../utils/shieldSystem';
 import { useLanguage } from '../../../context/LanguageContext';
 
 const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourseId }) => {
@@ -331,92 +331,100 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                         <span className={styles.viewAll}></span>
                     )}
                 </div>
-                <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
-                    <div className={styles.leaderboardRowLeft}>
-                        <span className={styles.rowRank}>{userRank}</span>
-                        <img
-                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
-                            className={styles.rowAvatar}
-                            alt={profile.display_name || 'লার্নার'}
-                        />
-                        <span className={styles.rowName}>
-                            {profile.display_name || 'লার্নার'}
-                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
-                        </span>
-                    </div>
-                    <div className={styles.leaderboardRowRight}>
-                        <ShieldIcon
-                            xp={profile.xp}
-                            size={22}
-                            showTooltip={false}
-                            showShadow={getShieldLevel(profile.xp).level !== 'SILVER'}
-                        />
-                        <span className={styles.rowXP}>{profile.xp}</span>
-                    </div>
-                </div>
-                <div className={styles.leaderboardDivider}>•••</div>
-
-                {profile?.xp >= 100 ? (
-                    <div className={styles.leaderboardPreview}>
-                        {(internalLoading || !leaderboardData?.length) ? (
-                            <div className={styles.leaderboardPreview}>
-                                <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
-                                <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
-                            </div>
+                <div className={styles.leaderboardContent}>
+                    {profile && (
+                        internalLoading ? (
+                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '45px', marginBottom: '12px' }}></div>
                         ) : (
-                            leaderboardData.slice(0, 2).map((user, index) => {
-                                // Deterministic avatar for dummy users if no avatar_url
-                                const avatarSeed = index === 0 ? 'Felix' : 'Vivian'; // Boy for #1, Girl for #2
-                                const avatarUrl = user.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.id === profile.id ? (profile.display_name || profile.id) : avatarSeed}`;
-
-                                return (
-                                    <div
-                                        key={user.id}
-                                        className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
-                                    >
-                                        <div className={styles.leaderboardRowLeft}>
-                                            <span className={styles.rowRank}>{index + 1}</span>
-                                            <img
-                                                src={avatarUrl}
-                                                className={styles.rowAvatar}
-                                                alt={user.display_name || 'লার্নার'}
-                                            />
-                                            <span className={styles.rowName}>
-                                                {user.display_name || 'লার্নার'}
-                                                {user.is_flaming && <FlamingBadge size={14} className={styles.nameBadge} />}
-                                            </span>
-                                        </div>
-                                        <div className={styles.leaderboardRowRight}>
-                                            <ShieldIcon
-                                                xp={user.xp}
-                                                size={22}
-                                                showTooltip={false}
-                                                showShadow={getShieldLevel(user.xp).level !== 'SILVER'}
-                                            />
-                                            <span className={styles.rowXP}>{user.xp}</span>
-                                        </div>
-                                    </div>
-                                );
-                            })
-                        )}
-                        {userRank > 2 && (
                             <>
-
-
+                                <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
+                                    <div className={styles.leaderboardRowLeft}>
+                                        <span className={styles.rowRank}>{userRank || '-'}</span>
+                                        <img
+                                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
+                                            className={styles.rowAvatar}
+                                            alt={profile.display_name || 'লার্নার'}
+                                        />
+                                        <span className={styles.rowName}>
+                                            {profile.display_name || 'লার্নার'}
+                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
+                                        </span>
+                                    </div>
+                                    <div className={styles.leaderboardRowRight}>
+                                        <ShieldIcon
+                                            xp={profile.xp || 0}
+                                            size={22}
+                                            showTooltip={false}
+                                            showShadow={getShieldLevel(profile.xp || 0).level !== 'SILVER'}
+                                        />
+                                        <span className={styles.rowXP}>{profile.xp || 0}</span>
+                                    </div>
+                                </div>
+                                <div className={styles.leaderboardDivider}>•••</div>
                             </>
-                        )}
-                    </div>
-                ) : (
-                    <div className={styles.unlockContent}>
-                        <div className={styles.iconBoxLocked}>
-                            <Lock size={40} className={styles.lockIconLarge} />
+                        )
+                    )}
+
+                    {profile?.xp >= 100 ? (
+                        <div className={styles.leaderboardPreview}>
+                            {(internalLoading || !leaderboardData?.length) ? (
+                                <div className={styles.leaderboardPreview}>
+                                    <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
+                                    <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
+                                </div>
+                            ) : (
+                                leaderboardData.slice(0, 2).map((user, index) => {
+                                    // Deterministic avatar for dummy users if no avatar_url
+                                    const avatarSeed = index === 0 ? 'Felix' : 'Vivian'; // Boy for #1, Girl for #2
+                                    const avatarUrl = user.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.id === profile.id ? (profile.display_name || profile.id) : avatarSeed}`;
+
+                                    return (
+                                        <div
+                                            key={user.id}
+                                            className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
+                                        >
+                                            <div className={styles.leaderboardRowLeft}>
+                                                <span className={styles.rowRank}>{index + 1}</span>
+                                                <img
+                                                    src={avatarUrl}
+                                                    className={styles.rowAvatar}
+                                                    alt={user.display_name || 'লার্নার'}
+                                                />
+                                                <span className={styles.rowName}>
+                                                    {user.display_name || 'লার্নার'}
+                                                    {user.is_flaming && <FlamingBadge size={14} className={styles.nameBadge} />}
+                                                </span>
+                                            </div>
+                                            <div className={styles.leaderboardRowRight}>
+                                                <ShieldIcon
+                                                    xp={user.xp}
+                                                    size={22}
+                                                    showTooltip={false}
+                                                    showShadow={getShieldLevel(user.xp).level !== 'SILVER'}
+                                                />
+                                                <span className={styles.rowXP}>{user.xp}</span>
+                                            </div>
+                                        </div>
+                                    );
+                                })
+                            )}
+                            {userRank > 2 && (
+                                <>
+                                </>
+                            )}
                         </div>
-                        <div className={styles.unlockInfo}>
-                            <h4 className={styles.unlockTitle}>লিডারবোর্ড আনলক করুন!</h4>
-                            <p className={styles.unlockDesc}>প্রতিযোগিতা শুরু করতে 100 টি XP অর্জন করুন</p>
+                    ) : (
+                        <div className={styles.unlockContent}>
+                            <div className={styles.iconBoxLocked}>
+                                <Lock size={40} className={styles.lockIconLarge} />
+                            </div>
+                            <div className={styles.unlockInfo}>
+                                <h4 className={styles.unlockTitle}>লিডারবোর্ড আনলক করুন!</h4>
+                                <p className={styles.unlockDesc}>প্রতিযোগিতা শুরু করতে 100 টি XP অর্জন করুন</p>
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
             <div className={styles.card}>

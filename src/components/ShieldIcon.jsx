@@ -1,14 +1,17 @@
 import React from 'react';
 import { getShieldLevel } from '../utils/shieldSystem';
 
-// Import shield images (you'll need to add these images to src/assets/shields/)
-// For now, we'll use a fallback if images don't exist
+import silverShield from '../assets/shields/silver-shield.png';
+import goldShield from '../assets/shields/gold-shield.png';
+import diamondShield from '../assets/shields/diamond-shield.png';
+import platinumShield from '../assets/shields/platinum-shield.png';
+
 const getShieldImage = (level) => {
     const images = {
-        SILVER: '/src/assets/shields/silver-shield.png',
-        GOLD: '/src/assets/shields/gold-shield.png',
-        PLATINUM: '/src/assets/shields/platinum-shield.png',
-        DIAMOND: '/src/assets/shields/diamond-shield.png'
+        SILVER: silverShield,
+        GOLD: goldShield,
+        PLATINUM: diamondShield, // Bee Master
+        DIAMOND: platinumShield   // Bee Legendary
     };
     return images[level] || null;
 };

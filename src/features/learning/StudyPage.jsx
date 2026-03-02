@@ -241,7 +241,7 @@ const StudyPage = () => {
 
     const handleNoHeartsCheckout = (type) => {
         if (type === 'hearts') {
-            setShowNoHeartsCheckout({ type: 'hearts', label: '১৪০পি ইনস্ট্যান্ট রিফিল', price: 5 });
+            setShowNoHeartsCheckout({ type: 'hearts', label: '140P ইনস্ট্যান্ট রিফিল', price: 5 });
         } else if (type === 'subscription') {
             const beeName = profile?.gender === 'male' ? t('king_bee_mode') : 'কুইন বী মোড';
             setShowNoHeartsCheckout({ type: 'subscription', label: `${beeName} (মাসিক)`, price: 99 });
@@ -259,7 +259,7 @@ const StudyPage = () => {
                 if (result?.success) {
                     setShowNoHeartsCheckout(null);
                     setShowNoHeartsModal(false);
-                    toast?.success('৪টি হানি ড্রপ যোক্ত হয়েছে! 🍯');
+                    toast?.success('4টি হানি ড্রপ যোক্ত হয়েছে! 🍯');
                 }
             } else if (type === 'subscription') {
                 result = await shopService.subscribeToPremium(user.id, 'monthly', price);
@@ -289,12 +289,12 @@ const StudyPage = () => {
         }
 
         const fetchProfile = async () => {
-            if (!user) return;
+            if (!user?.id) return;
             const { data } = await supabase.from('profiles').select('gender').eq('id', user.id).single();
             setProfile(data);
         };
         fetchProfile();
-    }, [user]);
+    }, [user?.id]);
 
     useEffect(() => {
         if (!dotLottie || selectedAnimation === 'none') return;
@@ -323,7 +323,10 @@ const StudyPage = () => {
 
     useEffect(() => {
         const fetchContent = async () => {
-            setLoading(true);
+            // Only show initial loading screen if we don't have questions yet
+            if (questions.length === 0) {
+                setLoading(true);
+            }
             try {
                 const { data: points, error: pErr } = await supabase
                     .from('learning_points')
@@ -359,8 +362,8 @@ const StudyPage = () => {
             }
         };
 
-        if (chapterId) fetchContent();
-    }, [chapterId, user]);
+        if (chapterId && user?.id) fetchContent();
+    }, [chapterId, user?.id]);
 
     // Initialize Shuffled Right for Matching
     useEffect(() => {
@@ -1013,7 +1016,7 @@ const StudyPage = () => {
                                         onClick={() => handleNoHeartsCheckout('hearts')}
                                     >
                                         <Zap size={18} fill="currentColor" strokeWidth={0} />
-                                        <span>আনলিমিটেড ২৪ ঘন্টা - মাত্র ৪ টাকা</span>
+                                        <span>আনলিমিটেড 24 ঘন্টা - মাত্র 4 টাকা</span>
                                     </button>
 
                                     {/* Secondary: Premium Mode */}
@@ -1022,7 +1025,7 @@ const StudyPage = () => {
                                         onClick={() => handleNoHeartsCheckout('subscription')}
                                     >
                                         <span>👑</span>
-                                        <span>{profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} — যাত্রা মাত্র ৯৯ টাকা</span>
+                                        <span>{profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} — যাত্রা মাত্র 99 টাকা</span>
                                     </button>
                                 </div>
                             </div>

@@ -51,9 +51,8 @@
 
 .navItemActive {
     background-color: rgba(241, 196, 15, 0.05) !important;
-    color: #f1c40f !important;
-    border: 2px solid #f1c40f !important;
-    border-bottom: 4px solid #d4ac0d !important;
+    color: rgba(241, 196, 15, 0.9) !important;
+    border: 1px solid rgba(241, 196, 15, 0.15) !important;
 }
 
 .navItemActive:hover {
@@ -171,19 +170,6 @@
     justify-content: center;
 }
 
-.notifDot {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 10px;
-    height: 10px;
-    background-color: #f1c40f;
-    border: 2px solid var(--color-bg-deep);
-    border-radius: 50%;
-    z-index: 10;
-    box-shadow: 0 0 8px rgba(241, 196, 15, 0.6);
-    animation: pulseNotif 2s infinite;
-}
 
 @keyframes pulseNotif {
     0% {

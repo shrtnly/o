@@ -15,11 +15,11 @@ const GIFT_CONFIG = {
         title: 'মধু ফোঁটা পুরস্কার!',
         subtitle: (amount) => `আপনি ${amount}টি মধু ফোঁটা (হার্ট) জিতেছেন!`,
     },
-    flaming_badge: {
-        emoji: '🔥',
-        color: '#FF4500',
-        title: 'ফ্লেমিং ব্যাজ!',
-        subtitle: () => '২৪ ঘণ্টার জন্য আপনার প্রোফাইলে আগুনের ব্যাজ সক্রিয় হয়েছে!',
+    xp: {
+        emoji: '⚡',
+        color: '#1CB0F6',
+        title: 'এক্সপি পুরস্কার!',
+        subtitle: (amount) => `আপনি ${amount}টি XP (প্রগতি) জিতেছেন!`,
     },
 };
 
@@ -103,12 +103,6 @@ export default function HoneyJarGiftModal({ gift, onClaim, onClose }) {
                     </div>
                 )}
 
-                {/* Badge note */}
-                {gift.gift_type === 'flaming_badge' && (
-                    <p className={styles.badgeNote}>
-                        🔥 ব্যাজটি ২৪ ঘণ্টার জন্য সক্রিয় থাকবে
-                    </p>
-                )}
             </div>
         </div>
     );

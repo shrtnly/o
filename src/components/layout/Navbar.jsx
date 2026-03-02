@@ -7,7 +7,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { honeyJarService } from '../../services/honeyJarService';
-import FlamingBadge from '../FlamingBadge';
 import { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 
@@ -15,24 +14,7 @@ const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
     const { t } = useLanguage();
-    const [flamingBadge, setFlamingBadge] = useState(null);
 
-    useEffect(() => {
-        if (!user) return;
-
-        // Initial fetch
-        honeyJarService.getActiveFlamingBadge(user.id).then(setFlamingBadge);
-
-        // Subscription
-        const channel = honeyJarService.subscribeToGifts(user.id, (payload) => {
-            // If any badge-related change, refresh
-            honeyJarService.getActiveFlamingBadge(user.id).then(setFlamingBadge);
-        });
-
-        return () => {
-            if (channel) supabase.removeChannel(channel);
-        };
-    }, [user]);
 
     return (
         <nav className={styles.navbar}>
@@ -54,7 +36,6 @@ const Navbar = () => {
                         <div className={styles.userSection}>
                             <div className={styles.userInfo}>
                                 <span className={styles.userName}>{user.email.split('@')[0]}</span>
-                                {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                             </div>
                             <button
                                 className={styles.logoutBtn}

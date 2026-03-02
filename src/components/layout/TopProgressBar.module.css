@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 6px;
+    height: 3px;
     z-index: 9999;
     pointer-events: none;
     background: transparent;
@@ -17,12 +17,9 @@
             #ffec6e 60%,
             #f1c40f 100%);
     background-size: 200% 100%;
-    box-shadow:
-        0 0 6px rgba(241, 196, 15, 0.45),
-        0 0 14px rgba(241, 196, 15, 0.2);
+    box-shadow: 0 0 4px rgba(241, 196, 15, 0.4);
     transition: width 0.3s ease-out, opacity 0.4s ease-in-out;
     animation: shimmer 1.2s linear infinite;
-    border-radius: 0 2px 2px 0;
 }
 
 @keyframes shimmer {

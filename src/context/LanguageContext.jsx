@@ -26,9 +26,9 @@ const translations = {
         honey_drop: "হানি ড্রপ",
         king_bee_mode: "কিং বী মোড",
         queen_bee_mode: "কুইন বী মোড",
-        only_for_99: "হন মাত্র ৯৯ টাকায়!",
+        only_for_99: "হন মাত্র 99 টাকায়!",
         hearts_added_msg: "নতুন হানি ড্রপ যোগ করা হয়েছে!",
-        heart_refill_5: "৫টি হানি ড্রপ রিফিল",
+        heart_refill_5: "5টি হানি ড্রপ রিফিল",
 
         // Settings
         pref_settings: "প্রেফারেন্স সেটিংস",
@@ -123,7 +123,7 @@ const translations = {
         special_badge: "স্পেশাল ব্যাজ",
         monthly: "মাসিক",
         yearly: "বার্ষিক",
-        discount: "-২০%",
+        discount: "-20%",
         gem_exchange: "পরাগরেণু এক্সচেঞ্জ",
         exchange: "এক্সচেঞ্জ",
         gem_packs: "পরাগরেণু প্যাক",
@@ -172,7 +172,7 @@ const translations = {
         // Landing Page Generic
         proven_title: "বৈজ্ঞানিকভাবে প্রমাণিত",
         proven_desc: "আমাদের পাঠদান পদ্ধতি গবেষণালব্ধ এবং কার্যকর। প্রতিটি পাঠ ডিজাইন করা হয়েছে যাতে আপনি দ্রুত এবং আনন্দদায়ক উপায়ে শিখতে পারেন।",
-        footer_copy: "২০২৪ BeeLesson. সকল স্বত্ব সংরক্ষিত।"
+        footer_copy: "2024 BeeLesson. সকল স্বত্ব সংরক্ষিত।"
     },
     en: {
         // Common

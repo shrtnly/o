@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity } from 'lucide-react';
+import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity, Gift } from 'lucide-react';
 import HoneyDropIcon from '../../../components/HoneyDropIcon';
 import PollenIcon from '../../../components/PollenIcon';
 import { useNavigate } from 'react-router-dom';
@@ -8,14 +8,34 @@ import { rewardService } from '../../../services/rewardService';
 import ConsistencyTracker from './ConsistencyTracker';
 import Button from '../../../components/ui/Button';
 import ShieldIcon from '../../../components/ShieldIcon';
-import FlamingBadge from '../../../components/FlamingBadge';
 import styles from '../LearningPage.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
 import { leaderboardService } from '../../../services/leaderboardService';
 import { getShieldLevel, getLevelProgress } from '../../../utils/shieldSystem';
 import { useLanguage } from '../../../context/LanguageContext';
+import { honeyJarService } from '../../../services/honeyJarService';
+import { supabase } from '../../../lib/supabaseClient';
+import { cn } from '../../../lib/utils';
 
-const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourseId }) => {
+const GIFT_CONFIG = {
+    pollen: {
+        emoji: '🌼',
+        color: '#FFD700',
+        label: 'পরাগরেণু',
+    },
+    honey_drops: {
+        emoji: '🍯',
+        color: '#F1A20F',
+        label: 'মধু ফোঁটা',
+    },
+    xp: {
+        emoji: '⚡',
+        color: '#1CB0F6',
+        label: 'এক্সপি',
+    },
+};
+
+const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [], currentCourseId }) => {
     const navigate = useNavigate();
     const { t } = useLanguage();
     const [isCourseOpen, setIsCourseOpen] = React.useState(false);
@@ -37,18 +57,18 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
     const [userRank, setUserRank] = React.useState(null);
     const [leaderboardData, setLeaderboardData] = React.useState([]);
     const [internalLoading, setInternalLoading] = React.useState(true);
-    const [myFlamingBadge, setMyFlamingBadge] = React.useState(null);
+
+    // Honey Jar states
+    const [jarProgress, setJarProgress] = React.useState({ fill_percent: 0, pollen_in_cycle: 0, is_full: false });
+    const [pendingGift, setPendingGift] = React.useState(null);
+    const [jarSplash, setJarSplash] = React.useState(false);
+    const [giftGenerationLoading, setGiftGenerationLoading] = React.useState(false);
+    const [claimingGift, setClaimingGift] = React.useState(false);
 
     // Fetch streak and activity data
     React.useEffect(() => {
         if (!profile?.id) return;
 
-        const fetchBadge = async () => {
-            const { honeyJarService } = await import('../../../services/honeyJarService');
-            const badge = await honeyJarService.getActiveFlamingBadge(profile.id);
-            setMyFlamingBadge(badge);
-        };
-        fetchBadge();
 
         const fetchStreakData = async () => {
             try {
@@ -88,14 +108,86 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
         const fetchData = async () => {
             setInternalLoading(true);
             try {
-                await Promise.all([fetchStreakData(), fetchLeaderboard()]);
+                await Promise.all([
+                    fetchStreakData(),
+                    fetchLeaderboard(),
+                    (async () => {
+                        const [progress, gift] = await Promise.all([
+                            honeyJarService.getJarProgress(profile.id),
+                            honeyJarService.getUnclaimedGift(profile.id),
+                        ]);
+                        setJarProgress(progress || { fill_percent: 0, pollen_in_cycle: 0, is_full: false });
+                        if (gift) {
+                            setPendingGift(gift);
+                        } else if (progress?.is_full) {
+                            // Jar is full but no gift yet? trigger generation
+                            handleJarFull();
+                        }
+                    })()
+                ]);
             } finally {
                 setInternalLoading(false);
             }
         };
 
         fetchData();
+
+        // Subscriptions for real-time jar updates
+        const channel = honeyJarService.subscribeToJarProgress(profile.id, (newData) => {
+            setJarProgress(newData);
+            setJarSplash(true);
+            setTimeout(() => setJarSplash(false), 800);
+            if (newData.is_full) handleJarFull();
+        });
+
+        const giftChannel = honeyJarService.subscribeToGifts(profile.id, (newGift) => {
+            if (!newGift.is_claimed) {
+                setPendingGift(newGift);
+            }
+        });
+
+        return () => {
+            supabase.removeChannel(channel);
+            supabase.removeChannel(giftChannel);
+        };
     }, [profile?.id, profile?.xp]);
+
+    const handleJarFull = async () => {
+        if (giftGenerationLoading) return;
+        setGiftGenerationLoading(true);
+        try {
+            // First check if a gift already exists to avoid duplicates
+            const existing = await honeyJarService.getUnclaimedGift(profile.id);
+            if (existing) {
+                setPendingGift(existing);
+                setGiftGenerationLoading(false);
+                return;
+            }
+
+            const gift = await honeyJarService.generateMysteryGift(profile.id);
+            if (gift) {
+                setPendingGift(gift);
+            }
+        } catch (err) {
+            console.error('handleJarFull error:', err);
+        } finally {
+            setGiftGenerationLoading(false);
+        }
+    };
+
+    const handleClaimGift = async (giftId) => {
+        setClaimingGift(true);
+        const result = await honeyJarService.claimMysteryGift(profile.id, giftId);
+        if (result?.success) {
+            const progress = await honeyJarService.getJarProgress(profile.id);
+            setJarProgress(progress);
+            setPendingGift(null);
+            // Refresh parent profile to update XP/Gems/Hearts
+            if (refreshProfile) await refreshProfile();
+        }
+        setClaimingGift(false);
+        return result;
+    };
 
     return (
         <aside className={styles.rightSidebar}>
@@ -129,7 +221,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                         onClick={() => handleCourseSwitch(course.id)}
                                     >
                                         <span className={styles.optionTitle}>{course.title}</span>
-                                        {course.id === currentCourseId && <Check size={16} color="#58cc02" strokeWidth={3} />}
+                                        {course.id === currentCourseId && <Check size={16} color="#f1c40f" strokeWidth={3} />}
                                     </div>
                                 ))}
                                 <div className={styles.courseDropdownDivider}></div>
@@ -213,12 +305,11 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
             </div>
 
 
-
             {/* Daily Practices Tracker / Consistency Tracker */}
-            <div className={styles.card} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
+            <div className={cn(styles.card, styles.cardGolden)} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Zap size={22} color="#f1c40f" fill="#f1c40f" style={{ filter: 'drop-shadow(0 0 5px rgba(241, 196, 15, 0.3))', flexShrink: 0 }} />
+                    <h3 className={styles.cardTitle}>
+                        <Zap size={20} className={styles.cardTitleIcon} />
                         <span>{t('buzz_streak')}</span>
                     </h3>
                     <div
@@ -248,9 +339,9 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                             <svg width="0" height="0" style={{ position: 'absolute' }}>
                                 <defs>
                                     <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" style={{ stopColor: '#00E5FF', stopOpacity: 1 }} />
-                                        <stop offset="50%" style={{ stopColor: '#0091FF', stopOpacity: 1 }} />
-                                        <stop offset="100%" style={{ stopColor: '#004CFF', stopOpacity: 1 }} />
+                                        <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
+                                        <stop offset="50%" style={{ stopColor: '#F1C40F', stopOpacity: 1 }} />
+                                        <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
                                     </linearGradient>
                                 </defs>
                             </svg>
@@ -279,12 +370,13 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                         });
 
                                         const isToday = dateStr === todayStr;
+                                        const isPast = index <= dayOfWeek;
 
                                         return (
                                             <div key={index} className={styles.flameContainer} title={dateStr}>
-                                                <div className={`${styles.flameIcon} ${isPracticed ? styles.flameActive : ''} ${isToday ? styles.flameToday : ''}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <div className={cn(styles.flameIcon, isPracticed && styles.flameActive, isToday && styles.flameToday)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                                     {isPracticed ? (
-                                                        <FlamingBadge size={24} />
+                                                        <Flame size={24} fill="url(#flameGradient)" stroke="url(#flameGradient)" />
                                                     ) : (
                                                         <Flame
                                                             size={24}
@@ -294,7 +386,7 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                                         />
                                                     )}
                                                 </div>
-                                                <span className={styles.flameDayLabel}>
+                                                <span className={cn(styles.flameDayLabel, (isPast || isPracticed) && styles.flameDayLabelActive)}>
                                                     {['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'][index]}
                                                 </span>
                                             </div>
@@ -321,11 +413,11 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                 </AnimatePresence>
             </div>
 
-            <div className={styles.card} onClick={() => profile?.xp >= 100 && navigate('/leaderboard')} style={{ cursor: profile?.xp >= 100 ? 'pointer' : 'default' }}>
+            <div className={cn(styles.card, styles.cardGolden)} onClick={() => profile?.xp >= 100 && navigate('/leaderboard')} style={{ cursor: profile?.xp >= 100 ? 'pointer' : 'default' }}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Trophy size={18} color="#f1c40f" fill="rgba(241, 196, 15, 0.2)" strokeWidth={2.5} />
-                        {profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}
+                    <h3 className={styles.cardTitle}>
+                        <Trophy size={18} className={styles.cardTitleIcon} />
+                        <span>{profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}</span>
                     </h3>
                     {profile?.xp >= 100 && (
                         <span className={styles.viewAll}></span>
@@ -347,7 +439,6 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                         />
                                         <span className={styles.rowName}>
                                             {profile.display_name || 'লার্নার'}
-                                            {myFlamingBadge && <FlamingBadge size={14} className={styles.nameBadge} />}
                                         </span>
                                     </div>
                                     <div className={styles.leaderboardRowRight}>
@@ -392,7 +483,6 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                                                 />
                                                 <span className={styles.rowName}>
                                                     {user.display_name || 'লার্নার'}
-                                                    {user.is_flaming && <FlamingBadge size={14} className={styles.nameBadge} />}
                                                 </span>
                                             </div>
                                             <div className={styles.leaderboardRowRight}>
@@ -427,25 +517,94 @@ const StatsSidebar = ({ profile, hearts, refillTime, courses = [], currentCourse
                 </div>
             </div>
 
-            <div className={styles.card}>
+
+            {/* Honey Jar Card */}
+            <div className={cn(styles.card, styles.cardGolden)}>
                 <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>দৈনিক অনুসন্ধান</h3>
-                    <span className={styles.viewAll}></span>
+                    <h3 className={styles.cardTitle}>
+                        <span className={styles.cardTitleEmoji}>🍯</span>
+                        <span>মধু-পূর্ণতা</span>
+                    </h3>
                 </div>
-                {(!profile || internalLoading) ? (
-                    <div className={`${styles.questItem} ${styles.skeleton}`} style={{ height: '60px', width: '100%' }}></div>
-                ) : (
-                    <div className={styles.questItem}>
-                        <Zap size={32} color="#ffc800" fill="#ffc800" />
-                        <div className={styles.progressContainer}>
-                            <div className={styles.questTitle}>১০ XP অর্জন করুন</div>
-                            <div className={styles.progressBar}>
-                                <div className={styles.progressFill} style={{ width: '0%' }}></div>
+                <div className={styles.jarLayout} style={{ background: 'none', border: 'none', padding: 0, boxShadow: 'none' }}>
+                    <div className={styles.honeyJarContainer}>
+                        <div className={styles.honeyJar} style={{ width: '56px' }}>
+                            {jarProgress.is_full && (
+                                <div className={styles.jarOverflowDrips} style={{ gap: '3px' }}>
+                                    <div className={styles.overflowDrip} style={{ width: '5px', height: '5px' }} />
+                                    <div className={styles.overflowDrip} style={{ width: '5px', height: '5px', animationDelay: '0.3s' }} />
+                                    <div className={styles.overflowDrip} style={{ width: '5px', height: '5px', animationDelay: '0.6s' }} />
+                                </div>
+                            )}
+                            <div className={styles.jarLid} style={{ height: '8px' }}></div>
+                            <div className={styles.jarBody}>
+                                <div className={`${styles.jarGlass} ${jarSplash ? styles.jarSplash : ''}`} style={{ width: '56px', height: '84px' }}>
+                                    <div className={styles.jarFill} style={{ height: `${jarProgress.fill_percent}%` }}>
+                                        <div className={styles.liquidWave}></div>
+                                    </div>
+                                    <div className={styles.jarGlossLeft}></div>
+                                </div>
+                            </div>
+                            <div className={styles.jarPercentOverlay} style={{ top: '8px' }}>
+                                <span style={{ fontSize: '0.65rem' }}>{jarProgress.fill_percent}%</span>
                             </div>
                         </div>
                     </div>
-                )}
+
+                    <div className={styles.jarInfo}>
+                        {jarProgress.is_full ? (
+                            <div className={styles.giftStatusArea}>
+                                {pendingGift ? (
+                                    <div className={styles.rewardPreview}>
+                                        <div className={styles.rewardIconBg} style={{ backgroundColor: GIFT_CONFIG[pendingGift.gift_type]?.color + '20' }}>
+                                            <span style={{ fontSize: '1.5rem' }}>{GIFT_CONFIG[pendingGift.gift_type]?.emoji}</span>
+                                        </div>
+                                        <div className={styles.rewardText}>
+                                            <span className={styles.rewardAmt}>+{pendingGift.gift_amount} {GIFT_CONFIG[pendingGift.gift_type]?.label}</span>
+                                            <button
+                                                className={styles.claimGiftBtn}
+                                                style={{ marginTop: '4px', padding: '6px 12px' }}
+                                                onClick={() => handleClaimGift(pendingGift.id)}
+                                                disabled={claimingGift}
+                                            >
+                                                <span>{claimingGift ? 'সংগ্রহ হচ্ছে...' : 'সংগ্রহ করুন'}</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <button
+                                        className={styles.claimGiftBtn}
+                                        onClick={() => handleJarFull()}
+                                        disabled={giftGenerationLoading}
+                                    >
+                                        <Gift size={14} />
+                                        <span>{giftGenerationLoading ? 'অপেক্ষা করুন...' : 'উপহার খুলুন!'}</span>
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            <p className={styles.jarLabel} style={{ fontSize: '0.78rem' }}>
+                                জার <strong>{jarProgress.fill_percent}%</strong> পূর্ণ
+                            </p>
+                        )}
+
+                        <p className={styles.pollenCounter} style={{ fontSize: '0.68rem', opacity: 0.8 }}>
+                            🌼 <strong>{jarProgress.pollen_in_cycle || 0}</strong> সংগ্রহ
+                        </p>
+
+                        <div className={styles.xpBarWrapper} style={{ gap: '5px' }}>
+                            <div className={styles.xpBar} style={{ height: '5px' }}>
+                                <div
+                                    className={`${styles.xpFill} ${jarProgress.is_full ? styles.xpFillFull : ''}`}
+                                    style={{ width: `${jarProgress.fill_percent}%` }}
+                                ></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
+
 
             {!profile && (
                 <div className={styles.ctaCard}>

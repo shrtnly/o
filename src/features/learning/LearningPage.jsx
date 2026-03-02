@@ -98,44 +98,31 @@ const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked,
             )}>
                 <div className={styles.nodeRing}>
                     <div className={styles.nodeInner}>
-                        {isLocked && chapter.type === 'lesson' ? (
-                            <div className={styles.lockOverlay}>
-                                <Lock size={32} color="#4b4b4b" fill="#4b4b4b" />
-                            </div>
-                        ) : (
-                            <>
-                                {chapter.type !== 'lesson' && !isLocked && !isCompleted && [1, 2, 3, 4, 5].map(i => (
-                                    <div
-                                        key={i}
-                                        className={styles.sparkle}
-                                        style={{
-                                            '--tx': Math.random() * 60 - 30,
-                                            '--ty': Math.random() * 60 - 30,
-                                            left: '50%',
-                                            top: '50%',
-                                            animationDelay: `${i * 0.3}s`
-                                        }}
-                                    />
-                                ))}
-                                {(() => {
-                                    if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
-                                        if (isCompleted) {
-                                            return <PackageOpen size={32} color="#ffd700" fill="none" strokeWidth={2} />;
-                                        }
-                                        return <Gift size={32} color="#ffd700" fill="none" strokeWidth={2} />;
-                                    }
-                                    const IconComponent = CHAPTER_ICONS[iconIdx % CHAPTER_ICONS.length];
-                                    return (
-                                        <IconComponent
-                                            size={32}
-                                            color={isActive || isCompleted ? "var(--unit-color-bg)" : "#afafaf"}
-                                            strokeWidth={2}
-                                        />
-                                    );
-                                })()}
-                            </>
+                        {chapter.type !== 'lesson' && !isLocked && !isCompleted && (
+                            <div className={styles.activeRewardGlow} />
                         )}
+                        {(() => {
+                            if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
+                                if (isCompleted) {
+                                    return <PackageOpen size={24} color="rgba(255, 215, 0, 0.6)" strokeWidth={2.5} />;
+                                }
+                                return <Gift size={24} color="#ffd700" strokeWidth={2.5} />;
+                            }
+                            const IconComponent = CHAPTER_ICONS[iconIdx % CHAPTER_ICONS.length];
+                            return (
+                                <IconComponent
+                                    size={24}
+                                    color={isActive || isCompleted ? "var(--unit-color-bg)" : "rgba(255, 255, 255, 0.45)"}
+                                    strokeWidth={2}
+                                />
+                            );
+                        })()}
                     </div>
+                    {isLocked && (
+                        <div className={styles.lockIconBadge}>
+                            <Lock size={12} fill="rgba(255, 255, 255, 0.4)" stroke="none" />
+                        </div>
+                    )}
                 </div>
                 <div className={styles.nodeLabel}>{chapter.title}</div>
             </div>
@@ -524,6 +511,12 @@ const LearningPage = () => {
         );
     }), [unitsWithChapters, completedChapterIds, activeChapterId, nodesPerRow, allChapters, handleChapterClick]);
 
+    const refreshProfile = useCallback(async () => {
+        if (!user) return;
+        const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+        if (data) setProfile(data);
+    }, [user]);
+
     return (
         <div className={styles.learningPage}>
             <main className={styles.mainContent} ref={mainContentRef} onScroll={handleScroll}>
@@ -571,6 +564,7 @@ const LearningPage = () => {
 
             <StatsSidebar
                 profile={profile}
+                refreshProfile={refreshProfile}
                 hearts={refillHearts}
                 refillTime={refillTimeDisplay}
                 courses={courses}

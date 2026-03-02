@@ -17,7 +17,6 @@ const Sidebar = () => {
     const [lastCourseId, setLastCourseId] = useState(null);
     const [moreOpen, setMoreOpen] = useState(false);
     const [showLogoutModal, setShowLogoutModal] = useState(false);
-    const [showsJarNotif, setShowsJarNotif] = useState(false);
 
     const handleLogout = async () => {
         try {
@@ -27,7 +26,6 @@ const Sidebar = () => {
             console.error('Error signing out:', error);
         }
     };
-
     useEffect(() => {
         const fetchLastCourse = async () => {
             if (user) {
@@ -40,52 +38,6 @@ const Sidebar = () => {
             }
         };
         fetchLastCourse();
-
-        // Robust logic for Notification Dot: Show if (Jar is 100% FULL) OR (There is an Unclaimed Gift)
-        if (user) {
-            const checkNotificationStatus = async () => {
-                try {
-                    const [progress, gift] = await Promise.all([
-                        honeyJarService.getJarProgress(user.id),
-                        honeyJarService.getUnclaimedGift(user.id)
-                    ]);
-                    setShowsJarNotif(!!(progress?.is_full || gift));
-                } catch (err) {
-                    console.error('Initial notif check error:', err);
-                }
-            };
-
-            checkNotificationStatus();
-
-            // 1. Subscribe to Jar Progress (for "Jar is Full" event)
-            const jarChannel = honeyJarService.subscribeToJarProgress(user.id, (payload) => {
-                if (payload.is_full) {
-                    setShowsJarNotif(true);
-                } else {
-                    // Re-verify gifts to be sure
-                    honeyJarService.getUnclaimedGift(user.id).then(gift => {
-                        setShowsJarNotif(!!gift);
-                    });
-                }
-            });
-
-            // 2. Subscribe to Gifts (for "Gift Claimed" event)
-            const giftChannel = honeyJarService.subscribeToGifts(user.id, (payload) => {
-                if (payload.is_claimed) {
-                    // If claimed, double check jar status before hiding
-                    honeyJarService.getJarProgress(user.id).then(progress => {
-                        setShowsJarNotif(!!progress?.is_full);
-                    });
-                } else {
-                    setShowsJarNotif(true); // New gift arrived
-                }
-            });
-
-            return () => {
-                if (jarChannel) supabase.removeChannel(jarChannel);
-                if (giftChannel) supabase.removeChannel(giftChannel);
-            };
-        }
     }, [user, currentCourseId]);
 
     // Priority: 1. Current course in URL, 2. Last practiced course from DB, 3. Default courses page
@@ -131,7 +83,6 @@ const Sidebar = () => {
             <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
                     <User size={24} />
-                    {showsJarNotif && <div className={styles.notifDot} />}
                 </div>
                 <span>প্রোফাইল</span>
             </NavLink>

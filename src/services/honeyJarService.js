@@ -99,28 +99,6 @@ export const honeyJarService = {
         }
     },
 
-    /**
-     * Check if learner has an active flaming badge
-     */
-    async getActiveFlamingBadge(userId) {
-        try {
-            const { data, error } = await supabase
-                .from('learner_active_badges')
-                .select('*')
-                .eq('user_id', userId)
-                .eq('badge_type', 'flaming')
-                .eq('is_active', true)
-                .gte('expires_at', new Date().toISOString())
-                .single();
-
-            if (error && error.code === 'PGRST116') return null;
-            if (error) throw error;
-            return data;
-        } catch (err) {
-            console.error('getActiveFlamingBadge error:', err);
-            return null;
-        }
-    },
 
     /**
      * Subscribe to real-time jar progress changes

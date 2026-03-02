@@ -32,10 +32,10 @@ export const surveyService = {
                 id: 3,
                 question: "প্রতিদিন কতক্ষণ সময় শিখতে চান?",
                 options: [
-                    { id: 'a', text: '১০-২০ মিনিট' },
-                    { id: 'b', text: '৩০-৬০ মিনিট' },
-                    { id: 'c', text: '১-২ ঘণ্টা' },
-                    { id: 'd', text: '২ ঘণ্টার বেশি' }
+                    { id: 'a', text: '10-20 মিনিট' },
+                    { id: 'b', text: '30-60 মিনিট' },
+                    { id: 'c', text: '1-2 ঘণ্টা' },
+                    { id: 'd', text: '2 ঘণ্টার বেশি' }
                 ]
             }
         ];

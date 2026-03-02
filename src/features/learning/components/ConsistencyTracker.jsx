@@ -12,7 +12,6 @@ import {
 import { motion } from 'framer-motion';
 import styles from './ConsistencyTracker.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
-import FlamingBadge from '../../../components/FlamingBadge';
 
 const ConsistencyTracker = ({ profile, streak, history = [] }) => {
     const [viewMode, setViewMode] = useState('daily');
@@ -160,11 +159,20 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
             animate={{ opacity: 1, y: 0 }}
             className={styles.container}
         >
+            <svg width="0" height="0" style={{ position: 'absolute' }}>
+                <defs>
+                    <linearGradient id="flameGradientTracker" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
+                        <stop offset="50%" style={{ stopColor: '#F1C40F', stopOpacity: 1 }} />
+                        <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
+                    </linearGradient>
+                </defs>
+            </svg>
             <div className={styles.statsRow}>
                 <div className={styles.statBox}>
                     <span className={styles.statLabel}>Current Streak</span>
                     <div className={styles.statMain}>
-                        <FlamingBadge size={40} />
+                        <Flame size={40} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" />
                         <span className={styles.statValue}>{stats.currentStreak}</span>
                     </div>
                     <div className={styles.statSub}>
@@ -246,7 +254,7 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                                 >
                                     {day.type === 'achieved' ? (
                                         <div className={styles.flameContainer}>
-                                            <FlamingBadge size={20} />
+                                            <Flame size={20} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" />
                                         </div>
                                     ) : (
                                         (day.type === 'future' || day.isToday) && day.day && <span className={styles.dayNumber}>{day.day}</span>

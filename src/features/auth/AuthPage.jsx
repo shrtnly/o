@@ -164,7 +164,7 @@ const AuthPage = () => {
             if (lowMessage.includes('invalid login credentials')) {
                 message = 'ভুল ইমেইল বা পাসওয়ার্ড। আবার চেষ্টা করুন।';
             } else if (lowMessage.includes('at least 6 characters')) {
-                message = 'পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে।';
+                message = 'পাসওয়ার্ড অন্তত 6 অক্ষরের হতে হবে।';
             } else if (lowMessage.includes('email not confirmed')) {
                 message = 'আপনার ইমেইলটি এখনো ভেরিফাই করা হয়নি। অনুগ্রহ করে ইনবক্স চেক করুন।';
             } else if (lowMessage.includes('already registered') ||

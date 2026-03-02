@@ -28,7 +28,7 @@ const ResetPassword = () => {
     const handleReset = async (e) => {
         e.preventDefault();
         if (password.length < 6) {
-            setError('পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে।');
+            setError('পাসওয়ার্ড অন্তত 6 অক্ষরের হতে হবে।');
             return;
         }
 

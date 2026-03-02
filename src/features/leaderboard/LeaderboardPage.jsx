@@ -9,7 +9,6 @@ import Sidebar from '../learning/components/Sidebar';
 import ShieldIcon from '../../components/ShieldIcon';
 import { supabase } from '../../lib/supabaseClient';
 import styles from './LeaderboardPage.module.css';
-import FlamingBadge from '../../components/FlamingBadge';
 
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
@@ -120,7 +119,7 @@ const LeaderboardPage = () => {
                                             <Trophy size={32} />
                                         </div>
                                         <h3>বী-র পরিচিতি</h3>
-                                        <p>BeeLesson-এ ৪টি র্যাঙ্ক আছে: Bee Kid, Bee Warrior, Bee Master এবং Bee Legendary। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী র্যাঙ্কে উন্নীত হয়।</p>
+                                        <p>BeeLesson-এ 4টি র্যাঙ্ক আছে: Bee Kid, Bee Warrior, Bee Master এবং Bee Legendary। প্রতি সপ্তাহে শীর্ষ লার্নাররা পরবর্তী র্যাঙ্কে উন্নীত হয়।</p>
                                     </div>
 
                                     <div className={styles.introCard}>
@@ -263,7 +262,6 @@ const LeaderboardPage = () => {
                                                                 <div className={styles.userInfo}>
                                                                     <span className={styles.userName}>
                                                                         {item.display_name}
-                                                                        {item.is_flaming && <FlamingBadge size={16} className={styles.nameBadge} />}
                                                                     </span>
                                                                 </div>
                                                             </div>

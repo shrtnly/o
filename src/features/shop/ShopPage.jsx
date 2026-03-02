@@ -33,8 +33,7 @@ const QUEEN_BEE_FEATURES = [
     { emoji: '⚡', text: 'নতুন কোর্স সবার আগে আপনার জন্য।' },
 ];
 
-const toBanglaNum = (num) =>
-    String(num).replace(/[0-9]/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+// Numbers are now kept in English per request
 
 const ShopPage = () => {
     const { user } = useAuth();
@@ -289,11 +288,11 @@ const ShopPage = () => {
                                         >
                                             <span>👑</span>
                                             {planType === 'monthly'
-                                                ? <><span className={styles.ctaPrice}>৯৯</span><span className={styles.ctaLabel}> টাকায় শুরু করুন</span></>
-                                                : <><span className={styles.ctaPrice}>৯৯৯</span><span className={styles.ctaLabel}> টাকায় বার্ষিক</span></>}
+                                                ? <><span className={styles.ctaPrice}>99</span><span className={styles.ctaLabel}> টাকায় শুরু করুন</span></>
+                                                : <><span className={styles.ctaPrice}>999</span><span className={styles.ctaLabel}> টাকায় বার্ষিক</span></>}
                                         </button>
                                         <p className={styles.queenBeeCtaSub}>
-                                            {planType === 'monthly' ? 'মাত্র ৳৯৯/মাস • যেকোনো সময় বাতিল করুন' : 'মাত্র ৳৯৯৯/বছর • ২ মাস বিনামূল্যে!'}
+                                            {planType === 'monthly' ? 'মাত্র ৳99/মাস • যেকোনো সময় বাতিল করুন' : 'মাত্র ৳999/বছর • 2 মাস বিনামূল্যে!'}
                                         </p>
                                     </div>
                                 </div>
@@ -324,7 +323,7 @@ const ShopPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className={styles.priceTag} style={{ background: '#f1c40f' }}>৳ {toBanglaNum(pack.price)}</div>
+                                        <div className={styles.priceTag} style={{ background: '#f1c40f' }}>৳ {pack.price}</div>
                                         <span className={styles.badge} style={{ background: '#f1c40f', color: '#fff', left: '24px', top: '-10px' }}>ইনস্ট্যান্ট</span>
                                     </div>
                                 ))}
@@ -401,7 +400,7 @@ const ShopPage = () => {
                                         <div className={styles.packIcon}>{pack.icon}</div>
                                         <div className={styles.packAmount}>{pack.amount}</div>
                                         <div className={styles.packName}>{t(pack.labelKey)}</div>
-                                        <div className={styles.priceTag}>৳ {toBanglaNum(pack.price)}</div>
+                                        <div className={styles.priceTag}>৳ {pack.price}</div>
                                     </div>
                                 ))}
                             </div>

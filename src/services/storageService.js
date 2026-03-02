@@ -26,7 +26,7 @@ export const storageService = {
 
             // Check file size
             if (file.size > MAX_AVATAR_SIZE) {
-                throw new Error('ফাইলের আকার ৫MB এর বেশি হতে পারবে না');
+                throw new Error('ফাইলের আকার 5MB এর বেশি হতে পারবে না');
             }
 
             // Check file type
@@ -161,7 +161,7 @@ export const storageService = {
 
             // Check file size
             if (file.size > MAX_COVER_SIZE) {
-                throw new Error('ফাইলের আকার ১০MB এর বেশি হতে পারবে না');
+                throw new Error('ফাইলের আকার 10MB এর বেশি হতে পারবে না');
             }
 
             // Check file type

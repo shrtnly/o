@@ -82,7 +82,7 @@ const CHAPTER_ICONS = [Play, BookOpen, PenTool, Star, Globe, Activity, Send, Sha
 const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, iconIdx, onClick }) => {
     return (
         <div
-            className={styles.nodeWrapper}
+            className={cn(styles.nodeWrapper, isLocked && styles.nodeLocked)}
             style={{ left: `${pos.x}px`, top: `${pos.y}px` }}
             onClick={onClick}
         >
@@ -536,7 +536,7 @@ const LearningPage = () => {
                                 }}
                             >
                                 <div className={styles.unitInfo}>
-                                    <h2 key={`unit-header-${activeUnit?.id}`}>
+                                    <h2>
                                         {activeUnit?.title || 'লোড হচ্ছে...'}
                                     </h2>
                                 </div>

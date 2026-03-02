@@ -86,7 +86,7 @@ const AppContent = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 300); // Reduced from 1500ms to 300ms for faster FCP
+    }, 100); // Reduced from 300ms to 100ms for near-instant FCP
     return () => clearTimeout(timer);
   }, []);
 

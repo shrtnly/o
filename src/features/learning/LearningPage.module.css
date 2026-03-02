@@ -67,7 +67,7 @@
 .unitHeader {
     width: 100%;
     background-color: var(--color-bg-deep);
-    padding: 12px 24px;
+    padding: 8px 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,30 +75,14 @@
     top: 0;
     z-index: 101;
     margin: 0;
-    transition: all 0.3s ease;
     text-align: center;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
-    animation: slideHeaderDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes slideHeaderDown {
-    from {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .unitHeaderScrolled {
-    padding: 12px 24px;
-    backdrop-filter: blur(10px);
-    background-color: rgba(10, 17, 20, 0.9);
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+    background-color: rgba(10, 17, 20, 0.85);
+    border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .unitInfo h2 {
@@ -317,15 +301,15 @@
 }
 
 .nodeLocked .nodeRing {
-    background: rgba(25, 30, 32, 0.6);
-    border-color: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(4px);
-    opacity: 0.6;
+    background: #1a1d21;
+    border-color: rgba(255, 255, 255, 0.08);
+    backdrop-filter: none;
+    opacity: 1;
 }
 
 .nodeLocked .nodeInner {
-    background: #111416;
-    border-color: rgba(255, 255, 255, 0.02);
+    background: #232a30;
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
 .activeRewardGlow {
@@ -340,13 +324,13 @@
     right: -2px;
     width: 20px;
     height: 20px;
-    background: #2b3e46;
+    background: #1a1d21;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #1a272d;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    border: 2px solid #232a30;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
     z-index: 5;
 }
 
@@ -493,7 +477,7 @@
 
 .nodeLocked .nodeImage,
 .nodeLocked .nodeInner svg {
-    filter: grayscale(1) opacity(0.6);
+    filter: grayscale(1) opacity(0.8);
 }
 
 .completeIcon {
@@ -543,7 +527,8 @@
 }
 
 .nodeLocked .nodeLabel {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 700;
 }
 
 

@@ -11,7 +11,7 @@ import { rewardService } from '../../services/rewardService';
 import { honeyJarService } from '../../services/honeyJarService';
 import { shopService } from '../../services/shopService';
 import { useLanguage } from '../../context/LanguageContext';
-import LoadingScreen from '../../components/ui/LoadingScreen';
+import InlineLoader from '../../components/ui/InlineLoader';
 
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
@@ -619,7 +619,11 @@ const StudyPage = () => {
         }
     };
 
-    if (loading) return <LoadingScreen />;
+    if (loading) return (
+        <div className="flex items-center justify-center h-screen w-full bg-[#0b0e11]">
+            <InlineLoader />
+        </div>
+    );
 
     if (questions.length === 0) return (
         <div className={styles.loadingContainer}>

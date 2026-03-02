@@ -20,22 +20,20 @@ import styles from './StudyPage.module.css';
 import { cn } from '../../lib/utils';
 
 const SparkleBurst = ({ large = false }) => {
-    const spreadX = large ? 2.21 : 0.64;
-    const spreadY = large ? 1.53 : 0.64;
+    const spreadX = large ? 1.4 : 0.42;
+    const spreadY = large ? 1.0 : 0.42;
     const elements = [
-        { Icon: Sparkles, tx: -30 * spreadX, ty: -40 * spreadY, delay: 0, size: large ? 22 : 18 },
-        { Icon: Star, tx: 35 * spreadX, ty: -35 * spreadY, delay: 0.1, size: large ? 16 : 14, filled: true },
-        { Icon: Square, tx: -45 * spreadX, ty: -60 * spreadY, delay: 0.15, size: large ? 12 : 10, filled: false },
-        { Icon: Sparkles, tx: 0 * spreadX, ty: -65 * spreadY, delay: 0.2, size: large ? 24 : 20 },
-        { Icon: Circle, tx: 45 * spreadX, ty: -25 * spreadY, delay: 0.25, size: large ? 10 : 8, filled: true },
-        { Icon: Star, tx: -50 * spreadX, ty: -25 * spreadY, delay: 0.3, size: large ? 16 : 14, filled: true },
-        { Icon: Square, tx: 30 * spreadX, ty: -45 * spreadY, delay: 0.2, size: large ? 11 : 9, filled: false },
-        { Icon: Sparkles, tx: 50 * spreadX, ty: -55 * spreadY, delay: 0.15, size: large ? 20 : 16 },
-        { Icon: Square, tx: 20 * spreadX, ty: -70 * spreadY, delay: 0.35, size: large ? 10 : 8, filled: false },
-        { Icon: Circle, tx: -35 * spreadX, ty: -50 * spreadY, delay: 0.3, size: large ? 9 : 7, filled: false },
-        { Icon: Star, tx: -15 * spreadX, ty: -50 * spreadY, delay: 0.25, size: large ? 14 : 12, filled: true },
-        { Icon: Circle, tx: -25 * spreadX, ty: -75 * spreadY, delay: 0.1, size: large ? 12 : 10, filled: true },
-        { Icon: Sparkles, tx: 15 * spreadX, ty: -60 * spreadY, delay: 0.05, size: large ? 18 : 16 },
+        { Icon: Star, tx: -30 * spreadX, ty: -38 * spreadY, delay: 0, size: large ? 16 : 13 },
+        { Icon: Circle, tx: 35 * spreadX, ty: -32 * spreadY, delay: 0.1, size: large ? 10 : 8 },
+        { Icon: Square, tx: -42 * spreadX, ty: -52 * spreadY, delay: 0.15, size: large ? 11 : 9 },
+        { Icon: Star, tx: 0 * spreadX, ty: -58 * spreadY, delay: 0.2, size: large ? 18 : 14 },
+        { Icon: Circle, tx: 42 * spreadX, ty: -22 * spreadY, delay: 0.25, size: large ? 9 : 7 },
+        { Icon: Star, tx: -46 * spreadX, ty: -22 * spreadY, delay: 0.3, size: large ? 14 : 11 },
+        { Icon: Square, tx: 28 * spreadX, ty: -42 * spreadY, delay: 0.2, size: large ? 10 : 8 },
+        { Icon: Circle, tx: 46 * spreadX, ty: -48 * spreadY, delay: 0.15, size: large ? 10 : 8 },
+        { Icon: Square, tx: 18 * spreadX, ty: -62 * spreadY, delay: 0.35, size: large ? 9 : 7 },
+        { Icon: Circle, tx: -32 * spreadX, ty: -44 * spreadY, delay: 0.3, size: large ? 8 : 6 },
+        { Icon: Star, tx: -14 * spreadX, ty: -46 * spreadY, delay: 0.25, size: large ? 12 : 10 },
     ];
     return (
         <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'visible' }}>
@@ -44,7 +42,7 @@ const SparkleBurst = ({ large = false }) => {
                     key={i}
                     initial={{ scale: 0, opacity: 0, x: '-50%', y: '-50%' }}
                     animate={{
-                        scale: [0, 1.2, 0],
+                        scale: [0, 1.1, 0],
                         opacity: [1, 1, 0],
                         x: `calc(-50% + ${el.tx}px)`,
                         y: `calc(-50% + ${el.ty}px)`,
@@ -56,9 +54,9 @@ const SparkleBurst = ({ large = false }) => {
                     <el.Icon
                         size={el.size}
                         color="#f1c40f"
-                        fill={el.filled ? '#f1c40f' : 'none'}
+                        fill="none"
                         strokeWidth={1.5}
-                        style={{ filter: `drop-shadow(0 0 ${large ? '8px' : '5px'} rgba(241,196,15,0.7))` }}
+                        style={{ filter: `drop-shadow(0 0 ${large ? '5px' : '3px'} rgba(241,196,15,0.6))` }}
                     />
                 </motion.div>
             ))}
@@ -156,7 +154,6 @@ const StudyPage = () => {
     const [isAnswered, setIsAnswered] = useState(false);
     const [isCorrect, setIsCorrect] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [progress, setProgress] = useState(0);
     const [showResults, setShowResults] = useState(false);
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
@@ -179,6 +176,8 @@ const StudyPage = () => {
         return saved !== null ? saved === 'true' : true;
     });
 
+    const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+
     const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
     const [answersHistory, setAnswersHistory] = useState({}); // { [index]: { selectedOption, isCorrect } }
     const scrollRef = React.useRef(null);
@@ -198,12 +197,20 @@ const StudyPage = () => {
 
     const isStoryInProgress = questions[currentIndex]?.type === 'storytelling' && activeDialogueIndex < dialogues.length;
 
-    // Auto-scroll to bottom when new items appear
+    // Auto-scroll: only when moving to new question, not on every isAnswered change
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
-    }, [currentIndex, activeDialogueIndex, isAnswered]);
+    }, [currentIndex, activeDialogueIndex]);
+
+    // Read sound preference once per render cycle via ref — avoids repeated localStorage hits
+    const soundEnabledRef = React.useRef(localStorage.getItem('soundEffectsEnabled') !== 'false');
+    useEffect(() => {
+        const handler = () => { soundEnabledRef.current = localStorage.getItem('soundEffectsEnabled') !== 'false'; };
+        window.addEventListener('storage', handler);
+        return () => window.removeEventListener('storage', handler);
+    }, []);
 
     // Audio pre-loading
     const correctAudio = React.useRef(null);
@@ -377,10 +384,10 @@ const StudyPage = () => {
         setFailedOptions([]); // Clear wrong attempts when moving to new question
     }, [currentIndex, questions]);
 
-    const handleOptionSelect = (optionId) => {
+    const handleOptionSelect = React.useCallback((optionId) => {
         if (isAnswered) return;
         setSelectedOption(optionId);
-    };
+    }, [isAnswered]);
 
     const handleMatchSelect = async (type, index) => {
         if (isAnswered) return;
@@ -445,7 +452,6 @@ const StudyPage = () => {
                             honeyJarService.addPollenToJar(user.id, 1);
                         }
                         setAnswersHistory(prev => ({ ...prev, [currentIndex]: { matches: newMatches, isCorrect: true } }));
-                        setProgress(((currentIndex + 1) / questions.length) * 100);
                     }
                 }
             }
@@ -495,10 +501,9 @@ const StudyPage = () => {
         }
 
         setAnswersHistory(prev => ({ ...prev, [currentIndex]: { matches, isCorrect: allCorrect } }));
-        setProgress(((currentIndex + 1) / questions.length) * 100);
     };
 
-    const handleCheck = async () => {
+    const handleCheck = React.useCallback(async () => {
         const currentQuestion = questions[currentIndex];
         const isMatching = currentQuestion.question_type === 'matching';
 
@@ -512,43 +517,34 @@ const StudyPage = () => {
         const selected = currentQuestion.mcq_options.find(o => o.id === selectedOption);
         const correct = !!selected?.is_correct;
 
+        // Update UI immediately — don't await anything before this
+        setIsCorrect(correct);
+        setIsAnswered(true);
+        setAnswersHistory(prev => ({ ...prev, [currentIndex]: { selectedOption, isCorrect: correct } }));
+
+        const soundEnabled = soundEnabledRef.current;
+
         if (correct) {
-            setIsCorrect(true);
-            setIsAnswered(true);
-
-            // Play success sound
-            const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
             if (correctAudio.current && soundEnabled) {
-                try { correctAudio.current.currentTime = 0; correctAudio.current.play(); } catch (err) { console.error(err); }
+                try { correctAudio.current.currentTime = 0; correctAudio.current.play(); } catch (err) {}
             }
-
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            // Fire-and-forget background tasks
             if (user) {
                 rewardService.awardXP(user.id, 1, 'correct_answer');
                 honeyJarService.addPollenToJar(user.id, 1);
             }
-
-            setAnswersHistory(prev => ({ ...prev, [currentIndex]: { selectedOption, isCorrect: true } }));
-            setProgress(((currentIndex + 1) / questions.length) * 100);
         } else {
-            // Wrong — deduct heart, show correct answer, mark answered so they can move on
             setFailedOptions(prev => [...prev, selectedOption]);
-            setIsCorrect(false);
-            setIsAnswered(true); // Let them continue without forcing correct answer
-
-            const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
             if (wrongAudio.current && soundEnabled) {
-                try { wrongAudio.current.currentTime = 0; wrongAudio.current.play(); } catch (err) { console.error(err); }
+                try { wrongAudio.current.currentTime = 0; wrongAudio.current.play(); } catch (err) {}
             }
-
             setShake(true);
             setTimeout(() => setShake(false), 500);
-            if (user) await deductHeart(1);
-
-            setAnswersHistory(prev => ({ ...prev, [currentIndex]: { selectedOption, isCorrect: false } }));
-            setProgress(((currentIndex + 1) / questions.length) * 100);
+            // Deduct heart in background — don't await
+            if (user) deductHeart(1).catch(console.error);
         }
-    };
+    }, [questions, currentIndex, selectedOption, isAnswered, canAnswer, user, deductHeart]);
 
     const handleNext = async () => {
         if (currentIndex < questions.length - 1) {
@@ -636,21 +632,63 @@ const StudyPage = () => {
 
     const currentQuestion = questions[currentIndex];
     const optionLabels = ['A', 'B', 'C', 'D', 'E'];
+    // Derived — no separate state needed, always in sync
+    const progress = questions.length > 0 ? ((currentIndex + (isAnswered ? 1 : 0)) / questions.length) * 100 : 0;
+
 
     return (
         <div className={styles.studyPage}>
             <header className={styles.header}>
-                <button className={styles.closeBtn} onClick={() => navigate(-1)}>
+                <button className={styles.closeBtn} onClick={() => setShowExitConfirmation(true)}>
                     <X size={24} strokeWidth={3} />
                 </button>
                 <div className={styles.progressContainer}>
                     <div className={styles.progressBar}>
-                        <motion.div
-                            className={styles.progressFill}
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ duration: 0.5, ease: "easeOut" }}
-                        />
+                        {/* Clip wrapper keeps fill rounded inside bar */}
+                        <div className={styles.progressFillClip}>
+                            <motion.div
+                                className={styles.progressFill}
+                                initial={{ width: 0 }}
+                                animate={{ width: `${progress}%` }}
+                                transition={{ duration: 0.15, ease: "easeOut" }}
+                            />
+                        </div>
+                        {/* Bubble burst at fill tip on correct answer */}
+                        <AnimatePresence>
+                            {isCorrect && (
+                                <motion.div
+                                    key={`burst-${currentIndex}`}
+                                    className={styles.progressBurstWrap}
+                                    style={{ left: `${Math.max(progress, 2)}%` }}
+                                    initial={{ opacity: 1 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0, transition: { delay: 0.8 } }}
+                                >
+                                    {[...Array(10)].map((_, i) => {
+                                        // Randomised but deterministic per question
+                                        const baseAngle = (i / 10) * 360;
+                                        const jitter = ((i * 37 + currentIndex * 13) % 60) - 30; // -30 to +30 deg
+                                        const angle = baseAngle + jitter - 90;
+                                        const rad = (angle * Math.PI) / 180;
+                                        const dist = 20 + ((i * 11 + currentIndex * 7) % 18); // 20–38px
+                                        const tx = Math.cos(rad) * dist;
+                                        const ty = Math.sin(rad) * dist;
+                                        const isRing = i % 3 === 1;
+                                        const size = 7 + (i % 3) * 2.5; // 7, 9.5, 12px
+                                        return (
+                                            <motion.span
+                                                key={i}
+                                                className={isRing ? styles.progressBubbleRing : styles.progressBubbleDot}
+                                                style={{ width: size, height: size, ...(isRing && { width: size, height: size }) }}
+                                                initial={{ x: 0, y: 0, scale: 0, opacity: 0 }}
+                                                animate={{ x: tx, y: ty, scale: [0, 1.2, 0], opacity: [0, 1, 0] }}
+                                                transition={{ duration: 0.6, delay: 0.35 + i * 0.03, ease: 'easeOut' }}
+                                            />
+                                        );
+                                    })}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </div>
                 <div className={styles.heartsContainer}>
@@ -704,8 +742,9 @@ const StudyPage = () => {
                                     return (
                                         <motion.div
                                             key={q.id}
-                                            initial={isLatest ? { opacity: 0, y: 20 } : false}
-                                            animate={{ opacity: 1, y: 0 }}
+                                            initial={isLatest ? { x: 40 } : false}
+                                            animate={{ x: 0 }}
+                                            transition={isLatest ? { duration: 1.1, ease: [0.25, 1, 0.5, 1] } : {}}
                                             className={cn(styles.questionSection, !isLatest && "opacity-60 grayscale-[0.5] scale-[0.98] transition-all")}
                                         >
                                             {showStory && (
@@ -716,11 +755,7 @@ const StudyPage = () => {
                                             )}
 
                                             {showMCQ && (
-                                                <motion.div
-                                                    initial={isLatest ? { opacity: 0, y: 10 } : false}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    className="space-y-8"
-                                                >
+                                                <div className="space-y-8">
                                                     {!isStory && (q.narrative || q.explanation) && (
                                                         <div className={styles.contextText}>
                                                             <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
@@ -850,7 +885,7 @@ const StudyPage = () => {
                                                             })
                                                         )}
                                                     </div>
-                                                </motion.div>
+                                                </div>
                                             )}
                                             {isLatest && <div ref={scrollRef} className="h-4" />}
                                         </motion.div>
@@ -880,17 +915,19 @@ const StudyPage = () => {
                                     <button className={styles.skipBtn} onClick={handleNext}>এগিয়ে যান</button>
                                     {questions[currentIndex]?.question_type === 'matching' ? (
                                         <button
-                                            className={styles.checkBtn}
-                                            disabled={Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0)}
-                                            onClick={handleMatchSubmit}
+                                            className={`${styles.checkBtn} ${Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0) ? styles.checkBtnDisabled : ''}`}
+                                            aria-disabled={Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0)}
+                                            onClick={() => {
+                                                if (Object.keys(matches).length >= (questions[currentIndex]?.metadata?.pairs?.length || 0)) handleMatchSubmit();
+                                            }}
                                         >
                                             যাচাই করুন
                                         </button>
                                     ) : (
                                         <button
-                                            className={styles.checkBtn}
-                                            disabled={!selectedOption}
-                                            onClick={handleCheck}
+                                            className={`${styles.checkBtn} ${!selectedOption ? styles.checkBtnDisabled : ''}`}
+                                            aria-disabled={!selectedOption}
+                                            onClick={() => { if (selectedOption) handleCheck(); }}
                                         >
                                             যাচাই করুন
                                         </button>
@@ -1104,6 +1141,51 @@ const StudyPage = () => {
                     </motion.div>
                 </div>
             )}
+
+            {/* Emotional Exit Confirmation Modal */}
+            <AnimatePresence>
+                {showExitConfirmation && (
+                    <div className={styles.confirmModalOverlay} onClick={() => setShowExitConfirmation(false)}>
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className={styles.confirmCard}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className={styles.confirmMascot}>
+                                <DotLottieReact
+                                    src="/models/awkward bee.lottie"
+                                    autoplay
+                                    loop
+                                    style={{ width: 140, height: 140 }}
+                                />
+                            </div>
+                            <h2 className={styles.confirmTitle}>
+                                আপনি কি সত্যিই ফিরে যেতে চান?
+                            </h2>
+                            <p className={styles.confirmDesc}>
+                                "এখন চলে গেলে চ্যাপ্টার শেষ হবে না..." <br />
+                                আপনার শেখার লক্ষ্য অর্জনে আর মাত্র কয়েকটি ধাপ বাকি!
+                            </p>
+                            <div className={styles.confirmActions}>
+                                <button
+                                    className={styles.stayBtn}
+                                    onClick={() => setShowExitConfirmation(false)}
+                                >
+                                    শেখা চালিয়ে যান
+                                </button>
+                                <button
+                                    className={styles.leaveBtn}
+                                    onClick={() => navigate(-1)}
+                                >
+                                    পরে ফিরে আসবো
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

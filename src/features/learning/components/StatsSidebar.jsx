@@ -56,7 +56,8 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
 
     const [userRank, setUserRank] = React.useState(null);
     const [leaderboardData, setLeaderboardData] = React.useState([]);
-    const [internalLoading, setInternalLoading] = React.useState(true);
+    const [streakLoading, setStreakLoading] = React.useState(true);
+    const [leaderboardLoading, setLeaderboardLoading] = React.useState(true);
 
     // Honey Jar states
     const [jarProgress, setJarProgress] = React.useState({ fill_percent: 0, pollen_in_cycle: 0, is_full: false });
@@ -65,52 +66,18 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
     const [giftGenerationLoading, setGiftGenerationLoading] = React.useState(false);
     const [claimingGift, setClaimingGift] = React.useState(false);
 
-    // Fetch streak and activity data
+    // Fetch streak and activity data — only re-runs when user ID changes, NOT on XP change
     React.useEffect(() => {
         if (!profile?.id) return;
 
-
         const fetchStreakData = async () => {
+            setStreakLoading(true);
             try {
-                const [streakData, history, full] = await Promise.all([
+                // Fetch 365 days once — slice in memory for weekly view (saves 1 DB round-trip)
+                const [streakData, full] = await Promise.all([
                     rewardService.getUserStreak(profile.id),
-                    rewardService.getActivityHistory(profile.id, 7),
-                    rewardService.getActivityHistory(profile.id, 365)
-                ]);
-
-                setStreak(streakData);
-                setWeeklyActivity(history);
-                setFullHistory(full);
-            } catch (error) {
-                console.error('Error fetching streak data:', error);
-            }
-        };
-
-        const fetchLeaderboard = async () => {
-            try {
-                if (profile.xp > 0) {
-                    const tier = getShieldLevel(profile.xp).level;
-                    // Fetch top 2 for preview
-                    const result = await leaderboardService.getLeaderboardByTier(tier, 2);
-                    setLeaderboardData(result.data || []);
-
-                    // Fetch rank
-                    const rank = await leaderboardService.getUserRank(profile.id, tier);
-                    setUserRank(rank);
-                }
-            } catch (error) {
-                console.error('Error fetching leaderboard:', error);
-                setLeaderboardData([]);
-                setUserRank(null);
-            }
-        };
-
-        const fetchData = async () => {
-            setInternalLoading(true);
-            try {
-                await Promise.all([
-                    fetchStreakData(),
-                    fetchLeaderboard(),
+                    rewardService.getActivityHistory(profile.id, 365),
+                    // Honey jar fetched in parallel too
                     (async () => {
                         const [progress, gift] = await Promise.all([
                             honeyJarService.getJarProgress(profile.id),
@@ -120,17 +87,50 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                         if (gift) {
                             setPendingGift(gift);
                         } else if (progress?.is_full) {
-                            // Jar is full but no gift yet? trigger generation
                             handleJarFull();
                         }
                     })()
                 ]);
+
+                setStreak(streakData);
+                setFullHistory(full);
+                // Derive weekly from the same data — no extra DB call
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                setWeeklyActivity(full.filter(a => new Date(a.activity_date) >= sevenDaysAgo));
+            } catch (error) {
+                console.error('Error fetching streak data:', error);
             } finally {
-                setInternalLoading(false);
+                setStreakLoading(false);
             }
         };
 
-        fetchData();
+        const fetchLeaderboard = async () => {
+            setLeaderboardLoading(true);
+            try {
+                if (profile.xp > 0) {
+                    const tier = getShieldLevel(profile.xp).level;
+                    // Fetch leaderboard and rank in parallel
+                    const [result, rank] = await Promise.all([
+                        leaderboardService.getLeaderboardByTier(tier, 2),
+                        leaderboardService.getUserRank(profile.id, tier)
+                    ]);
+                    setLeaderboardData(result.data || []);
+                    setUserRank(rank);
+                }
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+                setLeaderboardData([]);
+                setUserRank(null);
+            } finally {
+                setLeaderboardLoading(false);
+            }
+        };
+
+        // Run streak (fast) and leaderboard (slower) independently
+        // so streak cards appear immediately without waiting for leaderboard
+        fetchStreakData();
+        fetchLeaderboard();
 
         // Subscriptions for real-time jar updates
         const channel = honeyJarService.subscribeToJarProgress(profile.id, (newData) => {
@@ -150,7 +150,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
             supabase.removeChannel(channel);
             supabase.removeChannel(giftChannel);
         };
-    }, [profile?.id, profile?.xp]);
+    }, [profile?.id]); // ✅ Only re-fetch on user change, NOT on every XP update
 
     const handleJarFull = async () => {
         if (giftGenerationLoading) return;
@@ -239,7 +239,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
             </div>
 
             <div className={styles.statsRow}>
-                {(!profile || internalLoading) ? (
+                {(!profile || streakLoading) ? (
                     <>
                         <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
                         <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
@@ -346,7 +346,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                 </defs>
                             </svg>
                             <div className={styles.flameRow}>
-                                {(!profile || internalLoading) ? (
+                                {(!profile || streakLoading) ? (
                                     [...Array(7)].map((_, i) => (
                                         <div key={i} className={`${styles.flameIcon} ${styles.skeleton}`} style={{ width: '32px', height: '32px', borderRadius: '50%' }}></div>
                                     ))
@@ -425,7 +425,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                 </div>
                 <div className={styles.leaderboardContent}>
                     {profile && (
-                        internalLoading ? (
+                        leaderboardLoading ? (
                             <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '45px', marginBottom: '12px' }}></div>
                         ) : (
                             <>
@@ -458,7 +458,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
 
                     {profile?.xp >= 100 ? (
                         <div className={styles.leaderboardPreview}>
-                            {(internalLoading || !leaderboardData?.length) ? (
+                            {(leaderboardLoading || !leaderboardData?.length) ? (
                                 <div className={styles.leaderboardPreview}>
                                     <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
                                     <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>

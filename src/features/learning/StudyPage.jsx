@@ -207,12 +207,16 @@ const StudyPage = () => {
 
     const isStoryInProgress = questions[currentIndex]?.type === 'storytelling' && activeDialogueIndex < dialogues.length;
 
-    // Auto-scroll: only when moving to new question, not on every isAnswered change
+    // Auto-scroll: ensures active content is visible above footer when it expands or changes
     useEffect(() => {
         if (scrollRef.current) {
-            scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            // Wait a tiny bit for UI layout shifts (like footer growth) to settle
+            const timer = setTimeout(() => {
+                scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 150);
+            return () => clearTimeout(timer);
         }
-    }, [currentIndex, activeDialogueIndex]);
+    }, [currentIndex, activeDialogueIndex, isAnswered, failedOptions.length]);
 
     // Read sound preference once per render cycle via ref — avoids repeated localStorage hits
     const soundEnabledRef = React.useRef(localStorage.getItem('soundEffectsEnabled') !== 'false');
@@ -1128,7 +1132,7 @@ const StudyPage = () => {
                                                         </div>
                                                     </div>
                                                 )}
-                                                {isLatest && <div ref={scrollRef} className="h-4" />}
+                                                {isLatest && <div ref={scrollRef} className={styles.scrollAnchor} />}
                                             </motion.div>
                                         );
                                     });

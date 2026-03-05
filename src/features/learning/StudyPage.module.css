@@ -2393,3 +2393,11 @@
         padding: 12px 14px;
     }
 }
+
+/* ── Scroll Anchor ── */
+.scrollAnchor {
+    height: 16px;
+    width: 100%;
+    visibility: hidden;
+    pointer-events: none;
+}

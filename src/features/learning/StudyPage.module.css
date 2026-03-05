@@ -16,6 +16,12 @@
     overflow-x: hidden;
 }
 
+/* Lock to single screen when result card is shown */
+.resultsActive {
+    height: 100vh;
+    overflow: hidden;
+}
+
 /* ── Header ── */
 .header {
     height: 72px;
@@ -27,6 +33,13 @@
     max-width: 1100px;
     margin: 0 auto;
     width: 100%;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.headerHidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /* ── Matching Style ── */
@@ -259,6 +272,15 @@
     flex-direction: column;
     align-items: center;
     padding: 20px 20px 160px;
+    overflow-y: auto;
+}
+
+/* When results are shown, main should fill remaining height and center content */
+.resultsActive .mainContent {
+    padding: 0 20px;
+    overflow-x: visible;
+    overflow-y: auto;
+    justify-content: center;
 }
 
 .studyContentWrapper {
@@ -269,6 +291,7 @@
     max-width: 960px;
     width: 100%;
     position: relative;
+    overflow: visible;
 }
 
 .questionSection {
@@ -603,15 +626,17 @@
     background: #0b0e11;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     z-index: 100;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, opacity 0.3s, transform 0.3s, visibility 0.3s;
 }
 
 .footerCorrect {
-    border-top-color: rgba(241, 196, 15, 0.2);
+    border-top-color: rgba(46, 204, 113, 0.2);
+    background: rgba(46, 204, 113, 0.02);
 }
 
 .footerIncorrect {
-    border-top-color: rgba(231, 76, 60, 0.2);
+    border-top-color: rgba(255, 75, 75, 0.2);
+    background: rgba(255, 75, 75, 0.02);
 }
 
 .footerContent {
@@ -718,12 +743,12 @@
 
 .footerCorrect .statusIcon,
 .footerCorrect .statusHeader h3 {
-    color: #f1c40f;
+    color: #2ecc71;
 }
 
 .footerIncorrect .statusIcon,
 .footerIncorrect .statusHeader h3 {
-    color: #e74c3c;
+    color: #ff4b4b;
 }
 
 .statusHeader h3 {
@@ -790,117 +815,560 @@
     padding: 20px;
 }
 
-.resultCard {
-    background: #111519;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 28px;
-    padding: 48px 32px;
-    max-width: 420px;
+.minimalResultCard {
+    background: transparent;
+    padding: 0;
+    max-width: 500px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-}
-
-/* ── Radial Chart ── */
-.chartContainer {
     position: relative;
-    width: 160px;
-    height: 160px;
-    margin: 0 auto 36px;
+    overflow: visible;
 }
 
-.radialChart {
+/* ── Inline Result Card (replaces modal) ── */
+.inlineResultCard {
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0 90px;
+    /* bottom padding clears fixed footer */
+    text-align: center;
+    position: relative;
+    overflow: visible;
+}
+
+/* ── Fireworks overlay (celebration burst at top of card) ── */
+.fireworksWrap {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 300px;
+    pointer-events: none;
+    z-index: 10;
+    overflow: visible;
+}
+
+.fireworksAnim {
     width: 100%;
     height: 100%;
-    transform: rotate(-90deg);
+}
+
+
+/* ── Review Screen ── */
+.reviewScreen {
+    max-width: 560px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 0 100px;
+    overflow-y: auto;
+}
+
+.reviewCard {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    transition: border-color 0.2s;
+}
+
+.reviewCardCorrect {
+    border-color: rgba(46, 204, 113, 0.2);
+}
+
+.reviewCardWrong {
+    border-color: rgba(231, 76, 60, 0.2);
+}
+
+.reviewQNum {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.25);
+    margin-bottom: 6px;
+}
+
+.reviewQText {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+.reviewAnswerBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.reviewAnswer {
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.reviewAnswerCorrect {
+    color: #2ecc71;
+    background: rgba(46, 204, 113, 0.08);
+}
+
+.reviewAnswerWrong {
+    color: #ff4b4b;
+    background: rgba(255, 75, 75, 0.08);
+}
+
+.reviewCorrectHint {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.reviewHintLabel {
+    color: rgba(241, 196, 15, 0.6);
+    font-weight: 700;
+    font-size: 0.78rem;
+}
+
+/* ── Review Overlay (fixed panel between header and footer) ── */
+.reviewOverlay {
+    position: fixed;
+    top: 0;
+    bottom: 88px;
+    /* clears footer */
+    left: 0;
+    right: 0;
+    background: #0b0e11;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.reviewCloseBtn {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    z-index: 1;
+}
+
+.reviewCloseBtn:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}
+
+.reviewList {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    /* Firefox */
+    padding: 52px 20px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-content: start;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.reviewList::-webkit-scrollbar {
+    display: none;
+    /* Chrome / Safari */
+}
+
+/* ── Footer: Results state (neutral, no color) ── */
+.footerResults {
+    border-top-color: rgba(241, 196, 15, 0.15);
+    background: rgba(241, 196, 15, 0.02);
+}
+
+/* ── Review Button (left, ghost style) ── */
+.reviewBtn {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 11px 28px;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    font-family: 'Hind Siliguri', sans-serif;
+    letter-spacing: 0.02em;
+}
+
+.reviewBtn:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* ── Continue / Finish Button (right, primary gold) ── */
+.continueFinishBtn {
+    position: relative;
+    height: 48px;
+    padding: 0 30px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    background: #f1c40f;
+    color: #1a1400;
+    box-shadow: 0 4px 0 #c9a80b;
+    transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    font-family: 'Hind Siliguri', sans-serif;
+    letter-spacing: 0.02em;
+}
+
+.continueFinishBtn:hover {
+    background: #f5cc1f;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 #c9a80b;
+}
+
+.continueFinishBtn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #c9a80b;
+}
+
+.beeHeader {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -20px;
+    z-index: 2;
+    position: relative;
+}
+
+.resultBee {
+    width: 180px;
+    height: 180px;
+}
+
+.resultDivider {
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(241, 196, 15, 0.35), transparent);
+    margin: 8px auto 10px;
+    border: none;
+}
+
+.dualChartsArea {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.chartWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 10px;
 }
 
 .chartBg {
     fill: none;
-    stroke: rgba(255, 255, 255, 0.04);
-    stroke-width: 7;
+    stroke: rgba(255, 255, 255, 0.03);
+    /* Extremely subtle track */
 }
 
-.chartFill {
-    fill: none;
-    stroke: #f1c40f;
-    stroke-width: 7;
+.minimalChart {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+/* Chart 1 - larger meter chart */
+.chart1 {
+    width: 220px;
+    height: 140px;
+}
+
+.meterChart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.meterSvg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.meterTrack {
+    stroke: rgba(255, 255, 255, 0.05);
     stroke-linecap: round;
 }
 
-.chartText {
+.meterFill {
+    stroke: #f1c40f;
+    stroke-linecap: round;
+    /* Removed drop-shadow as per previous request */
+}
+
+.meterContent {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.minimalChartCenter {
     position: absolute;
     inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 4px;
 }
 
-.chartText span {
+.percentText {
     font-size: 2.2rem;
-    font-weight: 900;
+    font-weight: 950;
     color: #fff;
     line-height: 1;
+    letter-spacing: -0.02em;
 }
 
-.chartText p {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #f1c40f;
+.successLabel {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-top: 4px;
-    opacity: 0.8;
 }
 
-/* ── Stats Summary ── */
-.statsSummary {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-    margin-bottom: 36px;
+.accuracyFill {
+    stroke: #f1c40f;
+    /* Golden Bee Theme */
+    stroke-linecap: round;
 }
 
-.summaryItem {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 14px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+.wrongFill {
+    stroke: #ff4b4b;
+    /* Red for wrong */
+    stroke-linecap: round;
 }
 
-.summaryIcon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
+.xpSegment {
+    stroke: #1cb0f6;
+    /* Electric Blue for XP - Premium contrast */
 }
 
-.summaryInfo {
+.pollenSegment {
+    stroke: #f1c40f;
+    /* Golden for Pollen */
+}
+
+.rewardIconsCompact {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 1px;
+    align-items: center;
+    gap: 2px;
 }
 
-.summaryInfo span {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.35);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+.rewardIconGroup {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.summaryInfo strong {
-    font-size: 1.1rem;
-    font-weight: 800;
+.rewardValSmall {
+    font-size: 0.95rem;
+    font-weight: 900;
     color: #fff;
+}
+
+.chartMiniStats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.miniStatText {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+.correctText {
+    color: #f1c40f;
+}
+
+.wrongText {
+    color: rgba(255, 75, 75, 0.7);
+}
+
+.styledTimeIcon {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(241, 196, 15, 0.1);
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    padding: 6px 14px;
+    border-radius: 99px;
+    color: #f1c40f;
+}
+
+.timeIconPulse {
+    display: flex;
+    align-items: center;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+}
+
+.timeVal {
+    font-size: 0.95rem;
+    font-weight: 900;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.finishBtnMinimal {
+    min-width: 240px;
+    background: #f1c40f;
+    color: #1a1400;
+    border: none;
+    border-radius: 24px;
+    padding: 20px 40px;
+    font-size: 1.15rem;
+    font-weight: 950;
+    cursor: pointer;
+    box-shadow: 0 8px 0 #c9a80b;
+    transition: all 0.1s;
+    font-family: 'Hind Siliguri', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.finishBtnMinimal:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #c9a80b;
+}
+
+/* Removed shareBtnMinimal as requested */
+
+/* Base styles for no-hearts card to avoid breakage */
+.resultCard {
+    background: rgba(28, 31, 36, 0.95);
+    backdrop-filter: blur(28px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 40px;
+    padding: 40px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+.infoBadge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+    transition: all 0.2s;
+}
+
+.resultActions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+}
+
+.secondaryActions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.actionBtnSmall {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    font-family: 'Hind Siliguri', sans-serif;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.actionBtnSmall:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 /* ── Finish Button ── */
@@ -1503,4 +1971,69 @@
 
 .leaveBtn:hover {
     opacity: 1;
+}
+
+/* ── Results Loading Overlay ── */
+.resultsLoadingOverlay {
+    position: absolute;
+    inset: 0;
+    background: #0b0e11;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.loadingInner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 280px;
+    text-align: center;
+}
+
+.loadingBee {
+    width: 140px;
+    height: 140px;
+}
+
+.loadingText {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f1c40f;
+    margin-bottom: 24px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.loadingBarContainer {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.loadingBarFill {
+    height: 100%;
+    background: linear-gradient(90deg, #f1c40f, #f39c12);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+.loadingPercent {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #fff;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+/* ── Footer Utility ── */
+.footerHidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(100px);
 }

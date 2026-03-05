@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, CheckSquare, User } from 'lucide-react';
+import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, CheckSquare, User, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
 import HoneyDropIcon from '../../components/HoneyDropIcon';
+import PollenIcon from '../../components/PollenIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
@@ -157,6 +158,11 @@ const StudyPage = () => {
     const [showResults, setShowResults] = useState(false);
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
+    const [chapterInfo, setChapterInfo] = useState(null);
+    const [nextChapter, setNextChapter] = useState(null);
+    const [startTime] = useState(Date.now());
+    const [timeTaken, setTimeTaken] = useState(0);
+    const [streakInfo, setStreakInfo] = useState({ current_streak: 0 });
 
     // Missing heart/checkout states
     const [showNoHeartsModal, setShowNoHeartsModal] = useState(false);
@@ -177,6 +183,9 @@ const StudyPage = () => {
     });
 
     const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+    const [isProcessingResults, setIsProcessingResults] = useState(false);
+    const [resultLoadingProgress, setResultLoadingProgress] = useState(0);
+    const [showReview, setShowReview] = useState(false);
 
     const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
     const [answersHistory, setAnswersHistory] = useState({}); // { [index]: { selectedOption, isCorrect } }
@@ -335,6 +344,32 @@ const StudyPage = () => {
                 setLoading(true);
             }
             try {
+                // Fetch chapter info
+                const { data: chapter, error: cErr } = await supabase
+                    .from('chapters')
+                    .select('title')
+                    .eq('id', chapterId)
+                    .single();
+                if (!cErr && chapter) {
+                    setChapterInfo(chapter);
+                    // Fetch next chapter info
+                    const { data: nextC } = await supabase
+                        .from('chapters')
+                        .select('title')
+                        .eq('course_id', courseId)
+                        .gt('order_index', chapter?.order_index || 0)
+                        .order('order_index', { ascending: true })
+                        .limit(1)
+                        .maybeSingle();
+                    if (nextC) setNextChapter(nextC);
+                }
+
+                // Fetch streak info
+                if (user?.id) {
+                    const streak = await rewardService.getUserStreak(user.id);
+                    if (streak) setStreakInfo(streak);
+                }
+
                 const { data: points, error: pErr } = await supabase
                     .from('learning_points')
                     .select('*, mcq_questions(*, mcq_options(*))')
@@ -447,10 +482,6 @@ const StudyPage = () => {
                         }
 
                         setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
-                        if (user) {
-                            rewardService.awardXP(user.id, 1, 'correct_answer');
-                            honeyJarService.addPollenToJar(user.id, 1);
-                        }
                         setAnswersHistory(prev => ({ ...prev, [currentIndex]: { matches: newMatches, isCorrect: true } }));
                     }
                 }
@@ -487,10 +518,6 @@ const StudyPage = () => {
                 correctAudio.current.play().catch(e => console.error(e));
             }
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
-            if (user) {
-                rewardService.awardXP(user.id, 1, 'correct_answer');
-                honeyJarService.addPollenToJar(user.id, 1);
-            }
         } else {
             if (wrongAudio.current && soundEnabled) {
                 wrongAudio.current.currentTime = 0;
@@ -526,18 +553,13 @@ const StudyPage = () => {
 
         if (correct) {
             if (correctAudio.current && soundEnabled) {
-                try { correctAudio.current.currentTime = 0; correctAudio.current.play(); } catch (err) {}
+                try { correctAudio.current.currentTime = 0; correctAudio.current.play(); } catch (err) { }
             }
             setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
-            // Fire-and-forget background tasks
-            if (user) {
-                rewardService.awardXP(user.id, 1, 'correct_answer');
-                honeyJarService.addPollenToJar(user.id, 1);
-            }
         } else {
             setFailedOptions(prev => [...prev, selectedOption]);
             if (wrongAudio.current && soundEnabled) {
-                try { wrongAudio.current.currentTime = 0; wrongAudio.current.play(); } catch (err) {}
+                try { wrongAudio.current.currentTime = 0; wrongAudio.current.play(); } catch (err) { }
             }
             setShake(true);
             setTimeout(() => setShake(false), 500);
@@ -558,12 +580,35 @@ const StudyPage = () => {
             setIsCorrect(false);
             setActiveDialogueIndex(0);
         } else {
+            if (isProcessingResults) return;
+            setIsProcessingResults(true);
+            setResultLoadingProgress(0);
+
+            // Start an interval to simulate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15 + 5;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        setIsProcessingResults(false);
+                        setShowResults(true);
+                    }, 600);
+                }
+                setResultLoadingProgress(progress);
+            }, 180);
+
             if (user && courseId && chapterId) {
                 try {
-                    const earnedXp = stats.correct;
+                    // New Reward Logic: XP (Max 20), Pollen (Max 30)
+                    const earnedXp = Math.round((stats.correct / (stats.total || 1)) * 20);
+                    const earnedPollen = Math.round((stats.correct / (stats.total || 1)) * 30);
+
+                    // Update user progress
                     const { data: existingProgress } = await supabase
                         .from('user_progress')
-                        .select('id, xp_earned')
+                        .select('id')
                         .eq('user_id', user.id)
                         .eq('chapter_id', chapterId)
                         .single();
@@ -592,10 +637,42 @@ const StudyPage = () => {
                             })
                             .eq('id', existingProgress.id);
                     }
+
+                    // Update Profile Stats & Streak via Reward Service
+                    if (user?.id) {
+                        // This awards XP, logs activity, and updates streaks
+                        await rewardService.awardXP(user.id, earnedXp, 'chapter_complete', {
+                            courseId,
+                            chapterId,
+                            accuracy: stats.correct / (stats.total || 1)
+                        });
+
+                        // This awards gems (pollen)
+                        await rewardService.awardGems(user.id, earnedPollen, 'chapter_complete', {
+                            courseId,
+                            chapterId
+                        });
+
+                        // Update Honey Jar as well
+                        await honeyJarService.addPollenToJar(user.id, earnedPollen);
+                    }
                 } catch (err) {
                     console.error('Error updating progress:', err);
                 }
             }
+
+            // Calculate time taken in 0.0 min format
+            const durationMs = Date.now() - startTime;
+            const durationMins = (durationMs / 60000).toFixed(1);
+            setTimeTaken(durationMins);
+
+            // Refetch streak to show updated streak if it was incremented
+            if (user?.id) {
+                rewardService.getUserStreak(user.id).then(s => {
+                    if (s) setStreakInfo(s);
+                });
+            }
+
             // Play completion sound
             const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
             if (completeAudio.current && soundEnabled) {
@@ -611,7 +688,6 @@ const StudyPage = () => {
                 }
             }
 
-            setShowResults(true);
         }
     };
 
@@ -637,8 +713,8 @@ const StudyPage = () => {
 
 
     return (
-        <div className={styles.studyPage}>
-            <header className={styles.header}>
+        <div className={`${styles.studyPage} ${(showResults || isProcessingResults) ? styles.resultsActive : ''}`}>
+            <header className={`${styles.header} ${(showResults || isProcessingResults || showReview) ? styles.headerHidden : ''}`}>
                 <button className={styles.closeBtn} onClick={() => setShowExitConfirmation(true)}>
                     <X size={24} strokeWidth={3} />
                 </button>
@@ -717,189 +793,373 @@ const StudyPage = () => {
             <main className={styles.mainContent}>
                 <div className={styles.studyContentWrapper}>
 
+                    {/* ── Review Screen ── (fixed overlay between header and footer) */}
 
-                    <AnimatePresence mode="wait">
-                        <div className="space-y-12">
-                            {(() => {
-                                const currentLPId = questions[currentIndex]?.learning_point_id;
-                                // Find the first index of the current node group
-                                let startIdx = currentIndex;
-                                while (startIdx > 0 && questions[startIdx - 1].learning_point_id === currentLPId) {
-                                    startIdx--;
-                                }
-
-                                return questions.slice(startIdx, currentIndex + 1).map((q, arrayIdx) => {
-                                    const globalIdx = startIdx + arrayIdx;
-                                    const isLatest = globalIdx === currentIndex;
-                                    const isStory = q.type === 'storytelling';
-                                    const answer = answersHistory[globalIdx];
-
-                                    // Narrative logic: Only show narrative if it changed or it's the start of the node
-                                    const hasPrevSameNarrative = arrayIdx > 0 && questions[startIdx + arrayIdx - 1].narrative === q.narrative;
-                                    const showStory = isStory && (!hasPrevSameNarrative || isLatest);
-                                    const showMCQ = !isStory || (isLatest ? !isStoryInProgress : true);
-
-                                    return (
+                    {/* ── Results Loading Overlay (Calculating rewards) ── */}
+                    <AnimatePresence>
+                        {isProcessingResults && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className={styles.resultsLoadingOverlay}
+                            >
+                                <div className={styles.loadingInner}>
+                                    <DotLottieReact
+                                        src="/models/Honey bee.lottie"
+                                        autoplay
+                                        loop
+                                        className={styles.loadingBee}
+                                    />
+                                    <h2 className={styles.loadingText}>আপনার ফলাফল তৈরি করা হচ্ছে...</h2>
+                                    <div className={styles.loadingBarContainer}>
                                         <motion.div
-                                            key={q.id}
-                                            initial={isLatest ? { x: 40 } : false}
-                                            animate={{ x: 0 }}
-                                            transition={isLatest ? { duration: 1.1, ease: [0.25, 1, 0.5, 1] } : {}}
-                                            className={cn(styles.questionSection, !isLatest && "opacity-60 grayscale-[0.5] scale-[0.98] transition-all")}
-                                        >
-                                            {showStory && (
-                                                <StorytellingDisplay
-                                                    content={q.narrative}
-                                                    visibleCount={isLatest ? activeDialogueIndex : 999}
+                                            className={styles.loadingBarFill}
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${resultLoadingProgress}%` }}
+                                            transition={{ ease: "linear" }}
+                                        />
+                                    </div>
+                                    <span className={styles.loadingPercent}>{Math.round(resultLoadingProgress)}%</span>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* ── Inline Result Card (shown when chapter is completed) ── */}
+                    <AnimatePresence mode="wait">
+                        {showResults && (
+                            <motion.div
+                                key="inline-result"
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={showReview
+                                    ? { opacity: 0.3, y: 12, scale: 0.93 }
+                                    : { opacity: 1, y: 0, scale: 1 }
+                                }
+                                exit={{ opacity: 0, y: -20 }}
+                                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                                className={styles.inlineResultCard}
+                            >
+                                {/* ── Fireworks celebration animation ── */}
+                                <div className={styles.fireworksWrap}>
+                                    <DotLottieReact
+                                        src="/models/Fireworks.lottie"
+                                        autoplay
+                                        loop
+                                        className={styles.fireworksAnim}
+                                    />
+                                </div>
+
+                                <div className={styles.beeHeader}>
+                                    <DotLottieReact
+                                        src={
+                                            (stats.correct / (stats.total || 1)) >= 0.67
+                                                ? "/models/Honey bee.lottie"
+                                                : (stats.correct / (stats.total || 1)) >= 0.34
+                                                    ? "/models/Bee looking.lottie"
+                                                    : "/models/awkward bee.lottie"
+                                        }
+                                        autoplay
+                                        loop
+                                        className={styles.resultBee}
+                                    />
+                                </div>
+
+                                <div className={styles.resultDivider} />
+
+                                <div className={styles.dualChartsArea}>
+                                    {/* Chart 1: Accuracy Meter Chart */}
+                                    <div className={styles.chartWrapper}>
+                                        <div className={cn(styles.minimalChart, styles.chart1, styles.meterChart)}>
+                                            <svg viewBox="0 0 100 60" className={styles.meterSvg}>
+                                                <path
+                                                    d="M 10,50 A 40,40 0 0 1 90,50"
+                                                    className={styles.meterTrack}
+                                                    strokeWidth="10"
+                                                    fill="none"
                                                 />
-                                            )}
+                                                <motion.path
+                                                    d="M 10,50 A 40,40 0 0 1 90,50"
+                                                    className={styles.meterFill}
+                                                    strokeWidth="10"
+                                                    fill="none"
+                                                    initial={{ pathLength: 0 }}
+                                                    animate={{ pathLength: stats.correct / (stats.total || 1) }}
+                                                    transition={{ duration: 1.5, ease: "easeOut" }}
+                                                />
+                                            </svg>
+                                            <div className={styles.meterContent}>
+                                                <span className={styles.percentText}>{Math.round((stats.correct / (stats.total || 1)) * 100)}%</span>
+                                                <span className={styles.successLabel}>সঠিক</span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                            {showMCQ && (
-                                                <div className="space-y-8">
-                                                    {!isStory && (q.narrative || q.explanation) && (
-                                                        <div className={styles.contextText}>
-                                                            <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
-                                                            {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
-                                                        </div>
-                                                    )}
-
-                                                    <h2 className={styles.questionTitle}>
-                                                        {isLatest && selectedAnimation !== 'none' && (
-                                                            <span className={styles.mascotMini}>
-                                                                <DotLottieReact
-                                                                    key={currentModel}
-                                                                    src={currentModel}
-                                                                    autoplay={true}
-                                                                    loop={true}
-                                                                    speed={1}
-                                                                    renderConfig={{ renderer: 'svg' }}
-                                                                    dotLottieRefCallback={setDotLottie}
-                                                                />
-                                                            </span>
-                                                        )}
-                                                        {q.question_text}
-                                                    </h2>
-
-                                                    <div className={cn(styles.optionsList, q.question_type === 'boolean' && styles.booleanRow)}>
-                                                        {q.question_type === 'matching' ? (
-                                                            <div className={styles.matchingContainer}>
-                                                                <div className={styles.matchingColumn}>
-                                                                    {(q.metadata?.pairs || []).map((pair, pIdx) => {
-                                                                        const isMatched = matches[pIdx] !== undefined;
-                                                                        const rIdx = matches[pIdx];
-                                                                        const showResult = isLatest ? isAnswered : true;
-                                                                        // A match exists right now for this left card
-                                                                        const isMatchCorrect = isMatched && (q.metadata.pairs[pIdx].right === shuffledRight[rIdx]?.text);
-                                                                        // Red: currently matched but WRONG (temp flash before 800ms clear)
-                                                                        const isMatchWrong = (isLatest && isMatched && !isMatchCorrect) ||
-                                                                            (showResult && !isLatest && isMatched && !isMatchCorrect);
-                                                                        // After a failure, this left card has been tried before
-                                                                        const hasFailed = isLatest && failedOptions.some(f => f.left === pIdx);
-
-                                                                        if (!pair.left || pair.left.trim() === '') return null;
-
-                                                                        return (
-                                                                            <div
-                                                                                key={`l-${pIdx}`}
-                                                                                className={cn(
-                                                                                    styles.matchingCard,
-                                                                                    selectedLeft === pIdx && styles.selectedCard,
-                                                                                    isMatchCorrect && styles.matched,
-                                                                                    isMatchWrong && styles.mismatch,
-                                                                                    hasFailed && !isMatched && styles.hasFailed // subtle indicator
-                                                                                )}
-                                                                                onClick={() => isLatest && !isMatchCorrect && handleMatchSelect('left', pIdx)}
-                                                                            >
-                                                                                {pair.left}
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                                <div className={styles.matchingColumn}>
-                                                                    {shuffledRight.map((opt, rIdx) => {
-                                                                        const lIdx = Object.keys(matches).find(k => matches[k] === parseInt(rIdx) || matches[k] === rIdx);
-                                                                        const isMatched = lIdx !== undefined;
-                                                                        const isMatchCorrect = isMatched && (q.metadata.pairs[lIdx]?.right === opt.text);
-                                                                        const showResult = isLatest ? isAnswered : true;
-
-                                                                        // GREEN HINT: This right card is the correct answer for any left card that has failed
-                                                                        // Persists after failure so learner knows where to click next
-                                                                        const isHint = isLatest && !isMatchCorrect && !isMatched &&
-                                                                            failedOptions.some(f => q.metadata.pairs[f.left]?.right === opt.text);
-
-                                                                        // RED: currently matched wrong (temp - clears after 800ms)
-                                                                        const isMatchWrong = isLatest && isMatched && !isMatchCorrect;
-
-                                                                        return (
-                                                                            <div
-                                                                                key={`r-${rIdx}`}
-                                                                                className={cn(
-                                                                                    styles.matchingCard,
-                                                                                    isMatchCorrect && styles.matched,  // green for correct match
-                                                                                    isMatchWrong && styles.mismatch,   // red for wrong current match
-                                                                                    isHint && styles.hintCard          // green-outline hint for guidance
-                                                                                )}
-                                                                                onClick={() => isLatest && handleMatchSelect('right', rIdx)}
-                                                                            >
-                                                                                {opt.text}
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
-                                                            </div>
-                                                        ) : (
-                                                            (q.mcq_options || []).map((option, optIdx) => {
-                                                                const isSelected = (isLatest ? selectedOption : answer?.selectedOption) === option.id;
-                                                                const isCorrectOpt = option.is_correct;
-                                                                const showResult = isLatest ? isAnswered : true;
-                                                                const isFailed = isLatest && failedOptions.includes(option.id);
-
-                                                                // Hint: Show correct answer in green after a failure
-                                                                const showCorrect = (showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect)) ||
-                                                                    (isLatest && failedOptions.length > 0 && isCorrectOpt);
-
-                                                                return (
-                                                                    <button
-                                                                        key={option.id}
-                                                                        className={cn(
-                                                                            styles.optionBtn,
-                                                                            isSelected && styles.selected,
-                                                                            showCorrect && styles.correct,
-                                                                            (showResult && isSelected && !isCorrectOpt) || isFailed ? styles.incorrect : ''
-                                                                        )}
-                                                                        onClick={() => isLatest && handleOptionSelect(option.id)}
-                                                                        disabled={!isLatest || isAnswered || isFailed}
-                                                                    >
-                                                                        <div className={styles.optionIndex}>
-                                                                            {q.question_type === 'checkmark' ? <CheckSquare size={16} /> : optionLabels[optIdx]}
-                                                                        </div>
-                                                                        <span className={styles.optionText}>{option.option_text}</span>
-                                                                        {showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect) && (
-                                                                            <div className={styles.correctIcon}><CircleCheckBig size={20} /></div>
-                                                                        )}
-                                                                        {showResult && isSelected && !isCorrectOpt && (
-                                                                            <div className={styles.incorrectIcon}><CircleX size={20} /></div>
-                                                                        )}
-                                                                    </button>
-                                                                );
-                                                            })
-                                                        )}
+                                    {/* Chart 2: Rewards Meter Chart */}
+                                    <div className={styles.chartWrapper}>
+                                        <div className={cn(styles.minimalChart, styles.chart1, styles.meterChart)}>
+                                            {(() => {
+                                                const ARC = 125.7;
+                                                const TOTAL = 50;
+                                                const accuracy = stats.correct / (stats.total || 1);
+                                                const earnedPollen = Math.round(accuracy * 30);
+                                                const earnedXp = Math.round(accuracy * 20);
+                                                const pollenArc = (earnedPollen / TOTAL) * ARC;
+                                                const xpArc = (earnedXp / TOTAL) * ARC;
+                                                return (
+                                                    <svg viewBox="0 0 100 60" className={styles.meterSvg}>
+                                                        {/* Track (blank background arc) */}
+                                                        <path
+                                                            d="M 10,50 A 40,40 0 0 1 90,50"
+                                                            className={styles.meterTrack}
+                                                            strokeWidth="10"
+                                                            fill="none"
+                                                        />
+                                                        {/* Pollen segment — fills from start */}
+                                                        <motion.path
+                                                            d="M 10,50 A 40,40 0 0 1 90,50"
+                                                            className={cn(styles.meterFill, styles.pollenSegment)}
+                                                            strokeWidth="10"
+                                                            fill="none"
+                                                            initial={{ strokeDasharray: `0 ${ARC}` }}
+                                                            animate={{ strokeDasharray: `${pollenArc} ${ARC}` }}
+                                                            transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
+                                                        />
+                                                        {/* XP segment — starts right after pollen */}
+                                                        <motion.path
+                                                            d="M 10,50 A 40,40 0 0 1 90,50"
+                                                            className={cn(styles.meterFill, styles.xpSegment)}
+                                                            strokeWidth="10"
+                                                            fill="none"
+                                                            strokeDashoffset={-pollenArc}
+                                                            initial={{ strokeDasharray: `0 ${ARC}` }}
+                                                            animate={{ strokeDasharray: `${xpArc} ${ARC}` }}
+                                                            transition={{ duration: 1.1, delay: 0.55, ease: "easeOut" }}
+                                                        />
+                                                    </svg>
+                                                );
+                                            })()}
+                                            <div className={styles.meterContent}>
+                                                <div className={styles.rewardIconsCompact}>
+                                                    <div className={styles.rewardIconGroup}>
+                                                        <PollenIcon size={13} />
+                                                        <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 30)}</span>
+                                                    </div>
+                                                    <div className={styles.rewardIconGroup}>
+                                                        <Zap size={13} fill="#1cb0f6" stroke="none" />
+                                                        <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 20)}</span>
                                                     </div>
                                                 </div>
-                                            )}
-                                            {isLatest && <div ref={scrollRef} className="h-4" />}
-                                        </motion.div>
-                                    );
-                                });
-                            })()}
-                        </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
                     </AnimatePresence>
+
+                    {!showResults && (
+                        <AnimatePresence mode="wait">
+                            <div className="space-y-12">
+                                {(() => {
+                                    const currentLPId = questions[currentIndex]?.learning_point_id;
+                                    // Find the first index of the current node group
+                                    let startIdx = currentIndex;
+                                    while (startIdx > 0 && questions[startIdx - 1].learning_point_id === currentLPId) {
+                                        startIdx--;
+                                    }
+
+                                    return questions.slice(startIdx, currentIndex + 1).map((q, arrayIdx) => {
+                                        const globalIdx = startIdx + arrayIdx;
+                                        const isLatest = globalIdx === currentIndex;
+                                        const isStory = q.type === 'storytelling';
+                                        const answer = answersHistory[globalIdx];
+
+                                        // Narrative logic: Only show narrative if it changed or it's the start of the node
+                                        const hasPrevSameNarrative = arrayIdx > 0 && questions[startIdx + arrayIdx - 1].narrative === q.narrative;
+                                        const showStory = isStory && (!hasPrevSameNarrative || isLatest);
+                                        const showMCQ = !isStory || (isLatest ? !isStoryInProgress : true);
+
+                                        return (
+                                            <motion.div
+                                                key={q.id}
+                                                initial={isLatest ? { x: 40 } : false}
+                                                animate={{ x: 0 }}
+                                                transition={isLatest ? { duration: 1.1, ease: [0.25, 1, 0.5, 1] } : {}}
+                                                className={cn(styles.questionSection, !isLatest && "opacity-60 grayscale-[0.5] scale-[0.98] transition-all")}
+                                            >
+                                                {showStory && (
+                                                    <StorytellingDisplay
+                                                        content={q.narrative}
+                                                        visibleCount={isLatest ? activeDialogueIndex : 999}
+                                                    />
+                                                )}
+
+                                                {showMCQ && (
+                                                    <div className="space-y-8">
+                                                        {!isStory && (q.narrative || q.explanation) && (
+                                                            <div className={styles.contextText}>
+                                                                <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
+                                                                {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
+                                                            </div>
+                                                        )}
+
+                                                        <h2 className={styles.questionTitle}>
+                                                            {isLatest && selectedAnimation !== 'none' && (
+                                                                <span className={styles.mascotMini}>
+                                                                    <DotLottieReact
+                                                                        key={currentModel}
+                                                                        src={currentModel}
+                                                                        autoplay={true}
+                                                                        loop={true}
+                                                                        speed={1}
+                                                                        renderConfig={{ renderer: 'svg' }}
+                                                                        dotLottieRefCallback={setDotLottie}
+                                                                    />
+                                                                </span>
+                                                            )}
+                                                            {q.question_text}
+                                                        </h2>
+
+                                                        <div className={cn(styles.optionsList, q.question_type === 'boolean' && styles.booleanRow)}>
+                                                            {q.question_type === 'matching' ? (
+                                                                <div className={styles.matchingContainer}>
+                                                                    <div className={styles.matchingColumn}>
+                                                                        {(q.metadata?.pairs || []).map((pair, pIdx) => {
+                                                                            const isMatched = matches[pIdx] !== undefined;
+                                                                            const rIdx = matches[pIdx];
+                                                                            const showResult = isLatest ? isAnswered : true;
+                                                                            // A match exists right now for this left card
+                                                                            const isMatchCorrect = isMatched && (q.metadata.pairs[pIdx].right === shuffledRight[rIdx]?.text);
+                                                                            // Red: currently matched but WRONG (temp flash before 800ms clear)
+                                                                            const isMatchWrong = (isLatest && isMatched && !isMatchCorrect) ||
+                                                                                (showResult && !isLatest && isMatched && !isMatchCorrect);
+                                                                            // After a failure, this left card has been tried before
+                                                                            const hasFailed = isLatest && failedOptions.some(f => f.left === pIdx);
+
+                                                                            if (!pair.left || pair.left.trim() === '') return null;
+
+                                                                            return (
+                                                                                <div
+                                                                                    key={`l-${pIdx}`}
+                                                                                    className={cn(
+                                                                                        styles.matchingCard,
+                                                                                        selectedLeft === pIdx && styles.selectedCard,
+                                                                                        isMatchCorrect && styles.matched,
+                                                                                        isMatchWrong && styles.mismatch,
+                                                                                        hasFailed && !isMatched && styles.hasFailed // subtle indicator
+                                                                                    )}
+                                                                                    onClick={() => isLatest && !isMatchCorrect && handleMatchSelect('left', pIdx)}
+                                                                                >
+                                                                                    {pair.left}
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                    <div className={styles.matchingColumn}>
+                                                                        {shuffledRight.map((opt, rIdx) => {
+                                                                            const lIdx = Object.keys(matches).find(k => matches[k] === parseInt(rIdx) || matches[k] === rIdx);
+                                                                            const isMatched = lIdx !== undefined;
+                                                                            const isMatchCorrect = isMatched && (q.metadata.pairs[lIdx]?.right === opt.text);
+                                                                            const showResult = isLatest ? isAnswered : true;
+
+                                                                            // GREEN HINT: This right card is the correct answer for any left card that has failed
+                                                                            // Persists after failure so learner knows where to click next
+                                                                            const isHint = isLatest && !isMatchCorrect && !isMatched &&
+                                                                                failedOptions.some(f => q.metadata.pairs[f.left]?.right === opt.text);
+
+                                                                            // RED: currently matched wrong (temp - clears after 800ms)
+                                                                            const isMatchWrong = isLatest && isMatched && !isMatchCorrect;
+
+                                                                            return (
+                                                                                <div
+                                                                                    key={`r-${rIdx}`}
+                                                                                    className={cn(
+                                                                                        styles.matchingCard,
+                                                                                        isMatchCorrect && styles.matched,  // green for correct match
+                                                                                        isMatchWrong && styles.mismatch,   // red for wrong current match
+                                                                                        isHint && styles.hintCard          // green-outline hint for guidance
+                                                                                    )}
+                                                                                    onClick={() => isLatest && handleMatchSelect('right', rIdx)}
+                                                                                >
+                                                                                    {opt.text}
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+                                                                </div>
+                                                            ) : (
+                                                                (q.mcq_options || []).map((option, optIdx) => {
+                                                                    const isSelected = (isLatest ? selectedOption : answer?.selectedOption) === option.id;
+                                                                    const isCorrectOpt = option.is_correct;
+                                                                    const showResult = isLatest ? isAnswered : true;
+                                                                    const isFailed = isLatest && failedOptions.includes(option.id);
+
+                                                                    // Hint: Show correct answer in green after a failure
+                                                                    const showCorrect = (showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect)) ||
+                                                                        (isLatest && failedOptions.length > 0 && isCorrectOpt);
+
+                                                                    return (
+                                                                        <button
+                                                                            key={option.id}
+                                                                            className={cn(
+                                                                                styles.optionBtn,
+                                                                                isSelected && styles.selected,
+                                                                                showCorrect && styles.correct,
+                                                                                (showResult && isSelected && !isCorrectOpt) || isFailed ? styles.incorrect : ''
+                                                                            )}
+                                                                            onClick={() => isLatest && handleOptionSelect(option.id)}
+                                                                            disabled={!isLatest || isAnswered || isFailed}
+                                                                        >
+                                                                            <div className={styles.optionIndex}>
+                                                                                {q.question_type === 'checkmark' ? <CheckSquare size={16} /> : optionLabels[optIdx]}
+                                                                            </div>
+                                                                            <span className={styles.optionText}>{option.option_text}</span>
+                                                                            {showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect) && (
+                                                                                <div className={styles.correctIcon}><CircleCheckBig size={20} /></div>
+                                                                            )}
+                                                                            {showResult && isSelected && !isCorrectOpt && (
+                                                                                <div className={styles.incorrectIcon}><CircleX size={20} /></div>
+                                                                            )}
+                                                                        </button>
+                                                                    );
+                                                                })
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {isLatest && <div ref={scrollRef} className="h-4" />}
+                                            </motion.div>
+                                        );
+                                    });
+                                })()}
+                            </div>
+                        </AnimatePresence>
+                    )}
+
                 </div>
             </main>
 
-            <footer className={`${styles.footer} ${isAnswered ? (isCorrect ? styles.footerCorrect : styles.footerIncorrect) : ''}`}>
+            <footer className={`${styles.footer} ${showResults ? styles.footerResults : (isAnswered ? (isCorrect ? styles.footerCorrect : styles.footerIncorrect) : '')} ${(isProcessingResults || showReview) ? styles.footerHidden : ''}`}>
                 <div className={styles.footerContent}>
-                    {!isAnswered ? (
+                    {showResults ? (
+                        /* ── Result footer: Review (left) + Continue (right) ── */
+                        <div className="w-full flex gap-3 justify-between">
+                            <button
+                                className={styles.reviewBtn}
+                                onClick={() => { setShowResults(false); setShowReview(true); }}
+                            >
+                                রিভিউ করুন
+                            </button>
+                            <button
+                                className={styles.continueFinishBtn}
+                                onClick={() => navigate(-1)}
+                            >
+                                অব্যাহত রাখুন
+                                <ArrowRight size={18} strokeWidth={3} />
+                            </button>
+                        </div>
+                    ) : !isAnswered ? (
                         <>
                             {isStoryInProgress ? (
                                 <div className="w-full flex justify-end">
@@ -907,7 +1167,7 @@ const StudyPage = () => {
                                         className={styles.checkBtn}
                                         onClick={() => setActiveDialogueIndex(prev => prev + 1)}
                                     >
-                                        আগিয়ে যান
+                                        আগিয়ে যান
                                     </button>
                                 </div>
                             ) : (
@@ -963,39 +1223,7 @@ const StudyPage = () => {
                 </div>
             </footer>
 
-            <AnimatePresence>
-                {showResults && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className={styles.resultModal}>
-                        <motion.div initial={{ scale: 0.8, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} transition={{ type: "spring", damping: 15 }} className={styles.resultCard}>
-                            <div className={styles.chartContainer}>
-                                <svg viewBox="0 0 100 100" className={styles.radialChart}>
-                                    <circle cx="50" cy="50" r="45" className={styles.chartBg} />
-                                    <motion.circle cx="50" cy="50" r="45" className={styles.chartFill} initial={{ strokeDasharray: "0 283" }} animate={{ strokeDasharray: `${(stats.correct / (stats.total || 1)) * 283} 283` }} transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }} />
-                                </svg>
-                                <div className={styles.chartText}>
-                                    <motion.span initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1 }}>{Math.round((stats.correct / (stats.total || 1)) * 100)}%</motion.span>
-                                    <p>সফলতা</p>
-                                </div>
-                            </div>
-                            <div className={styles.statsSummary}>
-                                <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 162, 2, 0.1)' }}><CircleCheckBig size={20} color="#ffa202" strokeWidth={1.5} /></div>
-                                    <div className={styles.summaryInfo}><span>সঠিক উত্তর</span><strong>{stats.correct}</strong></div>
-                                </div>
-                                <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 75, 75, 0.1)' }}><CircleX size={20} color="#ff4b4b" strokeWidth={1.5} /></div>
-                                    <div className={styles.summaryInfo}><span>ভুল উত্তর</span><strong>{stats.total - stats.correct}</strong></div>
-                                </div>
-                                <div className={styles.summaryItem}>
-                                    <div className={styles.summaryIcon} style={{ background: 'rgba(255, 162, 2, 0.1)' }}><Star size={20} color="#ffa202" /></div>
-                                    <div className={styles.summaryInfo}><span>অর্জিত XP</span><strong>+{stats.correct}</strong></div>
-                                </div>
-                            </div>
-                            <button className={styles.finishBtn} onClick={() => navigate(-1)}>চালিয়ে যান</button>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Result modal removed — result card is now shown inline in main */}
 
             <AnimatePresence>
                 {showNoHeartsModal && (
@@ -1184,6 +1412,73 @@ const StudyPage = () => {
                             </div>
                         </motion.div>
                     </div>
+                )}
+            </AnimatePresence>
+
+            {/* ── Review Screen Overlay (fixed, sits between header and footer) ── */}
+            <AnimatePresence mode="wait">
+                {showReview && (
+                    <motion.div
+                        key="review-overlay"
+                        initial={{ opacity: 0, y: 40, scale: 0.97 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 30, scale: 0.98 }}
+                        transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
+                        className={styles.reviewOverlay}
+                    >
+                        {/* Floating close button */}
+                        <button
+                            className={styles.reviewCloseBtn}
+                            onClick={() => { setShowReview(false); setShowResults(true); }}
+                        >
+                            <X size={18} strokeWidth={2.5} />
+                        </button>
+
+                        {/* Scrollable list */}
+                        <div className={styles.reviewList}>
+                            {questions.map((q, idx) => {
+                                const hist = answersHistory[idx];
+                                if (!hist) return null;
+                                const correct = hist.isCorrect;
+
+                                let chosenText = null;
+                                let correctText = null;
+                                if (q.question_type !== 'matching') {
+                                    const chosen = q.mcq_options?.find(o => o.id === hist.selectedOption);
+                                    const corr = q.mcq_options?.find(o => o.is_correct);
+                                    chosenText = chosen?.option_text ?? null;
+                                    correctText = corr?.option_text ?? null;
+                                }
+
+                                return (
+                                    <div
+                                        key={q.id}
+                                        className={`${styles.reviewCard} ${correct ? styles.reviewCardCorrect : styles.reviewCardWrong}`}
+                                    >
+                                        <div className={styles.reviewQNum}>Q{idx + 1}</div>
+                                        <p className={styles.reviewQText}>{q.question_text}</p>
+
+                                        {q.question_type === 'matching' ? (
+                                            <div className={`${styles.reviewAnswer} ${correct ? styles.reviewAnswerCorrect : styles.reviewAnswerWrong}`}>
+                                                {correct ? '✓ সব জোড়া সঠিক' : '✗ ভুল জোড়া ছিল'}
+                                            </div>
+                                        ) : (
+                                            <div className={styles.reviewAnswerBlock}>
+                                                <div className={`${styles.reviewAnswer} ${correct ? styles.reviewAnswerCorrect : styles.reviewAnswerWrong}`}>
+                                                    {correct ? '✓' : '✗'} {chosenText}
+                                                </div>
+                                                {!correct && correctText && (
+                                                    <div className={styles.reviewCorrectHint}>
+                                                        <span className={styles.reviewHintLabel}>সঠিক উত্তর:</span> {correctText}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </motion.div>
                 )}
             </AnimatePresence>
         </div>

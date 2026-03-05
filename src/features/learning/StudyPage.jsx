@@ -189,6 +189,7 @@ const StudyPage = () => {
 
     const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
     const [answersHistory, setAnswersHistory] = useState({}); // { [index]: { selectedOption, isCorrect } }
+    const resultsActive = showResults || showReview;
     const scrollRef = React.useRef(null);
 
     // Matching Interaction State
@@ -715,78 +716,77 @@ const StudyPage = () => {
     return (
         <div className={`${styles.studyPage} ${(showResults || isProcessingResults) ? styles.resultsActive : ''}`}>
             <header className={`${styles.header} ${(showResults || isProcessingResults || showReview) ? styles.headerHidden : ''}`}>
-                <button className={styles.closeBtn} onClick={() => setShowExitConfirmation(true)}>
-                    <X size={24} strokeWidth={3} />
-                </button>
-                <div className={styles.progressContainer}>
-                    <div className={styles.progressBar}>
-                        {/* Clip wrapper keeps fill rounded inside bar */}
-                        <div className={styles.progressFillClip}>
-                            <motion.div
-                                className={styles.progressFill}
-                                initial={{ width: 0 }}
-                                animate={{ width: `${progress}%` }}
-                                transition={{ duration: 0.15, ease: "easeOut" }}
-                            />
-                        </div>
-                        {/* Bubble burst at fill tip on correct answer */}
-                        <AnimatePresence>
-                            {isCorrect && (
+                <div className={styles.headerContent}>
+                    <button className={styles.closeBtn} onClick={() => setShowExitConfirmation(true)}>
+                        <X size={24} strokeWidth={3} />
+                    </button>
+                    <div className={styles.progressContainer}>
+                        <div className={styles.progressBar}>
+                            <div className={styles.progressFillClip}>
                                 <motion.div
-                                    key={`burst-${currentIndex}`}
-                                    className={styles.progressBurstWrap}
-                                    style={{ left: `${Math.max(progress, 2)}%` }}
-                                    initial={{ opacity: 1 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0, transition: { delay: 0.8 } }}
-                                >
-                                    {[...Array(10)].map((_, i) => {
-                                        // Randomised but deterministic per question
-                                        const baseAngle = (i / 10) * 360;
-                                        const jitter = ((i * 37 + currentIndex * 13) % 60) - 30; // -30 to +30 deg
-                                        const angle = baseAngle + jitter - 90;
-                                        const rad = (angle * Math.PI) / 180;
-                                        const dist = 20 + ((i * 11 + currentIndex * 7) % 18); // 20–38px
-                                        const tx = Math.cos(rad) * dist;
-                                        const ty = Math.sin(rad) * dist;
-                                        const isRing = i % 3 === 1;
-                                        const size = 7 + (i % 3) * 2.5; // 7, 9.5, 12px
-                                        return (
-                                            <motion.span
-                                                key={i}
-                                                className={isRing ? styles.progressBubbleRing : styles.progressBubbleDot}
-                                                style={{ width: size, height: size, ...(isRing && { width: size, height: size }) }}
-                                                initial={{ x: 0, y: 0, scale: 0, opacity: 0 }}
-                                                animate={{ x: tx, y: ty, scale: [0, 1.2, 0], opacity: [0, 1, 0] }}
-                                                transition={{ duration: 0.6, delay: 0.35 + i * 0.03, ease: 'easeOut' }}
-                                            />
-                                        );
-                                    })}
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
+                                    className={styles.progressFill}
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${progress}%` }}
+                                    transition={{ duration: 0.15, ease: "easeOut" }}
+                                />
+                            </div>
+                            <AnimatePresence>
+                                {isCorrect && (
+                                    <motion.div
+                                        key={`burst-${currentIndex}`}
+                                        className={styles.progressBurstWrap}
+                                        style={{ left: `${Math.max(progress, 2)}%` }}
+                                        initial={{ opacity: 1 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0, transition: { delay: 0.8 } }}
+                                    >
+                                        {[...Array(10)].map((_, i) => {
+                                            const baseAngle = (i / 10) * 360;
+                                            const jitter = ((i * 37 + currentIndex * 13) % 60) - 30;
+                                            const angle = baseAngle + jitter - 90;
+                                            const rad = (angle * Math.PI) / 180;
+                                            const dist = 20 + ((i * 11 + currentIndex * 7) % 18);
+                                            const tx = Math.cos(rad) * dist;
+                                            const ty = Math.sin(rad) * dist;
+                                            const isRing = i % 3 === 1;
+                                            const size = 7 + (i % 3) * 2.5;
+                                            return (
+                                                <motion.span
+                                                    key={i}
+                                                    className={isRing ? styles.progressBubbleRing : styles.progressBubbleDot}
+                                                    style={{ width: size, height: size }}
+                                                    initial={{ x: 0, y: 0, scale: 0, opacity: 0 }}
+                                                    animate={{ x: tx, y: ty, scale: [0, 1.2, 0], opacity: [0, 1, 0] }}
+                                                    transition={{ duration: 0.6, delay: 0.35 + i * 0.03, ease: 'easeOut' }}
+                                                />
+                                            );
+                                        })}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </div>
-                </div>
-                <div className={styles.heartsContainer}>
-                    <motion.div animate={shake ? { x: [-5, 5, -5, 5, 0] } : {}} transition={{ duration: 0.4 }}>
-                        <HoneyDropIcon
-                            size={28}
-                            isEmpty={hearts === 0 && refillTimeDisplay}
-                        />
-                    </motion.div>
-                    {!(hearts === 0 && refillTimeDisplay) && (
-                        isPremium ? (
-                            <Infinity size={24} strokeWidth={3} style={{ marginLeft: '4px', color: '#ff4b4b' }} />
-                        ) : (
-                            <span className={styles.heartCount}>{hearts}</span>
-                        )
-                    )}
-                    {needsRefill && refillTimeDisplay && (
-                        <span className={styles.refillTimer}>
-                            <Clock size={12} />
-                            {refillTimeDisplay}
-                        </span>
-                    )}
+                    <div className={styles.heartsContainer}>
+                        <motion.div animate={shake ? { x: [-5, 5, -5, 5, 0] } : {}} transition={{ duration: 0.4 }}>
+                            <HoneyDropIcon
+                                size={28}
+                                isEmpty={hearts === 0 && refillTimeDisplay}
+                            />
+                        </motion.div>
+                        {!(hearts === 0 && refillTimeDisplay) && (
+                            isPremium ? (
+                                <Infinity size={24} strokeWidth={3} style={{ marginLeft: '4px', color: '#ff4b4b' }} />
+                            ) : (
+                                <span className={styles.heartCount}>{hearts}</span>
+                            )
+                        )}
+                        {needsRefill && refillTimeDisplay && (
+                            <span className={styles.refillTimer}>
+                                <Clock size={12} />
+                                {refillTimeDisplay}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </header>
 
@@ -811,7 +811,7 @@ const StudyPage = () => {
                                         loop
                                         className={styles.loadingBee}
                                     />
-                                    <h2 className={styles.loadingText}>আপনার ফলাফল তৈরি করা হচ্ছে...</h2>
+                                    <h2 className={styles.loadingText}> ফলাফল তৈরি করা হচ্ছে...</h2>
                                     <div className={styles.loadingBarContainer}>
                                         <motion.div
                                             className={styles.loadingBarFill}
@@ -828,7 +828,7 @@ const StudyPage = () => {
 
                     {/* ── Inline Result Card (shown when chapter is completed) ── */}
                     <AnimatePresence mode="wait">
-                        {showResults && (
+                        {resultsActive && (
                             <motion.div
                                 key="inline-result"
                                 initial={{ opacity: 0, y: 30 }}
@@ -1140,24 +1140,27 @@ const StudyPage = () => {
                 </div>
             </main>
 
-            <footer className={`${styles.footer} ${showResults ? styles.footerResults : (isAnswered ? (isCorrect ? styles.footerCorrect : styles.footerIncorrect) : '')} ${(isProcessingResults || showReview) ? styles.footerHidden : ''}`}>
+            <footer className={`${styles.footer} ${resultsActive ? styles.footerResults : (isAnswered ? (isCorrect ? styles.footerCorrect : styles.footerIncorrect) : '')} ${isProcessingResults ? styles.footerHidden : ''}`}>
                 <div className={styles.footerContent}>
-                    {showResults ? (
-                        /* ── Result footer: Review (left) + Continue (right) ── */
+                    {resultsActive ? (
+                        /* ── Result / Review footer ── */
                         <div className="w-full flex gap-3 justify-between">
                             <button
                                 className={styles.reviewBtn}
-                                onClick={() => { setShowResults(false); setShowReview(true); }}
+                                onClick={() => {
+                                    setShowReview(!showReview);
+                                }}
                             >
-                                রিভিউ করুন
+                                {showReview ? 'ফলাফল দেখুন' : 'রিভিউ করুন'}
                             </button>
-                            <button
-                                className={styles.continueFinishBtn}
-                                onClick={() => navigate(-1)}
-                            >
-                                অব্যাহত রাখুন
-                                <ArrowRight size={18} strokeWidth={3} />
-                            </button>
+                            {!showReview && (
+                                <button
+                                    className={styles.continueFinishBtn}
+                                    onClick={() => navigate(-1)}
+                                >
+                                    অব্যাহত রাখুন
+                                </button>
+                            )}
                         </div>
                     ) : !isAnswered ? (
                         <>
@@ -1304,71 +1307,73 @@ const StudyPage = () => {
             </AnimatePresence>
 
             {/* No Hearts Checkout Modal */}
-            {showNoHeartsCheckout && (
-                <div className={styles.checkoutOverlay} onClick={() => setShowNoHeartsCheckout(null)}>
-                    <motion.div
-                        initial={{ scale: 0.88, opacity: 0, y: 30 }}
-                        animate={{ scale: 1, opacity: 1, y: 0 }}
-                        exit={{ scale: 0.88, opacity: 0 }}
-                        transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                        className={styles.checkoutCard}
-                        onClick={e => e.stopPropagation()}
-                    >
-                        {/* Header */}
-                        <div className={styles.checkoutCardHeader}>
-                            <div className={styles.checkoutCardIcon}>
-                                {showNoHeartsCheckout.type === 'hearts' ? '🍯' : '👑'}
+            {
+                showNoHeartsCheckout && (
+                    <div className={styles.checkoutOverlay} onClick={() => setShowNoHeartsCheckout(null)}>
+                        <motion.div
+                            initial={{ scale: 0.88, opacity: 0, y: 30 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.88, opacity: 0 }}
+                            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                            className={styles.checkoutCard}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            {/* Header */}
+                            <div className={styles.checkoutCardHeader}>
+                                <div className={styles.checkoutCardIcon}>
+                                    {showNoHeartsCheckout.type === 'hearts' ? '🍯' : '👑'}
+                                </div>
+                                <h2 className={styles.checkoutCardTitle}>পেমেন্ট কনফার্ম করুন</h2>
+                                <p className={styles.checkoutCardSub}>নিচের বিবরণ যাচাই করুন</p>
                             </div>
-                            <h2 className={styles.checkoutCardTitle}>পেমেন্ট কনফার্ম করুন</h2>
-                            <p className={styles.checkoutCardSub}>নিচের বিবরণ যাচাই করুন</p>
-                        </div>
 
-                        {/* Order summary */}
-                        <div className={styles.checkoutSummary}>
-                            <div className={styles.checkoutSummaryRow}>
-                                <span>আইটেম</span>
-                                <span>{showNoHeartsCheckout.label}</span>
+                            {/* Order summary */}
+                            <div className={styles.checkoutSummary}>
+                                <div className={styles.checkoutSummaryRow}>
+                                    <span>আইটেম</span>
+                                    <span>{showNoHeartsCheckout.label}</span>
+                                </div>
+                                <div className={`${styles.checkoutSummaryRow} ${styles.checkoutSummaryTotal}`}>
+                                    <span>মোট</span>
+                                    <span>৳ {showNoHeartsCheckout.price}</span>
+                                </div>
                             </div>
-                            <div className={`${styles.checkoutSummaryRow} ${styles.checkoutSummaryTotal}`}>
-                                <span>মোট</span>
-                                <span>৳ {showNoHeartsCheckout.price}</span>
-                            </div>
-                        </div>
 
-                        {/* Payment methods */}
-                        <div className={styles.checkoutMethods}>
-                            <div className={`${styles.checkoutMethodBtn} ${styles.checkoutMethodActive}`}>
-                                <CreditCard size={22} />
-                                <span>বিকাশ</span>
+                            {/* Payment methods */}
+                            <div className={styles.checkoutMethods}>
+                                <div className={`${styles.checkoutMethodBtn} ${styles.checkoutMethodActive}`}>
+                                    <CreditCard size={22} />
+                                    <span>বিকাশ</span>
+                                </div>
+                                <div className={styles.checkoutMethodBtn}>
+                                    <ShoppingBag size={22} />
+                                    <span>নগদ</span>
+                                </div>
                             </div>
-                            <div className={styles.checkoutMethodBtn}>
-                                <ShoppingBag size={22} />
-                                <span>নগদ</span>
-                            </div>
-                        </div>
 
-                        {/* Actions */}
-                        <div className={styles.checkoutCardActions}>
-                            <button
-                                className={styles.checkoutCancelBtn}
-                                onClick={() => setShowNoHeartsCheckout(null)}
-                                disabled={checkoutProcessing}
-                            >
-                                বাতিল
-                            </button>
-                            <button
-                                className={styles.checkoutConfirmBtn}
-                                onClick={completeNoHeartsCheckout}
-                                disabled={checkoutProcessing}
-                            >
-                                {checkoutProcessing
-                                    ? <Loader2 size={20} className={styles.spinnerIcon} />
-                                    : 'এখনই পে করুন'}
-                            </button>
-                        </div>
-                    </motion.div>
-                </div>
-            )}
+                            {/* Actions */}
+                            <div className={styles.checkoutCardActions}>
+                                <button
+                                    className={styles.checkoutCancelBtn}
+                                    onClick={() => setShowNoHeartsCheckout(null)}
+                                    disabled={checkoutProcessing}
+                                >
+                                    বাতিল
+                                </button>
+                                <button
+                                    className={styles.checkoutConfirmBtn}
+                                    onClick={completeNoHeartsCheckout}
+                                    disabled={checkoutProcessing}
+                                >
+                                    {checkoutProcessing
+                                        ? <Loader2 size={20} className={styles.spinnerIcon} />
+                                        : 'এখনই পে করুন'}
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )
+            }
 
             {/* Emotional Exit Confirmation Modal */}
             <AnimatePresence>
@@ -1426,14 +1431,6 @@ const StudyPage = () => {
                         transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
                         className={styles.reviewOverlay}
                     >
-                        {/* Floating close button */}
-                        <button
-                            className={styles.reviewCloseBtn}
-                            onClick={() => { setShowReview(false); setShowResults(true); }}
-                        >
-                            <X size={18} strokeWidth={2.5} />
-                        </button>
-
                         {/* Scrollable list */}
                         <div className={styles.reviewList}>
                             {questions.map((q, idx) => {
@@ -1455,7 +1452,7 @@ const StudyPage = () => {
                                         key={q.id}
                                         className={`${styles.reviewCard} ${correct ? styles.reviewCardCorrect : styles.reviewCardWrong}`}
                                     >
-                                        <div className={styles.reviewQNum}>Q{idx + 1}</div>
+                                        <div className={styles.reviewQNum}>প্রশ্ন {(idx + 1).toLocaleString('bn-BD')}</div>
                                         <p className={styles.reviewQText}>{q.question_text}</p>
 
                                         {q.question_type === 'matching' ? (
@@ -1481,7 +1478,7 @@ const StudyPage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 

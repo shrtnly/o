@@ -24,16 +24,27 @@
 
 /* ── Header ── */
 .header {
-    height: 72px;
-    padding: 0 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #0b0e11;
+    z-index: 1000;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    display: flex;
+    justify-content: center;
+}
+
+.headerContent {
+    max-width: 1100px;
+    width: 100%;
+    height: 100%;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
-    max-width: 1100px;
-    margin: 0 auto;
-    width: 100%;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
+    gap: 12px;
 }
 
 .headerHidden {
@@ -168,14 +179,12 @@
 }
 
 .progressBar {
-    height: 16px;
+    height: 18px;
     background-color: #1a2226;
     border-radius: 99px;
     overflow: visible;
     position: relative;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
-    /* Clip only horizontally so fill stays within bar visually */
-    clip-path: none;
 }
 
 /* Inner clip wrapper for the fill so it stays rounded, burst is outside */
@@ -229,10 +238,10 @@
 .progressFill::after {
     content: '';
     position: absolute;
-    top: 2px;
+    top: 3px;
     left: 4px;
     right: 4px;
-    height: 4px;
+    height: 5px;
     background: rgba(255, 255, 255, 0.3);
     border-radius: 99px;
 }
@@ -246,7 +255,7 @@
 }
 
 .heartCount {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: #f1c40f;
     line-height: 1;
@@ -271,7 +280,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 20px 160px;
+    padding: 84px 20px 160px;
+    /* 64px header + 20px spacer */
     overflow-y: auto;
 }
 
@@ -298,6 +308,8 @@
     flex: 1;
     max-width: 580px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 @media (max-width: 900px) {
@@ -459,16 +471,16 @@
 
 /* ── Question Title ── */
 .questionTitle {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     font-weight: 800;
     text-align: left;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
     color: #fff;
     line-height: 1.45;
     padding: 0 4px;
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
 }
 
 
@@ -500,10 +512,10 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-bottom: 4px solid rgba(255, 255, 255, 0.15);
     border-radius: 14px;
-    padding: 14px 20px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
@@ -625,29 +637,29 @@
     padding: 20px 0;
     background: #0b0e11;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    z-index: 100;
-    transition: border-color 0.3s, opacity 0.3s, transform 0.3s, visibility 0.3s;
+    z-index: 1000;
+    transition: opacity 0.2s, visibility 0.2s;
 }
 
 .footerCorrect {
-    border-top-color: rgba(46, 204, 113, 0.2);
-    background: rgba(46, 204, 113, 0.02);
+    border-top: 1px solid rgba(241, 196, 15, 0.4);
+    background: #0b0e11;
 }
 
 .footerIncorrect {
-    border-top-color: rgba(255, 75, 75, 0.2);
-    background: rgba(255, 75, 75, 0.02);
+    border-top: 1px solid rgba(255, 75, 75, 0.35);
+    background: #0b0e11;
 }
 
 .footerContent {
-    max-width: 960px;
+    max-width: 1000px;
     width: 100%;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 /* ── Skip Button ── */
@@ -719,7 +731,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
     width: 100%;
 }
 
@@ -743,7 +755,7 @@
 
 .footerCorrect .statusIcon,
 .footerCorrect .statusHeader h3 {
-    color: #2ecc71;
+    color: #f1c40f;
 }
 
 .footerIncorrect .statusIcon,
@@ -856,7 +868,7 @@
 }
 
 
-/* ── Review Screen ── */
+/* ── Review Screen (old inline, kept for safety) ── */
 .reviewScreen {
     max-width: 560px;
     width: 100%;
@@ -868,91 +880,101 @@
     overflow-y: auto;
 }
 
+/* ── Review Card ── */
 .reviewCard {
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 14px;
-    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 12px;
+    padding: 12px 14px;
     text-align: left;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-left: 3px solid rgba(255, 255, 255, 0.08);
+    font-family: 'Hind Siliguri', sans-serif;
     transition: border-color 0.2s;
 }
 
 .reviewCardCorrect {
-    border-color: rgba(46, 204, 113, 0.2);
+    border-left-color: rgba(46, 204, 113, 0.5);
 }
 
 .reviewCardWrong {
-    border-color: rgba(231, 76, 60, 0.2);
+    border-left-color: rgba(255, 75, 75, 0.5);
 }
 
+/* Question number badge */
 .reviewQNum {
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.25);
-    margin-bottom: 6px;
+    color: rgba(241, 196, 15, 0.45);
+    margin-bottom: 5px;
 }
 
+/* Question text */
 .reviewQText {
-    font-size: 0.92rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
-    margin: 0 0 10px;
-    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0 0 8px;
+    line-height: 1.4;
 }
 
 .reviewAnswerBlock {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
+/* Answer chip */
 .reviewAnswer {
-    font-size: 0.88rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 4px 10px;
+    border-radius: 6px;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
+    width: fit-content;
 }
 
 .reviewAnswerCorrect {
     color: #2ecc71;
-    background: rgba(46, 204, 113, 0.08);
+    background: rgba(46, 204, 113, 0.07);
 }
 
 .reviewAnswerWrong {
     color: #ff4b4b;
-    background: rgba(255, 75, 75, 0.08);
+    background: rgba(255, 75, 75, 0.07);
 }
 
+/* Correct answer hint (shown under wrong answers) */
 .reviewCorrectHint {
-    font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.45);
-    padding: 4px 10px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.35);
+    padding: 2px 10px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .reviewHintLabel {
-    color: rgba(241, 196, 15, 0.6);
-    font-weight: 700;
-    font-size: 0.78rem;
+    color: rgba(241, 196, 15, 0.55);
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
 }
 
 /* ── Review Overlay (fixed panel between header and footer) ── */
 .reviewOverlay {
     position: fixed;
     top: 0;
-    bottom: 88px;
-    /* clears footer */
+    bottom: 92px;
+    /* clears footer height + bottom padding */
     left: 0;
     right: 0;
     background: #0b0e11;
-    z-index: 200;
+    z-index: 500;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -1003,29 +1025,28 @@
 
 /* ── Footer: Results state (neutral, no color) ── */
 .footerResults {
-    border-top-color: rgba(241, 196, 15, 0.15);
-    background: rgba(241, 196, 15, 0.02);
+    border-top-color: rgba(241, 196, 15, 0.25);
+    background: #0b0e11;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* ── Review Button (left, ghost style) ── */
 .reviewBtn {
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    border-radius: 12px;
-    padding: 11px 28px;
-    color: rgba(255, 255, 255, 0.65);
+    border: 1.5px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 11px 22px;
+    color: rgba(255, 255, 255, 0.35);
     font-weight: 700;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: color 0.2s, border-color 0.2s, background 0.2s;
+    transition: color 0.2s, border-color 0.2s;
     font-family: 'Hind Siliguri', sans-serif;
-    letter-spacing: 0.02em;
 }
 
 .reviewBtn:hover {
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.4);
-    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.75);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ── Continue / Finish Button (right, primary gold) ── */
@@ -1412,18 +1433,18 @@
 }
 
 .mascotMini {
-    width: 60px;
-    height: 60px;
+    width: 54px;
+    height: 54px;
     flex-shrink: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-top: -14px;
-    margin-right: 10px;
-    border: 0.5px solid rgba(241, 196, 15, 0.4);
-    border-radius: 14px;
-    background: rgba(241, 196, 15, 0.03);
-    padding: 8px;
+    margin-top: -6px;
+    margin-right: 12px;
+    border: 0.5px solid rgba(241, 196, 15, 0.3);
+    border-radius: 12px;
+    background: rgba(241, 196, 15, 0.02);
+    padding: 6px;
     position: relative;
     vertical-align: middle;
 }
@@ -2036,4 +2057,339 @@
     visibility: hidden;
     pointer-events: none;
     transform: translateY(100px);
+}
+
+/* ═══════════════════════════════════════
+   MOBILE RESPONSIVE  ≤ 640px
+═══════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   MOBILE RESPONSIVE  ≤ 640px
+═══════════════════════════════════════ */
+@media (max-width: 640px) {
+
+    .header {
+        height: 52px;
+    }
+
+    .headerContent {
+        padding: 0 16px;
+    }
+
+    .progressBarWrapper {
+        margin: 0 8px;
+    }
+
+    /* ── Main content ── */
+    .mainContent {
+        padding: 68px 12px 140px;
+        /* 52px header + 16px spacer */
+    }
+
+    .questionTitle {
+        font-size: 1.05rem;
+        margin-bottom: 20px;
+    }
+
+    .mascotMini {
+        width: 44px;
+        height: 44px;
+        margin-right: 8px;
+        margin-top: -4px;
+        padding: 4px;
+    }
+
+    .contextText {
+        font-size: 0.82rem;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .optionBtn {
+        padding: 12px 14px;
+        gap: 10px;
+        border-radius: 12px;
+        min-height: 56px;
+    }
+
+    .optionIndex {
+        width: 24px;
+        height: 24px;
+        font-size: 0.72rem;
+        border-radius: 5px;
+    }
+
+    .optionText {
+        font-size: 0.92rem;
+        line-height: 1.4;
+    }
+
+    .resultsActive .mainContent {
+        padding: 0 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* ── Result card ── */
+    .inlineResultCard {
+        padding: 40px 0 120px;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* ── Fireworks – shrink & reposition ── */
+    .fireworksWrap {
+        width: 100vw;
+        max-width: 360px;
+        height: 180px;
+        top: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* ── Bee mascot on result ── */
+    .beeHeader {
+        margin-bottom: 2px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .resultBee {
+        width: 110px !important;
+        height: 110px !important;
+    }
+
+    /* ── Divider ── */
+    .resultDivider {
+        width: 60%;
+        margin: 4px auto 20px;
+        opacity: 0.6;
+    }
+
+    /* ── Dual charts ── */
+    .dualChartsArea {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 30px;
+        width: 100%;
+        max-width: 380px;
+    }
+
+    .chartWrapper {
+        width: 100%;
+        padding: 0;
+    }
+
+    .minimalChart {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1/1;
+        max-width: 140px;
+    }
+
+    .chart1 {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 220/140;
+        max-width: 180px;
+    }
+
+    .meterSvg {
+        width: 100%;
+        height: auto;
+    }
+
+    .percentText {
+        font-size: 1.15rem;
+    }
+
+    .successLabel {
+        font-size: 0.6rem;
+    }
+
+    .rewardValSmall {
+        font-size: 0.65rem;
+    }
+
+    .matchingContainer {
+        gap: 12px;
+    }
+
+    .matchingCard {
+        padding: 12px;
+        min-height: 50px;
+        font-size: 0.85rem;
+    }
+
+    .footer {
+        padding: 8px 0;
+        height: auto;
+        min-height: 64px;
+    }
+
+    .footerContent {
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .checkBtn,
+    .continueBtn,
+    .continueFinishBtn,
+    .reviewBtn,
+    .skipBtn {
+        font-size: 0.9rem;
+        padding: 10px 24px;
+        border-radius: 12px;
+        flex: none;
+        width: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .skipBtn {
+        flex: none;
+        padding: 10px 20px;
+    }
+
+    .reviewBtn {
+        flex: 0 0 auto;
+    }
+
+    /* ── Feedback Footer Responsive ── */
+    .resultCardInner {
+        flex-direction: row;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .statusHeader h3 {
+        font-size: 1.1rem;
+    }
+
+    .statusIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .explanationText {
+        font-size: 0.8rem;
+        line-height: 1.4;
+        text-align: left;
+    }
+
+    .resultStatus {
+        text-align: left;
+        align-items: flex-start;
+    }
+
+    /* ── Review overlay ── */
+    .reviewOverlay {
+        bottom: 84px;
+    }
+
+    /* ── Review grid ── */
+    .reviewList {
+        grid-template-columns: 1fr;
+        padding: 48px 14px 20px;
+        gap: 10px;
+    }
+
+    .reviewCard {
+        padding: 12px;
+    }
+
+    .reviewQText {
+        font-size: 0.85rem;
+    }
+
+    /* ── Loading overlay ── */
+    .resultsLoadingOverlay {
+        padding: 24px 16px;
+    }
+
+    .loadingBee {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    /* ── Exit confirm ── */
+    .confirmCard {
+        width: 90%;
+        padding: 24px 20px;
+    }
+}
+
+/* ═══════════════════════════════════════
+   MOBILE ≤ 480px (Stack Feedback)
+═══════════════════════════════════════ */
+@media (max-width: 480px) {
+    .resultCardInner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .resultStatus {
+        text-align: left;
+    }
+
+    .continueBtn {
+        width: 100%;
+    }
+
+    .statusHeader h3 {
+        font-size: 1.2rem;
+    }
+}
+
+/* ═══════════════════════════════════════
+   VERY SMALL PHONES  ≤ 380px
+═══════════════════════════════════════ */
+@media (max-width: 380px) {
+    .dualChartsArea {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .chart1,
+    .minimalChart {
+        max-width: 150px;
+    }
+
+    .fireworksWrap {
+        max-width: 280px;
+        top: -30px;
+    }
+
+    .resultBee {
+        width: 90px !important;
+        height: 90px !important;
+    }
+
+    .percentText {
+        font-size: 1.1rem;
+    }
+
+    .footer {
+        padding: 10px 10px 20px;
+    }
+
+    .checkBtn,
+    .continueBtn,
+    .continueFinishBtn,
+    .skipBtn {
+        font-size: 0.9rem;
+        padding: 12px 14px;
+    }
 }

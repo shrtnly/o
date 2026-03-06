@@ -87,6 +87,12 @@
     }
 }
 
+@media (max-width: 768px) {
+    .leftSidebar {
+        display: none;
+    }
+}
+
 .moreContainer {
     position: relative;
     width: 100%;

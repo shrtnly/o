@@ -9,6 +9,31 @@
     overflow: hidden;
 }
 
+@media (max-width: 1024px) {
+    .learningPage {
+        grid-template-columns: 1fr 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .learningPage {
+        display: block;
+        /* Stack or just show main content */
+    }
+
+    .rightSidebar {
+        display: none;
+    }
+
+    .unitHeader {
+        padding: 6px 16px;
+    }
+
+    .unitInfo h2 {
+        font-size: 1.2rem;
+    }
+}
+
 .rewardPreview {
     display: flex;
     align-items: center;
@@ -77,6 +102,46 @@
     margin: 0;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.unitHeaderInner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 640px;
+}
+
+.mobileStats {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .unitHeaderInner {
+        justify-content: space-between;
+    }
+
+    .mobileStats {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .mobileStatItem {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 900;
+        font-size: 1rem;
+    }
+
+    .mobileStatItem:nth-child(1) {
+        color: #ff4b4b;
+    }
+
+    .mobileStatItem:nth-child(2) {
+        color: #f1c40f;
+    }
 }
 
 .unitHeaderScrolled {

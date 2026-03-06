@@ -7,6 +7,8 @@ import { supabase } from '../../lib/supabaseClient';
 import styles from './LearningPage.module.css';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import InlineLoader from '../../components/ui/InlineLoader';
+import HoneyDropIcon from '../../components/HoneyDropIcon';
+import PollenIcon from '../../components/PollenIcon';
 import Sidebar from './components/Sidebar';
 import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
@@ -19,18 +21,24 @@ import { courseService } from '../../services/courseService';
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
 const getNodePos = (i, nodesPerRow) => {
+    const windowWidth = window.innerWidth;
+    const isMobile = windowWidth <= 768;
+
+    // Dynamic centerX based on viewport - ensure nodes stay centered
+    // On mobile, the main area is the full window. On desktop, it's roughly 1fr of the grid.
+    const centerX = isMobile ? (windowWidth / 2) : 320;
+
     // Basic spacings
     let xSpacing = 160;
     let ySpacing = 160;
 
-    // Scale spacing based on screen size (handled via window width in state)
-    const windowWidth = window.innerWidth;
+    // Scale spacing based on screen size
     if (windowWidth < 480) {
-        xSpacing = 90;
-        ySpacing = 130;
+        xSpacing = 95;
+        ySpacing = 135;
     } else if (windowWidth < 768) {
-        xSpacing = 120;
-        ySpacing = 140;
+        xSpacing = 125;
+        ySpacing = 145;
     }
 
     const row = Math.floor(i / nodesPerRow);
@@ -38,13 +46,13 @@ const getNodePos = (i, nodesPerRow) => {
     const isEvenRow = row % 2 === 0;
     const xCol = isEvenRow ? col : (nodesPerRow - 1 - col);
 
-    const centerX = 320;
-    const startY = 50;
+    const startY = 60;
 
     const offsetFactor = (nodesPerRow - 1) / 2;
     return {
         x: centerX + (xCol - offsetFactor) * xSpacing,
-        y: startY + row * ySpacing
+        y: startY + row * ySpacing,
+        centerX // Pass centerX for path calculations
     };
 };
 
@@ -52,12 +60,13 @@ const getPathData = (chapters, nodesPerRow) => {
     if (chapters.length < 2) return '';
     let d = '';
 
-    // Scale curve tension
     const windowWidth = window.innerWidth;
-    const curveTension = windowWidth < 480 ? 60 : (windowWidth < 768 ? 80 : 100);
+    const curveTension = windowWidth < 480 ? 65 : (windowWidth < 768 ? 85 : 100);
 
     for (let i = 0; i < chapters.length; i++) {
         const pos = getNodePos(i, nodesPerRow);
+        const centerX = pos.centerX;
+
         if (i === 0) {
             d = `M ${pos.x},${pos.y}`;
         } else {
@@ -67,7 +76,7 @@ const getPathData = (chapters, nodesPerRow) => {
                 d += ` L ${pos.x},${pos.y}`;
             } else {
                 // Next row: S-curve at the edge
-                const cpX = prevPos.x > 320 ? prevPos.x + curveTension : prevPos.x - curveTension;
+                const cpX = prevPos.x > centerX ? prevPos.x + curveTension : prevPos.x - curveTension;
                 d += ` C ${cpX},${prevPos.y} ${cpX},${pos.y} ${pos.x},${pos.y}`;
             }
         }
@@ -455,6 +464,10 @@ const LearningPage = () => {
         const ySpacing = width < 480 ? 130 : (width < 768 ? 140 : 160);
         const containerHeight = (numRows - 1) * ySpacing + 120;
 
+        const windowWidth = window.innerWidth;
+        const isMobile = windowWidth <= 768;
+        const svgWidth = isMobile ? windowWidth : 640;
+
         const isSeparator = index > 0;
 
         return (
@@ -481,7 +494,7 @@ const LearningPage = () => {
                 >
                     <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
 
-                        <svg className={styles.connectingPath} viewBox={`0 0 640 ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
+                        <svg className={styles.connectingPath} viewBox={`0 0 ${svgWidth} ${containerHeight}`} preserveAspectRatio="xMinYMin meet">
                             <path d={pathD} className={styles.pathLine} />
                         </svg>
 
@@ -535,10 +548,24 @@ const LearningPage = () => {
                                     '--unit-border': currentColor.border
                                 }}
                             >
-                                <div className={styles.unitInfo}>
-                                    <h2>
-                                        {activeUnit?.title || 'লোড হচ্ছে...'}
-                                    </h2>
+                                <div className={styles.unitHeaderInner}>
+                                    <div className={styles.unitInfo}>
+                                        <h2>
+                                            {activeUnit?.title || 'লোড হচ্ছে...'}
+                                        </h2>
+                                    </div>
+
+                                    {/* Mobile Stats Header */}
+                                    <div className={styles.mobileStats}>
+                                        <div className={styles.mobileStatItem} title="মধু ফোঁটা">
+                                            <HoneyDropIcon size={20} isEmpty={refillHearts === 0 && refillTimeDisplay} />
+                                            <span>{profile?.is_premium ? '∞' : refillHearts}</span>
+                                        </div>
+                                        <div className={styles.mobileStatItem} title="পরাগরেণু">
+                                            <PollenIcon size={20} />
+                                            <span>{profile?.gems || 0}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}

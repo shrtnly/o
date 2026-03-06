@@ -15,24 +15,7 @@
     }
 }
 
-@media (max-width: 768px) {
-    .learningPage {
-        display: block;
-        /* Stack or just show main content */
-    }
 
-    .rightSidebar {
-        display: none;
-    }
-
-    .unitHeader {
-        padding: 6px 16px;
-    }
-
-    .unitInfo h2 {
-        font-size: 1.2rem;
-    }
-}
 
 .rewardPreview {
     display: flex;
@@ -112,35 +95,12 @@
     max-width: 640px;
 }
 
-.mobileStats {
-    display: none;
-}
-
+/* Mobile specific header container overrides */
 @media (max-width: 768px) {
     .unitHeaderInner {
-        justify-content: space-between;
-    }
-
-    .mobileStats {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .mobileStatItem {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: 900;
-        font-size: 1rem;
-    }
-
-    .mobileStatItem:nth-child(1) {
-        color: #ff4b4b;
-    }
-
-    .mobileStatItem:nth-child(2) {
-        color: #f1c40f;
+        justify-content: center;
+        width: 100%;
+        padding: 0 4px;
     }
 }
 
@@ -148,6 +108,10 @@
     backdrop-filter: blur(12px);
     background-color: rgba(10, 17, 20, 0.85);
     border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.mobileHeaderBar {
+    display: none;
 }
 
 .unitInfo h2 {
@@ -650,7 +614,8 @@
 @media (max-width: 480px) {
     .unitSeparator {
         gap: 8px;
-        margin: 35px auto 18px;
+        margin: 60px auto 40px;
+        /* Increased top and bottom margin for smaller mobile */
         padding: 0 15px;
     }
 
@@ -1841,5 +1806,164 @@
 
     50% {
         box-shadow: 0 0 4px 1px rgba(255, 100, 0, 0.12);
+    }
+}
+
+@media (max-width: 768px) {
+    .learningPage {
+        display: block;
+    }
+
+    .rightSidebar {
+        display: none;
+    }
+
+    .unitHeader {
+        padding: 0 !important;
+        padding-top: max(35px, env(safe-area-inset-top)) !important;
+        /* Fallback + Notch support */
+        overflow: visible;
+        flex-direction: column !important;
+        background: rgba(10, 17, 20, 1) !important;
+        /* Fully solid on mobile for visibility */
+        backdrop-filter: blur(12px);
+        z-index: 1000 !important;
+        /* Ensure it stays above everything */
+    }
+
+    .unitInfo h2 {
+        font-size: 1.25rem !important;
+        /* Increased font size */
+        letter-spacing: -0.2px;
+        justify-content: center !important;
+        padding: 18px 16px !important;
+        /* Increased padding for more vertical space */
+    }
+
+    .pathContainer {
+        margin-top: 5px !important;
+        margin-bottom: 50px !important;
+    }
+
+    .unitSeparator {
+        margin-top: 45px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .scrollNav {
+        right: 20px !important;
+        bottom: 120px !important;
+    }
+
+    .scrollBtn {
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        backdrop-filter: blur(8px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        color: #f1c40f !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .mobileHeaderBar {
+        display: flex !important;
+        /* Force visibility */
+        visibility: visible !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 12px 18px;
+        border-bottom: 2.5px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2) !important;
+        box-sizing: border-box;
+        position: relative;
+        /* Essential for dropdown positioning */
+    }
+
+    .mobileCourseSwitch {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        /* Increased gap */
+        padding: 8px 14px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 2px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        cursor: pointer;
+    }
+
+    .mobileCourseSwitch.active {
+        border-color: #f1c40f;
+        background: rgba(241, 196, 15, 0.05);
+    }
+
+    .mobileHeaderStats {
+        display: flex;
+        align-items: center;
+        gap: clamp(15px, 6vw, 50px);
+        /* Responsive gap that scales from 15px to 50px */
+        flex-wrap: nowrap;
+        /* Prevent wrapping but allow scaling */
+    }
+
+    .mobileHeaderStat {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        /* Minimized gap between icon and text */
+        font-weight: 900;
+        font-size: 1.25rem;
+        color: #fff;
+    }
+
+    .mobileCourseDropdown {
+        position: absolute;
+        top: calc(100% + 5px);
+        /* Perfectly below the bar regardless of height/notch */
+        left: 10px;
+        right: 10px;
+        background: #1a1f22;
+        border: 2px solid #2d383e;
+        border-radius: 18px;
+        z-index: 2000;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        overflow: hidden;
+    }
+
+    .dropdownHeader {
+        padding: 12px 18px;
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        font-weight: 800;
+        text-transform: uppercase;
+        border-bottom: 2px solid #2d383e;
+    }
+
+    .courseOption {
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+
+    .courseOption.selected {
+        background: rgba(241, 196, 15, 0.08);
+    }
+
+    .addCourseBtn {
+        width: 100%;
+        padding: 16px 18px;
+        border: none;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #f1c40f;
+        font-weight: 800;
     }
 }

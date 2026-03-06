@@ -259,7 +259,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                             <PollenIcon size={30} />
                             <span>{profile?.gems || 0}</span>
                         </div>
-                        <div className={styles.statItem} style={{ color: '#ff4b4b', position: 'relative' }} title={t('honey_drop')}>
+                        <div className={styles.statItem} style={{ color: '#f1c40f', position: 'relative' }} title={t('honey_drop')}>
                             <HoneyDropIcon
                                 size={30}
                                 isEmpty={(hearts == 0 || Number(hearts) === 0) && refillTime}
@@ -271,8 +271,8 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                             <svg width="0" height="0" style={{ position: 'absolute' }}>
                                                 <defs>
                                                     <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                        <stop offset="0%" stopColor="#00E5FF" />
-                                                        <stop offset="100%" stopColor="#0091FF" />
+                                                        <stop offset="0%" stopColor="#f1c40f" />
+                                                        <stop offset="100%" stopColor="#e67e22" />
                                                     </linearGradient>
                                                 </defs>
                                             </svg>

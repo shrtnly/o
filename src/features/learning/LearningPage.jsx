@@ -13,7 +13,7 @@ import ShieldIcon from '../../components/ShieldIcon';
 import Sidebar from './components/Sidebar';
 import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
-import { ChevronDown, Check, Plus, BookOpen, Star, Lock, Play, PenTool, Globe, Activity, Sparkles, Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Check, Plus, BookOpen, Star, Lock, Play, PenTool, Globe, Activity, Sparkles, Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
 import RewardModal from './components/RewardModal';
@@ -534,101 +534,99 @@ const LearningPage = () => {
     }, [user]);
 
     return (
+
         <div className={styles.learningPage}>
             <main className={styles.mainContent} ref={mainContentRef} onScroll={handleScroll}>
+                {/* Robust Mobile Header Toggle Bar */}
+                {!loading && unitsWithChapters.length > 0 && (
+                    <div
+                        className={cn(
+                            styles.unitHeader,
+                            scrolled && styles.unitHeaderScrolled,
+                            styles.mobileHeaderFixed
+                        )}
+                        style={{
+                            '--unit-bg': currentColor.bg,
+                            '--unit-border': currentColor.border
+                        }}
+                    >
+                        {/* Top: Mobile Stats & Course Switcher (Stacked) */}
+                        <div className={styles.mobileHeaderBar}>
+
+                            <div className={styles.mobileMainHeaderArea}>
+                                <div
+                                    className={cn(styles.mobileCourseSwitch, isCourseOpen && styles.active)}
+                                    onClick={() => setIsCourseOpen(!isCourseOpen)}
+                                >
+                                    <div className={styles.courseFlagMini}>
+                                        <Play size={16} fill="#f1c40f" color="#f1c40f" />
+                                    </div>
+                                    <ChevronDown size={14} className={cn(styles.chevron, isCourseOpen && styles.rotate)} />
+                                </div>
+
+                                <div className={styles.mobileHeaderStats}>
+                                    <div className={styles.mobileHeaderStat}>
+                                        <ShieldIcon xp={profile?.xp || 0} size={24} />
+                                        <span>{profile?.xp || 0}</span>
+                                    </div>
+                                    <div className={styles.mobileHeaderStat}>
+                                        <PollenIcon size={24} />
+                                        <span>{profile?.gems || 0}</span>
+                                    </div>
+                                    <div className={styles.mobileHeaderStat}>
+                                        <HoneyDropIcon size={24} isEmpty={refillHearts === 0 && refillTimeDisplay} />
+                                        <span>
+                                            {profile?.is_premium ? (
+                                                <InfinityIcon size={24} strokeWidth={3} stroke="#f1c40f" />
+                                            ) : refillHearts}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Mobile Course Dropdown */}
+                            {isCourseOpen && (
+                                <div className={styles.mobileCourseDropdown}>
+                                    <div className={styles.dropdownHeader}>কোর্স পরিবর্তন করুন</div>
+                                    {courses.map(course => (
+                                        <div
+                                            key={course.id}
+                                            className={cn(styles.courseOption, course.id === courseId && styles.selected)}
+                                            onClick={() => {
+                                                setIsCourseOpen(false);
+                                                if (course.id !== courseId) navigate(`/learn/${course.id}`);
+                                            }}
+                                        >
+                                            <span className={styles.courseTitle}>{course.title}</span>
+                                            {course.id === courseId && <Check size={16} color="#f1c40f" />}
+                                        </div>
+                                    ))}
+                                    <div className={styles.dropdownDivider} />
+                                    <button className={styles.addCourseBtn} onClick={() => navigate('/courses')}>
+                                        <Plus size={18} />
+                                        <span>নতুন কোর্স যোগ করুন</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Bottom: Unit Title & Description (Stacked) */}
+                        <div className={styles.unitHeaderInner}>
+                            <div className={styles.unitInfo}>
+                                <h2 className={styles.mobileUnitTitle}>
+                                    {activeUnit?.title || 'লোড হচ্ছে...'}
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {loading ? (
                     <div className="flex items-center justify-center h-full w-full">
                         <InlineLoader />
                     </div>
                 ) : (
                     <>
-                        {/* Single Unit Header at the Top */}
-                        {unitsWithChapters.length > 0 && (
-                            <div
-                                className={cn(
-                                    styles.unitHeader,
-                                    scrolled && styles.unitHeaderScrolled
-                                )}
-                                style={{
-                                    '--unit-bg': currentColor.bg,
-                                    '--unit-border': currentColor.border
-                                }}
-                            >
-                                {/* Mobile Stats & Course Switcher Header */}
-                                <div className={styles.mobileHeaderBar}>
-                                    <div
-                                        className={cn(styles.mobileCourseSwitch, isCourseOpen && styles.active)}
-                                        onClick={() => setIsCourseOpen(!isCourseOpen)}
-                                    >
-                                        <div className={styles.courseFlagMini}>
-                                            <Play size={18} fill="#f1c40f" color="#f1c40f" />
-                                        </div>
-                                        <ChevronDown size={14} className={cn(styles.chevron, isCourseOpen && styles.rotate)} />
-                                    </div>
-
-                                    <div className={styles.mobileHeaderStats}>
-                                        <svg width="0" height="0" style={{ position: 'absolute' }}>
-                                            <defs>
-                                                <linearGradient id="infinityGradientMobile" x1="0%" y1="0%" x2="100%" y2="0%">
-                                                    <stop offset="0%" stopColor="#f1c40f" />
-                                                    <stop offset="100%" stopColor="#e67e22" />
-                                                </linearGradient>
-                                            </defs>
-                                        </svg>
-                                        <div className={styles.mobileHeaderStat}>
-                                            <ShieldIcon xp={profile?.xp || 0} size={28} />
-                                            <span>{profile?.xp || 0}</span>
-                                        </div>
-                                        <div className={styles.mobileHeaderStat}>
-                                            <PollenIcon size={28} />
-                                            <span>{profile?.gems || 0}</span>
-                                        </div>
-                                        <div className={styles.mobileHeaderStat}>
-                                            <HoneyDropIcon size={28} isEmpty={refillHearts === 0 && refillTimeDisplay} />
-                                            <span>
-                                                {profile?.is_premium ? (
-                                                    <InfinityIcon size={28} strokeWidth={3} stroke="url(#infinityGradientMobile)" style={{ marginTop: '2px' }} />
-                                                ) : refillHearts}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Mobile Course Dropdown */}
-                                    {isCourseOpen && (
-                                        <div className={styles.mobileCourseDropdown}>
-                                            <div className={styles.dropdownHeader}>কোর্স পরিবর্তন করুন</div>
-                                            {courses.map(course => (
-                                                <div
-                                                    key={course.id}
-                                                    className={cn(styles.courseOption, course.id === courseId && styles.selected)}
-                                                    onClick={() => {
-                                                        setIsCourseOpen(false);
-                                                        if (course.id !== courseId) navigate(`/learn/${course.id}`);
-                                                    }}
-                                                >
-                                                    <span className={styles.courseTitle}>{course.title}</span>
-                                                    {course.id === courseId && <Check size={16} color="#f1c40f" />}
-                                                </div>
-                                            ))}
-                                            <div className={styles.dropdownDivider} />
-                                            <button className={styles.addCourseBtn} onClick={() => navigate('/courses')}>
-                                                <Plus size={18} />
-                                                <span>নতুন কোর্স যোগ করুন</span>
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className={styles.unitHeaderInner}>
-                                    <div className={styles.unitInfo}>
-                                        <h2>
-                                            {activeUnit?.title || 'লোড হচ্ছে...'}
-                                        </h2>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
+                        <div className={styles.mobileHeaderSpacer} />
                         {unitSections}
 
                         {/* Single Dynamic Floating Navigation Button - Hidden when active node is visible */}
@@ -647,7 +645,6 @@ const LearningPage = () => {
                 )}
             </main>
 
-
             <StatsSidebar
                 profile={profile}
                 refreshProfile={refreshProfile}
@@ -663,7 +660,7 @@ const LearningPage = () => {
                 hearts={lastReward.hearts}
                 gems={lastReward.gems}
             />
-        </div>
+        </div >
     );
 };
 

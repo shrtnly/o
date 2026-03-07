@@ -111,7 +111,30 @@
 }
 
 .mobileHeaderBar {
-    display: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 24px;
+}
+
+@media (max-width: 768px) {
+    .mobileHeaderBar {
+        padding: 8px 16px;
+    }
+}
+
+.mobileNavAction,
+.mobileHeaderBar {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+
+    .mobileNavAction,
+    .mobileHeaderBar {
+        display: flex !important;
+    }
 }
 
 .unitInfo h2 {
@@ -123,6 +146,9 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .guideBtn {
@@ -1814,30 +1840,199 @@
         display: block;
     }
 
+    .mainContent {
+        padding-top: 130px !important;
+    }
+
     .rightSidebar {
         display: none;
     }
 
     .unitHeader {
         padding: 0 !important;
-        padding-top: max(35px, env(safe-area-inset-top)) !important;
-        /* Fallback + Notch support */
         overflow: visible;
         flex-direction: column !important;
-        background: rgba(10, 17, 20, 1) !important;
-        /* Fully solid on mobile for visibility */
-        backdrop-filter: blur(12px);
-        z-index: 1000 !important;
-        /* Ensure it stays above everything */
+        background: rgba(10, 17, 20, 0.95) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        z-index: 2000 !important;
+        border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+        min-height: 64px;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        transition: transform 0.3s ease;
+    }
+
+    .mobileHeaderFixed {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding-top: env(safe-area-inset-top, 10px) !important;
+    }
+
+    /* Content spacer for fixed header */
+    .mobileHeaderSpacer {
+        height: calc(180px + env(safe-area-inset-top, 10px));
+        width: 100%;
+        display: block;
+    }
+
+    .mobileViewToggle {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 0 12px !important;
+        height: 64px;
+        animation: slideInBar 0.3s ease-out;
+    }
+
+    .mobileNavAction {
+        flex: 0 0 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mobileMainHeaderArea {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 0 4px;
+    }
+
+    .mobileUnitTitle {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: #fff !important;
+        margin: 0 !important;
+        padding-left: 8px !important;
+        text-align: left;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+    }
+
+    .mobileHeaderStats {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-left: auto;
+    }
+
+    .mobileHeaderStat {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 6px 10px !important;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobileHeaderStat span {
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        color: #fff;
+    }
+
+    .mobileBackBtn,
+    .mobileForwardBtn {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 12px !important;
+        width: 44px !important;
+        height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #f1c40f !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .mobileBackBtn:active,
+    .mobileForwardBtn:active {
+        transform: scale(0.92);
+        background: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    .mobileCourseSwitch {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 6px 10px !important;
+        border-radius: 10px !important;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    @keyframes slideInBar {
+        from {
+            opacity: 0;
+            transform: translateY(-5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    .mobileBackBtn,
+    .mobileForwardBtn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1.5px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+    }
+
+    .mobileBackBtn:active,
+    .mobileForwardBtn:active {
+        transform: scale(0.9);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .mobileForwardBtn {
+        margin-right: 12px;
+    }
+
+    .mobileBackBtn {
+        margin-left: 12px;
+        color: #f1c40f;
     }
 
     .unitInfo h2 {
-        font-size: 1.25rem !important;
-        /* Increased font size */
-        letter-spacing: -0.2px;
-        justify-content: center !important;
-        padding: 18px 16px !important;
-        /* Increased padding for more vertical space */
+        font-size: 1.15rem !important;
+        letter-spacing: -0.1px;
+        justify-content: flex-start !important;
+        /* Align left to make room for arrow */
+        padding: 12px 16px !important;
+        flex: 1;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-left: 10px;
     }
 
     .pathContainer {
@@ -1871,29 +2066,31 @@
 
     .mobileHeaderBar {
         display: flex !important;
-        /* Force visibility */
         visibility: visible !important;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-start;
+        /* Modified for back button */
         width: 100%;
-        padding: 12px 18px;
-        border-bottom: 2.5px solid rgba(255, 255, 255, 0.1);
-        background: rgba(0, 0, 0, 0.2) !important;
+        padding: 10px 12px;
+        /* Tightened */
+        border-bottom: none !important;
+        /* Shared with parent */
+        background: transparent !important;
         box-sizing: border-box;
         position: relative;
-        /* Essential for dropdown positioning */
+        gap: 8px;
     }
 
     .mobileCourseSwitch {
         display: flex;
         align-items: center;
-        gap: 10px;
-        /* Increased gap */
-        padding: 8px 14px;
-        background: rgba(255, 255, 255, 0.06);
-        border: 2px solid rgba(255, 255, 255, 0.12);
-        border-radius: 14px;
+        gap: 6px;
+        padding: 6px 10px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
         cursor: pointer;
+        flex-shrink: 0;
     }
 
     .mobileCourseSwitch.active {
@@ -1904,19 +2101,19 @@
     .mobileHeaderStats {
         display: flex;
         align-items: center;
-        gap: clamp(15px, 6vw, 50px);
-        /* Responsive gap that scales from 15px to 50px */
+        gap: clamp(10px, 4vw, 30px);
+        /* More conservative gaps for narrow phones */
         flex-wrap: nowrap;
-        /* Prevent wrapping but allow scaling */
+        justify-content: flex-end;
     }
 
     .mobileHeaderStat {
         display: flex;
         align-items: center;
-        gap: 2px;
-        /* Minimized gap between icon and text */
-        font-weight: 900;
-        font-size: 1.25rem;
+        gap: 3px;
+        font-weight: 800;
+        font-size: 1rem;
+        /* Slightly smaller for better fit */
         color: #fff;
     }
 

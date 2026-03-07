@@ -554,17 +554,17 @@ const LearningPage = () => {
                         <div className={styles.mobileHeaderBar}>
 
                             <div className={styles.mobileMainHeaderArea}>
-                                <div
-                                    className={cn(styles.mobileCourseSwitch, isCourseOpen && styles.active)}
-                                    onClick={() => setIsCourseOpen(!isCourseOpen)}
-                                >
-                                    <div className={styles.courseFlagMini}>
-                                        <Play size={16} fill="#f1c40f" color="#f1c40f" />
-                                    </div>
-                                    <ChevronDown size={14} className={cn(styles.chevron, isCourseOpen && styles.rotate)} />
-                                </div>
-
                                 <div className={styles.mobileHeaderStats}>
+                                    <div
+                                        className={cn(styles.mobileCourseSwitch, isCourseOpen && styles.active)}
+                                        onClick={() => setIsCourseOpen(!isCourseOpen)}
+                                    >
+                                        <div className={styles.courseFlagMini}>
+                                            <Play size={22} fill="#f1c40f" color="#f1c40f" />
+                                        </div>
+                                        <span>{courses.length}</span>
+                                    </div>
+
                                     <div className={styles.mobileHeaderStat}>
                                         <ShieldIcon xp={profile?.xp || 0} size={24} />
                                         <span>{profile?.xp || 0}</span>

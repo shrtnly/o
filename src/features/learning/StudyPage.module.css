@@ -30,7 +30,7 @@
     right: 0;
     height: 64px;
     background: #0b0e11;
-    z-index: 1000;
+    z-index: 2000;
     transition: opacity 0.25s ease, visibility 0.25s ease;
     display: flex;
     justify-content: center;
@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 8px;
 }
 
 .headerHidden {
@@ -160,7 +160,7 @@
     border-radius: 10px;
     color: #3d4f5a;
     cursor: pointer;
-    padding: 8px;
+    padding: 4px;
     transition: color 0.2s, transform 0.2s;
     display: flex;
     align-items: center;
@@ -277,12 +277,16 @@
 /* ── Main Content ── */
 .mainContent {
     flex: 1;
+    max-width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 84px 20px 160px;
     /* 64px header + 20px spacer */
     overflow-y: auto;
+    scroll-padding-top: 84px;
+    scroll-padding-bottom: 160px;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* When results are shown, main should fill remaining height and center content */
@@ -310,6 +314,16 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    scroll-margin-top: 84px;
+    scroll-margin-bottom: 160px;
+}
+
+.scrollAnchor {
+    height: 10px;
+    width: 100%;
+    margin-top: 20px;
+    pointer-events: none;
+    scroll-margin-bottom: 180px;
 }
 
 @media (max-width: 900px) {
@@ -347,7 +361,8 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-bottom: 32px;
+    margin-top: 12px;
+    margin-bottom: 36px;
 }
 
 .dialogueItem {
@@ -356,6 +371,11 @@
     max-width: 85%;
     animation: slideInDialog 0.4s ease-out forwards;
     opacity: 0;
+}
+
+/* Ensure the very first dialogue in a question doesn't hug the content above it */
+.dialogueItem:first-child {
+    padding-top: 16px;
 }
 
 @keyframes slideInDialog {
@@ -1027,7 +1047,6 @@
 .footerResults {
     border-top-color: rgba(241, 196, 15, 0.25);
     background: #0b0e11;
-    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.4);
 }
 
 /* ── Review Button (left, ghost style) ── */
@@ -2065,24 +2084,54 @@
 /* ═══════════════════════════════════════
    MOBILE RESPONSIVE  ≤ 640px
 ═══════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
 
     .header {
         height: 52px;
     }
 
     .headerContent {
-        padding: 0 16px;
+        padding: 0 10px;
+        gap: 6px;
     }
 
     .progressBarWrapper {
         margin: 0 8px;
     }
 
+    .progressContainer {
+        height: 12px;
+    }
+
+    .progressBar {
+        height: 12px;
+    }
+
     /* ── Main content ── */
     .mainContent {
-        padding: 68px 12px 140px;
-        /* 52px header + 16px spacer */
+        padding: 100px 12px 140px;
+        /* Increase from 84px - guarantee space below 52px header */
+        padding-top: calc(100px + env(safe-area-inset-top, 0px));
+        scroll-padding-top: 100px;
+        scroll-padding-bottom: 140px;
+    }
+
+    /* Added Spacer for storytelling boxes and header clearance */
+    .mobileTopSpacer {
+        display: block;
+        height: 68px;
+        width: 100%;
+        background: transparent;
+        pointer-events: none;
+    }
+
+    .questionSection {
+        scroll-margin-top: 68px;
+        scroll-margin-bottom: 140px;
+    }
+
+    .scrollAnchor {
+        scroll-margin-bottom: 160px;
     }
 
     .questionTitle {
@@ -2228,9 +2277,13 @@
     }
 
     .footer {
-        padding: 8px 0;
+        padding: 16px 0;
+        /* Generous bottom padding to release buttons from the screen edge/gesture bar */
+        padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
         height: auto;
-        min-height: 64px;
+        min-height: 100px;
+        background: #0b0e11;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .footerContent {
@@ -2247,14 +2300,15 @@
     .continueFinishBtn,
     .reviewBtn,
     .skipBtn {
-        font-size: 0.9rem;
-        padding: 10px 24px;
-        border-radius: 12px;
+        font-size: 0.92rem;
+        padding: 14px 30px;
+        border-radius: 16px;
         flex: none;
         width: auto;
         display: flex;
         justify-content: center;
         align-items: center;
+        letter-spacing: 0.02em;
     }
 
     .skipBtn {
@@ -2382,7 +2436,8 @@
     }
 
     .footer {
-        padding: 10px 10px 20px;
+        padding: 12px 10px calc(24px + env(safe-area-inset-bottom, 0px));
+        min-height: 90px;
     }
 
     .checkBtn,

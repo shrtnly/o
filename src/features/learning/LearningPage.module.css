@@ -434,8 +434,10 @@
 
 @media (max-width: 480px) {
     .nodeLabel {
-        font-size: 0.85rem;
-        max-width: 110px;
+        font-size: 0.65rem;
+        max-width: 85px;
+        font-weight: 500;
+        margin-top: 10px;
     }
 }
 
@@ -572,20 +574,30 @@
 
 @media (max-width: 768px) {
     .nodeLabel {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        width: 110px;
     }
 }
 
 @media (max-width: 480px) {
     .nodeLabel {
-        font-size: 0.75rem;
-        margin-top: 8px;
+        font-size: 0.65rem;
+        margin-top: 10px;
+        font-weight: 500;
+        width: 85px;
     }
 }
 
 .nodeLocked .nodeLabel {
     color: rgba(255, 255, 255, 0.5);
     font-weight: 700;
+}
+
+@media (max-width: 768px) {
+    .nodeLocked .nodeLabel {
+        font-weight: 500;
+    }
 }
 
 

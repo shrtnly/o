@@ -24,11 +24,12 @@ const translations = {
         confirm_reset_msg: "আপনি কি নিশ্চিত যে এই কোর্সের সকল প্রগতি মুছে ফেলতে চান?",
         irreversible: "এটি আর ফিরিয়ে আনা সম্ভব নয়।",
         honey_drop: "হানি ড্রপ",
-        king_bee_mode: "কিং বী মোড",
-        queen_bee_mode: "কুইন বী মোড",
+        king_bee_mode: "কিং বী",
+        queen_bee_mode: "কুইন বী",
         only_for_99: "হন মাত্র 99 টাকায়!",
         hearts_added_msg: "নতুন হানি ড্রপ যোগ করা হয়েছে!",
         heart_refill_5: "5টি হানি ড্রপ রিফিল",
+        unlimited_1d: "১ দিনের আনলিমিটেড",
 
         // Settings
         pref_settings: "প্রেফারেন্স সেটিংস",
@@ -202,6 +203,7 @@ const translations = {
         only_for_99: "only for ৳99!",
         hearts_added_msg: "new honey drops have been added!",
         heart_refill_5: "5 Honey Drop Refill",
+        unlimited_1d: "1 Day Unlimited",
 
         // Settings
         pref_settings: "Preference Settings",

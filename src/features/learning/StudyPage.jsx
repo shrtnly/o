@@ -191,6 +191,9 @@ const StudyPage = () => {
     const [answersHistory, setAnswersHistory] = useState({}); // { [index]: { selectedOption, isCorrect } }
     const resultsActive = showResults || showReview;
     const scrollRef = React.useRef(null);
+    const activeQuestionRef = React.useRef(null);
+    const mainContentRef = React.useRef(null);
+    const prevIndexRef = React.useRef(-1); // Start at -1 to trigger for the first question (0)
 
     // Matching Interaction State
     const [selectedLeft, setSelectedLeft] = useState(null);
@@ -205,18 +208,41 @@ const StudyPage = () => {
         return [];
     }, [questions, currentIndex]);
 
+    const [isMobile, setIsMobile] = useState(false);
+    const [lastInteractionWasFooter, setLastInteractionWasFooter] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const isStoryInProgress = questions[currentIndex]?.type === 'storytelling' && activeDialogueIndex < dialogues.length;
 
     // Auto-scroll: ensures active content is visible above footer when it expands or changes
     useEffect(() => {
-        if (scrollRef.current) {
-            // Wait a tiny bit for UI layout shifts (like footer growth) to settle
-            const timer = setTimeout(() => {
-                scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 150);
-            return () => clearTimeout(timer);
+        const isNewQuestion = prevIndexRef.current !== currentIndex;
+        prevIndexRef.current = currentIndex;
+
+        // On mobile, only auto-scroll on new questions, when answered, or if user touched footer
+        if (isMobile && !isNewQuestion && !isAnswered && !lastInteractionWasFooter) {
+            return;
         }
-    }, [currentIndex, activeDialogueIndex, isAnswered, failedOptions.length]);
+
+        const timer = setTimeout(() => {
+            if (isNewQuestion && activeQuestionRef.current) {
+                // For new questions, strictly scroll to the top of the section (including spacer)
+                activeQuestionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else if (scrollRef.current) {
+                // Within a section (like new dialogue), show the new line but never hide the header
+                scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+            // Reset footer interaction flag after scroll
+            if (isMobile) setLastInteractionWasFooter(false);
+        }, 220); // Increased from 150 for mobile responsiveness
+        return () => clearTimeout(timer);
+    }, [currentIndex, activeDialogueIndex, isAnswered, failedOptions.length, isMobile]);
 
     // Read sound preference once per render cycle via ref — avoids repeated localStorage hits
     const soundEnabledRef = React.useRef(localStorage.getItem('soundEffectsEnabled') !== 'false');
@@ -794,7 +820,7 @@ const StudyPage = () => {
                 </div>
             </header>
 
-            <main className={styles.mainContent}>
+            <main ref={mainContentRef} className={styles.mainContent}>
                 <div className={styles.studyContentWrapper}>
 
                     {/* ── Review Screen ── (fixed overlay between header and footer) */}
@@ -987,11 +1013,14 @@ const StudyPage = () => {
                                         return (
                                             <motion.div
                                                 key={q.id}
+                                                ref={isLatest ? activeQuestionRef : null}
                                                 initial={isLatest ? { x: 40 } : false}
                                                 animate={{ x: 0 }}
                                                 transition={isLatest ? { duration: 1.1, ease: [0.25, 1, 0.5, 1] } : {}}
                                                 className={cn(styles.questionSection, !isLatest && "opacity-60 grayscale-[0.5] scale-[0.98] transition-all")}
                                             >
+                                                {/* Mobile Safety Spacer: Prevents content from going behind fixed header on start-scroll */}
+                                                {isLatest && isMobile && <div className={styles.mobileTopSpacer} />}
                                                 {showStory && (
                                                     <StorytellingDisplay
                                                         content={q.narrative}
@@ -1144,7 +1173,10 @@ const StudyPage = () => {
                 </div>
             </main>
 
-            <footer className={`${styles.footer} ${resultsActive ? styles.footerResults : (isAnswered ? (isCorrect ? styles.footerCorrect : styles.footerIncorrect) : '')} ${isProcessingResults ? styles.footerHidden : ''}`}>
+            <footer
+                className={`${styles.footer} ${resultsActive ? styles.footerResults : (isAnswered ? (isCorrect ? styles.footerCorrect : styles.footerIncorrect) : '')} ${isProcessingResults ? styles.footerHidden : ''}`}
+                onPointerDown={() => isMobile && setLastInteractionWasFooter(true)}
+            >
                 <div className={styles.footerContent}>
                     {resultsActive ? (
                         /* ── Result / Review footer ── */
@@ -1152,6 +1184,7 @@ const StudyPage = () => {
                             <button
                                 className={styles.reviewBtn}
                                 onClick={() => {
+                                    setLastInteractionWasFooter(true);
                                     setShowReview(!showReview);
                                 }}
                             >
@@ -1172,19 +1205,26 @@ const StudyPage = () => {
                                 <div className="w-full flex justify-end">
                                     <button
                                         className={styles.checkBtn}
-                                        onClick={() => setActiveDialogueIndex(prev => prev + 1)}
+                                        onClick={() => {
+                                            setLastInteractionWasFooter(true);
+                                            setActiveDialogueIndex(prev => prev + 1);
+                                        }}
                                     >
                                         আগিয়ে যান
                                     </button>
                                 </div>
                             ) : (
                                 <div className="w-full flex gap-3 justify-between">
-                                    <button className={styles.skipBtn} onClick={handleNext}>এগিয়ে যান</button>
+                                    <button className={styles.skipBtn} onClick={() => {
+                                        setLastInteractionWasFooter(true);
+                                        handleNext();
+                                    }}>এগিয়ে যান</button>
                                     {questions[currentIndex]?.question_type === 'matching' ? (
                                         <button
                                             className={`${styles.checkBtn} ${Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0) ? styles.checkBtnDisabled : ''}`}
                                             aria-disabled={Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0)}
                                             onClick={() => {
+                                                setLastInteractionWasFooter(true);
                                                 if (Object.keys(matches).length >= (questions[currentIndex]?.metadata?.pairs?.length || 0)) handleMatchSubmit();
                                             }}
                                         >
@@ -1194,7 +1234,10 @@ const StudyPage = () => {
                                         <button
                                             className={`${styles.checkBtn} ${!selectedOption ? styles.checkBtnDisabled : ''}`}
                                             aria-disabled={!selectedOption}
-                                            onClick={() => { if (selectedOption) handleCheck(); }}
+                                            onClick={() => {
+                                                setLastInteractionWasFooter(true);
+                                                if (selectedOption) handleCheck();
+                                            }}
                                         >
                                             যাচাই করুন
                                         </button>
@@ -1219,7 +1262,10 @@ const StudyPage = () => {
                                         }
                                     </p>
                                 </div>
-                                <button className={styles.continueBtn} onClick={handleNext}>
+                                <button className={styles.continueBtn} onClick={() => {
+                                    setLastInteractionWasFooter(true);
+                                    handleNext();
+                                }}>
                                     {isCorrect && sparkleEnabled && <SparkleBurst large={true} />}
                                     <span>{currentIndex < questions.length - 1 ? 'এগিয়ে যান' : 'সম্পন্ন করুন'}</span>
                                     <ArrowRight size={20} strokeWidth={3} />

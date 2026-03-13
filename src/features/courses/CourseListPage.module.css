@@ -99,10 +99,16 @@
 .tabsContainer {
     display: flex;
     gap: 12px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     overflow-x: auto;
-    padding-bottom: 8px;
+    padding-bottom: 15px;
+    padding-top: 10px;
     scrollbar-width: none;
+    position: sticky;
+    top: -32px; /* Offsetting the container's padding-top to stick perfectly at the top edge */
+    z-index: 100;
+    background-color: var(--color-bg-deep);
+    margin-top: -10px;
 }
 
 .tabsContainer::-webkit-scrollbar {

@@ -24,7 +24,6 @@ const CourseListPage = () => {
     const categories = getCategories(t);
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
-    const [filteredCourses, setFilteredCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
@@ -59,23 +58,15 @@ const CourseListPage = () => {
         fetchData();
     }, [user]);
 
-    useEffect(() => {
-        let result = courses;
-
-        if (activeCategory !== 'All') {
-            result = result.filter(c => c.category === activeCategory);
-        }
-
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase();
-            result = result.filter(c => 
-                c.title.toLowerCase().includes(query) || 
-                c.category.toLowerCase().includes(query)
-            );
-        }
-
-        setFilteredCourses(result);
-    }, [activeCategory, courses, searchQuery]);
+    // Compute filtered courses during render to avoid blinks
+    const filteredCourses = courses.filter(course => {
+        const matchesCategory = activeCategory === 'All' || course.category === activeCategory;
+        const matchesSearch = !searchQuery.trim() || 
+            course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (course.category && course.category.toLowerCase().includes(searchQuery.toLowerCase()));
+        
+        return matchesCategory && matchesSearch;
+    });
 
     return (
         <div className={styles.pageWrapper}>

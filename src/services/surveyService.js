@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabaseClient';
+import { courseService } from './courseService';
 
 export const surveyService = {
     async getQuestionsByCourse(courseId) {
@@ -57,15 +58,8 @@ export const surveyService = {
 
             if (surveyError) console.error('Error saving survey:', surveyError);
 
-            // 2. Enroll user in the course
-            const { error: enrollError } = await supabase
-                .from('user_courses')
-                .upsert([{
-                    user_id: user.id,
-                    course_id: courseId
-                }], { onConflict: 'user_id,course_id' });
-
-            if (enrollError) throw enrollError;
+            // 2. Enroll user in the course using centralized courseService
+            await courseService.enrollUserInCourse(user.id, courseId);
 
             return { success: true };
         } catch (error) {

@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, Filter } from 'lucide-react';
-import InlineLoader from '../../components/ui/InlineLoader';
+import { Search, Info } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
 import CourseCard from '../landing/CourseCard';
+import CourseSkeleton from '../landing/CourseSkeleton';
 import styles from './CourseListPage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 
 const getCategories = (t) => [
+    { id: 'All', name: t('all_courses') },
     { id: 'Digital Literacy & Security', name: t('cat_digital_security_literacy') },
     { id: 'Legal Awareness & Citizen Rights', name: t('cat_legal_rights') },
     { id: 'Financial Awareness & Smart Banking', name: t('cat_finance_banking') },
@@ -26,32 +27,26 @@ const CourseListPage = () => {
     const [filteredCourses, setFilteredCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All');
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
-
-    // Close dropdown when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [allCourses, enrolledData] = await Promise.all([
+                const [allCourses, enrolledData, bulkStats] = await Promise.all([
                     courseService.getAllCourses(),
-                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : { data: [] }
+                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : { data: [] },
+                    courseService.getBulkCourseStats()
                 ]);
 
-                setCourses(allCourses || []);
-                setFilteredCourses(allCourses || []);
+                // Merge live stats into course data
+                const updatedCourses = (allCourses || []).map(course => ({
+                    ...course,
+                    students_count: bulkStats[course.id]?.count || course.students_count || 0,
+                    rating: bulkStats[course.id]?.rating || course.rating || 0
+                }));
 
+                setCourses(updatedCourses);
                 if (enrolledData?.data) {
                     setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
                 }
@@ -71,147 +66,82 @@ const CourseListPage = () => {
             result = result.filter(c => c.category === activeCategory);
         }
 
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase();
+            result = result.filter(c => 
+                c.title.toLowerCase().includes(query) || 
+                c.category.toLowerCase().includes(query)
+            );
+        }
+
         setFilteredCourses(result);
-    }, [activeCategory, courses]);
+    }, [activeCategory, courses, searchQuery]);
 
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
-                    <header className={styles.header}>
-                        <h1 className={styles.pageTitle}>
-                            {t('courses_title')} <span className={styles.highlight}>{t('courses_highlight')}</span> {t('courses_suffix')}
-                        </h1>
-                    </header>
+                    {/* Minimal Header with Search and Information */}
+                    <div className={styles.topBar}>
+                        <div className={styles.searchBox}>
+                            <Search size={18} className={styles.searchIcon} />
+                            <input 
+                                type="text" 
+                                placeholder={t('search_courses')} 
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Horizontal Category Tabs */}
+                    <div className={styles.tabsContainer}>
+                        {categories.map(cat => (
+                            <button
+                                key={cat.id}
+                                className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
+                                onClick={() => setActiveCategory(cat.id)}
+                            >
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
 
                     {loading ? (
-                        <InlineLoader />
+                        <div className={styles.grid}>
+                            {[...Array(6)].map((_, i) => (
+                                <CourseSkeleton key={i} />
+                            ))}
+                        </div>
                     ) : (
                         <div className={styles.content}>
-                            {activeCategory === 'All' ? (
-                                <section className={styles.categorySection}>
-                                    <div className={styles.sectionHeader}>
-                                        <h2 className={styles.categoryTitle}>সব কোর্স</h2>
-
-                                        <div className={styles.filterDropdown} ref={dropdownRef}>
-                                            <button
-                                                className={`${styles.dropdownToggle} ${isDropdownOpen ? styles.isOpen : ''}`}
-                                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                            >
-                                                <div className={styles.toggleContent}>
-                                                    <Filter size={18} className={styles.filterIcon} />
-                                                    <span>
-                                                        {activeCategory === 'All'
-                                                            ? t('all_courses')
-                                                            : categories.find(cat => cat.id === activeCategory)?.name}
-                                                    </span>
-                                                </div>
-                                                <ChevronDown size={20} className={styles.chevron} />
-                                            </button>
-
-                                            {isDropdownOpen && (
-                                                <div className={styles.dropdownMenu}>
-                                                    <div
-                                                        className={`${styles.dropdownItem} ${activeCategory === 'All' ? styles.active : ''}`}
-                                                        onClick={() => {
-                                                            setActiveCategory('All');
-                                                            setIsDropdownOpen(false);
-                                                        }}
-                                                    >
-                                                        {t('all_courses')}
-                                                    </div>
-                                                    {categories.map(cat => (
-                                                        <div
-                                                            key={cat.id}
-                                                            className={`${styles.dropdownItem} ${activeCategory === cat.id ? styles.active : ''}`}
-                                                            onClick={() => {
-                                                                setActiveCategory(cat.id);
-                                                                setIsDropdownOpen(false);
-                                                            }}
-                                                        >
-                                                            {cat.name}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className={styles.grid}>
-                                        {courses.map(course => (
-                                            <CourseCard
-                                                key={course.id}
-                                                course={course}
-                                                isEnrolled={enrolledCourseIds.has(course.id)}
-                                            />
-                                        ))}
-                                    </div>
-                                </section>
+                            {filteredCourses.length > 0 ? (
+                                <div className={styles.grid}>
+                                    {filteredCourses.map(course => (
+                                        <CourseCard
+                                            key={course.id}
+                                            course={course}
+                                            isEnrolled={enrolledCourseIds.has(course.id)}
+                                        />
+                                    ))}
+                                </div>
                             ) : (
-                                <section className={styles.categorySection}>
-                                    <div className={styles.sectionHeader}>
-                                        <h2 className={styles.categoryTitle}>
-                                            {categories.find(c => c.id === activeCategory)?.name}
-                                        </h2>
-
-                                        <div className={styles.filterDropdown} ref={dropdownRef}>
-                                            <button
-                                                className={`${styles.dropdownToggle} ${isDropdownOpen ? styles.isOpen : ''}`}
-                                                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                            >
-                                                <div className={styles.toggleContent}>
-                                                    <Filter size={18} className={styles.filterIcon} />
-                                                    <span>
-                                                        {activeCategory === 'All'
-                                                            ? t('all_courses')
-                                                            : categories.find(cat => cat.id === activeCategory)?.name}
-                                                    </span>
-                                                </div>
-                                                <ChevronDown size={20} className={styles.chevron} />
-                                            </button>
-
-                                            {isDropdownOpen && (
-                                                <div className={styles.dropdownMenu}>
-                                                    <div
-                                                        className={`${styles.dropdownItem} ${activeCategory === 'All' ? styles.active : ''}`}
-                                                        onClick={() => {
-                                                            setActiveCategory('All');
-                                                            setIsDropdownOpen(false);
-                                                        }}
-                                                    >
-                                                        {t('all_courses')}
-                                                    </div>
-                                                    {categories.map(cat => (
-                                                        <div
-                                                            key={cat.id}
-                                                            className={`${styles.dropdownItem} ${activeCategory === cat.id ? styles.active : ''}`}
-                                                            onClick={() => {
-                                                                setActiveCategory(cat.id);
-                                                                setIsDropdownOpen(false);
-                                                            }}
-                                                        >
-                                                            {cat.name}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
+                                <div className={styles.emptyState}>
+                                    <div className={styles.emptyIcon}>
+                                        <Info size={48} />
                                     </div>
-                                    {filteredCourses.length > 0 ? (
-                                        <div className={styles.grid}>
-                                            {filteredCourses.map(course => (
-                                                <CourseCard
-                                                    key={course.id}
-                                                    course={course}
-                                                    isEnrolled={enrolledCourseIds.has(course.id)}
-                                                />
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className={styles.emptyState}>
-                                            {t('no_courses_cat')}
-                                        </div>
-                                    )}
-                                </section>
+                                    <h3>{t('no_courses_found')}</h3>
+                                    <p>{t('try_different_filter')}</p>
+                                    <button 
+                                        className={styles.resetBtn}
+                                        onClick={() => {
+                                            setActiveCategory('All');
+                                            setSearchQuery('');
+                                        }}
+                                    >
+                                        {t('reset_filters')}
+                                    </button>
+                                </div>
                             )}
                         </div>
                     )}

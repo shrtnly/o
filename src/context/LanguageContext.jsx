@@ -173,7 +173,14 @@ const translations = {
         // Landing Page Generic
         proven_title: "বৈজ্ঞানিকভাবে প্রমাণিত",
         proven_desc: "আমাদের পাঠদান পদ্ধতি গবেষণালব্ধ এবং কার্যকর। প্রতিটি পাঠ ডিজাইন করা হয়েছে যাতে আপনি দ্রুত এবং আনন্দদায়ক উপায়ে শিখতে পারেন।",
-        footer_copy: "2024 BeeLesson. সকল স্বত্ব সংরক্ষিত।"
+        footer_copy: "2024 BeeLesson. সকল স্বত্ব সংরক্ষিত।",
+        
+        // New Search/Filter strings
+        search_courses: "কোর্স খুঁজুন...",
+        courses_found: "টি কোর্স পাওয়া গেছে",
+        no_courses_found: "দুঃখিত, কোনো কোর্স খুঁজে পাওয়া যায়নি",
+        try_different_filter: "দয়া করে অন্য কোনো বিষয় বা কি-ওয়ার্ড দিয়ে চেষ্টা করুন",
+        reset_filters: "সব রিসেট করুন"
     },
     en: {
         // Common
@@ -354,7 +361,14 @@ const translations = {
         // Landing Page Generic
         proven_title: "Scientifically Proven",
         proven_desc: "Our teaching methods are research-based and effective. Each lesson is designed so you can learn quickly and in an enjoyable way.",
-        footer_copy: "2024 BeeLesson. All rights reserved."
+        footer_copy: "2024 BeeLesson. All rights reserved.",
+
+        // New Search/Filter strings
+        search_courses: "Search courses...",
+        courses_found: "courses found",
+        no_courses_found: "No courses found",
+        try_different_filter: "Try searching with a different keyword or category",
+        reset_filters: "Reset all filters"
     }
 };
 

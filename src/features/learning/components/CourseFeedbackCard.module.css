@@ -1,0 +1,158 @@
+.cardWrapper {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+}
+
+.card {
+    width: 280px;
+    background: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    position: relative;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: color 0.2s ease;
+}
+
+.closeBtn:hover {
+    color: #fff;
+}
+
+.header h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.header p {
+    margin: 4px 0 16px 0;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+.starsRow {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.feedbackArea {
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px;
+    color: #fff;
+    font-size: 0.85rem;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+.textarea:focus {
+    border-color: rgba(241, 196, 15, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.starBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 10px;
+    background: #f1c40f;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.submitBtn:disabled {
+    opacity: 0.15;
+    cursor: not-allowed;
+    background: #fff;
+    color: #000;
+}
+
+.successState {
+    text-align: center;
+    padding: 5px 0;
+}
+
+.successIcon {
+    width: 44px;
+    height: 44px;
+    background: rgba(241, 196, 15, 0.1);
+    color: #f1c40f;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px auto;
+}
+
+.successState h4 {
+    margin: 0 0 4px 0;
+    color: #fff;
+    font-size: 1.1rem;
+}
+
+.successState p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+}
+
+@media (max-width: 480px) {
+    .cardWrapper {
+        bottom: 12px;
+        right: 12px;
+        left: 12px;
+    }
+    
+    .card {
+        width: auto;
+        padding: 18px;
+    }
+
+    .starsRow {
+        gap: 12px;
+    }
+}

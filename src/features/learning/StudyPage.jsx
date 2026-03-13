@@ -13,6 +13,8 @@ import { honeyJarService } from '../../services/honeyJarService';
 import { shopService } from '../../services/shopService';
 import { useLanguage } from '../../context/LanguageContext';
 import InlineLoader from '../../components/ui/InlineLoader';
+import CourseFeedbackCard from './components/CourseFeedbackCard';
+import { courseService } from '../../services/courseService';
 
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
@@ -210,6 +212,10 @@ const StudyPage = () => {
 
     const [isMobile, setIsMobile] = useState(false);
     const [lastInteractionWasFooter, setLastInteractionWasFooter] = useState(false);
+
+    // Feedback System States
+    const [showFeedbackCard, setShowFeedbackCard] = useState(false);
+    const [alreadyRated, setAlreadyRated] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -437,6 +443,28 @@ const StudyPage = () => {
 
         if (chapterId && user?.id) fetchContent();
     }, [chapterId, user?.id]);
+
+    // Check if user has already rated this course
+    useEffect(() => {
+        const checkRating = async () => {
+            if (user?.id && courseId) {
+                const rated = await courseService.checkUserRating(user.id, courseId);
+                setAlreadyRated(rated);
+            }
+        };
+        checkRating();
+    }, [user?.id, courseId]);
+
+    // Trigger feedback card after 2 minutes (120 seconds)
+    useEffect(() => {
+        if (alreadyRated || !user?.id || loading || resultsActive) return;
+
+        const timer = setTimeout(() => {
+            setShowFeedbackCard(true);
+        }, 2 * 60 * 1000); // 2 minutes
+
+        return () => clearTimeout(timer);
+    }, [alreadyRated, user?.id, loading, resultsActive]);
 
     // Initialize Shuffled Right for Matching
     useEffect(() => {
@@ -1528,6 +1556,15 @@ const StudyPage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Course Rating / Feedback Card */}
+            {showFeedbackCard && user && (
+                <CourseFeedbackCard
+                    courseId={courseId}
+                    userId={user.id}
+                    onDismiss={() => setShowFeedbackCard(false)}
+                />
+            )}
         </div >
     );
 };

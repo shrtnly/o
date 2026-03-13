@@ -266,6 +266,29 @@ export const courseService = {
             console.error('Error enrolling user:', error);
             throw error;
         }
+
+        // Update public stats table
+        try {
+            const { data: stats } = await supabase
+                .from('course_public_stats')
+                .select('enrolled_count')
+                .eq('course_id', courseId)
+                .maybeSingle();
+
+            if (stats) {
+                await supabase
+                    .from('course_public_stats')
+                    .update({ enrolled_count: (stats.enrolled_count || 0) + 1 })
+                    .eq('course_id', courseId);
+            } else {
+                await supabase
+                    .from('course_public_stats')
+                    .insert([{ course_id: courseId, enrolled_count: 1 }]);
+            }
+        } catch (err) {
+            console.error('Error updating public stats:', err);
+        }
+
         return data;
     },
 
@@ -290,5 +313,121 @@ export const courseService = {
         return true;
     },
 
+    // Course Reviews & Ratings
+    async submitReview(userId, courseId, rating, feedback = '') {
+        const { data, error } = await supabase
+            .from('course_reviews')
+            .upsert({
+                user_id: userId,
+                course_id: courseId,
+                rating,
+                feedback,
+                updated_at: new Date().toISOString()
+            }, {
+                onConflict: 'course_id,user_id'
+            })
+            .select();
 
+        if (error) throw error;
+        
+        // Update public stats
+        try {
+            const { data: allReviews } = await supabase
+                .from('course_reviews')
+                .select('rating')
+                .eq('course_id', courseId);
+            
+            if (allReviews && allReviews.length > 0) {
+                const avg = (allReviews.reduce((a, b) => a + b.rating, 0) / allReviews.length).toFixed(1);
+                await supabase
+                    .from('course_public_stats')
+                    .upsert({ 
+                        course_id: courseId, 
+                        average_rating: avg,
+                        review_count: allReviews.length 
+                    }, { onConflict: 'course_id' });
+            }
+        } catch (err) {
+            console.error('Error updating public rating:', err);
+        }
+
+        return data;
+    },
+
+    async getCourseReviews(courseId) {
+        const { data, error } = await supabase
+            .from('course_reviews')
+            .select('*, profiles(full_name, avatar_url)')
+            .eq('course_id', courseId)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        return data;
+    },
+
+    async getAverageRating(courseId) {
+        const { data, error } = await supabase
+            .from('course_public_stats')
+            .select('average_rating')
+            .eq('course_id', courseId)
+            .maybeSingle();
+
+        if (error) return 0;
+        return data?.average_rating || 0;
+    },
+
+    async checkUserRating(userId, courseId) {
+        if (!userId) return false;
+        const { data, error } = await supabase
+            .from('course_reviews')
+            .select('id')
+            .eq('user_id', userId)
+            .eq('course_id', courseId)
+            .maybeSingle();
+            
+        if (error) return false;
+        return !!data;
+    },
+
+    async getBulkCourseStats() {
+        try {
+            const { data, error } = await supabase
+                .from('course_public_stats')
+                .select('*');
+            
+            if (error) throw error;
+
+            const stats = {};
+            data.forEach(s => {
+                stats[s.course_id] = {
+                    count: s.enrolled_count || 0,
+                    rating: s.average_rating || 0
+                };
+            });
+            return stats;
+        } catch (err) {
+            console.error('Error fetching bulk stats:', err);
+            return {};
+        }
+    },
+
+    async getStudentCount(courseId) {
+        const { data, error } = await supabase
+            .from('course_public_stats')
+            .select('enrolled_count')
+            .eq('course_id', courseId)
+            .maybeSingle();
+
+        if (error) return 0;
+        return data?.enrolled_count || 0;
+    },
+
+    async getTotalStudentCount() {
+        const { data, error } = await supabase
+            .from('course_public_stats')
+            .select('enrolled_count');
+
+        if (error) return 0;
+        return data?.reduce((acc, curr) => acc + (curr.enrolled_count || 0), 0) || 0;
+    }
 };

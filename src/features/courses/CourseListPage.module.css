@@ -238,7 +238,14 @@
     background-color: var(--color-bg-deep);
 }
 
-.guestLayoutWrapper .mainContainer {
-    padding-top: 84px; /* Sufficient space for the sticky Navbar */
+/* When CourseListPage is used inside GuestCoursePage (which has a fixed Navbar) */
+.guestLayoutWrapper .pageWrapper {
+    height: calc(100vh - 72px);
+    margin-top: 72px;
+}
+
+.guestLayoutWrapper .tabsContainer {
+    top: 0; /* Sticky right at the bottom of the fixed Navbar */
+    margin-top: 0;
 }
 

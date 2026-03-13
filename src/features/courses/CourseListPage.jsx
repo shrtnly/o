@@ -32,10 +32,14 @@ const CourseListPage = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [allCourses, enrolledData, bulkStats] = await Promise.all([
-                    courseService.getAllCourses(),
-                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : { data: [] },
-                    courseService.getBulkCourseStats()
+                // Fetch basic course data first to show something immediately if possible
+                const allCourses = await courseService.getAllCourses();
+                setCourses(allCourses || []);
+                
+                // Then fetch optional stats and enrollment
+                const [enrolledData, bulkStats] = await Promise.all([
+                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : Promise.resolve({ data: [] }),
+                    courseService.getBulkCourseStats().catch(() => ({}))
                 ]);
 
                 // Merge live stats into course data
@@ -50,7 +54,7 @@ const CourseListPage = () => {
                     setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
                 }
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching course data:', error);
             } finally {
                 setLoading(false);
             }

@@ -3,7 +3,6 @@ import {
     Trophy, Medal, ChevronLeft, ChevronRight,
     Lock, Zap, TrendingUp, Share2,
 } from 'lucide-react';
-import PollenIcon from '../../components/PollenIcon';
 import InlineLoader from '../../components/ui/InlineLoader';
 import { useNavigate } from 'react-router-dom';
 import { leaderboardService } from '../../services/leaderboardService';
@@ -134,10 +133,10 @@ const LeaderboardPage = () => {
                                     </div>
                                     <div className={styles.lockBannerText}>
                                         <h2>লিডারবোর্ড আনলক করুন</h2>
-                                        <p>প্রতিযোগিতায় অংশ নিতে আরও <strong>{UNLOCK_XP - userXP} XP</strong> অর্জন করুন।</p>
+                                        <p>প্রতিযোগিতায় অংশ নিতে আরও <strong>{UNLOCK_XP - userXP} মধু</strong> অর্জন করুন।</p>
                                         <div className={styles.xpProgressLabel}>
-                                            <span>{userXP} XP অর্জিত</span>
-                                            <span>{UNLOCK_XP} XP</span>
+                                            <span>{userXP} মধু অর্জিত</span>
+                                            <span>{UNLOCK_XP} মধু</span>
                                         </div>
                                         <div className={styles.xpProgressTrack}>
                                             <div
@@ -157,8 +156,8 @@ const LeaderboardPage = () => {
                                         >
                                             <Zap size={20} />
                                         </div>
-                                        <h3>XP কীভাবে অর্জন করবেন?</h3>
-                                        <p>প্রতিটি অধ্যায় বা কুইজ সম্পন্ন করলে XP পাবেন। নির্ভুল উত্তর দিলে বেশি XP।</p>
+                                        <h3>মধু কীভাবে অর্জন করবেন?</h3>
+                                        <p>প্রতিটি অধ্যায় বা কুইজ সম্পন্ন করলে মধু পাবেন। নির্ভুল উত্তর দিলে বেশি মধু।</p>
                                     </div>
 
                                     <div className={styles.introCard}>
@@ -247,7 +246,7 @@ const LeaderboardPage = () => {
                                                     {nextLevel
                                                         ? <>
                                                             {TIERS.find(t => t.id === nextLevel.level)?.nameBn || 'Next'} লিগে যোগ দিতে আরও{' '}
-                                                            <span className={styles.xpHighlight}>+{progress.remaining} XP</span>
+                                                            <span className={styles.xpHighlight}>+{progress.remaining} মধু</span>
                                                           </>
                                                         : 'আপনি Bee Legendary-তে পৌঁছে গেছেন! 🎉'}
                                                 </p>
@@ -265,7 +264,7 @@ const LeaderboardPage = () => {
                                                 <div className={styles.headerCol}>#</div>
                                                 <div className={styles.headerCol}>শিক্ষার্থী</div>
                                                 <div className={styles.headerCol}>অগ্রগতি</div>
-                                                <div className={styles.headerCol}>XP</div>
+                                                <div className={styles.headerCol}>মোট মধু</div>
                                             </div>
                                             <div className={styles.tableBody}>
                                                 {[...Array(8)].map((_, i) => (
@@ -297,7 +296,7 @@ const LeaderboardPage = () => {
                                                 <div className={styles.headerCol}>#</div>
                                                 <div className={styles.headerCol}>শিক্ষার্থী</div>
                                                 <div className={styles.headerCol}>অগ্রগতি</div>
-                                                <div className={styles.headerCol}>XP</div>
+                                                <div className={styles.headerCol}>মোট মধু</div>
                                             </div>
                                             <div className={styles.tableBody}>
                                                 {leaderboardData.length === 0 ? (
@@ -328,7 +327,27 @@ const LeaderboardPage = () => {
                                                                     )}
                                                                 </div>
                                                                 <div className={styles.userInfo}>
-                                                                    <span className={styles.userName}>{item.display_name}</span>
+                                                                    <div className={styles.nameAndShare}>
+                                                                        <span className={styles.userName}>{item.display_name}</span>
+                                                                        {user?.id === item.id && (
+                                                                            <button
+                                                                                className={styles.shareIconBtn}
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    const actualRank = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
+                                                                                    const text = `I'm ranked #${actualRank} in the ${activeTier} Bee on O-sekha! Can you beat my ${item.xp} মধু?`;
+                                                                                    if (navigator.share) {
+                                                                                        navigator.share({ title: 'O-sekha Leaderboard', text, url: window.location.href });
+                                                                                    } else {
+                                                                                        navigator.clipboard.writeText(`${text} ${window.location.href}`);
+                                                                                    }
+                                                                                }}
+                                                                                title="Share your rank"
+                                                                            >
+                                                                                <Share2 size={12} />
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
                                                             </div>
 
@@ -347,28 +366,12 @@ const LeaderboardPage = () => {
                                                             <div className={styles.xpCol}>
                                                                 <div className={styles.xpScoreWrapper}>
                                                                     <div className={styles.pollenLabel}>
-                                                                        <PollenIcon size={13} />
+                                                                        <div className={styles.mobileShield}>
+                                                                            <ShieldIcon xp={item.xp} size={18} showTooltip={false} />
+                                                                        </div>
                                                                         <span>{item.xp}</span>
                                                                     </div>
                                                                 </div>
-                                                                {user?.id === item.id && (
-                                                                    <button
-                                                                        className={styles.shareIconBtn}
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            const actualRank = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
-                                                                            const text = `I'm ranked #${actualRank} in the ${activeTier} Bee on O-sekha! Can you beat my ${item.xp} XP?`;
-                                                                            if (navigator.share) {
-                                                                                navigator.share({ title: 'O-sekha Leaderboard', text, url: window.location.href });
-                                                                            } else {
-                                                                                navigator.clipboard.writeText(`${text} ${window.location.href}`);
-                                                                            }
-                                                                        }}
-                                                                        title="Share your rank"
-                                                                    >
-                                                                        <Share2 size={14} />
-                                                                    </button>
-                                                                )}
                                                             </div>
                                                         </div>
                                                     ))
@@ -381,9 +384,7 @@ const LeaderboardPage = () => {
                                 {/* Footer: rank + pagination */}
                                 {userRank && (
                                     <div className={styles.footerStatus}>
-                                        <div className={styles.footerRank}>
-                                            আপনার স্থান: <strong>#{userRank}</strong>
-                                        </div>
+
                                         {!loading && totalUsers > ITEMS_PER_PAGE && (
                                             <div className={styles.paginationControls}>
                                                 <button

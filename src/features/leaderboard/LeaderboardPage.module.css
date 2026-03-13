@@ -7,7 +7,6 @@
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    background-color: #0a0d0f;
     color: #fff;
     scrollbar-width: thin;
     scrollbar-color: #1e2c33 transparent;
@@ -77,7 +76,7 @@
 .introContainer {
     display: flex;
     flex-direction: column;
-    gap: 48px;
+    gap: 32px;
     animation: fadeSlideIn 0.4s ease;
 }
 
@@ -91,10 +90,10 @@
     background: #111820;
     border: 1px solid #1e2c33;
     border-radius: 18px;
-    padding: 32px 36px;
+    padding: 28px 32px;
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
 }
 
 .lockIconCircle {
@@ -165,17 +164,17 @@
 .introGrid {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 32px;
+    gap: 24px;
 }
 
 .introCard {
     background: #111820;
     border: 1px solid #1a2630;
     border-radius: 16px;
-    padding: 32px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -243,19 +242,19 @@
 }
 
 /* ============================================
-   UNLOCKED STATE — TIER TABS
+   UNLOCKED STATE — TIER TABS (Minimal & Professional)
    ============================================ */
 
 .tabs {
     display: flex;
     justify-content: center;
-    align-items: flex-end;
-    gap: 6px;
-    margin-bottom: 48px;
-    overflow-x: auto;
-    padding: 20px 0 0;
-    scrollbar-width: none;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 12px 0;
     position: relative;
+    overflow-x: auto;
+    scrollbar-width: none;
 }
 
 .tabs::-webkit-scrollbar {
@@ -264,63 +263,64 @@
 
 .tab {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 58px;
-    height: 68px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    border: none;
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     padding: 0;
-    filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.6));
-}
-
-.tab::before {
-    content: '';
-    position: absolute;
-    inset: 1.5px;
-    background: #0f1820;
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-    z-index: 1;
-    transition: background 0.3s ease;
 }
 
 .tabShield {
     z-index: 2;
     transition: all 0.3s ease;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.tab:hover {
-    transform: translateY(-4px);
-    filter: drop-shadow(0 8px 0 rgba(0,0,0,0.5)) brightness(1.2);
+.tab:hover:not(.lockedTab) {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(241, 196, 15, 0.3);
+    transform: translateY(-2px);
 }
 
 .activeTab {
-    width: 90px;
-    height: 104px;
-    background: linear-gradient(180deg, #F1C40F 0%, #C09C00 100%);
-    transform: translateY(4px) scale(1.05);
-    z-index: 10;
-    filter: drop-shadow(0 0 18px rgba(241,196,15,0.35)) drop-shadow(0 2px 0 rgba(0,0,0,0.7));
-}
-
-.activeTab::before {
-    background: linear-gradient(180deg, #141e27 0%, #0a1015 100%);
-    inset: 2px;
+    background: rgba(241, 196, 15, 0.05);
+    border: 1.5px solid #F1C40F;
+    box-shadow: 0 0 20px rgba(241, 196, 15, 0.15),
+                inset 0 0 12px rgba(241, 196, 15, 0.05);
+    width: 72px;
+    height: 72px;
 }
 
 .activeTab .tabShield {
-    filter: drop-shadow(0 0 10px rgba(241,196,15,0.55));
-    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(241, 196, 15, 0.4));
+}
+
+/* Subtle Active Indicator Dot */
+.activeTab::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    width: 4px;
+    height: 4px;
+    background: #F1C40F;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #F1C40F;
 }
 
 .lockedTab {
-    opacity: 0.35;
+    opacity: 0.3;
     cursor: not-allowed;
+    background: rgba(0, 0, 0, 0.1);
+    filter: grayscale(1);
 }
 
 .lockOverlay {
@@ -329,8 +329,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #F1C40F;
-    background: rgba(0,0,0,0.25);
+    color: #5a6a72;
     z-index: 5;
     pointer-events: none;
 }
@@ -373,26 +372,26 @@
    ============================================ */
 
 .leaderboardCard {
-    background: #0d1519;
-    border: 1px solid #1a2630;
+    background: transparent;
+    border: none;
     border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 48px;
+    margin-bottom: 32px;
 }
 
 
 
 .tableHeader {
     display: grid;
-    grid-template-columns: 52px 1fr 180px 120px;
-    padding: 12px 24px;
+    grid-template-columns: 50px 1.2fr 1fr 100px;
+    padding: 12px 20px;
     background: #111820;
     border-bottom: 1px solid #1a2630;
     font-weight: 700;
     color: #2d3f4a;
     text-transform: uppercase;
-    font-size: 0.72rem;
-    letter-spacing: 1.2px;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
 }
 
 .headerCol {
@@ -401,7 +400,8 @@
 }
 
 .headerCol:nth-child(1) { justify-content: center; }
-.headerCol:nth-child(3) { padding-left: 12px; }
+.headerCol:nth-child(2) { justify-content: flex-start; }
+.headerCol:nth-child(3) { justify-content: center; }
 .headerCol:nth-child(4) { justify-content: flex-end; }
 
 
@@ -409,11 +409,11 @@
 /* ---------- Rows ---------- */
 .row {
     display: grid;
-    grid-template-columns: 52px 1fr 180px 120px;
-    padding: 20px 24px;
+    grid-template-columns: 50px 1.2fr 1fr 100px;
+    padding: 14px 20px;
     align-items: center;
     border-bottom: 1px solid #111820;
-    transition: background 0.15s ease;
+    transition: all 0.2s ease;
 }
 
 .row:last-child {
@@ -426,10 +426,11 @@
 
 /* ---------- Current user row ---------- */
 .currentUserRow {
-    background: rgba(241, 196, 15, 0.05) !important;
-    border-bottom: 1px solid rgba(241, 196, 15, 0.12) !important;
-    border-top: 1px solid rgba(241, 196, 15, 0.12) !important;
+    background: rgba(241, 196, 15, 0.04) !important;
+    border-bottom: 1px solid rgba(241, 196, 15, 0.08) !important;
+    border-top: 1px solid rgba(241, 196, 15, 0.08) !important;
     position: relative;
+    box-shadow: inset 0 0 20px rgba(241, 196, 15, 0.02);
 }
 
 .currentUserRow .userName {
@@ -460,15 +461,16 @@
 }
 
 .rankNumber {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #3a4a54;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2a353c;
 }
 
 .medalWrapper {
     display: flex;
     align-items: center;
     justify-content: center;
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.2));
 }
 
 /* Gold / Silver / Bronze medals — subtle size scaling */
@@ -521,22 +523,28 @@
 }
 
 .userName {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #d0d0d0;
+    font-size: 0.925rem;
+    font-weight: 600;
+    color: #e0e0e0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;
-    max-width: 160px;
+}
+
+.nameAndShare {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
 }
 
 /* ---------- Progress column ---------- */
 .progressCol {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    padding-left: 12px;
+    width: 100%;
 }
 
 .progressCol img,
@@ -578,26 +586,29 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: #c9a000;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #F1C40F;
+}
+
+.mobileShield {
+    display: none;
 }
 
 .shareIconBtn {
-    position: absolute;
-    right: -4px;
-    background: transparent;
-    border: 1px solid #1e2c33;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     color: #3a4a54;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s ease;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .shareIconBtn:hover {
@@ -633,8 +644,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 18px 24px;
-    border-top: 1px solid #1a2630;
-    background: #0d1519;
+    border-top: none;
+    background: transparent;
     border-radius: 0 0 20px 20px;
     margin-top: -32px;
 }
@@ -748,10 +759,11 @@
 
     .row,
     .tableHeader {
-        grid-template-columns: 44px 1fr 90px;
+        grid-template-columns: 40px 1fr 85px;
+        padding: 12px 16px;
     }
 
-    .headerCol:nth-child(4) { padding-right: 4px; }
+    .headerCol:nth-child(4) { justify-content: flex-end; }
 
     .lockBanner {
         flex-direction: column;
@@ -772,5 +784,11 @@
     .tabs {
         gap: 4px;
         padding: 16px 0 20px;
+    }
+
+    .mobileShield {
+        display: flex;
+        align-items: center;
+        margin-right: 2px;
     }
 }

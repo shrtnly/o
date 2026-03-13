@@ -28,6 +28,7 @@ const QUEEN_BEE_FEATURES = [
 const ShopPage = () => {
     const { user } = useAuth();
     const { t, language } = useLanguage();
+    const navigate = useNavigate();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
@@ -35,11 +36,18 @@ const ShopPage = () => {
     const [gemToConvert, setGemToConvert] = useState(20);
     const [showCheckout, setShowCheckout] = useState(null); // { type, data }
     const [showConvertConfirmation, setShowConvertConfirmation] = useState(false);
+    const [activePlanType, setActivePlanType] = useState(null); // '1day' | 'monthly' | 'yearly' | null
+    const [planLoading, setPlanLoading] = useState(true);
+    const [timeLeft, setTimeLeft] = useState("");
+    const [oneDayExpiry, setOneDayExpiry] = useState(null);
 
     const calculatedHearts = Math.floor(gemToConvert / 20);
 
     const fetchProfile = async () => {
-        if (!user) return;
+        if (!user) {
+            setLoading(false);
+            return null;
+        }
         try {
             const { data, error } = await supabase
                 .from('profiles')
@@ -48,16 +56,94 @@ const ShopPage = () => {
                 .single();
             if (error) throw error;
             setProfile(data);
+            return data;
         } catch (err) {
             console.error('Error fetching profile:', err);
+            return null;
         } finally {
             setLoading(false);
         }
     };
 
+    const fetchActivePlan = async () => {
+        if (!user) {
+            setPlanLoading(false);
+            return;
+        }
+        try {
+            setPlanLoading(true);
+            const sub = await shopService.getActiveSubscription(user.id);
+            setActivePlanType(sub?.plan_type ?? null);
+            // If it's a 1-day plan, store its specific expiry for the timer
+            if (sub?.plan_type === '1day') {
+                setOneDayExpiry(sub.end_date);
+            } else {
+                setOneDayExpiry(null);
+            }
+        } catch (err) {
+            console.error('Error fetching active plan:', err);
+            setActivePlanType(null);
+            setOneDayExpiry(null);
+        } finally {
+            setPlanLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchProfile();
+        fetchActivePlan();
     }, [user]);
+
+    // Derived Premium States - Isolated Mode
+    const isQueenBee = !!profile?.is_premium;
+    const is1DayActive = !!profile?.is_1day_premium;
+    // For universal features (like unlimited hearts)
+    const isPremium = isQueenBee || is1DayActive;
+
+    // Countdown Logic for 1-Day Recharge
+    useEffect(() => {
+        // Source priority: local state -> dedicated 1-day column -> standard premium column
+        const endGoal = oneDayExpiry || profile?.one_day_premium_until || (profile?.is_1day_premium ? profile.premium_until : null);
+
+        if (!is1DayActive || !endGoal) {
+            setTimeLeft("");
+            return;
+        }
+
+        const tick = () => {
+            const now = new Date();
+            const end = new Date(endGoal);
+            const diff = end - now;
+
+            if (diff <= 0) {
+                setTimeLeft("");
+                fetchProfile();
+                fetchActivePlan();
+                return false;
+            }
+
+            const h = Math.floor(diff / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const format = (num) => num.toString().padStart(2, '0');
+            // Capped at 24 hours for display logic safety
+            const displayH = h >= 24 ? 24 : h;
+            setTimeLeft(`${format(displayH)}:${format(m)}:${format(s)}`);
+            return true;
+        };
+
+        const hasTime = tick();
+        if (!hasTime) return;
+
+        const timer = setInterval(tick, 1000);
+        return () => clearInterval(timer);
+    }, [is1DayActive, profile?.premium_until]);
+
+    // Debugging logic (attach to window for testing if needed)
+    useEffect(() => {
+        window.shopDebug = { profile, activePlanType, isPremium, is1DayActive, isQueenBee, timeLeft };
+    }, [profile, activePlanType, isPremium, is1DayActive, isQueenBee, timeLeft]);
 
     const handleIncrement = () => setGemToConvert(prev => prev + 20);
     const handleDecrement = () => setGemToConvert(prev => Math.max(20, prev - 20));
@@ -68,86 +154,195 @@ const ShopPage = () => {
             return;
         }
 
-        if (profile.is_premium) {
-            toast.error('আপনি একজন কিং বী! আপনার হানি ড্রপ আনলিমিটেড, এক্সচেঞ্জ করার প্রয়োজন নেই। 👑');
+        if (isPremium) {
+            toast.info(language === 'bn' ? 'আপনার আনলিমিটেড হানি ড্রপ সক্রিয় আছে। 👑' : 'Your unlimited honey drops are already active. 👑');
             return;
         }
 
+        const heartsToAdd = calculatedHearts;
+        const gemsToSubtract = gemToConvert;
+
+        // Store previous state for rollback
+        const previousProfile = { ...profile };
+
+        // Optimistic UI update for instant feedback
+        setProfile(prev => ({
+            ...prev,
+            gems: prev.gems - gemsToSubtract,
+            hearts: prev.hearts + heartsToAdd
+        }));
+
         setProcessing(true);
-        console.log('Starting conversion:', { userId: user.id, hearts: calculatedHearts, gems: gemToConvert });
         try {
-            const result = await shopService.convertGemsToHearts(user.id, calculatedHearts, gemToConvert);
-            console.log('Conversion result:', result);
+            const result = await shopService.convertGemsToHearts(user.id, heartsToAdd, gemsToSubtract);
+            
             if (result && result.success) {
-                // Manually update local state first for instant feedback
-                setProfile(prev => ({
-                    ...prev,
-                    gems: result.new_gems ?? (prev.gems - gemToConvert),
-                    hearts: result.new_hearts ?? (prev.hearts + calculatedHearts)
-                }));
-
-                // Then fetch fresh data as backup
-                await fetchProfile();
-
+                // Final state update with data from server to ensure sync
+                const updatedProfile = {
+                    ...previousProfile,
+                    gems: result.new_gems,
+                    hearts: result.new_hearts
+                };
+                setProfile(updatedProfile);
+                
+                // Dispatch global event for other components (Sidebar, TopBar etc.)
+                window.dispatchEvent(new CustomEvent('profileUpdate', { detail: updatedProfile }));
+                
                 const unit = language === 'bn' ? 'টি' : '';
-                toast.success(`${calculatedHearts}${unit} ${t('hearts_added_msg')} 🍯`);
+                toast.success(`${heartsToAdd}${unit} ${t('hearts_added_msg')} 🍯`);
+                
+                // Success state for the modal
+                setProcessing('success');
             } else {
+                // Rollback on server failure
+                setProfile(previousProfile);
+                setProcessing(false);
                 toast.error(result?.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
             }
         } catch (err) {
             console.error('Conversion error:', err);
-            toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
-        } finally {
+            // Rollback on network/logic error
+            setProfile(previousProfile);
             setProcessing(false);
+            toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
         }
     };
 
-    const handlePurchase = (type, data) => {
-        // Instead of immediate purchase, go to checkout logic
-        if (type === 'subscription' && profile?.is_premium) return;
+    const handlePurchase = (type, dataArg = {}) => {
+        if (processing) return;
 
-        const checkoutData = type === 'subscription'
-            ? {
-                id: 'premium',
-                amount: 1,
-                price: planType === 'monthly' ? 99 : 999,
-                label: `${profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} (${planType === 'monthly' ? t('monthly') : t('yearly')})`
+        try {
+            console.log('Shop: [Click Action]', { type, dataArg });
+
+            if (!user) {
+                toast.error('অনুগ্রহ করে লগইন করুন।');
+                return;
             }
-            : { ...data, label: t(data.labelKey) };
 
-        setShowCheckout({ type, data: checkoutData });
+            console.log('Shop: Current State for Purchase Check:', { isQueenBee, is1DayActive, type });
+
+            // Block if already active or redundant
+            if (type === 'subscription' && isQueenBee) {
+                toast.info('আপনি বর্তমানে কিং বী মুড-এ আছেন! 👑');
+                return;
+            }
+            if (type === '1day' && (is1DayActive || isQueenBee)) {
+                toast.info('আপনার আনলিমিটেড হানি ড্রপ আগে থেকেই সক্রিয় আছে।');
+                return;
+            }
+
+            let checkoutData = null;
+            if (type === 'subscription') {
+                checkoutData = {
+                    id: 'premium',
+                    amount: 1,
+                    price: planType === 'monthly' ? 99 : 999,
+                    label: `${profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} (${planType === 'monthly' ? t('monthly') : t('yearly')})`
+                };
+            } else if (type === '1day') {
+                checkoutData = {
+                    id: '1day',
+                    amount: 1,
+                    price: 49,
+                    label: (language === 'bn' ? 'কুইক হানি ড্রপ (১ দিন)' : 'Quick Honey Drop (1 Day)')
+                };
+            } else if (dataArg) {
+                checkoutData = {
+                    ...dataArg,
+                    label: dataArg.labelKey ? t(dataArg.labelKey) : (dataArg.label || 'আইটেম')
+                };
+            }
+
+            if (checkoutData) {
+                console.log('Shop: Opening checkout modal with data:', checkoutData);
+                setShowCheckout({ type, data: checkoutData });
+            } else {
+                toast.error('তথ্য পাওয়া যায়নি।');
+            }
+        } catch (error) {
+            console.error('Shop: handlePurchase error', error);
+            toast.error('দুঃখিত, সমস্যা হয়েছে।');
+        }
     };
 
     const completeCheckout = async () => {
-        if (!showCheckout) return;
+        if (!showCheckout || !showCheckout.data || processing) {
+            console.error('Shop: Cannot complete checkout', { showCheckout, processing });
+            return;
+        }
+
+        if (!user?.id) {
+            toast.error('সেশন পাওয়া যায়নি। আবার লগইন করুন।');
+            return;
+        }
+
         setProcessing(true);
+        const toastId = toast.loading('পেমেন্ট প্রসেসিং হচ্ছে...');
         const { type, data } = showCheckout;
+        console.log(`Shop: completeCheckout [${type}] initiated`, { data });
 
         try {
             let result;
             if (type === 'gems') {
                 result = await shopService.buyGems(user.id, data.amount, data.price, data.id);
-                if (result.success) {
+                if (result?.success) {
                     await fetchProfile();
-                    toast.success(t('gems_added').replace('টি', `${data.amount}টি`));
-                }
+                    toast.success(t('gems_added').replace('টি', `${data.amount}টি`), { id: toastId });
+                } else throw new Error();
             } else if (type === 'subscription') {
                 result = await shopService.subscribeToPremium(user.id, planType, data.price);
-                if (result.success) {
-                    await fetchProfile();
-                    const beeName = profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode');
-                    toast.success(`অভিনন্দন! আপনি এখন ${beeName}! 👑`);
+                if (result?.success) {
+                    setProfile(prev => ({ 
+                        ...prev, 
+                        is_premium: true,
+                        premium_until: result.end_date, // Now correctly tracks from DB result
+                        is_1day_premium: false, // Isolate: Queen Bee resets 1-day
+                        one_day_premium_until: null
+                    }));
+                    setActivePlanType(planType);
+                    await Promise.all([fetchProfile(), fetchActivePlan()]);
+                    toast.success('সাবস্ক্রিপশন সফল! আপনি এখন মেম্বার! 👑', { id: toastId });
+                } else throw new Error();
+            } else if (type === '1day') {
+                result = await shopService.buy1DayPremium(user.id, data.price);
+                console.log('Shop: 1-day purchase result:', result);
+                if (result && result.success) {
+                    // Update state immediately for UI responsiveness
+                    setProfile(prev => ({
+                        ...prev,
+                        is_1day_premium: true, // ONLY set 1-day flag (Isolate)
+                        one_day_premium_until: result.premium_until
+                    }));
+                    setActivePlanType('1day');
+                    setOneDayExpiry(result.premium_until);
+                    setPlanLoading(false);
+
+                    // Refresh fresh data in background
+                    fetchProfile().then(p => {
+                        console.log('Shop: Profile refreshed after 1-day purchase', p);
+                        // Dispatch global event for other components (like Sidebar) to refresh
+                        window.dispatchEvent(new CustomEvent('profileUpdate', { detail: p }));
+                    });
+                    fetchActivePlan();
+
+                    toast.success('১ দিনের রিচার্জ সফল! আনলিমিটেড হানি ড্রপ উপভোগ করুন 🍯', { id: toastId });
+                } else {
+                    console.error('Shop: 1-day purchase failed', result);
+                    const msg = result?.message || 'পেমেন্ট প্রসেস করা সম্ভব হয়নি।';
+                    toast.error(msg, { id: toastId });
+                    throw new Error(msg);
                 }
             } else if (type === 'hearts') {
                 result = await shopService.buyHearts(user.id, data.amount, data.price, data.id);
-                if (result.success) {
+                if (result?.success) {
                     await fetchProfile();
-                    toast.success(t('hearts_added').replace('টি', `${data.amount}টি`));
-                }
+                    toast.success(t('hearts_added').replace('টি', `${data.amount}টি`), { id: toastId });
+                } else throw new Error();
             }
             setShowCheckout(null);
         } catch (err) {
-            toast.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।');
+            console.error('Shop: Checkout error', err);
+            toast.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।', { id: toastId });
         } finally {
             setProcessing(false);
         }
@@ -171,7 +366,7 @@ const ShopPage = () => {
                                         autoplay
                                     />
                                 </div>
-                                <p>
+                                <p className={styles.headerSub}>
                                     {profile?.gender === 'male'
                                         ? 'আনলিমিটেড মধু নিয়ে শিখতে থাকুন'
                                         : 'আনলিমিটেড মধু নিয়ে শিখতে থাকুন'}
@@ -205,11 +400,12 @@ const ShopPage = () => {
 
                                 <div className={styles.qbCardRight}>
                                     <button
-                                        className={`${styles.qbActivateBtn} ${profile?.is_premium ? styles.activeBtnStyle : ''}`}
-                                        onClick={() => !profile?.is_premium && handlePurchase('subscription')}
-                                        disabled={processing || profile?.is_premium}
+                                        id="queen-bee-activate-btn"
+                                        className={`${styles.qbActivateBtn} ${isQueenBee ? styles.activeBtnStyle : ''}`}
+                                        onClick={() => handlePurchase('subscription')}
+                                        disabled={processing || isQueenBee}
                                     >
-                                        {profile?.is_premium
+                                        {isQueenBee
                                             ? (language === 'bn' ? 'সক্রিয়' : 'Active')
                                             : (language === 'bn' ? 'সক্রিয় করুন' : 'Activate')
                                         }
@@ -217,7 +413,7 @@ const ShopPage = () => {
                                 </div>
                             </div>
 
-                            <div className={styles.queenBeeCardHorizontal} style={{ marginTop: '20px' }}>
+                            <div className={styles.queenBeeCardHorizontal}>
                                 <div className={styles.qbCardLeft}>
                                     <div className={styles.qbIconBg}>
                                         <Zap size={32} color="#f1c40f" />
@@ -237,20 +433,45 @@ const ShopPage = () => {
 
                                 <div className={styles.qbCardRight}>
                                     <button
-                                        className={`${styles.qbActivateBtn} ${styles.blueBtn}`}
-                                        onClick={() => handlePurchase('hearts', { id: 'unlimited_1d', amount: 24, price: 49, labelKey: 'unlimited_1d' })}
-                                        disabled={processing}
+                                        id="recharge-1day-btn"
+                                        className={`${styles.qbActivateBtn} ${(isQueenBee || is1DayActive) ? styles.activeBtnStyle : styles.blueBtn}`}
+                                        onClick={() => handlePurchase('1day')}
+                                        disabled={processing || isQueenBee || is1DayActive}
                                     >
-                                        রিচার্জ 1 দিন
+                                        {is1DayActive && timeLeft
+                                            ? timeLeft
+                                            : (isQueenBee || is1DayActive)
+                                                ? (language === 'bn' ? 'সক্রিয়' : 'Active')
+                                                : (language === 'bn' ? 'রিচার্জ 1 দিন' : 'Recharge 1 Day')
+                                        }
                                     </button>
                                 </div>
                             </div>
                         </section>
 
                         <section className={styles.section}>
-                            <div className={styles.queenBeeCardHorizontal} style={{ marginTop: '20px' }}>
+                             <div className={styles.queenBeeCardHorizontal}>
                                 <div className={styles.qbCardLeft}>
-                                    <div className={styles.qbIconBg}>
+                                    <div 
+                                        className={styles.qbIconBg}
+                                        style={{ 
+                                            cursor: (processing || isPremium || (profile?.gems < gemToConvert)) ? 'default' : 'pointer',
+                                            transition: 'transform 0.1s'
+                                        }}
+                                        onClick={() => {
+                                            if (!(processing || isPremium || (profile?.gems < gemToConvert))) {
+                                                setShowConvertConfirmation(true);
+                                            }
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (!(processing || isPremium || (profile?.gems < gemToConvert))) {
+                                                e.currentTarget.style.transform = 'scale(1.05)';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.transform = 'scale(1)';
+                                        }}
+                                    >
                                         <PollenIcon size={32} />
                                     </div>
                                 </div>
@@ -259,11 +480,7 @@ const ShopPage = () => {
                                     <h3 className={styles.qbTitleHero}>
                                         {t('exchange')}
                                     </h3>
-                                    <div className={styles.qbFeaturesRow} style={{ marginBottom: '8px' }}>
-                                        <span className={styles.qbFeaturePill}>
-                                            {language === 'bn' ? 'পরাগরেণু দিয়ে রিফিল করুন' : 'Refill honey drops using your pollen'}
-                                        </span>
-                                    </div>
+                                  
                                     <div className={styles.exchangeControlsRow}>
                                         <button className={styles.miniStepBtn} onClick={handleDecrement} disabled={gemToConvert <= 20}>
                                             <Minus size={14} />
@@ -279,11 +496,26 @@ const ShopPage = () => {
 
                                 <div className={styles.qbCardRight}>
                                     <button
-                                        className={`${styles.qbActivateBtn} ${styles.greenBtn}`}
-                                        onClick={() => setShowConvertConfirmation(true)}
-                                        disabled={processing || (profile?.gems < gemToConvert)}
+                                        id="exchange-pollen-btn"
+                                        className={`${styles.qbActivateBtn} ${(isQueenBee || is1DayActive) ? styles.activeBtnStyle : styles.greenBtn}`}
+                                        onClick={() => {
+                                            if (profile?.gems < gemToConvert) {
+                                                setProcessing('insufficient');
+                                                setShowConvertConfirmation(true);
+                                            } else {
+                                                setShowConvertConfirmation(true);
+                                            }
+                                        }}
+                                        disabled={processing === true || isQueenBee || is1DayActive}
                                     >
-                                        {processing ? <Loader2 size={18} className={styles.spinner} /> : `+${calculatedHearts} হানি ড্রপ`}
+                                        {processing === true ? (
+                                            <Loader2 size={18} className={styles.spinner} />
+                                        ) : (
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <HoneyDropIcon size={18} />
+                                                <span>+{calculatedHearts} {language === 'bn' ? 'হানি ড্রপ' : 'Honey Drop'}</span>
+                                            </div>
+                                        )}
                                     </button>
                                 </div>
                             </div>
@@ -373,79 +605,121 @@ const ShopPage = () => {
             }
             {
                 showConvertConfirmation && (
-                    <div className={styles.checkoutOverlay} onClick={() => setShowConvertConfirmation(false)}>
-                        <div className={styles.checkoutModal} onClick={e => e.stopPropagation()} style={{ textAlign: 'center' }}>
-                            <div className={styles.checkoutHeader}>
-                                <div style={{ marginBottom: '20px' }}>
-                                    <HoneyDropIcon size={72} />
+                    <div className={styles.checkoutOverlay} onClick={() => !processing && setShowConvertConfirmation(false)}>
+                        <div className={styles.exchangeModal} onClick={e => e.stopPropagation()}>
+                            {processing === 'success' ? (
+                                <div className={styles.exchangeSuccess}>
+                                    <div className={styles.successLottie}>
+                                        <DotLottieReact
+                                            src="/models/Honey bee.lottie"
+                                            loop
+                                            autoplay
+                                        />
+                                    </div>
+                                    <h2 className={styles.successTitle}>সফল হয়েছে!</h2>
+                                    <p className={styles.successDesc}>
+                                        আপনার পরাগরেণু সফলভাবে হানি ড্রপে রূপান্তরিত হয়েছে।
+                                    </p>
+                                    <button 
+                                        className={styles.confirmBtn} 
+                                        onClick={() => {
+                                            navigate('/learn');
+                                        }}
+                                        style={{ width: '100%' }}
+                                    >
+                                        {language === 'bn' ? 'ফিরে যান' : 'Go Back'}
+                                    </button>
                                 </div>
-                                <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '12px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
-                                <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', marginBottom: '24px' }}>
-                                    আপনি কি <strong>{gemToConvert}টি</strong> পরাগরেণু দিয়ে <strong>{calculatedHearts}টি</strong> হানি ড্রপ নিতে চান?
-                                </p>
-                            </div>
+                            ) : processing === 'insufficient' ? (
+                                <div className={styles.exchangeSuccess}>
+                                    <div className={styles.successLottie} style={{ background: 'rgba(241,196,15,0.05)', borderRadius: '50%', padding: '20px' }}>
+                                        <PollenIcon size={100} />
+                                    </div>
+                                    <h2 className={styles.successTitle} style={{ color: '#fff', fontSize: '1.6rem' }}>পর্যাপ্ত পরাগরেণু নেই</h2>
+                                    <p className={styles.successDesc}>
+                                        হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> পরাগরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? 'কিং বী মোড' : 'কুইন বী মোড'} নিন।
+                                    </p>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+                                        <button 
+                                            className={styles.confirmBtn}
+                                            style={{ width: '100%', background: 'linear-gradient(135deg, #1cb0f6 0%, #1796d1 100%)', boxShadow: '0 4px 0 #1480b3' }}
+                                            onClick={() => navigate('/learn')}
+                                        >
+                                            পড়া শুরু করুন (Earn Pollen)
+                                        </button>
+                                        <button 
+                                            className={styles.confirmBtn}
+                                            onClick={() => {
+                                                setShowConvertConfirmation(false);
+                                                setProcessing(false);
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            }}
+                                            style={{ width: '100%' }}
+                                        >
+                                            {profile?.gender === 'male' 
+                                                ? (language === 'bn' ? 'কিং বী মোড দেখুন' : 'View King Bee Mode') 
+                                                : (language === 'bn' ? 'কুইন বী মোড দেখুন' : 'View Queen Bee Mode')
+                                            }
+                                        </button>
+                                        <button 
+                                            className={styles.cancelBtn}
+                                            onClick={() => {
+                                                setShowConvertConfirmation(false);
+                                                setProcessing(false);
+                                            }}
+                                            style={{ border: 'none' }}
+                                        >
+                                            এখন নয়
+                                        </button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    <div className={styles.checkoutHeader}>
+                                        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
+                                        <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
+                                            পরাগরেণু দিয়ে হানি ড্রপ পাওয়ার জন্য কনফার্ম করুন
+                                        </p>
+                                    </div>
 
-                            {profile?.is_premium && (
-                                <div style={{
-                                    background: 'rgba(241, 196, 15, 0.1)',
-                                    border: '1px solid #f1c40f',
-                                    borderRadius: '15px',
-                                    padding: '16px',
-                                    marginBottom: '24px',
-                                    color: '#f1c40f',
-                                    fontSize: '0.9rem',
-                                    fontWeight: 700,
-                                    lineHeight: 1.5,
-                                    textAlign: 'left',
-                                    display: 'flex',
-                                    gap: '12px',
-                                    alignItems: 'center'
-                                }}>
-                                    <span style={{ fontSize: '1.5rem' }}>👑</span>
-                                    <span>আপনি একজন কিং বী! আপনার হানি ড্রপ কখনো শেষ হবে না, তাই এক্সচেঞ্জ করার প্রয়োজন নেই।</span>
-                                </div>
+                                    <div className={styles.transactionFlow}>
+                                        <div className={styles.transactionItem}>
+                                            <div className={styles.itemCircle}>
+                                                <PollenIcon size={48} />
+                                            </div>
+                                            <span className={styles.itemAmount}>{gemToConvert}</span>
+                                        </div>
+                                        
+                                        <div className={styles.transactionArrow}>
+                                            <ChevronRight size={32} strokeWidth={3} />
+                                        </div>
+
+                                        <div className={styles.transactionItem}>
+                                            <div className={styles.itemCircle} style={{ borderColor: '#f1c40f' }}>
+                                                <HoneyDropIcon size={48} />
+                                            </div>
+                                            <span className={styles.itemAmount} style={{ color: '#f1c40f' }}>+{calculatedHearts}</span>
+                                        </div>
+                                    </div>
+
+                                    <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
+                                        <button
+                                            onClick={() => setShowConvertConfirmation(false)}
+                                            className={styles.cancelBtn}
+                                            disabled={processing === true}
+                                        >
+                                            না
+                                        </button>
+                                        <button
+                                            onClick={handleConvertAction}
+                                            className={styles.confirmBtn}
+                                            disabled={processing === true}
+                                        >
+                                            {processing === true ? <Loader2 className={styles.spinner} /> : 'হ্যাঁ, কনফার্ম'}
+                                        </button>
+                                    </div>
+                                </>
                             )}
-
-                            <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
-                                <button
-                                    onClick={() => setShowConvertConfirmation(false)}
-                                    style={{
-                                        flex: 1,
-                                        padding: '16px',
-                                        borderRadius: '16px',
-                                        border: '2px solid #37464f',
-                                        background: 'rgba(255,255,255,0.05)',
-                                        color: '#fff',
-                                        fontWeight: 900,
-                                        fontSize: '1.1rem',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s'
-                                    }}
-                                >
-                                    না
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        handleConvertAction();
-                                        setShowConvertConfirmation(false);
-                                    }}
-                                    style={{
-                                        flex: 1,
-                                        padding: '16px',
-                                        borderRadius: '16px',
-                                        background: '#f1c40f',
-                                        color: '#000',
-                                        border: 'none',
-                                        fontWeight: 900,
-                                        fontSize: '1.1rem',
-                                        cursor: 'pointer',
-                                        boxShadow: '0 4px 0 #9a7d0a',
-                                        transition: 'all 0.2s'
-                                    }}
-                                >
-                                    হ্যাঁ
-                                </button>
-                            </div>
                         </div>
                     </div>
                 )

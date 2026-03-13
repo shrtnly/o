@@ -1,79 +1,259 @@
+/* ============================================
+   LEADERBOARD PAGE — MINIMAL DARK THEME
+   ============================================ */
+
+/* ---------- Layout ---------- */
 .container {
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    background-color: #0a1114;
+    background-color: #0a0d0f;
     color: #fff;
+    scrollbar-width: thin;
+    scrollbar-color: #1e2c33 transparent;
+}
+
+.container::-webkit-scrollbar {
+    width: 4px;
+}
+
+.container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: #1e2c33;
+    border-radius: 4px;
 }
 
 .mainContent {
-    padding: 30px 48px 60px;
-    max-width: 900px;
+    padding: 36px 48px 80px;
+    max-width: 860px;
     margin: 0 auto;
     width: 100%;
 }
 
-.headerCol {
+/* ---------- Page Header ---------- */
+.pageHeader {
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
 }
 
-.headerCol:nth-child(2) {
+.pageHeaderIcon {
+    width: 42px;
+    height: 42px;
+    background: rgba(241, 196, 15, 0.1);
+    border: 1px solid rgba(241, 196, 15, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    color: #F1C40F;
+    flex-shrink: 0;
 }
 
-.header {
-    margin-bottom: 40px;
+.pageHeader h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -0.3px;
 }
 
-.titleSection {
+.pageHeaderSub {
+    font-size: 0.875rem;
+    color: #5a6a72;
+    font-weight: 500;
+    margin: 0;
+    margin-top: 2px;
+}
+
+/* ============================================
+   LOCKED STATE
+   ============================================ */
+
+.introContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+    animation: fadeSlideIn 0.4s ease;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ---------- Lock banner ---------- */
+.lockBanner {
+    background: #111820;
+    border: 1px solid #1e2c33;
+    border-radius: 18px;
+    padding: 32px 36px;
     display: flex;
     align-items: center;
     gap: 24px;
 }
 
-.trophyIcon {
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.3));
-    animation: floating 3s infinite ease-in-out;
+.lockIconCircle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #1a2630;
+    border: 1.5px solid #273540;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5a6a72;
+    flex-shrink: 0;
 }
 
-@keyframes floating {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
+.lockBannerText {
+    flex: 1;
+    min-width: 0;
 }
 
-.titleSection h1 {
-    font-size: 2.5rem;
-    font-weight: 900;
-    margin-bottom: 8px;
-    background: linear-gradient(135deg, #fff 0%, #afafaf 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.titleSection p {
-    color: #afafaf;
+.lockBannerText h2 {
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 800;
+    color: #e0e0e0;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.2px;
 }
+
+.lockBannerText p {
+    font-size: 0.875rem;
+    color: #5a6a72;
+    font-weight: 500;
+    margin: 0 0 14px 0;
+    line-height: 1.5;
+}
+
+/* XP progress bar inside lock banner */
+.xpProgressTrack {
+    height: 6px;
+    background: #1a2630;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.xpProgressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #F1C40F, #ff8c00);
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.35);
+}
+
+.xpProgressLabel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #3a4a54;
+}
+
+.xpProgressLabel span:last-child {
+    color: #F1C40F;
+}
+
+/* ---------- Intro info cards ---------- */
+.introGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+}
+
+.introCard {
+    background: #111820;
+    border: 1px solid #1a2630;
+    border-radius: 16px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.introCard:hover {
+    border-color: rgba(241, 196, 15, 0.2);
+    transform: translateY(-3px);
+}
+
+.introIconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.introCard h3 {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #e0e0e0;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.introCard p {
+    font-size: 0.82rem;
+    color: #4a5c65;
+    line-height: 1.6;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ---------- Action / CTA ---------- */
+.actionSection {
+    display: flex;
+    justify-content: center;
+    padding-top: 4px;
+}
+
+.startLearningBtn {
+    background: #F1C40F;
+    color: #0a0d0f;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    transition: all 0.15s ease;
+    box-shadow: 0 4px 0 #b8960b;
+}
+
+.startLearningBtn:hover {
+    background: #fad030;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 #b8960b;
+}
+
+.startLearningBtn:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #b8960b;
+}
+
+/* ============================================
+   UNLOCKED STATE — TIER TABS
+   ============================================ */
 
 .tabs {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: 50px;
+    align-items: flex-end;
+    gap: 6px;
+    margin-bottom: 48px;
     overflow-x: auto;
-    padding: 25px 0;
+    padding: 20px 0 0;
     scrollbar-width: none;
     position: relative;
 }
@@ -86,25 +266,23 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 70px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    width: 58px;
+    height: 68px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     border: none;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
     padding: 0;
-    filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.5));
-    /* 3D Base Shadow */
+    filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.6));
 }
 
 .tab::before {
     content: '';
     position: absolute;
     inset: 1.5px;
-    /* Ultra-thin 3D border */
-    background: #161b22;
+    background: #0f1820;
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     z-index: 1;
     transition: background 0.3s ease;
@@ -113,108 +291,168 @@
 .tabShield {
     z-index: 2;
     transition: all 0.3s ease;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 .tab:hover {
     transform: translateY(-4px);
-    filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.5)) brightness(1.2);
+    filter: drop-shadow(0 8px 0 rgba(0,0,0,0.5)) brightness(1.2);
 }
 
 .activeTab {
-    width: 95px;
-    height: 110px;
-    background: linear-gradient(180deg, #F1C40F 0%, #B8860B 100%);
-    transform: translateY(4px) scale(1.1);
-    /* Pushed-down 3D effect */
+    width: 90px;
+    height: 104px;
+    background: linear-gradient(180deg, #F1C40F 0%, #C09C00 100%);
+    transform: translateY(4px) scale(1.05);
     z-index: 10;
-    filter: drop-shadow(0 0 20px rgba(241, 196, 15, 0.4)) drop-shadow(0 2px 0 rgba(0, 0, 0, 0.6));
+    filter: drop-shadow(0 0 18px rgba(241,196,15,0.35)) drop-shadow(0 2px 0 rgba(0,0,0,0.7));
 }
 
 .activeTab::before {
-    background: linear-gradient(180deg, #1a272d 0%, #0d1117 100%);
+    background: linear-gradient(180deg, #141e27 0%, #0a1015 100%);
     inset: 2px;
-    /* Thinner sophisticated border */
 }
 
 .activeTab .tabShield {
-    filter: drop-shadow(0 0 12px rgba(241, 196, 15, 0.6));
-    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(241,196,15,0.55));
+    transform: scale(1.05);
 }
 
-.leaderboardCard {
-    background-color: rgba(26, 39, 45, 0.8);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(241, 196, 15, 0.2);
-    border-radius: 24px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    margin-bottom: 40px;
+.lockedTab {
+    opacity: 0.35;
+    cursor: not-allowed;
 }
 
-.tableHeader {
-    display: grid;
-    grid-template-columns: 60px 180px 1fr 180px;
-    padding: 10px 24px;
-    background-color: #233138;
-    border-bottom: 2px solid rgba(255, 153, 2, 0.2);
-    font-weight: 800;
-    color: #afafaf;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-}
-
-.row {
-    display: grid;
-    grid-template-columns: 60px 180px 1fr 180px;
-    padding: 10px 24px;
-    align-items: center;
-    border-bottom: 1px solid rgba(46, 204, 113, 0.1);
-    transition: all 0.2s ease;
-}
-
-.row:hover {
-    background-color: rgba(255, 153, 2, 0.04);
-}
-
-.currentUserRow {
-    background: linear-gradient(90deg, rgba(241, 196, 15, 0.15) 0%, rgba(241, 196, 15, 0.02) 100%);
-    border: 2px solid #F1C40F !important;
-    border-radius: 12px;
-    margin: 4px 12px;
-    box-shadow: 0 0 20px rgba(241, 196, 15, 0.2), inset 0 0 10px rgba(241, 196, 15, 0.1);
-    position: relative;
-    z-index: 1;
-}
-
-.currentUserRow::after {
-    content: '';
+.lockOverlay {
     position: absolute;
-    inset: -1px;
-    border-radius: 12px;
-    padding: 1px;
-    background: linear-gradient(45deg, #F1C40F, #2ecc71);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #F1C40F;
+    background: rgba(0,0,0,0.25);
+    z-index: 5;
     pointer-events: none;
 }
 
-.currentUserRow .userName {
-    color: #ff9902;
+/* ============================================
+   PROGRESS SECTION (tier label + XP bar)
+   ============================================ */
+
+.progressSection {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
 }
 
-.currentUserRow .xpValue {
+.progressTitle h1 {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #F1C40F;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.progressTitle p {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4a5c65;
+    margin: 4px 0 0;
+}
+
+.xpHighlight {
     color: #ff9902;
+    font-weight: 900;
+}
+
+/* ============================================
+   LEADERBOARD TABLE CARD
+   ============================================ */
+
+.leaderboardCard {
+    background: #0d1519;
+    border: 1px solid #1a2630;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 48px;
+}
+
+
+
+.tableHeader {
+    display: grid;
+    grid-template-columns: 52px 1fr 180px 120px;
+    padding: 12px 24px;
+    background: #111820;
+    border-bottom: 1px solid #1a2630;
+    font-weight: 700;
+    color: #2d3f4a;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 1.2px;
+}
+
+.headerCol {
+    display: flex;
+    align-items: center;
+}
+
+.headerCol:nth-child(1) { justify-content: center; }
+.headerCol:nth-child(3) { padding-left: 12px; }
+.headerCol:nth-child(4) { justify-content: flex-end; }
+
+
+
+/* ---------- Rows ---------- */
+.row {
+    display: grid;
+    grid-template-columns: 52px 1fr 180px 120px;
+    padding: 20px 24px;
+    align-items: center;
+    border-bottom: 1px solid #111820;
+    transition: background 0.15s ease;
+}
+
+.row:last-child {
+    border-bottom: none;
+}
+
+.row:hover {
+    background: rgba(241, 196, 15, 0.03);
+}
+
+/* ---------- Current user row ---------- */
+.currentUserRow {
+    background: rgba(241, 196, 15, 0.05) !important;
+    border-bottom: 1px solid rgba(241, 196, 15, 0.12) !important;
+    border-top: 1px solid rgba(241, 196, 15, 0.12) !important;
+    position: relative;
+}
+
+.currentUserRow .userName {
+    color: #F1C40F;
 }
 
 .currentUserRow .rankNumber {
-    color: #ff9902;
+    color: #F1C40F;
 }
 
+/* Subtle left accent bar */
+.currentUserRow::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 3px;
+    background: #F1C40F;
+    border-radius: 0 3px 3px 0;
+}
+
+/* ---------- Rank column ---------- */
 .rankCol {
     display: flex;
     justify-content: center;
@@ -222,26 +460,39 @@
 }
 
 .rankNumber {
-    font-size: 1.2rem;
-    font-weight: 900;
-    color: #fff;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #3a4a54;
 }
 
+.medalWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Gold / Silver / Bronze medals — subtle size scaling */
+.medalGold   { color: #F1C40F; }
+.medalSilver { color: #9ca3af; }
+.medalBronze { color: #b87333; }
+
+/* ---------- User column ---------- */
 .userCol {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     min-width: 0;
 }
 
 .avatarWrapper {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    background-color: #37464f;
-    border: 2px solid #4b5a64;
+    background: #1a2630;
+    border: 1.5px solid #273540;
     flex-shrink: 0;
+    position: relative;
 }
 
 .avatar {
@@ -256,252 +507,174 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: 900;
-    color: #fff;
-    background: linear-gradient(135deg, #ff9902 0%, #e68a00 100%);
+    color: #0a0d0f;
+    background: linear-gradient(135deg, #F1C40F 0%, #e68a00 100%);
 }
 
 .userInfo {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     min-width: 0;
 }
 
 .userName {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: #fff;
-    max-width: 140px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #d0d0d0;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
+    max-width: 160px;
 }
 
-.tierTag {
+/* ---------- Progress column ---------- */
+.progressCol {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #afafaf;
-    text-transform: uppercase;
+    gap: 10px;
+    padding-left: 12px;
 }
 
+.progressCol img,
+.progressCol svg {
+    filter: none !important;
+    flex-shrink: 0;
+}
+
+.progressBarWrapper {
+    flex: 1;
+    height: 4px;
+    background: #1a2630;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progressBar {
+    height: 100%;
+    background: linear-gradient(90deg, #F1C40F, #ff8200);
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- XP column ---------- */
 .xpCol {
     display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 6px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
     position: relative;
-}
-
-.xpValue {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #fff;
 }
 
 .xpScoreWrapper {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 2px;
 }
 
 .pollenLabel {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 1.1rem;
+    gap: 5px;
+    font-size: 0.9rem;
     font-weight: 800;
-    color: #F1C40F;
-    background: rgba(241, 196, 15, 0.15);
-    padding: 6px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(241, 196, 15, 0.2);
-    box-shadow: 0 0 10px rgba(241, 196, 15, 0.1);
-}
-
-.medalWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    filter: drop-shadow(0 0 8px rgba(241, 196, 15, 0.3));
-    animation: medalPulse 2s infinite ease-in-out;
-}
-
-@keyframes medalPulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.1);
-    }
-}
-
-.xpLabel {
-    display: none;
+    color: #c9a000;
 }
 
 .shareIconBtn {
     position: absolute;
-    right: 12px;
-    background: rgba(255, 153, 2, 0.1);
-    border: 1.5px solid #ff9902;
-    color: #ff9902;
-    width: 32px;
-    height: 32px;
+    right: -4px;
+    background: transparent;
+    border: 1px solid #1e2c33;
+    color: #3a4a54;
+    width: 28px;
+    height: 28px;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease;
     padding: 0;
 }
 
 .shareIconBtn:hover {
-    background: #ff9902;
-    color: #fff;
-    transform: scale(1.1);
-    box-shadow: 0 0 10px rgba(255, 153, 2, 0.4);
+    background: rgba(241, 196, 15, 0.1);
+    border-color: rgba(241, 196, 15, 0.3);
+    color: #F1C40F;
 }
 
-.shareIconBtn:active {
-    transform: scale(0.95);
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.skeleton {
-    background: #233138;
-    background: linear-gradient(90deg, #233138 25%, #2a3a42 50%, #233138 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 4px;
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: 200% 0;
-    }
-
-    100% {
-        background-position: -200% 0;
-    }
-}
-
-.skeletonRank {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-}
-
-.skeletonAvatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-}
-
-.skeletonName {
-    width: 100px;
-    height: 18px;
-}
-
-.skeletonShield {
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
-}
-
-.skeletonBar {
-    flex: 1;
-    height: 10px;
-    border-radius: 10px;
-}
-
-.skeletonXP {
-    width: 60px;
-    height: 24px;
-}
-
+/* ---------- Empty state ---------- */
 .emptyState {
-    padding: 80px 40px;
+    padding: 64px 40px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
 .emptyState p {
-    color: #afafaf;
+    color: #3a4a54;
     font-weight: 600;
-    max-width: 400px;
+    font-size: 0.9rem;
+    max-width: 340px;
     line-height: 1.6;
 }
 
+/* ============================================
+   FOOTER STATUS + PAGINATION
+   ============================================ */
+
 .footerStatus {
-    margin-top: 32px;
-    padding: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 2px solid rgba(255, 153, 2, 0.2);
-    width: 100%;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(100px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    padding: 18px 24px;
+    border-top: 1px solid #1a2630;
+    background: #0d1519;
+    border-radius: 0 0 20px 20px;
+    margin-top: -32px;
 }
 
 .footerRank {
-    font-size: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #4a5c65;
+}
+
+.footerRank strong {
+    color: #F1C40F;
     font-weight: 900;
-    color: #fff;
 }
 
 .paginationControls {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
 }
 
 .pageBtn {
-    background-color: #1a272d;
-    border: 2px solid rgba(255, 153, 2, 0.3);
-    color: #fff;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    background: #0f1820;
+    border: 1px solid #1e2c33;
+    color: #5a6a72;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s ease;
+    padding: 0;
 }
 
 .pageBtn:hover:not(:disabled) {
-    background-color: #37464f;
-    transform: translateY(-2px);
+    border-color: rgba(241, 196, 15, 0.3);
+    color: #F1C40F;
+    background: rgba(241, 196, 15, 0.05);
 }
 
 .pageBtn:disabled {
@@ -510,276 +683,40 @@
 }
 
 .pageInfo {
-    font-size: 1rem;
-    font-weight: 800;
-    color: #afafaf;
-    min-width: 100px;
-    text-align: center;
-}
-
-.introContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.lockInfoBanner {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    background-color: #1a272d;
-    padding: 24px 32px;
-    border-radius: 20px;
-    border: 2px solid #37464f;
-}
-
-.lockIconBox {
-    width: 64px;
-    height: 64px;
-    background-color: #233138;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #afafaf;
-}
-
-.lockTextContent h2 {
-    font-size: 1.5rem;
-    font-weight: 900;
-    margin-bottom: 4px;
-}
-
-.lockTextContent p {
-    color: #afafaf;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.introGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 24px;
-}
-
-.introCard {
-    background-color: #1a272d;
-    padding: 32px;
-    border-radius: 20px;
-    border: 2px solid #37464f;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    transition: transform 0.2s;
-}
-
-.introCard:hover {
-    transform: translateY(-5px);
-}
-
-.introIconBox {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.introCard h3 {
-    font-size: 1.25rem;
-    font-weight: 900;
-}
-
-.introCard p {
-    color: #afafaf;
-    line-height: 1.6;
-    font-weight: 600;
-}
-
-.actionSection {
-    display: flex;
-    justify-content: center;
-    padding-top: 16px;
-}
-
-.startLearningBtn {
-    background-color: #ff9902;
-    color: #fff;
-    border: none;
-    padding: 16px 48px;
-    border-radius: 16px;
-    font-size: 1.1rem;
-    font-weight: 900;
-    cursor: pointer;
-    box-shadow: 0 5px 0 #e68a00;
-    transition: all 0.1s;
-}
-
-.startLearningBtn:active {
-    transform: translateY(3px);
-    box-shadow: 0 2px 0 #e68a00;
-}
-
-@media (max-width: 1000px) {
-    .container {
-        grid-template-columns: 80px 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .mainContent {
-        padding: 40px 20px;
-    }
-
-    .headerCol:first-child,
-    .rankCol {
-        display: none;
-    }
-
-    .progressCol {
-        display: none;
-    }
-
-    .row,
-    .tableHeader {
-        grid-template-columns: 1fr 80px;
-    }
-
-    .lockInfoBanner {
-        flex-direction: column;
-        text-align: center;
-        padding: 32px 24px;
-    }
-
-    .footerStatus {
-        flex-direction: column;
-        gap: 16px;
-        text-align: center;
-        padding: 24px 12px;
-    }
-}
-
-.progressSection {
-    margin-bottom: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 8px;
-    width: 100%;
-}
-
-.progressTitle {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.progressTitle h1 {
-    font-size: 2.8rem;
-    font-weight: 900;
-    color: #F1C40F;
-    margin: 0;
-    text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
-}
-
-.progressTitle p {
-    font-size: 1.1rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: #afafaf;
-    margin: 0;
+    color: #3a4a54;
+    min-width: 80px;
+    text-align: center;
 }
 
-.xpHighlight {
-    color: #ff9902;
-    font-weight: 900;
-    font-size: 1.2rem;
+/* ============================================
+   SKELETON LOADER
+   ============================================ */
+
+.skeleton {
+    background: linear-gradient(90deg, #111820 25%, #18242d 50%, #111820 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    border-radius: 4px;
 }
 
-.tabShield {
-    transition: all 0.3s ease;
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
-.lockedTab {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
+.skeletonRank   { width: 22px; height: 22px; border-radius: 50%; }
+.skeletonAvatar { width: 36px; height: 36px; border-radius: 50%; }
+.skeletonName   { width: 110px; height: 14px; border-radius: 6px; }
+.skeletonShield { width: 22px; height: 22px; border-radius: 4px; }
+.skeletonBar    { flex: 1; height: 4px; border-radius: 10px; }
+.skeletonXP     { width: 52px; height: 16px; border-radius: 6px; }
 
+/* ============================================
+   BADGE HELPERS
+   ============================================ */
 
-.lockOverlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #F1C40F;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 5;
-    pointer-events: none;
-}
-
-.headerCol:nth-child(3) {
-    padding: 0 20%;
-}
-
-.progressCol {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 20%;
-}
-
-.progressCol img,
-.progressCol svg {
-    filter: none !important;
-}
-
-.progressBarWrapper {
-    flex: 1;
-    height: 10px;
-    background-color: #37464f;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.progressBar {
-    height: 100%;
-    background: linear-gradient(90deg, #F1C40F 0%, #ff8200 100%);
-    border-radius: 10px;
-    transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
-    position: relative;
-    overflow: hidden;
-}
-
-.progressBar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%);
-    opacity: 0.6;
-}
 .avatarFlameBadge {
     position: absolute;
     bottom: -4px;
@@ -789,12 +726,51 @@
 }
 
 .nameBadge {
-    margin-right: 6px;
-    flex-shrink: 0;
-}
-
-.nameBadge {
     margin-left: 6px;
     margin-right: 0;
     flex-shrink: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .mainContent {
+        padding: 24px 16px 80px;
+    }
+
+    /* Collapse progress col on small screens */
+    .progressCol,
+    .headerCol:nth-child(3) {
+        display: none;
+    }
+
+    .row,
+    .tableHeader {
+        grid-template-columns: 44px 1fr 90px;
+    }
+
+    .headerCol:nth-child(4) { padding-right: 4px; }
+
+    .lockBanner {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+    }
+
+    .introGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .footerStatus {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    .tabs {
+        gap: 4px;
+        padding: 16px 0 20px;
+    }
 }

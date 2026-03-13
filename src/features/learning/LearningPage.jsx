@@ -576,7 +576,7 @@ const LearningPage = () => {
                                     <div className={styles.mobileHeaderStat}>
                                         <HoneyDropIcon size={24} isEmpty={refillHearts === 0 && refillTimeDisplay} />
                                         <span>
-                                            {profile?.is_premium ? (
+                                            {(profile?.is_premium || profile?.is_1day_premium) ? (
                                                 <InfinityIcon size={24} strokeWidth={3} stroke="#f1c40f" />
                                             ) : refillHearts}
                                         </span>

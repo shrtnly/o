@@ -31,6 +31,19 @@ export const shopService = {
     },
 
     /**
+     * Buy 1-day premium recharge
+     */
+    async buy1DayPremium(userId, price) {
+        const { data, error } = await supabase.rpc('process_1day_premium_purchase', {
+            p_user_id: userId,
+            p_amount: price
+        });
+
+        if (error) throw error;
+        return data;
+    },
+
+    /**
      * Buy gems (using secure RPC and transaction tracking)
      */
     async buyGems(userId, amount, price, itemId) {

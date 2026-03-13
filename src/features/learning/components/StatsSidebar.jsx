@@ -146,11 +146,18 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
             }
         });
 
+        // Listen for profile updates from other components (like Shop)
+        const handleProfileUpdate = (e) => {
+            if (refreshProfile) refreshProfile();
+        };
+        window.addEventListener('profileUpdate', handleProfileUpdate);
+
         return () => {
             supabase.removeChannel(channel);
             supabase.removeChannel(giftChannel);
+            window.removeEventListener('profileUpdate', handleProfileUpdate);
         };
-    }, [profile?.id]); // ✅ Only re-fetch on user change, NOT on every XP update
+    }, [profile?.id, refreshProfile]); // ✅ Only re-fetch on user change, NOT on every XP update
 
     const handleJarFull = async () => {
         if (giftGenerationLoading) return;
@@ -266,7 +273,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                             />
                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 {!(Number(hearts) === 0 && refillTime) && (
-                                    profile?.is_premium ? (
+                                    (profile?.is_premium || profile?.is_1day_premium) ? (
                                         <>
                                             <svg width="0" height="0" style={{ position: 'absolute' }}>
                                                 <defs>

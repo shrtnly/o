@@ -56,53 +56,61 @@
 }
 
 .header {
-    margin-top: 16px;
-    margin-bottom: 40px;
+    margin-top: 0;
+    margin-bottom: 8px;
     text-align: center;
+    padding: 16px 16px 8px;
+    border-radius: 40px;
 }
 
 .headerWelcomeRow {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: 16px;
 }
 
 .headerMascotSmall {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(0 0 15px rgba(241, 196, 15, 0.2));
 }
 
-.header h1 {
-    font-size: 2.5rem;
+.headerTitle {
+    font-size: 2.2rem;
     font-weight: 900;
-    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    margin: 0;
     background: linear-gradient(135deg, #fff 0%, #afafaf 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.header p {
+.headerSub {
     color: var(--color-text-muted);
     font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0;
+    font-weight: 500;
+    margin-top: 8px;
+    max-width: 400px;
+    line-height: 1.5;
 }
 
 .headerDivider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
-    margin: 16px auto 0;
+    width: 60px;
+    height: 3px;
+    background: #f1c40f;
+    border-radius: 10px;
+    margin: 12px auto 0;
+    opacity: 0.5;
 }
 
 
 
 /* --- Section Styling --- */
 .section {
-    margin-bottom: 60px;
+    margin-bottom: 8px;
 }
 
 .sectionTitle {
@@ -805,14 +813,114 @@
 
 @keyframes modalSlideUp {
     from {
-        transform: translateY(50px);
+        transform: translateY(30px) scale(0.95);
         opacity: 0;
     }
-
     to {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
+}
+
+.exchangeModal {
+    background: #111b21;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 28px;
+    width: 100%;
+    max-width: 440px;
+    padding: 32px 24px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    animation: modalSlideUp 0.3s ease-out;
+    text-align: center;
+}
+
+.transactionFlow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin: 32px 0;
+    position: relative;
+}
+
+.transactionItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    animation: itemPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.transactionItem:nth-child(3) {
+    animation-delay: 0.1s;
+}
+
+@keyframes itemPop {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.itemCircle {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.itemAmount {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #fff;
+}
+
+.transactionArrow {
+    color: #f1c40f;
+    animation: arrowPulse 2s infinite ease-in-out;
+    margin-top: -30px; /* Aligns arrow center with icon centers */
+}
+
+@keyframes arrowPulse {
+    0%, 100% { transform: translateX(0); opacity: 0.5; }
+    50% { transform: translateX(10px); opacity: 1; }
+}
+
+.exchangeSuccess {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+    animation: successIn 0.5s ease-out forwards;
+}
+
+@keyframes successIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.successLottie {
+    width: 160px;
+    height: 160px;
+    margin-bottom: 20px;
+}
+
+.successTitle {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #2ecc71;
+    margin-bottom: 8px;
+}
+
+.successDesc {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 32px;
 }
 
 .checkoutHeader {
@@ -941,7 +1049,7 @@
     background: transparent;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 0;
-    padding: 24px 8px;
+    padding: 16px 8px;
     display: flex;
     align-items: center;
     gap: 24px;
@@ -1043,11 +1151,17 @@
 }
 
 .activeBtnStyle {
-    background: rgba(46, 204, 113, 0.15) !important;
-    border: 1px solid rgba(46, 204, 113, 0.3) !important;
-    color: #2ecc71 !important;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: rgba(255, 255, 255, 0.6) !important;
     box-shadow: none !important;
     cursor: default !important;
+    pointer-events: none !important;
+}
+
+.activeBtnStyle::after {
+    display: none !important;
+    animation: none !important;
 }
 
 .blueBtn {
@@ -1214,8 +1328,7 @@
 
     .queenBeeCardHorizontal {
         flex-direction: row !important;
-        /* Force Bar layout on mobile */
-        padding: 16px 4px;
+        padding: 12px 4px;
         gap: 12px;
         align-items: center;
         text-align: left;
@@ -1226,24 +1339,26 @@
     }
 
     .qbIconBg {
-        width: 52px;
-        height: 52px;
+        width: 48px;
+        height: 48px;
         background: transparent;
         border-color: rgba(241, 196, 15, 0.2);
     }
 
     .qbTitleHero {
-        font-size: 1.1rem;
+        font-size: 1rem;
         margin-bottom: 2px;
     }
 
     .qbFeaturesRow {
         justify-content: flex-start;
-        gap: 6px;
+        gap: 4px;
+        flex-wrap: wrap;
     }
 
     .qbFeaturePill {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
+        padding: 2px 0;
         color: rgba(255, 255, 255, 0.4);
     }
 
@@ -1254,8 +1369,65 @@
 
     .qbActivateBtn {
         width: auto;
-        padding: 8px 16px;
-        font-size: 0.85rem;
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        min-width: 100px;
+    }
+
+    .headerTitle {
+        font-size: 1.6rem;
+    }
+
+    .headerSub {
+        font-size: 0.9rem;
+        padding: 0 10px;
+    }
+
+    .headerMascotSmall {
+        width: 50px;
+        height: 50px;
+    }
+
+    .exchangeModal {
+        padding: 24px 16px;
+        margin: 0 10px;
+        max-width: calc(100% - 20px);
+    }
+
+    .successTitle {
+        font-size: 1.5rem;
+    }
+
+    .successDesc {
+        font-size: 0.95rem;
+    }
+
+    .transactionFlow {
+        gap: 12px;
+        margin: 20px 0;
+    }
+
+    .itemCircle {
+        width: 60px;
+        height: 60px;
+    }
+
+    .itemCircle svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .itemAmount {
+        font-size: 1rem;
+    }
+
+    .transactionArrow {
+        margin-top: -24px;
+    }
+
+    .confirmBtn, .cancelBtn {
+        padding: 12px 16px;
+        font-size: 1rem;
     }
 }
 

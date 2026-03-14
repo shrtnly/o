@@ -76,30 +76,32 @@ const CourseListPage = () => {
         <div className={styles.pageWrapper}>
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
-                    {/* Minimal Header with Search and Information */}
-                    <div className={styles.topBar}>
-                        <div className={styles.searchBox}>
-                            <Search size={18} className={styles.searchIcon} />
-                            <input 
-                                type="text" 
-                                placeholder={t('search_courses')} 
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
+                    {/* Sticky Header for Search and Categories */}
+                    <div className={styles.stickyHeader}>
+                        <div className={styles.topBar}>
+                            <div className={styles.searchBox}>
+                                <Search size={18} className={styles.searchIcon} />
+                                <input 
+                                    type="text" 
+                                    placeholder={t('search_courses')} 
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Horizontal Category Tabs */}
-                    <div className={styles.tabsContainer}>
-                        {categories.map(cat => (
-                            <button
-                                key={cat.id}
-                                className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
-                                onClick={() => setActiveCategory(cat.id)}
-                            >
-                                {cat.name}
-                            </button>
-                        ))}
+                        {/* Horizontal Category Tabs */}
+                        <div className={styles.tabsContainer}>
+                            {categories.map(cat => (
+                                <button
+                                    key={cat.id}
+                                    className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
+                                    onClick={() => setActiveCategory(cat.id)}
+                                >
+                                    {cat.name}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {loading ? (

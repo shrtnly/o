@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { courseService } from '../../services/courseService';
 import ConfirmModal from '../../components/ui/ConfirmModal';
-import { RotateCcw, AlertTriangle, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { storageService } from '../../services/storageService';
 import { useLanguage } from '../../context/LanguageContext';
+import { supabase } from '../../lib/supabaseClient';
 
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();
     const { language, toggleLanguage, t } = useLanguage();
-    const { user } = useAuth();
+    const { user, updateProfile } = useAuth();
     const [activeTab, setActiveTab] = useState('preferences');
     const [selectedAnimation, setSelectedAnimation] = useState('random');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -23,6 +24,16 @@ const SettingsPage = () => {
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [sparkleEnabled, setSparkleEnabled] = useState(true);
     const fileInputRef = useRef(null);
+    const menuBoxRef = useRef(null);
+    const navigate = useNavigate();
+
+    // Profile State
+    const [fullProfile, setFullProfile] = useState(null);
+    const [editForm, setEditForm] = useState({
+        full_name: '', designation: '', department: '', bio: '', location: ''
+    });
+    const [isSavingProfile, setIsSavingProfile] = useState(false);
+    const [isCancelling, setIsCancelling] = useState(false);
 
     // Modal states
     const [confirmModal, setConfirmModal] = useState({
@@ -69,6 +80,76 @@ const SettingsPage = () => {
         } finally {
             setLoadingCourses(false);
         }
+    };
+
+    useEffect(() => {
+        if ((activeTab === 'profile' || activeTab === 'subscription') && user) {
+            fetchUserProfile();
+        }
+    }, [activeTab, user]);
+
+    const fetchUserProfile = async () => {
+        try {
+            const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+            if (data) {
+                setFullProfile(data);
+                setEditForm({
+                    full_name: data.full_name || '',
+                    designation: data.designation || '',
+                    department: data.department || '',
+                    bio: data.bio || '',
+                    location: data.location || ''
+                });
+            }
+        } catch (err) {
+            console.error('Error fetching user profile in settings:', err);
+        }
+    };
+
+    const handleProfileSubmit = async (e) => {
+        e.preventDefault();
+        setIsSavingProfile(true);
+        try {
+            await updateProfile(editForm);
+            toast.success(t('profile_updated') || 'প্রোফাইল আপডেট করা হয়েছে');
+        } catch (error) {
+            console.error(error);
+            toast.error(t('update_error') || 'সমস্যা হয়েছে');
+        } finally {
+            setIsSavingProfile(false);
+        }
+    };
+
+    const handleCancelSubscription = async () => {
+        setConfirmModal({
+            isOpen: true,
+            type: 'danger',
+            title: language === 'bn' ? 'মেম্বারশিপ বাতিল করুন' : 'Cancel Membership',
+            message: language === 'bn' 
+                ? 'আপনি কি নিশ্চিত যে আপনি মেম্বারশিপ বাতিল করতে চান? আপনার বর্তমান মেয়াদ শেষ না হওয়া পর্যন্ত সুবিধাগুলো সচল থাকবে এবং এরপর আর রিনিউ হবে না।' 
+                : 'Are you sure you want to cancel? You will keep your benefits until the end of the current period, and it will not renew.',
+            confirmText: language === 'bn' ? 'হ্যাঁ, বাতিল করুন' : 'Yes, Cancel',
+            icon: X,
+            onConfirm: async () => {
+                try {
+                    const { error } = await supabase
+                        .from('subscriptions')
+                        .update({ status: 'cancelled' })
+                        .eq('user_id', user.id)
+                        .eq('status', 'active');
+                    
+                    if (error) throw error;
+                    
+                    setIsCancelling(false);
+                    toast.success(language === 'bn' ? 'পদক্ষেপ সফল হয়েছে' : 'Successfully cancelled');
+                    fetchUserProfile();
+                } catch (error) {
+                    setIsCancelling(false);
+                    console.error('Error cancelling sub:', error);
+                    toast.error(language === 'bn' ? 'বাতিল করতে সমস্যা হয়েছে' : 'Error cancelling');
+                }
+            }
+        });
     };
 
     const handleResetCourse = (course) => {
@@ -149,12 +230,30 @@ const SettingsPage = () => {
         }
     };
 
+    const handleTabClick = (id, e) => {
+        setActiveTab(id);
+        
+        // Auto scroll horizontally to show it is scrollable and center the selected tab
+        if (menuBoxRef.current && window.innerWidth <= 1024) {
+            const container = menuBoxRef.current;
+            const button = e.currentTarget;
+            
+            // Calculate scroll position to place the clicked button roughly in the center
+            const scrollLeft = button.offsetLeft - (container.offsetWidth / 2) + (button.offsetWidth / 2);
+            
+            container.scrollTo({
+                left: scrollLeft,
+                behavior: 'smooth'
+            });
+        }
+    };
+
     const menuItems = [
         { id: 'preferences', label: t('preferences'), icon: Sliders },
         { id: 'profile', label: t('profile'), icon: User },
         { id: 'notifications', label: t('notifications'), icon: Bell },
         { id: 'courses', label: t('courses'), icon: BookOpen },
-        { id: 'privacy', label: t('privacy'), icon: Shield },
+        { id: 'subscription', label: t('subscription'), icon: Crown },
     ];
 
     const renderContent = () => {
@@ -164,7 +263,6 @@ const SettingsPage = () => {
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
                             <h2>{t('pref_settings')}</h2>
-                            <p>{t('pref_desc')}</p>
                         </div>
                         <div className={styles.cardList}>
                             <div className={styles.settingCard}>
@@ -285,7 +383,6 @@ const SettingsPage = () => {
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
                             <h2>{t('profile_settings')}</h2>
-                            <p>{t('profile_desc')}</p>
                         </div>
                         <div className={styles.cardList}>
                             <div className={styles.settingCard}>
@@ -303,28 +400,70 @@ const SettingsPage = () => {
                                     </span>
                                 </label>
                             </div>
-                            <div className={styles.settingCard}>
-                                <div className={styles.cardText}>
-                                    <h3>{t('profile_picture')}</h3>
-                                    <p>{t('upload_new_pic')}</p>
-                                </div>
-                                <button
-                                    type="button"
-                                    className={styles.secondaryBtn}
-                                    onClick={handleAvatarClick}
-                                    disabled={uploadingAvatar}
-                                >
-                                    {uploadingAvatar ? t('loading') : t('change_pic')}
-                                </button>
-                                <input
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleAvatarChange}
-                                    style={{ display: 'none' }}
+
+                        </div>
+                        <form className={styles.editProfileCard} onSubmit={handleProfileSubmit}>
+                            <div className={styles.sectionHeader} style={{ marginTop: '24px', marginBottom: '16px' }}>
+                                <h2>{t('edit_profile') || 'প্রোফাইল এডিট করুন'}</h2>
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>{t('full_name') || 'পূর্ণ নাম'}</label>
+                                <input 
+                                    className={styles.settingsInput}
+                                    type="text" 
+                                    required 
+                                    value={editForm.full_name} 
+                                    onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })} 
                                 />
                             </div>
-                        </div>
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>{t('designation') || 'পদবি'}</label>
+                                    <input 
+                                        className={styles.settingsInput}
+                                        type="text" 
+                                        value={editForm.designation} 
+                                        onChange={(e) => setEditForm({ ...editForm, designation: e.target.value })} 
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>{t('dept') || 'বিভাগ'}</label>
+                                    <input 
+                                        className={styles.settingsInput}
+                                        type="text" 
+                                        value={editForm.department} 
+                                        onChange={(e) => setEditForm({ ...editForm, department: e.target.value })} 
+                                    />
+                                </div>
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>{t('bio') || 'পরিচয়'}</label>
+                                <textarea 
+                                    className={styles.settingsTextarea}
+                                    rows="3" 
+                                    value={editForm.bio} 
+                                    onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })} 
+                                />
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label>{t('location') || 'অবস্থান'}</label>
+                                <input 
+                                    className={styles.settingsInput}
+                                    type="text" 
+                                    value={editForm.location} 
+                                    onChange={(e) => setEditForm({ ...editForm, location: e.target.value })} 
+                                />
+                            </div>
+                            <div className={styles.formActions}>
+                                <button 
+                                    type="submit" 
+                                    className={styles.primaryBtn} 
+                                    disabled={isSavingProfile}
+                                >
+                                    {isSavingProfile ? t('loading') || 'লোড হচ্ছে...' : t('save') || 'সংরক্ষণ করুন'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 );
             case 'notifications':
@@ -332,7 +471,6 @@ const SettingsPage = () => {
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
                             <h2>{t('notif_settings')}</h2>
-                            <p>{t('notif_desc')}</p>
                         </div>
                         <div className={styles.cardList}>
                             <div className={styles.settingCard}>
@@ -373,13 +511,20 @@ const SettingsPage = () => {
                     <div className={styles.tabContent}>
                         <div className={styles.sectionHeader}>
                             <h2>{t('course_settings')}</h2>
-                            <p>{t('course_settings_desc')}</p>
                         </div>
 
                         {loadingCourses ? (
                             <div className={styles.loaderContainer}>
-                                <div className={styles.spinner}></div>
-                                <p>{t('loading')}</p>
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className={styles.skeletonCourseCard}>
+                                        <div className={cn(styles.skeleton, styles.skeletonThumb)}></div>
+                                        <div className={styles.skeletonInfo}>
+                                            <div className={cn(styles.skeleton, styles.skeletonTitle)}></div>
+                                            <div className={cn(styles.skeleton, styles.skeletonProgress)}></div>
+                                        </div>
+                                        <div className={cn(styles.skeleton, styles.skeletonBtn)}></div>
+                                    </div>
+                                ))}
                             </div>
                         ) : enrolledCourses.length > 0 ? (
                             <div className={styles.courseManageList}>
@@ -414,6 +559,10 @@ const SettingsPage = () => {
                                         </div>
                                     </div>
                                 ))}
+                                <div className={styles.warningNote}>
+                                    <AlertTriangle size={18} />
+                                    <span>সতর্কতা: রিসেট করলে তা আর পুনরুদ্ধার করা সম্ভব নয়।</span>
+                                </div>
                             </div>
                         ) : (
                             <div className={styles.emptyCourses}>
@@ -422,10 +571,56 @@ const SettingsPage = () => {
                                 <p>{t('no_courses_desc')}</p>
                             </div>
                         )}
-
-                        <div className={styles.warningNote}>
-                            <AlertTriangle size={18} />
-                            <span>{t('warning_reset')}</span>
+                    </div>
+                );
+            case 'subscription':
+                const isPremium = !!fullProfile?.is_premium || !!fullProfile?.is_1day_premium;
+                const isCancelled = fullProfile?.is_premium && fullProfile?.premium_status === 'cancelled';
+                
+                return (
+                    <div className={styles.tabContent}>
+                        <div className={styles.sectionHeader}>
+                            <h2>{t('subscription')}</h2>
+                        </div>
+                        <div className={styles.cardList}>
+                            <div className={styles.settingCard}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
+                                        <Crown size={20} color={isPremium ? "#f1c40f" : "var(--color-text-muted)"} />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>{isPremium ? (language === 'bn' ? 'সক্রিয় মেম্বারশিপ' : 'Active Membership') : (language === 'bn' ? 'কোনো সক্রিয় মেম্বারশিপ নেই' : 'No Active Membership')}</h3>
+                                        <p>
+                                            {isPremium 
+                                                ? (language === 'bn' 
+                                                    ? `মেয়াদ শেষ হবে: ${new Date(fullProfile?.premium_until).toLocaleDateString('bn-BD')}` 
+                                                    : `Expires on: ${new Date(fullProfile?.premium_until).toLocaleDateString()}`)
+                                                : (language === 'bn' ? 'প্রিমিয়াম ফিচার আনলক করতে শপে যান' : 'Unlock premium features, visit shop')
+                                            }
+                                        </p>
+                                        {isCancelled && (
+                                            <p style={{ color: '#ff6464', fontWeight: 700, marginTop: '4px' }}>
+                                                {language === 'bn' ? '⚠ বাতিল করা হয়েছে (রিনিউ হবে না)' : '⚠ Cancelled (Will not renew)'}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                                {isPremium ? (
+                                    isCancelled ? (
+                                        <button className={styles.disabledBtn} disabled>
+                                            {language === 'bn' ? 'বাতিল করা হয়েছে' : 'Cancelled'}
+                                        </button>
+                                    ) : (
+                                        <button className={styles.dangerBtn} onClick={handleCancelSubscription}>
+                                            {language === 'bn' ? 'বাতিল করুন' : 'Cancel'}
+                                        </button>
+                                    )
+                                ) : (
+                                    <button className={styles.shopBtn} onClick={() => navigate('/shop')}>
+                                        {language === 'bn' ? 'শপে যান' : 'Visit Shop'}
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 );
@@ -445,7 +640,6 @@ const SettingsPage = () => {
                 <div className={styles.headerTitle}>
                     <div className={styles.headerIconWrapper}>
                         <Settings className={styles.headerIcon} />
-                        <Sparkles className={styles.sparkleIcon} />
                     </div>
                     <h1>{t('settings')}</h1>
                 </div>
@@ -457,7 +651,7 @@ const SettingsPage = () => {
                 </main>
 
                 <aside className={styles.sidebar}>
-                    <div className={styles.menuBox}>
+                    <div className={styles.menuBox} ref={menuBoxRef}>
                         {menuItems.map((item) => (
                             <button
                                 key={item.id}
@@ -465,7 +659,7 @@ const SettingsPage = () => {
                                     styles.menuItem,
                                     activeTab === item.id && styles.menuItemActive
                                 )}
-                                onClick={() => setActiveTab(item.id)}
+                                onClick={(e) => handleTabClick(item.id, e)}
                             >
                                 <div className={styles.menuItemLeft}>
                                     <item.icon size={20} />

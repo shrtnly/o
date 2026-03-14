@@ -8,7 +8,7 @@ const translations = {
         profile: "প্রোফাইল",
         notifications: "নোটিফিকেশন",
         courses: "কোর্স",
-        privacy: "প্রাইভেসি",
+        subscription: "সাবস্ক্রিপশন",
         language: "ভাষা",
         dark_mode: "ডার্ক মুড",
         loading: "লোড হচ্ছে...",
@@ -32,7 +32,7 @@ const translations = {
         unlimited_1d: "১ দিনের আনলিমিটেড",
 
         // Settings
-        pref_settings: "প্রেফারেন্স সেটিংস",
+        pref_settings: "ব্যক্তিগত অভিজ্ঞতা",
         pref_desc: "আপনার ব্যক্তিগত ব্যবহারের অভিজ্ঞতা কাস্টমাইজ করুন",
         dark_mode_desc: "চোখের আরামের জন্য কালো থিম ব্যবহার করুন",
         study_anim: "স্টাডি পেজ অ্যানিমেশন",
@@ -189,7 +189,7 @@ const translations = {
         profile: "Profile",
         notifications: "Notifications",
         courses: "Courses",
-        privacy: "Privacy",
+        subscription: "Subscription",
         language: "Language",
         dark_mode: "Dark Mode",
         loading: "Loading...",

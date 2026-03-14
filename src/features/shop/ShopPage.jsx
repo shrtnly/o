@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
     Zap, Check, Shield, Star, ShoppingBag,
     Loader2, Sparkles, CreditCard, ChevronRight,
@@ -29,6 +29,7 @@ const ShopPage = () => {
     const { user } = useAuth();
     const { t, language } = useLanguage();
     const navigate = useNavigate();
+    const location = useLocation();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
@@ -93,6 +94,14 @@ const ShopPage = () => {
         fetchProfile();
         fetchActivePlan();
     }, [user]);
+
+    useEffect(() => {
+        if (location.state?.directCheckout && !loading && !planLoading && profile) {
+            handlePurchase(location.state.directCheckout === 'monthly' ? 'subscription' : '1day');
+            // Clear location state after processing to avoid re-triggering
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location.state, loading, planLoading, profile]);
 
     // Derived Premium States - Isolated Mode
     const isQueenBee = !!profile?.is_premium;

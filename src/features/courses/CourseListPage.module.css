@@ -9,7 +9,7 @@
 
 .mainContainer {
     height: 100%;
-    padding: 32px 0 80px 0;
+    padding: 0 0 80px 0;
     overflow-y: auto;
     scrollbar-width: none;
     background-color: var(--color-bg-deep);
@@ -20,18 +20,28 @@
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 40px;
 }
 
-/* Redesigned Top Bar */
 .topBar {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 32px;
+    padding-top: 12px;
+    margin-bottom: 24px;
     gap: 20px;
+}
+
+.stickyHeader {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--color-bg-deep);
+    padding-top: 32px;
+    padding-bottom: 2px;
+    margin-bottom: 32px;
 }
 
 .totalStats {
@@ -99,16 +109,11 @@
 .tabsContainer {
     display: flex;
     gap: 12px;
-    margin-bottom: 32px;
+    margin-bottom: 0;
     overflow-x: auto;
     padding-bottom: 15px;
-    padding-top: 10px;
     scrollbar-width: none;
-    position: sticky;
-    top: -32px; /* Offsetting the container's padding-top to stick perfectly at the top edge */
-    z-index: 100;
     background-color: var(--color-bg-deep);
-    margin-top: -10px;
 }
 
 .tabsContainer::-webkit-scrollbar {
@@ -231,21 +236,18 @@
     }
 }
 
-/* Guest Layout adjustments - Ensure top bar is visible below fixed Navbar */
+/* When CourseListPage is used inside GuestCoursePage (which has a fixed Navbar) */
 .guestLayoutWrapper {
+    display: block;
     width: 100%;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
     background-color: var(--color-bg-deep);
 }
 
-/* When CourseListPage is used inside GuestCoursePage (which has a fixed Navbar) */
 .guestLayoutWrapper .pageWrapper {
     height: calc(100vh - 72px);
-    margin-top: 72px;
-}
-
-.guestLayoutWrapper .tabsContainer {
-    top: 0; /* Sticky right at the bottom of the fixed Navbar */
-    margin-top: 0;
+    margin-top: 72px; /* Offset for the fixed Navbar */
+    padding-top: 0;
 }
 

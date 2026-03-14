@@ -279,25 +279,38 @@
 .settingsInput,
 .settingsTextarea {
     width: 100%;
-    background-color: var(--color-bg-alt);
-    border: 2px solid var(--color-border);
-    color: var(--color-text);
+    background-color: var(--color-bg-card, rgba(255, 255, 255, 0.05));
+    border: 1.5px solid var(--color-border, rgba(255, 255, 255, 0.1));
+    color: var(--color-text, #fff);
     padding: 12px 16px;
     border-radius: 12px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-family: inherit;
-    transition: border-color 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.settingsTextarea {
-    resize: vertical;
+.settingsInput:hover,
+.settingsTextarea:hover {
+    background-color: var(--color-bg-hover, rgba(255, 255, 255, 0.08));
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .settingsInput:focus,
 .settingsTextarea:focus {
     outline: none;
-    border-color: var(--color-primary);
+    background-color: var(--color-bg-hover, rgba(255, 255, 255, 0.08));
+    border-color: var(--color-primary, #f1c40f);
+    box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
+    transform: translateY(-2px);
+}
+
+.settingsTextarea {
+    resize: vertical;
+    min-height: 120px;
 }
 
 .formActions {
@@ -308,20 +321,42 @@
 
 .primaryBtn {
     background-color: var(--color-primary);
-    color: #fff;
+    color: #000;
     border: none;
-    padding: 12px 24px;
+    padding: 12px 28px;
     border-radius: 14px;
     font-weight: 800;
     font-size: 0.95rem;
     cursor: pointer;
-    box-shadow: 0 4px 0 calc(var(--color-primary) - #222);
-    transition: all 0.1s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 140px;
+    height: 48px;
+}
+
+.primaryBtn:hover:not(:disabled) {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(241, 196, 15, 0.3);
 }
 
 .primaryBtn:active:not(:disabled) {
-    transform: translateY(4px);
-    box-shadow: 0 0 0 calc(var(--color-primary) - #222);
+    transform: translateY(0);
+}
+
+.btnLoader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: btnSpin 0.8s linear infinite;
+}
+
+@keyframes btnSpin {
+    to { transform: rotate(360deg); }
 }
 
 .primaryBtn:disabled {
@@ -363,9 +398,39 @@
     font-size: 0.85rem;
 }
 
+.secondaryBtn {
+    background-color: transparent;
+    color: var(--color-text);
+    border: 1.5px solid var(--color-border);
+    padding: 8px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
 .secondaryBtn:hover {
     background-color: rgba(241, 196, 15, 0.1);
     border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+.dangerBtnMinimal {
+    background-color: transparent;
+    color: #ff6464;
+    border: 1.5px solid rgba(255, 100, 100, 0.2);
+    padding: 8px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dangerBtnMinimal:hover {
+    background-color: rgba(255, 100, 100, 0.05);
+    border-color: #ff6464;
     transform: translateY(-2px);
 }
 
@@ -510,12 +575,12 @@
     color: var(--color-text-muted);
 }
 
-/* Switch styling */
+/* Professional Minimal Toggle Switch */
 .switch {
     position: relative;
     display: inline-block;
-    width: 64px;
-    height: 34px;
+    width: 52px;
+    height: 28px;
 }
 
 .switch input {
@@ -529,40 +594,43 @@
     cursor: pointer;
     inset: 0;
     background-color: var(--color-bg-deep);
-    transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 12px;
-    border: 2px solid var(--color-border);
-    border-bottom: 4px solid #37464f;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 30px;
+    border: 1px solid var(--color-border);
 }
 
 .knob {
     position: absolute;
-    height: 24px;
-    width: 24px;
-    left: 4px;
-    top: 2px;
-    background-color: var(--color-text);
-    transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 8px;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    top: 3px;
+    background-color: #fff;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 3px 0 #afafaf;
-    color: #37464f;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: #888;
     z-index: 2;
 }
 
 input:checked+.slider {
     background-color: var(--color-primary);
-    border-color: var(--color-primary-dark);
-    border-bottom-color: #b7950b;
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+    border-color: var(--color-primary);
 }
 
 input:checked+.slider .knob {
-    transform: translateX(30px);
+    transform: translateX(24px);
     color: var(--color-primary);
-    box-shadow: 0 3px 0 var(--color-primary-dark);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Icons inside knob */
+.knob svg {
+    width: 12px;
+    height: 12px;
 }
 
 .onIcon,
@@ -570,14 +638,6 @@ input:checked+.slider .knob {
     display: none;
 }
 
-input:checked+.slider .onIcon {
-    display: block;
-}
-
-input:not(:checked)+.slider .offIcon {
-    display: block;
-    color: #e74c3c;
-}
 
 /* Animation Select Dropdown */
 .animationSelect {
@@ -937,16 +997,23 @@ input:not(:checked)+.slider .offIcon {
         font-size: 1.8rem;
     }
 
-    .sectionHeader {
-        margin-bottom: 8px;
-    }
-
-    .sectionHeader h2 {
-        font-size: 1.25rem;
-    }
-
     .sectionHeader p {
         font-size: 0.95rem;
+    }
+
+    .editProfileCard {
+        gap: 16px;
+        padding: 16px 0;
+    }
+
+    .formRow {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .settingsInput, .settingsTextarea {
+        padding: 10px 14px;
+        font-size: 0.9rem;
     }
 }
 

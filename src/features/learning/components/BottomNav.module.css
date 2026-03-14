@@ -23,24 +23,41 @@
 
 .navItem {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 8px;
     padding: 8px 12px;
     text-decoration: none;
     color: var(--color-text-muted);
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    min-width: 60px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 48px;
+    height: 44px;
+    border-radius: 22px;
 }
 
 .navItemActive {
     color: #f1c40f;
-    /* Bee Golden */
+    background-color: rgba(241, 196, 15, 0.08);
+    padding: 8px 16px;
+    min-width: 100px;
+}
+
+.navLabel {
+    font-size: 0.85rem;
+    font-weight: 800;
+    white-space: nowrap;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 .navItemActive svg {
@@ -49,12 +66,4 @@
 
 .navItem:active {
     transform: scale(0.92);
-}
-
-@media (max-width: 375px) {
-    .navItem {
-        padding: 8px 6px;
-        min-width: 50px;
-        font-size: 0.6rem;
-    }
 }

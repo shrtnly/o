@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircle, LogOut } from 'lucide-react';
+import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircle, LogOut, Flame } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
+import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
 import { honeyJarService } from '../../../services/honeyJarService';
 import { cn } from '../../../lib/utils';
@@ -12,6 +13,7 @@ import ConfirmModal from '../../../components/ui/ConfirmModal';
 
 const Sidebar = () => {
     const { user, signOut } = useAuth();
+    const { t } = useLanguage();
     const { courseId: currentCourseId } = useParams();
     const navigate = useNavigate();
     const [lastCourseId, setLastCourseId] = useState(null);
@@ -56,28 +58,37 @@ const Sidebar = () => {
                 <div className={styles.navIconWrapper}>
                     <Home size={24} />
                 </div>
-                <span>শিখুন</span>
+                <span>{t('learn')}</span>
             </NavLink>
 
             <NavLink to="/courses" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
                     <Compass size={24} />
                 </div>
-                <span>কোর্সসমূহ</span>
+                <span>{t('courses')}</span>
+            </NavLink>
+
+            <NavLink to="/streak" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
+                {({ isActive }) => (
+                    <>
+                        <div className={styles.navIconWrapper}>
+                            <Flame 
+                                size={24} 
+                                strokeWidth={isActive ? 2 : 1.5}
+                                fill={isActive ? "url(#flameGradientTracker)" : "none"}
+                                stroke={isActive ? "url(#flameGradientTracker)" : "currentColor"}
+                            />
+                        </div>
+                        <span>{t('streak')}</span>
+                    </>
+                )}
             </NavLink>
 
             <NavLink to="/leaderboard" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
-                    <Trophy size={24} />
+                    < Trophy size={24} />
                 </div>
                 <span>লিডারবোর্ড</span>
-            </NavLink>
-
-            <NavLink to="/shop" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
-                <div className={styles.navIconWrapper}>
-                    <Store size={24} />
-                </div>
-                <span>দোকান</span>
             </NavLink>
 
             <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>

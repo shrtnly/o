@@ -22,6 +22,7 @@ import CourseListPage from './features/courses/CourseListPage';
 import GuestCoursePage from './features/courses/GuestCoursePage';
 import SettingsPage from './features/settings/SettingsPage';
 import HelpPage from './features/help/HelpPage';
+import StreakPage from './features/learning/pages/StreakPage';
 
 import ResetPassword from './features/auth/ResetPassword';
 import TermsPage from './features/legal/TermsPage';
@@ -112,6 +113,7 @@ const AppContent = () => {
             <Route path="/learn/:courseId" element={<LearningPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/streak" element={<StreakPage />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/help" element={<HelpPage />} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag } from 'lucide-react';
+
+import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone, LogOut } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
@@ -11,11 +12,12 @@ import { toast } from 'sonner';
 import { storageService } from '../../services/storageService';
 import { useLanguage } from '../../context/LanguageContext';
 import { supabase } from '../../lib/supabaseClient';
+import CustomSelect from '../../components/ui/CustomSelect';
 
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();
     const { language, toggleLanguage, t } = useLanguage();
-    const { user, updateProfile } = useAuth();
+    const { user, updateProfile, signOut } = useAuth();
     const [activeTab, setActiveTab] = useState('preferences');
     const [selectedAnimation, setSelectedAnimation] = useState('random');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -23,6 +25,10 @@ const SettingsPage = () => {
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
     const [soundEnabled, setSoundEnabled] = useState(true);
     const [sparkleEnabled, setSparkleEnabled] = useState(true);
+    const [publicProfile, setPublicProfile] = useState(true);
+    const [pushNotifications, setPushNotifications] = useState(true);
+    const [emailNotifications, setEmailNotifications] = useState(false);
+    const [dailyReminder, setDailyReminder] = useState(true);
     const fileInputRef = useRef(null);
     const menuBoxRef = useRef(null);
     const navigate = useNavigate();
@@ -30,9 +36,18 @@ const SettingsPage = () => {
     // Profile State
     const [fullProfile, setFullProfile] = useState(null);
     const [editForm, setEditForm] = useState({
-        full_name: '', designation: '', department: '', bio: '', location: ''
+        full_name: '',
+        email: '',
+        phone_number: '',
+        user_type: '',
+        education_level: '',
+        age: '',
+        gender: '',
+        location: '',
+        bio: ''
     });
     const [isSavingProfile, setIsSavingProfile] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
     const [isCancelling, setIsCancelling] = useState(false);
 
     // Modal states
@@ -83,6 +98,60 @@ const SettingsPage = () => {
     };
 
     useEffect(() => {
+        if (activeTab === 'notifications' && user) {
+            fetchNotificationSettings();
+        }
+    }, [activeTab, user]);
+
+    const fetchNotificationSettings = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('user_notifications')
+                .select('*')
+                .eq('user_id', user.id)
+                .single();
+            
+            if (data) {
+                setPushNotifications(data.push_enabled);
+                setEmailNotifications(data.email_enabled);
+                setDailyReminder(data.daily_reminder_enabled);
+            } else if (error && error.code === 'PGRST116') {
+                // If no record exists, create one using profile data
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('full_name, email')
+                    .eq('id', user.id)
+                    .single();
+                
+                await supabase.from('user_notifications').insert([{
+                    user_id: user.id,
+                    learner_name: profile?.full_name || '',
+                    learner_email: profile?.email || user.email,
+                    push_enabled: true,
+                    email_enabled: false,
+                    daily_reminder_enabled: true
+                }]);
+            }
+        } catch (error) {
+            console.error('Error fetching notification settings:', error);
+        }
+    };
+
+    const updateNotificationSetting = async (field, value) => {
+        try {
+            const { error } = await supabase
+                .from('user_notifications')
+                .update({ [field]: value })
+                .eq('user_id', user.id);
+            
+            if (error) throw error;
+        } catch (error) {
+            console.error('Error updating notification setting:', error);
+            toast.error(t('error_update_settings') || 'সেটিংস আপডেট করতে সমস্যা হয়েছে');
+        }
+    };
+
+    useEffect(() => {
         if ((activeTab === 'profile' || activeTab === 'subscription') && user) {
             fetchUserProfile();
         }
@@ -95,10 +164,14 @@ const SettingsPage = () => {
                 setFullProfile(data);
                 setEditForm({
                     full_name: data.full_name || '',
-                    designation: data.designation || '',
-                    department: data.department || '',
-                    bio: data.bio || '',
-                    location: data.location || ''
+                    email: data.email || '',
+                    phone_number: data.phone_number || '',
+                    user_type: data.user_type || '',
+                    education_level: data.education_level || '',
+                    age: data.age || '',
+                    gender: data.gender || 'female',
+                    location: data.location || '',
+                    bio: data.bio || ''
                 });
             }
         } catch (err) {
@@ -109,9 +182,12 @@ const SettingsPage = () => {
     const handleProfileSubmit = async (e) => {
         e.preventDefault();
         setIsSavingProfile(true);
+        setIsSaved(false);
         try {
             await updateProfile(editForm);
+            setIsSaved(true);
             toast.success(t('profile_updated') || 'প্রোফাইল আপডেট করা হয়েছে');
+            setTimeout(() => setIsSaved(false), 2000);
         } catch (error) {
             console.error(error);
             toast.error(t('update_error') || 'সমস্যা হয়েছে');
@@ -213,6 +289,27 @@ const SettingsPage = () => {
         fileInputRef.current?.click();
     };
 
+    const handleLogout = () => {
+        setConfirmModal({
+            isOpen: true,
+            type: 'danger',
+            title: t('logout'),
+            message: t('confirm_logout_msg'),
+            confirmText: t('logout'),
+            icon: LogOut,
+            onConfirm: async () => {
+                try {
+                    await signOut();
+                    navigate('/');
+                    toast.success(t('logout_success'));
+                } catch (error) {
+                    console.error('Error logging out:', error);
+                    toast.error(t('logout_error'));
+                }
+            }
+        });
+    };
+
     const handleAvatarChange = async (e) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -272,7 +369,6 @@ const SettingsPage = () => {
                                     </div>
                                     <div className={styles.cardText}>
                                         <h3>{t('dark_mode')}</h3>
-                                        <p>{t('dark_mode_desc')}</p>
                                     </div>
                                 </div>
                                 <label className={styles.switch}>
@@ -292,11 +388,10 @@ const SettingsPage = () => {
                             <div className={styles.settingCard}>
                                 <div className={styles.cardHeaderArea}>
                                     <div className={styles.iconCircle}>
-                                        <Volume2 size={20} />
+                                        {soundEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
                                     </div>
                                     <div className={styles.cardText}>
                                         <h3>{t('sound_effects')}</h3>
-                                        <p>{t('sound_effects_desc')}</p>
                                     </div>
                                 </div>
                                 <label className={styles.switch}>
@@ -316,11 +411,10 @@ const SettingsPage = () => {
                             <div className={styles.settingCard}>
                                 <div className={styles.cardHeaderArea}>
                                     <div className={styles.iconCircle}>
-                                        <Sparkles size={20} />
+                                        <Drone size={20} />
                                     </div>
                                     <div className={styles.cardText}>
                                         <h3>{t('random_animation')}</h3>
-                                        <p>{t('study_anim_desc')}</p>
                                     </div>
                                 </div>
                                 <label className={styles.switch}>
@@ -340,11 +434,10 @@ const SettingsPage = () => {
                             <div className={styles.settingCard}>
                                 <div className={styles.cardHeaderArea}>
                                     <div className={styles.iconCircle}>
-                                        <Sparkles size={20} color="#f1c40f" />
+                                        <Sparkles size={20} />
                                     </div>
                                     <div className={styles.cardText}>
                                         <h3>{t('sparkle_effects')}</h3>
-                                        <p>{t('sparkle_desc')}</p>
                                     </div>
                                 </div>
                                 <label className={styles.switch}>
@@ -368,11 +461,16 @@ const SettingsPage = () => {
                                     </div>
                                     <div className={styles.cardText}>
                                         <h3>{t('language')} (Language)</h3>
-                                        <p>{t('lang_desc')}</p>
                                     </div>
                                 </div>
                                 <button type="button" className={styles.secondaryBtn} onClick={toggleLanguage}>
                                     {language === 'bn' ? 'English' : 'বাংলা'}
+                                </button>
+                            </div>
+
+                            <div className={styles.settingCard}>
+                                <button type="button" className={styles.dangerBtnMinimal} onClick={handleLogout} style={{ width: '100%', padding: '12px' }}>
+                                    {t('logout')}
                                 </button>
                             </div>
                         </div>
@@ -391,11 +489,14 @@ const SettingsPage = () => {
                                     <p>{t('public_profile_desc')}</p>
                                 </div>
                                 <label className={styles.switch}>
-                                    <input type="checkbox" defaultChecked />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={publicProfile} 
+                                        onChange={() => setPublicProfile(!publicProfile)} 
+                                    />
                                     <span className={styles.slider}>
                                         <span className={styles.knob}>
-                                            <Check size={14} strokeWidth={4} className={styles.onIcon} />
-                                            <X size={14} strokeWidth={4} className={styles.offIcon} />
+                                            {publicProfile ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
                                         </span>
                                     </span>
                                 </label>
@@ -404,63 +505,146 @@ const SettingsPage = () => {
                         </div>
                         <form className={styles.editProfileCard} onSubmit={handleProfileSubmit}>
                             <div className={styles.sectionHeader} style={{ marginTop: '24px', marginBottom: '16px' }}>
-                                <h2>{t('edit_profile') || 'প্রোফাইল এডিট করুন'}</h2>
+                                <h2>{t('edit_profile')}</h2>
                             </div>
-                            <div className={styles.formGroup}>
-                                <label>{t('full_name') || 'পূর্ণ নাম'}</label>
-                                <input 
-                                    className={styles.settingsInput}
-                                    type="text" 
-                                    required 
-                                    value={editForm.full_name} 
-                                    onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })} 
-                                />
-                            </div>
+                            
                             <div className={styles.formRow}>
                                 <div className={styles.formGroup}>
-                                    <label>{t('designation') || 'পদবি'}</label>
+                                    <label>{t('full_name')}</label>
                                     <input 
                                         className={styles.settingsInput}
                                         type="text" 
-                                        value={editForm.designation} 
-                                        onChange={(e) => setEditForm({ ...editForm, designation: e.target.value })} 
+                                        required 
+                                        value={editForm.full_name} 
+                                        onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })} 
                                     />
                                 </div>
                                 <div className={styles.formGroup}>
-                                    <label>{t('dept') || 'বিভাগ'}</label>
+                                    <label>{t('email')}</label>
                                     <input 
                                         className={styles.settingsInput}
-                                        type="text" 
-                                        value={editForm.department} 
-                                        onChange={(e) => setEditForm({ ...editForm, department: e.target.value })} 
+                                        type="email" 
+                                        disabled
+                                        value={editForm.email} 
                                     />
                                 </div>
                             </div>
+
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>{t('phone_number')}</label>
+                                    <input 
+                                        className={styles.settingsInput}
+                                        type="tel" 
+                                        placeholder="01XXXXXXXXX"
+                                        value={editForm.phone_number} 
+                                        onChange={(e) => setEditForm({ ...editForm, phone_number: e.target.value })} 
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>{t('gender')}</label>
+                                    <CustomSelect
+                                        value={editForm.gender}
+                                        onChange={(e) => setEditForm({ ...editForm, gender: e.target.value })}
+                                        options={[
+                                            { value: 'male', label: t('male') },
+                                            { value: 'female', label: t('female') },
+                                            { value: 'other', label: t('other') }
+                                        ]}
+                                        placeholder={t('select')}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>{t('i_am')}</label>
+                                    <CustomSelect
+                                        value={editForm.user_type}
+                                        onChange={(e) => setEditForm({ ...editForm, user_type: e.target.value })}
+                                        options={[
+                                            { value: 'student', label: t('student') },
+                                            { value: 'job_seeker', label: t('job_seeker') },
+                                            { value: 'job_holder', label: t('job_holder') },
+                                            { value: 'other', label: t('other') }
+                                        ]}
+                                        placeholder={t('select')}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>{t('education')}</label>
+                                    <CustomSelect
+                                        value={editForm.education_level}
+                                        onChange={(e) => setEditForm({ ...editForm, education_level: e.target.value })}
+                                        options={[
+                                            { value: 'below_class_5', label: t('below_class_5') },
+                                            { value: 'class_6_10', label: t('class_6_10') },
+                                            { value: 'intermediate', label: t('intermediate') },
+                                            { value: 'graduate', label: t('graduate') },
+                                            { value: 'post_graduate', label: t('post_graduate') }
+                                        ]}
+                                        placeholder={t('select')}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>{t('age')}</label>
+                                    <CustomSelect
+                                        value={editForm.age}
+                                        onChange={(e) => setEditForm({ ...editForm, age: e.target.value })}
+                                        options={[
+                                            ...Array.from({ length: 82 }, (_, i) => ({ value: String(2021 - i), label: String(2021 - i) }))
+                                        ]}
+                                        placeholder={t('select')}
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>{t('location')}</label>
+                                    <CustomSelect
+                                        value={editForm.location}
+                                        onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
+                                        options={[
+                                            { value: 'Dhaka', label: 'Dhaka (ঢাকা)' },
+                                            { value: 'Chattogram', label: 'Chattogram (চট্টগ্রাম)' },
+                                            { value: 'Rajshahi', label: 'Rajshahi (রাজশাহী)' },
+                                            { value: 'Khulna', label: 'Khulna (খুলনা)' },
+                                            { value: 'Barishal', label: 'Barishal (বরিশাল)' },
+                                            { value: 'Sylhet', label: 'Sylhet (সিলেট)' },
+                                            { value: 'Rangpur', label: 'Rangpur (রংপুর)' },
+                                            { value: 'Mymensingh', label: 'Mymensingh (ময়মনসিংহ)' },
+                                            { value: 'Overseas', label: 'Overseas (দেশের বাইরে)' }
+                                        ]}
+                                        placeholder={t('select')}
+                                    />
+                                </div>
+                            </div>
+
                             <div className={styles.formGroup}>
-                                <label>{t('bio') || 'পরিচয়'}</label>
+                                <label>{t('about_me')}</label>
                                 <textarea 
                                     className={styles.settingsTextarea}
                                     rows="3" 
+                                    placeholder={t('about_me')}
                                     value={editForm.bio} 
                                     onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })} 
                                 />
                             </div>
-                            <div className={styles.formGroup}>
-                                <label>{t('location') || 'অবস্থান'}</label>
-                                <input 
-                                    className={styles.settingsInput}
-                                    type="text" 
-                                    value={editForm.location} 
-                                    onChange={(e) => setEditForm({ ...editForm, location: e.target.value })} 
-                                />
-                            </div>
+
                             <div className={styles.formActions}>
                                 <button 
                                     type="submit" 
                                     className={styles.primaryBtn} 
-                                    disabled={isSavingProfile}
+                                    disabled={isSavingProfile || isSaved}
                                 >
-                                    {isSavingProfile ? t('loading') || 'লোড হচ্ছে...' : t('save') || 'সংরক্ষণ করুন'}
+                                    {isSavingProfile ? (
+                                        <div className={styles.btnLoader}></div>
+                                    ) : isSaved ? (
+                                        <Check size={24} strokeWidth={4} />
+                                    ) : (
+                                        t('save')
+                                    )}
                                 </button>
                             </div>
                         </form>
@@ -479,11 +663,18 @@ const SettingsPage = () => {
                                     <p>{t('push_notif_desc')}</p>
                                 </div>
                                 <label className={styles.switch}>
-                                    <input type="checkbox" defaultChecked />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={pushNotifications} 
+                                        onChange={() => {
+                                            const newVal = !pushNotifications;
+                                            setPushNotifications(newVal);
+                                            updateNotificationSetting('push_enabled', newVal);
+                                        }} 
+                                    />
                                     <span className={styles.slider}>
                                         <span className={styles.knob}>
-                                            <Check size={14} strokeWidth={4} className={styles.onIcon} />
-                                            <X size={14} strokeWidth={4} className={styles.offIcon} />
+                                            {pushNotifications ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
                                         </span>
                                     </span>
                                 </label>
@@ -494,11 +685,40 @@ const SettingsPage = () => {
                                     <p>{t('email_notif_desc')}</p>
                                 </div>
                                 <label className={styles.switch}>
-                                    <input type="checkbox" />
+                                    <input 
+                                        type="checkbox" 
+                                        checked={emailNotifications} 
+                                        onChange={() => {
+                                            const newVal = !emailNotifications;
+                                            setEmailNotifications(newVal);
+                                            updateNotificationSetting('email_enabled', newVal);
+                                        }} 
+                                    />
                                     <span className={styles.slider}>
                                         <span className={styles.knob}>
-                                            <Check size={14} strokeWidth={4} className={styles.onIcon} />
-                                            <X size={14} strokeWidth={4} className={styles.offIcon} />
+                                            {emailNotifications ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
+                                        </span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div className={styles.settingCard}>
+                                <div className={styles.cardText}>
+                                    <h3>{t('daily_reminder')}</h3>
+                                    <p>{t('daily_reminder_desc')}</p>
+                                </div>
+                                <label className={styles.switch}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={dailyReminder} 
+                                        onChange={() => {
+                                            const newVal = !dailyReminder;
+                                            setDailyReminder(newVal);
+                                            updateNotificationSetting('daily_reminder_enabled', newVal);
+                                        }} 
+                                    />
+                                    <span className={styles.slider}>
+                                        <span className={styles.knob}>
+                                            {dailyReminder ? <Check size={14} strokeWidth={4} /> : <X size={14} strokeWidth={4} />}
                                         </span>
                                     </span>
                                 </label>

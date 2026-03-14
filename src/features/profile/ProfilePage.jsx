@@ -197,6 +197,13 @@ const ProfilePage = () => {
 
                     {/* ========== SECTION 1: ROYAL HEADER ========== */}
                     <section className={styles.royalHeader}>
+                        <button 
+                            className={styles.headerSettingsBtn}
+                            onClick={() => navigate('/settings')}
+                            title={t('settings')}
+                        >
+                            <Settings size={22} strokeWidth={1.5} />
+                        </button>
                         {/* Glow Avatar */}
                         <div className={styles.avatarWrapper}>
                             <div className={styles.avatarGlow}></div>
@@ -327,10 +334,6 @@ const ProfilePage = () => {
                         <button className={styles.actionSolid}>
                             <Users size={16} />
                             বন্ধুদের চ্যালেঞ্জ করুন
-                        </button>
-                        <button className={styles.actionMinimal}
-                            onClick={() => navigate('/settings')}>
-                            <Settings size={18} />
                         </button>
                     </section>
 

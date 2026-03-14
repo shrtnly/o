@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Home, Trophy, Compass, Store, User, Settings } from 'lucide-react';
+import { Home, Trophy, Compass, Store, User, Settings, Flame } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
+import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
 import { cn } from '../../../lib/utils';
 import styles from './BottomNav.module.css';
 
 const BottomNav = () => {
     const { user } = useAuth();
+    const { t } = useLanguage();
     const { courseId: currentCourseId } = useParams();
     const [lastCourseId, setLastCourseId] = useState(null);
 
@@ -32,35 +34,61 @@ const BottomNav = () => {
         <nav className={styles.bottomNav}>
             <NavLink
                 to={learnPath}
-                className={({ isActive }) => cn(styles.navItem, (isActive || (currentCourseId && learnPath.includes(currentCourseId))) && styles.navItemActive)}
+                className={({ isActive }) => {
+                    const active = isActive || (currentCourseId && learnPath.includes(currentCourseId));
+                    return cn(styles.navItem, active && styles.navItemActive);
+                }}
             >
-                <Home size={22} />
-                <span>শিখুন</span>
+                {({ isActive }) => {
+                    const active = isActive || (currentCourseId && learnPath.includes(currentCourseId));
+                    return (
+                        <>
+                            <Home size={26} strokeWidth={1.5} />
+                            {active && <span className={styles.navLabel}>{t('learn')}</span>}
+                        </>
+                    );
+                }}
             </NavLink>
 
             <NavLink to="/courses" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
-                <Compass size={22} />
-                <span>কোর্সসমূহ</span>
+                {({ isActive }) => (
+                    <>
+                        <Compass size={26} strokeWidth={1.5} />
+                        {isActive && <span className={styles.navLabel}>{t('courses')}</span>}
+                    </>
+                )}
+            </NavLink>
+
+            <NavLink to="/streak" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
+                {({ isActive }) => (
+                    <>
+                        <Flame 
+                            size={26} 
+                            strokeWidth={isActive ? 2 : 1.5} 
+                            fill={isActive ? "url(#flameGradientTracker)" : "none"}
+                            stroke={isActive ? "url(#flameGradientTracker)" : "currentColor"}
+                        />
+                        {isActive && <span className={styles.navLabel}>{t('streak')}</span>}
+                    </>
+                )}
             </NavLink>
 
             <NavLink to="/leaderboard" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
-                <Trophy size={22} />
-                <span>লিডারবোর্ড</span>
-            </NavLink>
-
-            <NavLink to="/shop" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
-                <Store size={22} />
-                <span>দোকান</span>
+                {({ isActive }) => (
+                    <>
+                        <Trophy size={26} strokeWidth={1.5} />
+                        {isActive && <span className={styles.navLabel}>লিডারবোর্ড</span>}
+                    </>
+                )}
             </NavLink>
 
             <NavLink to="/profile" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
-                <User size={22} />
-                <span>প্রোফাইল</span>
-            </NavLink>
-
-            <NavLink to="/settings" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
-                <Settings size={22} />
-                <span>সেটিংস</span>
+                {({ isActive }) => (
+                    <>
+                        <User size={26} strokeWidth={1.5} />
+                        {isActive && <span className={styles.navLabel}>প্রোফাইল</span>}
+                    </>
+                )}
             </NavLink>
         </nav>
     );

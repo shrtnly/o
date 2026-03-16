@@ -9,12 +9,6 @@
     overflow: hidden;
 }
 
-@media (max-width: 1024px) {
-    .learningPage {
-        grid-template-columns: 1fr 320px;
-    }
-}
-
 
 
 .rewardPreview {
@@ -1362,22 +1356,23 @@
 
 @media (max-width: 1200px) {
     .learningPage {
-        grid-template-columns: 80px 1fr 300px;
+        grid-template-columns: 1fr 300px;
     }
+}
 
-    .logoText,
-    .navItem span {
-        display: none;
+@media (max-width: 1024px) {
+    .learningPage {
+        grid-template-columns: 1fr 280px;
     }
 }
 
 @media (max-width: 1000px) {
     .rightSidebar {
-        display: none;
+        display: none !important;
     }
 
     .learningPage {
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 1fr;
     }
 }
 

@@ -18,32 +18,26 @@
     margin-bottom: 24px;
 }
 
-.streakIconWrapper {
-    width: 100px;
-    height: 100px;
-    background: rgba(241, 196, 15, 0.1);
-    border-radius: 50%;
+.streakHorizontal {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
-    border: 2px solid rgba(241, 196, 15, 0.3);
-    box-shadow: 0 0 30px rgba(241, 196, 15, 0.1);
+    gap: 8px;
 }
 
 .streakNumber {
-    font-size: 4rem;
+    font-size: 4.5rem;
     font-weight: 900;
     color: #f1c40f;
     line-height: 1;
-    text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+    text-shadow: 0 0 20px rgba(241, 196, 15, 0.4);
 }
 
 .streakLabel {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
 }
 
 .tagline {

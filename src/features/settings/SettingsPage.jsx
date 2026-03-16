@@ -866,10 +866,6 @@ const SettingsPage = () => {
             </header>
 
             <div className={styles.layout}>
-                <main className={styles.mainContent}>
-                    {renderContent()}
-                </main>
-
                 <aside className={styles.sidebar}>
                     <div className={styles.menuBox} ref={menuBoxRef}>
                         {menuItems.map((item) => (
@@ -890,6 +886,10 @@ const SettingsPage = () => {
                         ))}
                     </div>
                 </aside>
+
+                <main className={styles.mainContent}>
+                    {renderContent()}
+                </main>
             </div>
 
             <ConfirmModal

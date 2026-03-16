@@ -59,25 +59,21 @@ const BottomNav = () => {
                 )}
             </NavLink>
 
-            <NavLink to="/streak" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
-                {({ isActive }) => (
-                    <>
-                        <Flame 
-                            size={26} 
-                            strokeWidth={isActive ? 2 : 1.5} 
-                            fill={isActive ? "url(#flameGradientTracker)" : "none"}
-                            stroke={isActive ? "url(#flameGradientTracker)" : "currentColor"}
-                        />
-                        {isActive && <span className={styles.navLabel}>{t('streak')}</span>}
-                    </>
-                )}
-            </NavLink>
 
             <NavLink to="/leaderboard" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
                 {({ isActive }) => (
                     <>
                         <Trophy size={26} strokeWidth={1.5} />
-                        {isActive && <span className={styles.navLabel}>লিডারবোর্ড</span>}
+                        {isActive && <span className={styles.navLabel}>{t('leaderboard')}</span>}
+                    </>
+                )}
+            </NavLink>
+
+            <NavLink to="/shop" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
+                {({ isActive }) => (
+                    <>
+                        <Store size={26} strokeWidth={1.5} />
+                        {isActive && <span className={styles.navLabel}>{t('shop')}</span>}
                     </>
                 )}
             </NavLink>
@@ -86,7 +82,7 @@ const BottomNav = () => {
                 {({ isActive }) => (
                     <>
                         <User size={26} strokeWidth={1.5} />
-                        {isActive && <span className={styles.navLabel}>প্রোফাইল</span>}
+                        {isActive && <span className={styles.navLabel}>{t('profile')}</span>}
                     </>
                 )}
             </NavLink>

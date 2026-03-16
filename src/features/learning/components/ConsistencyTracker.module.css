@@ -97,12 +97,13 @@
 }
 
 .bestLabel {
-    color: #58cc02;
+    color: #eab308;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .bestValue {
-    color: #58cc02;
+    color: #eab308;
 }
 
 .tagline {

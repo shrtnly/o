@@ -1,9 +1,14 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
-
-
-
+import { NavLink, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
+import { 
+    Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, 
+    Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone, 
+    LogOut, Flame, Play, Plus, ChevronDown, ChevronLeft, Star, Lock, PenTool, Activity, 
+    Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb, 
+    Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon 
+} from 'lucide-react';
+import { rewardService } from '../../services/rewardService';
 import styles from './LearningPage.module.css';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import InlineLoader from '../../components/ui/InlineLoader';
@@ -13,7 +18,6 @@ import ShieldIcon from '../../components/ShieldIcon';
 import Sidebar from './components/Sidebar';
 import StatsSidebar from './components/StatsSidebar';
 import { useAuth } from '../../context/AuthContext';
-import { ChevronDown, ChevronLeft, ChevronRight, Check, Plus, BookOpen, Star, Lock, Play, PenTool, Globe, Activity, Sparkles, Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { toast } from 'sonner';
 import RewardModal from './components/RewardModal';
@@ -151,9 +155,9 @@ const LearningPage = () => {
     const [profile, setProfile] = useState(null);
     const [progress, setProgress] = useState([]);
     const [courses, setCourses] = useState([]); // Added to store all enrolled courses
+    const [streak, setStreak] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeUnit, setActiveUnit] = useState(null);
-    const [isCourseOpen, setIsCourseOpen] = useState(false);
     const [nodesPerRow, setNodesPerRow] = useState(3);
     const location = useLocation();
 
@@ -277,6 +281,7 @@ const LearningPage = () => {
                         .select('*')
                         .eq('user_id', user.id)
                     );
+                    promises.push(rewardService.getUserStreak(user.id));
 
                     // Update last practiced tracking in background
                     courseService.getLastPracticedCourseId(user.id).then(() => {
@@ -302,6 +307,7 @@ const LearningPage = () => {
                 let enrolledCoursesData = results[1]?.data;
                 let profileData = results[2]?.data;
                 let progressData = results[3]?.data;
+                let streakData = results[4];
 
                 // Set course selector data
                 if (enrolledCoursesData) {
@@ -315,6 +321,7 @@ const LearningPage = () => {
 
                 if (profileData) setProfile(profileData);
                 if (progressData) setProgress(progressData);
+                if (streakData) setStreak(streakData);
 
                 // 3. Fetch chapters for the identified units
                 if (unitsData && unitsData.length > 0) {
@@ -555,15 +562,10 @@ const LearningPage = () => {
 
                             <div className={styles.mobileMainHeaderArea}>
                                 <div className={styles.mobileHeaderStats}>
-                                    <div
-                                        className={cn(styles.mobileCourseSwitch, isCourseOpen && styles.active)}
-                                        onClick={() => setIsCourseOpen(!isCourseOpen)}
-                                    >
-                                        <div className={styles.courseFlagMini}>
-                                            <Play size={22} fill="#f1c40f" color="#f1c40f" />
-                                        </div>
-                                        <span>{courses.length}</span>
-                                    </div>
+                                    <NavLink to="/streak" className={styles.mobileHeaderStat}>
+                                        <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                        <span>{streak?.current_streak || 0}</span>
+                                    </NavLink>
 
                                     <div className={styles.mobileHeaderStat}>
                                         <ShieldIcon xp={profile?.xp || 0} size={24} />
@@ -584,30 +586,6 @@ const LearningPage = () => {
                                 </div>
                             </div>
 
-                            {/* Mobile Course Dropdown */}
-                            {isCourseOpen && (
-                                <div className={styles.mobileCourseDropdown}>
-                                    <div className={styles.dropdownHeader}>কোর্স পরিবর্তন করুন</div>
-                                    {courses.map(course => (
-                                        <div
-                                            key={course.id}
-                                            className={cn(styles.courseOption, course.id === courseId && styles.selected)}
-                                            onClick={() => {
-                                                setIsCourseOpen(false);
-                                                if (course.id !== courseId) navigate(`/learn/${course.id}`);
-                                            }}
-                                        >
-                                            <span className={styles.courseTitle}>{course.title}</span>
-                                            {course.id === courseId && <Check size={16} color="#f1c40f" />}
-                                        </div>
-                                    ))}
-                                    <div className={styles.dropdownDivider} />
-                                    <button className={styles.addCourseBtn} onClick={() => navigate('/courses')}>
-                                        <Plus size={18} />
-                                        <span>নতুন কোর্স যোগ করুন</span>
-                                    </button>
-                                </div>
-                            )}
                         </div>
 
                         {/* Bottom: Unit Title & Description (Stacked) */}

@@ -68,27 +68,18 @@ const Sidebar = () => {
                 <span>{t('courses')}</span>
             </NavLink>
 
-            <NavLink to="/streak" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
-                {({ isActive }) => (
-                    <>
-                        <div className={styles.navIconWrapper}>
-                            <Flame 
-                                size={24} 
-                                strokeWidth={isActive ? 2 : 1.5}
-                                fill={isActive ? "url(#flameGradientTracker)" : "none"}
-                                stroke={isActive ? "url(#flameGradientTracker)" : "currentColor"}
-                            />
-                        </div>
-                        <span>{t('streak')}</span>
-                    </>
-                )}
-            </NavLink>
-
             <NavLink to="/leaderboard" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
                     < Trophy size={24} />
                 </div>
                 <span>লিডারবোর্ড</span>
+            </NavLink>
+
+            <NavLink to="/shop" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
+                <div className={styles.navIconWrapper}>
+                    <Store size={24} />
+                </div>
+                <span>শপ</span>
             </NavLink>
 
             <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>

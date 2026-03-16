@@ -7,13 +7,14 @@ import {
     ChevronLeft,
     ChevronRight,
     Check,
-    X
+    X,
+    Trophy
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import styles from './ConsistencyTracker.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
 
-const ConsistencyTracker = ({ profile, streak, history = [] }) => {
+const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent }) => {
     const [viewMode, setViewMode] = useState('daily');
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -168,6 +169,13 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                     </linearGradient>
                 </defs>
             </svg>
+
+            {calendarTopContent && (
+                <div className={styles.calendarTopContent} style={{ paddingBottom: '20px' }}>
+                    {calendarTopContent}
+                </div>
+            )}
+
             <div className={styles.statsRow}>
                 <div className={styles.statBox}>
                     <span className={styles.statLabel}>Current Streak</span>
@@ -177,7 +185,7 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.bestLabel}>My Best</span>
-                        <Zap size={14} color="#58cc02" fill="currentColor" />
+                        <Trophy size={14} color="#eab308" />
                         <span className={styles.bestValue}>{stats.bestStreak}</span>
                     </div>
                 </div>
@@ -187,8 +195,8 @@ const ConsistencyTracker = ({ profile, streak, history = [] }) => {
                 <div className={styles.statBox}>
                     <span className={styles.statLabel}>Consistency Score</span>
                     <div className={styles.statMain}>
-                        <TrendingUp size={40} color="#58cc02" strokeWidth={2.5} />
-                        <span className={styles.statValue}>{stats.score}</span>
+                        <TrendingUp size={40} color="#00E5FF" strokeWidth={2.5} />
+                        <span className={styles.statValue} style={{ color: '#00E5FF' }}>{stats.score}%</span>
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.tagline}>

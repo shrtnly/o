@@ -95,7 +95,7 @@ const RewardModal = ({ isOpen, onClose, hearts = 0, gems = 0 }) => {
                                             <PollenIcon size={34} />
                                         </div>
                                         <span className={styles.rewardValue}>+{gems}</span>
-                                        <span className={styles.rewardLabel}>পরাগরেণু</span>
+                                        <span className={styles.rewardLabel}>মধুরেণু</span>
                                     </motion.div>
                                 )}
                             </div>

@@ -2153,7 +2153,7 @@
         justify-content: space-between !important;
         width: 100% !important;
         padding: 0 16px !important;
-        overflow-x: auto;
+        overflow: visible !important;
         scrollbar-width: none;
         /* Hide scrollbar */
     }
@@ -2174,6 +2174,290 @@
         font-weight: 700 !important;
         font-size: 0.95rem !important;
         color: #fff !important;
+    }
+
+    .mobileHeaderStatWrapper {
+        position: relative;
+    }
+
+    .heartsTooltipOverlay,
+    .streakTooltipOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 2001;
+    }
+
+    .streakTooltipBox {
+        position: absolute;
+        top: calc(100% + 15px);
+        left: -5px; /* Aligned differently since it's on the left side */
+        background: #1a1f22;
+        border: 2px solid #2d383e;
+        border-radius: 16px;
+        z-index: 2002;
+        padding: 16px;
+        width: 300px; /* Width enough to fit 7 days */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .streakTooltipBox::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 20px;
+        width: 14px;
+        height: 14px;
+        background: #1a1f22;
+        border-top: 2px solid #2d383e;
+        border-left: 2px solid #2d383e;
+        transform: rotate(45deg);
+    }
+
+    .streakTooltipBoxCenter {
+        position: absolute;
+        top: calc(100% + 15px);
+        left: -60px;
+        background: #1a1f22;
+        border: 2px solid #2d383e;
+        border-radius: 16px;
+        z-index: 2002;
+        padding: 16px;
+        width: 250px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .streakTooltipBoxCenter::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        left: 70px;
+        width: 14px;
+        height: 14px;
+        background: #1a1f22;
+        border-top: 2px solid #2d383e;
+        border-left: 2px solid #2d383e;
+        transform: rotate(45deg);
+    }
+
+    .streakTooltipBoxRight {
+        position: absolute;
+        top: calc(100% + 15px);
+        right: -30px;
+        background: #1a1f22;
+        border: 2px solid #2d383e;
+        border-radius: 16px;
+        z-index: 2002;
+        padding: 16px;
+        width: 260px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    .streakTooltipBoxRight::before {
+        content: '';
+        position: absolute;
+        top: -8px;
+        right: 40px;
+        width: 14px;
+        height: 14px;
+        background: #1a1f22;
+        border-top: 2px solid #2d383e;
+        border-left: 2px solid #2d383e;
+        transform: rotate(45deg);
+    }
+
+    .streakTooltipHeader {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .streakInfoLeft {
+        text-align: left;
+    }
+
+    .streakInfoLeft h4 {
+        margin: 0 0 8px 0;
+        font-size: 1rem;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .streakInfoLeft p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #afafaf;
+    }
+
+    .streakSevenDaysRow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #2d383e;
+        border-radius: 12px;
+        padding: 12px;
+        border-bottom: 2px solid #1a1f22;
+    }
+
+    .streakDayItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .streakDayName {
+        font-size: 0.70rem;
+        font-weight: 700;
+        color: #afafaf;
+        text-transform: uppercase;
+    }
+
+    .streakDayCircle {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: #1a1f22;
+        border: 2px solid #4b5860;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .streakDayCircleActive {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(241, 196, 15, 0.15);
+        border: 2px solid #f1c40f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .heartsTooltipBox {
+        position: absolute;
+        top: calc(100% + 15px);
+        right: -10px;
+        background: #1a1f22;
+        border: 2px solid #2d383e;
+        border-radius: 16px;
+        z-index: 2002;
+        padding: 16px;
+        width: 260px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        color: #fff;
+    }
+
+    /* Little triangle pointer for tooltip */
+    .heartsTooltipBox::before {
+        content: '';
+        position: absolute;
+        top: -7px;
+        right: 25px;
+        width: 12px;
+        height: 12px;
+        background: #1a1f22;
+        border-top: 2px solid #2d383e;
+        border-left: 2px solid #2d383e;
+        transform: rotate(45deg);
+    }
+
+    .tooltipTextContent {
+        text-align: left;
+    }
+
+    .tooltipTextContent h4 {
+        margin: 0 0 2px 0;
+        font-size: 0.9rem;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .tooltipTextContent p {
+        margin: 0;
+        font-size: 0.75rem;
+        color: #afafaf;
+        line-height: 1.3;
+    }
+
+    .tooltipSubscriber {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .tooltipNonSubscriber {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .upsellSection {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #2d383e;
+    }
+
+    .dropsSection {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .dropStatus {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(241, 162, 15, 0.1);
+        padding: 6px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(241, 196, 15, 0.2);
+    }
+
+    .dropStatus span {
+        font-weight: 800;
+        font-size: 1rem;
+        color: #f1c40f;
+    }
+
+    .dropStatus span span {
+        font-size: 0.8rem;
+        color: #afafaf;
+        margin-left: 2px;
+    }
+
+    .refillText {
+        color: #1cb0f6 !important;
+        font-weight: 700;
+    }
+
+    .shopButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        background: #f1c40f;
+        color: #000;
+        border: none;
+        padding: 12px;
+        border-radius: 12px;
+        font-weight: 800;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: transform 0.2s;
+        border-bottom: 3px solid #d4ac0d;
+    }
+
+    .shopButton:active {
+        transform: translateY(2px);
+        border-bottom-width: 1px;
     }
 
     .mobileCourseDropdown {

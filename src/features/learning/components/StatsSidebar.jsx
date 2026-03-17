@@ -21,7 +21,7 @@ const GIFT_CONFIG = {
     pollen: {
         emoji: '🌼',
         color: '#FFD700',
-        label: 'পরাগরেণু',
+        label: 'মধুরেণু',
     },
     honey_drops: {
         emoji: '🍯',

@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../../features/learning/components/Sidebar';
 import BottomNav from '../../features/learning/components/BottomNav';
+import { rewardService } from '../../services/rewardService';
+import { useAuth } from '../../context/AuthContext';
 import styles from './MainLayout.module.css';
 
 const MainLayout = () => {
+    const { user } = useAuth();
+    const intervalRef = useRef(null);
+
+    useEffect(() => {
+        if (!user?.id) return;
+
+        // Start heartbeat tracker
+        // We sync every 60 seconds of active time
+        const startHeartbeat = () => {
+            intervalRef.current = setInterval(async () => {
+                if (document.visibilityState === 'visible') {
+                    await rewardService.addMinuteSpent(user.id);
+                }
+            }, 60000);
+        };
+
+        startHeartbeat();
+
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, [user?.id]);
+
     return (
         <div className={styles.appLayout}>
             <svg width="0" height="0" style={{ position: 'absolute' }}>

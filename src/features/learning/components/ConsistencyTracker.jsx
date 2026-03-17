@@ -55,11 +55,11 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
 
-        const firstDay = new Date(year, month, 1).getDay();
+        const emptyDaysCount = (new Date(year, month, 1).getDay() + 1) % 7;
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         const days = [];
-        for (let i = 0; i < firstDay; i++) {
+        for (let i = 0; i < emptyDaysCount; i++) {
             days.push({ type: 'empty', id: `empty-${i}` });
         }
 
@@ -248,6 +248,9 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 {viewMode === 'daily' ? (
                     <div className={styles.dailyView}>
                         <div className={styles.calendarGrid}>
+                            {['শনি', 'রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র'].map(dayLabel => (
+                                <div key={dayLabel} className={styles.weekdayName}>{dayLabel}</div>
+                            ))}
                             {calendarData.map(day => (
                                 <div
                                     key={day.id}
@@ -264,10 +267,13 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                                         <div className={styles.flameContainer}>
                                             <Flame size={20} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" />
                                         </div>
+                                    ) : (day.type === 'missed' || (day.isToday && day.type !== 'achieved')) ? (
+                                        <div className={styles.flameContainer}>
+                                            <Flame size={20} color="rgba(255, 255, 255, 0.15)" strokeWidth={2} />
+                                        </div>
                                     ) : (
-                                        (day.type === 'future' || day.isToday) && day.day && <span className={styles.dayNumber}>{day.day}</span>
+                                        day.type === 'future' && day.day && <span className={styles.dayNumber}>{day.day}</span>
                                     )}
-                                    {day.isToday && <div className={styles.todayIndicator} />}
                                 </div>
                             ))}
                         </div>

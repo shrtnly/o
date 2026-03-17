@@ -6,8 +6,8 @@ const GIFT_CONFIG = {
     pollen: {
         emoji: '🌼',
         color: '#FFD700',
-        title: 'পরাগরেণু পুরস্কার!',
-        subtitle: (amount) => `আপনি ${amount}টি পরাগরেণু (জেম) জিতেছেন!`,
+        title: 'মধুরেণু পুরস্কার!',
+        subtitle: (amount) => `আপনি ${amount}টি মধুরেণু (জেম) জিতেছেন!`,
     },
     honey_drops: {
         emoji: '🍯',

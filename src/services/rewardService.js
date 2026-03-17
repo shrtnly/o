@@ -16,6 +16,7 @@ export const rewardService = {
      */
     async awardXP(userId, amount, source = 'mcq_correct', metadata = {}) {
         try {
+            // Award XP in profiles using RPC
             const { data, error } = await supabase.rpc('award_user_xp', {
                 p_user_id: userId,
                 p_amount: amount,
@@ -27,12 +28,26 @@ export const rewardService = {
 
             if (error) throw error;
 
-            // Log activity and force streak update
+            // Log cumulative activity for the day
             const today = formatLocalDate(new Date());
+            
+            // Fetch current daily activity to increment
+            const { data: currentActivity } = await supabase
+                .from('user_daily_activity')
+                .select('xp_earned, lessons_completed')
+                .eq('user_id', userId)
+                .eq('activity_date', today)
+                .maybeSingle();
+
+            const isLesson = source === 'chapter_complete';
+            const newDailyXp = (currentActivity?.xp_earned || 0) + amount;
+            const newDailyLessons = (currentActivity?.lessons_completed || 0) + (isLesson ? 1 : 0);
+
             await supabase.from('user_daily_activity').upsert({
                 user_id: userId,
                 activity_date: today,
-                xp_earned: amount
+                xp_earned: newDailyXp,
+                lessons_completed: newDailyLessons
             }, { onConflict: 'user_id,activity_date' });
 
             // Force recalculate streak in DB
@@ -63,10 +78,22 @@ export const rewardService = {
 
                 // Ensure activity is logged even in fallback
                 const today = formatLocalDate(new Date());
+                const { data: currentActivity } = await supabase
+                    .from('user_daily_activity')
+                    .select('xp_earned, lessons_completed')
+                    .eq('user_id', userId)
+                    .eq('activity_date', today)
+                    .maybeSingle();
+
+                const isLesson = source === 'chapter_complete';
+                const newDailyXp = (currentActivity?.xp_earned || 0) + amount;
+                const newDailyLessons = (currentActivity?.lessons_completed || 0) + (isLesson ? 1 : 0);
+
                 await supabase.from('user_daily_activity').upsert({
                     user_id: userId,
                     activity_date: today,
-                    xp_earned: amount
+                    xp_earned: newDailyXp,
+                    lessons_completed: newDailyLessons
                 }, { onConflict: 'user_id,activity_date' });
 
                 return { success: true, newXp, transactionId: null };
@@ -357,8 +384,6 @@ export const rewardService = {
 
             const startDateStr = formatLocalDate(startDate);
 
-
-
             const { data, error } = await supabase
                 .from('user_daily_activity')
                 .select('*')
@@ -366,14 +391,114 @@ export const rewardService = {
                 .gte('activity_date', startDateStr)
                 .order('activity_date', { ascending: true });
 
-
-
             if (error) throw error;
 
             return data || [];
         } catch (error) {
             console.error('Error fetching activity history:', error);
             return [];
+        }
+    },
+
+    /**
+     * Get analysis data for the Profile Analyze tab
+     * @param {string} userId - User ID
+     * @param {number} days - Number of days to look back
+     * @returns {Promise<object>}
+     */
+    async getAnalysisData(userId, days = 'all') {
+        try {
+            let activityQuery = supabase
+                .from('user_daily_activity')
+                .select('*')
+                .eq('user_id', userId)
+                .order('activity_date', { ascending: true });
+
+            let progressQuery = supabase
+                .from('user_progress')
+                .select('*, chapters(estimated_time)')
+                .eq('user_id', userId)
+                .eq('is_completed', true);
+
+            if (days !== 'all') {
+                const startDate = new Date();
+                startDate.setDate(startDate.getDate() - parseInt(days));
+                const startDateStr = formatLocalDate(startDate);
+                
+                activityQuery = activityQuery.gte('activity_date', startDateStr);
+                progressQuery = progressQuery.gte('completed_at', startDate.toISOString());
+            }
+
+            const [activityRes, progressRes] = await Promise.all([
+                activityQuery,
+                progressQuery
+            ]);
+
+            if (activityRes.error) throw activityRes.error;
+            if (progressRes.error) throw progressRes.error;
+
+            const activity = activityRes.data || [];
+            const progress = progressRes.data || [];
+
+            // Calculate metrics
+            let totalCorrect = 0;
+            let totalQuestions = 0;
+            const totalMinutes = activity.reduce((acc, curr) => acc + (curr.minutes_spent || 0), 0);
+
+            progress.forEach(p => {
+                totalCorrect += p.correct_answers || 0;
+                totalQuestions += p.total_questions || 0;
+            });
+
+            return {
+                activity,
+                summary: {
+                    totalCorrect,
+                    totalWrong: Math.max(0, totalQuestions - totalCorrect),
+                    totalMinutes,
+                    totalXp: activity.reduce((acc, curr) => acc + (curr.xp_earned || 0), 0),
+                    totalLessons: activity.reduce((acc, curr) => acc + (curr.lessons_completed || 0), 0)
+                }
+            };
+        } catch (error) {
+            console.error('Error in fetchAnalysis:', error);
+            return null;
+        }
+    },
+
+    /**
+     * Increment minutes spent by a user today
+     * @param {string} userId - User ID
+     * @returns {Promise<boolean>}
+     */
+    async addMinuteSpent(userId) {
+        if (!userId) return false;
+        try {
+            const today = formatLocalDate(new Date());
+            
+            // First, check if activity entry exists
+            const { data, error } = await supabase
+                .from('user_daily_activity')
+                .select('minutes_spent')
+                .eq('user_id', userId)
+                .eq('activity_date', today)
+                .single();
+
+            const currentMinutes = data?.minutes_spent || 0;
+
+            const { error: upsertError } = await supabase
+                .from('user_daily_activity')
+                .upsert({
+                    user_id: userId,
+                    activity_date: today,
+                    minutes_spent: currentMinutes + 1
+                }, { onConflict: 'user_id,activity_date' });
+
+            if (upsertError) throw upsertError;
+            return true;
+        } catch (error) {
+            console.error('Error tracking time spent:', error);
+            return false;
         }
     }
 };

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { NavLink, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
-import { 
-    Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, 
-    Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone, 
-    LogOut, Flame, Play, Plus, ChevronDown, ChevronLeft, Star, Lock, PenTool, Activity, 
-    Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb, 
-    Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon 
+import {
+    Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles,
+    Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone,
+    LogOut, Flame, Play, Plus, ChevronDown, ChevronLeft, Star, Lock, PenTool, Activity,
+    Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb,
+    Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon
 } from 'lucide-react';
 import { rewardService } from '../../services/rewardService';
 import styles from './LearningPage.module.css';
@@ -161,6 +161,11 @@ const LearningPage = () => {
     const [nodesPerRow, setNodesPerRow] = useState(3);
     const location = useLocation();
 
+    const [streakHistory, setStreakHistory] = useState([]);
+    const [showStreakTooltip, setShowStreakTooltip] = useState(false);
+    const [showXpTooltip, setShowXpTooltip] = useState(false);
+    const [showPollenTooltip, setShowPollenTooltip] = useState(false);
+
     // Use heart refill system
     const {
         hearts: refillHearts,
@@ -173,6 +178,7 @@ const LearningPage = () => {
 
     const [showRewardModal, setShowRewardModal] = useState(false);
     const [lastReward, setLastReward] = useState({ hearts: 0, gems: 0 }); // Note: 'gems' here refers to the pollen count in DB
+    const [showHeartsTooltip, setShowHeartsTooltip] = useState(false);
 
     const handleScroll = () => {
         if (!mainContentRef.current || unitsWithChapters.length === 0) return;
@@ -282,6 +288,7 @@ const LearningPage = () => {
                         .eq('user_id', user.id)
                     );
                     promises.push(rewardService.getUserStreak(user.id));
+                    promises.push(rewardService.getActivityHistory(user.id, 7));
 
                     // Update last practiced tracking in background
                     courseService.getLastPracticedCourseId(user.id).then(() => {
@@ -308,6 +315,7 @@ const LearningPage = () => {
                 let profileData = results[2]?.data;
                 let progressData = results[3]?.data;
                 let streakData = results[4];
+                let streakHistoryData = results[5];
 
                 // Set course selector data
                 if (enrolledCoursesData) {
@@ -322,6 +330,7 @@ const LearningPage = () => {
                 if (profileData) setProfile(profileData);
                 if (progressData) setProgress(progressData);
                 if (streakData) setStreak(streakData);
+                if (streakHistoryData) setStreakHistory(streakHistoryData);
 
                 // 3. Fetch chapters for the identified units
                 if (unitsData && unitsData.length > 0) {
@@ -540,6 +549,26 @@ const LearningPage = () => {
         if (data) setProfile(data);
     }, [user]);
 
+    // Compute last 7 days for the streak tooltip
+    const last7DaysStreak = useMemo(() => {
+        const days = [];
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            const isCompleted = streakHistory.some(h => h.activity_date === dateStr);
+            days.push({
+                date: dateStr,
+                dayName: d.toLocaleDateString('bn-BD', { weekday: 'short' }),
+                completed: isCompleted
+            });
+        }
+        return days;
+    }, [streakHistory]);
+
     return (
 
         <div className={styles.learningPage}>
@@ -562,26 +591,155 @@ const LearningPage = () => {
 
                             <div className={styles.mobileMainHeaderArea}>
                                 <div className={styles.mobileHeaderStats}>
-                                    <NavLink to="/streak" className={styles.mobileHeaderStat}>
-                                        <Flame size={24} color="#f1c40f" fill="#f1c40f" />
-                                        <span>{streak?.current_streak || 0}</span>
-                                    </NavLink>
+                                    <div className={styles.mobileHeaderStatWrapper}>
+                                        <div className={styles.mobileHeaderStat} onClick={() => setShowStreakTooltip(true)} style={{ cursor: 'pointer' }}>
+                                            <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                            <span>{streak?.current_streak || 0}</span>
+                                        </div>
 
-                                    <div className={styles.mobileHeaderStat}>
-                                        <ShieldIcon xp={profile?.xp || 0} size={24} />
-                                        <span>{profile?.xp || 0}</span>
+                                        {showStreakTooltip && (
+                                            <>
+                                                <div className={styles.streakTooltipOverlay} onClick={() => setShowStreakTooltip(false)} />
+                                                <div className={styles.streakTooltipBox}>
+                                                    <div className={styles.streakTooltipHeader}>
+                                                        <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                                        <div className={styles.streakInfoLeft}>
+                                                            <h4 style={{ margin: 0 }}>{streak?.current_streak || 0} দিনের ধারাবাহিকতা</h4>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={styles.streakSevenDaysRow}>
+                                                        {last7DaysStreak.map((day, idx) => (
+                                                            <div key={idx} className={styles.streakDayItem}>
+                                                                <div className={styles.streakDayName}>{day.dayName}</div>
+                                                                <div className={day.completed ? styles.streakDayCircleActive : styles.streakDayCircle}>
+                                                                    {day.completed ? <Check size={14} strokeWidth={4} color="#f1c40f" /> : null}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+
+                                                    <button
+                                                        className={styles.shopButton}
+                                                        style={{ background: '#2d383e', color: '#fff', borderBottom: '3px solid #1a1f22', width: '100%', marginTop: '16px' }}
+                                                        onClick={() => { setShowStreakTooltip(false); navigate('/streak'); }}
+                                                    >
+                                                        <span>বিস্তারিত দেখুন</span>
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
-                                    <div className={styles.mobileHeaderStat}>
-                                        <PollenIcon size={24} />
-                                        <span>{profile?.gems || 0}</span>
+
+                                    <div className={styles.mobileHeaderStatWrapper}>
+                                        <div className={styles.mobileHeaderStat} onClick={() => setShowXpTooltip(true)} style={{ cursor: 'pointer' }}>
+                                            <ShieldIcon xp={profile?.xp || 0} size={24} />
+                                            <span>{profile?.xp || 0}</span>
+                                        </div>
+
+                                        {showXpTooltip && (
+                                            <>
+                                                <div className={styles.streakTooltipOverlay} onClick={() => setShowXpTooltip(false)} />
+                                                <div className={styles.streakTooltipBoxCenter}>
+                                                    <div className={styles.streakTooltipHeader}>
+                                                        <div className={styles.streakInfoLeft}>
+                                                            <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                <ShieldIcon xp={profile?.xp || 0} size={24} /> মধু সংগৃহীত &nbsp; {profile?.xp || 0}
+                                                            </h4>
+                                                            <p>দৈনিক অনুশীলন করে মধু সংগ্রহ করুন এবং লিডারবোর্ডে এগিয়ে থাকুন!</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        className={styles.shopButton}
+                                                        style={{ background: '#2d383e', color: '#fff', borderBottom: '3px solid #1a1f22', width: '100%' }}
+                                                        onClick={() => { setShowXpTooltip(false); navigate('/leaderboard'); }}
+                                                    >
+                                                        <span>লিডারবোর্ড দেখুন</span>
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
-                                    <div className={styles.mobileHeaderStat}>
-                                        <HoneyDropIcon size={24} isEmpty={refillHearts === 0 && refillTimeDisplay} />
-                                        <span>
-                                            {(profile?.is_premium || profile?.is_1day_premium) ? (
-                                                <InfinityIcon size={24} strokeWidth={3} stroke="#f1c40f" />
-                                            ) : refillHearts}
-                                        </span>
+
+                                    <div className={styles.mobileHeaderStatWrapper}>
+                                        <div className={styles.mobileHeaderStat} onClick={() => setShowPollenTooltip(true)} style={{ cursor: 'pointer' }}>
+                                            <PollenIcon size={24} />
+                                            <span>{profile?.gems || 0}</span>
+                                        </div>
+
+                                        {showPollenTooltip && (
+                                            <>
+                                                <div className={styles.streakTooltipOverlay} onClick={() => setShowPollenTooltip(false)} />
+                                                <div className={styles.streakTooltipBoxRight}>
+                                                    <div className={styles.streakTooltipHeader}>
+                                                        <div className={styles.streakInfoLeft}>
+                                                            <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                <PollenIcon size={24} /> মধুরেণু &nbsp; {profile?.gems || 0}
+                                                            </h4>
+                                                            <p>দৈনিক এক্টিভিটি এবং স্ট্রিক বজায় রেখে রেণু সংগ্রহ করুন!</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
+
+                                    <div className={styles.mobileHeaderStatWrapper}>
+                                        <div className={styles.mobileHeaderStat} onClick={() => setShowHeartsTooltip(true)} style={{ cursor: 'pointer' }}>
+                                            <HoneyDropIcon size={24} isEmpty={refillHearts === 0 && refillTimeDisplay} />
+                                            <span>
+                                                {(profile?.is_premium || profile?.is_1day_premium) ? (
+                                                    <InfinityIcon size={24} strokeWidth={3} stroke="#f1c40f" />
+                                                ) : refillHearts}
+                                            </span>
+                                        </div>
+
+                                        {showHeartsTooltip && (
+                                            <>
+                                                <div className={styles.heartsTooltipOverlay} onClick={() => setShowHeartsTooltip(false)} />
+                                                <div className={styles.heartsTooltipBox}>
+                                                    {(profile?.is_premium || profile?.is_1day_premium) ? (
+                                                        <div className={styles.tooltipSubscriber}>
+                                                            <div className={styles.tooltipNonSubscriber}>
+                                                                <div className={styles.upsellSection} style={{ borderBottom: 'none', paddingBottom: 0 }}>
+                                                                    <Crown size={24} color="#f1c40f" />
+                                                                    <div className={styles.tooltipTextContent}>
+                                                                        <h4>{(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় আছে' : 'কিং বী সক্রিয় আছে'}</h4>
+                                                                        {profile?.premium_until ? (
+                                                                            <p>মেয়াদ শেষ হবে: {new Date(profile.premium_until).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                                                        ) : (
+                                                                            <p>আনলিমিটেড মধু ফোঁটা</p>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <div className={styles.tooltipNonSubscriber}>
+                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                                <button
+                                                                    className={styles.shopButton}
+                                                                    style={{ background: 'linear-gradient(135deg, #FFD700 0%, #F1A20F 100%)', borderBottom: '3px solid #d48e00' }}
+                                                                    onClick={() => { setShowHeartsTooltip(false); navigate('/shop', { state: { directCheckout: 'monthly' } }); }}
+                                                                >
+                                                                    <Crown size={16} />
+                                                                    <span>{(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় করুন' : 'কিং বী সক্রিয় করুন'}</span>
+                                                                </button>
+
+                                                                <button
+                                                                    className={styles.shopButton}
+                                                                    style={{ background: '#2d383e', color: '#fff', borderBottom: '3px solid #1a1f22' }}
+                                                                    onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
+                                                                >
+                                                                    <ShoppingBag size={16} />
+                                                                    <span>শপে যান</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>

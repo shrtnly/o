@@ -6,19 +6,28 @@ import { rewardService } from '../../services/rewardService';
 import { courseService } from '../../services/courseService';
 import { storageService } from '../../services/storageService';
 import { honeyJarService } from '../../services/honeyJarService';
+import { connectionService } from '../../services/connectionService';
 import InlineLoader from '../../components/ui/InlineLoader';
 import PollenIcon from '../../components/PollenIcon';
 import { leaderboardService } from '../../services/leaderboardService';
 import {
-    User, Calendar, Zap, Gem, Trophy, Target,
-    BookOpen, Camera, X, Settings, Share2,
     Users, Edit3, Crown, Star, Lock, MapPin,
-    Shield, Flame, Compass, Gift
+    Heart, Info, Bell, Shield, ChevronRight, ChevronDown, Award,
+    LogOut, BarChart3, Layout, Activity as ActivityIcon, Compass, Flame,
+    Camera, X, Settings, Share2, User, Calendar, Zap, Gem, Trophy, Target, BookOpen,
+    Search, UserPlus
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel } from '../../utils/shieldSystem';
+import { motion, AnimatePresence } from 'framer-motion';
+import LearnerConnection from './components/LearnerConnection';
+import { 
+    ResponsiveContainer, AreaChart, Area, XAxis, YAxis, 
+    CartesianGrid, Tooltip as ChartTooltip, PieChart, Pie, Cell,
+    BarChart, Bar
+} from 'recharts';
 
 // --- Achievement Badge Constants ---
 const BADGE_DEFS = [
@@ -43,6 +52,32 @@ const ProfilePage = () => {
     const [streak, setStreak] = useState(null);
     const [showShareCard, setShowShareCard] = useState(false);
     const [globalRank, setGlobalRank] = useState('—');
+    const [activeTab, setActiveTab] = useState('general');
+    
+    const [analysisData, setAnalysisData] = useState(null);
+    const [analysisDays, setAnalysisDays] = useState('all');
+    const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
+    const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+    const filterRef = useRef(null);
+
+    const [activitySubTab, setActivitySubTab] = useState('log');
+    const [notifications, setNotifications] = useState([]);
+    const [activityLogs, setActivityLogs] = useState([]);
+    const [isActivityLoading, setIsActivityLoading] = useState(false);
+
+    const [connections, setConnections] = useState({ pending: [], active: [], outgoing: [] });
+    const [selectedLearner, setSelectedLearner] = useState(null);
+
+    // Close dropdown on click outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (filterRef.current && !filterRef.current.contains(e.target)) {
+                setIsFilterDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     // Modal states
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -141,6 +176,68 @@ const ProfilePage = () => {
         });
     };
 
+    const fetchAnalysisData = useCallback(async () => {
+        if (!user) return;
+        setIsAnalysisLoading(true);
+        try {
+            const data = await rewardService.getAnalysisData(user.id, analysisDays);
+            setAnalysisData(data);
+        } catch (err) {
+            console.error('Error fetching analysis:', err);
+        } finally {
+            setIsAnalysisLoading(false);
+        }
+    }, [user, analysisDays]);
+
+    const fetchActivityData = useCallback(async () => {
+        if (!user) return;
+        setIsActivityLoading(true);
+        try {
+            const logs = await rewardService.getRecentTransactions(user.id, 20);
+            setActivityLogs(logs);
+
+            const { data: notifs, error } = await supabase
+                .from('notification_history')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false })
+                .limit(20);
+            
+            if (!error) {
+                setNotifications(notifs || []);
+            }
+        } catch (err) {
+            console.error('Error fetching activity data:', err);
+        } finally {
+            setIsActivityLoading(false);
+        }
+    }, [user]);
+
+    const fetchConnectionBadgeData = useCallback(async () => {
+        if (!user) return;
+        try {
+            const data = await connectionService.getConnections(user.id);
+            setConnections(data);
+        } catch (err) {
+            console.error('Error fetching connections for badge:', err);
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (activeTab === 'analyze') {
+            fetchAnalysisData();
+        } else if (activeTab === 'activity') {
+            fetchActivityData();
+        } else if (activeTab === 'connection') {
+            fetchConnectionBadgeData();
+        }
+    }, [activeTab, fetchAnalysisData, fetchActivityData, fetchConnectionBadgeData]);
+
+
+    // Calculate Completed Courses for Certification
+    const completedCourses = enrolledCourses.filter(course => 
+        Number(course.progress_percentage || 0) >= 100
+    );
 
     // Calculate Badges Unlocked Status
     const badges = BADGE_DEFS.map(badge => {
@@ -237,63 +334,96 @@ const ProfilePage = () => {
                             <h1 className={styles.profileName}>
                                 {profile?.full_name || 'শিক্ষার্থী'}
                             </h1>
-                            <div className={styles.metaRow}>
-                                {profile?.location && (
-                                    <span className={styles.metaItem}>
-                                        <MapPin size={13} /> {profile.location}
-                                    </span>
-                                )}
-                                <span className={styles.metaItem}>
-                                    <Calendar size={13} /> যোগদান: {formatDate(profile?.created_at)}
-                                </span>
-                            </div>
 
                             {/* Rank Badge */}
                             <div className={styles.rankBadge}>
-                                <Crown size={14} className={styles.crownIcon} />
                                 <span>
-                                    {language === 'bn'
-                                        ? `রয়্যাল জেলি ${getShieldLevel(profile?.xp || 0).nameBangla}`
-                                        : `Royal Jelly ${getShieldLevel(profile?.xp || 0).name}`
-                                    }
+                                    {getShieldLevel(profile?.xp || 0).name}
                                 </span>
                             </div>
                         </div>
                     </section>
 
-                    {/* ========== SECTION 2: HONEY STATS GRID ========== */}
+                    {/* ========== TABS SECTION ========== */}
+                    <nav className={styles.profileTabs}>
+                        <button 
+                            className={`${styles.tabItem} ${activeTab === 'general' ? styles.tabActive : ''}`}
+                            onClick={() => setActiveTab('general')}
+                        >
+                            <Layout size={18} />
+                            <span>{t('tab_general')}</span>
+                        </button>
+                        <button 
+                            className={`${styles.tabItem} ${activeTab === 'analyze' ? styles.tabActive : ''}`}
+                            onClick={() => setActiveTab('analyze')}
+                        >
+                            <BarChart3 size={18} />
+                            <span>{t('tab_analyze')}</span>
+                        </button>
+                        <button 
+                            className={`${styles.tabItem} ${activeTab === 'activity' ? styles.tabActive : ''}`}
+                            onClick={() => setActiveTab('activity')}
+                        >
+                            <ActivityIcon size={18} />
+                            <span>{t('tab_activity')}</span>
+                        </button>
+                        <button 
+                            className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
+                            onClick={() => setActiveTab('connection')}
+                        >
+                            <Users size={18} />
+                            <span>{t('tab_connection')}</span>
+                            {connections.pending.length > 0 && <span className={styles.tabBadge}>{connections.pending.length}</span>}
+                        </button>
+                    </nav>
+
+                    {activeTab === 'general' && (
+                        <>
+                            {/* ========== SECTION 2: HONEY STATS GRID ========== */}
                     <section className={styles.statsSection}>
                         <div className={styles.statsGrid}>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <PollenIcon size={28} className={styles.statIconPollen} />
-                                    <span className={styles.statCardValue}>{profile?.gems || 0}</span>
-                                    <span className={styles.statCardDivider}>-</span>
-                                    <span className={styles.statCardLabel}>পরাগরেণু</span>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <PollenIcon size={18} className={styles.statIconPollen} />
+                                            {profile?.gems || 0}
+                                        </span>
+                                        <span className={styles.statCardLabel}>মধুরেণু</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <Compass size={22} className={styles.statIconCompass} />
-                                    <span className={styles.statCardValue}>{enrolledCourses.length}</span>
-                                    <span className={styles.statCardDivider}>-</span>
-                                    <span className={styles.statCardLabel}>শেখার কোর্সসমূহ</span>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <Compass size={16} className={styles.statIconCompass} />
+                                            {enrolledCourses.length}
+                                        </span>
+                                        <span className={styles.statCardLabel}>কোর্সসমূহ</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <Flame size={22} fill="url(#flameGradientProfile)" stroke="url(#flameGradientProfile)" className={styles.statIconStreak} />
-                                    <span className={styles.statCardValue}>{streak?.current_streak || 0} দিন</span>
-                                    <span className={styles.statCardDivider}>-</span>
-                                    <span className={styles.statCardLabel}>গুনগুন স্ট্রিক</span>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <Flame size={16} fill="url(#flameGradientProfile)" stroke="url(#flameGradientProfile)" className={styles.statIconStreak} />
+                                            {streak?.current_streak || 0} দিন
+                                        </span>
+                                        <span className={styles.statCardLabel}>গুনগুন স্ট্রিক</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
-                                    <Trophy size={22} className={styles.statIconRank} />
-                                    <span className={styles.statCardValue}>#{globalRank}</span>
-                                    <span className={styles.statCardDivider}>-</span>
-                                    <span className={styles.statCardLabel}>লিডারবোর্ড র‌্যাঙ্কিং</span>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <Trophy size={16} className={styles.statIconRank} />
+                                            #{globalRank}
+                                        </span>
+                                        <span className={styles.statCardLabel}>র‌্যাঙ্কিং</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -324,11 +454,47 @@ const ProfilePage = () => {
                         </div>
                     </section>
 
+                    {/* ========== SECTION 6: CERTIFICATIONS ========== */}
+                    <section className={styles.certsSection}>
+                        <h2 className={styles.sectionTitle}>
+                            <span>🎓</span> {t('earned_certificates')}
+                        </h2>
+                        {completedCourses.length > 0 ? (
+                            <div className={styles.certsGrid}>
+                                {completedCourses.map((course) => (
+                                    <div key={course.course_id} className={styles.certCard}>
+                                        <div className={styles.certIconContainer}>
+                                            <Award size={24} />
+                                        </div>
+                                        <div className={styles.certInfo}>
+                                            <h3 className={styles.certTitle}>{course.course_title}</h3>
+                                            <p className={styles.certDate}>
+                                                কোর্সের সকল অধ্যায় সফলভাবে সম্পন্ন হয়েছে
+                                            </p>
+                                        </div>
+                                        <div className={styles.certBadge}>
+                                            <Shield size={16} fill="#F1C40F" stroke="#F1C40F" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className={styles.noCertsWrapper}>
+                                <div className={styles.certIconContainer} style={{ opacity: 0.3 }}>
+                                    <Award size={32} />
+                                </div>
+                                <p className={styles.noCertsText}>
+                                    {t('no_certificates')}
+                                </p>
+                            </div>
+                        )}
+                    </section>
+
                     {/* ========== SECTION 5: ACTIONS & SETTINGS ========== */}
                     <section className={styles.actionsSection}>
                         <button className={styles.actionOutline}
                             onClick={() => setIsEditModalOpen(true)}>
-                            <Edit3 size={16} />
+uhj                            <Edit3 size={16} />
                             প্রোফাইল এডিট করুন
                         </button>
                         <button className={styles.actionSolid}>
@@ -338,7 +504,393 @@ const ProfilePage = () => {
                     </section>
 
                     {/* Bottom Spacer for extra scrolling room */}
-                    <div className={styles.bottomSpacer} />
+                        <div className={styles.bottomSpacer} />
+                        </>
+                    )}
+
+                    {activeTab === 'analyze' && (
+                        <div className={styles.analyzeTabContent}>
+                            {/* Filter Header */}
+                            <div className={styles.analysisFilters}>
+                                <div className={styles.dropdownWrapper} ref={filterRef}>
+                                    <button 
+                                        className={styles.dropdownToggle}
+                                        onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                                    >
+                                        <div className={styles.dropLabelStack}>
+                                            <span className={styles.selectedVal}>
+                                                {analysisDays === 'all' ? t('all_time') : t(`last_${analysisDays}_days`)}
+                                            </span>
+                                        </div>
+                                        <ChevronDown size={14} className={`${styles.dropdownIcon} ${isFilterDropdownOpen ? styles.rotateIcon : ''}`} />
+                                    </button>
+
+                                    <AnimatePresence>
+                                        {isFilterDropdownOpen && (
+                                            <motion.div 
+                                                className={styles.dropdownMenu}
+                                                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                                transition={{ duration: 0.15, ease: "easeOut" }}
+                                            >
+                                                {[
+                                                    { value: 'all', label: t('all_time') },
+                                                    { value: '30', label: t('last_30_days') },
+                                                    { value: '15', label: t('last_15_days') },
+                                                    { value: '7', label: t('last_7_days') }
+                                                ].map((opt) => (
+                                                    <button
+                                                        key={opt.value}
+                                                        className={`${styles.dropdownOption} ${analysisDays === opt.value ? styles.optActive : ''}`}
+                                                        onClick={() => {
+                                                            setAnalysisDays(opt.value);
+                                                            setIsFilterDropdownOpen(false);
+                                                        }}
+                                                    >
+                                                        {opt.label}
+                                                        {analysisDays === opt.value && <div className={styles.activeDot} />}
+                                                    </button>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+
+                            {isAnalysisLoading ? (
+                                <div className={styles.analysisLoading}>
+                                    <InlineLoader />
+                                    <p>অ্যানালাইসিস লোড হচ্ছে...</p>
+                                </div>
+                            ) : analysisData ? (
+                                <div className={styles.analysisGrid}>
+                                    {/* Summary Cards */}
+                                    <div className={styles.analysisStatsRow}>
+                                        <div className={styles.analysisMiniCard}>
+                                            <span className={styles.miniCardLabel}>{t('daily_xp')}</span>
+                                            <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
+                                                {analysisData.summary.totalXp}
+                                            </span>
+                                        </div>
+                                        <div className={styles.analysisMiniCard}>
+                                            <span className={styles.miniCardLabel}>{t('total_time')}</span>
+                                            <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
+                                                {analysisData.summary.totalMinutes} {t('minutes')}
+                                            </span>
+                                        </div>
+                                        <div className={styles.analysisMiniCard}>
+                                            <span className={styles.miniCardLabel}>{t('accuracy')}</span>
+                                            <span className={styles.miniCardValue} style={{ color: '#2ECC71' }}>
+                                                {Math.round((analysisData.summary.totalCorrect / (analysisData.summary.totalCorrect + analysisData.summary.totalWrong)) * 100)}%
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {/* XP Activity Chart */}
+                                    <div className={styles.chartContainerFull}>
+                                        <h3 className={styles.chartTitle}>{t('daily_honey')}</h3>
+                                        <div style={{ width: '100%', height: 200 }}>
+                                            <ResponsiveContainer>
+                                                <AreaChart data={analysisData.activity}>
+                                                    <defs>
+                                                        <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
+                                                            <stop offset="5%" stopColor="#F1C40F" stopOpacity={0.3}/>
+                                                            <stop offset="95%" stopColor="#F1C40F" stopOpacity={0}/>
+                                                        </linearGradient>
+                                                    </defs>
+                                                    <XAxis 
+                                                        dataKey="activity_date" 
+                                                        hide 
+                                                    />
+                                                    <YAxis hide />
+                                                    <ChartTooltip 
+                                                        contentStyle={{ 
+                                                            background: 'rgba(20, 20, 20, 0.9)', 
+                                                            border: '1px solid rgba(255,255,255,0.1)',
+                                                            borderRadius: '12px',
+                                                            fontSize: '12px',
+                                                            color: '#fff'
+                                                        }}
+                                                        itemStyle={{ color: '#fff' }}
+                                                        labelStyle={{ color: '#fff' }}
+                                                    />
+                                                    <Area 
+                                                        type="monotone" 
+                                                        dataKey="xp_earned" 
+                                                        name={t('earned')}
+                                                        stroke="#F1C40F" 
+                                                        fillOpacity={1} 
+                                                        fill="url(#colorXp)" 
+                                                        strokeWidth={3}
+                                                    />
+                                                </AreaChart>
+                                            </ResponsiveContainer>
+                                        </div>
+                                    </div>
+
+                                    {/* Pie Chart: Accuracy */}
+                                    <div className={styles.analysisChartsHalf}>
+                                        <div className={styles.chartCard}>
+                                            <h3 className={styles.chartTitle}>{t('accuracy')}</h3>
+                                            <div style={{ width: '100%', height: 150 }}>
+                                                <ResponsiveContainer>
+                                                    <PieChart>
+                                                        <Pie
+                                                            data={[
+                                                                { name: t('right_answers'), value: analysisData.summary.totalCorrect },
+                                                                { name: t('wrong_answers'), value: analysisData.summary.totalWrong }
+                                                            ]}
+                                                            cx="50%"
+                                                            cy="50%"
+                                                            innerRadius={45}
+                                                            outerRadius={65}
+                                                            paddingAngle={8}
+                                                            dataKey="value"
+                                                        >
+                                                            <Cell fill="#F1C40F" stroke="none" />
+                                                            <Cell fill="rgba(255, 255, 255, 0.05)" stroke="none" />
+                                                        </Pie>
+                                                        <ChartTooltip 
+                                                            contentStyle={{ 
+                                                                background: 'rgba(20, 20, 20, 0.9)', 
+                                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                                borderRadius: '10px',
+                                                                fontSize: '12px',
+                                                                color: '#fff'
+                                                            }}
+                                                            itemStyle={{ color: '#fff' }}
+                                                            labelStyle={{ color: '#fff' }}
+                                                        />
+                                                    </PieChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                            <div className={styles.pieLegend}>
+                                                <div className={styles.legendItem}>
+                                                    <span className={styles.legendDot} style={{ background: '#F1C40F' }} />
+                                                    <span>{t('right_answers')}</span>
+                                                </div>
+                                                <div className={styles.legendItem}>
+                                                    <span className={styles.legendDot} style={{ background: 'rgba(255, 255, 255, 0.15)' }} />
+                                                    <span>{t('wrong_answers')}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.chartCard}>
+                                            <h3 className={styles.chartTitle}>{t('learning_pattern')}</h3>
+                                            <div style={{ width: '100%', height: 150 }}>
+                                                <ResponsiveContainer>
+                                                    <BarChart data={analysisData.activity}>
+                                                        <XAxis 
+                                                            dataKey="activity_date" 
+                                                            hide 
+                                                        />
+                                                        <YAxis hide />
+                                                        <ChartTooltip 
+                                                            contentStyle={{ 
+                                                                background: 'rgba(20, 20, 20, 0.9)', 
+                                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                                borderRadius: '10px',
+                                                                fontSize: '10px',
+                                                                color: '#fff'
+                                                            }}
+                                                            itemStyle={{ color: '#fff' }}
+                                                            labelStyle={{ color: '#fff' }}
+                                                            cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+                                                        />
+                                                        <Bar 
+                                                            dataKey="lessons_completed" 
+                                                            name={t('lessons_completed')}
+                                                            fill="#F1C40F" 
+                                                            radius={[4, 4, 0, 0]} 
+                                                            barSize={12}
+                                                            opacity={0.8}
+                                                        />
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className={styles.analysisEmpty}>
+                                    <BarChart3 size={40} opacity={0.3} />
+                                    <p>এই সময়ে কোনো কার্যক্রম পাওয়া যায়নি</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'activity' && (
+                        <div className={styles.activityTabContent}>
+                            <div className={styles.subTabHeader}>
+                                <button 
+                                    className={`${styles.subTabBtn} ${activitySubTab === 'log' ? styles.subTabActive : ''}`}
+                                    onClick={() => setActivitySubTab('log')}
+                                >
+                                    <ActivityIcon size={16} />
+                                    {t('activity_log')}
+                                </button>
+                                <button 
+                                    className={`${styles.subTabBtn} ${activitySubTab === 'notifications' ? styles.subTabActive : ''}`}
+                                    onClick={() => setActivitySubTab('notifications')}
+                                >
+                                    <Bell size={16} />
+                                    {t('notifications')}
+                                    {notifications.some(n => !n.is_read) && <span className={styles.notifBadge} />}
+                                </button>
+                            </div>
+
+                            {isActivityLoading ? (
+                                <div className={styles.activityLoading}>
+                                    <InlineLoader />
+                                </div>
+                            ) : (
+                                <div className={styles.subTabContent}>
+                                    {activitySubTab === 'log' ? (
+                                        <div className={styles.logList}>
+                                            {activityLogs.length > 0 ? activityLogs.map(log => (
+                                                <div key={log.id} className={styles.logItem}>
+                                                    <div className={styles.logIconRow}>
+                                                        <div className={styles.logIcon}>
+                                                            {log.transaction_type === 'xp_earned' && <Zap size={14} color="#F1C40F" />}
+                                                            {log.transaction_type === 'gem_earned' && <PollenIcon size={14} />}
+                                                            {log.transaction_type === 'heart_lost' && <Heart size={14} color="#E74C3C" />}
+                                                            {log.transaction_type === 'heart_gained' && <Heart size={14} color="#2ECC71" />}
+                                                            {log.transaction_type === 'gem_spent' && <Gem size={14} color="#E74C3C" />}
+                                                        </div>
+                                                        <span className={styles.logTime}>
+                                                            {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                        </span>
+                                                    </div>
+                                                    <div className={styles.logMain}>
+                                                        <div className={styles.logLabel}>
+                                                            {log.transaction_type === 'xp_earned' && `অর্জিত ${log.amount} XP`}
+                                                            {log.transaction_type === 'gem_earned' && `পেয়েছেন ${log.amount} পরাগ`}
+                                                            {log.transaction_type === 'heart_lost' && `১টি ড্রপ হারিয়েছেন`}
+                                                            {log.transaction_type === 'heart_gained' && `${log.amount}টি ড্রপ পেয়েছেন`}
+                                                            {log.transaction_type === 'gem_spent' && `${log.amount} পরাগ খরচ করেছেন`}
+                                                        </div>
+                                                        <div className={styles.logSource}>
+                                                            {log.source === 'mcq_correct' && 'সঠিক উত্তরের জন্য'}
+                                                            {log.source === 'chapter_complete' && 'অধ্যায় সম্পন্ন করার জন্য'}
+                                                            {log.source === 'mystery_box' && 'রহস্য বক্স থেকে'}
+                                                            {log.source === 'streak_bonus' && 'স্ট্রাইক বোনাস'}
+                                                            {!log.source && 'সিস্টেম কার্যক্রম'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )) : (
+                                                <div className={styles.emptyState}>
+                                                    <ActivityIcon size={40} opacity={0.2} />
+                                                    <p>{t('empty_activity')}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className={styles.notifList}>
+                                            {notifications.length > 0 ? notifications.map(notif => (
+                                                <div key={notif.id} className={`${styles.notifItem} ${!notif.is_read ? styles.unreadNotif : ''}`}>
+                                                    <div className={styles.notifIconWrap}>
+                                                        {notif.type === 'reward' && <Trophy size={16} color="#F1C40F" />}
+                                                        {notif.type === 'streak' && <Flame size={16} color="#E67E22" />}
+                                                        {notif.type === 'course' && <BookOpen size={16} color="#2ECC71" />}
+                                                        {notif.type === 'system' && <Bell size={16} color="#3498DB" />}
+                                                    </div>
+                                                    <div className={styles.notifBody}>
+                                                        <h4 className={styles.notifTitle}>{notif.title}</h4>
+                                                        <p className={styles.notifMsg}>{notif.message}</p>
+                                                        <span className={styles.notifDate}>
+                                                            {new Date(notif.created_at).toLocaleDateString('bn-BD')}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            )) : (
+                                                <div className={styles.emptyState}>
+                                                    <Bell size={40} opacity={0.2} />
+                                                    <p>{t('empty_notif')}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'connection' && (
+                        <LearnerConnection 
+                            user={user} 
+                            userXp={profile?.xp || 0}
+                            onSelectLearner={setSelectedLearner} 
+                        />
+                    )}
+
+                    {/* Learner Profile Modal */}
+                    <AnimatePresence>
+                        {selectedLearner && (
+                            <motion.div 
+                                className={styles.modalOverlay}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                onClick={() => setSelectedLearner(null)}
+                            >
+                                <motion.div 
+                                    className={styles.learnerModal}
+                                    initial={{ scale: 0.9, y: 20 }}
+                                    animate={{ scale: 1, y: 0 }}
+                                    exit={{ scale: 0.9, y: 20 }}
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    <button className={styles.modalClose} onClick={() => setSelectedLearner(null)}>
+                                        <X size={20} />
+                                    </button>
+                                    
+                                    <div className={styles.learnerHeader}>
+                                        <div className={styles.lAvatarLarge}>
+                                            {selectedLearner.avatar_url ? <img src={selectedLearner.avatar_url} /> : <User size={48} color="#F1C40F" />}
+                                        </div>
+                                        <h3 className={styles.lNameLarge}>{selectedLearner.full_name || selectedLearner.display_name}</h3>
+                                        <p className={styles.lEmailLarge}>{selectedLearner.email}</p>
+                                    </div>
+
+                                    <div className={styles.lStatsRow}>
+                                        <div className={styles.lStatItem}>
+                                            <Zap size={16} color="#F1C40F" />
+                                            <span>{selectedLearner.xp} XP</span>
+                                        </div>
+                                        {selectedLearner.location && (
+                                            <div className={styles.lStatItem}>
+                                                <MapPin size={16} color="#3498DB" />
+                                                <span>{selectedLearner.location}</span>
+                                            </div>
+                                        )}
+                                        <div className={styles.lStatItem}>
+                                            <User size={16} color="#9B59B6" />
+                                            <span>{t(selectedLearner.gender)}</span>
+                                        </div>
+                                    </div>
+
+                                    {selectedLearner.bio && (
+                                        <div className={styles.lBioSection}>
+                                            <h4 className={styles.lBioTitle}>{t('bio')}</h4>
+                                            <p className={styles.lBioText}>{selectedLearner.bio}</p>
+                                        </div>
+                                    )}
+
+                                    <div className={styles.lBadgesRow}>
+                                        {/* Placeholder for learner's top badges if available */}
+                                    </div>
+
+                                    <button className={styles.lActionBtn} onClick={() => setSelectedLearner(null)}>
+                                        {t('close')}
+                                    </button>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             )}
 
@@ -369,7 +921,7 @@ const ProfilePage = () => {
                                     : <User size={32} color="#F1C40F" />}
                             </div>
                             <h4 className={styles.shareCardName}>
-                                {profile?.full_name || 'শিক্ষার্থী'}
+                                {profile?.full_name || profile?.display_name || 'শিক্ষার্থী'}
                                 {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                             </h4>
                             <div className={styles.shareStatsRow}>

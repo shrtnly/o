@@ -203,17 +203,24 @@
     gap: 6px;
 }
 
+.weekdayName {
+    font-size: 11px;
+    font-weight: 800;
+    color: #afafaf;
+    text-align: center;
+    padding-bottom: 4px;
+}
+
 .daySquare {
     aspect-ratio: 1;
-    background-color: rgba(35, 49, 56, 0.3);
-    border: 1.5px solid rgba(55, 70, 79, 0.5);
+    background-color: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     transition: all 0.2s;
-    opacity: 0.4;
 }
 
 .dayNumber {
@@ -228,90 +235,31 @@
     align-items: center;
     justify-content: center;
     z-index: 2;
-    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.3));
 }
 
 .dayAchieved {
-    background: linear-gradient(135deg, rgba(0, 229, 255, 0.15) 0%, rgba(0, 145, 255, 0.05) 100%);
-    border-color: #00E5FF;
-    box-shadow: 0 0 3px rgba(0, 229, 255, 0.1);
+    border-color: #37464f;
     opacity: 1;
-}
-
-.dayAchieved .dayNumber {
-    color: #00E5FF;
-    text-shadow: 0 0 4px rgba(0, 229, 255, 0.3);
 }
 
 .dayToday {
     border-color: #f1c40f;
-    box-shadow: 0 0 0 1.5px #f1c40f inset;
-    animation: todayPulse 2s ease-in-out infinite;
-}
-
-.dayToday.dayAchieved .flameContainer {
-    animation: flameFlicker 1.5s ease-in-out infinite;
-}
-
-@keyframes todayPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 1.5px #f1c40f inset, 0 0 8px rgba(241, 196, 15, 0.3);
-    }
-
-    50% {
-        box-shadow: 0 0 0 2px #f1c40f inset, 0 0 16px rgba(241, 196, 15, 0.5);
-    }
-}
-
-@keyframes flameFlicker {
-
-    0%,
-    100% {
-        transform: scale(1) translateY(0);
-        filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.4));
-    }
-
-    25% {
-        transform: scale(1.05) translateY(-1px);
-        filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
-    }
-
-    50% {
-        transform: scale(1.1) translateY(-2px);
-        filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
-    }
-
-    75% {
-        transform: scale(1.05) translateY(-1px);
-        filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.5));
-    }
 }
 
 .dayFuture {
     opacity: 0.7;
-    background-color: rgba(35, 49, 56, 0.5);
-    border-color: rgba(55, 70, 79, 0.7);
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .dayFuture .dayNumber {
-    color: #afafaf;
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .dayEmpty {
     opacity: 0.1;
     background: transparent;
     border-style: dashed;
-}
-
-.todayIndicator {
-    position: absolute;
-    bottom: -6px;
-    width: 6px;
-    height: 6px;
-    background-color: #2ecc71;
-    border-radius: 50%;
 }
 
 /* Weekly View */

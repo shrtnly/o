@@ -627,7 +627,7 @@ const ShopPage = () => {
                                     </div>
                                     <h2 className={styles.successTitle}>সফল হয়েছে!</h2>
                                     <p className={styles.successDesc}>
-                                        আপনার পরাগরেণু সফলভাবে হানি ড্রপে রূপান্তরিত হয়েছে।
+                                        আপনার মধুরেণু সফলভাবে হানি ড্রপে রূপান্তরিত হয়েছে।
                                     </p>
                                     <button 
                                         className={styles.confirmBtn} 
@@ -644,9 +644,9 @@ const ShopPage = () => {
                                     <div className={styles.successLottie} style={{ background: 'rgba(241,196,15,0.05)', borderRadius: '50%', padding: '20px' }}>
                                         <PollenIcon size={100} />
                                     </div>
-                                    <h2 className={styles.successTitle} style={{ color: '#fff', fontSize: '1.6rem' }}>পর্যাপ্ত পরাগরেণু নেই</h2>
+                                    <h2 className={styles.successTitle} style={{ color: '#fff', fontSize: '1.6rem' }}>পর্যাপ্ত মধুরেণু নেই</h2>
                                     <p className={styles.successDesc}>
-                                        হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> পরাগরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? 'কিং বী মোড' : 'কুইন বী মোড'} নিন।
+                                        হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> মধুরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? 'কিং বী মোড' : 'কুইন বী মোড'} নিন।
                                     </p>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
                                         <button 
@@ -687,7 +687,7 @@ const ShopPage = () => {
                                     <div className={styles.checkoutHeader}>
                                         <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
                                         <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
-                                            পরাগরেণু দিয়ে হানি ড্রপ পাওয়ার জন্য কনফার্ম করুন
+                                            মধুরেণু দিয়ে হানি ড্রপ পাওয়ার জন্য কনফার্ম করুন
                                         </p>
                                     </div>
 

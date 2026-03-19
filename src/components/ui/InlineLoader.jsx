@@ -1,16 +1,16 @@
 import React from 'react';
 
-const InlineLoader = ({ size = 200 }) => {
-    const spinnerSize = Math.max(28, size * 0.14);
+const InlineLoader = ({ size = 200, showText = true, customText = 'লোড হচ্ছে...' }) => {
+    const spinnerSize = Math.max(16, size * 0.14);
     return (
         <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            padding: '40px 0',
-            gap: '14px'
+            width: showText ? '100%' : 'auto',
+            padding: showText ? '40px 0' : '0',
+            gap: showText ? '14px' : '0'
         }}>
             <style>{`
                 @keyframes _bee_spin {
@@ -26,22 +26,24 @@ const InlineLoader = ({ size = 200 }) => {
                 width: `${spinnerSize}px`,
                 height: `${spinnerSize}px`,
                 borderRadius: '50%',
-                border: `3px solid rgba(241, 196, 15, 0.2)`,
+                border: `${Math.max(1.5, spinnerSize * 0.1)}px solid rgba(241, 196, 15, 0.2)`,
                 borderTopColor: '#f1c40f',
                 borderRightColor: '#f39c12',
                 animation: '_bee_spin 0.85s linear infinite',
                 flexShrink: 0,
             }} />
-            <p style={{
-                color: '#f1c40f',
-                fontWeight: '700',
-                fontSize: '0.85rem',
-                margin: 0,
-                animation: '_bee_pulse 1.4s ease-in-out infinite',
-                letterSpacing: '0.03em',
-            }}>
-                লোড হচ্ছে...
-            </p>
+            {showText && (
+                <p style={{
+                    color: '#f1c40f',
+                    fontWeight: '700',
+                    fontSize: '0.85rem',
+                    margin: 0,
+                    animation: '_bee_pulse 1.4s ease-in-out infinite',
+                    letterSpacing: '0.03em',
+                }}>
+                    {customText}
+                </p>
+            )}
         </div>
     );
 };

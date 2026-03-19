@@ -100,6 +100,15 @@ export const connectionService = {
      * Respond to a request
      */
     async respondToRequest(connectionId, status, senderId, receiverId) {
+        if (status === 'rejected') {
+            const { error } = await supabase
+                .from('learner_connections')
+                .delete()
+                .eq('id', connectionId);
+            if (error) throw error;
+            return true;
+        }
+
         const { error } = await supabase
             .from('learner_connections')
             .update({ status })

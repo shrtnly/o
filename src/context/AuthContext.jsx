@@ -26,6 +26,30 @@ export const AuthProvider = ({ children }) => {
         return () => subscription.unsubscribe();
     }, []);
 
+    // New effect for tracking user activity
+    useEffect(() => {
+        if (!user?.id) return;
+
+        const updateLastSeen = async () => {
+            try {
+                await supabase
+                    .from('profiles')
+                    .update({ last_seen: new Date().toISOString() })
+                    .eq('id', user.id);
+            } catch (err) {
+                console.error('Error updating last seen:', err);
+            }
+        };
+
+        // Update immediately on mount/login
+        updateLastSeen();
+
+        // Update every 2 minutes
+        const intervalId = setInterval(updateLastSeen, 2 * 60 * 1000);
+
+        return () => clearInterval(intervalId);
+    }, [user?.id]);
+
     const value = {
         signUp: (data) => supabase.auth.signUp(data),
         signIn: (data) => supabase.auth.signInWithPassword(data),

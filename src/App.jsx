@@ -28,6 +28,8 @@ import ResetPassword from './features/auth/ResetPassword';
 import TermsPage from './features/legal/TermsPage';
 import PrivacyPage from './features/legal/PrivacyPage';
 
+import { Toaster } from 'sonner';
+
 // Landing Page UI Component
 const LandingPageContent = () => {
   const { t } = useLanguage();
@@ -137,6 +139,7 @@ function App() {
     <AuthProvider>
       <LanguageProvider>
         <ThemeProvider>
+          <Toaster position="top-right" expand={false} theme="dark" richColors />
           <AppContent />
         </ThemeProvider>
       </LanguageProvider>

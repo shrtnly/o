@@ -93,11 +93,11 @@ const ProfilePage = () => {
     useEffect(() => {
         if (!user) { navigate('/auth'); return; }
         fetchProfileData();
-    }, [user, navigate]);
+    }, [user?.id, navigate]);
 
     const fetchProfileData = async () => {
         try {
-            setLoading(true);
+            if (!profile) setLoading(true);
             const { data: profileData } = await supabase
                 .from('profiles').select('*').eq('id', user.id).single();
             setProfile(profileData);
@@ -177,7 +177,7 @@ const ProfilePage = () => {
     };
 
     const fetchAnalysisData = useCallback(async () => {
-        if (!user) return;
+        if (!user?.id) return;
         setIsAnalysisLoading(true);
         try {
             const data = await rewardService.getAnalysisData(user.id, analysisDays);
@@ -187,10 +187,10 @@ const ProfilePage = () => {
         } finally {
             setIsAnalysisLoading(false);
         }
-    }, [user, analysisDays]);
+    }, [user?.id, analysisDays]);
 
     const fetchActivityData = useCallback(async () => {
-        if (!user) return;
+        if (!user?.id) return;
         setIsActivityLoading(true);
         try {
             const logs = await rewardService.getRecentTransactions(user.id, 20);
@@ -211,27 +211,67 @@ const ProfilePage = () => {
         } finally {
             setIsActivityLoading(false);
         }
-    }, [user]);
+    }, [user?.id]);
 
     const fetchConnectionBadgeData = useCallback(async () => {
-        if (!user) return;
+        if (!user?.id) return;
         try {
             const data = await connectionService.getConnections(user.id);
             setConnections(data);
         } catch (err) {
             console.error('Error fetching connections for badge:', err);
         }
-    }, [user]);
+    }, [user?.id]);
 
     useEffect(() => {
         if (activeTab === 'analyze') {
             fetchAnalysisData();
         } else if (activeTab === 'activity') {
             fetchActivityData();
-        } else if (activeTab === 'connection') {
+        }
+    }, [activeTab, fetchAnalysisData, fetchActivityData]);
+
+    // Independent fetch for badges on mount
+    useEffect(() => {
+        if (user?.id) {
             fetchConnectionBadgeData();
         }
-    }, [activeTab, fetchAnalysisData, fetchActivityData, fetchConnectionBadgeData]);
+    }, [user?.id, fetchConnectionBadgeData]);
+
+    // Real-time listener for connection requests
+    useEffect(() => {
+        if (!user?.id) return;
+
+        // Listen for ANY change in connections
+        const connectionChannel = supabase
+            .channel(`profile-badge-${user.id}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'learner_connections'
+                },
+                (payload) => {
+                    console.log('Real-time sync triggered:', payload.eventType);
+                    fetchConnectionBadgeData();
+                }
+            )
+            .subscribe();
+
+        // Also fetch when window becomes visible (user returns to browser tab)
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                fetchConnectionBadgeData();
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            supabase.removeChannel(connectionChannel);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [user?.id, fetchConnectionBadgeData]);
 
 
     // Calculate Completed Courses for Certification
@@ -301,9 +341,7 @@ const ProfilePage = () => {
                         >
                             <Settings size={22} strokeWidth={1.5} />
                         </button>
-                        {/* Glow Avatar */}
                         <div className={styles.avatarWrapper}>
-                            <div className={styles.avatarGlow}></div>
                             <div className={styles.avatar} onClick={() => fileInputRef.current?.click()}>
                                 {profile?.avatar_url
                                     ? <img src={profile.avatar_url} alt="Profile" />
@@ -315,15 +353,11 @@ const ProfilePage = () => {
                                 {uploadingAvatar && <div className={styles.loaderOverlay}><InlineLoader /></div>}
                             </div>
 
-                            {/* Desktop Rank Badge on Avatar */}
-                            {xp >= 1 && (
-                                <div className={styles.avatarBadge}>
-                                    <img
-                                        alt={getShieldLevel(profile?.xp || 0).name}
-                                        src={`/src/assets/shields/${getShieldLevel(profile?.xp || 0).level.toLowerCase()}-shield.png`}
-                                    />
-                                </div>
-                            )}
+                            {/* Active/Inactive Indicator */}
+                            <div className={styles.statusIndicator}>
+                                <div className={`${styles.statusDot} ${profile?.last_seen && (new Date() - new Date(profile.last_seen)) < 5 * 60 * 1000 ? styles.online : styles.offline}`}></div>
+                            </div>
+
                             <input ref={fileInputRef} type="file"
                                 accept="image/jpeg,image/jpg,image/png,image/webp"
                                 onChange={handleAvatarChange} style={{ display: 'none' }} />
@@ -338,7 +372,7 @@ const ProfilePage = () => {
                             {/* Rank Badge */}
                             <div className={styles.rankBadge}>
                                 <span>
-                                    {getShieldLevel(profile?.xp || 0).name}
+                                    {getShieldLevel(profile?.xp || 0).name} Learner {profile?.location ? `@ ${profile.location}` : ''}
                                 </span>
                             </div>
                         </div>
@@ -371,9 +405,13 @@ const ProfilePage = () => {
                             className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('connection')}
                         >
-                            <Users size={18} />
+                            <div className={styles.tabIconGroup}>
+                                <Users size={18} />
+                                {connections.pending.length > 0 && (
+                                    <span className={styles.tabBadge}>{connections.pending.length}</span>
+                                )}
+                            </div>
                             <span>{t('tab_connection')}</span>
-                            {connections.pending.length > 0 && <span className={styles.tabBadge}>{connections.pending.length}</span>}
                         </button>
                     </nav>
 
@@ -494,7 +532,7 @@ const ProfilePage = () => {
                     <section className={styles.actionsSection}>
                         <button className={styles.actionOutline}
                             onClick={() => setIsEditModalOpen(true)}>
-uhj                            <Edit3 size={16} />
+                            <Edit3 size={16} />
                             প্রোফাইল এডিট করুন
                         </button>
                         <button className={styles.actionSolid}>
@@ -894,13 +932,7 @@ uhj                            <Edit3 size={16} />
                 </div>
             )}
 
-            {/* === FLOATING SHARE BUTTON === */}
-            {!loading && (
-                <button className={styles.shareFab} onClick={() => setShowShareCard(true)}
-                    title="শেয়ার করুন">
-                    <Share2 size={20} />
-                </button>
-            )}
+
 
             {/* === SHARE CARD MODAL === */}
             {showShareCard && (

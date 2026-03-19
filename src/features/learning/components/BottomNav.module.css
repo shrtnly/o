@@ -19,6 +19,9 @@
     .bottomNav {
         display: flex;
     }
+    :global(.mobile-chat-open) .bottomNav {
+        display: none !important;
+    }
 }
 
 .navItem {

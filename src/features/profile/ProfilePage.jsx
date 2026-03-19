@@ -15,7 +15,7 @@ import {
     Heart, Info, Bell, Shield, ChevronRight, ChevronDown, Award,
     LogOut, BarChart3, Layout, Activity as ActivityIcon, Compass, Flame,
     Camera, X, Settings, Share2, User, Calendar, Zap, Gem, Trophy, Target, BookOpen,
-    Search, UserPlus
+    Search, UserPlus, Check
 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
@@ -30,6 +30,8 @@ import {
 } from 'recharts';
 
 // --- Achievement Badge Constants ---
+import { useNotifications } from '../../context/NotificationContext';
+
 const BADGE_DEFS = [
     { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ' },
     { id: 'streak_7', emoji: '🔥', label: '7 দিনের স্ট্রিক' },
@@ -61,7 +63,7 @@ const ProfilePage = () => {
     const filterRef = useRef(null);
 
     const [activitySubTab, setActivitySubTab] = useState('log');
-    const [notifications, setNotifications] = useState([]);
+    const { notifications, unreadCount, markAsRead, markAllAsRead, refresh: refreshNotifications } = useNotifications();
     const [activityLogs, setActivityLogs] = useState([]);
     const [isActivityLoading, setIsActivityLoading] = useState(false);
 
@@ -140,6 +142,25 @@ const ProfilePage = () => {
     };
 
 
+    const sendTestNotification = async () => {
+        if (!user?.id) return;
+        try {
+            const { error } = await supabase
+                .from('notifications')
+                .insert([{
+                    user_id: user.id,
+                    type: 'reward',
+                    title: 'টেস্ট নটিফিকেশন 🐝',
+                    message: 'অভিনন্দন! আপনার নোটিফিকেশন সিস্টেম এখন চমৎকারভাবে কাজ করছে।',
+                    data: { test: true }
+                }]);
+            if (error) throw error;
+        } catch (err) {
+            console.error('Error sending test notification:', err);
+        }
+    };
+
+
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         try {
@@ -166,6 +187,29 @@ const ProfilePage = () => {
         } finally {
             setUploadingAvatar(false);
         }
+    };
+
+    const formatNotifDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const today = new Date();
+        const isToday = date.toDateString() === today.toDateString();
+
+        if (isToday) {
+            return date.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                hour12: true 
+            });
+        }
+
+        return date.toLocaleString('en-US', { 
+            day: 'numeric', 
+            month: 'short',
+            hour: '2-digit', 
+            minute: '2-digit', 
+            hour12: true 
+        });
     };
 
     const formatDate = (dateString) => {
@@ -195,23 +239,14 @@ const ProfilePage = () => {
         try {
             const logs = await rewardService.getRecentTransactions(user.id, 20);
             setActivityLogs(logs);
-
-            const { data: notifs, error } = await supabase
-                .from('notification_history')
-                .select('*')
-                .eq('user_id', user.id)
-                .order('created_at', { ascending: false })
-                .limit(20);
-            
-            if (!error) {
-                setNotifications(notifs || []);
-            }
+            await refreshNotifications();
         } catch (err) {
             console.error('Error fetching activity data:', err);
         } finally {
             setIsActivityLoading(false);
         }
-    }, [user?.id]);
+    }, [user?.id, refreshNotifications]);
+
 
     const fetchConnectionBadgeData = useCallback(async () => {
         if (!user?.id) return;
@@ -398,8 +433,11 @@ const ProfilePage = () => {
                             className={`${styles.tabItem} ${activeTab === 'activity' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('activity')}
                         >
-                            <ActivityIcon size={18} />
-                            <span>{t('tab_activity')}</span>
+                            <div className={styles.tabIconGroup}>
+                                <Bell size={18} />
+                                {unreadCount > 0 && <span className={styles.tabBadge}>{unreadCount}</span>}
+                            </div>
+                            <span>{'নটিফিকেশন'}</span>
                         </button>
                         <button 
                             className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
@@ -534,6 +572,10 @@ const ProfilePage = () => {
                             onClick={() => setIsEditModalOpen(true)}>
                             <Edit3 size={16} />
                             প্রোফাইল এডিট করুন
+                        </button>
+                        <button className={styles.actionOutline} onClick={sendTestNotification}>
+                            <Bell size={16} />
+                            টেস্ট নটিফিকেশন
                         </button>
                         <button className={styles.actionSolid}>
                             <Users size={16} />
@@ -762,74 +804,24 @@ const ProfilePage = () => {
 
                     {activeTab === 'activity' && (
                         <div className={styles.activityTabContent}>
-                            <div className={styles.subTabHeader}>
-                                <button 
-                                    className={`${styles.subTabBtn} ${activitySubTab === 'log' ? styles.subTabActive : ''}`}
-                                    onClick={() => setActivitySubTab('log')}
-                                >
-                                    <ActivityIcon size={16} />
-                                    {t('activity_log')}
-                                </button>
-                                <button 
-                                    className={`${styles.subTabBtn} ${activitySubTab === 'notifications' ? styles.subTabActive : ''}`}
-                                    onClick={() => setActivitySubTab('notifications')}
-                                >
-                                    <Bell size={16} />
-                                    {t('notifications')}
-                                    {notifications.some(n => !n.is_read) && <span className={styles.notifBadge} />}
-                                </button>
-                            </div>
-
                             {isActivityLoading ? (
                                 <div className={styles.activityLoading}>
                                     <InlineLoader />
                                 </div>
                             ) : (
                                 <div className={styles.subTabContent}>
-                                    {activitySubTab === 'log' ? (
-                                        <div className={styles.logList}>
-                                            {activityLogs.length > 0 ? activityLogs.map(log => (
-                                                <div key={log.id} className={styles.logItem}>
-                                                    <div className={styles.logIconRow}>
-                                                        <div className={styles.logIcon}>
-                                                            {log.transaction_type === 'xp_earned' && <Zap size={14} color="#F1C40F" />}
-                                                            {log.transaction_type === 'gem_earned' && <PollenIcon size={14} />}
-                                                            {log.transaction_type === 'heart_lost' && <Heart size={14} color="#E74C3C" />}
-                                                            {log.transaction_type === 'heart_gained' && <Heart size={14} color="#2ECC71" />}
-                                                            {log.transaction_type === 'gem_spent' && <Gem size={14} color="#E74C3C" />}
-                                                        </div>
-                                                        <span className={styles.logTime}>
-                                                            {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                        </span>
-                                                    </div>
-                                                    <div className={styles.logMain}>
-                                                        <div className={styles.logLabel}>
-                                                            {log.transaction_type === 'xp_earned' && `অর্জিত ${log.amount} XP`}
-                                                            {log.transaction_type === 'gem_earned' && `পেয়েছেন ${log.amount} পরাগ`}
-                                                            {log.transaction_type === 'heart_lost' && `১টি ড্রপ হারিয়েছেন`}
-                                                            {log.transaction_type === 'heart_gained' && `${log.amount}টি ড্রপ পেয়েছেন`}
-                                                            {log.transaction_type === 'gem_spent' && `${log.amount} পরাগ খরচ করেছেন`}
-                                                        </div>
-                                                        <div className={styles.logSource}>
-                                                            {log.source === 'mcq_correct' && 'সঠিক উত্তরের জন্য'}
-                                                            {log.source === 'chapter_complete' && 'অধ্যায় সম্পন্ন করার জন্য'}
-                                                            {log.source === 'mystery_box' && 'রহস্য বক্স থেকে'}
-                                                            {log.source === 'streak_bonus' && 'স্ট্রাইক বোনাস'}
-                                                            {!log.source && 'সিস্টেম কার্যক্রম'}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )) : (
-                                                <div className={styles.emptyState}>
-                                                    <ActivityIcon size={40} opacity={0.2} />
-                                                    <p>{t('empty_activity')}</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ) : (
                                         <div className={styles.notifList}>
+                                            {notifications.length > 0 && unreadCount > 0 && (
+                                                <button className={styles.markAllBtn} onClick={markAllAsRead}>
+                                                    <Check size={14} /> মার্ক অল অ্যাজ রিড
+                                                </button>
+                                            )}
                                             {notifications.length > 0 ? notifications.map(notif => (
-                                                <div key={notif.id} className={`${styles.notifItem} ${!notif.is_read ? styles.unreadNotif : ''}`}>
+                                                <div 
+                                                    key={notif.id} 
+                                                    className={`${styles.notifItem} ${!notif.is_read ? styles.unreadNotif : ''}`}
+                                                    onClick={() => !notif.is_read && markAsRead(notif.id)}
+                                                >
                                                     <div className={styles.notifIconWrap}>
                                                         {notif.type === 'reward' && <Trophy size={16} color="#F1C40F" />}
                                                         {notif.type === 'streak' && <Flame size={16} color="#E67E22" />}
@@ -840,18 +832,17 @@ const ProfilePage = () => {
                                                         <h4 className={styles.notifTitle}>{notif.title}</h4>
                                                         <p className={styles.notifMsg}>{notif.message}</p>
                                                         <span className={styles.notifDate}>
-                                                            {new Date(notif.created_at).toLocaleDateString('bn-BD')}
+                                                            {formatNotifDate(notif.created_at)}
                                                         </span>
                                                     </div>
                                                 </div>
                                             )) : (
-                                                <div className={styles.emptyState}>
-                                                    <Bell size={40} opacity={0.2} />
-                                                    <p>{t('empty_notif')}</p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
+                                            <div className={styles.emptyState}>
+                                                <Bell size={40} opacity={0.2} />
+                                                <p>{t('empty_notif')}</p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
                         </div>

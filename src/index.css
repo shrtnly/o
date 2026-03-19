@@ -45,17 +45,14 @@
   }
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling - Hidden for minimalist feel */
+html, body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+  display: none; /* Chrome, Safari, Opera */
 }
 
 a {

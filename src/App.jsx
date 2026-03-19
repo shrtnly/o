@@ -134,14 +134,18 @@ const AppContent = () => {
   );
 };
 
+import { NotificationProvider } from './context/NotificationContext';
+
 function App() {
   return (
     <AuthProvider>
       <LanguageProvider>
-        <ThemeProvider>
-          <Toaster position="top-right" expand={false} theme="dark" richColors />
-          <AppContent />
-        </ThemeProvider>
+        <NotificationProvider>
+          <ThemeProvider>
+            <Toaster position="top-right" expand={false} theme="dark" richColors />
+            <AppContent />
+          </ThemeProvider>
+        </NotificationProvider>
       </LanguageProvider>
     </AuthProvider>
   );

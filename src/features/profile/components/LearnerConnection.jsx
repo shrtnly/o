@@ -48,6 +48,56 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [filePreview, setFilePreview] = useState(null);
     const scrollRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
+    const chatWindowRef = React.useRef(null);
+    const chatHeaderRef = React.useRef(null);
+    const chatInputRowRef = React.useRef(null);
+    const messageInputRef = React.useRef(null);
+
+    const [inboxSearchQuery, setInboxSearchQuery] = useState('');
+
+    // Derived filtered lists for the inbox search
+    const filteredConversations = conversations.filter(conv => 
+        (conv.partner.full_name || conv.partner.display_name)?.toLowerCase().includes(inboxSearchQuery.toLowerCase())
+    );
+
+    const filteredConnections = connections.active.filter(conn => {
+        const other = conn.sender_id === user.id ? conn.receiver : conn.sender;
+        const name = (other.full_name || other.display_name)?.toLowerCase();
+        const matchesSearch = name.includes(inboxSearchQuery.toLowerCase());
+        const alreadyInInbox = conversations.some(conv => conv.partner.id === other.id);
+        return matchesSearch && !alreadyInInbox;
+    });
+
+    // Hard-lock touch gestures on stationary parts of the UI
+    useEffect(() => {
+        const preventDefault = (e) => {
+            if (e.cancelable) e.preventDefault();
+        };
+
+        const header = chatHeaderRef.current;
+        const inputRow = chatInputRowRef.current;
+
+        if (header) {
+            header.addEventListener('touchstart', (e) => e.stopPropagation());
+            header.addEventListener('touchmove', preventDefault, { passive: false });
+        }
+
+        if (inputRow) {
+            inputRow.addEventListener('touchstart', (e) => e.stopPropagation());
+            inputRow.addEventListener('touchmove', preventDefault, { passive: false });
+        }
+
+        return () => {
+            if (header) {
+                header.removeEventListener('touchstart', (e) => e.stopPropagation());
+                header.removeEventListener('touchmove', preventDefault);
+            }
+            if (inputRow) {
+                inputRow.removeEventListener('touchstart', (e) => e.stopPropagation());
+                inputRow.removeEventListener('touchmove', preventDefault);
+            }
+        };
+    }, [isMobileChatOpen]);
 
     const fetchConnections = useCallback(async (isSilent = false) => {
         if (!user?.id) return;
@@ -109,6 +159,63 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         };
     }, [user?.id, fetchConnections]);
 
+    // Handle body scroll locking when mobile chat is open
+    useEffect(() => {
+        if (isMobileChatOpen) {
+            const scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100vw';
+            document.body.style.overflow = 'hidden';
+            document.body.classList.add('mobile-chat-open');
+        } else {
+            const scrollY = document.body.style.top;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.style.overflow = '';
+            document.body.classList.remove('mobile-chat-open');
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            }
+        }
+        return () => {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            document.body.style.overflow = '';
+            document.body.classList.remove('mobile-chat-open');
+        };
+    }, [isMobileChatOpen]);
+
+    // Handle mobile keyboard resize using Visual Viewport API
+    useEffect(() => {
+        if (!window.visualViewport || !isMobileChatOpen) return;
+
+        const handleResize = () => {
+            if (chatWindowRef.current) {
+                chatWindowRef.current.style.height = `${window.visualViewport.height}px`;
+                // Force scroll to bottom when keyboard opens/resizes
+                if (scrollRef.current) {
+                    setTimeout(() => {
+                        if (scrollRef.current) {
+                            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                        }
+                    }, 100);
+                }
+            }
+        };
+
+        window.visualViewport.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+            if (window.visualViewport) {
+                window.visualViewport.removeEventListener('resize', handleResize);
+            }
+        };
+    }, [isMobileChatOpen]);
+
     // Keep selectedPartner ref for real-time listener to avoid re-subscribing
     const partnerRef = React.useRef(selectedPartner);
     const subTabRef = React.useRef(subTab);
@@ -143,7 +250,9 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                 (payload) => {
                     const currentPartner = partnerRef.current;
                     const currentTab = subTabRef.current;
-                    if (payload.new.receiver_id === user.id || payload.new.sender_id === user.id) {
+                    // Only add messages via realtime if they were NOT sent by me
+                    // My sent messages are already handled by the handleSendMessage optimistic update
+                    if (payload.new.sender_id !== user.id && (payload.new.receiver_id === user.id || payload.new.sender_id === user.id)) {
                         if (currentPartner?.id === payload.new.sender_id || currentPartner?.id === payload.new.receiver_id) {
                             setMessages(prev => {
                                 if (prev.filter(m => m.id === payload.new.id).length > 0) return prev;
@@ -253,24 +362,46 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
     const handleSendMessage = async (e) => {
         if (e) e.preventDefault();
-        const hasContent = newMessage.trim();
-        const hasAttachment = pendingAttachmentUrl;
+        const content = newMessage.trim();
+        const attachment = pendingAttachmentUrl;
 
-        if ((!hasContent && !hasAttachment) || !selectedPartner || isSendingMsg || isUploading) return;
+        if ((!content && !attachment) || !selectedPartner || isSendingMsg || isUploading) return;
 
         try {
             setIsSendingMsg(true);
-            const msg = await messageService.sendMessage(user.id, selectedPartner.id, newMessage.trim(), pendingAttachmentUrl);
+
+            // Optimistically clear the input and reset state to make it feel instant
+            const optimisticId = `temp-${Date.now()}`;
+            const optimisticMsg = {
+                id: optimisticId,
+                sender_id: user.id,
+                receiver_id: selectedPartner.id,
+                content: content,
+                attachment_url: attachment,
+                created_at: new Date().toISOString(),
+                is_sending: true
+            };
+
             setNewMessage('');
             setPendingAttachmentUrl(null);
             setFilePreview(null);
-            if (!messages.some(m => m.id === msg.id)) {
-                setMessages(prev => [...prev, msg]);
-            }
+            setMessages(prev => [...prev, optimisticMsg]);
+            
+            messageInputRef.current?.focus();
+
+            const msg = await messageService.sendMessage(user.id, selectedPartner.id, content, attachment);
+            
+            // Replace optimistic message with the real one from DB
+            setMessages(prev => prev.map(m => m.id === optimisticId ? msg : m));
         } catch (err) {
             toast.error('মেসেজ পাঠানো সম্ভব হয়নি');
+            // Revert message if it failed or add back content to input? 
+            // For now, just remove the failed optimistic message
+            setMessages(prev => prev.filter(m => m.id !== optimisticId));
+            setNewMessage(content); // Restore content to try again
         } finally {
             setIsSendingMsg(false);
+            messageInputRef.current?.focus();
         }
     };
 
@@ -423,45 +554,112 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                             <div className={`${styles.inboxWrapper} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
                                 {/* Conversation Sidebar */}
                                 <div className={styles.conversationsSidebar}>
-                                    {conversations.length === 0 ? (
-                                        <div className={styles.emptyInbox}>
-                                            <MessageSquare size={32} opacity={0.1} />
-                                            <p>ইনবক্স খালি</p>
+                                    <div className={styles.sidebarHeader}>
+                                        <div className={styles.inboxSearchBox}>
+                                            <Search size={14} />
+                                            <textarea 
+                                                rows="1"
+                                                name="inbox_search_q_v2"
+                                                autoComplete="off"
+                                                autoCorrect="off"
+                                                spellCheck="false"
+                                                data-lpignore="true"
+                                                aria-autocomplete="none"
+                                                inputMode="search"
+                                                placeholder="সার্চ করুন" 
+                                                value={inboxSearchQuery}
+                                                onChange={(e) => setInboxSearchQuery(e.target.value)}
+                                            />
+                                            {inboxSearchQuery && (
+                                                <button 
+                                                    className={styles.clearSearchBtn}
+                                                    onClick={() => setInboxSearchQuery('')}
+                                                    type="button"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            )}
                                         </div>
-                                    ) : (
-                                        conversations.map(conv => (
-                                            <div 
-                                                key={conv.partner.id} 
-                                                className={`${styles.conversationItem} ${selectedPartner?.id === conv.partner.id ? styles.convActive : ''}`}
-                                                onClick={() => handleSelectConversation(conv.partner)}
-                                            >
-                                                <div className={styles.partnerAvatar}>
-                                                    {conv.partner.avatar_url ? (
-                                                        <img src={conv.partner.avatar_url} alt="" />
-                                                    ) : (
-                                                        <div className={styles.avatarPlaceholder}><User size={18} /></div>
-                                                    )}
-                                                    <StatusIndicator lastSeen={conv.partner.last_seen} />
-                                                </div>
-                                                <div className={styles.convDetails}>
-                                                    <span className={styles.partnerName}>{conv.partner.full_name || conv.partner.display_name}</span>
-                                                    <span className={styles.lastMsg}>{conv.lastMessage}</span>
-                                                </div>
-                                                {conv.isNew && (
-                                                    <div className={styles.unreadBadge}>
-                                                        <span>NEW</span>
+                                    </div>
+                                    <div className={styles.sidebarList}>
+                                        {filteredConversations.length === 0 && !inboxSearchQuery ? (
+                                            <div className={styles.emptyInbox}>
+                                                <MessageSquare size={32} opacity={0.1} />
+                                                <p>ইনবক্স খালি</p>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                {filteredConversations.map(conv => (
+                                                    <div 
+                                                        key={conv.partner.id} 
+                                                        className={`${styles.conversationItem} ${selectedPartner?.id === conv.partner.id ? styles.convActive : ''}`}
+                                                        onClick={() => handleSelectConversation(conv.partner)}
+                                                    >
+                                                        <div className={styles.partnerAvatar}>
+                                                            {conv.partner.avatar_url ? (
+                                                                <img src={conv.partner.avatar_url} alt="" />
+                                                            ) : (
+                                                                <div className={styles.avatarPlaceholder}><User size={18} /></div>
+                                                            )}
+                                                            <StatusIndicator lastSeen={conv.partner.last_seen} />
+                                                        </div>
+                                                        <div className={styles.convDetails}>
+                                                            <span className={styles.partnerName}>{conv.partner.full_name || conv.partner.display_name}</span>
+                                                            <span className={styles.lastMsg}>{conv.lastMessage}</span>
+                                                        </div>
+                                                        {conv.isNew && (
+                                                            <div className={styles.unreadBadge}>
+                                                                <span>NEW</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                                
+                                                {/* "Search New Learners" section if we're searching */}
+                                                {inboxSearchQuery && filteredConnections.length > 0 && (
+                                                    <div className={styles.newChatSection}>
+                                                        <span className={styles.sectionLabel}>নতুন কানেকশন</span>
+                                                        {filteredConnections.map(conn => {
+                                                            const other = conn.sender_id === user.id ? conn.receiver : conn.sender;
+                                                            return (
+                                                                <div 
+                                                                    key={other.id}
+                                                                    className={styles.conversationItem}
+                                                                    onClick={() => handleSelectConversation(other)}
+                                                                >
+                                                                    <div className={styles.partnerAvatar}>
+                                                                        {other.avatar_url ? (
+                                                                            <img src={other.avatar_url} alt="" />
+                                                                        ) : (
+                                                                            <div className={styles.avatarPlaceholder}><User size={18} /></div>
+                                                                        )}
+                                                                        <StatusIndicator lastSeen={other.last_seen} />
+                                                                    </div>
+                                                                    <div className={styles.convDetails}>
+                                                                        <span className={styles.partnerName}>{other.full_name || other.display_name}</span>
+                                                                        <span className={styles.lastMsg}>কানেক্টেড • চ্যাট শুরু করুন</span>
+                                                                    </div>
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </div>
                                                 )}
-                                            </div>
-                                        ))
-                                    )}
+
+                                                {inboxSearchQuery && filteredConversations.length === 0 && filteredConnections.length === 0 && (
+                                                    <div className={styles.noResults}>
+                                                        <span>"{inboxSearchQuery}" এর জন্য কোনো চ্যাট পাওয়া যায়নি</span>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Chat Window */}
-                                <div className={styles.chatWindow}>
+                                <div ref={chatWindowRef} className={styles.chatWindow}>
                                     {selectedPartner ? (
                                         <>
-                                            <div className={styles.chatHeader}>
+                                            <div ref={chatHeaderRef} className={styles.chatHeader}>
                                                 <button 
                                                     className={styles.backToInbox}
                                                     onClick={() => setIsMobileChatOpen(false)}
@@ -543,7 +741,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 </div>
                                             )}
 
-                                            <form className={styles.chatInputRow} onSubmit={handleSendMessage}>
+                                            <div ref={chatInputRowRef} className={styles.chatInputRow}>
                                                 <button 
                                                     type="button" 
                                                     className={styles.attachBtn} 
@@ -559,13 +757,31 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     accept="image/*" 
                                                     onChange={handleImageUpload} 
                                                 />
-                                                <input 
+                                                <textarea 
+                                                    ref={messageInputRef}
+                                                    rows="1"
+                                                    name="msg_field_v1"
+                                                    autoComplete="off"
+                                                    autoCorrect="off"
+                                                    spellCheck="false"
+                                                    data-lpignore="true"
+                                                    enterKeyHint="send"
+                                                    inputMode="text"
+                                                    aria-autocomplete="none"
                                                     placeholder="কোনো কিছু লিখুন..." 
                                                     value={newMessage}
                                                     onChange={(e) => setNewMessage(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                                            e.preventDefault();
+                                                            handleSendMessage();
+                                                        }
+                                                    }}
+                                                    className={styles.chatInput}
                                                 />
                                                 <button 
-                                                    type="submit" 
+                                                    type="button" 
+                                                    onClick={() => handleSendMessage()}
                                                     disabled={(!newMessage.trim() && !pendingAttachmentUrl) || isSendingMsg || isUploading}
                                                 >
                                                     {isSendingMsg ? (
@@ -578,7 +794,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                         />
                                                     )}
                                                 </button>
-                                            </form>
+                                            </div>
                                         </>
                                     ) : (
                                         <div className={styles.chatEmptyState}>
@@ -680,50 +896,43 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 <div className={styles.sectionHeader}>
                                                 </div>
                                                 {suggestions.length > 0 ? (
-                                                    <>
-                                                        <div className={styles.connGrid}>
-                                                            {suggestions.slice(0, showAllSuggest ? suggestions.length : 7).map(s => (
-                                                                <div key={s.id} className={styles.connCard}>
-                                                                    <div className={styles.learnerCore} onClick={() => onSelectLearner(s)}>
-                                                                        <div className={styles.avatarMini}>
-                                                                            {s.avatar_url ? <img src={s.avatar_url} /> : <User size={20} />}
-                                                                            <StatusIndicator lastSeen={s.last_seen} />
-                                                                        </div>
-                                                                        <div className={styles.learnerText}>
-                                                                            <span className={styles.learnerName}>{s.full_name || s.display_name}</span>
-                                                                            <div className={styles.learnerSub}>
-                                                                                <Zap size={10} color="#F1C40F" />
-                                                                                {s.xp} XP
-                                                                            </div>
-                                                                        </div>
+                                                    <div className={styles.connGrid}>
+                                                        {suggestions.map(s => (
+                                                            <div key={s.id} className={styles.connCard}>
+                                                                <div className={styles.learnerCore} onClick={() => onSelectLearner(s)}>
+                                                                    <div className={styles.avatarMini}>
+                                                                        {s.avatar_url ? <img src={s.avatar_url} /> : <User size={20} />}
+                                                                        <StatusIndicator lastSeen={s.last_seen} />
                                                                     </div>
-                                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-                                                                        <button 
-                                                                            className={styles.actionBtn} 
-                                                                            onClick={() => sendRequest(s.id)}
-                                                                            disabled={sendingId === s.id || s.request_sent}
-                                                                        >
-                                                                            {sendingId === s.id ? (
-                                                                                <InlineLoader size={30} showText={false} />
-                                                                            ) : (
-                                                                                s.request_sent ? <Check size={16} color="#F1C40F" /> : <UserPlus size={16} />
-                                                                            )}
-                                                                        </button>
-                                                                        {s.request_sent && (
-                                                                            <span style={{ fontSize: '10px', color: '#F1C40F', fontWeight: '600' }}>
-                                                                                অনুরোধ পাঠানো হয়েছে
-                                                                            </span>
-                                                                        )}
+                                                                    <div className={styles.learnerText}>
+                                                                        <span className={styles.learnerName}>{s.full_name || s.display_name}</span>
+                                                                        <div className={styles.learnerSub}>
+                                                                            <Zap size={10} color="#F1C40F" />
+                                                                            {s.xp} XP
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                        {suggestions.length > 7 && !showAllSuggest && (
-                                                            <button className={styles.seeAllBtn} onClick={() => setShowAllSuggest(true)}>
-                                                                সব দেখুন
-                                                            </button>
-                                                        )}
-                                                    </>
+                                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                                                                    <button 
+                                                                        className={styles.actionBtn} 
+                                                                        onClick={() => sendRequest(s.id)}
+                                                                        disabled={sendingId === s.id || s.request_sent}
+                                                                    >
+                                                                        {sendingId === s.id ? (
+                                                                            <InlineLoader size={30} showText={false} />
+                                                                        ) : (
+                                                                            s.request_sent ? <Check size={16} color="#F1C40F" /> : <UserPlus size={16} />
+                                                                        )}
+                                                                    </button>
+                                                                    {s.request_sent && (
+                                                                        <span style={{ fontSize: '10px', color: '#F1C40F', fontWeight: '600' }}>
+                                                                            অনুরোধ পাঠানো হয়েছে
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 ) : (
                                                     <div className={styles.emptyState}>
                                                         <Users size={40} opacity={0.2} />
@@ -763,73 +972,66 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         {requestType === 'all' && (
                                             <>
                                                 {connections.active.length > 0 ? (
-                                                    <>
-                                                        <div className={styles.connGrid}>
-                                                            <AnimatePresence mode='popLayout'>
-                                                                {connections.active.slice(0, showAllActive ? connections.active.length : 7).map(conn => {
-                                                                    const other = conn.sender_id === user.id ? conn.receiver : conn.sender;
-                                                                    return (
-                                                                        <motion.div 
-                                                                            key={conn.id} 
-                                                                            layout
-                                                                            initial={{ opacity: 0, scale: 0.95 }}
-                                                                            animate={{ opacity: 1, scale: 1 }}
-                                                                            exit={{ opacity: 0, scale: 0.9, x: -20 }}
-                                                                            className={styles.connCard}
-                                                                        >
-                                                                            <div className={styles.learnerCore} onClick={() => onSelectLearner(other)}>
-                                                                                <div className={styles.avatarMini}>
-                                                                                    {other.avatar_url ? <img src={other.avatar_url} /> : <User size={20} />}
-                                                                                    <StatusIndicator lastSeen={other.last_seen} />
-                                                                                </div>
-                                                                                <div className={styles.learnerText}>
-                                                                                    <span className={styles.learnerName}>{other.full_name || other.display_name}</span>
-                                                                                    <span className={styles.learnerSub}>কানেক্টেড • {other.xp} XP</span>
-                                                                                </div>
+                                                    <div className={styles.connGrid}>
+                                                        <AnimatePresence mode='popLayout'>
+                                                            {connections.active.map(conn => {
+                                                                const other = conn.sender_id === user.id ? conn.receiver : conn.sender;
+                                                                return (
+                                                                    <motion.div 
+                                                                        key={conn.id} 
+                                                                        layout
+                                                                        initial={{ opacity: 0, scale: 0.95 }}
+                                                                        animate={{ opacity: 1, scale: 1 }}
+                                                                        exit={{ opacity: 0, scale: 0.9, x: -20 }}
+                                                                        className={styles.connCard}
+                                                                    >
+                                                                        <div className={styles.learnerCore} onClick={() => onSelectLearner(other)}>
+                                                                            <div className={styles.avatarMini}>
+                                                                                {other.avatar_url ? <img src={other.avatar_url} /> : <User size={20} />}
+                                                                                <StatusIndicator lastSeen={other.last_seen} />
                                                                             </div>
-                                                                            {cardAction.id === conn.id ? (
-                                                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
-                                                                                    {cardAction.success ? (
-                                                                                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
-                                                                                            <Check color="#f1c40f" size={20} />
-                                                                                        </motion.div>
-                                                                                    ) : (
-                                                                                        <InlineLoader size={120} showText={false} />
-                                                                                    )}
-                                                                                    {cardAction.success && (
-                                                                                        <motion.span 
-                                                                                            initial={{ opacity: 0, y: 5 }}
-                                                                                            animate={{ opacity: 1, y: 0 }}
-                                                                                            style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
-                                                                                        >
-                                                                                            {cardAction.msg}
-                                                                                        </motion.span>
-                                                                                    )}
-                                                                                </div>
-                                                                            ) : (
-                                                                                <button 
-                                                                                    className={styles.actionBtn} 
-                                                                                    style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--color-primary)' }}
-                                                                                    onClick={(e) => {
-                                                                                        e.stopPropagation();
-                                                                                        setSubTab('inbox');
-                                                                                        handleSelectConversation(other);
-                                                                                    }}
-                                                                                >
-                                                                                    <MessageSquare size={16} fill="currentColor" fillOpacity={0.1} />
-                                                                                </button>
-                                                                            )}
-                                                                        </motion.div>
-                                                                    );
-                                                                })}
-                                                            </AnimatePresence>
-                                                        </div>
-                                                        {connections.active.length > 7 && !showAllActive && (
-                                                            <button className={styles.seeAllBtn} onClick={() => setShowAllActive(true)}>
-                                                                সব দেখুন
-                                                            </button>
-                                                        )}
-                                                    </>
+                                                                            <div className={styles.learnerText}>
+                                                                                <span className={styles.learnerName}>{other.full_name || other.display_name}</span>
+                                                                                <span className={styles.learnerSub}>কানেক্টেড • {other.xp} XP</span>
+                                                                            </div>
+                                                                        </div>
+                                                                        {cardAction.id === conn.id ? (
+                                                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
+                                                                                {cardAction.success ? (
+                                                                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
+                                                                                        <Check color="#f1c40f" size={20} />
+                                                                                    </motion.div>
+                                                                                ) : (
+                                                                                    <InlineLoader size={120} showText={false} />
+                                                                                )}
+                                                                                {cardAction.success && (
+                                                                                    <motion.span 
+                                                                                        initial={{ opacity: 0, y: 5 }}
+                                                                                        animate={{ opacity: 1, y: 0 }}
+                                                                                        style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
+                                                                                    >
+                                                                                        {cardAction.msg}
+                                                                                    </motion.span>
+                                                                                )}
+                                                                            </div>
+                                                                        ) : (
+                                                                            <button 
+                                                                                className={styles.actionBtn} 
+                                                                                style={{ background: 'rgba(255,255,255,0.06)', color: 'var(--color-primary)' }}
+                                                                                onClick={(e) => {
+                                                                                    e.stopPropagation();
+                                                                                    setSubTab('inbox');
+                                                                                    handleSelectConversation(other);
+                                                                                }}
+                                                                            >
+                                                                                <MessageSquare size={16} fill="currentColor" fillOpacity={0.1} />
+                                                                            </button>
+                                                                        )}
+                                                                    </motion.div>
+                                                                );
+                                                            })}
+                                                        </AnimatePresence>
+                                                    </div>
                                                 ) : (
                                                     <div className={styles.emptyState}>
                                                         <Users size={40} opacity={0.2} />
@@ -842,67 +1044,60 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         {requestType === 'received' && (
                                             <>
                                                 {connections.pending.length > 0 ? (
-                                                    <>
-                                                        <div className={styles.connGrid}>
-                                                            <AnimatePresence mode='popLayout'>
-                                                                {connections.pending.slice(0, showAllPending ? connections.pending.length : 7).map(conn => (
-                                                                    <motion.div 
-                                                                        key={conn.id} 
-                                                                        layout
-                                                                        initial={{ opacity: 0, scale: 0.95 }}
-                                                                        animate={{ opacity: 1, scale: 1 }}
-                                                                        exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                                                                        className={styles.connCard}
-                                                                    >
-                                                                        <div className={styles.learnerCore} onClick={() => onSelectLearner(conn.sender)}>
-                                                                            <div className={styles.avatarMini}>
-                                                                                {conn.sender.avatar_url ? <img src={conn.sender.avatar_url} /> : <User size={20} />}
-                                                                                <StatusIndicator lastSeen={conn.sender.last_seen} />
-                                                                            </div>
-                                                                            <div className={styles.learnerText}>
-                                                                                <span className={styles.learnerName}>{conn.sender.full_name || conn.sender.display_name}</span>
-                                                                                <span className={styles.learnerSub}>নতুন অনুরোধ</span>
-                                                                            </div>
+                                                    <div className={styles.connGrid}>
+                                                        <AnimatePresence mode='popLayout'>
+                                                            {connections.pending.map(conn => (
+                                                                <motion.div 
+                                                                    key={conn.id} 
+                                                                    layout
+                                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    exit={{ opacity: 0, scale: 0.9, x: 20 }}
+                                                                    className={styles.connCard}
+                                                                >
+                                                                    <div className={styles.learnerCore} onClick={() => onSelectLearner(conn.sender)}>
+                                                                        <div className={styles.avatarMini}>
+                                                                            {conn.sender.avatar_url ? <img src={conn.sender.avatar_url} /> : <User size={20} />}
+                                                                            <StatusIndicator lastSeen={conn.sender.last_seen} />
                                                                         </div>
-                                                                        {cardAction.id === conn.id ? (
-                                                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
-                                                                                {cardAction.success ? (
-                                                                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
-                                                                                        <Check color="#f1c40f" size={20} />
-                                                                                    </motion.div>
-                                                                                ) : (
-                                                                                    <InlineLoader size={120} showText={false} />
-                                                                                )}
-                                                                                {cardAction.success && (
-                                                                                    <motion.span 
-                                                                                        initial={{ opacity: 0, y: 5 }}
-                                                                                        animate={{ opacity: 1, y: 0 }}
-                                                                                        style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
-                                                                                    >
-                                                                                        {cardAction.msg}
-                                                                                    </motion.span>
-                                                                                )}
-                                                                            </div>
-                                                                        ) : (
-                                                                            <div style={{ display: 'flex', gap: '8px' }}>
-                                                                                <button className={styles.actionBtn} onClick={() => handleAction(conn.id, 'accepted', conn.sender_id, conn.receiver_id)}>
-                                                                                    <Check size={16} />
-                                                                                </button>
-                                                                                <button className={styles.actionBtn} style={{ background: 'rgba(231, 76, 60, 0.2)', color: '#E74C3C' }} onClick={() => handleAction(conn.id, 'rejected')}>
-                                                                                    <X size={16} />
-                                                                                </button>
-                                                                            </div>
-                                                                        )}
-                                                                    </motion.div>
-                                                                ))}
-                                                            </AnimatePresence>
-                                                        </div>
-                                                        {connections.pending.length > 7 && !showAllPending && (
-                                                            <button className={styles.seeAllBtn} onClick={() => setShowAllPending(true)}>
-                                                                সব দেখুন
-                                                            </button>
-                                                        )}
-                                                    </>
+                                                                        <div className={styles.learnerText}>
+                                                                            <span className={styles.learnerName}>{conn.sender.full_name || conn.sender.display_name}</span>
+                                                                            <span className={styles.learnerSub}>নতুন অনুরোধ</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    {cardAction.id === conn.id ? (
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
+                                                                            {cardAction.success ? (
+                                                                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
+                                                                                    <Check color="#f1c40f" size={20} />
+                                                                                </motion.div>
+                                                                            ) : (
+                                                                                <InlineLoader size={120} showText={false} />
+                                                                            )}
+                                                                            {cardAction.success && (
+                                                                                <motion.span 
+                                                                                    initial={{ opacity: 0, y: 5 }}
+                                                                                    animate={{ opacity: 1, y: 0 }}
+                                                                                    style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
+                                                                                >
+                                                                                    {cardAction.msg}
+                                                                                </motion.span>
+                                                                            )}
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div style={{ display: 'flex', gap: '8px' }}>
+                                                                            <button className={styles.actionBtn} onClick={() => handleAction(conn.id, 'accepted', conn.sender_id, conn.receiver_id)}>
+                                                                                <Check size={16} />
+                                                                            </button>
+                                                                            <button className={styles.actionBtn} style={{ background: 'rgba(231, 76, 60, 0.2)', color: '#E74C3C' }} onClick={() => handleAction(conn.id, 'rejected')}>
+                                                                                <X size={16} />
+                                                                            </button>
+                                                                        </div>
+                                                                    )}
+                                                                </motion.div>
+                                                            ))}
+                                                        </AnimatePresence>
+                                                    </div>
                                                 ) : (
                                                     <div className={styles.emptyState}>
                                                         <Users size={40} opacity={0.2} />
@@ -915,62 +1110,55 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         {requestType === 'sent' && (
                                             <>
                                                 {connections.outgoing.length > 0 ? (
-                                                    <>
-                                                        <div className={styles.connGrid}>
-                                                            <AnimatePresence mode='popLayout'>
-                                                                {connections.outgoing.slice(0, showAllSent ? connections.outgoing.length : 7).map(conn => (
-                                                                    <motion.div 
-                                                                        key={conn.id} 
-                                                                        layout
-                                                                        initial={{ opacity: 0, scale: 0.95 }}
-                                                                        animate={{ opacity: 1, scale: 1 }}
-                                                                        exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                                                        className={styles.connCard}
-                                                                    >
-                                                                        <div className={styles.learnerCore} onClick={() => onSelectLearner(conn.receiver)}>
-                                                                            <div className={styles.avatarMini}>
-                                                                                {conn.receiver.avatar_url ? <img src={conn.receiver.avatar_url} /> : <User size={20} />}
-                                                                                <StatusIndicator lastSeen={conn.receiver.last_seen} />
-                                                                            </div>
-                                                                            <div className={styles.learnerText}>
-                                                                                <span className={styles.learnerName}>{conn.receiver.full_name || conn.receiver.display_name}</span>
-                                                                                <span className={styles.learnerSub}>অপেক্ষমান</span>
-                                                                            </div>
+                                                    <div className={styles.connGrid}>
+                                                        <AnimatePresence mode='popLayout'>
+                                                            {connections.outgoing.map(conn => (
+                                                                <motion.div 
+                                                                    key={conn.id} 
+                                                                    layout
+                                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                                                    className={styles.connCard}
+                                                                >
+                                                                    <div className={styles.learnerCore} onClick={() => onSelectLearner(conn.receiver)}>
+                                                                        <div className={styles.avatarMini}>
+                                                                            {conn.receiver.avatar_url ? <img src={conn.receiver.avatar_url} /> : <User size={20} />}
+                                                                            <StatusIndicator lastSeen={conn.receiver.last_seen} />
                                                                         </div>
-                                                                        {cardAction.id === conn.id ? (
-                                                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
-                                                                                {cardAction.success ? (
-                                                                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
-                                                                                        <Check color="#f1c40f" size={20} />
-                                                                                    </motion.div>
-                                                                                ) : (
-                                                                                    <InlineLoader size={120} showText={false} />
-                                                                                )}
-                                                                                {cardAction.success && (
-                                                                                    <motion.span 
-                                                                                        initial={{ opacity: 0, y: 5 }}
-                                                                                        animate={{ opacity: 1, y: 0 }}
-                                                                                        style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
-                                                                                    >
-                                                                                        {cardAction.msg}
-                                                                                    </motion.span>
-                                                                                )}
-                                                                            </div>
-                                                                        ) : (
-                                                                            <button className={styles.actionBtn} style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)' }} onClick={() => cancelRequest(conn.id)}>
-                                                                                <X size={16} />
-                                                                            </button>
-                                                                        )}
-                                                                    </motion.div>
-                                                                ))}
-                                                            </AnimatePresence>
-                                                        </div>
-                                                        {connections.outgoing.length > 7 && !showAllSent && (
-                                                            <button className={styles.seeAllBtn} onClick={() => setShowAllSent(true)}>
-                                                                সব দেখুন
-                                                            </button>
-                                                        )}
-                                                    </>
+                                                                        <div className={styles.learnerText}>
+                                                                            <span className={styles.learnerName}>{conn.receiver.full_name || conn.receiver.display_name}</span>
+                                                                            <span className={styles.learnerSub}>অপেক্ষমান</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    {cardAction.id === conn.id ? (
+                                                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
+                                                                            {cardAction.success ? (
+                                                                                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
+                                                                                    <Check color="#f1c40f" size={20} />
+                                                                                </motion.div>
+                                                                            ) : (
+                                                                                <InlineLoader size={120} showText={false} />
+                                                                            )}
+                                                                            {cardAction.success && (
+                                                                                <motion.span 
+                                                                                    initial={{ opacity: 0, y: 5 }}
+                                                                                    animate={{ opacity: 1, y: 0 }}
+                                                                                    style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
+                                                                                >
+                                                                                    {cardAction.msg}
+                                                                                </motion.span>
+                                                                            )}
+                                                                        </div>
+                                                                    ) : (
+                                                                        <button className={styles.actionBtn} style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)' }} onClick={() => cancelRequest(conn.id)}>
+                                                                            <X size={16} />
+                                                                        </button>
+                                                                    )}
+                                                                </motion.div>
+                                                            ))}
+                                                        </AnimatePresence>
+                                                    </div>
                                                 ) : (
                                                     <div className={styles.emptyState}>
                                                         <Send size={40} opacity={0.2} />

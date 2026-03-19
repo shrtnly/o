@@ -15,6 +15,12 @@
     color: var(--color-text);
     font-family: 'Hind Siliguri', sans-serif;
     padding-bottom: 60px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.profilePage::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .loadingContainer {
@@ -1942,66 +1948,94 @@
     color: rgba(255, 255, 255, 0.4);
 }
 
+.activityTabContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 10px;
+    background: none;
+    border: none;
+}
+
+.subTabContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.notifList {
+    display: flex;
+    flex-direction: column;
+}
+
 .notifItem {
     display: flex;
     gap: 16px;
-    padding: 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    border-radius: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+    cursor: pointer;
     position: relative;
 }
 
-.unreadNotif {
-    background: rgba(241, 196, 15, 0.03);
-    border-color: rgba(241, 196, 15, 0.1);
+.notifItem:hover {
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: -12px;
+    margin-right: -12px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
 }
 
-.unreadNotif::before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 20px;
-    background: var(--color-primary);
-    border-radius: 2px;
+.unreadNotif {
+    background: rgba(255, 255, 255, 0.025);
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: -12px;
+    margin-right: -12px;
+    border-radius: 12px;
+    border-bottom-color: transparent;
+    border-left: 2px solid #F1C40F;
 }
 
 .notifIconWrap {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
     flex-shrink: 0;
 }
 
 .notifBody {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .notifTitle {
     font-size: 0.95rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0 0 4px 0;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
 }
 
 .notifMsg {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: rgba(255, 255, 255, 0.5);
-    margin: 0 0 8px 0;
+    margin: 2px 0 4px 0;
     line-height: 1.4;
 }
 
 .notifDate {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.25);
     font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
 .emptyState {
@@ -2359,42 +2393,56 @@
     gap: 10px;
 }
 
+.notifList {
+    display: flex;
+    flex-direction: column;
+}
+
+.tabIconGroup {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
 .tabBadge {
     background: var(--color-error);
     color: #fff;
     font-size: 10px;
-    font-weight: 700;
-    padding: 1px 6px;
+    font-weight: 800;
+    padding: 2px 6px;
     border-radius: 10px;
     margin-left: 6px;
+    line-height: 1;
 }
 
-.emptyConnections {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 5rem;
-    gap: 1rem;
-    color: rgba(255, 255, 255, 0.2);
-}
 
-.searchLoader {
-    margin-left: auto;
-}
 
-.modalClose {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.3);
+.markAllBtn {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: color 0.2s;
+    margin-bottom: 16px;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    width: fit-content;
 }
 
-.modalClose:hover {
+.markAllBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
     color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.markAllBtn:active {
+    transform: translateY(0);
 }
 

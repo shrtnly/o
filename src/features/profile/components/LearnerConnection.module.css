@@ -1,7 +1,15 @@
 .container {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
+    max-height: 800px;
+    overflow: visible;
+}
+
+@media (max-width: 768px) {
+    .container {
+        gap: 0.75rem;
+    }
 }
 
 .subTabHeader {
@@ -55,7 +63,7 @@
 
 .searchSection {
     position: relative;
-    z-index: 100;
+    z-index: 1000;
     margin-bottom: 0.75rem;
 }
 
@@ -65,10 +73,19 @@
     gap: 16px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 0;
     padding: 12px 4px;
     transition: all 0.3s ease;
+    position: relative;
+}
+
+.searchLoader {
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
 }
 
 .searchBox:focus-within {
@@ -93,16 +110,24 @@
 
 .searchResults {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: rgb(15, 15, 15);
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 8px;
-    max-height: 300px;
+    padding: 12px 6px;
+    max-height: 320px;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 2000;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    animation: slideDownFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .learnerItem {
@@ -211,6 +236,15 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-height: 600px;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    padding-right: 0;
+}
+
+.connGrid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .connCard {
@@ -348,21 +382,100 @@
 /* Inbox & Messaging Styles */
 .inboxWrapper {
     display: flex;
-    gap: 1.5rem;
-    height: 520px;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 20px;
+    gap: 1rem;
+    height: 600px;
+    background: transparent;
+    border-radius: 0;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: none;
 }
 
 .conversationsSidebar {
-    width: 240px;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
+    width: 250px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.01);
     display: flex;
     flex-direction: column;
+    border-radius: 16px;
+}
+
+.sidebarHeader {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.inboxSearchBox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 10px 4px;
+    color: rgba(255, 255, 255, 0.25);
+    transition: all 0.2s ease;
+}
+
+.inboxSearchBox:focus-within {
+    color: var(--color-primary);
+}
+
+.inboxSearchBox textarea {
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    color: #fff !important;
+    font-size: 0.85rem !important;
+    width: 100% !important;
+    padding: 0 !important;
+    resize: none;
+    overflow: hidden;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    font-family: inherit;
+}
+
+.sidebarList {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior: contain;
+    padding-bottom: 20px;
+}
+
+.sidebarList::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebarList {
+        padding-bottom: 120px; /* Extra space to clear mobile navbar */
+    }
+}
+
+.newChatSection {
+    padding-top: 12px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    margin-top: 8px;
+}
+
+.sectionLabel {
+    display: block;
+    padding: 0 14px 8px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.noResults {
+    padding: 30px 14px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.25);
+    font-style: italic;
 }
 
 .conversationItem {
@@ -448,8 +561,11 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
     height: 100%;
+    overflow: hidden;
 }
 
 .chatHeader {
@@ -457,8 +573,12 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(255, 255, 255, 0.01);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(15, 15, 15, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    backdrop-filter: blur(12px);
 }
 
 .headerInfo {
@@ -485,6 +605,13 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    overscroll-behavior: contain; /* Prevent scroll chaining */
+}
+
+.messageScroll::-webkit-scrollbar {
+    display: none;
 }
 
 .chatLoader {
@@ -544,32 +671,45 @@
 }
 
 .chatInputRow {
-    padding: 12px 20px;
-    background: rgba(255, 255, 255, 0.01);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 12px 16px;
+    background: rgba(15, 15, 15, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
+    backdrop-filter: blur(10px);
 }
 
-.chatInputRow input {
+.chatInput {
     flex: 1;
-    background: transparent;
-    border: none;
-    padding: 10px 0;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 16px;
+    border-radius: 20px;
     color: #fff;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     outline: none;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
+    transition: all 0.2s ease;
+    resize: none;
+    line-height: 1.4;
+    font-family: inherit;
+    display: block;
+    width: 100%;
 }
 
-.chatInputRow input::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+.chatInput:focus {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(241, 196, 15, 0.3);
+}
+
+.chatInput::placeholder {
+    color: rgba(255, 255, 255, 0.25);
 }
 
 .chatInputRow button {
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     background: transparent;
     border: none;
@@ -579,6 +719,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    flex-shrink: 0;
 }
 
 .chatInputRow button:hover:not(:disabled) {
@@ -635,33 +776,72 @@
 @media (max-width: 768px) {
     .inboxWrapper {
         flex-direction: column;
-        height: 550px;
+        height: calc(100vh - 280px);
+        min-height: 480px;
         position: relative;
     }
+
     .conversationsSidebar {
         width: 100%;
         height: 100%;
         border-right: none;
+        background: transparent;
     }
+
     .chatWindow {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 100;
-        background: #000;
         display: none;
     }
+
     .mobileChatActive .chatWindow {
         display: flex;
+        flex-direction: column;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        background: #0a0a0a;
+        animation: slideInMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
     }
+
     .mobileChatActive .conversationsSidebar {
         display: none;
     }
+
     .backToInbox {
         display: flex;
+        padding: 8px;
+        margin-right: 8px;
+        color: var(--color-primary);
     }
+
+    .chatHeader {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 16px;
+        background: rgba(15, 15, 15, 0.98);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    .chatInputRow {
+        padding: 12px 16px;
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        background: rgba(15, 15, 15, 0.98);
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+}
+
+@keyframes slideInMobile {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
 
 .attachBtn {

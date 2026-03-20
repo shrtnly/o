@@ -15,8 +15,9 @@ import {
     Heart, Info, Bell, Shield, ChevronRight, ChevronDown, Award,
     LogOut, BarChart3, Layout, Activity as ActivityIcon, Compass, Flame,
     Camera, X, Settings, Share2, User, Calendar, Zap, Gem, Trophy, Target, BookOpen,
-    Search, UserPlus, Check
+    Search, UserPlus, Check, Mail, AtSign, Phone, GraduationCap, ChartNoAxesCombined, SquarePen
 } from 'lucide-react';
+import ShieldIcon from '../../components/ShieldIcon';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
@@ -64,7 +65,13 @@ const ProfilePage = () => {
     const filterRef = useRef(null);
 
     const [activitySubTab, setActivitySubTab] = useState('log');
-    const { notifications, unreadCount, markAsRead, markAllAsRead, refresh: refreshNotifications } = useNotifications();
+    const { 
+        notifications, unreadCount, markAsRead, 
+        markAllAsRead, 
+        deleteNotification, refresh: refreshNotifications,
+        respondToConnectionRequest
+    } = useNotifications();
+    const [notifFilter, setNotifFilter] = useState('all');
     const [activityLogs, setActivityLogs] = useState([]);
     const [isActivityLoading, setIsActivityLoading] = useState(false);
 
@@ -431,6 +438,18 @@ const ProfilePage = () => {
                             <span>{t('tab_general')}</span>
                         </button>
                         <button 
+                            className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
+                            onClick={() => setActiveTab('connection')}
+                        >
+                            <div className={styles.tabIconGroup}>
+                                <Users size={18} />
+                                {connections.pending.length > 0 && (
+                                    <span className={styles.tabBadge}>{connections.pending.length}</span>
+                                )}
+                            </div>
+                            <span>{t('tab_connection')}</span>
+                        </button>
+                        <button 
                             className={`${styles.tabItem} ${activeTab === 'analyze' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('analyze')}
                         >
@@ -447,55 +466,25 @@ const ProfilePage = () => {
                             </div>
                             <span>{'নটিফিকেশন'}</span>
                         </button>
-                        <button 
-                            className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
-                            onClick={() => setActiveTab('connection')}
-                        >
-                            <div className={styles.tabIconGroup}>
-                                <Users size={18} />
-                                {connections.pending.length > 0 && (
-                                    <span className={styles.tabBadge}>{connections.pending.length}</span>
-                                )}
-                            </div>
-                            <span>{t('tab_connection')}</span>
-                        </button>
                     </nav>
 
                     {activeTab === 'general' && (
                         <>
                             {/* ========== SECTION 2: HONEY STATS GRID ========== */}
                     <section className={styles.statsSection}>
+                        <h2 className={styles.sectionTitle}>
+                            <div className={styles.sectionTitleLeft}>
+                                <span><ChartNoAxesCombined size={18} /></span> {language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}
+                            </div>
+                        </h2>
                         <div className={styles.statsGrid}>
                             <div className={styles.statCard}>
                                 <div className={styles.statCardContent}>
                                     <div className={styles.statInfoStack}>
                                         <span className={styles.statCardValue}>
-                                            <PollenIcon size={18} className={styles.statIconPollen} />
-                                            {profile?.gems || 0}
-                                        </span>
-                                        <span className={styles.statCardLabel}>মধুরেণু</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
-                                            <Compass size={16} className={styles.statIconCompass} />
-                                            {enrolledCourses.length}
-                                        </span>
-                                        <span className={styles.statCardLabel}>কোর্সসমূহ</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
                                             <Flame size={16} fill="url(#flameGradientProfile)" stroke="url(#flameGradientProfile)" className={styles.statIconStreak} />
-                                            {streak?.current_streak || 0} দিন
+                                            {streak?.current_streak || 0}
                                         </span>
-                                        <span className={styles.statCardLabel}>গুনগুন স্ট্রিক</span>
                                     </div>
                                 </div>
                             </div>
@@ -506,7 +495,36 @@ const ProfilePage = () => {
                                             <Trophy size={16} className={styles.statIconRank} />
                                             #{globalRank}
                                         </span>
-                                        <span className={styles.statCardLabel}>র‌্যাঙ্কিং</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <ShieldIcon xp={profile?.xp || 0} size={20} showTooltip={false} />
+                                            {profile?.xp || 0}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <PollenIcon size={18} className={styles.statIconPollen} />
+                                            {profile?.gems || 0}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.statCard}>
+                                <div className={styles.statCardContent}>
+                                    <div className={styles.statInfoStack}>
+                                        <span className={styles.statCardValue}>
+                                            <Compass size={16} className={styles.statIconCompass} />
+                                            {enrolledCourses.length}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -514,27 +532,59 @@ const ProfilePage = () => {
                     </section>
 
 
-                    {/* ========== SECTION 4: ACHIEVEMENT GALLERY ========== */}
-                    <section className={styles.badgesSection}>
+                    {/* ========== SECTION: PERSONAL DETAILS ========== */}
+                    <section className={styles.personalSection}>
                         <h2 className={styles.sectionTitle}>
-                            <span>🏅</span> অর্জিত পদক
+                            <div className={styles.sectionTitleLeft}>
+                                <span><User size={18} /></span> {language === 'bn' ? 'ব্যক্তিগত তথ্য' : 'Personal Details'}
+                            </div>
+                            <button className={styles.seeAllBtn} onClick={() => navigate('/settings?tab=profile')}>
+                                <SquarePen size={18} />
+                            </button>
                         </h2>
-                        <div className={styles.badgesGrid}>
-                            {badges.map(badge => (
-                                <div
-                                    key={badge.id}
-                                    className={`${styles.badgeItem} ${badge.unlocked ? styles.badgeUnlocked : styles.badgeLocked}`}
-                                    title={badge.label}
-                                >
-                                    <div className={styles.badgeCircle}>
-                                        {badge.unlocked
-                                            ? <span className={styles.badgeEmoji}>{badge.emoji}</span>
-                                            : <Lock size={16} className={styles.lockIcon} />
-                                        }
-                                    </div>
-                                    <span className={styles.badgeLabel}>{badge.label}</span>
+                        <div className={styles.personalGrid}>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <User size={14} />
                                 </div>
-                            ))}
+                                <span className={styles.personalValue}>{profile?.full_name || '—'}</span>
+                            </div>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <Mail size={14} />
+                                </div>
+                                <span className={styles.personalValue}>{profile?.email || '—'}</span>
+                            </div>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <Phone size={14} />
+                                </div>
+                                <span className={styles.personalValue}>{profile?.phone_number || '—'}</span>
+                            </div>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <Calendar size={14} />
+                                </div>
+                                <span className={styles.personalValue}>{profile?.age || '—'}</span>
+                            </div>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <MapPin size={14} />
+                                </div>
+                                <span className={styles.personalValue}>{profile?.location || '—'}</span>
+                            </div>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <GraduationCap size={14} />
+                                </div>
+                                <span className={styles.personalValue}>{profile?.education_level || '—'}</span>
+                            </div>
+                            <div className={styles.personalItem}>
+                                <div className={styles.personalIcon}>
+                                    <Calendar size={14} />
+                                </div>
+                                <span className={styles.personalValue}>{formatDate(profile?.created_at)}</span>
+                            </div>
                         </div>
                     </section>
 
@@ -818,38 +868,165 @@ const ProfilePage = () => {
                                 </div>
                             ) : (
                                 <div className={styles.subTabContent}>
-                                        <div className={styles.notifList}>
+                                    {/* Filter Pills */}
+                                    <div className={styles.notifFilters}>
+                                        {[
+                                            { id: 'all', label: 'সব' },
+                                            { id: 'achievements', label: 'অ্যাচিভমেন্ট' },
+                                            { id: 'social', label: 'সোশ্যাল' },
+                                            { id: 'system', label: 'সিস্টেম' }
+                                        ].map(f => (
+                                            <button 
+                                                key={f.id}
+                                                className={`${styles.filterPill} ${notifFilter === f.id ? styles.filterPillActive : ''}`}
+                                                onClick={() => setNotifFilter(f.id)}
+                                            >
+                                                {f.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    <div className={styles.notifList}>
+                                        <div className={styles.notifHeaderRow}>
+                                            <h3 className={styles.notifCountLabel}>
+                                                {unreadCount > 0 ? `${unreadCount}টি আনরিড` : 'সব পড়া হয়েছে'}
+                                            </h3>
                                             {notifications.length > 0 && unreadCount > 0 && (
-                                                <button className={styles.markAllBtn} onClick={markAllAsRead}>
-                                                    <Check size={14} /> মার্ক অল অ্যাজ রিড
+                                                <button className={styles.markAllBtnMinimal} onClick={markAllAsRead}>
+                                                    মার্ক অল রিড
                                                 </button>
                                             )}
-                                            {notifications.length > 0 ? notifications.map(notif => (
-                                                <div 
-                                                    key={notif.id} 
-                                                    className={`${styles.notifItem} ${!notif.is_read ? styles.unreadNotif : ''}`}
-                                                    onClick={() => !notif.is_read && markAsRead(notif.id)}
-                                                >
-                                                    <div className={styles.notifIconWrap}>
-                                                        {notif.type === 'reward' && <Trophy size={16} color="#F1C40F" />}
-                                                        {notif.type === 'streak' && <Flame size={16} color="#E67E22" />}
-                                                        {notif.type === 'course' && <BookOpen size={16} color="#2ECC71" />}
-                                                        {notif.type === 'system' && <Bell size={16} color="#3498DB" />}
+                                        </div>
+
+                                        {(() => {
+                                            const filtered = notifications.filter(n => {
+                                                if (notifFilter === 'all') return true;
+                                                if (notifFilter === 'achievements') return ['reward', 'streak'].includes(n.type);
+                                                if (notifFilter === 'social') return ['connection', 'message'].includes(n.type);
+                                                if (notifFilter === 'system') return ['system', 'course'].includes(n.type);
+                                                return true;
+                                            });
+
+                                            if (filtered.length === 0) {
+                                                return (
+                                                    <div className={styles.emptyState}>
+                                                        <Bell size={40} opacity={0.2} />
+                                                        <p>কোনো নটিফিকেশন পাওয়া যায়নি</p>
                                                     </div>
-                                                    <div className={styles.notifBody}>
-                                                        <h4 className={styles.notifTitle}>{notif.title}</h4>
-                                                        <p className={styles.notifMsg}>{notif.message}</p>
-                                                        <span className={styles.notifDate}>
-                                                            {formatNotifDate(notif.created_at)}
-                                                        </span>
+                                                );
+                                            }
+
+                                            const groups = filtered.reduce((acc, notif) => {
+                                                const d = new Date(notif.created_at);
+                                                const today = new Date();
+                                                const yesterday = new Date(today);
+                                                yesterday.setDate(yesterday.getDate() - 1);
+
+                                                let key = 'এর আগে';
+                                                if (d.toDateString() === today.toDateString()) key = 'আজ';
+                                                else if (d.toDateString() === yesterday.toDateString()) key = 'গতকাল';
+
+                                                if (!acc[key]) acc[key] = [];
+                                                acc[key].push(notif);
+                                                return acc;
+                                            }, {});
+
+                                            return Object.entries(groups).map(([groupName, items]) => (
+                                                <div key={groupName} className={styles.notifGroup}>
+                                                    <h5 className={styles.groupHeading}>{groupName}</h5>
+                                                    <div className={styles.groupItems}>
+                                                        {items.map(notif => (
+                                                            <div 
+                                                                key={notif.id} 
+                                                                className={`${styles.notifCard} ${!notif.is_read ? styles.unreadCard : ''}`}
+                                                                onClick={() => !notif.is_read && markAsRead(notif.id)}
+                                                            >
+                                                                <div className={styles.notifMainRow}>
+                                                                    <div className={styles.actorAvatar}>
+                                                                        {notif.actor?.avatar_url ? (
+                                                                            <img src={notif.actor.avatar_url} alt="actor" />
+                                                                        ) : (
+                                                                            <div className={styles.typeIconWrap} style={{
+                                                                                background: notif.type === 'reward' ? 'rgba(241, 196, 15, 0.1)' :
+                                                                                            notif.type === 'streak' ? 'rgba(230, 126, 34, 0.1)' :
+                                                                                            notif.type === 'course' ? 'rgba(46, 204, 113, 0.1)' : 'rgba(52, 152, 219, 0.1)'
+                                                                            }}>
+                                                                                {notif.type === 'reward' && <Trophy size={16} color="#F1C40F" />}
+                                                                                {notif.type === 'streak' && <Flame size={16} color="#E67E22" />}
+                                                                                {notif.type === 'course' && <BookOpen size={16} color="#2ECC71" />}
+                                                                                {(!['reward', 'streak', 'course'].includes(notif.type)) && <Bell size={16} color="#3498DB" />}
+                                                                            </div>
+                                                                        )}
+                                                                        {!notif.is_read && <div className={styles.unreadIndicator} />}
+                                                                    </div>
+                                                                    
+                                                                    <div className={styles.notifContent}>
+                                                                        <div className={styles.notifTextContainer}>
+                                                                            <h4 className={styles.nTitle}>{notif.title}</h4>
+                                                                            <p className={styles.nMsg}>{notif.message}</p>
+                                                                            <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
+                                                                        </div>
+
+                                                                        {/* Action Buttons */}
+                                                                        {notif.type === 'connection' && notif.data?.status === 'pending' && (
+                                                                            <div className={styles.notifActions}>
+                                                                                <button 
+                                                                                    className={styles.acceptBtnSmall}
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        respondToConnectionRequest(notif.id, notif.data.connection_id, 'accepted', notif.actor_id);
+                                                                                    }}
+                                                                                >
+                                                                                    গ্রহণ করুন
+                                                                                </button>
+                                                                                <button 
+                                                                                    className={styles.declineBtnSmall}
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        respondToConnectionRequest(notif.id, notif.data.connection_id, 'rejected');
+                                                                                    }}
+                                                                                >
+                                                                                    বাতিল
+                                                                                </button>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {notif.type === 'connection' && notif.data?.status === 'accepted' && (
+                                                                            <div className={styles.respondedStatus}>
+                                                                                <Check size={14} strokeWidth={3} />
+                                                                                <span>সংযুক্ত হয়েছেন</span>
+                                                                            </div>
+                                                                        )}
+
+                                                                        {notif.type === 'reward' && (
+                                                                            <button 
+                                                                                className={styles.actionLink}
+                                                                                onClick={() => navigate('/shop')}
+                                                                            >
+                                                                                শপ দেখুন <ChevronRight size={12} />
+                                                                            </button>
+                                                                        )}
+                                                                    </div>
+
+                                                                    <button 
+                                                                        type="button"
+                                                                        className={styles.deleteNotif}
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            e.stopPropagation();
+                                                                            deleteNotification(notif.id);
+                                                                        }}
+                                                                        title="Delete"
+                                                                    >
+                                                                        <X size={14} />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </div>
-                                            )) : (
-                                            <div className={styles.emptyState}>
-                                                <Bell size={40} opacity={0.2} />
-                                                <p>{t('empty_notif')}</p>
-                                            </div>
-                                        )}
+                                            ));
+                                        })()}
                                     </div>
                                 </div>
                             )}

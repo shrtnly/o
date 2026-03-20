@@ -63,14 +63,6 @@ export const connectionService = {
 
         if (error) throw error;
 
-        // Create notification for receiver
-        await supabase.from('notification_history').insert({
-            user_id: receiverId,
-            title: 'নতুন কানেকশন অনুরোধ!',
-            message: 'একজন শিক্ষার্থী আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।',
-            type: 'system'
-        });
-
         return data;
     },
 
@@ -116,16 +108,6 @@ export const connectionService = {
 
         if (error) throw error;
 
-        if (status === 'accepted') {
-            // Notify original sender
-            await supabase.from('notification_history').insert({
-                user_id: senderId,
-                title: 'অনুরোধ গ্রহণ করা হয়েছে!',
-                message: 'আপনার কানেকশন অনুরোধটি গ্রহণ করা হয়েছে।',
-                type: 'system'
-            });
-        }
-        
         return true;
     },
 

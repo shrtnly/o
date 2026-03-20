@@ -122,7 +122,7 @@ const translations = {
         logout_error: "লগআউট করতে সমস্যা হয়েছে",
         
         tab_general: "সাধারণ",
-        tab_analyze: "বিশ্লেষণ",
+        tab_analyze: "এনালিটিক্স",
         tab_activity: "কার্যক্রম",
         tab_connection: "সংযোগ",
         
@@ -377,7 +377,7 @@ const translations = {
         logout_error: "Error logging out",
         
         tab_general: "General",
-        tab_analyze: "Analyze",
+        tab_analyze: "Analytics",
         tab_activity: "Activity",
         tab_connection: "Connection",
         search_learner: "Search learners...",

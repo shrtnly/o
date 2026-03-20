@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone, LogOut } from 'lucide-react';
 import styles from './SettingsPage.module.css';
@@ -32,6 +32,7 @@ const SettingsPage = () => {
     const fileInputRef = useRef(null);
     const menuBoxRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Profile State
     const [fullProfile, setFullProfile] = useState(null);
@@ -77,6 +78,16 @@ const SettingsPage = () => {
             setSparkleEnabled(savedSparkle === 'true');
         }
     }, []);
+
+    // Handle deep linking for tabs
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('tab');
+        const validItem = menuItems.find(item => item.id === tab);
+        if (validItem) {
+            setActiveTab(tab);
+        }
+    }, [location.search]);
 
     useEffect(() => {
         if (activeTab === 'courses' && user) {

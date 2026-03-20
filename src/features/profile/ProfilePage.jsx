@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { rewardService } from '../../services/rewardService';
@@ -46,6 +46,7 @@ const BADGE_DEFS = [
 const ProfilePage = () => {
     const { user, signOut, updateProfile } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const { t, language } = useLanguage();
     const [profile, setProfile] = useState(null);
     const [stats, setStats] = useState(null);
@@ -95,7 +96,14 @@ const ProfilePage = () => {
     useEffect(() => {
         if (!user) { navigate('/auth'); return; }
         fetchProfileData();
-    }, [user?.id, navigate]);
+
+        // Check for tab param
+        const params = new URLSearchParams(location.search);
+        const tab = params.get('tab');
+        if (tab && ['general', 'analyze', 'activity', 'connection'].includes(tab)) {
+            setActiveTab(tab);
+        }
+    }, [user?.id, navigate, location.search]);
 
     const fetchProfileData = async () => {
         try {

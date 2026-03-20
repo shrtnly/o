@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { supabase } from '../../../lib/supabaseClient';
 import { 
     Users, Search, UserPlus, UserRoundSearch, UserMinus, 
@@ -10,6 +11,7 @@ import { messageService } from '../../../services/messageService';
 import { useLanguage } from '../../../context/LanguageContext';
 import InlineLoader from '../../../components/ui/InlineLoader';
 import { toast } from 'sonner';
+import { useNotifications } from '../../../context/NotificationContext';
 import styles from './LearnerConnection.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -46,6 +48,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
     const [pendingAttachmentUrl, setPendingAttachmentUrl] = useState(null);
     const [filePreview, setFilePreview] = useState(null);
+    const { setActiveChatId, setIsInboxOpen } = useNotifications();
     const scrollRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
     const chatWindowRef = React.useRef(null);
@@ -159,9 +162,60 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         };
     }, [user?.id, fetchConnections]);
 
+    const location = useLocation();
+
+    // Deep link handler for subTab and partnerId
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const sub = params.get('sub');
+        const partnerId = params.get('partnerId');
+
+        if (sub === 'inbox') {
+            setSubTab('inbox');
+            if (partnerId) {
+                const handleDeepLink = async () => {
+                    // Check if we already have this partner in conversations
+                    const existing = conversations.find(c => c.partner.id === partnerId);
+                    if (existing) {
+                        handleSelectConversation(existing.partner);
+                    } else {
+                        // Fetch profile manually if not in list
+                        const { data: profile } = await supabase
+                            .from('profiles')
+                            .select('*')
+                            .eq('id', partnerId)
+                            .single();
+                        
+                        if (profile) {
+                            handleSelectConversation(profile);
+                        }
+                    }
+                };
+                handleDeepLink();
+            }
+        }
+    }, [location.search, conversations.length]); // Re-run when conversations are loaded
+
+    useEffect(() => {
+        setIsInboxOpen(subTab === 'inbox');
+        // Clear active chat if not in inbox or if switching tabs
+        if (subTab !== 'inbox') {
+            setActiveChatId(null);
+        } else if (!selectedPartner) {
+             setActiveChatId(null);
+        } else {
+             setActiveChatId(selectedPartner.id);
+        }
+
+        return () => {
+            setIsInboxOpen(false);
+            setActiveChatId(null);
+        };
+    }, [subTab, selectedPartner, setIsInboxOpen, setActiveChatId]);
+
     // Handle body scroll locking when mobile chat is open
     useEffect(() => {
-        if (isMobileChatOpen) {
+        if (isMobileChatOpen && window.innerWidth <= 768) {
             const scrollY = window.scrollY;
             document.body.style.position = 'fixed';
             document.body.style.top = `-${scrollY}px`;
@@ -190,28 +244,51 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
     // Handle mobile keyboard resize using Visual Viewport API
     useEffect(() => {
-        if (!window.visualViewport || !isMobileChatOpen) return;
+        // Only run on mobile
+        const isMobileScreen = () => window.innerWidth <= 768;
+        if (!window.visualViewport || !isMobileChatOpen || !isMobileScreen()) return;
 
+        let rafId;
         const handleResize = () => {
-            if (chatWindowRef.current) {
-                chatWindowRef.current.style.height = `${window.visualViewport.height}px`;
-                // Force scroll to bottom when keyboard opens/resizes
-                if (scrollRef.current) {
-                    setTimeout(() => {
-                        if (scrollRef.current) {
-                            scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                        }
-                    }, 100);
-                }
+            if (!chatWindowRef.current) return;
+            const vv = window.visualViewport;
+            
+            // Use requestAnimationFrame for smoother updates
+            rafId = requestAnimationFrame(() => {
+                const el = chatWindowRef.current;
+                if (!el) return;
+                
+                // Using only height and fixed top:0 to avoid bouncing
+                el.style.setProperty('top', `${vv.offsetTop}px`, 'important');
+                el.style.setProperty('height', `${vv.height}px`, 'important');
+                el.style.setProperty('bottom', 'auto', 'important');
+            });
+            
+            // Scroll to bottom after keyboard shows
+            if (scrollRef.current) {
+                // Short delay to allow browser layout to stabilize
+                setTimeout(() => {
+                    if (scrollRef.current) {
+                        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                    }
+                }, 150);
             }
         };
 
         window.visualViewport.addEventListener('resize', handleResize);
-        handleResize();
+        handleResize(); // call once to initialize
 
         return () => {
             if (window.visualViewport) {
                 window.visualViewport.removeEventListener('resize', handleResize);
+            }
+            if (rafId) cancelAnimationFrame(rafId);
+            
+            if (chatWindowRef.current) {
+                const el = chatWindowRef.current;
+                el.style.removeProperty('top');
+                el.style.removeProperty('height');
+                el.style.removeProperty('bottom');
             }
         };
     }, [isMobileChatOpen]);
@@ -408,7 +485,10 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const handleSelectConversation = (partner) => {
         setSelectedPartner(partner);
         handleFetchMessages(partner.id);
-        setIsMobileChatOpen(true);
+        // Only trigger full-screen overlay on mobile
+        if (window.innerWidth <= 768) {
+            setIsMobileChatOpen(true);
+        }
     };
 
     useEffect(() => {
@@ -604,7 +684,14 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                             <StatusIndicator lastSeen={conv.partner.last_seen} />
                                                         </div>
                                                         <div className={styles.convDetails}>
-                                                            <span className={styles.partnerName}>{conv.partner.full_name || conv.partner.display_name}</span>
+                                                            <div className={styles.convNameRow}>
+                                                                <span className={styles.partnerName}>{conv.partner.full_name || conv.partner.display_name}</span>
+                                                                {conv.timestamp && (
+                                                                    <span className={styles.convTime}>
+                                                                        {new Date(conv.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                             <span className={styles.lastMsg}>{conv.lastMessage}</span>
                                                         </div>
                                                         {conv.isNew && (
@@ -653,156 +740,6 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                             </>
                                         )}
                                     </div>
-                                </div>
-
-                                {/* Chat Window */}
-                                <div ref={chatWindowRef} className={styles.chatWindow}>
-                                    {selectedPartner ? (
-                                        <>
-                                            <div ref={chatHeaderRef} className={styles.chatHeader}>
-                                                <button 
-                                                    className={styles.backToInbox}
-                                                    onClick={() => setIsMobileChatOpen(false)}
-                                                >
-                                                    <ChevronLeft size={20} />
-                                                </button>
-                                                <div className={styles.partnerAvatar} onClick={() => onSelectLearner(selectedPartner)} style={{ cursor: 'pointer' }}>
-                                                    {selectedPartner.avatar_url ? (
-                                                        <img src={selectedPartner.avatar_url} alt="" />
-                                                    ) : (
-                                                        <div className={styles.avatarPlaceholder}><User size={18} /></div>
-                                                    )}
-                                                    <StatusIndicator lastSeen={selectedPartner.last_seen} />
-                                                </div>
-                                                <div className={styles.headerInfo}>
-                                                    <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
-                                                    <span className={styles.onlineStatus}>{isOnline(selectedPartner.last_seen) ? 'অনলাইন' : 'অফলাইন'}</span>
-                                                </div>
-                                            </div>
-
-                                            <div ref={scrollRef} className={styles.messageScroll}>
-                                                {isMessagesLoading ? (
-                                                    <div className={styles.chatLoader}><InlineLoader size={80} showText={false} /></div>
-                                                ) : (
-                                                    <AnimatePresence mode="popLayout">
-                                                        {messages.map((msg, idx) => (
-                                                            <motion.div 
-                                                                key={msg.id || idx}
-                                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                                className={msg.sender_id === user.id ? styles.msgSent : styles.msgReceived}
-                                                            >
-                                                                <div className={styles.msgBubble}>
-                                                                    {msg.attachment_url && (
-                                                                        <div className={styles.msgAttachment}>
-                                                                            <img src={msg.attachment_url} alt="" onClick={() => window.open(msg.attachment_url, '_blank')} />
-                                                                        </div>
-                                                                    )}
-                                                                    {msg.content && <span>{msg.content}</span>}
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
-                                                                        <span className={styles.msgTime}>
-                                                                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                                        </span>
-                                                                        {msg.sender_id === user.id && (
-                                                                            <span style={{ display: 'flex' }}>
-                                                                                    <CheckCheck 
-                                                                                        size={12} 
-                                                                                        color={msg.is_read ? "var(--color-primary)" : "rgba(255,255,255,0.2)"} 
-                                                                                        style={{ transition: 'all 0.3s ease' }}
-                                                                                    />
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            </motion.div>
-                                                        ))}
-                                                    </AnimatePresence>
-                                                )}
-                                                <div style={{ height: '1px' }} />
-                                            </div>
-
-                                            {filePreview && (
-                                                <div className={styles.imagePreviewContainer}>
-                                                    <div className={styles.imagePreview}>
-                                                        <img src={filePreview} alt="" />
-                                                        <button 
-                                                            className={styles.removePreview} 
-                                                            onClick={removePendingAttachment}
-                                                            type="button"
-                                                        >
-                                                            <X size={14} />
-                                                        </button>
-                                                        {isUploading && (
-                                                            <div className={styles.previewLoader}>
-                                                                <InlineLoader size={30} showText={false} />
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            )}
-
-                                            <div ref={chatInputRowRef} className={styles.chatInputRow}>
-                                                <button 
-                                                    type="button" 
-                                                    className={styles.attachBtn} 
-                                                    onClick={() => fileInputRef.current?.click()} 
-                                                    disabled={isUploading || isSendingMsg}
-                                                >
-                                                    <ImagePlus size={20} />
-                                                </button>
-                                                <input 
-                                                    type="file" 
-                                                    ref={fileInputRef} 
-                                                    style={{ display: 'none' }} 
-                                                    accept="image/*" 
-                                                    onChange={handleImageUpload} 
-                                                />
-                                                <textarea 
-                                                    ref={messageInputRef}
-                                                    rows="1"
-                                                    name="msg_field_v1"
-                                                    autoComplete="off"
-                                                    autoCorrect="off"
-                                                    spellCheck="false"
-                                                    data-lpignore="true"
-                                                    enterKeyHint="send"
-                                                    inputMode="text"
-                                                    aria-autocomplete="none"
-                                                    placeholder="কোনো কিছু লিখুন..." 
-                                                    value={newMessage}
-                                                    onChange={(e) => setNewMessage(e.target.value)}
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === 'Enter' && !e.shiftKey) {
-                                                            e.preventDefault();
-                                                            handleSendMessage();
-                                                        }
-                                                    }}
-                                                    className={styles.chatInput}
-                                                />
-                                                <button 
-                                                    type="button" 
-                                                    onClick={() => handleSendMessage()}
-                                                    disabled={(!newMessage.trim() && !pendingAttachmentUrl) || isSendingMsg || isUploading}
-                                                >
-                                                    {isSendingMsg ? (
-                                                        <InlineLoader size={20} showText={false} />
-                                                    ) : (
-                                                        <Send 
-                                                            size={22} 
-                                                            fill={(newMessage.trim() || pendingAttachmentUrl) ? "currentColor" : "none"} 
-                                                            fillOpacity={0.1}
-                                                        />
-                                                    )}
-                                                </button>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <div className={styles.chatEmptyState}>
-                                            <MessageSquare size={48} opacity={0.1} />
-                                            <p>কথা বলা শুরু করুন</p>
-                                            <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)' }}>একটি কনভারসেশন সিলেক্ট করুন</span>
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                         ) : (
@@ -1174,6 +1111,151 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                     </>
                 )}
             </div>
+                                {/* Floating Chat Window (Facebook Style on Desktop, Full Overlay on Mobile) */}
+                                <AnimatePresence>
+                                    {selectedPartner && (
+                                        <div ref={chatWindowRef} className={`${styles.chatWindow} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
+                                            <div ref={chatHeaderRef} className={styles.chatHeader}>
+
+                                                <div className={styles.partnerAvatar} onClick={() => onSelectLearner(selectedPartner)} style={{ cursor: 'pointer' }}>
+                                                    {selectedPartner.avatar_url ? (
+                                                        <img src={selectedPartner.avatar_url} alt="" />
+                                                    ) : (
+                                                        <div className={styles.avatarPlaceholder}><User size={18} /></div>
+                                                    )}
+                                                    <StatusIndicator lastSeen={selectedPartner.last_seen} />
+                                                </div>
+                                                <div className={styles.headerInfo}>
+                                                    <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
+
+                                                </div>
+                                                <button 
+                                                    className={styles.closeChatBtn}
+                                                    onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
+                                                >
+                                                    <X size={20} />
+                                                </button>
+                                            </div>
+
+                                            <div ref={scrollRef} className={styles.messageScroll}>
+                                                {isMessagesLoading ? (
+                                                    <div className={styles.chatLoader}><InlineLoader size={80} showText={false} /></div>
+                                                ) : (
+                                                    <AnimatePresence mode="popLayout">
+                                                        {messages.map((msg, idx) => (
+                                                            <motion.div 
+                                                                key={msg.id || idx}
+                                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                className={msg.sender_id === user.id ? styles.msgSent : styles.msgReceived}
+                                                            >
+                                                                <div className={styles.msgBubble}>
+                                                                    {msg.attachment_url && (
+                                                                        <div className={styles.msgAttachment}>
+                                                                            <img src={msg.attachment_url} alt="" onClick={() => window.open(msg.attachment_url, '_blank')} />
+                                                                        </div>
+                                                                    )}
+                                                                    {msg.content && <span>{msg.content}</span>}
+                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
+                                                                        <span className={styles.msgTime}>
+                                                                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                        </span>
+                                                                        {msg.sender_id === user.id && (
+                                                                            <span style={{ display: 'flex' }}>
+                                                                                    <CheckCheck 
+                                                                                        size={12} 
+                                                                                        color={msg.is_read ? "var(--color-primary)" : "rgba(255,255,255,0.2)"} 
+                                                                                        style={{ transition: 'all 0.3s ease' }}
+                                                                                    />
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                </div>
+                                                            </motion.div>
+                                                        ))}
+                                                    </AnimatePresence>
+                                                )}
+                                                <div style={{ height: '1px' }} />
+                                            </div>
+
+                                            {filePreview && (
+                                                <div className={styles.imagePreviewContainer}>
+                                                    <div className={styles.imagePreview}>
+                                                        <img src={filePreview} alt="" />
+                                                        <button 
+                                                            className={styles.removePreview} 
+                                                            onClick={removePendingAttachment}
+                                                            type="button"
+                                                        >
+                                                            <X size={14} />
+                                                        </button>
+                                                        {isUploading && (
+                                                            <div className={styles.previewLoader}>
+                                                                <InlineLoader size={30} showText={false} />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            <div ref={chatInputRowRef} className={styles.chatInputRow}>
+                                                <button 
+                                                    type="button" 
+                                                    className={styles.attachBtn} 
+                                                    onClick={() => fileInputRef.current?.click()} 
+                                                    disabled={isUploading || isSendingMsg}
+                                                >
+                                                    <ImagePlus size={20} />
+                                                </button>
+                                                <input 
+                                                    type="file" 
+                                                    ref={fileInputRef} 
+                                                    style={{ display: 'none' }} 
+                                                    accept="image/*" 
+                                                    onChange={handleImageUpload} 
+                                                />
+                                                <textarea 
+                                                    ref={messageInputRef}
+                                                    rows="1"
+                                                    name="msg_field_v1"
+                                                    autoComplete="off"
+                                                    autoCorrect="off"
+                                                    spellCheck="false"
+                                                    data-lpignore="true"
+                                                    enterKeyHint="send"
+                                                    inputMode="text"
+                                                    aria-autocomplete="none"
+                                                    placeholder="কোনো কিছু লিখুন..." 
+                                                    value={newMessage}
+                                                    onChange={(e) => setNewMessage(e.target.value)}
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                                            e.preventDefault();
+                                                            handleSendMessage();
+                                                        }
+                                                    }}
+                                                    className={styles.chatInput}
+                                                />
+                                                <button 
+                                                    type="button" 
+                                                    className={styles.sendBtn}
+                                                    onClick={() => handleSendMessage()}
+                                                    disabled={(!newMessage.trim() && !pendingAttachmentUrl) || isSendingMsg || isUploading}
+                                                >
+                                                    {isSendingMsg ? (
+                                                        <InlineLoader size={20} showText={false} />
+                                                    ) : (
+                                                        <Send 
+                                                            size={22} 
+                                                            fill={(newMessage.trim() || pendingAttachmentUrl) ? "currentColor" : "none"} 
+                                                            fillOpacity={0.1}
+                                                        />
+                                                    )}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </AnimatePresence>
         </div>
     );
 };

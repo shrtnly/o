@@ -181,13 +181,20 @@ export const NotificationProvider = ({ children }) => {
         };
     }, [user, fetchNotifications]);
 
+    const [activeChatId, setActiveChatId] = useState(null);
+    const [isInboxOpen, setIsInboxOpen] = useState(false);
+
     return (
         <NotificationContext.Provider value={{
             notifications,
             unreadCount,
             markAsRead,
             markAllAsRead,
-            refresh: fetchNotifications
+            refresh: fetchNotifications,
+            activeChatId,
+            setActiveChatId,
+            isInboxOpen,
+            setIsInboxOpen
         }}>
             {children}
         </NotificationContext.Provider>

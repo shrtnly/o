@@ -34,7 +34,13 @@
     max-width: 560px;
     margin: 0 auto;
     padding: 0 18px 20px;
-    /* Reduced bottom padding */
+    transition: max-width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@media (min-width: 1024px) {
+    .container {
+        max-width: 600px;
+    }
 }
 
 /* ─────────────────────────────────────────────
@@ -285,6 +291,12 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+}
+
+@media (min-width: 1024px) {
+    .statsGrid {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }
 
 .statCard {

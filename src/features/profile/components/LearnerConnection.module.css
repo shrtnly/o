@@ -16,13 +16,13 @@
 
 .subTabHeader {
     display: flex;
-    gap: 2px;
-    background: rgba(255, 255, 255, 0.03);
+    gap: 3px;
+    background: rgba(255, 255, 255, 0.04);
     padding: 4px;
-    border-radius: 12px;
+    border-radius: 14px;
     width: 100%;
     margin-bottom: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 @media (max-width: 768px) {
@@ -32,33 +32,44 @@
 }
 
 .subTabBtn {
+    /* Equal width for all 3 tabs */
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     padding: 10px 8px;
-    border-radius: 9px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     white-space: nowrap;
+    letter-spacing: 0.1px;
+    position: relative;
+    overflow: hidden;
 }
 
+.subTabBtn:hover:not(.subTabActive) {
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Active tab — gold filled pill */
 .subTabActive {
-    color: #000;
+    color: #0a0a0a;
     background: var(--color-primary);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .subTabActive svg {
-    color: #000;
     stroke-width: 2.5;
+    color: #0a0a0a;
 }
+
+
 
 .subTabContent {
     animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -386,6 +397,94 @@
     border-radius: 50%;
     margin-left: 4px;
 }
+
+/* Sub-tab count chip (shown on inactive tabs) */
+.subTabCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 2px;
+}
+
+/* Unread badge on inactive inbox tab */
+.subTabUnread {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    border-radius: 10px;
+    background: #E74C3C;
+    color: #fff;
+    margin-left: 2px;
+}
+
+/* Connection filter pill row */
+.connFilterRow {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0.75rem;
+    padding: 0 2px;
+}
+
+.connFilterPill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 100px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.connFilterPill:hover {
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.connFilterActive {
+    color: var(--color-primary) !important;
+    background: rgba(241, 196, 15, 0.08) !important;
+    border-color: rgba(241, 196, 15, 0.2) !important;
+}
+
+.filterCount {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.58rem;
+    font-weight: 800;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.filterCountAlert {
+    background: rgba(231, 76, 60, 0.15);
+    color: #E74C3C;
+}
+
 
 /* Inbox & Messaging Styles */
 .inboxWrapper {

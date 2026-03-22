@@ -315,77 +315,74 @@
 
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-}
-
-@media (min-width: 1024px) {
-    .statsGrid {
-        grid-template-columns: repeat(5, 1fr);
-    }
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
 }
 
 .statCard {
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 10px;
-    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 10px;
+    transition: background 0.2s ease, border-color 0.2s ease;
     cursor: default;
 }
 
 .statCard:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(241, 196, 15, 0.3);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
-.statCardContent {
+.statIconBox {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.03);
     display: flex;
     align-items: center;
-    width: 100%;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
 .statInfoStack {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
     width: 100%;
 }
 
 .statIconCompass {
     color: #F1C40F;
+    opacity: 0.85;
 }
 
 .statIconStreak {
     color: #FF4500;
-    filter: drop-shadow(0 0 5px rgba(255, 69, 0, 0.3));
+    filter: drop-shadow(0 0 4px rgba(255, 69, 0, 0.25));
 }
 
 .statIconRank {
     color: #FFD700;
+    opacity: 0.9;
 }
 
 .statCardValue {
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: var(--color-text);
-    line-height: 1.1;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1;
+    display: block;
 }
 
 .statCardLabel {
-    font-size: 0.68rem;
-    color: var(--color-text-muted);
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.25);
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.6px;
 }
 
 /* ─────────────────────────────────────────────
@@ -1492,7 +1489,7 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
-    padding: 12px 10px;
+    padding: 12px 8px;
     background: transparent;
     border: none;
     color: var(--color-text-muted);
@@ -1501,9 +1498,9 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    position: relative;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    min-width: 44px;
 }
 
 .tabItem svg {
@@ -1575,12 +1572,11 @@
     content: '';
     position: absolute;
     bottom: -1.5px;
-    left: 20%;
-    right: 20%;
+    left: 15%;
+    right: 15%;
     height: 3px;
     background: #F1C40F;
     border-radius: 10px;
-    box-shadow: 0 -2px 10px rgba(241, 196, 15, 0.4);
 }
 
 .tabContentPlaceholder {
@@ -1605,8 +1601,52 @@
 .analyzeTabContent {
     display: flex;
     flex-direction: column;
+    gap: 0;
+    min-height: 400px;
+    max-height: 820px;
+    overflow: hidden;
+}
+
+/* ── Analytics Scroll Header ── */
+.analyzeHeader {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg-deep);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 4px 0 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 4px;
+}
+
+
+
+/* ── Section Scroll Target Blocks ── */
+.analysisSectionBlock {
+    display: flex;
+    flex-direction: column;
     gap: 12px;
 }
+
+
+
+/* Scrollable analytics body */
+.analyzeScrollBody {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-right: 2px;
+}
+
+.analyzeScrollBody::-webkit-scrollbar {
+    display: none;
+}
+
 
 .analysisFilters {
     display: flex;
@@ -1723,6 +1763,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    padding-bottom: 24px;
 }
 
 .analysisStatsRow {
@@ -1856,8 +1897,39 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    color: var(--color-text-muted);
+    gap: 16px;
+    color: var(--color-primary, #F1C40F);
+}
+
+.typingLoading {
+    display: inline-block;
+    position: relative;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #F1C40F;
+}
+
+.typingLoading::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 14px;
+    background: #F1C40F;
+    animation: blink 0.8s step-end infinite;
+}
+
+@keyframes blink {
+    from, to { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.analysisLoading p {
+    margin: 0;
+    opacity: 0.8;
 }
 
 .analysisEmpty {
@@ -1875,7 +1947,7 @@
 
 @media (max-width: 768px) {
     .analysisStatsRow {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
     }
     
     .analysisChartsHalf {
@@ -1883,14 +1955,139 @@
     }
 }
 
-/* Activity Tab Styles */
+/* Activity Tab — Scroll System */
 .activityTabContent {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 28px;
-    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
     min-height: 400px;
+    max-height: 820px;
+    overflow: hidden;
 }
+
+.notifStickyHeader {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--color-bg-deep);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 4px 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 4px;
+}
+
+.notifScrollBody {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: none;
+    padding-right: 2px;
+}
+
+.notifScrollBody::-webkit-scrollbar {
+    display: none;
+}
+
+/* Flat minimal notification row */
+.notifRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    border-radius: 10px;
+    position: relative;
+}
+
+.notifRow:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.notifRow:last-child {
+    border-bottom: none;
+}
+
+/* Unread state — left gold border */
+.notifRowUnread {
+    border-left: 2px solid rgba(241, 196, 15, 0.5);
+    padding-left: 8px;
+}
+
+/* Unread dot column */
+.notifUnreadDot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 8px;
+    flex-shrink: 0;
+    padding-top: 6px;
+}
+
+.unreadDot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #F1C40F;
+    flex-shrink: 0;
+}
+
+/* Icon box */
+.notifTypeIcon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.notifActorImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Text area */
+.notifRowText {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.notifRowText .nTitle {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.3;
+    display: block;
+}
+
+.notifRowText .nMsg {
+    font-size: 0.77rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.4;
+    display: block;
+}
+
+.notifRowText .nTime {
+    font-size: 0.67rem;
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 500;
+    display: block;
+    margin-top: 3px;
+}
+
+
 
 .subTabHeader {
     display: flex;
@@ -2013,10 +2210,8 @@
 
 .notifFilters {
     display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 4px;
     overflow-x: auto;
-    padding-bottom: 4px;
     scrollbar-width: none;
 }
 
@@ -2025,21 +2220,26 @@
 }
 
 .filterPill {
-    padding: 8px 16px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--color-text-muted);
-    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 100px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.72rem;
     font-weight: 600;
     white-space: nowrap;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
+}
+
+.filterPill:hover {
+    color: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 .filterPillActive {
-    background: rgba(241, 196, 15, 0.15);
-    border-color: rgba(241, 196, 15, 0.3);
+    background: rgba(241, 196, 15, 0.08);
+    border-color: rgba(241, 196, 15, 0.2);
     color: #F1C40F;
 }
 
@@ -2047,30 +2247,35 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 0;
 }
 
 .notifCountLabel {
-    font-size: 0.85rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.25);
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 }
 
 .markAllBtnMinimal {
     background: none;
     border: none;
-    color: var(--color-primary);
-    font-size: 0.8rem;
-    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.7rem;
+    font-weight: 600;
     cursor: pointer;
-    padding: 4px 8px;
-    border-radius: 8px;
-    transition: background 0.2s;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255, 255, 255, 0.15);
+    transition: color 0.15s ease;
 }
 
 .markAllBtnMinimal:hover {
-    background: rgba(241, 196, 15, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration-color: rgba(255, 255, 255, 0.3);
 }
 
 .notifGroup {
@@ -2231,27 +2436,30 @@
 
 .deleteNotif {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 28px;
-    height: 28px;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.4);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.12);
     cursor: pointer;
-    border-radius: 50%;
-    transition: all 0.2s;
-    z-index: 100;
+    border-radius: 6px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    z-index: 10;
+}
+
+.notifRow:hover .deleteNotif {
+    opacity: 1;
 }
 
 .deleteNotif:hover {
     background: rgba(255, 59, 48, 0.1);
     color: #FF3B30;
-    border-color: rgba(255, 59, 48, 0.2);
-    transform: scale(1.1);
 }
 
 .respondedStatus {
@@ -2691,78 +2899,52 @@
 
 .personalItem {
     display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    transition: all 0.3s ease;
+    flex-direction: column;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    transition: all 0.2s ease;
     min-width: 0;
 }
 
 .personalItem:hover {
     background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(241, 196, 15, 0.3);
-}
-
-.personalIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.04);
-    color: #F1C40F;
+    border-color: rgba(255, 255, 255, 0.12);
 }
 
 .personalText {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
 }
 
 .personalLabel {
-    font-size: 0.68rem;
-    color: var(--color-text-muted);
+    font-size: 0.62rem;
+    color: rgba(255, 255, 255, 0.3);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
+    letter-spacing: 0.8px;
+    font-weight: 700;
 }
 
 .personalValue {
     font-size: 0.88rem;
-    color: var(--color-text);
-    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 @media (max-width: 600px) {
-    .personalSection {
-        margin-top: 24px;
-    }
-
     .personalGrid {
         grid-template-columns: 1fr 1fr;
-        gap: 8px;
+        gap: 10px;
     }
 
     .personalItem {
-        padding: 8px 14px;
-        gap: 12px;
-        border-radius: 10px;
-    }
-
-    .personalIcon {
-        width: 32px;
-        height: 32px;
-    }
-
-    .personalValue {
-        font-size: 0.82rem;
+        padding: 12px 16px;
+        border-radius: 12px;
     }
 }
 

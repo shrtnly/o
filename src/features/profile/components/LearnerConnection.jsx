@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabaseClient';
 import { 
     Users, Search, UserPlus, UserRoundSearch, UserMinus, 
@@ -17,6 +17,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const { t } = useLanguage();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [subTab, setSubTab] = useState('my'); // suggest, my, sent
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -162,13 +164,20 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         };
     }, [user?.id, fetchConnections]);
 
-    const location = useLocation();
+    // const location = useLocation(); // moved up
 
     // Deep link handler for subTab and partnerId
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const sub = params.get('sub');
         const partnerId = params.get('partnerId');
+
+        if (sub === 'received') {
+            setSubTab('my');
+            setRequestType('received');
+            // Clear URL params after consuming them so they don't persist on reload
+            navigate(location.pathname, { replace: true });
+        }
 
         if (sub === 'inbox') {
             setSubTab('inbox');
@@ -595,6 +604,9 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         <div className={`${styles.statusDot} ${isOnline(lastSeen) ? styles.statusOnline : styles.statusOffline}`} />
     );
 
+    // Count unread conversations for inbox badge
+    const unreadCount = conversations.filter(c => c.isNew).length;
+
     return (
         <div className={styles.container}>
             {/* Sub-Tab Header */}
@@ -604,21 +616,27 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                     onClick={() => setSubTab('my')}
                 >
                     <Users size={16} />
-                    {'আমার কানেকশন'}
+                    {subTab === 'my' && <span>আমার কানেকশন</span>}
+                    {subTab !== 'my' && connections.active.length > 0 && (
+                        <span className={styles.subTabCount}>{connections.active.length}</span>
+                    )}
                 </button>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'suggest' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('suggest')}
                 >
-                    <UserRoundSearch size={16} />
-                    {'সার্চ কানেকশন'}
+                    <Search size={16} />
+                    {subTab === 'suggest' && <span>সার্চ করুন</span>}
                 </button>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'inbox' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('inbox')}
                 >
                     <MessageSquare size={16} />
-                    {'ইনবক্স'}
+                    {subTab === 'inbox' && <span>ইনবক্স</span>}
+                    {subTab !== 'inbox' && unreadCount > 0 && (
+                        <span className={styles.subTabUnread}>{unreadCount}</span>
+                    )}
                 </button>
             </div>
 
@@ -830,8 +848,6 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
                                         {!searchQuery && !isSearchFocused && (
                                             <>
-                                                <div className={styles.sectionHeader}>
-                                                </div>
                                                 {suggestions.length > 0 ? (
                                                     <div className={styles.connGrid}>
                                                         {suggestions.map(s => (
@@ -883,26 +899,34 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
                                 {subTab === 'my' && (
                                     <div className={styles.myConnSection}>
-                                        {/* Connection Toggles */}
-                                        <div style={{ display: 'flex', gap: '8px', marginBottom: '0.75rem', padding: '0 4px' }}>
+                                        {/* Connection Filter Toggles */}
+                                        <div className={styles.connFilterRow}>
                                             <button 
-                                                className={`${styles.tagBtn} ${requestType === 'all' ? styles.tagActive : ''}`}
+                                                className={`${styles.connFilterPill} ${requestType === 'all' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('all')}
                                             >
                                                 কানেকশন
+                                                {connections.active.length > 0 && (
+                                                    <span className={styles.filterCount}>{connections.active.length}</span>
+                                                )}
                                             </button>
                                             <button 
-                                                className={`${styles.tagBtn} ${requestType === 'received' ? styles.tagActive : ''}`}
+                                                className={`${styles.connFilterPill} ${requestType === 'received' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('received')}
                                             >
                                                 প্রাপ্ত
-                                                {connections.pending.length > 0 && <span className={styles.tagBadge}>{connections.pending.length}</span>}
+                                                {connections.pending.length > 0 && (
+                                                    <span className={`${styles.filterCount} ${styles.filterCountAlert}`}>{connections.pending.length}</span>
+                                                )}
                                             </button>
                                             <button 
-                                                className={`${styles.tagBtn} ${requestType === 'sent' ? styles.tagActive : ''}`}
+                                                className={`${styles.connFilterPill} ${requestType === 'sent' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('sent')}
                                             >
                                                 পাঠানো
+                                                {connections.outgoing.length > 0 && (
+                                                    <span className={styles.filterCount}>{connections.outgoing.length}</span>
+                                                )}
                                             </button>
                                         </div>
 

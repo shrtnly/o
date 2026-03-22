@@ -24,8 +24,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel } from '../../utils/shieldSystem';
 import { motion, AnimatePresence } from 'framer-motion';
 import LearnerConnection from './components/LearnerConnection';
-import { 
-    ResponsiveContainer, AreaChart, Area, XAxis, YAxis, 
+import {
+    ResponsiveContainer, AreaChart, Area, XAxis, YAxis,
     CartesianGrid, Tooltip as ChartTooltip, PieChart, Pie, Cell,
     BarChart, Bar
 } from 'recharts';
@@ -57,17 +57,24 @@ const ProfilePage = () => {
     const [showShareCard, setShowShareCard] = useState(false);
     const [globalRank, setGlobalRank] = useState('—');
     const [activeTab, setActiveTab] = useState('general');
-    
+
     const [analysisData, setAnalysisData] = useState(null);
     const [analysisDays, setAnalysisDays] = useState('all');
     const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
     const filterRef = useRef(null);
 
+    const analyzeScrollRef = useRef(null);
+
+    // Notification scroll ref
+    const notifScrollRef = useRef(null);
+
+
+
     const [activitySubTab, setActivitySubTab] = useState('log');
-    const { 
-        notifications, unreadCount, markAsRead, 
-        markAllAsRead, 
+    const {
+        notifications, unreadCount, markAsRead,
+        markAllAsRead,
         deleteNotification, refresh: refreshNotifications,
         respondToConnectionRequest
     } = useNotifications();
@@ -211,19 +218,19 @@ const ProfilePage = () => {
         const isToday = date.toDateString() === today.toDateString();
 
         if (isToday) {
-            return date.toLocaleTimeString('en-US', { 
-                hour: '2-digit', 
-                minute: '2-digit', 
-                hour12: true 
+            return date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
             });
         }
 
-        return date.toLocaleString('en-US', { 
-            day: 'numeric', 
+        return date.toLocaleString('en-US', {
+            day: 'numeric',
             month: 'short',
-            hour: '2-digit', 
-            minute: '2-digit', 
-            hour12: true 
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
         });
     };
 
@@ -281,6 +288,8 @@ const ProfilePage = () => {
         }
     }, [activeTab, fetchAnalysisData, fetchActivityData]);
 
+
+
     // Independent fetch for badges on mount
     useEffect(() => {
         if (user?.id) {
@@ -325,7 +334,7 @@ const ProfilePage = () => {
 
 
     // Calculate Completed Courses for Certification
-    const completedCourses = enrolledCourses.filter(course => 
+    const completedCourses = enrolledCourses.filter(course =>
         Number(course.progress_percentage || 0) >= 100
     );
 
@@ -384,7 +393,7 @@ const ProfilePage = () => {
 
                     {/* ========== SECTION 1: ROYAL HEADER ========== */}
                     <section className={styles.royalHeader}>
-                        <button 
+                        <button
                             className={styles.headerSettingsBtn}
                             onClick={() => navigate('/settings')}
                             title={t('settings')}
@@ -430,14 +439,14 @@ const ProfilePage = () => {
 
                     {/* ========== TABS SECTION ========== */}
                     <nav className={styles.profileTabs}>
-                        <button 
+                        <button
                             className={`${styles.tabItem} ${activeTab === 'general' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('general')}
                         >
                             <Layout size={18} />
-                            <span>{t('tab_general')}</span>
+                            {activeTab === 'general' && <span>{t('tab_general')}</span>}
                         </button>
-                        <button 
+                        <button
                             className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('connection')}
                         >
@@ -447,16 +456,16 @@ const ProfilePage = () => {
                                     <span className={styles.tabBadge}>{connections.pending.length}</span>
                                 )}
                             </div>
-                            <span>{t('tab_connection')}</span>
+                            {activeTab === 'connection' && <span>{t('tab_connection')}</span>}
                         </button>
-                        <button 
+                        <button
                             className={`${styles.tabItem} ${activeTab === 'analyze' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('analyze')}
                         >
                             <BarChart3 size={18} />
-                            <span>{t('tab_analyze')}</span>
+                            {activeTab === 'analyze' && <span>{t('tab_analyze')}</span>}
                         </button>
-                        <button 
+                        <button
                             className={`${styles.tabItem} ${activeTab === 'activity' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('activity')}
                         >
@@ -464,397 +473,396 @@ const ProfilePage = () => {
                                 <Bell size={18} />
                                 {unreadCount > 0 && <span className={styles.tabBadge}>{unreadCount}</span>}
                             </div>
-                            <span>{'নটিফিকেশন'}</span>
+                            {activeTab === 'activity' && <span>{'নটিফিকেশন'}</span>}
                         </button>
                     </nav>
 
                     {activeTab === 'general' && (
                         <>
                             {/* ========== SECTION 2: HONEY STATS GRID ========== */}
-                    <section className={styles.statsSection}>
-                        <h2 className={styles.sectionTitle}>
-                            <div className={styles.sectionTitleLeft}>
-                                <span><ChartNoAxesCombined size={18} /></span> {language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}
-                            </div>
-                        </h2>
-                        <div className={styles.statsGrid}>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
-                                            <Flame size={16} fill="url(#flameGradientProfile)" stroke="url(#flameGradientProfile)" className={styles.statIconStreak} />
-                                            {streak?.current_streak || 0}
-                                        </span>
+                            <section className={styles.statsSection}>
+                                <h2 className={styles.sectionTitle}>
+                                    <div className={styles.sectionTitleLeft}>
+                                        {language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}
                                     </div>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
-                                            <Trophy size={16} className={styles.statIconRank} />
-                                            #{globalRank}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
-                                            <ShieldIcon xp={profile?.xp || 0} size={20} showTooltip={false} />
-                                            {profile?.xp || 0}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
-                                            <PollenIcon size={18} className={styles.statIconPollen} />
-                                            {profile?.gems || 0}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={styles.statCard}>
-                                <div className={styles.statCardContent}>
-                                    <div className={styles.statInfoStack}>
-                                        <span className={styles.statCardValue}>
-                                            <Compass size={16} className={styles.statIconCompass} />
-                                            {enrolledCourses.length}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-
-                    {/* ========== SECTION: PERSONAL DETAILS ========== */}
-                    <section className={styles.personalSection}>
-                        <h2 className={styles.sectionTitle}>
-                            <div className={styles.sectionTitleLeft}>
-                                <span><User size={18} /></span> {language === 'bn' ? 'ব্যক্তিগত তথ্য' : 'Personal Details'}
-                            </div>
-                            <button className={styles.seeAllBtn} onClick={() => navigate('/settings?tab=profile')}>
-                                <SquarePen size={18} />
-                            </button>
-                        </h2>
-                        <div className={styles.personalGrid}>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <User size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{profile?.full_name || '—'}</span>
-                            </div>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <Mail size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{profile?.email || '—'}</span>
-                            </div>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <Phone size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{profile?.phone_number || '—'}</span>
-                            </div>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <Calendar size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{profile?.age || '—'}</span>
-                            </div>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <MapPin size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{profile?.location || '—'}</span>
-                            </div>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <GraduationCap size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{profile?.education_level || '—'}</span>
-                            </div>
-                            <div className={styles.personalItem}>
-                                <div className={styles.personalIcon}>
-                                    <Calendar size={14} />
-                                </div>
-                                <span className={styles.personalValue}>{formatDate(profile?.created_at)}</span>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* ========== SECTION 6: CERTIFICATIONS ========== */}
-                    <section className={styles.certsSection}>
-                        <h2 className={styles.sectionTitle}>
-                            <span>🎓</span> {t('earned_certificates')}
-                        </h2>
-                        {completedCourses.length > 0 ? (
-                            <div className={styles.certsGrid}>
-                                {completedCourses.map((course) => (
-                                    <div key={course.course_id} className={styles.certCard}>
-                                        <div className={styles.certIconContainer}>
-                                            <Award size={24} />
+                                </h2>
+                                <div className={styles.statsGrid}>
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIconBox}>
+                                            <Flame size={18} fill="url(#flameGradientProfile)" stroke="url(#flameGradientProfile)" className={styles.statIconStreak} />
                                         </div>
-                                        <div className={styles.certInfo}>
-                                            <h3 className={styles.certTitle}>{course.course_title}</h3>
-                                            <p className={styles.certDate}>
-                                                কোর্সের সকল অধ্যায় সফলভাবে সম্পন্ন হয়েছে
-                                            </p>
-                                        </div>
-                                        <div className={styles.certBadge}>
-                                            <Shield size={16} fill="#F1C40F" stroke="#F1C40F" />
+                                        <div className={styles.statInfoStack}>
+                                            <span className={styles.statCardValue}>{streak?.current_streak || 0}</span>
+                                            <span className={styles.statCardLabel}>{language === 'bn' ? 'স্ট্রিক' : 'Streak'}</span>
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className={styles.noCertsWrapper}>
-                                <div className={styles.certIconContainer} style={{ opacity: 0.3 }}>
-                                    <Award size={32} />
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIconBox}>
+                                            <Trophy size={18} className={styles.statIconRank} />
+                                        </div>
+                                        <div className={styles.statInfoStack}>
+                                            <span className={styles.statCardValue}>#{globalRank}</span>
+                                            <span className={styles.statCardLabel}>{language === 'bn' ? 'র‍্যাংক' : 'Rank'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIconBox}>
+                                            <Compass size={18} className={styles.statIconCompass} />
+                                        </div>
+                                        <div className={styles.statInfoStack}>
+                                            <span className={styles.statCardValue}>{enrolledCourses.length}</span>
+                                            <span className={styles.statCardLabel}>{language === 'bn' ? 'কোর্স' : 'Courses'}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p className={styles.noCertsText}>
-                                    {t('no_certificates')}
-                                </p>
-                            </div>
-                        )}
-                    </section>
+                            </section>
 
-                    {/* ========== SECTION 5: ACTIONS & SETTINGS ========== */}
-                    <section className={styles.actionsSection}>
-                        <button className={styles.actionOutline}
-                            onClick={() => setIsEditModalOpen(true)}>
-                            <Edit3 size={16} />
-                            প্রোফাইল এডিট করুন
-                        </button>
-                        <button className={styles.actionOutline} onClick={sendTestNotification}>
-                            <Bell size={16} />
-                            টেস্ট নটিফিকেশন
-                        </button>
-                        <button className={styles.actionSolid}>
-                            <Users size={16} />
-                            বন্ধুদের চ্যালেঞ্জ করুন
-                        </button>
-                    </section>
 
-                    {/* Bottom Spacer for extra scrolling room */}
-                        <div className={styles.bottomSpacer} />
+                            {/* ========== SECTION: PERSONAL DETAILS ========== */}
+                            <section className={styles.personalSection}>
+                                <h2 className={styles.sectionTitle}>
+                                    <div className={styles.sectionTitleLeft}>
+                                        {language === 'bn' ? 'ব্যক্তিগত তথ্য' : 'Personal Details'}
+                                    </div>
+                                    <button className={styles.seeAllBtn} onClick={() => navigate('/settings?tab=profile')}>
+                                        <SquarePen size={18} />
+                                    </button>
+                                </h2>
+                                <div className={styles.personalGrid}>
+                                    <div className={styles.personalItem}>
+                                        <div className={styles.personalText}>
+                                            <span className={styles.personalLabel}>{language === 'bn' ? 'নাম' : 'Name'}</span>
+                                            <span className={styles.personalValue}>{profile?.full_name || '—'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.personalItem}>
+                                        <div className={styles.personalText}>
+                                            <span className={styles.personalLabel}>{language === 'bn' ? 'ইমেইল' : 'Email'}</span>
+                                            <span className={styles.personalValue}>{profile?.email || '—'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.personalItem}>
+                                        <div className={styles.personalText}>
+                                            <span className={styles.personalLabel}>{language === 'bn' ? 'ফোন' : 'Phone'}</span>
+                                            <span className={styles.personalValue}>{profile?.phone_number || '—'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.personalItem}>
+                                        <div className={styles.personalText}>
+                                            <span className={styles.personalLabel}>{language === 'bn' ? 'ঠিকানা' : 'Location'}</span>
+                                            <span className={styles.personalValue}>{profile?.location || '—'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.personalItem}>
+                                        <div className={styles.personalText}>
+                                            <span className={styles.personalLabel}>{language === 'bn' ? 'শিক্ষা' : 'Education'}</span>
+                                            <span className={styles.personalValue}>{profile?.education_level || '—'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.personalItem}>
+                                        <div className={styles.personalText}>
+                                            <span className={styles.personalLabel}>{language === 'bn' ? 'সদস্যপদ' : 'Joined'}</span>
+                                            <span className={styles.personalValue}>{formatDate(profile?.created_at)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* ========== SECTION 6: CERTIFICATIONS ========== */}
+                            <section className={styles.certsSection}>
+                                <h2 className={styles.sectionTitle}>
+                                    <span>🎓</span> {t('earned_certificates')}
+                                </h2>
+                                {completedCourses.length > 0 ? (
+                                    <div className={styles.certsGrid}>
+                                        {completedCourses.map((course) => (
+                                            <div key={course.course_id} className={styles.certCard}>
+                                                <div className={styles.certIconContainer}>
+                                                    <Award size={24} />
+                                                </div>
+                                                <div className={styles.certInfo}>
+                                                    <h3 className={styles.certTitle}>{course.course_title}</h3>
+                                                    <p className={styles.certDate}>
+                                                        কোর্সের সকল অধ্যায় সফলভাবে সম্পন্ন হয়েছে
+                                                    </p>
+                                                </div>
+                                                <div className={styles.certBadge}>
+                                                    <Shield size={16} fill="#F1C40F" stroke="#F1C40F" />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={styles.noCertsWrapper}>
+                                        <div className={styles.certIconContainer} style={{ opacity: 0.3 }}>
+                                            <Award size={32} />
+                                        </div>
+                                        <p className={styles.noCertsText}>
+                                            {t('no_certificates')}
+                                        </p>
+                                    </div>
+                                )}
+                            </section>
+
+                            {/* ========== SECTION 5: ACTIONS & SETTINGS ========== */}
+                            <section className={styles.actionsSection}>
+                                <button className={styles.actionOutline}
+                                    onClick={() => setIsEditModalOpen(true)}>
+                                    <Edit3 size={16} />
+                                    প্রোফাইল এডিট করুন
+                                </button>
+                                <button className={styles.actionOutline} onClick={sendTestNotification}>
+                                    <Bell size={16} />
+                                    টেস্ট নটিফিকেশন
+                                </button>
+                                <button className={styles.actionSolid}>
+                                    <Users size={16} />
+                                    বন্ধুদের চ্যালেঞ্জ করুন
+                                </button>
+                            </section>
+
+                            {/* Bottom Spacer for extra scrolling room */}
+                            <div className={styles.bottomSpacer} />
                         </>
                     )}
 
                     {activeTab === 'analyze' && (
                         <div className={styles.analyzeTabContent}>
-                            {/* Filter Header */}
-                            <div className={styles.analysisFilters}>
-                                <div className={styles.dropdownWrapper} ref={filterRef}>
-                                    <button 
-                                        className={styles.dropdownToggle}
-                                        onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
-                                    >
-                                        <div className={styles.dropLabelStack}>
-                                            <span className={styles.selectedVal}>
-                                                {analysisDays === 'all' ? t('all_time') : t(`last_${analysisDays}_days`)}
-                                            </span>
-                                        </div>
-                                        <ChevronDown size={14} className={`${styles.dropdownIcon} ${isFilterDropdownOpen ? styles.rotateIcon : ''}`} />
-                                    </button>
+                            {/* \u2500\u2500 Scroll Nav + Filter Header \u2500\u2500 */}
+                            <div className={styles.analyzeHeader}>
+                                {/* Time Range Filter */}
+                                <div className={styles.analysisFilters}>
+                                    <div className={styles.dropdownWrapper} ref={filterRef}>
+                                        <button
+                                            className={styles.dropdownToggle}
+                                            onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                                        >
+                                            <div className={styles.dropLabelStack}>
+                                                <span className={styles.selectedVal}>
+                                                    {analysisDays === 'all' ? t('all_time') : t(`last_${analysisDays}_days`)}
+                                                </span>
+                                            </div>
+                                            <ChevronDown size={14} className={`${styles.dropdownIcon} ${isFilterDropdownOpen ? styles.rotateIcon : ''}`} />
+                                        </button>
 
-                                    <AnimatePresence>
-                                        {isFilterDropdownOpen && (
-                                            <motion.div 
-                                                className={styles.dropdownMenu}
-                                                initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                                exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                                transition={{ duration: 0.15, ease: "easeOut" }}
-                                            >
-                                                {[
-                                                    { value: 'all', label: t('all_time') },
-                                                    { value: '30', label: t('last_30_days') },
-                                                    { value: '15', label: t('last_15_days') },
-                                                    { value: '7', label: t('last_7_days') }
-                                                ].map((opt) => (
-                                                    <button
-                                                        key={opt.value}
-                                                        className={`${styles.dropdownOption} ${analysisDays === opt.value ? styles.optActive : ''}`}
-                                                        onClick={() => {
-                                                            setAnalysisDays(opt.value);
-                                                            setIsFilterDropdownOpen(false);
-                                                        }}
-                                                    >
-                                                        {opt.label}
-                                                        {analysisDays === opt.value && <div className={styles.activeDot} />}
-                                                    </button>
-                                                ))}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
+                                        <AnimatePresence>
+                                            {isFilterDropdownOpen && (
+                                                <motion.div
+                                                    className={styles.dropdownMenu}
+                                                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                                    transition={{ duration: 0.15, ease: "easeOut" }}
+                                                >
+                                                    {[
+                                                        { value: 'all', label: t('all_time') },
+                                                        { value: '30', label: t('last_30_days') },
+                                                        { value: '15', label: t('last_15_days') },
+                                                        { value: '7', label: t('last_7_days') }
+                                                    ].map((opt) => (
+                                                        <button
+                                                            key={opt.value}
+                                                            className={`${styles.dropdownOption} ${analysisDays === opt.value ? styles.optActive : ''}`}
+                                                            onClick={() => {
+                                                                setAnalysisDays(opt.value);
+                                                                setIsFilterDropdownOpen(false);
+                                                            }}
+                                                        >
+                                                            {opt.label}
+                                                            {analysisDays === opt.value && <div className={styles.activeDot} />}
+                                                        </button>
+                                                    ))}
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
                             </div>
 
                             {isAnalysisLoading ? (
                                 <div className={styles.analysisLoading}>
-                                    <InlineLoader />
-                                    <p>অ্যানালাইসিস লোড হচ্ছে...</p>
+                                    <InlineLoader showText={false} />
+                                    <p className={styles.typingLoading}>
+                                        {language === 'bn' ? 'লোড হচ্ছে...' : 'Analyzing performance...'}
+                                    </p>
                                 </div>
                             ) : analysisData ? (
-                                <div className={styles.analysisGrid}>
-                                    {/* Summary Cards */}
-                                    <div className={styles.analysisStatsRow}>
-                                        <div className={styles.analysisMiniCard}>
-                                            <span className={styles.miniCardLabel}>{t('daily_xp')}</span>
-                                            <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
-                                                {analysisData.summary.totalXp}
-                                            </span>
-                                        </div>
-                                        <div className={styles.analysisMiniCard}>
-                                            <span className={styles.miniCardLabel}>{t('total_time')}</span>
-                                            <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
-                                                {analysisData.summary.totalMinutes} {t('minutes')}
-                                            </span>
-                                        </div>
-                                        <div className={styles.analysisMiniCard}>
-                                            <span className={styles.miniCardLabel}>{t('accuracy')}</span>
-                                            <span className={styles.miniCardValue} style={{ color: '#2ECC71' }}>
-                                                {Math.round((analysisData.summary.totalCorrect / (analysisData.summary.totalCorrect + analysisData.summary.totalWrong)) * 100)}%
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div ref={analyzeScrollRef} className={styles.analyzeScrollBody}>
+                                    <div className={styles.analysisGrid}>
 
-                                    {/* XP Activity Chart */}
-                                    <div className={styles.chartContainerFull}>
-                                        <h3 className={styles.chartTitle}>{t('daily_honey')}</h3>
-                                        <div style={{ width: '100%', height: 200 }}>
-                                            <ResponsiveContainer>
-                                                <AreaChart data={analysisData.activity}>
-                                                    <defs>
-                                                        <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
-                                                            <stop offset="5%" stopColor="#F1C40F" stopOpacity={0.3}/>
-                                                            <stop offset="95%" stopColor="#F1C40F" stopOpacity={0}/>
-                                                        </linearGradient>
-                                                    </defs>
-                                                    <XAxis 
-                                                        dataKey="activity_date" 
-                                                        hide 
-                                                    />
-                                                    <YAxis hide />
-                                                    <ChartTooltip 
-                                                        contentStyle={{ 
-                                                            background: 'rgba(20, 20, 20, 0.9)', 
-                                                            border: '1px solid rgba(255,255,255,0.1)',
-                                                            borderRadius: '12px',
-                                                            fontSize: '12px',
-                                                            color: '#fff'
-                                                        }}
-                                                        itemStyle={{ color: '#fff' }}
-                                                        labelStyle={{ color: '#fff' }}
-                                                    />
-                                                    <Area 
-                                                        type="monotone" 
-                                                        dataKey="xp_earned" 
-                                                        name={t('earned')}
-                                                        stroke="#F1C40F" 
-                                                        fillOpacity={1} 
-                                                        fill="url(#colorXp)" 
-                                                        strokeWidth={3}
-                                                    />
-                                                </AreaChart>
-                                            </ResponsiveContainer>
-                                        </div>
-                                    </div>
+                                        {/* \u2500\u2500 Section 1: Summary \u2500\u2500 */}
+                                        <div
+                                            className={styles.analysisSectionBlock}
+                                            ref={analyticsSummaryRef}
+                                            data-section="summary"
+                                        >
 
-                                    {/* Pie Chart: Accuracy */}
-                                    <div className={styles.analysisChartsHalf}>
-                                        <div className={styles.chartCard}>
-                                            <h3 className={styles.chartTitle}>{t('accuracy')}</h3>
-                                            <div style={{ width: '100%', height: 150 }}>
-                                                <ResponsiveContainer>
-                                                    <PieChart>
-                                                        <Pie
-                                                            data={[
-                                                                { name: t('right_answers'), value: analysisData.summary.totalCorrect },
-                                                                { name: t('wrong_answers'), value: analysisData.summary.totalWrong }
-                                                            ]}
-                                                            cx="50%"
-                                                            cy="50%"
-                                                            innerRadius={45}
-                                                            outerRadius={65}
-                                                            paddingAngle={8}
-                                                            dataKey="value"
-                                                        >
-                                                            <Cell fill="#F1C40F" stroke="none" />
-                                                            <Cell fill="rgba(255, 255, 255, 0.05)" stroke="none" />
-                                                        </Pie>
-                                                        <ChartTooltip 
-                                                            contentStyle={{ 
-                                                                background: 'rgba(20, 20, 20, 0.9)', 
-                                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                                borderRadius: '10px',
-                                                                fontSize: '12px',
-                                                                color: '#fff'
-                                                            }}
-                                                            itemStyle={{ color: '#fff' }}
-                                                            labelStyle={{ color: '#fff' }}
-                                                        />
-                                                    </PieChart>
-                                                </ResponsiveContainer>
-                                            </div>
-                                            <div className={styles.pieLegend}>
-                                                <div className={styles.legendItem}>
-                                                    <span className={styles.legendDot} style={{ background: '#F1C40F' }} />
-                                                    <span>{t('right_answers')}</span>
+                                            <div className={styles.analysisStatsRow}>
+                                                <div className={styles.analysisMiniCard}>
+                                                    <span className={styles.miniCardLabel}>{t('daily_xp')}</span>
+                                                    <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
+                                                        {analysisData.summary.totalXp}
+                                                    </span>
                                                 </div>
-                                                <div className={styles.legendItem}>
-                                                    <span className={styles.legendDot} style={{ background: 'rgba(255, 255, 255, 0.15)' }} />
-                                                    <span>{t('wrong_answers')}</span>
+                                                <div className={styles.analysisMiniCard}>
+                                                    <span className={styles.miniCardLabel}>{t('total_time')}</span>
+                                                    <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
+                                                        {analysisData.summary.totalMinutes} {t('minutes')}
+                                                    </span>
+                                                </div>
+                                                <div className={styles.analysisMiniCard}>
+                                                    <span className={styles.miniCardLabel}>{t('accuracy')}</span>
+                                                    <span className={styles.miniCardValue} style={{ color: '#2ECC71' }}>
+                                                        {Math.round((analysisData.summary.totalCorrect / (analysisData.summary.totalCorrect + analysisData.summary.totalWrong)) * 100)}%
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className={styles.chartCard}>
-                                            <h3 className={styles.chartTitle}>{t('learning_pattern')}</h3>
-                                            <div style={{ width: '100%', height: 150 }}>
-                                                <ResponsiveContainer>
-                                                    <BarChart data={analysisData.activity}>
-                                                        <XAxis 
-                                                            dataKey="activity_date" 
-                                                            hide 
-                                                        />
-                                                        <YAxis hide />
-                                                        <ChartTooltip 
-                                                            contentStyle={{ 
-                                                                background: 'rgba(20, 20, 20, 0.9)', 
-                                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                                borderRadius: '10px',
-                                                                fontSize: '10px',
-                                                                color: '#fff'
-                                                            }}
-                                                            itemStyle={{ color: '#fff' }}
-                                                            labelStyle={{ color: '#fff' }}
-                                                            cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                                                        />
-                                                        <Bar 
-                                                            dataKey="lessons_completed" 
-                                                            name={t('lessons_completed')}
-                                                            fill="#F1C40F" 
-                                                            radius={[4, 4, 0, 0]} 
-                                                            barSize={12}
-                                                            opacity={0.8}
-                                                        />
-                                                    </BarChart>
-                                                </ResponsiveContainer>
+                                        {/* \u2500\u2500 Section 2: XP Chart \u2500\u2500 */}
+                                        <div
+                                            className={styles.analysisSectionBlock}
+                                            data-section="xp"
+                                        >
+
+                                            <div className={styles.chartContainerFull}>
+                                                <h3 className={styles.chartTitle}>{t('daily_honey')}</h3>
+                                                <div style={{ width: '100%', height: 200 }}>
+                                                    <ResponsiveContainer>
+                                                        <AreaChart data={analysisData.activity}>
+                                                            <defs>
+                                                                <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
+                                                                    <stop offset="5%" stopColor="#F1C40F" stopOpacity={0.3} />
+                                                                    <stop offset="95%" stopColor="#F1C40F" stopOpacity={0} />
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <XAxis dataKey="activity_date" hide />
+                                                            <YAxis hide />
+                                                            <ChartTooltip
+                                                                contentStyle={{
+                                                                    background: 'rgba(20, 20, 20, 0.9)',
+                                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                                    borderRadius: '12px',
+                                                                    fontSize: '12px',
+                                                                    color: '#fff'
+                                                                }}
+                                                                itemStyle={{ color: '#fff' }}
+                                                                labelStyle={{ color: '#fff' }}
+                                                            />
+                                                            <Area
+                                                                type="monotone"
+                                                                dataKey="xp_earned"
+                                                                name={t('earned')}
+                                                                stroke="#F1C40F"
+                                                                fillOpacity={1}
+                                                                fill="url(#colorXp)"
+                                                                strokeWidth={3}
+                                                            />
+                                                        </AreaChart>
+                                                    </ResponsiveContainer>
+                                                </div>
                                             </div>
                                         </div>
+
+                                        {/* \u2500\u2500 Section 3: Accuracy \u2500\u2500 */}
+                                        <div
+                                            className={styles.analysisSectionBlock}
+                                            data-section="accuracy"
+                                        >
+
+                                            <div className={styles.chartCard}>
+                                                <h3 className={styles.chartTitle}>{t('accuracy')}</h3>
+                                                <div style={{ width: '100%', height: 150 }}>
+                                                    <ResponsiveContainer>
+                                                        <PieChart>
+                                                            <Pie
+                                                                data={[
+                                                                    { name: t('right_answers'), value: analysisData.summary.totalCorrect },
+                                                                    { name: t('wrong_answers'), value: analysisData.summary.totalWrong }
+                                                                ]}
+                                                                cx="50%"
+                                                                cy="50%"
+                                                                innerRadius={45}
+                                                                outerRadius={65}
+                                                                paddingAngle={8}
+                                                                dataKey="value"
+                                                            >
+                                                                <Cell fill="#F1C40F" stroke="none" />
+                                                                <Cell fill="rgba(255, 255, 255, 0.05)" stroke="none" />
+                                                            </Pie>
+                                                            <ChartTooltip
+                                                                contentStyle={{
+                                                                    background: 'rgba(20, 20, 20, 0.9)',
+                                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                                    borderRadius: '10px',
+                                                                    fontSize: '12px',
+                                                                    color: '#fff'
+                                                                }}
+                                                                itemStyle={{ color: '#fff' }}
+                                                                labelStyle={{ color: '#fff' }}
+                                                            />
+                                                        </PieChart>
+                                                    </ResponsiveContainer>
+                                                </div>
+                                                <div className={styles.pieLegend}>
+                                                    <div className={styles.legendItem}>
+                                                        <span className={styles.legendDot} style={{ background: '#F1C40F' }} />
+                                                        <span>{t('right_answers')}</span>
+                                                    </div>
+                                                    <div className={styles.legendItem}>
+                                                        <span className={styles.legendDot} style={{ background: 'rgba(255, 255, 255, 0.15)' }} />
+                                                        <span>{t('wrong_answers')}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* \u2500\u2500 Section 4: Pattern \u2500\u2500 */}
+                                        <div
+                                            className={styles.analysisSectionBlock}
+                                            data-section="pattern"
+                                        >
+
+                                            <div className={styles.chartCard}>
+                                                <h3 className={styles.chartTitle}>{t('learning_pattern')}</h3>
+                                                <div style={{ width: '100%', height: 150 }}>
+                                                    <ResponsiveContainer>
+                                                        <BarChart data={analysisData.activity}>
+                                                            <XAxis dataKey="activity_date" hide />
+                                                            <YAxis hide />
+                                                            <ChartTooltip
+                                                                contentStyle={{
+                                                                    background: 'rgba(20, 20, 20, 0.9)',
+                                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                                    borderRadius: '10px',
+                                                                    fontSize: '10px',
+                                                                    color: '#fff'
+                                                                }}
+                                                                itemStyle={{ color: '#fff' }}
+                                                                labelStyle={{ color: '#fff' }}
+                                                                cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+                                                            />
+                                                            <Bar
+                                                                dataKey="lessons_completed"
+                                                                name={t('lessons_completed')}
+                                                                fill="#F1C40F"
+                                                                radius={[4, 4, 0, 0]}
+                                                                barSize={12}
+                                                                opacity={0.8}
+                                                            />
+                                                        </BarChart>
+                                                    </ResponsiveContainer>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
+                                    <div style={{ height: 24 }} />
                                 </div>
                             ) : (
                                 <div className={styles.analysisEmpty}>
                                     <BarChart3 size={40} opacity={0.3} />
-                                    <p>এই সময়ে কোনো কার্যক্রম পাওয়া যায়নি</p>
+                                    <p>?? ????? ???? ????????? ?????? ??????</p>
                                 </div>
                             )}
                         </div>
@@ -862,196 +870,187 @@ const ProfilePage = () => {
 
                     {activeTab === 'activity' && (
                         <div className={styles.activityTabContent}>
-                            {isActivityLoading ? (
-                                <div className={styles.activityLoading}>
-                                    <InlineLoader />
+                            {/* Sticky Header */}
+                            <div className={styles.notifStickyHeader}>
+                                <div className={styles.notifHeaderRow}>
+                                    <span className={styles.notifCountLabel}>
+                                        {unreadCount > 0 ? `${unreadCount}টি আনরিড` : 'সব পড়া হয়েছে'}
+                                    </span>
+                                    {unreadCount > 0 && (
+                                        <button className={styles.markAllBtnMinimal} onClick={markAllAsRead}>
+                                            সব পড়া হল
+                                        </button>
+                                    )}
                                 </div>
-                            ) : (
-                                <div className={styles.subTabContent}>
-                                    {/* Filter Pills */}
-                                    <div className={styles.notifFilters}>
-                                        {[
-                                            { id: 'all', label: 'সব' },
-                                            { id: 'achievements', label: 'অ্যাচিভমেন্ট' },
-                                            { id: 'social', label: 'সোশ্যাল' },
-                                            { id: 'system', label: 'সিস্টেম' }
-                                        ].map(f => (
-                                            <button 
-                                                key={f.id}
-                                                className={`${styles.filterPill} ${notifFilter === f.id ? styles.filterPillActive : ''}`}
-                                                onClick={() => setNotifFilter(f.id)}
-                                            >
-                                                {f.label}
-                                            </button>
-                                        ))}
-                                    </div>
+                                {/* Filter pills */}
+                                <div className={styles.notifFilters}>
+                                    {[
+                                        { id: 'all', label: 'সব' },
+                                        { id: 'achievements', label: 'অ্যাচিভমেন্ট' },
+                                        { id: 'social', label: 'সোশ্যাল' },
+                                        { id: 'system', label: 'সিস্টেম' }
+                                    ].map(f => (
+                                        <button
+                                            key={f.id}
+                                            className={`${styles.filterPill} ${notifFilter === f.id ? styles.filterPillActive : ''}`}
+                                            onClick={() => setNotifFilter(f.id)}
+                                        >
+                                            {f.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
 
-                                    <div className={styles.notifList}>
-                                        <div className={styles.notifHeaderRow}>
-                                            <h3 className={styles.notifCountLabel}>
-                                                {unreadCount > 0 ? `${unreadCount}টি আনরিড` : 'সব পড়া হয়েছে'}
-                                            </h3>
-                                            {notifications.length > 0 && unreadCount > 0 && (
-                                                <button className={styles.markAllBtnMinimal} onClick={markAllAsRead}>
-                                                    মার্ক অল রিড
-                                                </button>
-                                            )}
-                                        </div>
+                            {/* Scrollable content */}
+                            <div ref={notifScrollRef} className={styles.notifScrollBody}>
+                                {isActivityLoading ? (
+                                    <div className={styles.activityLoading}><InlineLoader /></div>
+                                ) : (() => {
+                                    const filtered = notifications.filter(n => {
+                                        if (notifFilter === 'all') return true;
+                                        if (notifFilter === 'achievements') return ['reward', 'streak'].includes(n.type);
+                                        if (notifFilter === 'social') return ['connection', 'message'].includes(n.type);
+                                        if (notifFilter === 'system') return ['system', 'course'].includes(n.type);
+                                        return true;
+                                    });
 
-                                        {(() => {
-                                            const filtered = notifications.filter(n => {
-                                                if (notifFilter === 'all') return true;
-                                                if (notifFilter === 'achievements') return ['reward', 'streak'].includes(n.type);
-                                                if (notifFilter === 'social') return ['connection', 'message'].includes(n.type);
-                                                if (notifFilter === 'system') return ['system', 'course'].includes(n.type);
-                                                return true;
-                                            });
+                                    if (filtered.length === 0) {
+                                        return (
+                                            <div className={styles.emptyState}>
+                                                <Bell size={36} opacity={0.15} />
+                                                <p>কোনো নটিফিকেশন নেই</p>
+                                            </div>
+                                        );
+                                    }
 
-                                            if (filtered.length === 0) {
-                                                return (
-                                                    <div className={styles.emptyState}>
-                                                        <Bell size={40} opacity={0.2} />
-                                                        <p>কোনো নটিফিকেশন পাওয়া যায়নি</p>
-                                                    </div>
-                                                );
-                                            }
+                                    const groups = filtered.reduce((acc, notif) => {
+                                        const d = new Date(notif.created_at);
+                                        const today = new Date();
+                                        const yesterday = new Date(today);
+                                        yesterday.setDate(yesterday.getDate() - 1);
+                                        let key = 'আগে';
+                                        if (d.toDateString() === today.toDateString()) key = 'আজ';
+                                        else if (d.toDateString() === yesterday.toDateString()) key = 'গতকাল';
+                                        if (!acc[key]) acc[key] = [];
+                                        acc[key].push(notif);
+                                        return acc;
+                                    }, {});
 
-                                            const groups = filtered.reduce((acc, notif) => {
-                                                const d = new Date(notif.created_at);
-                                                const today = new Date();
-                                                const yesterday = new Date(today);
-                                                yesterday.setDate(yesterday.getDate() - 1);
+                                    return Object.entries(groups).map(([groupName, items]) => (
+                                        <div key={groupName} className={styles.notifGroup}>
+                                            <h5 className={styles.groupHeading}>{groupName}</h5>
+                                            <div className={styles.groupItems}>
+                                                {items.map(notif => (
+                                                    <div
+                                                        key={notif.id}
+                                                        className={`${styles.notifRow} ${!notif.is_read ? styles.notifRowUnread : ''}`}
+                                                        onClick={() => !notif.is_read && markAsRead(notif.id)}
+                                                    >
+                                                        {/* Unread dot */}
+                                                        <div className={styles.notifUnreadDot}>
+                                                            {!notif.is_read && <div className={styles.unreadDot} />}
+                                                        </div>
 
-                                                let key = 'এর আগে';
-                                                if (d.toDateString() === today.toDateString()) key = 'আজ';
-                                                else if (d.toDateString() === yesterday.toDateString()) key = 'গতকাল';
+                                                        {/* Icon */}
+                                                        <div className={styles.notifTypeIcon} style={{
+                                                            background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
+                                                                notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
+                                                                    notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
+                                                                        'rgba(52,152,219,0.08)'
+                                                        }}>
+                                                            {notif.actor?.avatar_url ? (
+                                                                <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
+                                                            ) : (
+                                                                <>
+                                                                    {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
+                                                                    {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
+                                                                    {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
+                                                                    {!['reward', 'streak', 'course'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
+                                                                </>
+                                                            )}
+                                                        </div>
 
-                                                if (!acc[key]) acc[key] = [];
-                                                acc[key].push(notif);
-                                                return acc;
-                                            }, {});
+                                                        {/* Text */}
+                                                        <div className={styles.notifRowText}>
+                                                            <span className={styles.nTitle}>
+                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
+                                                                    ? 'নতুন কানেকশন অনুরোধ!'
+                                                                    : notif.title}
+                                                            </span>
+                                                            <span className={styles.nMsg}>
+                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
+                                                                    ? `${notif.actor?.full_name || 'কেউ একজন'} আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।`
+                                                                    : notif.message}
+                                                            </span>
 
-                                            return Object.entries(groups).map(([groupName, items]) => (
-                                                <div key={groupName} className={styles.notifGroup}>
-                                                    <h5 className={styles.groupHeading}>{groupName}</h5>
-                                                    <div className={styles.groupItems}>
-                                                        {items.map(notif => (
-                                                            <div 
-                                                                key={notif.id} 
-                                                                className={`${styles.notifCard} ${!notif.is_read ? styles.unreadCard : ''}`}
-                                                                onClick={() => !notif.is_read && markAsRead(notif.id)}
-                                                            >
-                                                                <div className={styles.notifMainRow}>
-                                                                    <div className={styles.actorAvatar}>
-                                                                        {notif.actor?.avatar_url ? (
-                                                                            <img src={notif.actor.avatar_url} alt="actor" />
-                                                                        ) : (
-                                                                            <div className={styles.typeIconWrap} style={{
-                                                                                background: notif.type === 'reward' ? 'rgba(241, 196, 15, 0.1)' :
-                                                                                            notif.type === 'streak' ? 'rgba(230, 126, 34, 0.1)' :
-                                                                                            notif.type === 'course' ? 'rgba(46, 204, 113, 0.1)' : 'rgba(52, 152, 219, 0.1)'
-                                                                            }}>
-                                                                                {notif.type === 'reward' && <Trophy size={16} color="#F1C40F" />}
-                                                                                {notif.type === 'streak' && <Flame size={16} color="#E67E22" />}
-                                                                                {notif.type === 'course' && <BookOpen size={16} color="#2ECC71" />}
-                                                                                {(!['reward', 'streak', 'course'].includes(notif.type)) && <Bell size={16} color="#3498DB" />}
-                                                                            </div>
-                                                                        )}
-                                                                        {!notif.is_read && <div className={styles.unreadIndicator} />}
-                                                                    </div>
-                                                                    
-                                                                    <div className={styles.notifContent}>
-                                                                        <div className={styles.notifTextContainer}>
-                                                                            <h4 className={styles.nTitle}>{notif.title}</h4>
-                                                                            <p className={styles.nMsg}>{notif.message}</p>
-                                                                            <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
-                                                                        </div>
+                                                            {/* Actions */}
 
-                                                                        {/* Action Buttons */}
-                                                                        {notif.type === 'connection' && notif.data?.status === 'pending' && (
-                                                                            <div className={styles.notifActions}>
-                                                                                <button 
-                                                                                    className={styles.acceptBtnSmall}
-                                                                                    onClick={(e) => {
-                                                                                        e.stopPropagation();
-                                                                                        respondToConnectionRequest(notif.id, notif.data.connection_id, 'accepted', notif.actor_id);
-                                                                                    }}
-                                                                                >
-                                                                                    গ্রহণ করুন
-                                                                                </button>
-                                                                                <button 
-                                                                                    className={styles.declineBtnSmall}
-                                                                                    onClick={(e) => {
-                                                                                        e.stopPropagation();
-                                                                                        respondToConnectionRequest(notif.id, notif.data.connection_id, 'rejected');
-                                                                                    }}
-                                                                                >
-                                                                                    বাতিল
-                                                                                </button>
-                                                                            </div>
-                                                                        )}
-
-                                                                        {notif.type === 'connection' && notif.data?.status === 'accepted' && (
-                                                                            <div className={styles.respondedStatus}>
-                                                                                <Check size={14} strokeWidth={3} />
-                                                                                <span>সংযুক্ত হয়েছেন</span>
-                                                                            </div>
-                                                                        )}
-
-                                                                        {notif.type === 'reward' && (
-                                                                            <button 
-                                                                                className={styles.actionLink}
-                                                                                onClick={() => navigate('/shop')}
-                                                                            >
-                                                                                শপ দেখুন <ChevronRight size={12} />
-                                                                            </button>
-                                                                        )}
-                                                                    </div>
-
-                                                                    <button 
-                                                                        type="button"
-                                                                        className={styles.deleteNotif}
-                                                                        onClick={(e) => {
-                                                                            e.preventDefault();
-                                                                            e.stopPropagation();
-                                                                            deleteNotification(notif.id);
-                                                                        }}
-                                                                        title="Delete"
-                                                                    >
-                                                                        <X size={14} />
-                                                                    </button>
+                                                            {notif.type === 'connection' && notif.data?.status === 'accepted' && (
+                                                                <div className={styles.respondedStatus}>
+                                                                    <Check size={12} strokeWidth={3} />
+                                                                    <span>সংযুক্ত হয়েছেন</span>
                                                                 </div>
-                                                            </div>
-                                                        ))}
+                                                            )}
+                                                            {notif.type === 'reward' && (
+                                                                <button className={styles.actionLink} onClick={() => navigate('/shop')}>
+                                                                    শপ দেখুন <ChevronRight size={11} />
+                                                                </button>
+                                                            )}
+
+                                                            {notif.type === 'connection' && notif.data?.status === 'pending' && (
+                                                                <button
+                                                                    className={styles.actionLink}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        navigate('?tab=connection&sub=received');
+                                                                        if (!notif.is_read) markAsRead(notif.id);
+                                                                    }}
+                                                                >
+                                                                    দেখুন <ChevronRight size={11} />
+                                                                </button>
+                                                            )}
+
+                                                            <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
+                                                        </div>
+
+                                                        {/* Delete */}
+                                                        <button
+                                                            type="button"
+                                                            className={styles.deleteNotif}
+                                                            onClick={e => { e.preventDefault(); e.stopPropagation(); deleteNotification(notif.id); }}
+                                                        >
+                                                            <X size={13} />
+                                                        </button>
                                                     </div>
-                                                </div>
-                                            ));
-                                        })()}
-                                    </div>
-                                </div>
-                            )}
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ));
+                                })()}
+                                <div style={{ height: 24 }} />
+                            </div>
                         </div>
                     )}
 
                     {activeTab === 'connection' && (
-                        <LearnerConnection 
-                            user={user} 
+                        <LearnerConnection
+                            user={user}
                             userXp={profile?.xp || 0}
-                            onSelectLearner={setSelectedLearner} 
+                            onSelectLearner={setSelectedLearner}
                         />
                     )}
 
                     {/* Learner Profile Modal */}
                     <AnimatePresence>
                         {selectedLearner && (
-                            <motion.div 
+                            <motion.div
                                 className={styles.modalOverlay}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
                                 onClick={() => setSelectedLearner(null)}
                             >
-                                <motion.div 
+                                <motion.div
                                     className={styles.learnerModal}
                                     initial={{ scale: 0.9, y: 20 }}
                                     animate={{ scale: 1, y: 0 }}
@@ -1061,7 +1060,7 @@ const ProfilePage = () => {
                                     <button className={styles.modalClose} onClick={() => setSelectedLearner(null)}>
                                         <X size={20} />
                                     </button>
-                                    
+
                                     <div className={styles.learnerHeader}>
                                         <div className={styles.lAvatarLarge}>
                                             {selectedLearner.avatar_url ? <img src={selectedLearner.avatar_url} /> : <User size={48} color="#F1C40F" />}

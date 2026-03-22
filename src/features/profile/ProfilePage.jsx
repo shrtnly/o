@@ -24,6 +24,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel } from '../../utils/shieldSystem';
 import { motion, AnimatePresence } from 'framer-motion';
 import LearnerConnection from './components/LearnerConnection';
+import CertificateCard from './components/CertificateCard';
+import CertificateViewer from './components/CertificateViewer';
 import {
     ResponsiveContainer, AreaChart, Area, XAxis, YAxis,
     CartesianGrid, Tooltip as ChartTooltip, PieChart, Pie, Cell,
@@ -57,6 +59,9 @@ const ProfilePage = () => {
     const [showShareCard, setShowShareCard] = useState(false);
     const [globalRank, setGlobalRank] = useState('—');
     const [activeTab, setActiveTab] = useState('general');
+    const [certificates, setCertificates] = useState([]);
+    const [viewingCert, setViewingCert] = useState(null);
+    const [certTab, setCertTab] = useState('earned'); // 'earned' or 'progress'
 
     const [analysisData, setAnalysisData] = useState(null);
     const [analysisDays, setAnalysisDays] = useState('all');
@@ -137,8 +142,18 @@ const ProfilePage = () => {
             setStats(userStats);
             const streakData = await rewardService.getUserStreak(user.id);
             setStreak(streakData);
-            const courseProgress = await courseService.getUserEnrolledCourses(user.id);
-            setEnrolledCourses(courseProgress);
+            const { data: courseProgress } = await supabase
+                .from('user_course_progress')
+                .select('*')
+                .eq('user_id', user.id);
+            setEnrolledCourses(courseProgress || []);
+
+            // Fetch certificates
+            const { data: certData } = await supabase
+                .from('certificates')
+                .select('*, courses(title)')
+                .eq('user_id', user.id);
+            setCertificates(certData || []);
 
             // Fetch real rank from leaderboard
             try {
@@ -333,10 +348,17 @@ const ProfilePage = () => {
     }, [user?.id, fetchConnectionBadgeData]);
 
 
-    // Calculate Completed Courses for Certification
-    const completedCourses = enrolledCourses.filter(course =>
-        Number(course.progress_percentage || 0) >= 100
-    );
+    // Map enrolled courses with their certificate data if available
+    const certificatesWithStatus = enrolledCourses.map(course => {
+        const cert = certificates.find(c => c.course_id === course.course_id);
+        const progress = Number(course.progress_percentage || 0);
+        return {
+            ...course,
+            isLocked: !cert && progress < 100,
+            certificate: cert,
+            progress: progress
+        };
+    }).sort((a, b) => (b.progress - a.progress));
 
     // Calculate Badges Unlocked Status
     const badges = BADGE_DEFS.map(badge => {
@@ -570,55 +592,70 @@ const ProfilePage = () => {
 
                             {/* ========== SECTION 6: CERTIFICATIONS ========== */}
                             <section className={styles.certsSection}>
-                                <h2 className={styles.sectionTitle}>
-                                    <span>🎓</span> {t('earned_certificates')}
-                                </h2>
-                                {completedCourses.length > 0 ? (
+                                <div className={styles.sectionTitle}>
+                                    <div className={styles.sectionTitleLeft}>
+                                        {t('earned_certificates')}
+                                    </div>
+                                    <div className={styles.certTabs}>
+                                        <button 
+                                            className={`${styles.certTab} ${certTab === 'earned' ? styles.certTabActive : ''}`}
+                                            onClick={() => setCertTab('earned')}
+                                        >
+                                            {language === 'bn' ? 'অর্জিত' : 'Earned'}
+                                        </button>
+                                        <button 
+                                            className={`${styles.certTab} ${certTab === 'progress' ? styles.certTabActive : ''}`}
+                                            onClick={() => setCertTab('progress')}
+                                        >
+                                            {language === 'bn' ? 'চলমান' : 'Ongoing'}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {certificatesWithStatus.filter(c => certTab === 'earned' ? !c.isLocked : c.isLocked).length > 0 ? (
                                     <div className={styles.certsGrid}>
-                                        {completedCourses.map((course) => (
-                                            <div key={course.course_id} className={styles.certCard}>
-                                                <div className={styles.certIconContainer}>
-                                                    <Award size={24} />
-                                                </div>
-                                                <div className={styles.certInfo}>
-                                                    <h3 className={styles.certTitle}>{course.course_title}</h3>
-                                                    <p className={styles.certDate}>
-                                                        কোর্সের সকল অধ্যায় সফলভাবে সম্পন্ন হয়েছে
-                                                    </p>
-                                                </div>
-                                                <div className={styles.certBadge}>
-                                                    <Shield size={16} fill="#F1C40F" stroke="#F1C40F" />
-                                                </div>
-                                            </div>
-                                        ))}
+                                        {certificatesWithStatus
+                                            .filter(c => certTab === 'earned' ? !c.isLocked : c.isLocked)
+                                            .map((course) => (
+                                                <CertificateCard 
+                                                    key={course.course_id} 
+                                                    course={course} 
+                                                    onOpen={(c) => setViewingCert(c)}
+                                                />
+                                            ))}
                                     </div>
                                 ) : (
                                     <div className={styles.noCertsWrapper}>
-                                        <div className={styles.certIconContainer} style={{ opacity: 0.3 }}>
+                                        <div className={styles.certIconContainer} style={{ opacity: 0.2 }}>
                                             <Award size={32} />
                                         </div>
                                         <p className={styles.noCertsText}>
-                                            {t('no_certificates')}
+                                            {certTab === 'earned' 
+                                                ? t('no_certificates') 
+                                                : (language === 'bn' ? 'বর্তমানে কোনো কোর্স চলমান নেই।' : 'No courses currently in progress.')}
                                         </p>
                                     </div>
                                 )}
                             </section>
 
+                            <AnimatePresence>
+                                {viewingCert && (
+                                    <CertificateViewer 
+                                        certificate={viewingCert}
+                                        learnerName={profile?.full_name || 'Learner'}
+                                        onClose={() => setViewingCert(null)}
+                                    />
+                                )}
+                            </AnimatePresence>
+
                             {/* ========== SECTION 5: ACTIONS & SETTINGS ========== */}
                             <section className={styles.actionsSection}>
-                                <button className={styles.actionOutline}
-                                    onClick={() => setIsEditModalOpen(true)}>
-                                    <Edit3 size={16} />
-                                    প্রোফাইল এডিট করুন
-                                </button>
+
                                 <button className={styles.actionOutline} onClick={sendTestNotification}>
                                     <Bell size={16} />
                                     টেস্ট নটিফিকেশন
                                 </button>
-                                <button className={styles.actionSolid}>
-                                    <Users size={16} />
-                                    বন্ধুদের চ্যালেঞ্জ করুন
-                                </button>
+                               
                             </section>
 
                             {/* Bottom Spacer for extra scrolling room */}
@@ -862,7 +899,7 @@ const ProfilePage = () => {
                             ) : (
                                 <div className={styles.analysisEmpty}>
                                     <BarChart3 size={40} opacity={0.3} />
-                                    <p>?? ????? ???? ????????? ?????? ??????</p>
+                                    <p>{language === 'bn' ? 'কোনো ডেটা পাওয়া যায়নি' : 'No data available'}</p>
                                 </div>
                             )}
                         </div>

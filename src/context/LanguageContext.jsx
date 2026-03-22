@@ -127,7 +127,7 @@ const translations = {
         tab_connection: "সংযোগ",
         
         certification: "সার্টিফিকেশন",
-        earned_certificates: "অর্জিত সার্টিফিকেট",
+        earned_certificates: "সার্টিফিকেট",
         no_certificates: "আপনি এখনও কোনো সার্টিফিকেট অর্জন করেননি।",
         
         analysis_ov: "অ্যাক্টিভিটি অ্যানালাইসিস",

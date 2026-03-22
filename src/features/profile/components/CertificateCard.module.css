@@ -1,0 +1,206 @@
+.card {
+    position: relative;
+    background: #0D0D0D;
+    border: 1.2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 160px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* --- Certificate Ornaments --- */
+.cornerTopLeft, .cornerTopRight, .cornerBottomLeft, .cornerBottomRight {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 1px solid rgba(241, 196, 15, 0.4);
+    opacity: 0.6;
+}
+
+.cornerTopLeft { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
+.cornerTopRight { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+.cornerBottomLeft { bottom: 8px; left: 8px; border-right: 0; border-top: 0; }
+.cornerBottomRight { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(241, 196, 15, 0.4);
+}
+
+.unlocked {
+    cursor: pointer;
+}
+
+.locked {
+    opacity: 0.85;
+    background: #181818;
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.locked .cornerTopLeft, .locked .cornerTopRight, .locked .cornerBottomLeft, .locked .cornerBottomRight {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.cardContent {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.labelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.badgeContainerMini {
+    display: flex;
+    align-items: center;
+}
+
+.lockIconMini {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.awardIconMini {
+    color: #F1C40F;
+}
+
+.body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    gap: 8px;
+}
+
+.certLabel {
+    font-size: 8px;
+    font-weight: 800;
+    color: #F1C40F;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.locked .certLabel {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.courseTitle {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #fff;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.recipientInfo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(46, 204, 113, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+.recipientInfo span {
+    font-size: 10px;
+    font-weight: 700;
+    color: #2ECC71;
+    text-transform: uppercase;
+}
+
+.checkIcon {
+    color: #2ECC71;
+}
+
+.progressBrander {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progressLabel {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+}
+
+.miniProgressBar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.miniProgressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #F1C40F, #F39C12);
+    border-radius: inherit;
+}
+
+.progressPercent {
+    font-size: 12px;
+    font-weight: 800;
+    color: #F1C40F;
+}
+
+.footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 12px;
+    margin-top: 12px;
+}
+
+.footerInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footerItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.viewPrompt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    color: #F1C40F;
+    letter-spacing: 0.5px;
+}
+
+.continuePrompt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+
+.card:hover .miniProgressFill {
+    opacity: 0.9;
+}

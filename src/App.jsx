@@ -23,6 +23,7 @@ import GuestCoursePage from './features/courses/GuestCoursePage';
 import SettingsPage from './features/settings/SettingsPage';
 import HelpPage from './features/help/HelpPage';
 import StreakPage from './features/learning/pages/StreakPage';
+import CertificateVerificationPage from './features/profile/pages/CertificateVerificationPage';
 
 import ResetPassword from './features/auth/ResetPassword';
 import TermsPage from './features/legal/TermsPage';
@@ -108,6 +109,7 @@ const AppContent = () => {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/survey/:courseId" element={<Survey />} />
+          <Route path="/verify/:code" element={<CertificateVerificationPage />} />
 
           {/* All protected routes inside MainLayout to ensure Sidebar stays stable */}
           <Route element={<MainLayout />}>

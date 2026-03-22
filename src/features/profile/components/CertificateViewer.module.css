@@ -1,0 +1,517 @@
+@import url('https://fonts.googleapis.com/css2?family=Imperial+Script&display=swap');
+
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modalContent {
+    background: #121212;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+.header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modalTitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+}
+
+.closeBtn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.closeBtn:hover {
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.certWrapper {
+    padding: 20px;
+    background: #0a0a0a;
+}
+
+/* THE ACTUAL CERTIFICATE (Capture Target) */
+.certificate {
+    background: #fff;
+    width: 100%;
+    aspect-ratio: 1.414 / 1;
+    /* A4 aspect ratio */
+    min-height: 500px;
+    padding: 30px;
+    font-family: 'Times New Roman', serif;
+    /* Or something professional if available, else standard serif */
+    color: #000;
+}
+
+.certInner {
+    height: 100%;
+    border: 3px double #d4af37;
+    /* Golden double border */
+    padding: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: radial-gradient(circle, #fff 0%, #f9f9f9 100%);
+}
+
+/* Border Ornaments */
+.borderDecorTL,
+.borderDecorTR,
+.borderDecorBL,
+.borderDecorBR {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* We'll use CSS shapes to create some ornaments if no SVG assets */
+.borderDecorTL {
+    top: -10px;
+    left: -10px;
+    border-top: 15px solid #d4af37;
+    border-left: 15px solid #d4af37;
+}
+
+.borderDecorTR {
+    top: -10px;
+    right: -10px;
+    border-top: 15px solid #d4af37;
+    border-right: 15px solid #d4af37;
+}
+
+.borderDecorBL {
+    bottom: -10px;
+    left: -10px;
+    border-bottom: 15px solid #d4af37;
+    border-left: 15px solid #d4af37;
+}
+
+.borderDecorBR {
+    bottom: -10px;
+    right: -10px;
+    border-bottom: 15px solid #d4af37;
+    border-right: 15px solid #d4af37;
+}
+
+.logoSection {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.logoImgBox {
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
+
+.certLogoImg {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+.logoText {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: -0.5px;
+}
+
+.mainHeading {
+    font-size: 40px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.subtext {
+    font-size: 24px;
+    font-style: italic;
+    color: #555;
+    margin-bottom: 0px;
+}
+
+.learnerName {
+    font-size: 84px;
+    font-weight: 600;
+    font-family: 'Imperial Script', cursive;
+    color: #ffd210;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 0px;
+    line-height: 1;
+    border-bottom: 2px solid rgba(255, 210, 16, 0.2);
+    display: inline-block;
+}
+
+.courseDetails {
+    font-size: 22px;
+    line-height: 1.6;
+    color: #444;
+    margin-bottom: 30px;
+}
+
+.highlight {
+    color: #ffd210;
+    font-weight: 700;
+}
+
+.certFooter {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 0px;
+    margin-bottom: 50px;
+}
+
+.qrSection {
+    display: flex;
+    align-items: center;
+    text-align: right;
+}
+
+.qrCode {
+    background: #fff;
+    padding: 5px;
+    border: 1px solid #eee;
+}
+
+
+.signatureSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.signatureBox {
+    height: 60px;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: -5px;
+}
+
+.signatureImg {
+    max-height: 100%;
+    width: auto;
+    mix-blend-mode: multiply;
+    /* Helps blend signature with potential backgrounds */
+}
+
+.signatureLine {
+    width: 200px;
+    height: 1px;
+    background: #ddd;
+    margin-bottom: 8px;
+}
+
+.signatureLabel {
+    font-size: 14px;
+    color: #666;
+    margin: 0;
+}
+
+.siteUrl {
+    color: #ffd210;
+    font-weight: 600;
+    font-size: 12px;
+    margin: 0;
+}
+
+/* Actions Section */
+.actions {
+    padding: 24px;
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.downloadBtn {
+    flex: 1;
+    background: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.downloadBtn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+}
+
+.shareBtn,
+.copyBtn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.shareBtn:hover,
+.copyBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .modalContent {
+        max-width: 100%;
+        margin: 20px 0;
+        height: auto;
+        max-height: 95vh;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .certWrapper {
+        padding: 10px;
+        flex: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #000;
+        overflow: visible;
+    }
+
+    .certificate {
+        width: 100%;
+        min-width: 0;
+        min-height: auto;
+        padding: 8px; /* Even tighter for mobile */
+        aspect-ratio: 1.414 / 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .certInner {
+        border-width: 2px; /* Thinner for mobile */
+        padding: 8px; /* Maximise content area */
+    }
+
+    /* Adjust ornaments more precisely for mobile */
+    .borderDecorTL,
+    .borderDecorTR,
+    .borderDecorBL,
+    .borderDecorBR {
+        width: 25px;
+        height: 25px;
+    }
+
+    .borderDecorTL {
+        top: -3px;
+        left: -3px;
+        border-top-width: 6px;
+        border-left-width: 6px;
+    }
+
+    .borderDecorTR {
+        top: -3px;
+        right: -3px;
+        border-top-width: 6px;
+        border-right-width: 6px;
+    }
+
+    .borderDecorBL {
+        bottom: -3px;
+        left: -3px;
+        border-bottom-width: 6px;
+        border-left-width: 6px;
+    }
+
+    .borderDecorBR {
+        bottom: -3px;
+        right: -3px;
+        border-bottom-width: 6px;
+        border-right-width: 6px;
+    }
+
+    .logoSection {
+        margin-top: 5px;
+        margin-bottom: 2px;
+    }
+
+    .logoImgBox {
+        height: 25px;
+    }
+
+    .mainHeading {
+        font-size: 14px;
+        margin-bottom: 5px;
+        letter-spacing: 1px;
+    }
+
+    .subtext {
+        font-size: 9px;
+        margin-bottom: 5px;
+    }
+
+    .learnerName {
+        font-size: 28px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+    }
+
+    .courseDetails {
+        font-size: 9px;
+        margin-bottom: 10px;
+        line-height: 1.4;
+    }
+
+    .certFooter {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 10px;
+    }
+
+    .signatureBox {
+        height: 25px;
+    }
+
+    .signatureLine {
+        width: 70px;
+    }
+
+    .signatureLabel, .siteUrl {
+        font-size: 7px;
+    }
+
+    .qrCode svg {
+        width: 40px !important;
+        height: 40px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .actions {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .downloadBtn, .shareBtn, .copyBtn {
+        width: 100%;
+        padding: 10px;
+        justify-content: center;
+        font-size: 14px;
+    }
+}
+/* Forcing Desktop Styles During Download on any device */
+.isDesktopCapture {
+    width: 1056px !important;
+    height: 747px !important;
+    padding: 40px !important;
+    background: #fff !important;
+}
+
+.isDesktopCapture .certInner {
+    padding: 30px !important;
+    border: 3px double #d4af37 !important;
+}
+
+.isDesktopCapture .borderDecorTL,
+.isDesktopCapture .borderDecorTR,
+.isDesktopCapture .borderDecorBL,
+.isDesktopCapture .borderDecorBR {
+    width: 60px !important;
+    height: 60px !important;
+    position: absolute !important;
+}
+
+.isDesktopCapture .borderDecorTL {
+    top: -10px !important;
+    left: -10px !important;
+    border-top: 15px solid #d4af37 !important;
+    border-left: 15px solid #d4af37 !important;
+}
+
+.isDesktopCapture .borderDecorTR {
+    top: -10px !important;
+    right: -10px !important;
+    border-top: 15px solid #d4af37 !important;
+    border-right: 15px solid #d4af37 !important;
+    left: auto !important;
+}
+
+.isDesktopCapture .borderDecorBL {
+    bottom: -10px !important;
+    left: -10px !important;
+    border-bottom: 15px solid #d4af37 !important;
+    border-left: 15px solid #d4af37 !important;
+    top: auto !important;
+}
+
+.isDesktopCapture .borderDecorBR {
+    bottom: -10px !important;
+    right: -10px !important;
+    border-bottom: 15px solid #d4af37 !important;
+    border-right: 15px solid #d4af37 !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+.isDesktopCapture .logoImgBox { height: 80px !important; }
+.isDesktopCapture .mainHeading { font-size: 42px !important; }
+.isDesktopCapture .learnerName { font-size: 68px !important; margin: 25px 0 !important; }
+.isDesktopCapture .subtext, .isDesktopCapture .courseDetails { font-size: 18px !important; }
+.isDesktopCapture .signatureBox { height: 60px !important; }
+.isDesktopCapture .signatureLine { width: 220px !important; }
+.isDesktopCapture .signatureLabel, .isDesktopCapture .siteUrl { font-size: 14px !important; }
+.isDesktopCapture .qrCode svg { width: 110px !important; height: 110px !important; }

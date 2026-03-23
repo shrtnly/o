@@ -263,8 +263,20 @@
 .actions {
     padding: 24px;
     display: flex;
-    gap: 12px;
+    flex-direction: column;
+    gap: 16px;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btnGroup {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.shareWrapper {
+    position: relative;
+    flex: 1;
 }
 
 .downloadBtn {
@@ -288,8 +300,8 @@
     opacity: 0.95;
 }
 
-.shareBtn,
-.copyBtn {
+.shareBtn {
+    width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -299,13 +311,116 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: all 0.2s;
 }
 
-.shareBtn:hover,
-.copyBtn:hover {
+.copyBtn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
+    padding: 10px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.shareBtn:hover {
     background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.copyBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.shareMenu {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    right: 0;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 16px;
+    width: 240px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    z-index: 10;
+}
+
+.shareMenu::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 40px;
+    border: 8px solid transparent;
+    border-top-color: #1a1a1a;
+}
+
+.shareMenuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.shareMenuHeader span {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.shareMenuHeader button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    padding: 4px;
+}
+
+.shareOptions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.shareOptions button {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shareOptions button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.shareMenuTip {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.shareMenuTip span {
+    font-size: 11px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.4);
+    display: block;
+    text-align: center;
 }
 
 @media (max-width: 768px) {
@@ -443,14 +558,31 @@
     .actions {
         padding: 15px;
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
+    }
+
+    .btnGroup {
+        flex-direction: column;
     }
 
     .downloadBtn, .shareBtn, .copyBtn {
         width: 100%;
-        padding: 10px;
+        padding: 12px;
         justify-content: center;
         font-size: 14px;
+    }
+
+    .shareMenu {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+        transform: none !important;
+    }
+
+    .shareMenu::after {
+        display: none;
     }
 }
 /* Forcing Desktop Styles During Download on any device */

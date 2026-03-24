@@ -644,7 +644,7 @@ const ShopPage = () => {
                                     <div className={styles.successLottie} style={{ background: 'rgba(241,196,15,0.05)', borderRadius: '50%', padding: '20px' }}>
                                         <PollenIcon size={100} />
                                     </div>
-                                    <h2 className={styles.successTitle} style={{ color: '#fff', fontSize: '1.6rem' }}>পর্যাপ্ত মধুরেণু নেই</h2>
+                                    <h2 className={styles.successTitle} style={{ color: 'var(--color-text)', fontSize: '1.6rem' }}>পর্যাপ্ত মধুরেণু নেই</h2>
                                     <p className={styles.successDesc}>
                                         হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> মধুরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? 'কিং বী মোড' : 'কুইন বী মোড'} নিন।
                                     </p>

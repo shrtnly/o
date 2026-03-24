@@ -68,13 +68,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 4px;
 }
 
 .headerMascotSmall {
     width: 110px;
     height: 110px;
-    filter: drop-shadow(0 0 15px rgba(241, 196, 15, 0.4));
 }
 
 .headerTitle {
@@ -92,7 +91,7 @@
     color: var(--color-text-muted);
     font-size: 1.1rem;
     font-weight: 500;
-    margin-top: 8px;
+    margin-top: 0;
     max-width: 400px;
     line-height: 1.5;
 }
@@ -1440,3 +1439,178 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================================
+   LIGHT MODE OVERRIDES
+   ========================================================================= */
+:global(.light) .shopText,
+:global(.light) .headerTitle {
+    background: linear-gradient(135deg, #333 0%, #666 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+:global(.light) .sectionTitle,
+:global(.light) .superTitle,
+:global(.light) .qbTitleHero {
+    color: var(--color-text);
+}
+
+:global(.light) .headerSub,
+:global(.light) .packName,
+:global(.light) .successDesc,
+:global(.light) .summaryRow,
+:global(.light) .checkoutHeader p {
+    color: var(--color-text-muted);
+}
+
+:global(.light) .convertCard {
+    border-bottom: 8px solid var(--color-border);
+}
+
+:global(.light) .premiumCard {
+    background: linear-gradient(135deg, #fff8ec 0%, #ffffff 100%);
+    box-shadow: 0 20px 50px rgba(255, 162, 2, 0.1);
+}
+
+:global(.light) .packCard {
+    background: linear-gradient(135deg, #ffffff 0%, #fffcf5 40%, #fff7eb 100%);
+    border-color: rgba(255, 162, 2, 0.3);
+    border-bottom-color: rgba(255, 162, 2, 0.5);
+    box-shadow: 0 8px 24px rgba(255, 162, 2, 0.08);
+}
+
+:global(.light) .packCard:hover {
+    background: linear-gradient(135deg, #fffcf5 0%, #fff7ea 40%, #ffefd4 100%);
+    border-color: rgba(255, 162, 2, 0.6);
+    box-shadow: 0 16px 40px rgba(255, 162, 2, 0.15);
+}
+
+:global(.light) .packAmount {
+    color: var(--color-text);
+}
+
+:global(.light) .feature {
+    color: var(--color-text);
+}
+
+:global(.light) .featureIcon {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .convertCenter {
+    color: var(--color-text-muted);
+}
+
+:global(.light) .convertCard:hover .convertCenter {
+    color: #ffa202;
+}
+
+:global(.light) .gemInputDisplay {
+    background: var(--color-bg);
+    border: 2px solid var(--color-border);
+    color: var(--color-text);
+}
+
+:global(.light) .gemInputDisplay span {
+    color: var(--color-text);
+}
+
+:global(.light) .stepBtn {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+:global(.light) .stepBtn:hover:not(:disabled) {
+    background: #ffa202;
+    border-color: #ffa202;
+    color: #fff;
+}
+
+:global(.light) .queenBeeCardHorizontal {
+    border-bottom-color: var(--color-border);
+}
+
+:global(.light) .qbIconBg {
+    background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0.02) 100%);
+    border-color: rgba(255, 184, 0, 0.3);
+    box-shadow: none;
+}
+
+:global(.light) .qbIconBg:hover {
+    box-shadow: none;
+    border-color: rgba(255, 184, 0, 0.5);
+}
+
+:global(.light) .qbFeaturePill {
+    color: var(--color-text-muted);
+}
+
+:global(.light) .miniStepBtn {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+:global(.light) .miniDisplay {
+    background: var(--color-bg);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+/* Modals */
+:global(.light) .checkoutModal,
+:global(.light) .exchangeModal {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+:global(.light) .checkoutOverlay {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+:global(.light) .checkoutPriceLarge,
+:global(.light) .itemAmount,
+:global(.light) .checkoutHeader h2 {
+    color: var(--color-text);
+}
+
+:global(.light) .itemCircle {
+    background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0.02) 100%);
+    border-color: rgba(255, 184, 0, 0.3);
+    box-shadow: none;
+}
+
+:global(.light) .itemCircle:hover {
+    border-color: rgba(255, 184, 0, 0.6);
+    box-shadow: none;
+}
+
+:global(.light) .transactionArrow {
+    color: #ffa202;
+}
+
+:global(.light) .methodBtn {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+}
+
+:global(.light) .methodBtnActive {
+    border-color: #ffa202;
+    background: rgba(255, 162, 2, 0.05);
+    color: #ffa202;
+}
+
+:global(.light) .cancelBtn,
+:global(.light) .toggleBtn {
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+}
+
+:global(.light) .summaryTotal {
+    color: var(--color-text);
+}

@@ -2,6 +2,8 @@
     /* Common Variables */
     --color-primary: #f1c40f;
     --color-primary-dark: #d4ac0d;
+    --color-primary-light: rgba(241, 196, 15, 0.4);
+    --color-primary-faint: rgba(241, 196, 15, 0.05);
     --color-secondary: #1cb0f6;
     --color-secondary-dark: #1899d6;
     --color-danger: #ff4b4b;

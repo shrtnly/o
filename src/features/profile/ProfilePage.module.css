@@ -1,5 +1,5 @@
 /* ================================================
-   beeLesson – Profile Page (Bee/Honey Theme)
+   BeeLesson – Profile Page (Bee/Honey Theme)
    Font: Hind Siliguri  |  Primary: #F1C40F
    ================================================ */
 
@@ -497,7 +497,6 @@
 .certTabActive {
     background: #F1C40F;
     color: #000;
-    box-shadow: 0 4px 12px rgba(241, 196, 15, 0.25);
 }
 
 .certTabActive:hover {

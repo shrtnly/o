@@ -335,9 +335,9 @@ const LeaderboardPage = () => {
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
                                                                                     const actualRank = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
-                                                                                    const text = `I'm ranked #${actualRank} in the ${activeTier} Bee on O-sekha! Can you beat my ${item.xp} মধু?`;
+                                                                                    const text = `I'm ranked #${actualRank} in the ${activeTier} Bee on BeeLesson! Can you beat my ${item.xp} মধু?`;
                                                                                     if (navigator.share) {
-                                                                                        navigator.share({ title: 'O-sekha Leaderboard', text, url: window.location.href });
+                                                                                        navigator.share({ title: 'BeeLesson Leaderboard', text, url: window.location.href });
                                                                                     } else {
                                                                                         navigator.clipboard.writeText(`${text} ${window.location.href}`);
                                                                                     }

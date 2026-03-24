@@ -1,18 +1,28 @@
 import React from 'react';
 import { Lock, Award, Eye, GraduationCap, Calendar, CheckCircle2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import styles from './CertificateCard.module.css';
 
 const CertificateCard = ({ course, onOpen }) => {
+    const navigate = useNavigate();
     const isLocked = course.isLocked;
     const progress = Math.min(100, Math.floor(course.progress || 0));
     const issueDate = course.certificate?.issued_at 
         ? new Date(course.certificate.issued_at).toLocaleDateString() 
         : null;
 
+    const handleCardClick = () => {
+        if (isLocked) {
+            navigate(`/learn/${course.course_id}`);
+        } else {
+            onOpen(course);
+        }
+    };
+
     return (
         <div 
             className={`${styles.card} ${isLocked ? styles.locked : styles.unlocked}`}
-            onClick={!isLocked ? () => onOpen(course) : undefined}
+            onClick={handleCardClick}
         >
             {/* Certificate Style Ornaments */}
             <div className={styles.cornerTopLeft}></div>

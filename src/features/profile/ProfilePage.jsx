@@ -42,7 +42,7 @@ const BADGE_DEFS = [
     { id: 'course_complete', emoji: '🎓', label: 'কোর্স সম্পন্ন' },
     { id: 'streak_30', emoji: '⚡', label: '30 দিনের স্ট্রিক' },
     { id: 'rank_top10', emoji: '👑', label: 'টপ 10' },
-    { id: 'bee_master', emoji: '�', label: 'সার্টিফিকেট' },
+    { id: 'bee_master', emoji: '', label: 'সার্টিফিকেট' },
 ];
 
 const ProfilePage = () => {
@@ -1159,7 +1159,7 @@ const ProfilePage = () => {
                         <div className={styles.shareCardInner}>
                             <div className={styles.shareCardHeader}>
                                 <span className={styles.shareBeeIcon}>🐝</span>
-                                <h3>beeLesson</h3>
+                                <h3>BeeLesson</h3>
                                 <p>আমার শেখার সারসংক্ষেপ</p>
                             </div>
                             <div className={styles.shareCardAvatar}>

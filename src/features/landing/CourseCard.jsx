@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Star, CheckCircle2 } from 'lucide-react';
 import { courseService } from '../../services/courseService';
+import { useLanguage } from '../../context/LanguageContext';
 import styles from './CourseCard.module.css';
 
-const CourseCard = ({ course, isEnrolled }) => {
+const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
+    const { t } = useLanguage();
     const navigate = useNavigate();
 
     // Use values from course object, fallback to 0
@@ -20,7 +22,7 @@ const CourseCard = ({ course, isEnrolled }) => {
     };
 
     return (
-        <div className={styles.card} onClick={handleClick}>
+        <div className={`${styles.card} ${viewType === 'list' ? styles.listCard : ''}`} onClick={handleClick}>
             <div className={styles.imageWrapper}>
                 <img src={course.image_url} alt={course.title} className={styles.image} />
                 {isEnrolled && (
@@ -32,11 +34,11 @@ const CourseCard = ({ course, isEnrolled }) => {
             <div className={styles.content}>
                 <h3 className={styles.title}>{course.title}</h3>
                 <div className={styles.meta}>
-                    <div className={styles.stat} title="শিক্ষার্থী সংখ্যা">
+                    <div className={styles.stat} title={t('students_count')}>
                         <Users size={14} />
                         <span>{students}</span>
                     </div>
-                    <div className={styles.stat} title="কোর্স রেটিং">
+                    <div className={styles.stat} title={t('course_rating')}>
                         <Star size={14} className={styles.starIcon} />
                         <span>{rating.toFixed(1)}</span>
                     </div>

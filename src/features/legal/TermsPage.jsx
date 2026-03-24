@@ -1,30 +1,56 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, UserCheck, ShieldAlert, Coins, Copyright, RefreshCw } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import styles from './TermsPage.module.css';
 
 const TermsPage = () => {
     const navigate = useNavigate();
+    const { t } = useLanguage();
+
+    const sections = [
+        { id: 1, title: 't_section_1_title', desc: 't_section_1_desc', icon: UserCheck },
+        { id: 2, title: 't_section_2_title', desc: 't_section_2_desc', icon: ShieldAlert },
+        { id: 3, title: 't_section_3_title', desc: 't_section_3_desc', icon: Coins },
+        { id: 4, title: 't_section_4_title', desc: 't_section_4_desc', icon: Copyright },
+        { id: 5, title: 't_section_5_title', desc: 't_section_5_desc', icon: RefreshCw },
+    ];
 
     return (
-        <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 20px', color: 'var(--color-text)' }}>
-            <button
-                onClick={() => navigate(-1)}
-                style={{ display: 'flex', alignItems: 'center', background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', marginBottom: '20px', padding: 0 }}
-            >
-                <ChevronLeft size={20} />
-                <span>ফিরে যান</span>
-            </button>
-            <h1 style={{ color: 'var(--color-primary)', marginBottom: '24px' }}>টার্মস এবং কন্ডিশনস</h1>
-            <div style={{ lineHeight: '1.6' }}>
-                <p>BeeLesson এ আপনাকে স্বাগতম। আমাদের সেবা ব্যবহার করার মাধ্যমে আপনি নিম্নলিখিত শর্তাবলীতে সম্মত হচ্ছেন:</p>
-                <h3 style={{ marginTop: '20px' }}>1. অ্যাকাউন্ট তৈরি</h3>
-                <p>সেবাটি ব্যবহারের জন্য আপনাকে সঠিক তথ্য দিয়ে একটি অ্যাকাউন্ট তৈরি করতে হবে। আপনার অ্যাকাউন্টের তথ্যের গোপনীয়তা রক্ষার দায়িত্ব আপনার।</p>
-                <h3 style={{ marginTop: '20px' }}>2. সেবার ব্যবহার</h3>
-                <p>আপনি শুধুমাত্র বৈধ এবং শিক্ষামূলক উদ্দেশ্যে BeeLesson ব্যবহার করতে পারবেন। কোনো ধরনের অবৈধ কর্মকাণ্ডে এই প্ল্যাটফর্ম ব্যবহার করা নিষিদ্ধ।</p>
-                <h3 style={{ marginTop: '20px' }}>3. মেধা সম্পদ</h3>
-                <p>এই প্ল্যাটফর্মের সকল কন্টেন্ট (ভিডিও, টেক্সট, ইমেজ) BeeLesson এর সম্পদ। অনুমতি ছাড়া এগুলো কপি বা শেয়ার করা আইনত দণ্ডনীয় অপরাধ।</p>
-                <h3 style={{ marginTop: '20px' }}>4. পরিবর্তন</h3>
-                <p>আমরা যেকোনো সময় এই শর্তাবলী পরিবর্তন করার অধিকার রাখি। পরিবর্তনের পর সেবাটি চালিয়ে যাওয়া মানে আপনি নতুন শর্তাবলীতে সম্মত।</p>
+        <div className={styles.termsPage}>
+            <div className={styles.container}>
+                <button
+                    onClick={() => navigate(-1)}
+                    className={styles.backBtn}
+                    aria-label="Go back"
+                >
+                    <ChevronLeft size={20} />
+                    <span>{t('go_back')}</span>
+                </button>
+
+                <header className={styles.header}>
+                    <h1>{t('terms_title')}</h1>
+                    <p>{t('terms_desc')}</p>
+                </header>
+
+                <div className={styles.content}>
+                    {sections.map((section) => {
+                        const Icon = section.icon;
+                        return (
+                            <section key={section.id} className={styles.section}>
+                                <h2>
+                                    <Icon size={20} />
+                                    {t(section.title)}
+                                </h2>
+                                <p>{t(section.desc)}</p>
+                            </section>
+                        );
+                    })}
+                </div>
+
+                <div className={styles.footer}>
+                    <p>© ২০২৪ বি লেসন (BeeLesson). {t('p_contact_us')}</p>
+                </div>
             </div>
         </div>
     );

@@ -72,30 +72,34 @@ const Sidebar = () => {
                 <div className={styles.navIconWrapper}>
                     < Trophy size={24} />
                 </div>
-                <span>লিডারবোর্ড</span>
+                <span>{t('leaderboard')}</span>
             </NavLink>
 
             <NavLink to="/shop" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
                     <Store size={24} />
                 </div>
-                <span>শপ</span>
+                <span>{t('shop')}</span>
             </NavLink>
 
             <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
                     <User size={24} />
                 </div>
-                <span>প্রোফাইল</span>
+                <span>{t('profile')}</span>
             </NavLink>
 
-            <div className={styles.moreContainer}>
+            <div 
+                className={styles.moreContainer}
+                onMouseEnter={() => setMoreOpen(true)}
+                onMouseLeave={() => setMoreOpen(false)}
+            >
                 <button
                     className={cn(styles.navItem, moreOpen && styles.navItemActive)}
                     onClick={() => setMoreOpen(!moreOpen)}
                 >
                     <MoreHorizontal size={24} />
-                    <span>আরও</span>
+                    <span>{t('more')}</span>
                 </button>
 
                 {moreOpen && (
@@ -106,7 +110,7 @@ const Sidebar = () => {
                             onClick={() => setMoreOpen(false)}
                         >
                             <Settings size={20} />
-                            <span>সেটিংস</span>
+                            <span>{t('settings')}</span>
                         </NavLink>
                         <NavLink
                             to="/help"
@@ -114,7 +118,7 @@ const Sidebar = () => {
                             onClick={() => setMoreOpen(false)}
                         >
                             <HelpCircle size={20} />
-                            <span>সহায়তা</span>
+                            <span>{t('help')}</span>
                         </NavLink>
                         <button
                             className={styles.logoutBtn}
@@ -124,7 +128,7 @@ const Sidebar = () => {
                             }}
                         >
                             <LogOut size={20} />
-                            <span>লগআউট</span>
+                            <span>{t('logout')}</span>
                         </button>
                     </div>
                 )}

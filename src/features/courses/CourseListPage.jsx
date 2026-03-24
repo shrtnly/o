@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Info } from 'lucide-react';
+import { Search, Info, LayoutGrid, List as ListIcon, TrendingUp, Star } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
@@ -27,6 +27,8 @@ const CourseListPage = () => {
     const [loading, setLoading] = useState(true);
     const [activeCategory, setActiveCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
+    const [viewType, setViewType] = useState('grid'); // 'grid' or 'list'
+    const [sortBy, setBySort] = useState('popularity'); // 'popularity' or 'rating'
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -62,7 +64,7 @@ const CourseListPage = () => {
         fetchData();
     }, [user]);
 
-    // Compute filtered courses during render to avoid blinks
+    // Compute filtered and sorted courses
     const filteredCourses = courses.filter(course => {
         const matchesCategory = activeCategory === 'All' || course.category === activeCategory;
         const matchesSearch = !searchQuery.trim() || 
@@ -70,6 +72,17 @@ const CourseListPage = () => {
             (course.category && course.category.toLowerCase().includes(searchQuery.toLowerCase()));
         
         return matchesCategory && matchesSearch;
+    }).sort((a, b) => {
+        // Always prioritize featured courses
+        if (a.is_featured && !b.is_featured) return -1;
+        if (!a.is_featured && b.is_featured) return 1;
+
+        if (sortBy === 'rating') {
+            return (b.rating || 0) - (a.rating || 0);
+        } else if (sortBy === 'popularity') {
+            return (b.students_count || 0) - (a.students_count || 0);
+        }
+        return 0; // Maintain default order
     });
 
     return (
@@ -87,6 +100,31 @@ const CourseListPage = () => {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
+                            </div>
+
+                            <div className={styles.controls}>
+                                <div className={styles.sortGroup}>
+                                    <span className={styles.controlLabel}>{t('sort_by')}</span>
+                                    <button 
+                                        className={`${styles.sortBtn} ${styles.activeSort}`}
+                                        onClick={() => setBySort(sortBy === 'popularity' ? 'rating' : 'popularity')}
+                                        title={sortBy === 'popularity' ? t('sort_popularity') : t('sort_rating')}
+                                    >
+                                        {sortBy === 'popularity' ? <TrendingUp size={16} /> : <Star size={16} />}
+                                    </button>
+                                </div>
+
+                                <div className={styles.divider} />
+
+                                <div className={styles.viewToggle}>
+                                    <button 
+                                        className={`${styles.viewBtn} ${styles.activeView}`}
+                                        onClick={() => setViewType(viewType === 'grid' ? 'list' : 'grid')}
+                                        title={viewType === 'grid' ? t('grid_view') : t('list_view')}
+                                    >
+                                        {viewType === 'grid' ? <LayoutGrid size={18} /> : <ListIcon size={18} />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -113,12 +151,13 @@ const CourseListPage = () => {
                     ) : (
                         <div className={styles.content}>
                             {filteredCourses.length > 0 ? (
-                                <div className={styles.grid}>
+                                <div className={viewType === 'grid' ? styles.grid : styles.list}>
                                     {filteredCourses.map(course => (
                                         <CourseCard
                                             key={course.id}
                                             course={course}
                                             isEnrolled={enrolledCourseIds.has(course.id)}
+                                            viewType={viewType}
                                         />
                                     ))}
                                 </div>

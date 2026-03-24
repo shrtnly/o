@@ -32,8 +32,8 @@ const translations = {
         confirm_reset_msg: "আপনি কি নিশ্চিত যে এই কোর্সের সকল প্রগতি মুছে ফেলতে চান?",
         irreversible: "এটি আর ফিরিয়ে আনা সম্ভব নয়।",
         honey_drop: "হানি ড্রপ",
-        king_bee_mode: "কিং বী",
-        queen_bee_mode: "কুইন বী",
+        king_bee_mode: "সুপার কিং বি",
+        queen_bee_mode: "সুপার কুইন বি",
         only_for_99: "হন মাত্র 99 টাকায়!",
         hearts_added_msg: "নতুন হানি ড্রপ যোগ করা হয়েছে!",
         heart_refill_5: "5টি হানি ড্রপ রিফিল",
@@ -125,16 +125,16 @@ const translations = {
         confirm_logout_msg: "আপনি কি নিশ্চিত যে লগআউট করতে চান?",
         logout_success: "সাফল্যের সাথে লগআউট করা হয়েছে",
         logout_error: "লগআউট করতে সমস্যা হয়েছে",
-        
+
         tab_general: "সাধারণ",
         tab_analyze: "এনালিটিক্স",
         tab_activity: "কার্যক্রম",
         tab_connection: "সংযোগ",
-        
+
         certification: "সার্টিফিকেশন",
         earned_certificates: "সার্টিফিকেট",
         no_certificates: "আপনি এখনও কোনো সার্টিফিকেট অর্জন করেননি।",
-        
+
         analysis_ov: "অ্যাক্টিভিটি অ্যানালাইসিস",
         total_time: "মোট সময়",
         right_answers: "সঠিক উত্তর",
@@ -235,7 +235,7 @@ const translations = {
         target_xp: "{xp} মধু",
         how_to_earn_xp: "মধু কীভাবে অর্জন করবেন?",
         earn_xp_desc: "প্রতিটি অধ্যায় বা কুইজ সম্পন্ন করলে মধু পাবেন। নির্ভুল উত্তর দিলে বেশি মধু।",
-        bee_ranks: "বী-র র‍্যাঙ্ক",
+        bee_ranks: "বি-র র‍্যাঙ্ক",
         bee_ranks_desc: "Bee Kid → Warrior → Master → Legendary। প্রতি সপ্তাহে শীর্ষরা পরবর্তী লিগে ওঠে।",
         start_competition: "প্রতিযোগিতা শুরু করুন",
         start_competition_desc: "বন্ধুদের সাথে প্রতিযোগিতা করুন এবং দেশের সেরা শিক্ষার্থীদের তালিকায় নাম তুলুন।",
@@ -286,9 +286,9 @@ const translations = {
         proven_title: "বৈজ্ঞানিকভাবে প্রমাণিত",
         proven_desc: "আমাদের পাঠদান পদ্ধতি গবেষণালব্ধ এবং কার্যকর। প্রতিটি পাঠ ডিজাইন করা হয়েছে যাতে আপনি দ্রুত এবং আনন্দদায়ক উপায়ে শিখতে পারেন।",
         footer_copy: "2024 বি লেসন. সকল স্বত্ব সংরক্ষিত।",
-        
+
         reset_filters: "সব রিসেট করুন",
-        
+
         // Help Center
         help_center: "হেল্প সেন্টার",
         how_can_we_help: "কিভাবে আমরা আপনাকে সাহায্য করতে পারি?",
@@ -361,8 +361,8 @@ const translations = {
         confirm_reset_msg: "Are you sure you want to delete all progress for this course?",
         irreversible: "This action cannot be undone.",
         honey_drop: "Honey Drop",
-        king_bee_mode: "King Bee Mode",
-        queen_bee_mode: "Queen Bee Mode",
+        king_bee_mode: "Super King Bee",
+        queen_bee_mode: "Super Queen Bee",
         only_for_99: "only for ৳99!",
         hearts_added_msg: "new honey drops have been added!",
         heart_refill_5: "5 Honey Drop Refill",
@@ -454,7 +454,7 @@ const translations = {
         confirm_logout_msg: "Are you sure you want to logout?",
         logout_success: "Successfully logged out",
         logout_error: "Error logging out",
-        
+
         tab_general: "General",
         tab_analyze: "Analytics",
         tab_activity: "Activity",
@@ -476,11 +476,11 @@ const translations = {
         no_suggestions: "No suggestions yet",
         no_sent_requests: "No pending requests",
         close: "Close",
-        
+
         certification: "Certification",
         earned_certificates: "Earned Certificates",
         no_certificates: "You haven't earned any certificates yet.",
-        
+
         analysis_ov: "Activity Analysis",
         total_time: "Total Time",
         right_answers: "Right Answers",

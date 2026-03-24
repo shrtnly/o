@@ -232,7 +232,7 @@ const ShopPage = () => {
 
             // Block if already active or redundant
             if (type === 'subscription' && isQueenBee) {
-                toast.info('আপনি বর্তমানে কিং বী মুড-এ আছেন! 👑');
+                toast.info(`আপনি বর্তমানে ${profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} মুড-এ আছেন! 👑`);
                 return;
             }
             if (type === '1day' && (is1DayActive || isQueenBee)) {
@@ -377,8 +377,8 @@ const ShopPage = () => {
                                 </div>
                                 <p className={styles.headerSub}>
                                     {profile?.gender === 'male'
-                                        ? 'আনলিমিটেড মধু নিয়ে শিখতে থাকুন'
-                                        : 'আনলিমিটেড মধু নিয়ে শিখতে থাকুন'}
+                                        ? 'শিখতে থাকুন আনলিমিটেড হানি ড্রপ নিয়ে'
+                                        : 'শিখতে থাকুন আনলিমিটেড হানি ড্রপ নিয়ে'}
                                 </p>
                             </div>
                             <div className={styles.headerDivider}></div>
@@ -646,7 +646,7 @@ const ShopPage = () => {
                                     </div>
                                     <h2 className={styles.successTitle} style={{ color: 'var(--color-text)', fontSize: '1.6rem' }}>পর্যাপ্ত মধুরেণু নেই</h2>
                                     <p className={styles.successDesc}>
-                                        হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> মধুরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? 'কিং বী মোড' : 'কুইন বী মোড'} নিন।
+                                        হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> মধুরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} মোড নিন।
                                     </p>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
                                         <button 
@@ -666,8 +666,8 @@ const ShopPage = () => {
                                             style={{ width: '100%' }}
                                         >
                                             {profile?.gender === 'male' 
-                                                ? (language === 'bn' ? 'কিং বী মোড দেখুন' : 'View King Bee Mode') 
-                                                : (language === 'bn' ? 'কুইন বী মোড দেখুন' : 'View Queen Bee Mode')
+                                                ? (language === 'bn' ? `${t('king_bee_mode')} মোড দেখুন` : `View ${t('king_bee_mode')} Mode`) 
+                                                : (language === 'bn' ? `${t('queen_bee_mode')} মোড দেখুন` : `View ${t('queen_bee_mode')} Mode`)
                                             }
                                         </button>
                                         <button 

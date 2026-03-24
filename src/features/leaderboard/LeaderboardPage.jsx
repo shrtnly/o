@@ -10,6 +10,7 @@ import { useAuth } from '../../context/AuthContext';
 import ShieldIcon from '../../components/ShieldIcon';
 import { supabase } from '../../lib/supabaseClient';
 import styles from './LeaderboardPage.module.css';
+import { useLanguage } from '../../context/LanguageContext';
 
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
@@ -26,6 +27,7 @@ const UNLOCK_XP = 100;
 const LeaderboardPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { t, language } = useLanguage();
 
     const [activeTier,      setActiveTier]      = useState('SILVER');
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -85,7 +87,7 @@ const LeaderboardPage = () => {
         const rank = (currentPage - 1) * ITEMS_PER_PAGE + index;
         if (rank === 0) return (
             <div className={styles.medalWrapper}>
-                <Medal size={28} color="#F1C40F" fill="rgba(241,196,15,0.15)" strokeWidth={2} />
+                <Medal size={28} color="var(--color-primary)" fill="var(--color-primary-light)" strokeWidth={2} />
             </div>
         );
         if (rank === 1) return (
@@ -132,11 +134,15 @@ const LeaderboardPage = () => {
                                         <Lock size={22} />
                                     </div>
                                     <div className={styles.lockBannerText}>
-                                        <h2>লিডারবোর্ড আনলক করুন</h2>
-                                        <p>প্রতিযোগিতায় অংশ নিতে আরও <strong>{UNLOCK_XP - userXP} মধু</strong> অর্জন করুন।</p>
+                                        <h2>{t('unlock_leaderboard')}</h2>
+                                        <p>
+                                            {t('reach_xp_to_unlock').split('{xp}')[0]}
+                                            <strong>{UNLOCK_XP - userXP} {t('pollen')}</strong>
+                                            {t('reach_xp_to_unlock').split('{xp}')[1]}
+                                        </p>
                                         <div className={styles.xpProgressLabel}>
-                                            <span>{userXP} মধু অর্জিত</span>
-                                            <span>{UNLOCK_XP} মধু</span>
+                                            <span>{t('xp_earned_so_far').replace('{xp}', userXP)}</span>
+                                            <span>{t('target_xp').replace('{xp}', UNLOCK_XP)}</span>
                                         </div>
                                         <div className={styles.xpProgressTrack}>
                                             <div
@@ -150,36 +156,27 @@ const LeaderboardPage = () => {
                                 {/* Info cards */}
                                 <div className={styles.introGrid}>
                                     <div className={styles.introCard}>
-                                        <div
-                                            className={styles.introIconBox}
-                                            style={{ background: 'rgba(241,196,15,0.1)', color: '#F1C40F' }}
-                                        >
+                                        <div className={styles.introIconBox}>
                                             <Zap size={20} />
                                         </div>
-                                        <h3>মধু কীভাবে অর্জন করবেন?</h3>
-                                        <p>প্রতিটি অধ্যায় বা কুইজ সম্পন্ন করলে মধু পাবেন। নির্ভুল উত্তর দিলে বেশি মধু।</p>
+                                        <h3>{t('how_to_earn_xp')}</h3>
+                                        <p>{t('earn_xp_desc')}</p>
                                     </div>
 
                                     <div className={styles.introCard}>
-                                        <div
-                                            className={styles.introIconBox}
-                                            style={{ background: 'rgba(241,196,15,0.1)', color: '#F1C40F' }}
-                                        >
+                                        <div className={styles.introIconBox}>
                                             <Trophy size={20} />
                                         </div>
-                                        <h3>বী-র র‍্যাঙ্ক</h3>
-                                        <p>Bee Kid → Warrior → Master → Legendary। প্রতি সপ্তাহে শীর্ষরা পরবর্তী লিগে ওঠে।</p>
+                                        <h3>{t('bee_ranks')}</h3>
+                                        <p>{t('bee_ranks_desc')}</p>
                                     </div>
 
                                     <div className={styles.introCard}>
-                                        <div
-                                            className={styles.introIconBox}
-                                            style={{ background: 'rgba(241,196,15,0.1)', color: '#F1C40F' }}
-                                        >
+                                        <div className={styles.introIconBox}>
                                             <TrendingUp size={20} />
                                         </div>
-                                        <h3>প্রতিযোগিতা শুরু করুন</h3>
-                                        <p>বন্ধুদের সাথে প্রতিযোগিতা করুন এবং দেশের সেরা শিক্ষার্থীদের তালিকায় নাম তুলুন।</p>
+                                        <h3>{t('start_competition')}</h3>
+                                        <p>{t('start_competition_desc')}</p>
                                     </div>
                                 </div>
 
@@ -189,7 +186,7 @@ const LeaderboardPage = () => {
                                         className={styles.startLearningBtn}
                                         onClick={() => navigate('/learning')}
                                     >
-                                        শেখা শুরু করুন
+                                        {t('start_learning_btn')}
                                     </button>
                                 </div>
                             </div>
@@ -220,6 +217,7 @@ const LeaderboardPage = () => {
                                                         xp={tier.minXP}
                                                         size={activeTier === tier.id ? 68 : 30}
                                                         showTooltip={false}
+                                                        showShadow={false}
                                                     />
                                                 </div>
                                                 {isTierLocked && (
@@ -241,14 +239,15 @@ const LeaderboardPage = () => {
                                     return (
                                         <div className={styles.progressSection}>
                                             <div className={styles.progressTitle}>
-                                                <h1>{currentTierInfo?.nameBn || ''}</h1>
+                                                <h1>{currentTierInfo?.name || ''} Learner</h1>
                                                 <p>
                                                     {nextLevel
                                                         ? <>
-                                                            {TIERS.find(t => t.id === nextLevel.level)?.nameBn || 'Next'} লিগে যোগ দিতে আরও{' '}
-                                                            <span className={styles.xpHighlight}>+{progress.remaining} মধু</span>
+                                                            {t('complete_xp_to_join').split('{xp}')[0].replace('{tier}', TIERS.find(t => t.id === nextLevel.level)?.name || 'Next')}
+                                                            <span className={styles.xpHighlight}>{progress.remaining}</span>
+                                                            {t('complete_xp_to_join').split('{xp}')[1].replace('{tier}', TIERS.find(t => t.id === nextLevel.level)?.name || 'Next')}
                                                           </>
-                                                        : 'আপনি Bee Legendary-তে পৌঁছে গেছেন! 🎉'}
+                                                        : t('reached_legendary')}
                                                 </p>
                                             </div>
                                         </div>
@@ -261,10 +260,10 @@ const LeaderboardPage = () => {
                                         /* Skeleton */
                                         <div className={styles.tableContainer}>
                                             <div className={styles.tableHeader}>
-                                                <div className={styles.headerCol}>#</div>
-                                                <div className={styles.headerCol}>শিক্ষার্থী</div>
-                                                <div className={styles.headerCol}>অগ্রগতি</div>
-                                                <div className={styles.headerCol}>মোট মধু</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_rank')}</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_learner')}</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_progress')}</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_pollen')}</div>
                                             </div>
                                             <div className={styles.tableBody}>
                                                 {[...Array(8)].map((_, i) => (
@@ -293,16 +292,16 @@ const LeaderboardPage = () => {
                                         /* Real data */
                                         <div className={styles.tableContainer}>
                                             <div className={styles.tableHeader}>
-                                                <div className={styles.headerCol}>#</div>
-                                                <div className={styles.headerCol}>শিক্ষার্থী</div>
-                                                <div className={styles.headerCol}>অগ্রগতি</div>
-                                                <div className={styles.headerCol}>মোট মধু</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_rank')}</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_learner')}</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_progress')}</div>
+                                                <div className={styles.headerCol}>{t('leaderboard_table_pollen')}</div>
                                             </div>
                                             <div className={styles.tableBody}>
                                                 {leaderboardData.length === 0 ? (
                                                     <div className={styles.emptyState}>
-                                                        <Trophy size={48} color="#1e2c33" />
-                                                        <p>এই বী-তে এখনো কোনো শিক্ষার্থী নেই। পড়াশোনা শুরু করুন এবং জায়গা করে নিন!</p>
+                                                        <Trophy size={48} className={styles.emptyStateIcon} />
+                                                        <p>{t('empty_tier')}</p>
                                                     </div>
                                                 ) : (
                                                     leaderboardData.map((item, index) => (
@@ -335,14 +334,19 @@ const LeaderboardPage = () => {
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
                                                                                     const actualRank = (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
-                                                                                    const text = `I'm ranked #${actualRank} in the ${activeTier} Bee on BeeLesson! Can you beat my ${item.xp} মধু?`;
+                                                                                    const tierName = TIERS.find(t => t.id === activeTier)?.name || activeTier;
+                                                                                    const shareText = t('leaderboard_share_msg')
+                                                                                        .replace('{rank}', actualRank)
+                                                                                        .replace('{tier}', tierName)
+                                                                                        .replace('{xp}', item.xp);
+                                                                                        
                                                                                     if (navigator.share) {
-                                                                                        navigator.share({ title: 'BeeLesson Leaderboard', text, url: window.location.href });
+                                                                                        navigator.share({ title: 'BeeLesson Leaderboard', text: shareText, url: window.location.href });
                                                                                     } else {
-                                                                                        navigator.clipboard.writeText(`${text} ${window.location.href}`);
+                                                                                        navigator.clipboard.writeText(`${shareText} ${window.location.href}`);
                                                                                     }
                                                                                 }}
-                                                                                title="Share your rank"
+                                                                                title={t('share_rank_tooltip')}
                                                                             >
                                                                                 <Share2 size={12} />
                                                                             </button>
@@ -353,7 +357,7 @@ const LeaderboardPage = () => {
 
                                                             {/* Progress bar */}
                                                             <div className={styles.progressCol}>
-                                                                <ShieldIcon xp={item.xp} size={22} showTooltip={false} />
+                                                                <ShieldIcon xp={item.xp} size={22} showTooltip={false} showShadow={false} />
                                                                 <div className={styles.progressBarWrapper}>
                                                                     <div
                                                                         className={styles.progressBar}
@@ -367,7 +371,7 @@ const LeaderboardPage = () => {
                                                                 <div className={styles.xpScoreWrapper}>
                                                                     <div className={styles.pollenLabel}>
                                                                         <div className={styles.mobileShield}>
-                                                                            <ShieldIcon xp={item.xp} size={18} showTooltip={false} />
+                                                                            <ShieldIcon xp={item.xp} size={18} showTooltip={false} showShadow={false} />
                                                                         </div>
                                                                         <span>{item.xp}</span>
                                                                     </div>

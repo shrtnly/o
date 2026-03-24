@@ -11,14 +11,12 @@
     min-height: 90px;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-card);
 }
 
 .card:hover {
     background: var(--color-bg-hover);
     border-color: var(--color-primary-light);
     transform: translateY(-3px);
-    box-shadow: var(--shadow-hover);
 }
 
 .listCard {

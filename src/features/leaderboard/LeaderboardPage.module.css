@@ -7,9 +7,10 @@
     width: 100%;
     height: 100vh;
     overflow-y: auto;
-    color: #fff;
+    color: var(--color-text);
+    background: var(--color-bg);
     scrollbar-width: thin;
-    scrollbar-color: #1e2c33 transparent;
+    scrollbar-color: var(--color-border) transparent;
 }
 
 .container::-webkit-scrollbar {
@@ -21,7 +22,7 @@
 }
 
 .container::-webkit-scrollbar-thumb {
-    background: #1e2c33;
+    background: var(--color-border);
     border-radius: 4px;
 }
 
@@ -43,27 +44,27 @@
 .pageHeaderIcon {
     width: 42px;
     height: 42px;
-    background: rgba(241, 196, 15, 0.1);
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    background: var(--color-primary-faint);
+    border: 1px solid var(--color-primary-light);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #F1C40F;
+    color: var(--color-primary);
     flex-shrink: 0;
 }
 
 .pageHeader h1 {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
     letter-spacing: -0.3px;
 }
 
 .pageHeaderSub {
     font-size: 0.875rem;
-    color: #5a6a72;
+    color: var(--color-text-muted);
     font-weight: 500;
     margin: 0;
     margin-top: 2px;
@@ -87,25 +88,26 @@
 
 /* ---------- Lock banner ---------- */
 .lockBanner {
-    background: #111820;
-    border: 1px solid #1e2c33;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 18px;
     padding: 28px 32px;
     display: flex;
     align-items: center;
     gap: 20px;
+    box-shadow: var(--shadow-card);
 }
 
 .lockIconCircle {
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: #1a2630;
-    border: 1.5px solid #273540;
+    background: var(--color-bg-deep);
+    border: 1.5px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #5a6a72;
+    color: var(--color-text-muted);
     flex-shrink: 0;
 }
 
@@ -117,14 +119,14 @@
 .lockBannerText h2 {
     font-size: 1.1rem;
     font-weight: 800;
-    color: #e0e0e0;
+    color: var(--color-text);
     margin: 0 0 6px 0;
     letter-spacing: -0.2px;
 }
 
 .lockBannerText p {
     font-size: 0.875rem;
-    color: #5a6a72;
+    color: var(--color-text-muted);
     font-weight: 500;
     margin: 0 0 14px 0;
     line-height: 1.5;
@@ -133,7 +135,7 @@
 /* XP progress bar inside lock banner */
 .xpProgressTrack {
     height: 6px;
-    background: #1a2630;
+    background: var(--color-bg-deep);
     border-radius: 10px;
     overflow: hidden;
     position: relative;
@@ -141,10 +143,10 @@
 
 .xpProgressFill {
     height: 100%;
-    background: linear-gradient(90deg, #F1C40F, #ff8c00);
+    background: linear-gradient(90deg, var(--color-primary), #ff8c00);
     border-radius: 10px;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 10px rgba(241, 196, 15, 0.35);
+    box-shadow: 0 0 10px var(--color-primary-light);
 }
 
 .xpProgressLabel {
@@ -153,11 +155,11 @@
     margin-bottom: 6px;
     font-size: 0.75rem;
     font-weight: 700;
-    color: #3a4a54;
+    color: var(--color-text-muted);
 }
 
 .xpProgressLabel span:last-child {
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 /* ---------- Intro info cards ---------- */
@@ -168,14 +170,15 @@
 }
 
 .introCard {
-    background: #111820;
-    border: 1px solid #1a2630;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 16px;
     padding: 24px;
     display: flex;
     flex-direction: column;
     gap: 12px;
     transition: border-color 0.2s ease, transform 0.2s ease;
+    box-shadow: var(--shadow-card);
 }
 
 .introCard:hover {
@@ -191,19 +194,22 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    background: var(--color-primary-faint);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-light);
 }
 
 .introCard h3 {
     font-size: 0.95rem;
     font-weight: 800;
-    color: #e0e0e0;
+    color: var(--color-text);
     margin: 0;
     line-height: 1.3;
 }
 
 .introCard p {
     font-size: 0.82rem;
-    color: #4a5c65;
+    color: var(--color-text-muted);
     line-height: 1.6;
     font-weight: 500;
     margin: 0;
@@ -217,8 +223,8 @@
 }
 
 .startLearningBtn {
-    background: #F1C40F;
-    color: #0a0d0f;
+    background: var(--color-primary);
+    color: var(--color-bg-deep);
     border: none;
     padding: 14px 40px;
     border-radius: 14px;
@@ -227,18 +233,18 @@
     cursor: pointer;
     letter-spacing: 0.3px;
     transition: all 0.15s ease;
-    box-shadow: 0 4px 0 #b8960b;
+    box-shadow: 0 4px 0 var(--color-primary-dark);
 }
 
 .startLearningBtn:hover {
     background: #fad030;
     transform: translateY(-1px);
-    box-shadow: 0 5px 0 #b8960b;
+    box-shadow: 0 5px 0 var(--color-primary-dark);
 }
 
 .startLearningBtn:active {
     transform: translateY(3px);
-    box-shadow: 0 1px 0 #b8960b;
+    box-shadow: 0 1px 0 var(--color-primary-dark);
 }
 
 /* ============================================
@@ -268,8 +274,8 @@
     justify-content: center;
     width: 64px;
     height: 64px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: transparent;
+    border: 1px solid var(--color-border);
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -286,22 +292,20 @@
 }
 
 .tab:hover:not(.lockedTab) {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(241, 196, 15, 0.3);
+    background: transparent;
+    border-color: var(--color-primary-light);
     transform: translateY(-2px);
 }
 
 .activeTab {
-    background: rgba(241, 196, 15, 0.05);
-    border: 1.5px solid #F1C40F;
-    box-shadow: 0 0 20px rgba(241, 196, 15, 0.15),
-                inset 0 0 12px rgba(241, 196, 15, 0.05);
+    background: transparent;
+    border: 1.5px solid var(--color-primary);
     width: 72px;
     height: 72px;
 }
 
 .activeTab .tabShield {
-    filter: drop-shadow(0 0 8px rgba(241, 196, 15, 0.4));
+    filter: none;
 }
 
 /* Subtle Active Indicator Dot */
@@ -311,15 +315,14 @@
     bottom: 6px;
     width: 4px;
     height: 4px;
-    background: #F1C40F;
+    background: var(--color-primary);
     border-radius: 50%;
-    box-shadow: 0 0 8px #F1C40F;
 }
 
 .lockedTab {
     opacity: 0.3;
     cursor: not-allowed;
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--color-bg-deep);
     filter: grayscale(1);
 }
 
@@ -329,7 +332,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #5a6a72;
+    color: var(--color-text-muted);
     z-index: 5;
     pointer-events: none;
 }
@@ -350,7 +353,7 @@
 .progressTitle h1 {
     font-size: 1.75rem;
     font-weight: 900;
-    color: #F1C40F;
+    color: var(--color-primary);
     margin: 0;
     letter-spacing: -0.5px;
 }
@@ -358,12 +361,12 @@
 .progressTitle p {
     font-size: 0.875rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--color-text);
     margin: 4px 0 0;
 }
 
 .xpHighlight {
-    color: #ff9902;
+    color: var(--color-warning);
     font-weight: 900;
 }
 
@@ -374,7 +377,7 @@
 .leaderboardCard {
     background: transparent;
     border: none;
-    border-radius: 20px;
+    border-radius: 0;
     overflow: hidden;
     margin-bottom: 32px;
 }
@@ -385,10 +388,10 @@
     display: grid;
     grid-template-columns: 50px 1.2fr 1fr 100px;
     padding: 12px 20px;
-    background: #111820;
-    border-bottom: 1px solid #1a2630;
+    background: var(--color-bg-alt);
+    border-bottom: 1px solid var(--color-border);
     font-weight: 700;
-    color: #ffffff;
+    color: var(--color-text);
     text-transform: uppercase;
     font-size: 0.7rem;
     letter-spacing: 1.5px;
@@ -412,8 +415,9 @@
     grid-template-columns: 50px 1.2fr 1fr 100px;
     padding: 14px 20px;
     align-items: center;
-    border-bottom: 1px solid #111820;
+    border-bottom: 1px solid var(--color-border-muted);
     transition: all 0.2s ease;
+    background: var(--color-bg);
 }
 
 .row:last-child {
@@ -421,24 +425,23 @@
 }
 
 .row:hover {
-    background: rgba(241, 196, 15, 0.03);
+    background: var(--color-bg-hover);
 }
 
 /* ---------- Current user row ---------- */
 .currentUserRow {
-    background: rgba(241, 196, 15, 0.04) !important;
-    border-bottom: 1px solid rgba(241, 196, 15, 0.08) !important;
-    border-top: 1px solid rgba(241, 196, 15, 0.08) !important;
+    background: var(--color-primary-faint) !important;
+    border-bottom: 1px solid var(--color-primary-light) !important;
+    border-top: 1px solid var(--color-primary-light) !important;
     position: relative;
-    box-shadow: inset 0 0 20px rgba(241, 196, 15, 0.02);
 }
 
 .currentUserRow .userName {
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .currentUserRow .rankNumber {
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 /* Subtle left accent bar */
@@ -449,7 +452,7 @@
     top: 20%;
     height: 60%;
     width: 3px;
-    background: #F1C40F;
+    background: var(--color-primary);
     border-radius: 0 3px 3px 0;
 }
 
@@ -463,18 +466,17 @@
 .rankNumber {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #2a353c;
+    color: var(--color-text-muted);
 }
 
 .medalWrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 0 4px rgba(0,0,0,0.2));
 }
 
 /* Gold / Silver / Bronze medals — subtle size scaling */
-.medalGold   { color: #F1C40F; }
+.medalGold   { color: var(--color-primary); }
 .medalSilver { color: #9ca3af; }
 .medalBronze { color: #b87333; }
 
@@ -491,8 +493,8 @@
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
-    background: #1a2630;
-    border: 1.5px solid #273540;
+    background: var(--color-bg-deep);
+    border: 1.5px solid var(--color-border);
     flex-shrink: 0;
     position: relative;
 }
@@ -511,8 +513,8 @@
     justify-content: center;
     font-size: 1rem;
     font-weight: 900;
-    color: #0a0d0f;
-    background: linear-gradient(135deg, #F1C40F 0%, #e68a00 100%);
+    color: var(--color-bg-deep);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #e68a00 100%);
 }
 
 .userInfo {
@@ -525,7 +527,7 @@
 .userName {
     font-size: 0.925rem;
     font-weight: 600;
-    color: #e0e0e0;
+    color: var(--color-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -556,14 +558,14 @@
 .progressBarWrapper {
     flex: 1;
     height: 4px;
-    background: #1a2630;
+    background: var(--color-bg-deep);
     border-radius: 10px;
     overflow: hidden;
 }
 
 .progressBar {
     height: 100%;
-    background: linear-gradient(90deg, #F1C40F, #ff8200);
+    background: linear-gradient(90deg, var(--color-primary), #ff8200);
     border-radius: 10px;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -588,7 +590,7 @@
     gap: 5px;
     font-size: 0.95rem;
     font-weight: 700;
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .mobileShield {
@@ -596,9 +598,9 @@
 }
 
 .shareIconBtn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #3a4a54;
+    background: var(--color-border-muted);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     width: 24px;
     height: 24px;
     border-radius: 6px;
@@ -612,9 +614,9 @@
 }
 
 .shareIconBtn:hover {
-    background: rgba(241, 196, 15, 0.1);
-    border-color: rgba(241, 196, 15, 0.3);
-    color: #F1C40F;
+    background: var(--color-primary-faint);
+    border-color: var(--color-primary-light);
+    color: var(--color-primary);
 }
 
 /* ---------- Empty state ---------- */
@@ -627,8 +629,13 @@
     gap: 12px;
 }
 
+.emptyStateIcon {
+    color: var(--color-text-muted);
+    opacity: 0.3;
+}
+
 .emptyState p {
-    color: #3a4a54;
+    color: var(--color-text-muted);
     font-weight: 600;
     font-size: 0.9rem;
     max-width: 340px;
@@ -653,11 +660,11 @@
 .footerRank {
     font-size: 0.875rem;
     font-weight: 700;
-    color: #4a5c65;
+    color: var(--color-text-muted);
 }
 
 .footerRank strong {
-    color: #F1C40F;
+    color: var(--color-primary);
     font-weight: 900;
 }
 
@@ -668,9 +675,9 @@
 }
 
 .pageBtn {
-    background: #0f1820;
-    border: 1px solid #1e2c33;
-    color: #5a6a72;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     width: 34px;
     height: 34px;
     border-radius: 10px;
@@ -683,9 +690,9 @@
 }
 
 .pageBtn:hover:not(:disabled) {
-    border-color: rgba(241, 196, 15, 0.3);
-    color: #F1C40F;
-    background: rgba(241, 196, 15, 0.05);
+    border-color: var(--color-primary-light);
+    color: var(--color-primary);
+    background: var(--color-primary-faint);
 }
 
 .pageBtn:disabled {
@@ -696,7 +703,7 @@
 .pageInfo {
     font-size: 0.8rem;
     font-weight: 700;
-    color: #3a4a54;
+    color: var(--color-text-muted);
     min-width: 80px;
     text-align: center;
 }
@@ -706,7 +713,7 @@
    ============================================ */
 
 .skeleton {
-    background: linear-gradient(90deg, #111820 25%, #18242d 50%, #111820 75%);
+    background: linear-gradient(90deg, var(--color-bg-alt) 25%, var(--color-bg-deep) 50%, var(--color-bg-alt) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.6s infinite;
     border-radius: 4px;
@@ -792,3 +799,15 @@
         margin-right: 2px;
     }
 }
+
+/* Light mode specific refinements */
+:global(.light) .row:hover {
+    background: var(--color-bg-deep);
+}
+
+:global(.light) .pageBtn {
+    background: var(--color-bg);
+}
+
+
+

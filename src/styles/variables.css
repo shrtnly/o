@@ -45,7 +45,14 @@
     --color-on-secondary: #ffffff;
     --color-border: #e2e8f0;
     --color-border-muted: rgba(0, 0, 0, 0.05);
-    --glow-primary: 0 0 15px rgba(241, 196, 15, 0.15);
+
+    /* Golden Color Overrides for Light Mode */
+    --color-primary: #FFB800;
+    --color-primary-dark: #e6a600;
+    --color-primary-light: rgba(255, 184, 0, 0.4);
+    --color-primary-faint: rgba(255, 184, 0, 0.05);
+
+    --glow-primary: 0 0 15px rgba(255, 184, 0, 0.15);
     --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.05);
     --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.08);
     --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05);

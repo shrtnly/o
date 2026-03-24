@@ -59,6 +59,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const messageInputRef = React.useRef(null);
 
     const [inboxSearchQuery, setInboxSearchQuery] = useState('');
+    const [isConversationsLoading, setIsConversationsLoading] = useState(false);
 
     // Derived filtered lists for the inbox search
     const filteredConversations = conversations.filter(conv => 
@@ -310,8 +311,15 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
     const handleFetchConversations = useCallback(async (isSilent = false) => {
         if (!user?.id) return;
-        const data = await messageService.getConversations(user.id);
-        setConversations(data);
+        if (!isSilent) setIsConversationsLoading(true);
+        try {
+            const data = await messageService.getConversations(user.id);
+            setConversations(data);
+        } catch (err) {
+            console.error('Error fetching conversations:', err);
+        } finally {
+            setIsConversationsLoading(false);
+        }
     }, [user?.id]);
 
     const handleFetchMessages = useCallback(async (partnerId) => {
@@ -680,7 +688,19 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         </div>
                                     </div>
                                     <div className={styles.sidebarList}>
-                                        {filteredConversations.length === 0 && !inboxSearchQuery ? (
+                                        {isConversationsLoading ? (
+                                            <div className={styles.skeletonConversations}>
+                                                {[...Array(6)].map((_, i) => (
+                                                    <div key={i} className={styles.skeletonItem}>
+                                                        <div className={styles.skeletonAvatar} />
+                                                        <div className={styles.skeletonDetails}>
+                                                            <div className={styles.skeletonName} />
+                                                            <div className={styles.skeletonMsg} />
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : filteredConversations.length === 0 && !inboxSearchQuery ? (
                                             <div className={styles.emptyInbox}>
                                                 <MessageSquare size={32} opacity={0.1} />
                                                 <p>ইনবক্স খালি</p>
@@ -995,8 +1015,55 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     </div>
                                                 ) : (
                                                     <div className={styles.emptyState}>
-                                                        <Users size={40} opacity={0.2} />
-                                                        <p>{t('no_connections')}</p>
+                                                        <div className={styles.emptyHeader}>
+                                                            <Users size={40} opacity={0.2} />
+                                                            <p style={{ fontWeight: '600', fontSize: '1rem', color: 'rgba(255,255,255,0.4)' }}>
+                                                                {t('no_connections') || 'আপনার কোনো কানেকশন নেই'}
+                                                            </p>
+                                                        </div>
+                                                        
+                                                        {suggestions.length > 0 && (
+                                                            <div className={styles.emptySuggestWrap}>
+                                                                <h4 className={styles.emptySuggestTitle}>আপনার জন্য কিছু সাজেশন</h4>
+                                                                <div className={styles.connGrid}>
+                                                                    {suggestions.slice(0, 6).map(s => (
+                                                                        <div key={s.id} className={styles.connCard}>
+                                                                            <div className={styles.learnerCore} onClick={() => onSelectLearner(s)}>
+                                                                                <div className={styles.avatarMini}>
+                                                                                    {s.avatar_url ? <img src={s.avatar_url} /> : <User size={20} />}
+                                                                                    <StatusIndicator lastSeen={s.last_seen} />
+                                                                                </div>
+                                                                                <div className={styles.learnerText}>
+                                                                                    <span className={styles.learnerName}>{s.full_name || s.display_name}</span>
+                                                                                    <div className={styles.learnerSub}>
+                                                                                        <Zap size={10} color="#F1C40F" />
+                                                                                        {s.xp} XP
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                                                                                <button 
+                                                                                    className={styles.actionBtn} 
+                                                                                    onClick={() => sendRequest(s.id)}
+                                                                                    disabled={sendingId === s.id || s.request_sent}
+                                                                                >
+                                                                                    {sendingId === s.id ? (
+                                                                                        <InlineLoader size={30} showText={false} />
+                                                                                    ) : (
+                                                                                        s.request_sent ? <Check size={16} color="#F1C40F" /> : <UserPlus size={16} />
+                                                                                    )}
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                                {suggestions.length > 6 && (
+                                                                    <button className={styles.seeMoreEmptyBtn} onClick={() => setSubTab('suggest')}>
+                                                                        সব সাজেশন দেখুন
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
                                             </>

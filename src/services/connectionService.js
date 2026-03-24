@@ -39,7 +39,9 @@ export const connectionService = {
             .from('profiles')
             .select('*')
             .not('id', 'in', `(${connectedIds.join(',')})`)
-            .lte('xp', userXp + 500) // suggested level
+            .not('full_name', 'is', null)
+            .gte('xp', Math.max(0, userXp - 500)) // 500 XP lower or 1000 XP higher
+            .lte('xp', userXp + 1000)
             .order('xp', { ascending: false })
             .limit(limit);
 

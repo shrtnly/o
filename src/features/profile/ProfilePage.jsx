@@ -5,7 +5,6 @@ import { supabase } from '../../lib/supabaseClient';
 import { rewardService } from '../../services/rewardService';
 import { courseService } from '../../services/courseService';
 import { storageService } from '../../services/storageService';
-import { honeyJarService } from '../../services/honeyJarService';
 import { connectionService } from '../../services/connectionService';
 import InlineLoader from '../../components/ui/InlineLoader';
 import PollenIcon from '../../components/PollenIcon';
@@ -157,15 +156,19 @@ const ProfilePage = () => {
 
             // Fetch real rank from leaderboard
             try {
-                const { data: rankData } = await supabase
-                    .from('leaderboard_view')
-                    .select('tier')
-                    .eq('id', user.id)
-                    .maybeSingle();
+                if (!profileData || profileData.xp < 100) {
+                    setGlobalRank('—');
+                } else {
+                    const { data: rankData } = await supabase
+                        .from('leaderboard_view')
+                        .select('tier')
+                        .eq('id', user.id)
+                        .maybeSingle();
 
-                if (rankData) {
-                    const rank = await leaderboardService.getUserRank(user.id, rankData.tier);
-                    if (rank) setGlobalRank(rank);
+                    if (rankData) {
+                        const rank = await leaderboardService.getUserRank(user.id, rankData.tier);
+                        if (rank) setGlobalRank(rank);
+                    }
                 }
             } catch (rankErr) {
                 console.error('Error fetching global rank:', rankErr);
@@ -523,7 +526,7 @@ const ProfilePage = () => {
                                             <Trophy size={18} className={styles.statIconRank} />
                                         </div>
                                         <div className={styles.statInfoStack}>
-                                            <span className={styles.statCardValue}>#{globalRank}</span>
+                                            <span className={styles.statCardValue}>{typeof globalRank === 'number' ? `#${globalRank}` : globalRank}</span>
                                             <span className={styles.statCardLabel}>{language === 'bn' ? 'র‍্যাংক' : 'Rank'}</span>
                                         </div>
                                     </div>

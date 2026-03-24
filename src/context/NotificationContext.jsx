@@ -179,9 +179,8 @@ export const NotificationProvider = ({ children }) => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '12px',
-                                width: '90vw',
-                                maxWidth: '320px',
-                                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5)',
+                                width: '320px',
+                                minWidth: '280px',
                                 color: '#fff',
                                 fontFamily: "'Hind Siliguri', sans-serif"
                             }}>
@@ -202,10 +201,16 @@ export const NotificationProvider = ({ children }) => {
                                         <img src={actorProfile.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
                                         <div style={{ background: 'var(--color-primary-soft)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            {newNotif.type === 'reward' && <span style={{ fontSize: '18px' }}>🏆</span>}
+                                            {newNotif.type === 'reward' && <span style={{ fontSize: '18px' }}>🌕</span>}
                                             {newNotif.type === 'streak' && <span style={{ fontSize: '18px' }}>🔥</span>}
-                                            {newNotif.type === 'course' && <span style={{ fontSize: '18px' }}>📚</span>}
-                                            {(!['reward', 'streak', 'course'].includes(newNotif.type)) && <span style={{ fontSize: '18px' }}>🔔</span>}
+                                            {newNotif.type === 'course' && (
+                                                <span style={{ fontSize: '18px' }}>
+                                                    {newNotif.data?.type === 'course_complete' ? '🎓' : 
+                                                     newNotif.data?.type === 'module_complete' ? '🌟' : '📚'}
+                                                </span>
+                                            )}
+                                            {newNotif.type === 'unlock' && <span style={{ fontSize: '18px' }}>🏆</span>}
+                                            {(!['reward', 'streak', 'course', 'unlock'].includes(newNotif.type)) && <span style={{ fontSize: '18px' }}>🔔</span>}
                                         </div>
                                     )}
                                 </div>
@@ -220,15 +225,15 @@ export const NotificationProvider = ({ children }) => {
                                         letterSpacing: '1px', 
                                         marginBottom: '2px' 
                                     }}>
-                                        {newNotif.title}
+                                        {newNotif.data?.display_title || newNotif.title}
                                     </div>
                                     <div style={{ 
-                                        fontSize: '0.85rem', 
-                                        fontWeight: '700', 
+                                        fontSize: '0.82rem', 
+                                        fontWeight: '800', 
                                         color: '#fff', 
                                         lineHeight: '1.2' 
                                     }}>
-                                        {actorProfile?.full_name || actorProfile?.display_name || 'লার্নার'}
+                                        {newNotif.data?.display_msg || (actorProfile?.full_name || actorProfile?.display_name || 'BeeLesson Achievement')}
                                     </div>
                                 </div>
 
@@ -287,7 +292,10 @@ export const NotificationProvider = ({ children }) => {
                                     </button>
                                 )}
                             </div>
-                        ), { duration: 5000 });
+                        ), { 
+                            id: newNotif.id,
+                            duration: 4000 
+                        });
                     } else if (eventType === 'UPDATE') {
                         setNotifications(prev => prev.map(n => n.id === newNotif.id ? { ...n, ...newNotif } : n));
                     } else if (eventType === 'DELETE') {

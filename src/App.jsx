@@ -144,7 +144,7 @@ function App() {
       <LanguageProvider>
         <NotificationProvider>
           <ThemeProvider>
-            <Toaster position="top-right" expand={false} theme="dark" richColors />
+            <Toaster position="top-right" expand={true} visibleToasts={5} theme="dark" richColors />
             <AppContent />
           </ThemeProvider>
         </NotificationProvider>

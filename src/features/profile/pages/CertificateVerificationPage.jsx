@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabaseClient';
-import { CheckCircle2, XCircle, Search, Award, Calendar, User, BookOpen, GraduationCap } from 'lucide-react';
+import { CheckCircle2, XCircle, Search, Award, Calendar, User, BookOpen } from 'lucide-react';
+import logoImg from '../../../assets/shields/Logo_BeeLesson.png';
 import LoadingScreen from '../../../components/ui/LoadingScreen';
 import styles from './CertificateVerificationPage.module.css';
 
@@ -18,7 +19,7 @@ const CertificateVerificationPage = () => {
                 setLoading(true);
                 const { data, error: certError } = await supabase
                     .from('certificates')
-                    .select('*, courses(title), profiles(full_name)')
+                    .select('*, courses(title), profiles(full_name, avatar_url, display_name)')
                     .eq('verification_code', code)
                     .single();
 
@@ -45,8 +46,8 @@ const CertificateVerificationPage = () => {
             <div className={styles.card}>
                 <div className={styles.header}>
                     <div className={styles.logo}>
-                         <GraduationCap size={32} color="#F1C40F" />
-                         <span>BeeLesson <small>Verification</small></span>
+                         <img src={logoImg} alt="BeeLesson Logo" className={styles.beeLogo} />
+                         <span>Verification</span>
                     </div>
                 </div>
 
@@ -63,52 +64,50 @@ const CertificateVerificationPage = () => {
                     </div>
                 ) : (
                     <div className={styles.resultArea}>
-                        <div className={styles.successIcon}>
-                            <CheckCircle2 size={64} color="#2ECC71" />
+                        <div className={styles.titleRow}>
+                            <h1 className={styles.successTitle}>Official Certificate</h1>
+                            <div className={styles.statusBadge}>
+                                <CheckCircle2 size={16} />
+                                <span>Verified</span>
+                            </div>
                         </div>
-                        <h1 className={styles.successTitle}>Verified Certificate</h1>
-                        <p className={styles.successMsg}>
-                            This certificate was officially issued by BeeLesson and is valid.
-                        </p>
+                        
+                        <div className={styles.recipientHeader}>
+                            <div className={styles.avatarBox}>
+                                {certificate.profiles?.avatar_url ? (
+                                    <img src={certificate.profiles.avatar_url} alt="" className={styles.avatarImg} />
+                                ) : (
+                                    <div className={styles.avatarPlaceholder}><User size={24} /></div>
+                                )}
+                            </div>
+                            <div className={styles.recipientInfo}>
+                                <div className={styles.label}>CERTIFIED LEARNER</div>
+                                <h2 className={styles.name}>{certificate.profiles?.full_name}</h2>
+                            </div>
+                        </div>
 
                         <div className={styles.detailsGrid}>
                             <div className={styles.detailItem}>
-                                <User size={18} />
                                 <div className={styles.detailContent}>
-                                    <label>Recipient</label>
-                                    <span>{certificate.profiles?.full_name}</span>
-                                </div>
-                            </div>
-                            <div className={styles.detailItem}>
-                                <BookOpen size={18} />
-                                <div className={styles.detailContent}>
-                                    <label>Course Name</label>
+                                    <label>Course Completion</label>
                                     <span>{certificate.courses?.title}</span>
                                 </div>
                             </div>
                             <div className={styles.detailItem}>
-                                <Calendar size={18} />
                                 <div className={styles.detailContent}>
-                                    <label>Issued On</label>
+                                    <label>Issue Date</label>
                                     <span>{new Date(certificate.issued_at).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                                 </div>
                             </div>
-                            <div className={styles.detailItem}>
-                                <Search size={18} />
-                                <div className={styles.detailContent}>
-                                    <label>Verification Code</label>
-                                    <span>{certificate.verification_code}</span>
-                                </div>
-                            </div>
                         </div>
 
-                        <div className={styles.infoBox}>
-                             <Award size={20} />
-                             <p>This learner has demonstrated full mastery of all course modules.</p>
+                        <div className={styles.idBox}>
+                            <div className={styles.idLabel}>VERIFICATION ID</div>
+                            <code>{certificate.verification_code}</code>
                         </div>
 
                         <button className={styles.homeBtn} onClick={() => navigate('/')}>
-                            Explore More Courses
+                            Continue Learning
                         </button>
                     </div>
                 )}

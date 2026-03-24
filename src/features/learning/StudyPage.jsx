@@ -9,7 +9,6 @@ import PollenIcon from '../../components/PollenIcon';
 import { useAuth } from '../../context/AuthContext';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { rewardService } from '../../services/rewardService';
-import { honeyJarService } from '../../services/honeyJarService';
 import { shopService } from '../../services/shopService';
 import { useLanguage } from '../../context/LanguageContext';
 import InlineLoader from '../../components/ui/InlineLoader';
@@ -384,16 +383,16 @@ const StudyPage = () => {
                 // Fetch chapter info
                 const { data: chapter, error: cErr } = await supabase
                     .from('chapters')
-                    .select('title')
+                    .select('title, order_index, unit_id')
                     .eq('id', chapterId)
                     .single();
                 if (!cErr && chapter) {
                     setChapterInfo(chapter);
-                    // Fetch next chapter info
+                    // Fetch next chapter info using unit_id since course_id is not directly in chapters table
                     const { data: nextC } = await supabase
                         .from('chapters')
                         .select('title')
-                        .eq('course_id', courseId)
+                        .eq('unit_id', chapter.unit_id)
                         .gt('order_index', chapter?.order_index || 0)
                         .order('order_index', { ascending: true })
                         .limit(1)
@@ -664,38 +663,17 @@ const StudyPage = () => {
                     const earnedXp = Math.round((stats.correct / (stats.total || 1)) * 20);
                     const earnedPollen = Math.round((stats.correct / (stats.total || 1)) * 30);
 
-                    // Update user progress
-                    const { data: existingProgress } = await supabase
-                        .from('user_progress')
-                        .select('id')
-                        .eq('user_id', user.id)
-                        .eq('chapter_id', chapterId)
-                        .single();
+                    // Update user progress via Atomic RPC for better reliability and RLS bypass
+                    const { error: rpcErr } = await supabase.rpc('upsert_user_progress', {
+                        p_user_id: user.id,
+                        p_course_id: courseId,
+                        p_chapter_id: chapterId,
+                        p_total_questions: stats.total,
+                        p_correct_answers: stats.correct,
+                        p_xp_earned: earnedXp
+                    });
 
-                    if (!existingProgress) {
-                        await supabase.from('user_progress').insert({
-                            user_id: user.id,
-                            course_id: courseId,
-                            chapter_id: chapterId,
-                            is_completed: true,
-                            completed_at: new Date().toISOString(),
-                            total_questions: stats.total,
-                            correct_answers: stats.correct,
-                            xp_earned: earnedXp,
-                            last_accessed: new Date().toISOString()
-                        });
-                    } else {
-                        await supabase.from('user_progress')
-                            .update({
-                                is_completed: true,
-                                completed_at: new Date().toISOString(),
-                                total_questions: stats.total,
-                                correct_answers: stats.correct,
-                                xp_earned: earnedXp,
-                                last_accessed: new Date().toISOString()
-                            })
-                            .eq('id', existingProgress.id);
-                    }
+                    if (rpcErr) throw rpcErr;
 
                     // Update Profile Stats & Streak via Reward Service
                     if (user?.id) {
@@ -712,8 +690,7 @@ const StudyPage = () => {
                             chapterId
                         });
 
-                        // Update Honey Jar as well
-                        await honeyJarService.addPollenToJar(user.id, earnedPollen);
+
                     }
                 } catch (err) {
                     console.error('Error updating progress:', err);
@@ -758,9 +735,26 @@ const StudyPage = () => {
 
     if (questions.length === 0) return (
         <div className={styles.loadingContainer}>
-            <div className="text-center space-y-4">
-                <h2 className="text-xl font-bold">এই অধ্যায়ে কোনো প্রশ্ন পাওয়া যায়নি।</h2>
-                <button onClick={() => navigate(-1)} className="bg-[#ffa202] text-white px-6 py-2 rounded-xl shadow-[0_4px_0_#e69200] active:translate-y-1 active:shadow-none transition-all">ফিরে যান</button>
+            <div className="text-center space-y-6 max-w-sm px-6">
+                <div className="bg-[#ffa202]/10 p-6 rounded-2xl border-2 border-dashed border-[#ffa202]/30">
+                    <Lightbulb size={48} className="mx-auto mb-4 text-[#ffa202]" strokeWidth={1.5} />
+                    <h2 className="text-xl font-bold text-white mb-2">এই অধ্যায়ে কোনো প্রশ্ন পাওয়া যায়নি।</h2>
+                    <p className="text-gray-400 text-sm">সম্ভবত এই অধ্যায়টি শীঘ্রই আপডেট করা হবে। আপনি চাইলে এখন এটি সম্পন্ন করে এগিয়ে যেতে পারেন।</p>
+                </div>
+                <div className="flex flex-col gap-3">
+                    <button 
+                        onClick={handleNext} 
+                        className="w-full bg-[#ffa202] text-white px-6 py-3 rounded-xl font-bold shadow-[0_4px_0_#e69200] active:translate-y-1 active:shadow-none transition-all flex items-center justify-center gap-2"
+                    >
+                        অধ্যায়টি সম্পন্ন করুন <ArrowRight size={20} />
+                    </button>
+                    <button 
+                        onClick={() => navigate(-1)} 
+                        className="w-full bg-[#2d383e] text-white/60 px-6 py-3 rounded-xl font-medium hover:text-white transition-colors"
+                    >
+                        ফিরে যান
+                    </button>
+                </div>
             </div>
         </div>
     );
@@ -1221,7 +1215,7 @@ const StudyPage = () => {
                             {!showReview && (
                                 <button
                                     className={styles.continueFinishBtn}
-                                    onClick={() => navigate(-1)}
+                                    onClick={() => navigate(`/learn/${courseId}`)}
                                 >
                                     অব্যাহত রাখুন
                                 </button>
@@ -1304,8 +1298,6 @@ const StudyPage = () => {
                 </div>
             </footer>
 
-            {/* Result modal removed — result card is now shown inline in main */}
-
             <AnimatePresence>
                 {showNoHeartsModal && (
                     <motion.div
@@ -1323,13 +1315,11 @@ const StudyPage = () => {
                             className={`${styles.resultCard} ${styles.noHeartsCard}`}
                             onClick={(e) => e.stopPropagation()}
                         >
-                            {/* Close Button */}
                             <button className={styles.modalCloseBtn} onClick={() => setShowNoHeartsModal(false)}>
                                 <X size={18} strokeWidth={2.5} />
                             </button>
 
                             <div className={styles.noHeartsContent}>
-                                {/* Hero Area */}
                                 <div className={styles.noHeartsHero}>
                                     <div className={styles.honeyEmoji}>🍯</div>
                                     <div className={styles.noHeartsTextBlock}>
@@ -1338,7 +1328,6 @@ const StudyPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Refill Timer */}
                                 {refillTimeDisplay && (
                                     <div className={styles.refillTimerRow}>
                                         <div className={styles.refillTimerLeft}>
@@ -1355,12 +1344,9 @@ const StudyPage = () => {
                                     </div>
                                 )}
 
-                                {/* Divider */}
                                 <div className={styles.noHeartsDivider} />
 
-                                {/* Action Buttons */}
                                 <div className={styles.noHeartsButtons}>
-                                    {/* Primary: Instant Refill */}
                                     <button
                                         className={`${styles.btn3d} ${styles.instantRefillBtn}`}
                                         onClick={() => handleNoHeartsCheckout('hearts')}
@@ -1369,7 +1355,6 @@ const StudyPage = () => {
                                         <span>আনলিমিটেড 24 ঘন্টা - মাত্র 4 টাকা</span>
                                     </button>
 
-                                    {/* Secondary: Premium Mode */}
                                     <button
                                         className={`${styles.btn3d} ${styles.premiumCardBtn}`}
                                         onClick={() => handleNoHeartsCheckout('subscription')}
@@ -1384,76 +1369,68 @@ const StudyPage = () => {
                 )}
             </AnimatePresence>
 
-            {/* No Hearts Checkout Modal */}
-            {
-                showNoHeartsCheckout && (
-                    <div className={styles.checkoutOverlay} onClick={() => setShowNoHeartsCheckout(null)}>
-                        <motion.div
-                            initial={{ scale: 0.88, opacity: 0, y: 30 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.88, opacity: 0 }}
-                            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-                            className={styles.checkoutCard}
-                            onClick={e => e.stopPropagation()}
-                        >
-                            {/* Header */}
-                            <div className={styles.checkoutCardHeader}>
-                                <div className={styles.checkoutCardIcon}>
-                                    {showNoHeartsCheckout.type === 'hearts' ? '🍯' : '👑'}
-                                </div>
-                                <h2 className={styles.checkoutCardTitle}>পেমেন্ট কনফার্ম করুন</h2>
-                                <p className={styles.checkoutCardSub}>নিচের বিবরণ যাচাই করুন</p>
+            {showNoHeartsCheckout && (
+                <div className={styles.checkoutOverlay} onClick={() => setShowNoHeartsCheckout(null)}>
+                    <motion.div
+                        initial={{ scale: 0.88, opacity: 0, y: 30 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.88, opacity: 0 }}
+                        transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+                        className={styles.checkoutCard}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        <div className={styles.checkoutCardHeader}>
+                            <div className={styles.checkoutCardIcon}>
+                                {showNoHeartsCheckout.type === 'hearts' ? '🍯' : '👑'}
                             </div>
+                            <h2 className={styles.checkoutCardTitle}>পেমেন্ট কনফার্ম করুন</h2>
+                            <p className={styles.checkoutCardSub}>নিচের বিবরণ যাচাই করুন</p>
+                        </div>
 
-                            {/* Order summary */}
-                            <div className={styles.checkoutSummary}>
-                                <div className={styles.checkoutSummaryRow}>
-                                    <span>আইটেম</span>
-                                    <span>{showNoHeartsCheckout.label}</span>
-                                </div>
-                                <div className={`${styles.checkoutSummaryRow} ${styles.checkoutSummaryTotal}`}>
-                                    <span>মোট</span>
-                                    <span>৳ {showNoHeartsCheckout.price}</span>
-                                </div>
+                        <div className={styles.checkoutSummary}>
+                            <div className={styles.checkoutSummaryRow}>
+                                <span>আইটেম</span>
+                                <span>{showNoHeartsCheckout.label}</span>
                             </div>
-
-                            {/* Payment methods */}
-                            <div className={styles.checkoutMethods}>
-                                <div className={`${styles.checkoutMethodBtn} ${styles.checkoutMethodActive}`}>
-                                    <CreditCard size={22} />
-                                    <span>বিকাশ</span>
-                                </div>
-                                <div className={styles.checkoutMethodBtn}>
-                                    <ShoppingBag size={22} />
-                                    <span>নগদ</span>
-                                </div>
+                            <div className={`${styles.checkoutSummaryRow} ${styles.checkoutSummaryTotal}`}>
+                                <span>মোট</span>
+                                <span>৳ {showNoHeartsCheckout.price}</span>
                             </div>
+                        </div>
 
-                            {/* Actions */}
-                            <div className={styles.checkoutCardActions}>
-                                <button
-                                    className={styles.checkoutCancelBtn}
-                                    onClick={() => setShowNoHeartsCheckout(null)}
-                                    disabled={checkoutProcessing}
-                                >
-                                    বাতিল
-                                </button>
-                                <button
-                                    className={styles.checkoutConfirmBtn}
-                                    onClick={completeNoHeartsCheckout}
-                                    disabled={checkoutProcessing}
-                                >
-                                    {checkoutProcessing
-                                        ? <Loader2 size={20} className={styles.spinnerIcon} />
-                                        : 'এখনই পে করুন'}
-                                </button>
+                        <div className={styles.checkoutMethods}>
+                            <div className={`${styles.checkoutMethodBtn} ${styles.checkoutMethodActive}`}>
+                                <CreditCard size={22} />
+                                <span>বিকাশ</span>
                             </div>
-                        </motion.div>
-                    </div>
-                )
-            }
+                            <div className={styles.checkoutMethodBtn}>
+                                <ShoppingBag size={22} />
+                                <span>নগদ</span>
+                            </div>
+                        </div>
 
-            {/* Emotional Exit Confirmation Modal */}
+                        <div className={styles.checkoutCardActions}>
+                            <button
+                                className={styles.checkoutCancelBtn}
+                                onClick={() => setShowNoHeartsCheckout(null)}
+                                disabled={checkoutProcessing}
+                            >
+                                বাতিল
+                            </button>
+                            <button
+                                className={styles.checkoutConfirmBtn}
+                                onClick={completeNoHeartsCheckout}
+                                disabled={checkoutProcessing}
+                            >
+                                {checkoutProcessing
+                                    ? <Loader2 size={20} className={styles.spinnerIcon} />
+                                    : 'এখনই পে করুন'}
+                            </button>
+                        </div>
+                    </motion.div>
+                </div>
+            )}
+
             <AnimatePresence>
                 {showExitConfirmation && (
                     <div className={styles.confirmModalOverlay} onClick={() => setShowExitConfirmation(false)}>
@@ -1488,7 +1465,7 @@ const StudyPage = () => {
                                 </button>
                                 <button
                                     className={styles.leaveBtn}
-                                    onClick={() => navigate(-1)}
+                                    onClick={() => navigate(`/learn/${courseId}`)}
                                 >
                                     পরে ফিরে আসবো
                                 </button>
@@ -1498,7 +1475,6 @@ const StudyPage = () => {
                 )}
             </AnimatePresence>
 
-            {/* ── Review Screen Overlay (fixed, sits between header and footer) ── */}
             <AnimatePresence mode="wait">
                 {showReview && (
                     <motion.div
@@ -1509,7 +1485,6 @@ const StudyPage = () => {
                         transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
                         className={styles.reviewOverlay}
                     >
-                        {/* Scrollable list */}
                         <div className={styles.reviewList}>
                             {questions.map((q, idx) => {
                                 const hist = answersHistory[idx];
@@ -1557,7 +1532,6 @@ const StudyPage = () => {
                 )}
             </AnimatePresence>
 
-            {/* Course Rating / Feedback Card */}
             {showFeedbackCard && user && (
                 <CourseFeedbackCard
                     courseId={courseId}

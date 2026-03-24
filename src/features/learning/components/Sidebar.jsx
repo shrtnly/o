@@ -4,7 +4,7 @@ import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircl
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
-import { honeyJarService } from '../../../services/honeyJarService';
+
 import { cn } from '../../../lib/utils';
 import logo from '../../../assets/shields/Logo_BeeLesson.png';
 import { supabase } from '../../../lib/supabaseClient';

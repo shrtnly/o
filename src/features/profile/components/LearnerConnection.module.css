@@ -367,12 +367,55 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem;
-    gap: 1rem;
+    padding: 3rem 1.5rem;
+    gap: 1.5rem;
     color: rgba(255, 255, 255, 0.2);
     background: rgba(255, 255, 255, 0.01);
     border-radius: 24px;
     border: 1px dashed rgba(255, 255, 255, 0.05);
+}
+
+.emptyHeader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.emptySuggestWrap {
+    width: 100%;
+}
+
+.emptySuggestTitle {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.75rem;
+    padding-left: 2px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.seeMoreEmptyBtn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.seeMoreEmptyBtn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .sectionTitle {
@@ -1262,4 +1305,56 @@
     .msgAttachment {
         max-width: 220px;
     }
+}
+
+/* Skeleton Loading */
+.skeletonConversations {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.skeletonItem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.skeletonAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    animation: skeleton-shimmer 1.5s infinite linear;
+}
+
+.skeletonDetails {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeletonName {
+    height: 14px;
+    width: 40%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    animation: skeleton-shimmer 1.5s infinite linear;
+}
+
+.skeletonMsg {
+    height: 10px;
+    width: 70%;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    animation: skeleton-shimmer 1.5s infinite linear;
+}
+
+@keyframes skeleton-shimmer {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.3; }
 }

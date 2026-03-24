@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity, Gift } from 'lucide-react';
+import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity, Users, UserPlus } from 'lucide-react';
 import HoneyDropIcon from '../../../components/HoneyDropIcon';
 import PollenIcon from '../../../components/PollenIcon';
 import { useNavigate } from 'react-router-dom';
@@ -13,27 +13,11 @@ import { formatLocalDate } from '../../../lib/dateUtils';
 import { leaderboardService } from '../../../services/leaderboardService';
 import { getShieldLevel, getLevelProgress } from '../../../utils/shieldSystem';
 import { useLanguage } from '../../../context/LanguageContext';
-import { honeyJarService } from '../../../services/honeyJarService';
 import { supabase } from '../../../lib/supabaseClient';
 import { cn } from '../../../lib/utils';
+import { connectionService } from '../../../services/connectionService';
 
-const GIFT_CONFIG = {
-    pollen: {
-        emoji: '🌼',
-        color: '#FFD700',
-        label: 'মধুরেণু',
-    },
-    honey_drops: {
-        emoji: '🍯',
-        color: '#F1A20F',
-        label: 'মধু ফোঁটা',
-    },
-    xp: {
-        emoji: '⚡',
-        color: '#1CB0F6',
-        label: 'এক্সপি',
-    },
-};
+
 
 const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [], currentCourseId }) => {
     const navigate = useNavigate();
@@ -59,12 +43,14 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
     const [streakLoading, setStreakLoading] = React.useState(true);
     const [leaderboardLoading, setLeaderboardLoading] = React.useState(true);
 
-    // Honey Jar states
-    const [jarProgress, setJarProgress] = React.useState({ fill_percent: 0, pollen_in_cycle: 0, is_full: false });
-    const [pendingGift, setPendingGift] = React.useState(null);
-    const [jarSplash, setJarSplash] = React.useState(false);
-    const [giftGenerationLoading, setGiftGenerationLoading] = React.useState(false);
-    const [claimingGift, setClaimingGift] = React.useState(false);
+
+
+    // Connections & Suggestions
+    const [connections, setConnections] = React.useState({ active: [], pending: [], outgoing: [] });
+    const [suggestions, setSuggestions] = React.useState([]);
+    const [connectionsLoading, setConnectionsLoading] = React.useState(true);
+    const [sendingId, setSendingId] = React.useState(null);
+    const [leavingId, setLeavingId] = React.useState(null);
 
     // Fetch streak and activity data — only re-runs when user ID changes, NOT on XP change
     React.useEffect(() => {
@@ -76,20 +62,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                 // Fetch 365 days once — slice in memory for weekly view (saves 1 DB round-trip)
                 const [streakData, full] = await Promise.all([
                     rewardService.getUserStreak(profile.id),
-                    rewardService.getActivityHistory(profile.id, 365),
-                    // Honey jar fetched in parallel too
-                    (async () => {
-                        const [progress, gift] = await Promise.all([
-                            honeyJarService.getJarProgress(profile.id),
-                            honeyJarService.getUnclaimedGift(profile.id),
-                        ]);
-                        setJarProgress(progress || { fill_percent: 0, pollen_in_cycle: 0, is_full: false });
-                        if (gift) {
-                            setPendingGift(gift);
-                        } else if (progress?.is_full) {
-                            handleJarFull();
-                        }
-                    })()
+                    rewardService.getActivityHistory(profile.id, 365)
                 ]);
 
                 setStreak(streakData);
@@ -132,19 +105,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
         fetchStreakData();
         fetchLeaderboard();
 
-        // Subscriptions for real-time jar updates
-        const channel = honeyJarService.subscribeToJarProgress(profile.id, (newData) => {
-            setJarProgress(newData);
-            setJarSplash(true);
-            setTimeout(() => setJarSplash(false), 800);
-            if (newData.is_full) handleJarFull();
-        });
 
-        const giftChannel = honeyJarService.subscribeToGifts(profile.id, (newGift) => {
-            if (!newGift.is_claimed) {
-                setPendingGift(newGift);
-            }
-        });
 
         // Listen for profile updates from other components (like Shop)
         const handleProfileUpdate = (e) => {
@@ -153,48 +114,58 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
         window.addEventListener('profileUpdate', handleProfileUpdate);
 
         return () => {
-            supabase.removeChannel(channel);
-            supabase.removeChannel(giftChannel);
+
             window.removeEventListener('profileUpdate', handleProfileUpdate);
         };
     }, [profile?.id, refreshProfile]); // ✅ Only re-fetch on user change, NOT on every XP update
 
-    const handleJarFull = async () => {
-        if (giftGenerationLoading) return;
-        setGiftGenerationLoading(true);
+    // Independent fetch for connections and suggestions
+    React.useEffect(() => {
+        if (!profile?.id) return;
+
+        const fetchConnectionData = async () => {
+            setConnectionsLoading(true);
+            try {
+                const [connRes, suggestRes] = await Promise.all([
+                    connectionService.getConnections(profile.id),
+                    connectionService.getSuggestions(profile.id, profile.xp, 4) // Fetch 4 suggestions
+                ]);
+                setConnections(connRes);
+                setSuggestions(suggestRes);
+            } catch (error) {
+                console.error('Error fetching connections in sidebar:', error);
+            } finally {
+                setConnectionsLoading(false);
+            }
+        };
+
+        fetchConnectionData();
+    }, [profile?.id, profile?.xp]);
+
+    const handleConnectClick = async (targetId) => {
+        setSendingId(targetId);
         try {
-            // First check if a gift already exists to avoid duplicates
-            const existing = await honeyJarService.getUnclaimedGift(profile.id);
-            if (existing) {
-                setPendingGift(existing);
-                setGiftGenerationLoading(false);
-                return;
-            }
-
-            const gift = await honeyJarService.generateMysteryGift(profile.id);
-            if (gift) {
-                setPendingGift(gift);
-            }
+            await connectionService.sendRequest(profile.id, targetId);
+            setSuggestions(prev => prev.map(s => s.id === targetId ? { ...s, request_sent: true } : s));
+            
+            // Wait for check animation, then trigger exit animation and remove
+            setTimeout(() => {
+                setLeavingId(targetId);
+                setTimeout(() => {
+                    setSuggestions(prev => prev.filter(s => s.id !== targetId));
+                    setLeavingId(null);
+                    refreshProfile && refreshProfile();
+                }, 300); // Match itemExit animation duration
+            }, 800); // Time to see the animated check
+            
         } catch (err) {
-            console.error('handleJarFull error:', err);
+            console.error('Connect error:', err);
         } finally {
-            setGiftGenerationLoading(false);
+            setSendingId(null);
         }
     };
 
-    const handleClaimGift = async (giftId) => {
-        setClaimingGift(true);
-        const result = await honeyJarService.claimMysteryGift(profile.id, giftId);
-        if (result?.success) {
-            const progress = await honeyJarService.getJarProgress(profile.id);
-            setJarProgress(progress);
-            setPendingGift(null);
-            // Refresh parent profile to update XP/Gems/Hearts
-            if (refreshProfile) await refreshProfile();
-        }
-        setClaimingGift(false);
-        return result;
-    };
+
 
     return (
         <aside className={styles.rightSidebar}>
@@ -432,7 +403,17 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                 </div>
                 <div className={styles.leaderboardContent}>
                     {profile && (
-                        leaderboardLoading ? (
+                        profile.xp < 100 ? (
+                            <div className={styles.unlockContent}>
+                                <div className={styles.iconBoxLocked}>
+                                    <Lock size={40} className={styles.lockIconLarge} />
+                                </div>
+                                <div className={styles.unlockInfo}>
+                                    <h4 className={styles.unlockTitle}>লিডারবোর্ড আনলক করুন!</h4>
+                                    <p className={styles.unlockDesc}>প্রতিযোগিতা শুরু করতে 100 টি XP অর্জন করুন</p>
+                                </div>
+                            </div>
+                        ) : leaderboardLoading ? (
                             <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '45px', marginBottom: '12px' }}></div>
                         ) : (
                             <>
@@ -459,169 +440,113 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                     </div>
                                 </div>
                                 <div className={styles.leaderboardDivider}>•••</div>
+
+                                <div className={styles.leaderboardPreview}>
+                                    {(!leaderboardData?.length) ? (
+                                        <div className={styles.leaderboardPreview}>
+                                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
+                                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
+                                        </div>
+                                    ) : (
+                                        leaderboardData.slice(0, 2).map((user, index) => {
+                                            const avatarSeed = index === 0 ? 'Felix' : 'Vivian';
+                                            const avatarUrl = user.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.id === profile.id ? (profile.display_name || profile.id) : avatarSeed}`;
+
+                                            return (
+                                                <div
+                                                    key={user.id}
+                                                    className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
+                                                >
+                                                    <div className={styles.leaderboardRowLeft}>
+                                                        <span className={styles.rowRank}>{index + 1}</span>
+                                                        <img
+                                                            src={avatarUrl}
+                                                            className={styles.rowAvatar}
+                                                            alt={user.display_name || 'লার্নার'}
+                                                        />
+                                                        <span className={styles.rowName}>
+                                                            {user.display_name || 'লার্নার'}
+                                                        </span>
+                                                    </div>
+                                                    <div className={styles.leaderboardRowRight}>
+                                                        <ShieldIcon
+                                                            xp={user.xp}
+                                                            size={22}
+                                                            showTooltip={false}
+                                                            showShadow={getShieldLevel(user.xp).level !== 'SILVER'}
+                                                        />
+                                                        <span className={styles.rowXP}>{user.xp}</span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
                             </>
                         )
                     )}
-
-                    {profile?.xp >= 100 ? (
-                        <div className={styles.leaderboardPreview}>
-                            {(leaderboardLoading || !leaderboardData?.length) ? (
-                                <div className={styles.leaderboardPreview}>
-                                    <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
-                                    <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
-                                </div>
-                            ) : (
-                                leaderboardData.slice(0, 2).map((user, index) => {
-                                    // Deterministic avatar for dummy users if no avatar_url
-                                    const avatarSeed = index === 0 ? 'Felix' : 'Vivian'; // Boy for #1, Girl for #2
-                                    const avatarUrl = user.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.id === profile.id ? (profile.display_name || profile.id) : avatarSeed}`;
-
-                                    return (
-                                        <div
-                                            key={user.id}
-                                            className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
-                                        >
-                                            <div className={styles.leaderboardRowLeft}>
-                                                <span className={styles.rowRank}>{index + 1}</span>
-                                                <img
-                                                    src={avatarUrl}
-                                                    className={styles.rowAvatar}
-                                                    alt={user.display_name || 'লার্নার'}
-                                                />
-                                                <span className={styles.rowName}>
-                                                    {user.display_name || 'লার্নার'}
-                                                </span>
-                                            </div>
-                                            <div className={styles.leaderboardRowRight}>
-                                                <ShieldIcon
-                                                    xp={user.xp}
-                                                    size={22}
-                                                    showTooltip={false}
-                                                    showShadow={getShieldLevel(user.xp).level !== 'SILVER'}
-                                                />
-                                                <span className={styles.rowXP}>{user.xp}</span>
-                                            </div>
-                                        </div>
-                                    );
-                                })
-                            )}
-                            {userRank > 2 && (
-                                <>
-                                </>
-                            )}
-                        </div>
-                    ) : (
-                        <div className={styles.unlockContent}>
-                            <div className={styles.iconBoxLocked}>
-                                <Lock size={40} className={styles.lockIconLarge} />
-                            </div>
-                            <div className={styles.unlockInfo}>
-                                <h4 className={styles.unlockTitle}>লিডারবোর্ড আনলক করুন!</h4>
-                                <p className={styles.unlockDesc}>প্রতিযোগিতা শুরু করতে 100 টি XP অর্জন করুন</p>
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
 
 
-            {/* Honey Jar Card */}
-            <div className={cn(styles.card, styles.cardGolden)}>
-                <div className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle}>
-                        <span className={styles.cardTitleEmoji}>🍯</span>
-                        <span>মধু-পূর্ণতা</span>
-                    </h3>
-                </div>
-                <div className={styles.jarLayout} style={{ background: 'none', border: 'none', padding: 0, boxShadow: 'none' }}>
-                    <div className={styles.honeyJarContainer}>
-                        <div className={styles.honeyJar} style={{ width: '56px' }}>
-                            {jarProgress.is_full && (
-                                <div className={styles.jarOverflowDrips} style={{ gap: '3px' }}>
-                                    <div className={styles.overflowDrip} style={{ width: '5px', height: '5px' }} />
-                                    <div className={styles.overflowDrip} style={{ width: '5px', height: '5px', animationDelay: '0.3s' }} />
-                                    <div className={styles.overflowDrip} style={{ width: '5px', height: '5px', animationDelay: '0.6s' }} />
-                                </div>
-                            )}
-                            <div className={styles.jarLid} style={{ height: '8px' }}></div>
-                            <div className={styles.jarBody}>
-                                <div className={`${styles.jarGlass} ${jarSplash ? styles.jarSplash : ''}`} style={{ width: '56px', height: '84px' }}>
-                                    <div className={styles.jarFill} style={{ height: `${jarProgress.fill_percent}%` }}>
-                                        <div className={styles.liquidWave}></div>
-                                    </div>
-                                    <div className={styles.jarGlossLeft}></div>
-                                </div>
-                            </div>
-                            <div className={styles.jarPercentOverlay} style={{ top: '8px' }}>
-                                <span style={{ fontSize: '0.65rem' }}>{jarProgress.fill_percent}%</span>
-                            </div>
-                        </div>
+            {/* Suggest list */}
+            {(!connectionsLoading && suggestions.length > 0) && (
+                <div className={cn(styles.card, styles.cardGolden)} style={{ marginTop: '4px' }}>
+                    <div className={styles.cardHeader}>
+                        <h3 className={styles.cardTitle}>
+                            <Users size={18} className={styles.cardTitleIcon} />
+                            <span>কানেক্ট হোন!</span>
+                        </h3>
                     </div>
-
-                    <div className={styles.jarInfo}>
-                        {jarProgress.is_full ? (
-                            <div className={styles.giftStatusArea}>
-                                {pendingGift ? (
-                                    <div className={styles.rewardPreview}>
-                                        <div className={styles.rewardIconBg} style={{ backgroundColor: GIFT_CONFIG[pendingGift.gift_type]?.color + '20' }}>
-                                            <span style={{ fontSize: '1.5rem' }}>{GIFT_CONFIG[pendingGift.gift_type]?.emoji}</span>
+                    <div className={styles.emptyStateContainer}>
+                        <div className={styles.suggestList}>
+                            {suggestions.map(s => (
+                                <div 
+                                    key={s.id} 
+                                    className={cn(styles.suggestItem, leavingId === s.id && styles.suggestItemLeaving)}
+                                >
+                                    <div className={styles.suggestItemLeft}>
+                                        <div className={styles.suggestAvatar}>
+                                            {s.avatar_url ? (
+                                                <img src={s.avatar_url} alt={s.display_name} />
+                                            ) : (
+                                                <User size={16} />
+                                            )}
                                         </div>
-                                        <div className={styles.rewardText}>
-                                            <span className={styles.rewardAmt}>+{pendingGift.gift_amount} {GIFT_CONFIG[pendingGift.gift_type]?.label}</span>
-                                            <button
-                                                className={styles.claimGiftBtn}
-                                                style={{ marginTop: '4px', padding: '6px 12px' }}
-                                                onClick={() => handleClaimGift(pendingGift.id)}
-                                                disabled={claimingGift}
-                                            >
-                                                <span>{claimingGift ? 'সংগ্রহ হচ্ছে...' : 'সংগ্রহ করুন'}</span>
-                                            </button>
+                                        <div className={styles.suggestText}>
+                                            <span className={styles.suggestName}>{s.display_name || 'লার্নার'}</span>
+                                            <span className={styles.suggestXp}>{s.xp} XP</span>
                                         </div>
                                     </div>
-                                ) : (
                                     <button
-                                        className={styles.claimGiftBtn}
-                                        onClick={() => handleJarFull()}
-                                        disabled={giftGenerationLoading}
+                                        className={styles.connectMiniBtn}
+                                        onClick={() => handleConnectClick(s.id)}
+                                        disabled={sendingId === s.id || s.request_sent}
                                     >
-                                        <Gift size={14} />
-                                        <span>{giftGenerationLoading ? 'অপেক্ষা করুন...' : 'উপহার খুলুন!'}</span>
+                                        {sendingId === s.id ? (
+                                            <div className={styles.tinyLoader} />
+                                        ) : (
+                                            s.request_sent ? <Check size={14} className={styles.checkAnimated} /> : <Plus size={14} />
+                                        )}
                                     </button>
-                                )}
-                            </div>
-                        ) : (
-                            <p className={styles.jarLabel} style={{ fontSize: '0.78rem' }}>
-                                জার <strong>{jarProgress.fill_percent}%</strong> পূর্ণ
-                            </p>
-                        )}
-
-                        <p className={styles.pollenCounter} style={{ fontSize: '0.68rem', opacity: 0.8 }}>
-                            🌼 <strong>{jarProgress.pollen_in_cycle || 0}</strong> সংগ্রহ
-                        </p>
-
-                        <div className={styles.xpBarWrapper} style={{ gap: '5px' }}>
-                            <div className={styles.xpBar} style={{ height: '5px' }}>
-                                <div
-                                    className={`${styles.xpFill} ${jarProgress.is_full ? styles.xpFillFull : ''}`}
-                                    style={{ width: `${jarProgress.fill_percent}%` }}
-                                ></div>
-                            </div>
+                                </div>
+                            ))}
                         </div>
-
-                    </div>
-                </div>
-            </div>
-
-
-            {!profile && (
-                <div className={styles.ctaCard}>
-                    <p className={styles.ctaText}>প্রগতি সংরক্ষণ করতে একটি প্রোফাইল তৈরি করুন!</p>
-                    <div className={styles.ctaButtons}>
-                        <Button variant="primary" style={{ backgroundColor: '#fff', color: '#1cb0f6' }}>প্রোফাইল তৈরি করুন</Button>
-                        <Button variant="outline" style={{ color: '#fff', borderColor: 'rgba(255,255,255,0.3)' }}>লগইন করুন</Button>
+                        <button
+                            className={styles.viewConnectionsBtn}
+                            onClick={() => navigate('/profile?tab=connection')}
+                        >
+                            <span>সব দেখুন</span>
+                            <ChevronDown size={14} style={{ transform: 'rotate(-90deg)' }} />
+                        </button>
                     </div>
                 </div>
             )}
+
+
+
+
+
         </aside>
     );
 };

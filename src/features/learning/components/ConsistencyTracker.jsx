@@ -13,8 +13,10 @@ import {
 import { motion } from 'framer-motion';
 import styles from './ConsistencyTracker.module.css';
 import { formatLocalDate } from '../../../lib/dateUtils';
+import { useLanguage } from '../../../context/LanguageContext';
 
 const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent }) => {
+    const { t } = useLanguage();
     const [viewMode, setViewMode] = useState('daily');
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -133,7 +135,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
             const isCurrent = today >= weekStartDate && today <= weekEndDate;
 
             weeks.push({
-                label: `Week ${w + 1}`,
+                label: `${t('week')} ${w + 1}`,
                 progress,
                 isCompleted: progress === 100,
                 isIncomplete: progress < 100,
@@ -149,7 +151,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
         setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + offset, 1));
     };
 
-    const monthDisplay = currentMonth.toLocaleDateString('en-US', {
+    const monthDisplay = currentMonth.toLocaleDateString(t('language') === 'bn' ? 'bn-BD' : 'en-US', {
         month: 'long',
         year: 'numeric'
     });
@@ -178,13 +180,13 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
 
             <div className={styles.statsRow}>
                 <div className={styles.statBox}>
-                    <span className={styles.statLabel}>Current Streak</span>
+                    <span className={styles.statLabel}>{t('current_streak')}</span>
                     <div className={styles.statMain}>
                         <Flame size={40} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" />
                         <span className={styles.statValue}>{stats.currentStreak}</span>
                     </div>
                     <div className={styles.statSub}>
-                        <span className={styles.bestLabel}>My Best</span>
+                        <span className={styles.bestLabel}>{t('my_best')}</span>
                         <Trophy size={14} color="#eab308" />
                         <span className={styles.bestValue}>{stats.bestStreak}</span>
                     </div>
@@ -193,19 +195,19 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 <div className={styles.statsDivider}></div>
 
                 <div className={styles.statBox}>
-                    <span className={styles.statLabel}>Consistency Score</span>
+                    <span className={styles.statLabel}>{t('consistency_score')}</span>
                     <div className={styles.statMain}>
                         <TrendingUp size={40} color="#00E5FF" strokeWidth={2.5} />
                         <span className={styles.statValue} style={{ color: '#00E5FF' }}>{stats.score}%</span>
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.tagline}>
-                            {stats.progressPercentage >= 90 ? '🔥 Perfect Progress!' :
-                                stats.progressPercentage >= 75 ? '🟢 Almost Perfect!' :
-                                    stats.progressPercentage >= 50 ? '🟡 Good Progress!' :
-                                        stats.progressPercentage >= 25 ? '🟠 Keep Going!' :
-                                            stats.progressPercentage > 0 ? '🔴 Getting Started!' :
-                                                '⚪ No Practice Yet'}
+                            {stats.progressPercentage >= 90 ? t('perfect_progress') :
+                                stats.progressPercentage >= 75 ? t('almost_perfect') :
+                                    stats.progressPercentage >= 50 ? t('good_progress') :
+                                        stats.progressPercentage >= 25 ? t('keep_going') :
+                                            stats.progressPercentage > 0 ? t('getting_started') :
+                                                t('no_practice_yet')}
                         </span>
                     </div>
                 </div>
@@ -233,13 +235,13 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                         className={`${styles.switchBtn} ${viewMode === 'daily' ? styles.switchBtnActive : ''}`}
                         onClick={() => setViewMode('daily')}
                     >
-                        Daily
+                        {t('daily')}
                     </button>
                     <button
                         className={`${styles.switchBtn} ${viewMode === 'weekly' ? styles.switchBtnActive : ''}`}
                         onClick={() => setViewMode('weekly')}
                     >
-                        Weekly
+                        {t('weekly')}
                     </button>
                 </div>
             </div>
@@ -248,7 +250,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 {viewMode === 'daily' ? (
                     <div className={styles.dailyView}>
                         <div className={styles.calendarGrid}>
-                            {['শনি', 'রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহঃ', 'শুক্র'].map(dayLabel => (
+                            {[t('sat'), t('sun'), t('mon'), t('tue'), t('wed'), t('thu'), t('fri')].map(dayLabel => (
                                 <div key={dayLabel} className={styles.weekdayName}>{dayLabel}</div>
                             ))}
                             {calendarData.map(day => (

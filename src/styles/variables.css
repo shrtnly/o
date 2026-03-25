@@ -37,6 +37,7 @@
     --color-text-hover: #ffffff;
     --color-on-primary: #ffffff;
     --color-on-secondary: #ffffff;
+    --color-primary-faded: rgba(241, 196, 15, 0.1);
 }
 
 /* Light Mode */
@@ -60,6 +61,7 @@
     --color-primary-dark: #e6a600;
     --color-primary-light: rgba(255, 184, 0, 0.4);
     --color-primary-faint: rgba(255, 184, 0, 0.05);
+    --color-primary-faded: rgba(255, 184, 0, 0.12);
 
     --glow-primary: 0 0 15px rgba(255, 184, 0, 0.15);
     --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.05);

@@ -4,7 +4,7 @@
     height: 100vh;
     width: 100%;
     background-color: var(--color-bg-deep);
-    color: #fff;
+    color: var(--color-text);
     font-family: 'Hind Siliguri', sans-serif;
     overflow: hidden;
 }
@@ -423,7 +423,7 @@
 
 .nodeCompleted+.nodeLabel,
 .nodeActive+.nodeLabel {
-    color: #fff;
+    color: var(--color-text);
 }
 
 @media (max-width: 480px) {
@@ -558,10 +558,10 @@
     margin-top: 12px;
     font-weight: 800;
     font-size: 1rem;
-    color: #fff;
+    color: var(--color-text);
     text-align: center;
     line-height: 1.25;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: center;
 }
@@ -584,7 +584,7 @@
 }
 
 .nodeLocked .nodeLabel {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted);
     font-weight: 700;
 }
 
@@ -736,6 +736,7 @@
     border-left: 2px solid var(--color-border);
     background-color: var(--color-bg-deep);
     scrollbar-width: none;
+    color: var(--color-text);
 }
 
 .rightSidebar::-webkit-scrollbar {
@@ -755,12 +756,18 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(241, 196, 15, 0.08);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: #fff;
+    color: var(--color-text);
+}
+
+:global(.light) .courseSelectorBtn {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .courseSelectorBtn:hover {
@@ -781,13 +788,18 @@
 .courseIcon {
     width: 32px;
     height: 32px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-hover);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-text-muted);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
+}
+
+:global(.light) .courseIcon {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 .courseTitle {
@@ -811,10 +823,10 @@
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    background: #1a1d21;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-hover);
     z-index: 1000;
     padding: 6px;
     display: flex;
@@ -846,22 +858,30 @@
 }
 
 .courseOption:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--color-bg-hover);
 }
 
 .optionActive {
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--color-primary-faint);
+}
+
+:global(.light) .courseOption:hover {
+    background-color: #f1f5f9;
+}
+
+:global(.light) .optionActive {
+    background-color: rgba(255, 184, 0, 0.08);
 }
 
 .optionTitle {
     font-weight: 700;
     font-size: 0.9rem;
-    color: #fff;
+    color: var(--color-text);
 }
 
 .courseDropdownDivider {
     height: 1px;
-    background-color: rgba(255, 255, 255, 0.06);
+    background-color: var(--color-border-muted);
     margin: 4px 12px;
 }
 
@@ -895,15 +915,21 @@
     gap: 12px;
     margin-bottom: 0;
     padding: 10px 16px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
     border-radius: 20px;
-    border: 1px solid rgba(241, 196, 15, 0.08);
+    border: 1px solid var(--color-border);
     transition: all 0.2s ease;
 }
 
+:global(.light) .statsRow {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
 .statsRow:hover {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(241, 196, 15, 0.25);
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary-light);
 }
 
 .statItem {
@@ -959,8 +985,8 @@
 }
 
 .card {
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 14px 12px;
     display: flex;
@@ -969,8 +995,20 @@
     transition: all 0.2s ease;
 }
 
+:global(.light) .card {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
 .card:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary-light);
+}
+
+:global(.light) .card:hover {
+    background: #fff;
+    border-color: var(--color-primary);
 }
 
 /* .cardGolden is used as a flag class in JS */
@@ -1015,8 +1053,7 @@
 }
 
 .viewAll:hover {
-    color: #fff;
-    filter: brightness(1.2);
+    color: var(--color-primary);
 }
 
 .leaderboardContent {
@@ -1037,14 +1074,23 @@
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-hover);
     border-radius: 14px;
     border: 1px solid transparent;
     transition: all 0.2s ease;
 }
 
+:global(.light) .leaderboardRow {
+    background: #f8fafc;
+}
+
 .leaderboardRow:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--color-bg-hover);
+    filter: brightness(1.1);
+}
+
+:global(.light) .leaderboardRow:hover {
+    background: #f1f5f9;
 }
 
 .leaderboardRowActive {
@@ -1088,7 +1134,7 @@
 }
 
 .leaderboardRowActive .rowName {
-    color: #fff;
+    color: var(--color-text);
 }
 
 .leaderboardRowRight {
@@ -1104,12 +1150,12 @@
 }
 
 .leaderboardRowActive .rowXP {
-    color: #fff;
+    color: var(--color-text);
 }
 
 .leaderboardDivider {
     text-align: center;
-    color: #37464f;
+    color: var(--color-border);
     font-weight: 900;
     font-size: 1.2rem;
     margin: -8px 0;
@@ -1134,7 +1180,7 @@
 }
 
 .userNameCompact {
-    color: #fff;
+    color: var(--color-text);
     font-weight: 800;
     font-size: 1.1rem;
 }
@@ -1158,17 +1204,23 @@
 .iconBoxLocked {
     position: relative;
     padding: 14px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-hover);
     border-radius: 20px;
-    border: 2px dashed #37464f;
+    border: 2px dashed var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 }
 
+:global(.light) .iconBoxLocked {
+    background: #f1f5f9;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
 .lockIconLarge {
-    color: #37464f;
+    color: var(--color-border);
     filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
     animation: lockGlow 3s infinite ease-in-out;
 }
@@ -1194,7 +1246,7 @@
 }
 
 .unlockTitle {
-    color: #fff;
+    color: var(--color-text);
     font-weight: 900;
     font-size: 1.1rem;
     margin: 0;
@@ -1223,11 +1275,15 @@
 
 .progressBar {
     height: 16px;
-    background-color: #37464f;
+    background-color: var(--color-border);
     border-radius: 12px;
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+:global(.light) .progressBar {
+    background-color: #e2e8f0;
 }
 
 .progressFill {
@@ -1326,7 +1382,7 @@
 }
 
 .flameDayLabelActive {
-    color: #ffffff !important;
+    color: var(--color-text) !important;
 }
 
 
@@ -1341,18 +1397,27 @@
 }
 
 .skeleton {
-    background: #1a272d;
+    background: var(--color-bg-alt);
     background-image: linear-gradient(to right,
-            #1a272d 0%,
-            #233138 20%,
-            #1a272d 40%,
-            #1a272d 100%);
+            var(--color-bg-alt) 0%,
+            var(--color-bg-hover) 20%,
+            var(--color-bg-alt) 40%,
+            var(--color-bg-alt) 100%);
     background-repeat: no-repeat;
     background-size: 800px 104px;
     display: inline-block;
     position: relative;
     animation: shimmer 1.5s infinite linear;
     border-radius: 8px;
+}
+
+:global(.light) .skeleton {
+    background: #e2e8f0;
+    background-image: linear-gradient(to right,
+            #e2e8f0 0%,
+            #f1f5f9 20%,
+            #e2e8f0 40%,
+            #e2e8f0 100%);
 }
 
 @media (max-width: 1200px) {
@@ -1493,9 +1558,14 @@
     justify-content: space-between;
     padding: 8px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-hover);
+    border: 1px solid var(--color-border);
     transition: all 0.2s ease;
+}
+
+:global(.light) .suggestItem {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 .suggestItem:hover {
@@ -1514,13 +1584,18 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
     flex-shrink: 0;
+}
+
+:global(.light) .suggestAvatar {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.08);
 }
 
 .suggestAvatar img {
@@ -1530,7 +1605,7 @@
 }
 
 .suggestAvatar svg {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
 }
 
 .suggestText {
@@ -1543,7 +1618,7 @@
 .suggestName {
     font-size: 0.8rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1579,8 +1654,8 @@
 
 .connectMiniBtn:disabled {
     opacity: 0.5;
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.3);
+    background: var(--color-bg-hover);
+    color: var(--color-text-muted);
     border-color: transparent;
     cursor: default;
 }
@@ -1589,9 +1664,9 @@
     width: 100%;
     padding: 10px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-border);
     background: transparent;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted);
     font-size: 0.75rem;
     font-weight: 700;
     display: flex;
@@ -1602,10 +1677,19 @@
     transition: all 0.2s;
 }
 
+:global(.light) .viewConnectionsBtn {
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
 .viewConnectionsBtn:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--color-bg-hover);
+    color: var(--color-text);
+    border-color: var(--color-primary-light);
+}
+
+:global(.light) .viewConnectionsBtn:hover {
+    background: #f1f5f9;
+    border-color: var(--color-primary);
 }
 
 .tinyLoader {

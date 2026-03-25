@@ -11,11 +11,12 @@ import PollenIcon from '../../components/PollenIcon';
 import { leaderboardService } from '../../services/leaderboardService';
 import {
     Users, Edit3, Crown, Star, Lock, MapPin,
-    Heart, Info, Bell, Shield, ChevronRight, ChevronDown, Award,
+    Heart, Info, Bell, Shield, ChevronRight, ChevronLeft, ChevronDown, Award,
     LogOut, BarChart3, Layout, Activity as ActivityIcon, Compass, Flame,
     Camera, X, Settings, Share2, User, Calendar, Zap, Gem, Trophy, Target, BookOpen,
     Search, UserPlus, Check, Mail, AtSign, Phone, GraduationCap, ChartNoAxesCombined, SquarePen
 } from 'lucide-react';
+import { formatLocalDate } from '../../lib/dateUtils';
 import ShieldIcon from '../../components/ShieldIcon';
 import Button from '../../components/ui/Button';
 import styles from './ProfilePage.module.css';
@@ -31,19 +32,20 @@ import {
     BarChart, Bar
 } from 'recharts';
 import { useTheme } from '../../context/ThemeContext';
+import { toast } from 'sonner';
 
 // --- Achievement Badge Constants ---
 import { useNotifications } from '../../context/NotificationContext';
 
 const BADGE_DEFS = [
-    { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ' },
-    { id: 'streak_7', emoji: '🔥', label: '7 দিনের স্ট্রিক' },
-    { id: 'honey_100', emoji: '🍯', label: '100 মধু' },
-    { id: 'quiz_ace', emoji: '🏆', label: 'কুইজ মাস্টার' },
-    { id: 'course_complete', emoji: '🎓', label: 'কোর্স সম্পন্ন' },
-    { id: 'streak_30', emoji: '⚡', label: '30 দিনের স্ট্রিক' },
-    { id: 'rank_top10', emoji: '👑', label: 'টপ 10' },
-    { id: 'bee_master', emoji: '', label: 'সার্টিফিকেট' },
+    { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ', labelEn: 'First Lesson' },
+    { id: 'streak_7', emoji: '🔥', label: '7 দিনের স্ট্রিক', labelEn: '7 Day Streak' },
+    { id: 'honey_100', emoji: '🍯', label: '100 টোটেন', labelEn: '100 Honey' },
+    { id: 'quiz_ace', emoji: '🏆', label: 'কুইজ মাস্টার', labelEn: 'Quiz Master' },
+    { id: 'course_complete', emoji: '🎓', label: 'কোর্স সম্পন্ন', labelEn: 'Course Complete' },
+    { id: 'streak_30', emoji: '⚡', label: '30 দিনের স্ট্রিক', labelEn: '30 Day Streak' },
+    { id: 'rank_top10', emoji: '👑', label: 'টপ 10', labelEn: 'Top 10' },
+    { id: 'bee_master', emoji: '🛡️', label: 'সার্টিফিকেট', labelEn: 'Certificate' },
 ];
 
 const ProfilePage = () => {
@@ -66,7 +68,8 @@ const ProfilePage = () => {
     const [certTab, setCertTab] = useState('earned'); // 'earned' or 'progress'
 
     const [analysisData, setAnalysisData] = useState(null);
-    const [analysisDays, setAnalysisDays] = useState('all');
+    const [analysisDays, setAnalysisDays] = useState('30');
+    const [viewingMonth, setViewingMonth] = useState(new Date());
     const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
     const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
     const filterRef = useRef(null);
@@ -271,14 +274,26 @@ const ProfilePage = () => {
         if (!user?.id) return;
         setIsAnalysisLoading(true);
         try {
-            const data = await rewardService.getAnalysisData(user.id, analysisDays);
+            let period = null;
+            if (analysisDays === 'all') {
+                // Fetch everything
+            } else if (analysisDays === 'month') {
+                const firstDay = new Date(viewingMonth.getFullYear(), viewingMonth.getMonth(), 1);
+                const lastDay = new Date(viewingMonth.getFullYear(), viewingMonth.getMonth() + 1, 0);
+                period = {
+                    start: formatLocalDate(firstDay),
+                    end: formatLocalDate(lastDay)
+                };
+            }
+
+            const data = await rewardService.getAnalysisData(user.id, analysisDays === 'month' ? 'all' : analysisDays, period);
             setAnalysisData(data);
         } catch (err) {
             console.error('Error fetching analysis:', err);
         } finally {
             setIsAnalysisLoading(false);
         }
-    }, [user?.id, analysisDays]);
+    }, [user?.id, analysisDays, viewingMonth]);
 
     const fetchActivityData = useCallback(async () => {
         if (!user?.id) return;
@@ -294,6 +309,38 @@ const ProfilePage = () => {
         }
     }, [user?.id, refreshNotifications]);
 
+
+    const renderChartNav = () => {
+        if (analysisDays !== 'month') return null;
+        return (
+            <div className={styles.chartNav}>
+                <button
+                    className={styles.navBtn}
+                    onClick={() => {
+                        const prev = new Date(viewingMonth);
+                        prev.setMonth(prev.getMonth() - 1);
+                        setViewingMonth(prev);
+                    }}
+                >
+                    <ChevronLeft size={16} />
+                </button>
+                <span className={styles.currentPeriod}>
+                    {viewingMonth.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { month: 'long', year: 'numeric' })}
+                </span>
+                <button
+                    className={styles.navBtn}
+                    onClick={() => {
+                        const next = new Date(viewingMonth);
+                        next.setMonth(next.getMonth() + 1);
+                        setViewingMonth(next);
+                    }}
+                    disabled={viewingMonth.getMonth() === new Date().getMonth() && viewingMonth.getFullYear() === new Date().getFullYear()}
+                >
+                    <ChevronRight size={16} />
+                </button>
+            </div>
+        );
+    };
 
     const fetchConnectionBadgeData = useCallback(async () => {
         if (!user?.id) return;
@@ -356,6 +403,56 @@ const ProfilePage = () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
         };
     }, [user?.id, fetchConnectionBadgeData]);
+
+    // Analytics unlock notification handler
+    useEffect(() => {
+        if (streak?.current_streak) {
+            console.log('--- Analytics Unlock Logic ---');
+            console.log('Current streak:', streak.current_streak);
+            console.log('Status:', streak.current_streak >= 3 ? 'Eligible for unlock' : 'Need more days');
+        }
+
+        if (!user?.id || !streak) return;
+
+        if (streak.current_streak >= 3 && !localStorage.getItem(`analytics_unlocked_${user.id}`)) {
+            const sendUnlockNotif = async () => {
+                try {
+                    // Restore success style and original message, but keep trophy icon
+                    toast.success(
+                        language === 'bn' ? 'অভিনন্দন!পারফরমেন্স অ্যানালিটিক্স আনলক' : 'Congratulations! Your performance analytics are now unlocked.',
+                        {
+                            icon: <Trophy size={18} className={styles.statIconRank} />,
+                            duration: 5000
+                        }
+                    );
+
+                    const { error } = await supabase.from('notifications').insert({
+                        user_id: user.id,
+                        actor_id: user.id,
+                        title: language === 'bn' ? 'অ্যানালিটিক্স আনলক হয়েছে!' : 'Analytics Unlocked!',
+                        message: language === 'bn' ? 'আপনি ৩ দিনের ধারাবাহিকতা অর্জন করেছেন। এখন আপনার পারফরমেন্স চার্টগুলো দেখতে পারবেন।' : 'You have achieved a 3-day streak. You can now view your performance charts.',
+                        type: 'unlock',
+                        is_read: false,
+                        data: {
+                            type: 'analytics_unlock',
+                            display_title: language === 'bn' ? 'অ্যানালিটিক্স আনলকড! 🏆' : 'Analytics Unlocked! 🏆',
+                            display_msg: language === 'bn' ? '৩ দিনের স্ট্রিক পূর্ণ হয়েছে!' : '3-day streak achieved!'
+                        }
+                    });
+
+                    if (!error) {
+                        localStorage.setItem(`analytics_unlocked_${user.id}`, 'true');
+                        refreshNotifications();
+                    } else {
+                        console.error('Failed to insert unlock notification:', error);
+                    }
+                } catch (err) {
+                    console.error('Error sending unlock notif:', err);
+                }
+            };
+            sendUnlockNotif();
+        }
+    }, [streak?.current_streak, user?.id, language, refreshNotifications]);
 
 
     // Map enrolled courses with their certificate data if available
@@ -505,7 +602,7 @@ const ProfilePage = () => {
                                 <Bell size={18} />
                                 {unreadCount > 0 && <span className={styles.tabBadge}>{unreadCount}</span>}
                             </div>
-                            {activeTab === 'activity' && <span>{'নটিফিকেশন'}</span>}
+                            {activeTab === 'activity' && <span>{t('tab_activity')}</span>}
                         </button>
                     </nav>
 
@@ -607,13 +704,13 @@ const ProfilePage = () => {
                                         {t('earned_certificates')}
                                     </div>
                                     <div className={styles.certTabs}>
-                                        <button 
+                                        <button
                                             className={`${styles.certTab} ${certTab === 'earned' ? styles.certTabActive : ''}`}
                                             onClick={() => setCertTab('earned')}
                                         >
                                             {language === 'bn' ? 'অর্জিত' : 'Earned'}
                                         </button>
-                                        <button 
+                                        <button
                                             className={`${styles.certTab} ${certTab === 'progress' ? styles.certTabActive : ''}`}
                                             onClick={() => setCertTab('progress')}
                                         >
@@ -627,9 +724,9 @@ const ProfilePage = () => {
                                         {certificatesWithStatus
                                             .filter(c => certTab === 'earned' ? !c.isLocked : c.isLocked)
                                             .map((course) => (
-                                                <CertificateCard 
-                                                    key={course.course_id} 
-                                                    course={course} 
+                                                <CertificateCard
+                                                    key={course.course_id}
+                                                    course={course}
                                                     onOpen={(c) => setViewingCert(c)}
                                                 />
                                             ))}
@@ -640,8 +737,8 @@ const ProfilePage = () => {
                                             <Award size={32} />
                                         </div>
                                         <p className={styles.noCertsText}>
-                                            {certTab === 'earned' 
-                                                ? t('no_certificates') 
+                                            {certTab === 'earned'
+                                                ? t('no_certificates')
                                                 : (language === 'bn' ? 'বর্তমানে কোনো কোর্স চলমান নেই।' : 'No courses currently in progress.')}
                                         </p>
                                     </div>
@@ -650,7 +747,7 @@ const ProfilePage = () => {
 
                             <AnimatePresence>
                                 {viewingCert && (
-                                    <CertificateViewer 
+                                    <CertificateViewer
                                         certificate={viewingCert}
                                         learnerName={profile?.full_name || 'Learner'}
                                         onClose={() => setViewingCert(null)}
@@ -665,7 +762,7 @@ const ProfilePage = () => {
                                     <Bell size={16} />
                                     টেস্ট নটিফিকেশন
                                 </button>
-                               
+
                             </section>
 
                             {/* Bottom Spacer for extra scrolling room */}
@@ -686,7 +783,9 @@ const ProfilePage = () => {
                                         >
                                             <div className={styles.dropLabelStack}>
                                                 <span className={styles.selectedVal}>
-                                                    {analysisDays === 'all' ? t('all_time') : t(`last_${analysisDays}_days`)}
+                                                    {analysisDays === 'all' ? t('all_time') :
+                                                        analysisDays === 'month' ? (language === 'bn' ? 'মাসিক' : 'Monthly') :
+                                                            t(`last_${analysisDays}_days`)}
                                                 </span>
                                             </div>
                                             <ChevronDown size={14} className={`${styles.dropdownIcon} ${isFilterDropdownOpen ? styles.rotateIcon : ''}`} />
@@ -703,6 +802,7 @@ const ProfilePage = () => {
                                                 >
                                                     {[
                                                         { value: 'all', label: t('all_time') },
+                                                        { value: 'month', label: language === 'bn' ? 'মাসিক' : 'Monthly' },
                                                         { value: '30', label: t('last_30_days') },
                                                         { value: '15', label: t('last_15_days') },
                                                         { value: '7', label: t('last_7_days') }
@@ -732,6 +832,30 @@ const ProfilePage = () => {
                                     <p className={styles.typingLoading}>
                                         {language === 'bn' ? 'লোড হচ্ছে...' : 'Analyzing performance...'}
                                     </p>
+                                </div>
+                            ) : (streak?.current_streak || 0) < 3 ? (
+                                <div className={styles.lockedAnalysis}>
+                                    <div className={styles.lockContent}>
+                                        <div className={styles.lockIconBox}>
+                                            <Lock size={40} />
+                                        </div>
+                                        <h2 className={styles.lockTitle}>{t('analysis_locked_title')}</h2>
+                                        <p className={styles.lockDesc}>{t('analysis_locked_desc')}</p>
+
+                                        <div className={styles.streakProgressBox}>
+                                            <div className={styles.streakBarContainer}>
+                                                <motion.div
+                                                    className={styles.streakBarFill}
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: `${Math.min(100, ((streak?.current_streak || 0) / 3) * 100)}%` }}
+                                                    transition={{ duration: 1, ease: "easeOut" }}
+                                                />
+                                            </div>
+                                            <span className={styles.streakCountText}>
+                                                {t('days_earned').replace('{count}', (streak?.current_streak || 0).toString().toLocaleLowerCase(language === 'bn' ? 'bn-BD' : 'en-US'))}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             ) : analysisData ? (
                                 <div ref={analyzeScrollRef} className={styles.analyzeScrollBody}>
@@ -774,7 +898,10 @@ const ProfilePage = () => {
                                         >
 
                                             <div className={styles.chartContainerFull}>
-                                                <h3 className={styles.chartTitle}>{t('daily_honey')}</h3>
+                                                <div className={styles.chartHeader}>
+                                                    <h3 className={styles.chartTitle}>{t('daily_honey')}</h3>
+                                                    {renderChartNav()}
+                                                </div>
                                                 <div style={{ width: '100%', height: 200 }}>
                                                     <ResponsiveContainer>
                                                         <AreaChart data={analysisData.activity}>
@@ -784,7 +911,17 @@ const ProfilePage = () => {
                                                                     <stop offset="95%" stopColor={brandColor} stopOpacity={0} />
                                                                 </linearGradient>
                                                             </defs>
-                                                            <XAxis dataKey="activity_date" hide />
+                                                            <XAxis
+                                                                dataKey="activity_date"
+                                                                tickFormatter={(date) => {
+                                                                    const d = new Date(date);
+                                                                    return d.getDate();
+                                                                }}
+                                                                tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
+                                                                axisLine={false}
+                                                                tickLine={false}
+                                                                minTickGap={10}
+                                                            />
                                                             <YAxis hide />
                                                             <ChartTooltip
                                                                 contentStyle={{
@@ -821,7 +958,10 @@ const ProfilePage = () => {
                                         >
 
                                             <div className={styles.chartCard}>
-                                                <h3 className={styles.chartTitle}>{t('accuracy')}</h3>
+                                                <div className={styles.chartHeader}>
+                                                    <h3 className={styles.chartTitle}>{t('accuracy')}</h3>
+                                                    {renderChartNav()}
+                                                </div>
                                                 <div style={{ width: '100%', height: 150 }}>
                                                     <ResponsiveContainer>
                                                         <PieChart>
@@ -861,7 +1001,7 @@ const ProfilePage = () => {
                                                         <span>{t('right_answers')}</span>
                                                     </div>
                                                     <div className={styles.legendItem}>
-                                                        <span className={styles.legendDot} style={{ background: 'rgba(255, 255, 255, 0.15)' }} />
+                                                        <span className={styles.legendDot} style={{ background: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)' }} />
                                                         <span>{t('wrong_answers')}</span>
                                                     </div>
                                                 </div>
@@ -876,23 +1016,37 @@ const ProfilePage = () => {
                                         >
 
                                             <div className={styles.chartCard}>
-                                                <h3 className={styles.chartTitle}>{t('learning_pattern')}</h3>
+                                                <div className={styles.chartHeader}>
+                                                    <h3 className={styles.chartTitle}>{t('learning_pattern')}</h3>
+                                                    {renderChartNav()}
+                                                </div>
                                                 <div style={{ width: '100%', height: 150 }}>
                                                     <ResponsiveContainer>
                                                         <BarChart data={analysisData.activity}>
-                                                            <XAxis dataKey="activity_date" hide />
+                                                            <XAxis
+                                                                dataKey="activity_date"
+                                                                tickFormatter={(date) => {
+                                                                    const d = new Date(date);
+                                                                    return d.getDate();
+                                                                }}
+                                                                tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
+                                                                axisLine={false}
+                                                                tickLine={false}
+                                                                minTickGap={10}
+                                                            />
                                                             <YAxis hide />
                                                             <ChartTooltip
                                                                 contentStyle={{
-                                                                    background: 'rgba(20, 20, 20, 0.9)',
-                                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                                    background: isDark ? 'rgba(20, 20, 20, 0.95)' : '#ffffff',
+                                                                    border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
                                                                     borderRadius: '10px',
                                                                     fontSize: '10px',
-                                                                    color: '#fff'
+                                                                    color: isDark ? '#fff' : '#1e293b',
+                                                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                                                 }}
-                                                                itemStyle={{ color: '#fff' }}
-                                                                labelStyle={{ color: '#fff' }}
-                                                                cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
+                                                                itemStyle={{ color: isDark ? '#fff' : '#1e293b' }}
+                                                                labelStyle={{ color: isDark ? '#fff' : '#1e293b' }}
+                                                                cursor={{ fill: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)' }}
                                                             />
                                                             <Bar
                                                                 dataKey="lessons_completed"
@@ -926,21 +1080,21 @@ const ProfilePage = () => {
                             <div className={styles.notifStickyHeader}>
                                 <div className={styles.notifHeaderRow}>
                                     <span className={styles.notifCountLabel}>
-                                        {unreadCount > 0 ? `${unreadCount}টি আনরিড` : 'সব পড়া হয়েছে'}
+                                        {unreadCount > 0 ? `${unreadCount}${t('notif_unread')}` : t('notif_all_read')}
                                     </span>
                                     {unreadCount > 0 && (
                                         <button className={styles.markAllBtnMinimal} onClick={markAllAsRead}>
-                                            সব পড়া হল
+                                            {t('notif_mark_all')}
                                         </button>
                                     )}
                                 </div>
                                 {/* Filter pills */}
                                 <div className={styles.notifFilters}>
                                     {[
-                                        { id: 'all', label: 'সব' },
-                                        { id: 'achievements', label: 'অ্যাচিভমেন্ট' },
-                                        { id: 'social', label: 'সোশ্যাল' },
-                                        { id: 'system', label: 'সিস্টেম' }
+                                        { id: 'all', label: t('filter_all_notif') },
+                                        { id: 'achievements', label: t('filter_achievements') },
+                                        { id: 'social', label: t('filter_social') },
+                                        { id: 'system', label: t('filter_system') }
                                     ].map(f => (
                                         <button
                                             key={f.id}
@@ -960,7 +1114,7 @@ const ProfilePage = () => {
                                 ) : (() => {
                                     const filtered = notifications.filter(n => {
                                         if (notifFilter === 'all') return true;
-                                        if (notifFilter === 'achievements') return ['reward', 'streak'].includes(n.type);
+                                        if (notifFilter === 'achievements') return ['reward', 'streak', 'unlock', 'achievement'].includes(n.type);
                                         if (notifFilter === 'social') return ['connection', 'message'].includes(n.type);
                                         if (notifFilter === 'system') return ['system', 'course'].includes(n.type);
                                         return true;
@@ -970,7 +1124,7 @@ const ProfilePage = () => {
                                         return (
                                             <div className={styles.emptyState}>
                                                 <Bell size={36} opacity={0.15} />
-                                                <p>কোনো নটিফিকেশন নেই</p>
+                                                <p>{t('no_notifications')}</p>
                                             </div>
                                         );
                                     }
@@ -980,9 +1134,9 @@ const ProfilePage = () => {
                                         const today = new Date();
                                         const yesterday = new Date(today);
                                         yesterday.setDate(yesterday.getDate() - 1);
-                                        let key = 'আগে';
-                                        if (d.toDateString() === today.toDateString()) key = 'আজ';
-                                        else if (d.toDateString() === yesterday.toDateString()) key = 'গতকাল';
+                                        let key = t('earlier');
+                                        if (d.toDateString() === today.toDateString()) key = t('today');
+                                        else if (d.toDateString() === yesterday.toDateString()) key = t('yesterday');
                                         if (!acc[key]) acc[key] = [];
                                         acc[key].push(notif);
                                         return acc;
@@ -1008,7 +1162,8 @@ const ProfilePage = () => {
                                                             background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
                                                                 notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
                                                                     notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
-                                                                        'rgba(52,152,219,0.08)'
+                                                                        notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
+                                                                            'rgba(52,152,219,0.08)'
                                                         }}>
                                                             {notif.actor?.avatar_url ? (
                                                                 <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
@@ -1017,7 +1172,8 @@ const ProfilePage = () => {
                                                                     {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
                                                                     {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
                                                                     {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
-                                                                    {!['reward', 'streak', 'course'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
+                                                                    {(notif.type === 'unlock' || notif.type === 'achievement') && <Award size={15} color="#9B59B6" />}
+                                                                    {!['reward', 'streak', 'course', 'unlock', 'achievement'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
                                                                 </>
                                                             )}
                                                         </div>
@@ -1172,7 +1328,7 @@ const ProfilePage = () => {
                             <div className={styles.shareCardHeader}>
                                 <span className={styles.shareBeeIcon}>🐝</span>
                                 <h3>BeeLesson</h3>
-                                <p>আমার শেখার সারসংক্ষেপ</p>
+                                <p>{language === 'bn' ? 'আমার শেখার সারসংক্ষেপ' : 'My Learning Summary'}</p>
                             </div>
                             <div className={styles.shareCardAvatar}>
                                 {profile?.avatar_url
@@ -1180,18 +1336,18 @@ const ProfilePage = () => {
                                     : <User size={32} color={brandColor} />}
                             </div>
                             <h4 className={styles.shareCardName}>
-                                {profile?.full_name || profile?.display_name || 'শিক্ষার্থী'}
+                                {profile?.full_name || profile?.display_name || (language === 'bn' ? 'শিক্ষার্থী' : 'Learner')}
                                 {flamingBadge && <FlamingBadge size={16} className={styles.nameBadge} />}
                             </h4>
                             <div className={styles.shareStatsRow}>
-                                <div className={styles.shareStat}><strong>{profile?.xp || 0}</strong><span>মধু (XP)</span></div>
-                                <div className={styles.shareStat}><strong>{streak?.current_streak || 0}</strong><span>দিনের স্ট্রিক</span></div>
-                                <div className={styles.shareStat}><strong>{enrolledCourses.length}</strong><span>কোর্স</span></div>
+                                <div className={styles.shareStat}><strong>{profile?.xp || 0}</strong><span>{language === 'bn' ? 'মধু (XP)' : 'Honey (XP)'}</span></div>
+                                <div className={styles.shareStat}><strong>{streak?.current_streak || 0}</strong><span>{language === 'bn' ? 'দিনের স্ট্রিক' : 'Day Streak'}</span></div>
+                                <div className={styles.shareStat}><strong>{enrolledCourses.length}</strong><span>{language === 'bn' ? 'কোর্স' : 'Courses'}</span></div>
                             </div>
                             <div className={styles.shareRankBadge}>
                                 <Crown size={13} /> {language === 'bn' ? `রয়্যাল জেলি ${getShieldLevel(profile?.xp || 0).nameBangla}` : `Royal Jelly ${getShieldLevel(profile?.xp || 0).name}`}
                             </div>
-                            <button className={styles.shareDownload}>📸 স্ক্রিনশট নিন</button>
+                            <button className={styles.shareDownload}>{language === 'bn' ? '📸 স্ক্রিনশট নিন' : '📸 Take Screenshot'}</button>
                         </div>
                     </div>
                 </div>
@@ -1202,7 +1358,7 @@ const ProfilePage = () => {
                 <div className={styles.modalOverlay} onClick={() => setIsEditModalOpen(false)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
                         <div className={styles.modalHeader}>
-                            <h3>প্রোফাইল এডিট</h3>
+                            <h3>{language === 'bn' ? 'প্রোফাইল এডিট' : 'Edit Profile'}</h3>
                             <button className={styles.closeBtn} onClick={() => setIsEditModalOpen(false)}>
                                 <X size={20} />
                             </button>
@@ -1238,7 +1394,7 @@ const ProfilePage = () => {
                                     onChange={e => setEditForm({ ...editForm, location: e.target.value })} />
                             </div>
                             <div className={styles.fieldGroup}>
-                                <label>লিঙ্গ</label>
+                                <label>{language === 'bn' ? 'লিঙ্গ' : 'Gender'}</label>
                                 <div className={styles.genderToggle}>
                                     <button type="button"
                                         className={`${styles.genderBtn} ${editForm.gender === 'male' ? styles.genderBtnActive : ''}`}
@@ -1253,8 +1409,12 @@ const ProfilePage = () => {
                                 </div>
                             </div>
                             <div className={styles.modalActions}>
-                                <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>বাতিল</Button>
-                                <Button variant="primary" type="submit">সংরক্ষণ করুন</Button>
+                                <Button variant="secondary" type="button" onClick={() => setIsEditModalOpen(false)}>
+                                    {language === 'bn' ? 'বাতিল' : 'Cancel'}
+                                </Button>
+                                <Button variant="primary" type="submit">
+                                    {language === 'bn' ? 'সংরক্ষণ করুন' : 'Save Changes'}
+                                </Button>
                             </div>
                         </form>
                     </div>

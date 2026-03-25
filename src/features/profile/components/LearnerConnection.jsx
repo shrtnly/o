@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Fragment } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabaseClient';
 import { 
     Users, Search, UserPlus, UserRoundSearch, UserMinus, 
     Check, CheckCheck, X, ChevronRight, ChevronLeft, Zap, 
-    MapPin, User, Send, MessageSquare, ImagePlus
+    MapPin, User, Send, SendHorizontal, MessageSquare, ImagePlus,
+    ChevronDown, Trash2
 } from 'lucide-react';
 import { connectionService } from '../../../services/connectionService';
 import { messageService } from '../../../services/messageService';
@@ -16,7 +17,7 @@ import styles from './LearnerConnection.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const navigate = useNavigate();
     const location = useLocation();
     const [subTab, setSubTab] = useState('my'); // suggest, my, sent
@@ -50,6 +51,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
     const [pendingAttachmentUrl, setPendingAttachmentUrl] = useState(null);
     const [filePreview, setFilePreview] = useState(null);
+    const [viewerImage, setViewerImage] = useState(null);
     const { setActiveChatId, setIsInboxOpen } = useNotifications();
     const scrollRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
@@ -60,6 +62,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
     const [inboxSearchQuery, setInboxSearchQuery] = useState('');
     const [isConversationsLoading, setIsConversationsLoading] = useState(false);
+    const [msgOptionsId, setMsgOptionsId] = useState(null);
 
     // Derived filtered lists for the inbox search
     const filteredConversations = conversations.filter(conv => 
@@ -302,6 +305,19 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             }
         };
     }, [isMobileChatOpen]);
+
+    const handleDeleteMessage = async (msgId) => {
+        try {
+            await messageService.deleteMessage(msgId, user.id);
+            setMessages(prev => prev.filter(m => m.id !== msgId));
+            setMsgOptionsId(null);
+            toast.success('বার্তাটি ডিলিট করা হয়েছে');
+            handleFetchConversations(true);
+        } catch (err) {
+            console.error('Error deleting message:', err);
+            toast.error('মুছে ফেলতে সমস্যা হয়েছে');
+        }
+    };
 
     // Keep selectedPartner ref for real-time listener to avoid re-subscribing
     const partnerRef = React.useRef(selectedPartner);
@@ -612,11 +628,35 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         <div className={`${styles.statusDot} ${isOnline(lastSeen) ? styles.statusOnline : styles.statusOffline}`} />
     );
 
+    const getDateLabel = (dateString) => {
+        const date = new Date(dateString);
+        const today = new Date();
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+
+        const dString = date.toLocaleDateString();
+        const tString = today.toLocaleDateString();
+        const yString = yesterday.toLocaleDateString();
+
+        if (dString === tString) {
+            return t('today');
+        } else if (dString === yString) {
+            return t('yesterday');
+        } else {
+            return date.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+        }
+    };
+
     // Count unread conversations for inbox badge
     const unreadCount = conversations.filter(c => c.isNew).length;
 
     return (
-        <div className={styles.container}>
+        <Fragment>
+            <div className={styles.container}>
             {/* Sub-Tab Header */}
             <div className={styles.subTabHeader}>
                 <button 
@@ -624,7 +664,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                     onClick={() => setSubTab('my')}
                 >
                     <Users size={16} />
-                    {subTab === 'my' && <span>আমার কানেকশন</span>}
+                    {subTab === 'my' && <span>{t('subtab_my')}</span>}
                     {subTab !== 'my' && connections.active.length > 0 && (
                         <span className={styles.subTabCount}>{connections.active.length}</span>
                     )}
@@ -634,14 +674,14 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                     onClick={() => setSubTab('suggest')}
                 >
                     <Search size={16} />
-                    {subTab === 'suggest' && <span>সার্চ করুন</span>}
+                    {subTab === 'suggest' && <span>{t('subtab_suggest')}</span>}
                 </button>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'inbox' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('inbox')}
                 >
                     <MessageSquare size={16} />
-                    {subTab === 'inbox' && <span>ইনবক্স</span>}
+                    {subTab === 'inbox' && <span>{t('subtab_inbox')}</span>}
                     {subTab !== 'inbox' && unreadCount > 0 && (
                         <span className={styles.subTabUnread}>{unreadCount}</span>
                     )}
@@ -672,7 +712,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 data-lpignore="true"
                                                 aria-autocomplete="none"
                                                 inputMode="search"
-                                                placeholder="সার্চ করুন" 
+                                                placeholder={t('search_chat')} 
                                                 value={inboxSearchQuery}
                                                 onChange={(e) => setInboxSearchQuery(e.target.value)}
                                             />
@@ -689,13 +729,19 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                     </div>
                                     <div className={styles.sidebarList}>
                                         {isConversationsLoading ? (
-                                            <div className={styles.skeletonConversations}>
+                                            <div className={styles.skeletonList}>
                                                 {[...Array(6)].map((_, i) => (
                                                     <div key={i} className={styles.skeletonItem}>
-                                                        <div className={styles.skeletonAvatar} />
-                                                        <div className={styles.skeletonDetails}>
-                                                            <div className={styles.skeletonName} />
-                                                            <div className={styles.skeletonMsg} />
+                                                        <div className={styles.skeletonAvatar}>
+                                                            <div className={styles.skeletonShimmer} />
+                                                        </div>
+                                                        <div className={styles.skeletonInfo}>
+                                                            <div className={styles.skeletonLine} style={{ width: '60%' }}>
+                                                                <div className={styles.skeletonShimmer} />
+                                                            </div>
+                                                            <div className={`${styles.skeletonLine} ${styles.skeletonLineShort}`}>
+                                                                <div className={styles.skeletonShimmer} />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -840,7 +886,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                     )}
                                                                 </button>
                                                                 {(learner.request_sent || connections.outgoing.some(o => o.receiver_id === learner.id)) && (
-                                                                    <span style={{ fontSize: '10px', color: '#F1C40F', fontWeight: '600' }}>
+                                                                    <span style={{ fontSize: '10px', color: 'var(--color-primary)', fontWeight: '600' }}>
                                                                         অনুরোধ পাঠানো হয়েছে
                                                                     </span>
                                                                 )}
@@ -853,11 +899,11 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     <div style={{ 
                                                         padding: '24px 8px', 
                                                         fontSize: '0.85rem', 
-                                                        color: 'rgba(255,255,255,0.4)',
+                                                        color: 'var(--color-text-muted)',
                                                         textAlign: 'center',
-                                                        background: 'rgba(255,255,255,0.01)',
+                                                        background: 'var(--color-bg-alt)',
                                                         borderRadius: '12px',
-                                                        border: '1px dashed rgba(255,255,255,0.05)',
+                                                        border: '1px dashed var(--color-border-muted)',
                                                         marginTop: '8px'
                                                     }}>
                                                         "{searchQuery}" এর জন্য কোনো learner পাওয়া যায় নি
@@ -869,7 +915,9 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         {!searchQuery && !isSearchFocused && (
                                             <>
                                                 {suggestions.length > 0 ? (
-                                                    <div className={styles.connGrid}>
+                                                    <>
+                                                        <span className={styles.sectionLabel}>{t('suggestions_for_you')}</span>
+                                                        <div className={styles.connGrid}>
                                                         {suggestions.map(s => (
                                                             <div key={s.id} className={styles.connCard}>
                                                                 <div className={styles.learnerCore} onClick={() => onSelectLearner(s)}>
@@ -898,14 +946,15 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                         )}
                                                                     </button>
                                                                     {s.request_sent && (
-                                                                        <span style={{ fontSize: '10px', color: '#F1C40F', fontWeight: '600' }}>
+                                                                        <span style={{ fontSize: '10px', color: 'var(--color-primary)', fontWeight: '600' }}>
                                                                             অনুরোধ পাঠানো হয়েছে
                                                                         </span>
                                                                     )}
                                                                 </div>
                                                             </div>
                                                         ))}
-                                                    </div>
+                                                        </div>
+                                                    </>
                                                 ) : (
                                                     <div className={styles.emptyState}>
                                                         <Users size={40} opacity={0.2} />
@@ -925,7 +974,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 className={`${styles.connFilterPill} ${requestType === 'all' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('all')}
                                             >
-                                                কানেকশন
+                                                {t('filter_all')}
                                                 {connections.active.length > 0 && (
                                                     <span className={styles.filterCount}>{connections.active.length}</span>
                                                 )}
@@ -934,7 +983,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 className={`${styles.connFilterPill} ${requestType === 'received' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('received')}
                                             >
-                                                প্রাপ্ত
+                                                {t('filter_received')}
                                                 {connections.pending.length > 0 && (
                                                     <span className={`${styles.filterCount} ${styles.filterCountAlert}`}>{connections.pending.length}</span>
                                                 )}
@@ -943,7 +992,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 className={`${styles.connFilterPill} ${requestType === 'sent' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('sent')}
                                             >
-                                                পাঠানো
+                                                {t('filter_sent')}
                                                 {connections.outgoing.length > 0 && (
                                                     <span className={styles.filterCount}>{connections.outgoing.length}</span>
                                                 )}
@@ -1017,14 +1066,14 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     <div className={styles.emptyState}>
                                                         <div className={styles.emptyHeader}>
                                                             <Users size={40} opacity={0.2} />
-                                                            <p style={{ fontWeight: '600', fontSize: '1rem', color: 'rgba(255,255,255,0.4)' }}>
+                                                            <p style={{ fontWeight: '600', fontSize: '1rem', color: 'var(--color-text-muted)' }}>
                                                                 {t('no_connections') || 'আপনার কোনো কানেকশন নেই'}
                                                             </p>
                                                         </div>
                                                         
                                                         {suggestions.length > 0 && (
                                                             <div className={styles.emptySuggestWrap}>
-                                                                <h4 className={styles.emptySuggestTitle}>আপনার জন্য কিছু সাজেশন</h4>
+                                                                <h4 className={styles.emptySuggestTitle}>{t('suggestions_for_you')}</h4>
                                                                 <div className={styles.connGrid}>
                                                                     {suggestions.slice(0, 6).map(s => (
                                                                         <div key={s.id} className={styles.connCard}>
@@ -1050,16 +1099,21 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                                     {sendingId === s.id ? (
                                                                                         <InlineLoader size={30} showText={false} />
                                                                                     ) : (
-                                                                                        s.request_sent ? <Check size={16} color="#F1C40F" /> : <UserPlus size={16} />
+                                                                                        s.request_sent ? <Check size={16} color="var(--color-primary-dark)" /> : <UserPlus size={16} />
                                                                                     )}
                                                                                 </button>
+                                                                                {s.request_sent && (
+                                                                                    <span style={{ fontSize: '10px', color: 'var(--color-primary)', fontWeight: '600', marginTop: '4px' }}>
+                                                                                        অনুরোধ পাঠানো হয়েছে
+                                                                                    </span>
+                                                                                )}
                                                                             </div>
                                                                         </div>
                                                                     ))}
                                                                 </div>
                                                                 {suggestions.length > 6 && (
                                                                     <button className={styles.seeMoreEmptyBtn} onClick={() => setSubTab('suggest')}>
-                                                                        সব সাজেশন দেখুন
+                                                                        {t('view_all_suggestions')}
                                                                     </button>
                                                                 )}
                                                             </div>
@@ -1172,14 +1226,14 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                                 <motion.span 
                                                                                     initial={{ opacity: 0, y: 5 }}
                                                                                     animate={{ opacity: 1, y: 0 }}
-                                                                                    style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
+                                                                                    style={{ fontSize: '11px', color: 'var(--color-primary)', fontWeight: '600' }}
                                                                                 >
                                                                                     {cardAction.msg}
                                                                                 </motion.span>
                                                                             )}
                                                                         </div>
                                                                     ) : (
-                                                                        <button className={styles.actionBtn} style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.4)' }} onClick={() => cancelRequest(conn.id)}>
+                                                                        <button className={styles.actionBtn} style={{ background: 'var(--color-bg-alt)', color: 'var(--color-text-muted)' }} onClick={() => cancelRequest(conn.id)}>
                                                                             <X size={16} />
                                                                         </button>
                                                                     )}
@@ -1207,6 +1261,12 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                     {selectedPartner && (
                                         <div ref={chatWindowRef} className={`${styles.chatWindow} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
                                             <div ref={chatHeaderRef} className={styles.chatHeader}>
+                                                <button 
+                                                    className={styles.backToInbox}
+                                                    onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
+                                                >
+                                                    <ChevronLeft size={24} />
+                                                </button>
 
                                                 <div className={styles.partnerAvatar} onClick={() => onSelectLearner(selectedPartner)} style={{ cursor: 'pointer' }}>
                                                     {selectedPartner.avatar_url ? (
@@ -1216,10 +1276,11 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     )}
                                                     <StatusIndicator lastSeen={selectedPartner.last_seen} />
                                                 </div>
+
                                                 <div className={styles.headerInfo}>
                                                     <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
-
                                                 </div>
+
                                                 <button 
                                                     className={styles.closeChatBtn}
                                                     onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
@@ -1233,37 +1294,73 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     <div className={styles.chatLoader}><InlineLoader size={80} showText={false} /></div>
                                                 ) : (
                                                     <AnimatePresence mode="popLayout">
-                                                        {messages.map((msg, idx) => (
-                                                            <motion.div 
-                                                                key={msg.id || idx}
-                                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                                className={msg.sender_id === user.id ? styles.msgSent : styles.msgReceived}
-                                                            >
-                                                                <div className={styles.msgBubble}>
-                                                                    {msg.attachment_url && (
-                                                                        <div className={styles.msgAttachment}>
-                                                                            <img src={msg.attachment_url} alt="" onClick={() => window.open(msg.attachment_url, '_blank')} />
+                                                        {messages.map((msg, idx) => {
+                                                            const msgDate = new Date(msg.created_at).toLocaleDateString();
+                                                            const prevMsg = idx > 0 ? messages[idx - 1] : null;
+                                                            const prevDate = prevMsg ? new Date(prevMsg.created_at).toLocaleDateString() : null;
+                                                            const showDivider = msgDate !== prevDate;
+
+                                                            return (
+                                                                <motion.div key={msg.id || idx} layout style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                                                                    {showDivider && (
+                                                                        <div className={styles.dateDivider}>
+                                                                            <span>{getDateLabel(msg.created_at)}</span>
                                                                         </div>
                                                                     )}
-                                                                    {msg.content && <span>{msg.content}</span>}
-                                                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '4px' }}>
-                                                                        <span className={styles.msgTime}>
-                                                                            {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                                        </span>
-                                                                        {msg.sender_id === user.id && (
-                                                                            <span style={{ display: 'flex' }}>
-                                                                                    <CheckCheck 
-                                                                                        size={12} 
-                                                                                        color={msg.is_read ? "var(--color-primary)" : "rgba(255,255,255,0.2)"} 
-                                                                                        style={{ transition: 'all 0.3s ease' }}
-                                                                                    />
-                                                                            </span>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
-                                                            </motion.div>
-                                                        ))}
+                                                                    <motion.div 
+                                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                        exit={{ opacity: 0, scale: 0.9 }}
+                                                                        className={msg.sender_id === user.id ? styles.msgSent : styles.msgReceived}
+                                                                        style={{ alignSelf: msg.sender_id === user.id ? 'flex-end' : 'flex-start' }}
+                                                                    >
+                                                                        <div className={styles.msgBubble}>
+                                                                            {msg.sender_id === user.id && (
+                                                                                <>
+                                                                                    <button 
+                                                                                        className={styles.msgOptionBtn} 
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            setMsgOptionsId(msgOptionsId === msg.id ? null : msg.id);
+                                                                                        }}
+                                                                                    >
+                                                                                        <ChevronDown size={14} />
+                                                                                    </button>
+                                                                                    {msgOptionsId === msg.id && (
+                                                                                        <div className={styles.deleteMenu}>
+                                                                                            <button className={styles.deleteBtn} onClick={() => handleDeleteMessage(msg.id)}>
+                                                                                                {t('delete_msg')}
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    )}
+                                                                                </>
+                                                                            )}
+                                                                            {msg.attachment_url && (
+                                                                                <div className={styles.msgAttachment} onClick={() => setViewerImage(msg.attachment_url)}>
+                                                                                    <img src={msg.attachment_url} alt="" />
+                                                                                </div>
+                                                                            )}
+                                                                            {msg.content && <span>{msg.content}</span>}
+                                                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: msg.sender_id === user.id ? 'flex-end' : 'flex-start', gap: '4px' }}>
+                                                                                <span className={styles.msgTime}>
+                                                                                    {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                                </span>
+                                                                                {msg.sender_id === user.id && (
+                                                                                    <span style={{ display: 'flex' }}>
+                                                                                            <CheckCheck 
+                                                                                                size={12} 
+                                                                                                color={msg.is_read ? "var(--color-primary)" : "var(--color-text-muted)"} 
+                                                                                                opacity={msg.is_read ? 1 : 0.4}
+                                                                                                style={{ transition: 'all 0.3s ease' }}
+                                                                                            />
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                    </motion.div>
+                                                                </motion.div>
+                                                            );
+                                                        })}
                                                     </AnimatePresence>
                                                 )}
                                                 <div style={{ height: '1px' }} />
@@ -1316,7 +1413,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     enterKeyHint="send"
                                                     inputMode="text"
                                                     aria-autocomplete="none"
-                                                    placeholder="কোনো কিছু লিখুন..." 
+                                                    placeholder={t('write_msg')} 
                                                     value={newMessage}
                                                     onChange={(e) => setNewMessage(e.target.value)}
                                                     onKeyDown={(e) => {
@@ -1336,11 +1433,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     {isSendingMsg ? (
                                                         <InlineLoader size={20} showText={false} />
                                                     ) : (
-                                                        <Send 
-                                                            size={22} 
-                                                            fill={(newMessage.trim() || pendingAttachmentUrl) ? "currentColor" : "none"} 
-                                                            fillOpacity={0.1}
-                                                        />
+                                                        <SendHorizontal size={20} />
                                                     )}
                                                 </button>
                                             </div>
@@ -1348,6 +1441,35 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                     )}
                                 </AnimatePresence>
         </div>
+
+        {/* Image Viewer Modal */}
+        <AnimatePresence>
+            {viewerImage && (
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className={styles.imageViewerOverlay} 
+                    onClick={() => setViewerImage(null)}
+                >
+                    <button className={styles.viewerClose} onClick={() => setViewerImage(null)}>
+                        <X size={24} />
+                    </button>
+                    <motion.img 
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.9, opacity: 0 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        src={viewerImage} 
+                        className={styles.viewerImage} 
+                        alt="" 
+                        onClick={(e) => e.stopPropagation()} 
+                    />
+                </motion.div>
+            )}
+        </AnimatePresence>
+        </Fragment>
     );
 };
 

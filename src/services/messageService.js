@@ -125,5 +125,22 @@ export const messageService = {
     } catch (err) {
       console.error('Error marking as read:', err);
     }
+  },
+
+  // Delete a message
+  async deleteMessage(messageId, userId) {
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .delete()
+        .eq('id', messageId)
+        .eq('sender_id', userId);
+
+      if (error) throw error;
+      return true;
+    } catch (err) {
+      console.error('Error deleting message:', err);
+      throw err;
+    }
   }
 };

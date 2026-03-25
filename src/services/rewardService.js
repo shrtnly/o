@@ -406,7 +406,7 @@ export const rewardService = {
      * @param {number} days - Number of days to look back
      * @returns {Promise<object>}
      */
-    async getAnalysisData(userId, days = 'all') {
+    async getAnalysisData(userId, days = 'all', dateRange = null) {
         try {
             let activityQuery = supabase
                 .from('user_daily_activity')
@@ -420,7 +420,15 @@ export const rewardService = {
                 .eq('user_id', userId)
                 .eq('is_completed', true);
 
-            if (days !== 'all') {
+            if (dateRange && dateRange.start && dateRange.end) {
+                activityQuery = activityQuery
+                    .gte('activity_date', dateRange.start)
+                    .lte('activity_date', dateRange.end);
+                
+                progressQuery = progressQuery
+                    .gte('completed_at', new Date(dateRange.start).toISOString())
+                    .lte('completed_at', new Date(dateRange.end).toISOString());
+            } else if (days !== 'all') {
                 const startDate = new Date();
                 startDate.setDate(startDate.getDate() - parseInt(days));
                 const startDateStr = formatLocalDate(startDate);

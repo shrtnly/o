@@ -184,7 +184,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                     <Play size={18} fill="currentColor" />
                                 </div>
                                 <span className={styles.courseTitle}>
-                                    {currentCourse?.title || 'কোর্স নির্বাচন করুন'}
+                                    {currentCourse?.title || t('select_course')}
                                 </span>
                             </div>
                             <ChevronDown size={20} className={`${styles.chevron} ${isCourseOpen ? styles.chevronRotate : ''}`} />
@@ -208,7 +208,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                     onClick={() => navigate('/courses')}
                                 >
                                     <Plus size={18} />
-                                    <span className={styles.optionTitle}>কোর্স যোগ করুন</span>
+                                    <span className={styles.optionTitle}>{t('add_course')}</span>
                                 </button>
                             </div>
                         )}
@@ -225,7 +225,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                     </>
                 ) : (
                     <>
-                        <div className={styles.statItem} title="মোট মধু">
+                        <div className={styles.statItem} title={t('total_xp')}>
                             <ShieldIcon
                                 xp={profile?.xp || 0}
                                 size={30}
@@ -365,7 +365,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                                     )}
                                                 </div>
                                                 <span className={cn(styles.flameDayLabel, (isPast || isPracticed) && styles.flameDayLabelActive)}>
-                                                    {['রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহ', 'শুক্র', 'শনি'][index]}
+                                                    {[t('sun'), t('mon'), t('tue'), t('wed'), t('thu'), t('fri'), t('sat')][index]}
                                                 </span>
                                             </div>
                                         );
@@ -395,7 +395,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                 <div className={styles.cardHeader}>
                     <h3 className={styles.cardTitle}>
                         <Trophy size={18} className={styles.cardTitleIcon} />
-                        <span>{profile?.xp >= 100 ? 'আপনার লিডারবোর্ড' : 'লিডারবোর্ড'}</span>
+                        <span>{profile?.xp >= 100 ? t('your_leaderboard') : t('leaderboard')}</span>
                     </h3>
                     {profile?.xp >= 100 && (
                         <span className={styles.viewAll}></span>
@@ -409,8 +409,8 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                     <Lock size={40} className={styles.lockIconLarge} />
                                 </div>
                                 <div className={styles.unlockInfo}>
-                                    <h4 className={styles.unlockTitle}>লিডারবোর্ড আনলক করুন!</h4>
-                                    <p className={styles.unlockDesc}>প্রতিযোগিতা শুরু করতে 100 টি XP অর্জন করুন</p>
+                                    <h4 className={styles.unlockTitle}>{t('unlock_leaderboard_title')}</h4>
+                                    <p className={styles.unlockDesc}>{t('unlock_leaderboard_desc')}</p>
                                 </div>
                             </div>
                         ) : leaderboardLoading ? (
@@ -423,10 +423,10 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                         <img
                                             src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
                                             className={styles.rowAvatar}
-                                            alt={profile.display_name || 'লার্নার'}
+                                            alt={profile.display_name || t('learner')}
                                         />
                                         <span className={styles.rowName}>
-                                            {profile.display_name || 'লার্নার'}
+                                            {profile.display_name || t('learner')}
                                         </span>
                                     </div>
                                     <div className={styles.leaderboardRowRight}>
@@ -462,10 +462,10 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                                         <img
                                                             src={avatarUrl}
                                                             className={styles.rowAvatar}
-                                                            alt={user.display_name || 'লার্নার'}
+                                                            alt={user.display_name || t('learner')}
                                                         />
                                                         <span className={styles.rowName}>
-                                                            {user.display_name || 'লার্নার'}
+                                                            {user.display_name || t('learner')}
                                                         </span>
                                                     </div>
                                                     <div className={styles.leaderboardRowRight}>
@@ -495,7 +495,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                     <div className={styles.cardHeader}>
                         <h3 className={styles.cardTitle}>
                             <Users size={18} className={styles.cardTitleIcon} />
-                            <span>কানেক্ট হোন!</span>
+                            <span>{t('connect_now')}</span>
                         </h3>
                     </div>
                     <div className={styles.emptyStateContainer}>
@@ -514,7 +514,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                             )}
                                         </div>
                                         <div className={styles.suggestText}>
-                                            <span className={styles.suggestName}>{s.display_name || 'লার্নার'}</span>
+                                            <span className={styles.suggestName}>{s.display_name || t('learner')}</span>
                                             <span className={styles.suggestXp}>{s.xp} XP</span>
                                         </div>
                                     </div>
@@ -536,7 +536,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                             className={styles.viewConnectionsBtn}
                             onClick={() => navigate('/profile?tab=connection')}
                         >
-                            <span>সব দেখুন</span>
+                            <span>{t('see_all')}</span>
                             <ChevronDown size={14} style={{ transform: 'rotate(-90deg)' }} />
                         </button>
                     </div>

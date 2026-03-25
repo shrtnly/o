@@ -234,9 +234,9 @@
 .actionBtn {
     padding: 6px;
     border-radius: 8px;
-    background: rgba(241, 196, 15, 0.1);
+    background: var(--color-primary-faded);
     color: var(--color-primary);
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    border: 1px solid var(--color-primary-faded);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
@@ -505,8 +505,8 @@
 
 .connFilterActive {
     color: var(--color-primary) !important;
-    background: rgba(241, 196, 15, 0.08) !important;
-    border-color: rgba(241, 196, 15, 0.2) !important;
+    background: var(--color-primary-faded) !important;
+    border-color: var(--color-primary-faint) !important;
 }
 
 .filterCount {
@@ -604,6 +604,7 @@
     height: 1.2rem;
     line-height: 1.2rem;
     font-family: inherit;
+    opacity: 0.9;
 }
 
 .sidebarList {
@@ -659,7 +660,7 @@
 
 .newChatSection {
     padding-top: 12px;
-    border-top: 1px dashed var(--color-border-muted);
+    border-top: 1px solid var(--color-border-muted);
     margin-top: 8px;
 }
 
@@ -719,6 +720,7 @@
     height: 40px;
     border-radius: 50%;
     background: var(--color-bg-deep);
+    border: 2px solid var(--color-primary-faded);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -808,30 +810,32 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.chatHeader {
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(25, 25, 25, 0.5);
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    backdrop-filter: blur(20px);
-}
 
-.headerInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
 
 .partnerTitle {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--color-text);
     line-height: 1.2;
+}
+
+.chatAvatar {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary-faded);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-deep);
+    overflow: hidden;
+}
+
+.chatAvatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .messageScroll {
@@ -853,7 +857,7 @@
 }
 
 .messageScroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border-muted);
     border-radius: 10px;
 }
 
@@ -882,29 +886,91 @@
 }
 
 .msgBubble {
-    padding: 10px 16px;
-    border-radius: 16px;
-    font-size: 0.9rem;
-    line-height: 1.4;
     position: relative;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    max-width: 100%;
     word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .msgSent .msgBubble {
-    background: linear-gradient(135deg, rgba(241, 196, 15, 0.15), rgba(241, 196, 15, 0.05));
-    color: #fff;
-    font-weight: 500;
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    background: var(--color-bg-alt); /* More minimal and professional slate/white */
+    color: var(--color-text);
+    border: 1px solid var(--color-border-muted);
     border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding-right: 28px;
+    font-weight: 400;
 }
 
 .msgReceived .msgBubble {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-deep);
+    color: var(--color-text);
     border-bottom-left-radius: 4px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.msgOptionBtn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: transparent;
+    border: none;
+    color: currentColor;
+    opacity: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.msgBubble:hover .msgOptionBtn {
+    opacity: 0.6;
+}
+
+.msgOptionBtn:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.deleteMenu {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: none;
+    z-index: 100;
+    overflow: hidden;
+    min-width: 80px;
+}
+
+.deleteBtn {
+    width: 100%;
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    color: var(--color-danger);
+    font-size: 0.75rem; /* Smaller font */
+    font-weight: 600;
+    text-align: center; /* Minimal centered design */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.deleteBtn:hover {
+    background: var(--color-primary-faded);
+    color: var(--color-danger);
 }
 
 .msgTime {
@@ -916,7 +982,8 @@
 
 .msgSent .msgTime {
     text-align: right;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
+    opacity: 0.5;
 }
 
 .chatWindow {
@@ -925,33 +992,61 @@
     right: 30px;
     width: 320px;
     height: 480px;
-    background: #0f0f0f;
+    background: var(--color-bg-alt);
     border-radius: 12px 12px 0 0;
     display: flex;
     flex-direction: column;
     z-index: 9999;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-hover);
+    border: 1px solid var(--color-border);
     border-bottom: none;
     overflow: hidden;
 }
 
 .chatHeader {
-    padding: 10px 14px;
-    background: rgba(20, 20, 20, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 20px;
+    background: linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg-deep));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--color-border-muted);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 14px;
     cursor: pointer;
+    z-index: 10;
+    position: relative;
+}
+
+.backToInbox {
+    display: none; /* Desktop only - hide back chevron */
+    background: transparent;
+    border: none;
+    color: var(--color-primary);
+    padding: 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.headerInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.partnerTitle {
+    font-weight: 700;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    letter-spacing: -0.2px;
 }
 
 .closeChatBtn {
     margin-left: auto;
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -962,14 +1057,20 @@
 }
 
 .closeChatBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--color-bg-deep);
+    color: var(--color-text);
+}
+
+.chatHeader .partnerAvatar {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--color-primary-light);
 }
 
 .chatInputRow {
-    padding: 12px 20px;
-    background: rgba(15, 15, 15, 0.4);
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 16px 20px;
+    background: var(--color-bg-alt);
+    border-top: 1px solid var(--color-border);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -978,11 +1079,11 @@
 
 .chatInput {
     flex: 1;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
     padding: 10px 18px;
     border-radius: 20px;
-    color: #fff;
+    color: var(--color-text);
     font-size: 0.9rem;
     outline: none;
     letter-spacing: 0.1px;
@@ -992,8 +1093,8 @@
 }
 
 .chatInput:focus {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(255, 255, 255, 0.22);
+    background: var(--color-bg-alt);
+    border-color: var(--color-primary);
 }
 
 .sendBtn {
@@ -1007,13 +1108,12 @@
     padding: 8px;
     border-radius: 50%;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.9;
+    opacity: 1;
 }
 
 .sendBtn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.05);
-    opacity: 1;
-    transform: scale(1.05);
+    background: var(--color-primary-faded);
+    transform: translateY(-1px) scale(1.1);
 }
 
 .sendBtn:active:not(:disabled) {
@@ -1021,13 +1121,16 @@
 }
 
 .sendBtn:disabled {
-    color: rgba(255, 255, 255, 0.2);
+    background: var(--color-border);
+    color: var(--color-text-muted);
     cursor: default;
-    opacity: 0.5;
+    opacity: 0.8;
+    box-shadow: none;
 }
 
 .chatInput::placeholder {
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-muted);
+    opacity: 0.8;
 }
 
 .chatInputRow button {
@@ -1056,6 +1159,69 @@
     cursor: default;
 }
 
+.skeletonList {
+    display: flex;
+    flex-direction: column;
+    padding: 0 4px;
+}
+
+.skeletonItem {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border-muted);
+}
+
+.skeletonAvatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--color-border-muted);
+    position: relative;
+    overflow: hidden;
+}
+
+.skeletonInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.skeletonLine {
+    height: 12px;
+    background: var(--color-border-muted);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeletonLineShort {
+    width: 40%;
+}
+
+.skeletonShimmer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.05),
+        transparent
+    );
+    animation: shimmer 1.5s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+
 .chatEmptyState {
     flex: 1;
     display: flex;
@@ -1063,19 +1229,20 @@
     align-items: center;
     justify-content: center;
     gap: 1.5rem;
-    color: rgba(255, 255, 255, 0.2);
-    background: radial-gradient(circle at center, rgba(241, 196, 15, 0.02) 0%, transparent 70%);
+    color: var(--color-text-muted);
+    opacity: 0.3;
+    background: radial-gradient(circle at center, var(--color-primary-faded) 0%, transparent 70%);
 }
 
 .chatEmptyState p {
     font-size: 1.1rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .chatEmptyState span {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
     max-width: 250px;
     text-align: center;
     line-height: 1.5;
@@ -1150,7 +1317,7 @@
         width: 100% !important;
         height: 100% !important;
         z-index: 9999;
-        background: #0a0a0a;
+        background: var(--color-bg-alt);
         animation: slideInMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
         border-radius: 0 !important;
@@ -1165,23 +1332,46 @@
 
     .backToInbox {
         display: flex;
-        padding: 8px;
-        margin-right: 8px;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        margin-right: 2px;
         color: var(--color-primary);
+        background: transparent;
+        border: none;
+        transition: transform 0.2s;
+    }
+
+    .backToInbox:active {
+        transform: scale(0.9);
+        opacity: 0.7;
     }
 
     .chatHeader {
         position: sticky;
         top: 0;
         z-index: 100;
-        padding: 12px 16px;
-        background: rgba(10, 10, 10, 0.98);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        touch-action: none;
-        user-select: none;
-        -webkit-user-select: none;
-        flex-shrink: 0;
+        padding: 14px 16px; /* Slightly taller for mobile */
+        height: 64px; /* Standardize height */
+        background: linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg-deep));
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid var(--color-border-muted);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .chatHeader .partnerTitle {
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+    }
+
+    .closeChatBtn {
+        display: none;
     }
 
     .messageScroll {
@@ -1193,11 +1383,11 @@
     }
 
     .chatInputRow {
-        padding: 10px 16px;
-        padding-bottom: max(12px, env(safe-area-inset-bottom));
-        background: rgba(15, 15, 15, 0.98);
+        padding: 12px 16px;
+        padding-bottom: max(16px, env(safe-area-inset-bottom));
+        background: var(--color-bg-alt);
         backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        border-top: 1px solid var(--color-border);
         flex-shrink: 0;
         width: 100%;
         display: flex;
@@ -1214,7 +1404,7 @@
 .attachBtn {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-primary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1222,6 +1412,12 @@
     padding: 8px;
     border-radius: 50%;
     transition: all 0.2s;
+    opacity: 1;
+}
+
+.attachBtn:hover {
+    background: var(--color-primary-faded);
+    transform: translateY(-1px) scale(1.1);
 }
 
 .imagePreviewContainer {
@@ -1287,7 +1483,7 @@
     overflow: hidden;
     cursor: pointer;
     max-width: 300px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--color-border-muted); /* Clean border instead of shadow */
 }
 
 .msgAttachment img {
@@ -1307,11 +1503,47 @@
     }
 }
 
-/* Skeleton Loading */
-.skeletonConversations {
+.dateDivider {
     display: flex;
-    flex-direction: column;
-    width: 100%;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0 16px;
+    position: relative;
+    padding: 0 40px;
+}
+
+.dateDivider::before {
+    content: '';
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: var(--color-border-muted);
+    z-index: 1;
+}
+
+.dateDivider span {
+    position: relative;
+    z-index: 2;
+    background: var(--color-bg-alt);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+    .dateDivider {
+        margin: 20px 0 12px;
+    }
+    .dateDivider span {
+        font-size: 0.7rem;
+    }
 }
 
 .skeletonItem {
@@ -1357,4 +1589,66 @@
     0% { opacity: 0.3; }
     50% { opacity: 0.7; }
     100% { opacity: 0.3; }
+}
+
+/* Image Viewer Modal */
+.imageViewerOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    cursor: zoom-out;
+}
+
+.viewerImage {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    user-select: none;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    cursor: default;
+}
+
+.viewerClose {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10001;
+}
+
+.viewerClose:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: rotate(90deg);
+}
+
+@media (max-width: 768px) {
+    .imageViewerOverlay {
+        padding: 10px;
+    }
+    .viewerClose {
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
 }

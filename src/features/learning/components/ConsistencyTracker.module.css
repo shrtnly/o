@@ -1,6 +1,6 @@
 .container {
     padding: 0px;
-    color: #fff;
+    color: var(--color-text);
     font-family: 'Din Round', 'Inter', sans-serif;
     margin-top: 12px;
 }
@@ -17,7 +17,7 @@
     font-size: 20px;
     font-weight: 800;
     margin: 0;
-    color: #fff;
+    color: var(--color-text);
 }
 
 .titleSection p {
@@ -45,7 +45,7 @@
 
 .divider {
     height: 1px;
-    background-color: #37464f;
+    background-color: var(--color-border);
     margin: 16px 0;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .statsDivider {
-    background-color: #37464f;
+    background-color: var(--color-border);
     height: 60px;
 }
 
@@ -167,11 +167,15 @@
 
 /* View Switcher */
 .viewSwitcher {
-    background-color: #233138;
+    background-color: var(--color-bg-hover);
     padding: 4px;
     border-radius: 12px;
     display: flex;
-    border: 1.5px solid #37464f;
+    border: 1.5px solid var(--color-border);
+}
+
+:global(.light) .viewSwitcher {
+    background-color: #f1f5f9;
 }
 
 .switchBtn {
@@ -187,9 +191,15 @@
 }
 
 .switchBtnActive {
+    background-color: var(--color-text);
+    color: var(--color-bg-alt);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+:global(.light) .switchBtnActive {
     background-color: #fff;
     color: #1a272d;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Sections */
@@ -214,13 +224,17 @@
 .daySquare {
     aspect-ratio: 1;
     background-color: transparent;
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border: 1.5px solid var(--color-border);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     transition: all 0.2s;
+}
+
+:global(.light) .daySquare {
+    border-color: rgba(0, 0, 0, 0.06);
 }
 
 .dayNumber {
@@ -238,8 +252,12 @@
 }
 
 .dayAchieved {
-    border-color: #37464f;
+    border-color: var(--color-border);
     opacity: 1;
+}
+
+:global(.light) .dayAchieved {
+    background-color: #f8fafc;
 }
 
 .dayToday {
@@ -253,7 +271,8 @@
 }
 
 .dayFuture .dayNumber {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
+    opacity: 0.5;
 }
 
 .dayEmpty {
@@ -280,7 +299,7 @@
     left: 20px;
     right: 20px;
     height: 2px;
-    background-color: #37464f;
+    background-color: var(--color-border);
     transform: translateY(-16px);
     z-index: 0;
 }
@@ -298,12 +317,16 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: #1a272d;
-    border: 2px solid #37464f;
+    background-color: var(--color-bg-hover);
+    border: 2px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+:global(.light) .weekCircle {
+    background-color: #f8fafc;
 }
 
 .weekCompleted {
@@ -324,7 +347,7 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 3px solid #37464f;
+    border: 3px solid var(--color-border);
     border-top-color: #58cc02;
     animation: spin 1s linear infinite;
 }

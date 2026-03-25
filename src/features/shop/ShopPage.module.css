@@ -65,15 +65,23 @@
 
 .headerWelcomeRow {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Vertical stack */
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 8px; /* Optimized gap for stack */
+    margin: 10px 0 0;
+    animation: fadeInSlideDown 0.8s ease-out;
 }
 
 .headerMascotSmall {
-    width: 110px;
-    height: 110px;
+    width: 65px;
+    height: 65px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+.headerMascotSmall:hover {
+    transform: scale(1.15) rotate(5deg);
 }
 
 .headerTitle {
@@ -88,18 +96,48 @@
 }
 
 .headerSub {
-    color: var(--color-text-muted);
-    font-size: 1.1rem;
-    font-weight: 500;
-    margin-top: 0;
-    max-width: 400px;
-    line-height: 1.5;
+    color: var(--color-text); /* Dynamically switches with theme */
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    max-width: 500px;
+    line-height: 1.4;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeInSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .headerWelcomeRow {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+    }
+    .headerSub {
+        text-align: center;
+    }
+    .headerMascotSmall {
+        width: 80px;
+        height: 80px;
+    }
 }
 
 .headerDivider {
     width: 60px;
     height: 3px;
-    background: #f1c40f;
+    background: var(--color-primary); /* Automatically picks #f1c40f or #FFB800 */
     border-radius: 10px;
     margin: 12px auto 0;
     opacity: 0.5;
@@ -1123,6 +1161,17 @@
     overflow: hidden;
 }
 
+.qbActivateBtn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 0 #c9a80b;
+    filter: brightness(1.05);
+}
+
+.qbActivateBtn:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #c9a80b;
+}
+
 .qbActivateBtn::after {
     content: '';
     position: absolute;
@@ -1163,11 +1212,12 @@
 
 .activeBtnStyle {
     background: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    color: rgba(255, 255, 255, 0.6) !important;
+    border: 1px solid var(--color-border) !important;
+    color: var(--color-text-muted) !important;
     box-shadow: none !important;
     cursor: default !important;
     pointer-events: none !important;
+    opacity: 0.8;
 }
 
 .activeBtnStyle::after {
@@ -1178,16 +1228,102 @@
 .blueBtn {
     background: linear-gradient(135deg, #1cb0f6 0%, #1796d1 100%) !important;
     box-shadow: 0 4px 0 #1480b3 !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.blueBtn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 75%);
+    animation: shineLTR 4s infinite ease-in-out;
+    pointer-events: none;
+}
+
+.blueBtn:hover:not(:disabled) {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 7px 0 #1480b3 !important;
+}
+
+.blueBtn:active:not(:disabled) {
+    transform: translateY(2px) !important;
+    box-shadow: 0 2px 0 #1480b3 !important;
 }
 
 .orangeBtn {
     background: linear-gradient(135deg, #ffa202 0%, #e67e22 100%) !important;
     box-shadow: 0 4px 0 #9a7d0a !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.orangeBtn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 75%);
+    animation: shineLTR 4s infinite ease-in-out;
+    animation-delay: 0.5s;
+    pointer-events: none;
+}
+
+.orangeBtn:hover:not(:disabled) {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 7px 0 #9a7d0a !important;
+}
+
+.orangeBtn:active:not(:disabled) {
+    transform: translateY(2px) !important;
+    box-shadow: 0 2px 0 #9a7d0a !important;
 }
 
 .greenBtn {
     background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%) !important;
     box-shadow: 0 4px 0 #1b7a43 !important;
+    border: none !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.greenBtn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 150%;
+    height: 100%;
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.3) 50%,
+            transparent 75%);
+    animation: shineLTR 4s infinite ease-in-out;
+    animation-delay: 1s;
+    pointer-events: none;
+}
+
+.greenBtn:hover:not(:disabled) {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 7px 0 #1b7a43 !important;
+}
+
+.greenBtn:active:not(:disabled) {
+    transform: translateY(2px) !important;
+    box-shadow: 0 2px 0 #1b7a43 !important;
 }
 
 

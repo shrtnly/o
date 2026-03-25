@@ -158,7 +158,7 @@ const SettingsPage = () => {
             if (error) throw error;
         } catch (error) {
             console.error('Error updating notification setting:', error);
-            toast.error(t('error_update_settings') || 'সেটিংস আপডেট করতে সমস্যা হয়েছে');
+            toast.error(t('error_update_settings'));
         }
     };
 
@@ -201,7 +201,7 @@ const SettingsPage = () => {
             setTimeout(() => setIsSaved(false), 2000);
         } catch (error) {
             console.error(error);
-            toast.error(t('update_error') || 'সমস্যা হয়েছে');
+            toast.error(t('update_error'));
         } finally {
             setIsSavingProfile(false);
         }
@@ -211,11 +211,9 @@ const SettingsPage = () => {
         setConfirmModal({
             isOpen: true,
             type: 'danger',
-            title: language === 'bn' ? 'মেম্বারশিপ বাতিল করুন' : 'Cancel Membership',
-            message: language === 'bn' 
-                ? 'আপনি কি নিশ্চিত যে আপনি মেম্বারশিপ বাতিল করতে চান? আপনার বর্তমান মেয়াদ শেষ না হওয়া পর্যন্ত সুবিধাগুলো সচল থাকবে এবং এরপর আর রিনিউ হবে না।' 
-                : 'Are you sure you want to cancel? You will keep your benefits until the end of the current period, and it will not renew.',
-            confirmText: language === 'bn' ? 'হ্যাঁ, বাতিল করুন' : 'Yes, Cancel',
+            title: t('cancel_membership'),
+            message: t('cancel_membership_msg'),
+            confirmText: t('yes_cancel'),
             icon: X,
             onConfirm: async () => {
                 try {
@@ -228,12 +226,12 @@ const SettingsPage = () => {
                     if (error) throw error;
                     
                     setIsCancelling(false);
-                    toast.success(language === 'bn' ? 'পদক্ষেপ সফল হয়েছে' : 'Successfully cancelled');
+                    toast.success(t('successfully_cancelled'));
                     fetchUserProfile();
                 } catch (error) {
                     setIsCancelling(false);
                     console.error('Error cancelling sub:', error);
-                    toast.error(language === 'bn' ? 'বাতিল করতে সমস্যা হয়েছে' : 'Error cancelling');
+                    toast.error(t('error_cancelling'));
                 }
             }
         });
@@ -792,7 +790,7 @@ const SettingsPage = () => {
                                 ))}
                                 <div className={styles.warningNote}>
                                     <AlertTriangle size={18} />
-                                    <span>সতর্কতা: রিসেট করলে তা আর পুনরুদ্ধার করা সম্ভব নয়।</span>
+                                    <span>{t('warning_reset')}</span>
                                 </div>
                             </div>
                         ) : (
@@ -820,18 +818,16 @@ const SettingsPage = () => {
                                         <Crown size={20} color={isPremium ? "#f1c40f" : "var(--color-text-muted)"} />
                                     </div>
                                     <div className={styles.cardText}>
-                                        <h3>{isPremium ? (language === 'bn' ? 'সক্রিয় মেম্বারশিপ' : 'Active Membership') : (language === 'bn' ? 'কোনো সক্রিয় মেম্বারশিপ নেই' : 'No Active Membership')}</h3>
+                                        <h3>{isPremium ? t('active_membership') : t('no_active_membership')}</h3>
                                         <p>
                                             {isPremium 
-                                                ? (language === 'bn' 
-                                                    ? `মেয়াদ শেষ হবে: ${new Date(fullProfile?.premium_until).toLocaleDateString('bn-BD')}` 
-                                                    : `Expires on: ${new Date(fullProfile?.premium_until).toLocaleDateString()}`)
-                                                : (language === 'bn' ? 'প্রিমিয়াম ফিচার আনলক করতে শপে যান' : 'Unlock premium features, visit shop')
+                                                ? `${t('expires_on')}: ${new Date(fullProfile?.premium_until).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US')}` 
+                                                : t('unlock_premium_visit_shop')
                                             }
                                         </p>
                                         {isCancelled && (
                                             <p style={{ color: '#ff6464', fontWeight: 700, marginTop: '4px' }}>
-                                                {language === 'bn' ? '⚠ বাতিল করা হয়েছে (রিনিউ হবে না)' : '⚠ Cancelled (Will not renew)'}
+                                                {t('cancelled_not_renew')}
                                             </p>
                                         )}
                                     </div>
@@ -843,12 +839,13 @@ const SettingsPage = () => {
                                         </button>
                                     ) : (
                                         <button className={styles.dangerBtn} onClick={handleCancelSubscription}>
-                                            {language === 'bn' ? 'বাতিল করুন' : 'Cancel'}
+                                            {t('cancel')}
                                         </button>
                                     )
                                 ) : (
                                     <button className={styles.shopBtn} onClick={() => navigate('/shop')}>
-                                        {language === 'bn' ? 'শপে যান' : 'Visit Shop'}
+                                        <ShoppingBag size={18} />
+                                        <span>{t('shop')}</span>
                                     </button>
                                 )}
                             </div>

@@ -71,7 +71,7 @@
 }
 
 .headerIcon {
-    color: #ffffff;
+    color: var(--color-text);
     width: 32px;
     height: 32px;
 }
@@ -315,32 +315,29 @@
 .settingsInput,
 .settingsTextarea {
     width: 100%;
-    background-color: var(--color-bg-card, rgba(255, 255, 255, 0.05));
-    border: 1.5px solid var(--color-border, rgba(255, 255, 255, 0.1));
-    color: var(--color-text, #fff);
+    background-color: var(--color-input-bg);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
     padding: 12px 16px;
     border-radius: 12px;
     font-size: 0.95rem;
     font-family: inherit;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     box-sizing: border-box;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .settingsInput:hover,
 .settingsTextarea:hover {
-    background-color: var(--color-bg-hover, rgba(255, 255, 255, 0.08));
-    border-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-primary);
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .settingsInput:focus,
 .settingsTextarea:focus {
     outline: none;
-    background-color: var(--color-bg-hover, rgba(255, 255, 255, 0.08));
-    border-color: var(--color-primary, #f1c40f);
-    box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.1);
+    background-color: var(--color-bg-hover);
+    border-color: var(--color-primary);
     transform: translateY(-2px);
 }
 
@@ -357,7 +354,7 @@
 
 .primaryBtn {
     background-color: var(--color-primary);
-    color: #000;
+    color: var(--color-on-primary, #000);
     border: none;
     padding: 12px 28px;
     border-radius: 14px;
@@ -375,18 +372,18 @@
 .primaryBtn:hover:not(:disabled) {
     background-color: var(--color-primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(241, 196, 15, 0.3);
+    box-shadow: 0 8px 24px var(--color-primary-faint);
 }
 
 .primaryBtn:active:not(:disabled) {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
 }
 
 .btnLoader {
     width: 20px;
     height: 20px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #000;
+    border: 3px solid var(--color-primary-faint);
+    border-top-color: var(--color-on-primary, #000);
     border-radius: 50%;
     animation: btnSpin 0.8s linear infinite;
 }
@@ -430,14 +427,14 @@
 
 .cardText p {
     margin: 4px 0 0 0;
-    color: #888;
+    color: var(--color-text-muted);
     font-size: 0.85rem;
 }
 
 .secondaryBtn {
     background-color: transparent;
     color: var(--color-text);
-    border: 1.5px solid var(--color-border);
+    border: 1px solid var(--color-border);
     padding: 8px 20px;
     border-radius: 12px;
     font-weight: 700;
@@ -447,15 +444,20 @@
 }
 
 .secondaryBtn:hover {
-    background-color: rgba(241, 196, 15, 0.1);
+    background-color: var(--color-primary-faint);
     border-color: var(--color-primary);
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px var(--color-primary-faint);
+}
+
+.secondaryBtn:active {
+    transform: translateY(0) scale(0.98);
 }
 
 .dangerBtnMinimal {
     background-color: transparent;
     color: #ff6464;
-    border: 1.5px solid rgba(255, 100, 100, 0.2);
+    border: 1px solid rgba(255, 100, 100, 0.2);
     padding: 8px 20px;
     border-radius: 12px;
     font-weight: 700;
@@ -471,26 +473,30 @@
 }
 
 .shopBtn {
-    background-color: transparent;
-    color: var(--color-primary);
-    border: 1.5px solid var(--color-primary);
-    padding: 7px 16px;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 0.8rem;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary, #000);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
     text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.2s;
-    display: block;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
 }
 
 .shopBtn:hover {
-    background-color: var(--color-primary);
-    color: #000;
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--color-primary-faint);
 }
 
 .shopBtn:active {
-    transform: scale(0.98);
+    transform: translateY(0) scale(0.98);
 }
 
 .dangerBtn {
@@ -580,7 +586,7 @@
     top: 10px;
     right: -25px;
     background-color: var(--color-primary);
-    color: #000;
+    color: var(--color-on-primary, #000);
     font-size: 0.65rem;
     font-weight: 900;
     padding: 4px 30px;
@@ -596,9 +602,8 @@
 
 .emptyState {
     padding: 60px 20px;
-    text-align: center;
-    background-color: var(--color-bg-alt);
-    border: 2px dashed #37464f;
+    background-color: var(--color-bg-card);
+    border: 2px dashed var(--color-border);
     border-radius: 24px;
 }
 
@@ -641,14 +646,14 @@
     width: 20px;
     left: 3px;
     top: 3px;
-    background-color: #fff;
+    background-color: var(--color-bg-alt);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    color: #888;
+    color: var(--color-text-muted);
     z-index: 2;
 }
 
@@ -677,7 +682,7 @@ input:checked+.slider .knob {
 
 /* Animation Select Dropdown */
 .animationSelect {
-    background-color: var(--color-bg-deep);
+    background-color: var(--color-bg-card);
     border: 2px solid var(--color-border);
     color: var(--color-text);
     padding: 10px 16px;
@@ -842,7 +847,7 @@ input:checked+.slider .knob {
 }
 
 .resetBtn:hover {
-    background-color: #2c3e47;
+    background-color: rgba(255, 150, 0, 0.2);
     transform: translateY(-1px);
 }
 
@@ -855,7 +860,7 @@ input:checked+.slider .knob {
     margin-top: 32px;
     padding: 16px;
     background-color: rgba(255, 150, 0, 0.05);
-    border: 1.5px solid rgba(255, 150, 0, 0.2);
+    border: 1px solid rgba(255, 150, 0, 0.2);
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -868,12 +873,12 @@ input:checked+.slider .knob {
 .emptyCourses {
     padding: 60px 20px;
     text-align: center;
-    border: 2px dashed #37464f;
+    border: 2px dashed var(--color-border);
     border-radius: 24px;
 }
 
 .emptyIcon {
-    color: #37464f;
+    color: var(--color-text-muted);
     margin-bottom: 16px;
 }
 

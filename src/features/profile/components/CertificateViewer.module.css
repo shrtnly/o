@@ -13,9 +13,9 @@
 }
 
 .modalContent {
-    background: #121212;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-hover);
     border-radius: 20px;
     width: 100%;
     max-width: 900px;
@@ -27,7 +27,7 @@
 
 .header {
     padding: 16px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border-muted);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -36,26 +36,26 @@
 .modalTitle {
     font-size: 18px;
     font-weight: 500;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
 }
 
 .closeBtn {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted);
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .closeBtn:hover {
-    color: #fff;
+    color: var(--color-text);
     transform: rotate(90deg);
 }
 
 .certWrapper {
     padding: 20px;
-    background: #0a0a0a;
+    background: var(--color-bg-deep);
 }
 
 /* THE ACTUAL CERTIFICATE (Capture Target) */
@@ -265,7 +265,7 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border-muted);
 }
 
 .btnGroup {
@@ -281,7 +281,7 @@
 
 .downloadBtn {
     flex: 1;
-    background: linear-gradient(135deg, #F1C40F 0%, #F39C12 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #F39C12 100%);
     border: none;
     color: #000;
     font-weight: 600;
@@ -302,9 +302,9 @@
 
 .shareBtn {
     width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
     font-weight: 500;
     padding: 12px 20px;
     border-radius: 12px;
@@ -318,9 +318,9 @@
 
 .copyBtn {
     width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.6);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     font-weight: 400;
     padding: 10px 20px;
     border-radius: 12px;
@@ -334,25 +334,25 @@
 }
 
 .shareBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: var(--color-bg-alt);
+    border-color: var(--color-primary-light);
 }
 
 .copyBtn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: var(--color-bg-alt);
+    color: var(--color-text);
 }
 
 .shareMenu {
     position: absolute;
     bottom: calc(100% + 12px);
     right: 0;
-    background: #1a1a1a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 16px;
     padding: 16px;
     width: 240px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-hover);
     z-index: 10;
 }
 
@@ -362,7 +362,7 @@
     top: 100%;
     right: 40px;
     border: 8px solid transparent;
-    border-top-color: #1a1a1a;
+    border-top-color: var(--color-bg-alt);
 }
 
 .shareMenuHeader {
@@ -375,13 +375,13 @@
 .shareMenuHeader span {
     font-size: 14px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted);
 }
 
 .shareMenuHeader button {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     cursor: pointer;
     padding: 4px;
 }
@@ -393,8 +393,8 @@
 }
 
 .shareOptions button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
     aspect-ratio: 1;
     border-radius: 12px;
     display: flex;
@@ -405,8 +405,9 @@
 }
 
 .shareOptions button:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-hover);
     transform: translateY(-2px);
+    border-color: var(--color-border);
 }
 
 .shareMenuTip {
@@ -418,7 +419,7 @@
 .shareMenuTip span {
     font-size: 11px;
     line-height: 1.4;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     display: block;
     text-align: center;
 }

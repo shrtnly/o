@@ -17,12 +17,12 @@
 .subTabHeader {
     display: flex;
     gap: 3px;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-deep);
     padding: 4px;
     border-radius: 14px;
     width: 100%;
     margin-bottom: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border);
 }
 
 @media (max-width: 768px) {
@@ -42,7 +42,7 @@
     border-radius: 10px;
     font-size: 0.78rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -54,19 +54,19 @@
 }
 
 .subTabBtn:hover:not(.subTabActive) {
-    color: rgba(255, 255, 255, 0.6);
-    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-text);
+    background: var(--color-bg-alt);
 }
 
 /* Active tab — gold filled pill */
 .subTabActive {
-    color: #0a0a0a;
+    color: #000;
     background: var(--color-primary);
 }
 
 .subTabActive svg {
     stroke-width: 2.5;
-    color: #0a0a0a;
+    color: #000;
 }
 
 
@@ -92,7 +92,7 @@
     gap: 16px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-border);
     border-radius: 0;
     padding: 12px 4px;
     transition: all 0.3s ease;
@@ -113,13 +113,13 @@
 }
 
 .searchIcon {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
 }
 
 .searchBox input {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-text);
     font-size: 0.9rem;
     font-weight: 500;
     flex: 1;
@@ -132,15 +132,15 @@
     top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: rgba(15, 15, 15, 0.95);
+    background: var(--color-bg-alt);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
     border-radius: 20px;
     padding: 12px 6px;
     max-height: 320px;
     overflow-y: auto;
     z-index: 2000;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--shadow-hover);
     animation: slideDownFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -155,12 +155,12 @@
     justify-content: space-between;
     padding: 12px 14px;
     background: transparent;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--color-border-muted);
     transition: background 0.2s;
 }
 
 .learnerItem:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-hover);
 }
 
 .learnerCore {
@@ -177,8 +177,8 @@
     height: 38px;
     border-radius: 50%;
     padding: 2px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,7 +198,7 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    border: 2px solid #0a0a0a;
+    border: 2px solid var(--color-bg);
     z-index: 2;
 }
 
@@ -219,13 +219,13 @@
 .learnerName {
     font-size: 0.85rem;
     font-weight: 500;
-    color: #fff;
+    color: var(--color-text);
     letter-spacing: 0.2px;
 }
 
 .learnerSub {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -247,8 +247,8 @@
 .actionBtn:disabled {
     opacity: 0.3;
     background: transparent;
-    border-color: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.2);
+    border-color: var(--color-border-muted);
+    color: var(--color-text-muted);
 }
 
 .connGrid {
@@ -273,14 +273,14 @@
     padding: 14px 14px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-border-muted);
     border-radius: 0;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .connCard:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-hover);
 }
 
 .seeAllBtn {
@@ -302,13 +302,13 @@
 
 .seeAllBtn:hover {
     opacity: 1;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-bg-hover);
 }
 
 .clearSearchBtn {
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     cursor: pointer;
     padding: 8px;
     display: flex;
@@ -319,16 +319,16 @@
 }
 
 .clearSearchBtn:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-text);
+    background: var(--color-bg-hover);
 }
 
 .tagBtn {
     padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
     border-radius: 100px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted);
     font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
@@ -369,10 +369,10 @@
     justify-content: center;
     padding: 3rem 1.5rem;
     gap: 1.5rem;
-    color: rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.01);
+    color: var(--color-text-muted);
+    background: var(--color-bg-alt);
     border-radius: 24px;
-    border: 1px dashed rgba(255, 255, 255, 0.05);
+    border: 1px dashed var(--color-border);
 }
 
 .emptyHeader {
@@ -402,10 +402,10 @@
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
     border-radius: 12px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted);
     font-size: 0.8rem;
     font-weight: 700;
     cursor: pointer;
@@ -413,9 +413,9 @@
 }
 
 .seeMoreEmptyBtn:hover {
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-hover);
+    color: var(--color-text);
+    border-color: var(--color-border);
 }
 
 .sectionTitle {
@@ -452,8 +452,8 @@
     height: 16px;
     padding: 0 4px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.5);
+    background: var(--color-bg-deep);
+    color: var(--color-text-muted);
     margin-left: 2px;
 }
 
@@ -487,9 +487,9 @@
     gap: 5px;
     padding: 5px 12px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--color-border-muted);
     border-radius: 100px;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     font-size: 0.72rem;
     font-weight: 600;
     cursor: pointer;
@@ -498,9 +498,9 @@
 }
 
 .connFilterPill:hover {
-    color: rgba(255, 255, 255, 0.7);
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border);
 }
 
 .connFilterActive {
@@ -519,8 +519,8 @@
     height: 14px;
     padding: 0 3px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.5);
+    background: var(--color-bg-deep);
+    color: var(--color-text-muted);
 }
 
 .filterCountAlert {
@@ -568,7 +568,7 @@
 .sidebarTitle {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text);
     margin-bottom: 16px;
     letter-spacing: -0.5px;
 }
@@ -579,10 +579,10 @@
     gap: 12px;
     background: transparent;
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-border);
     border-radius: 0;
     padding: 12px 4px;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -595,7 +595,7 @@
     background: none !important;
     border: none !important;
     outline: none !important;
-    color: #fff !important;
+    color: var(--color-text) !important;
     font-size: 0.85rem !important;
     width: 100% !important;
     padding: 0 !important;
@@ -622,12 +622,12 @@
 }
 
 .sidebarList::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border-muted);
     border-radius: 10px;
 }
 
 .sidebarList:hover::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-border);
 }
 
 .sidebarList {
@@ -635,7 +635,7 @@
     overflow-y: auto;
     padding: 4px 0;
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.05) transparent;
+    scrollbar-color: var(--color-border-muted) transparent;
 }
 
 .sidebarList::-webkit-scrollbar {
@@ -647,7 +647,7 @@
 }
 
 .sidebarList::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border-muted);
     border-radius: 10px;
 }
 
@@ -659,7 +659,7 @@
 
 .newChatSection {
     padding-top: 12px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    border-top: 1px dashed var(--color-border-muted);
     margin-top: 8px;
 }
 
@@ -670,14 +670,14 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
 }
 
 .noResults {
     padding: 30px 14px;
     text-align: center;
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-muted);
     font-style: italic;
 }
 
@@ -688,12 +688,12 @@
     padding: 14px 20px;
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-border-muted);
     position: relative;
 }
 
 .conversationItem:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-hover);
 }
 
 .convActive {
@@ -718,7 +718,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -749,14 +749,14 @@
 
 .convTime {
     font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-muted);
     font-weight: 500;
 }
 
 .partnerName {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--color-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -764,7 +764,7 @@
 
 .lastMsg {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -772,13 +772,13 @@
 
 .unreadBadge {
     background: var(--color-primary);
-    color: #000;
+    color: var(--color-on-primary);
     font-size: 0.55rem;
     font-weight: 800;
     padding: 2px 6px;
     border-radius: 100px;
     margin-left: auto;
-    box-shadow: 0 0 10px rgba(241, 196, 15, 0.4);
+    box-shadow: 0 0 10px var(--color-primary-light);
     letter-spacing: 0.5px;
     animation: pulse 1.5s infinite;
 }

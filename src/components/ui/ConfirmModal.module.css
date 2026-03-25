@@ -14,14 +14,14 @@
 }
 
 .modal {
-    background: #1a272d;
+    background: var(--color-bg-alt);
     width: 100%;
     max-width: 320px;
     border-radius: 24px;
     position: relative;
     padding: 32px 24px;
-    border: 3px solid #37464f;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+    border: 3px solid var(--color-border);
+    box-shadow: var(--shadow-card);
     text-align: center;
 }
 
@@ -41,7 +41,7 @@
 }
 
 .closeBtn:hover {
-    color: #fff;
+    color: var(--color-text);
 }
 
 .content {
@@ -81,13 +81,13 @@
 
 .title {
     font-size: 1.75rem;
-    color: #fff;
+    color: var(--color-text);
     font-weight: 900;
     margin-bottom: 12px;
 }
 
 .message {
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 32px;
@@ -114,9 +114,9 @@
 }
 
 .cancelBtn {
-    background: #37464f;
-    color: #fff;
-    box-shadow: 0 5px 0 #202f36;
+    background: var(--color-border);
+    color: var(--color-text);
+    box-shadow: 0 5px 0 var(--color-bg-deep);
 }
 
 .cancelBtn:active {

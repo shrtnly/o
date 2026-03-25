@@ -1,7 +1,7 @@
 .card {
     position: relative;
-    background: #0D0D0D;
-    border: 1.2px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border: 1.2px solid var(--color-border);
     border-radius: 12px;
     padding: 14px;
     display: flex;
@@ -11,7 +11,7 @@
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
     cursor: default;
-    box-shadow: none;
+    box-shadow: var(--shadow-card);
 }
 
 /* --- Certificate Ornaments --- */
@@ -19,7 +19,7 @@
     position: absolute;
     width: 20px;
     height: 20px;
-    border: 1px solid rgba(241, 196, 15, 0.4);
+    border: 1px solid var(--color-primary-light);
     opacity: 0.6;
 }
 
@@ -30,7 +30,7 @@
 
 .card:hover {
     transform: translateY(-2px);
-    border-color: rgba(241, 196, 15, 0.4);
+    border-color: var(--color-primary-light);
 }
 
 .unlocked {
@@ -39,12 +39,12 @@
 
 .locked {
     opacity: 0.85;
-    background: #181818;
-    border-color: rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-deep);
+    border-color: var(--color-border-muted);
 }
 
 .locked .cornerTopLeft, .locked .cornerTopRight, .locked .cornerBottomLeft, .locked .cornerBottomRight {
-    border-color: rgba(255, 255, 255, 0.15);
+    border-color: var(--color-border-muted);
 }
 
 .cardContent {
@@ -68,11 +68,11 @@
 }
 
 .lockIconMini {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
 }
 
 .awardIconMini {
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .body {
@@ -87,20 +87,20 @@
 .certLabel {
     font-size: 8px;
     font-weight: 800;
-    color: #F1C40F;
+    color: var(--color-primary);
     letter-spacing: 1px;
     text-transform: uppercase;
 }
 
 .locked .certLabel {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .courseTitle {
     font-size: 16px;
     font-weight: 700;
     line-height: 1.4;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -138,31 +138,31 @@
 
 .progressLabel {
     font-size: 9px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted);
     text-transform: uppercase;
 }
 
 .miniProgressBar {
     height: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-deep);
     border-radius: 100px;
     overflow: hidden;
 }
 
 .miniProgressFill {
     height: 100%;
-    background: linear-gradient(90deg, #F1C40F, #F39C12);
+    background: linear-gradient(90deg, var(--color-primary), #F39C12);
     border-radius: inherit;
 }
 
 .progressPercent {
     font-size: 12px;
     font-weight: 800;
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border-muted);
     padding-top: 12px;
     margin-top: 12px;
 }
@@ -178,7 +178,7 @@
     align-items: center;
     gap: 6px;
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .viewPrompt {
@@ -187,7 +187,7 @@
     gap: 6px;
     font-size: 10px;
     font-weight: 800;
-    color: #F1C40F;
+    color: var(--color-primary);
     letter-spacing: 0.5px;
 }
 
@@ -197,7 +197,7 @@
     gap: 8px;
     font-size: 10px;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 

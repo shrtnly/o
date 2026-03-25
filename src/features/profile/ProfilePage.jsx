@@ -30,6 +30,7 @@ import {
     CartesianGrid, Tooltip as ChartTooltip, PieChart, Pie, Cell,
     BarChart, Bar
 } from 'recharts';
+import { useTheme } from '../../context/ThemeContext';
 
 // --- Achievement Badge Constants ---
 import { useNotifications } from '../../context/NotificationContext';
@@ -50,6 +51,8 @@ const ProfilePage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { t, language } = useLanguage();
+    const { isDark } = useTheme();
+    const brandColor = isDark ? '#F1C40F' : '#FFB800';
     const [profile, setProfile] = useState(null);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -69,6 +72,10 @@ const ProfilePage = () => {
     const filterRef = useRef(null);
 
     const analyzeScrollRef = useRef(null);
+    const analyticsSummaryRef = useRef(null);
+    const xpTrendRef = useRef(null);
+    const accuracyRef = useRef(null);
+    const patternRef = useRef(null);
 
     // Notification scroll ref
     const notifScrollRef = useRef(null);
@@ -406,7 +413,7 @@ const ProfilePage = () => {
                 <defs>
                     <linearGradient id="flameGradientProfile" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
-                        <stop offset="50%" style={{ stopColor: '#F1C40F', stopOpacity: 1 }} />
+                        <stop offset="50%" style={{ stopColor: brandColor, stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
                     </linearGradient>
                 </defs>
@@ -429,7 +436,7 @@ const ProfilePage = () => {
                             <div className={styles.avatar} onClick={() => fileInputRef.current?.click()}>
                                 {profile?.avatar_url
                                     ? <img src={profile.avatar_url} alt="Profile" />
-                                    : <User size={44} color="#F1C40F" />
+                                    : <User size={44} color={brandColor} />
                                 }
                                 <div className={styles.avatarOverlay}>
                                     <Camera size={20} />
@@ -740,13 +747,13 @@ const ProfilePage = () => {
                                             <div className={styles.analysisStatsRow}>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('daily_xp')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
+                                                    <span className={styles.miniCardValue} style={{ color: brandColor }}>
                                                         {analysisData.summary.totalXp}
                                                     </span>
                                                 </div>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('total_time')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: '#F1C40F' }}>
+                                                    <span className={styles.miniCardValue} style={{ color: brandColor }}>
                                                         {analysisData.summary.totalMinutes} {t('minutes')}
                                                     </span>
                                                 </div>
@@ -762,6 +769,7 @@ const ProfilePage = () => {
                                         {/* \u2500\u2500 Section 2: XP Chart \u2500\u2500 */}
                                         <div
                                             className={styles.analysisSectionBlock}
+                                            ref={xpTrendRef}
                                             data-section="xp"
                                         >
 
@@ -772,28 +780,29 @@ const ProfilePage = () => {
                                                         <AreaChart data={analysisData.activity}>
                                                             <defs>
                                                                 <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
-                                                                    <stop offset="5%" stopColor="#F1C40F" stopOpacity={0.3} />
-                                                                    <stop offset="95%" stopColor="#F1C40F" stopOpacity={0} />
+                                                                    <stop offset="5%" stopColor={brandColor} stopOpacity={0.3} />
+                                                                    <stop offset="95%" stopColor={brandColor} stopOpacity={0} />
                                                                 </linearGradient>
                                                             </defs>
                                                             <XAxis dataKey="activity_date" hide />
                                                             <YAxis hide />
                                                             <ChartTooltip
                                                                 contentStyle={{
-                                                                    background: 'rgba(20, 20, 20, 0.9)',
-                                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                                    background: isDark ? 'rgba(20, 20, 20, 0.95)' : '#ffffff',
+                                                                    border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
                                                                     borderRadius: '12px',
                                                                     fontSize: '12px',
-                                                                    color: '#fff'
+                                                                    color: isDark ? '#fff' : '#1e293b',
+                                                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                                                 }}
-                                                                itemStyle={{ color: '#fff' }}
-                                                                labelStyle={{ color: '#fff' }}
+                                                                itemStyle={{ color: isDark ? '#fff' : '#1e293b' }}
+                                                                labelStyle={{ color: isDark ? '#fff' : '#1e293b' }}
                                                             />
                                                             <Area
                                                                 type="monotone"
                                                                 dataKey="xp_earned"
                                                                 name={t('earned')}
-                                                                stroke="#F1C40F"
+                                                                stroke={brandColor}
                                                                 fillOpacity={1}
                                                                 fill="url(#colorXp)"
                                                                 strokeWidth={3}
@@ -807,6 +816,7 @@ const ProfilePage = () => {
                                         {/* \u2500\u2500 Section 3: Accuracy \u2500\u2500 */}
                                         <div
                                             className={styles.analysisSectionBlock}
+                                            ref={accuracyRef}
                                             data-section="accuracy"
                                         >
 
@@ -827,26 +837,27 @@ const ProfilePage = () => {
                                                                 paddingAngle={8}
                                                                 dataKey="value"
                                                             >
-                                                                <Cell fill="#F1C40F" stroke="none" />
-                                                                <Cell fill="rgba(255, 255, 255, 0.05)" stroke="none" />
+                                                                <Cell fill={brandColor} stroke="none" />
+                                                                <Cell fill={isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)"} stroke="none" />
                                                             </Pie>
                                                             <ChartTooltip
                                                                 contentStyle={{
-                                                                    background: 'rgba(20, 20, 20, 0.9)',
-                                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                                    background: isDark ? 'rgba(20, 20, 20, 0.95)' : '#ffffff',
+                                                                    border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
                                                                     borderRadius: '10px',
                                                                     fontSize: '12px',
-                                                                    color: '#fff'
+                                                                    color: isDark ? '#fff' : '#1e293b',
+                                                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                                                 }}
-                                                                itemStyle={{ color: '#fff' }}
-                                                                labelStyle={{ color: '#fff' }}
+                                                                itemStyle={{ color: isDark ? '#fff' : '#1e293b' }}
+                                                                labelStyle={{ color: isDark ? '#fff' : '#1e293b' }}
                                                             />
                                                         </PieChart>
                                                     </ResponsiveContainer>
                                                 </div>
                                                 <div className={styles.pieLegend}>
                                                     <div className={styles.legendItem}>
-                                                        <span className={styles.legendDot} style={{ background: '#F1C40F' }} />
+                                                        <span className={styles.legendDot} style={{ background: brandColor }} />
                                                         <span>{t('right_answers')}</span>
                                                     </div>
                                                     <div className={styles.legendItem}>
@@ -860,6 +871,7 @@ const ProfilePage = () => {
                                         {/* \u2500\u2500 Section 4: Pattern \u2500\u2500 */}
                                         <div
                                             className={styles.analysisSectionBlock}
+                                            ref={patternRef}
                                             data-section="pattern"
                                         >
 
@@ -885,7 +897,7 @@ const ProfilePage = () => {
                                                             <Bar
                                                                 dataKey="lessons_completed"
                                                                 name={t('lessons_completed')}
-                                                                fill="#F1C40F"
+                                                                fill={brandColor}
                                                                 radius={[4, 4, 0, 0]}
                                                                 barSize={12}
                                                                 opacity={0.8}
@@ -1103,7 +1115,7 @@ const ProfilePage = () => {
 
                                     <div className={styles.learnerHeader}>
                                         <div className={styles.lAvatarLarge}>
-                                            {selectedLearner.avatar_url ? <img src={selectedLearner.avatar_url} /> : <User size={48} color="#F1C40F" />}
+                                            {selectedLearner.avatar_url ? <img src={selectedLearner.avatar_url} /> : <User size={48} color={brandColor} />}
                                         </div>
                                         <h3 className={styles.lNameLarge}>{selectedLearner.full_name || selectedLearner.display_name}</h3>
                                         <p className={styles.lEmailLarge}>{selectedLearner.email}</p>
@@ -1111,7 +1123,7 @@ const ProfilePage = () => {
 
                                     <div className={styles.lStatsRow}>
                                         <div className={styles.lStatItem}>
-                                            <Zap size={16} color="#F1C40F" />
+                                            <Zap size={16} color={brandColor} />
                                             <span>{selectedLearner.xp} XP</span>
                                         </div>
                                         {selectedLearner.location && (
@@ -1165,7 +1177,7 @@ const ProfilePage = () => {
                             <div className={styles.shareCardAvatar}>
                                 {profile?.avatar_url
                                     ? <img src={profile.avatar_url} alt="avatar" />
-                                    : <User size={32} color="#F1C40F" />}
+                                    : <User size={32} color={brandColor} />}
                             </div>
                             <h4 className={styles.shareCardName}>
                                 {profile?.full_name || profile?.display_name || 'শিক্ষার্থী'}

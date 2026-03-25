@@ -1,6 +1,6 @@
 /* ================================================
    BeeLesson – Profile Page (Bee/Honey Theme)
-   Font: Hind Siliguri  |  Primary: #F1C40F
+   Font: Hind Siliguri  |  Primary: var(--color-primary)
    ================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
@@ -77,7 +77,7 @@
 }
 
 .seeAllBtn:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-hover);
     opacity: 1;
 }
 
@@ -99,8 +99,8 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     color: var(--color-text-muted);
     display: flex;
     align-items: center;
@@ -112,7 +112,7 @@
 .headerSettingsBtn:hover {
     background: rgba(241, 196, 15, 0.1);
     border-color: rgba(241, 196, 15, 0.3);
-    color: #F1C40F;
+    color: var(--color-primary);
     transform: rotate(45deg);
 }
 
@@ -162,7 +162,7 @@
     width: 84px;
     height: 84px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.12);
+    border: 2px solid var(--color-border);
     padding: 4px;
     background: transparent;
     overflow: hidden;
@@ -178,7 +178,7 @@
 
 .avatar:hover {
     transform: scale(1.02);
-    border-color: rgba(255, 255, 255, 0.3);
+    border-color: var(--color-primary-light);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
@@ -236,7 +236,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #F1C40F;
+    color: var(--color-primary);
     opacity: 0;
     transition: opacity 0.2s ease;
     z-index: 5;
@@ -303,7 +303,7 @@
 }
 
 .crownIcon {
-    color: #F1C40F;
+    color: var(--color-primary);
     flex-shrink: 0;
 }
 
@@ -322,8 +322,8 @@
 }
 
 .statCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 14px;
     padding: 10px 14px;
     display: flex;
@@ -334,15 +334,15 @@
 }
 
 .statCard:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border);
 }
 
 .statIconBox {
     width: 32px;
     height: 32px;
     border-radius: 9px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -357,7 +357,7 @@
 }
 
 .statIconCompass {
-    color: #F1C40F;
+    color: var(--color-primary);
     opacity: 0.85;
 }
 
@@ -374,14 +374,14 @@
 .statCardValue {
     font-size: 0.95rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
     line-height: 1;
     display: block;
 }
 
 .statCardLabel {
     font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-muted);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.6px;
@@ -422,7 +422,7 @@
 
 .badgeUnlocked .badgeCircle {
     background: rgba(241, 196, 15, 0.12);
-    border: 2px solid rgba(241, 196, 15, 0.4);
+    border: 2px solid var(--color-primary-light);
     box-shadow: 0 4px 16px rgba(241, 196, 15, 0.2);
 }
 
@@ -432,8 +432,8 @@
 }
 
 .badgeLocked .badgeCircle {
-    background: rgba(255, 255, 255, 0.03);
-    border: 2px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-deep);
+    border: 2px solid var(--color-border-muted);
     filter: grayscale(1);
     opacity: 0.45;
 }
@@ -444,7 +444,7 @@
 }
 
 .lockIcon {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
 }
 
 .badgeLabel {
@@ -469,8 +469,8 @@
 
 .certTabs {
     display: flex;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
     padding: 3px;
     border-radius: 10px;
     gap: 4px;
@@ -490,17 +490,17 @@
 }
 
 .certTab:hover {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.03);
+    color: var(--color-text);
+    background: var(--color-bg-alt);
 }
 
 .certTabActive {
-    background: #F1C40F;
+    background: var(--color-primary);
     color: #000;
 }
 
 .certTabActive:hover {
-    background: #F1C40F;
+    background: var(--color-primary);
     color: #000;
 }
 
@@ -516,8 +516,8 @@
     align-items: center;
     justify-content: center;
     padding: 60px 20px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.15);
+    background: var(--color-bg-alt);
+    border: 1px dashed var(--color-border);
     border-radius: 24px;
     text-align: center;
     color: var(--color-text-muted);
@@ -551,7 +551,7 @@
     border: 1.5px solid rgba(241, 196, 15, 0.45);
     border-radius: 12px;
     background: transparent;
-    color: #F1C40F;
+    color: var(--color-primary);
     font-family: 'Hind Siliguri', sans-serif;
     font-size: 0.85rem;
     font-weight: 700;
@@ -573,7 +573,7 @@
     padding: 11px 16px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, #F1C40F 0%, #F0A30A 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #F0A30A 100%);
     color: #000;
     font-family: 'Hind Siliguri', sans-serif;
     font-size: 0.85rem;
@@ -600,8 +600,8 @@
 }
 
 .actionMinimal:hover {
-    border-color: rgba(241, 196, 15, 0.4);
-    color: #F1C40F;
+    border-color: var(--color-primary-light);
+    color: var(--color-primary);
     background: rgba(241, 196, 15, 0.07);
 }
 
@@ -615,7 +615,7 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #F1C40F, #F0A30A);
+    background: linear-gradient(135deg, var(--color-primary), #F0A30A);
     border: none;
     color: #000;
     display: flex;
@@ -638,7 +638,7 @@
 .modalOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: var(--color-bg-overlay);
     backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
@@ -651,22 +651,22 @@
    SHARE CARD MODAL
 ───────────────────────────────────────────── */
 .shareCard {
-    background: linear-gradient(145deg, #1a1200, #2c1e00);
-    border: 1.5px solid rgba(241, 196, 15, 0.35);
+    background: var(--color-bg-alt);
+    border: 1.5px solid var(--color-primary-light);
     border-radius: 24px;
     width: 100%;
     max-width: 340px;
     position: relative;
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--shadow-hover);
 }
 
 .shareCloseBtn {
     position: absolute;
     top: 14px;
     right: 14px;
-    background: rgba(255, 255, 255, 0.08);
-    border: none;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
     color: var(--color-text-muted);
     width: 32px;
     height: 32px;
@@ -679,7 +679,7 @@
 }
 
 .shareCloseBtn:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--color-bg-alt);
 }
 
 .shareCardInner {
@@ -703,7 +703,7 @@
 .shareCardHeader h3 {
     font-size: 1.2rem;
     font-weight: 800;
-    color: #F1C40F;
+    color: var(--color-primary);
     margin: 0;
 }
 
@@ -717,12 +717,12 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    border: 2px solid #F1C40F;
+    border: 2px solid var(--color-primary);
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--color-bg-alt);
+    background: var(--color-bg-deep);
 }
 
 .shareCardAvatar img {
@@ -754,7 +754,7 @@
 .shareStat strong {
     font-size: 1.1rem;
     font-weight: 800;
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .shareStat span {
@@ -772,14 +772,14 @@
     padding: 5px 14px;
     font-size: 0.72rem;
     font-weight: 700;
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .shareDownload {
     width: 100%;
     padding: 11px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #F1C40F, #F0A30A);
+    background: linear-gradient(135deg, var(--color-primary), #F0A30A);
     border: none;
     color: #000;
     font-family: 'Hind Siliguri', sans-serif;
@@ -803,7 +803,7 @@
     max-width: 480px;
     border-radius: 24px;
     border: 1px solid var(--color-border);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-hover);
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     max-height: 90vh;
     overflow-y: auto;
@@ -847,7 +847,7 @@
 }
 
 .closeBtn:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: var(--color-bg-hover);
     color: var(--color-text);
 }
 
@@ -891,7 +891,7 @@
 
 .fieldGroup input:focus,
 .fieldGroup textarea:focus {
-    border-color: #F1C40F;
+    border-color: var(--color-primary);
 }
 
 .modalActions {
@@ -928,8 +928,8 @@
 
 .genderBtnActive {
     background: rgba(241, 196, 15, 0.1) !important;
-    border-color: #F1C40F !important;
-    color: #F1C40F !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
 }
 
 /* ─────────────────────────────────────────────
@@ -1014,7 +1014,7 @@
     align-items: center;
     gap: 0;
     margin: 10px 0 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-border);
     width: 100%;
 }
 
@@ -1054,11 +1054,11 @@
 }
 
 .tabActive {
-    color: #F1C40F !important;
+    color: var(--color-primary) !important;
 }
 
 .tabActive svg {
-    color: #F1C40F !important;
+    color: var(--color-primary) !important;
     opacity: 1 !important;
 }
 
@@ -1075,7 +1075,7 @@
     position: absolute;
     top: -10px;
     right: -10px;
-    background-color: #F1C40F !important;
+    background-color: var(--color-primary) !important;
     color: #000 !important;
     font-family: 'Hind Siliguri', sans-serif;
     font-size: 0.7rem;
@@ -1112,7 +1112,7 @@
     left: 15%;
     right: 15%;
     height: 3px;
-    background: #F1C40F;
+    background: var(--color-primary);
     border-radius: 10px;
 }
 
@@ -1127,9 +1127,9 @@
     font-size: 0.9rem;
     text-align: center;
     padding: 40px 20px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-bg-alt);
     border-radius: 20px;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border: 1px dashed var(--color-border);
 }
 
 /* ─────────────────────────────────────────────
@@ -1199,17 +1199,17 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-bg-alt);
     padding: 5px 12px;
     border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--color-border);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdownToggle:hover {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary-light);
 }
 
 .dropLabelStack {
@@ -1230,12 +1230,12 @@
 .selectedVal {
     font-size: 0.72rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text);
     letter-spacing: 0.2px;
 }
 
 .dropdownIcon {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     transition: transform 0.2s;
 }
 
@@ -1248,12 +1248,12 @@
     top: calc(100% + 6px);
     right: 0;
     width: 160px;
-    background: rgba(26, 27, 30, 0.8);
+    background: var(--color-bg-alt);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--color-border);
     border-radius: 14px;
     padding: 6px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--shadow-card);
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -1284,15 +1284,15 @@
 
 .optActive {
     background: rgba(241, 196, 15, 0.1) !important;
-    color: #F1C40F !important;
+    color: var(--color-primary) !important;
 }
 
 .activeDot {
     width: 6px;
     height: 6px;
-    background: #F1C40F;
+    background: var(--color-primary);
     border-radius: 50%;
-    box-shadow: 0 0 8px #F1C40F;
+    box-shadow: 0 0 8px var(--color-primary);
 }
 
 .analysisGrid {
@@ -1309,8 +1309,8 @@
 }
 
 .analysisMiniCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 12px;
     padding: 10px 14px;
     display: flex;
@@ -1320,7 +1320,7 @@
 }
 
 .analysisMiniCard:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-hover);
 }
 
 .miniCardLabel {
@@ -1339,8 +1339,8 @@
 }
 
 .chartContainerFull {
-    background: rgba(255, 255, 255, 0.015);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 20px;
     padding: 18px 22px;
 }
@@ -1362,8 +1362,8 @@
 }
 
 .chartCard {
-    background: rgba(255, 255, 255, 0.015);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 20px;
     padding: 18px;
 }
@@ -1374,7 +1374,7 @@
     gap: 16px;
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    border-top: 1px solid var(--color-border-muted);
 }
 
 .legendItem {
@@ -1406,7 +1406,7 @@
 
 .radarPlaceholder p {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     font-weight: 600;
 }
 
@@ -1434,7 +1434,7 @@
     align-items: center;
     justify-content: center;
     gap: 16px;
-    color: var(--color-primary, #F1C40F);
+    color: var(--color-primary, var(--color-primary));
 }
 
 .typingLoading {
@@ -1443,7 +1443,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: 0.5px;
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .typingLoading::after {
@@ -1454,7 +1454,7 @@
     transform: translateY(-50%);
     width: 2px;
     height: 14px;
-    background: #F1C40F;
+    background: var(--color-primary);
     animation: blink 0.8s step-end infinite;
 }
 
@@ -1476,9 +1476,9 @@
     justify-content: center;
     gap: 12px;
     color: var(--color-text-muted);
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-bg-alt);
     border-radius: 24px;
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border: 1px dashed var(--color-border);
 }
 
 @media (max-width: 768px) {
@@ -1512,7 +1512,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border);
     margin-bottom: 4px;
 }
 
@@ -1533,7 +1533,7 @@
     align-items: flex-start;
     gap: 10px;
     padding: 11px 6px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid var(--color-border-muted);
     cursor: pointer;
     transition: background 0.15s ease;
     border-radius: 10px;
@@ -1541,7 +1541,7 @@
 }
 
 .notifRow:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--color-bg-hover);
 }
 
 .notifRow:last-child {
@@ -1568,7 +1568,7 @@
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: #F1C40F;
+    background: var(--color-primary);
     flex-shrink: 0;
 }
 
@@ -1603,21 +1603,22 @@
 .notifRowText .nTitle {
     font-size: 0.84rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.88);
+    color: var(--color-text);
     line-height: 1.3;
     display: block;
 }
 
 .notifRowText .nMsg {
     font-size: 0.77rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     line-height: 1.4;
     display: block;
 }
 
 .notifRowText .nTime {
     font-size: 0.67rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
+    opacity: 0.6;
     font-weight: 500;
     display: block;
     margin-top: 3px;
@@ -1629,10 +1630,11 @@
     display: flex;
     gap: 8px;
     margin-bottom: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-deep);
     padding: 6px;
     border-radius: 16px;
     width: fit-content;
+    border: 1px solid var(--color-border);
 }
 
 .subTabBtn {
@@ -1643,7 +1645,7 @@
     border-radius: 12px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -1652,8 +1654,8 @@
 }
 
 .subTabActive {
-    color: var(--color-primary);
-    background: rgba(241, 196, 15, 0.1);
+    color: #000;
+    background: var(--color-primary);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -1665,7 +1667,7 @@
     height: 6px;
     background: var(--color-error);
     border-radius: 50%;
-    border: 2px solid #000;
+    border: 2px solid var(--color-bg-deep);
 }
 
 .logList, .notifList {
@@ -1678,15 +1680,16 @@
     display: flex;
     gap: 16px;
     padding: 14px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 20px;
     transition: all 0.2s ease;
 }
 
 .logItem:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-hover);
     transform: translateX(4px);
+    border-color: var(--color-border);
 }
 
 .logIconRow {
@@ -1703,13 +1706,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
     border-radius: 10px;
+    border: 1px solid var(--color-border-muted);
 }
 
 .logTime {
     font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
+    opacity: 0.6;
     font-weight: 500;
 }
 
@@ -1722,12 +1727,12 @@
 .logLabel {
     font-size: 0.9rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
 }
 
 .logSource {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .activityTabContent {
@@ -1758,9 +1763,9 @@
 .filterPill {
     padding: 5px 12px;
     border-radius: 100px;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.35);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     font-size: 0.72rem;
     font-weight: 600;
     white-space: nowrap;
@@ -1769,14 +1774,15 @@
 }
 
 .filterPill:hover {
-    color: rgba(255, 255, 255, 0.6);
-    border-color: rgba(255, 255, 255, 0.12);
+    color: var(--color-text);
+    border-color: var(--color-primary-light);
+    background: var(--color-bg-hover);
 }
 
 .filterPillActive {
     background: rgba(241, 196, 15, 0.08);
     border-color: rgba(241, 196, 15, 0.2);
-    color: #F1C40F;
+    color: var(--color-primary);
 }
 
 .notifHeaderRow {
@@ -1789,7 +1795,8 @@
 .notifCountLabel {
     font-size: 0.72rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-muted);
+    opacity: 0.6;
     margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -1798,20 +1805,20 @@
 .markAllBtnMinimal {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
     font-size: 0.7rem;
     font-weight: 600;
     cursor: pointer;
     padding: 0;
     text-decoration: underline;
     text-underline-offset: 3px;
-    text-decoration-color: rgba(255, 255, 255, 0.15);
+    text-decoration-color: var(--color-border);
     transition: color 0.15s ease;
 }
 
 .markAllBtnMinimal:hover {
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration-color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text);
+    text-decoration-color: var(--color-primary-light);
 }
 
 .notifGroup {
@@ -1821,7 +1828,8 @@
 .groupHeading {
     font-size: 0.75rem;
     font-weight: 800;
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-text-muted);
+    opacity: 0.6;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 12px;
@@ -1834,8 +1842,8 @@
 }
 
 .notifCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 20px;
     padding: 14px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1844,8 +1852,8 @@
 }
 
 .notifCard:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border);
     transform: translateX(4px);
 }
 
@@ -1867,7 +1875,8 @@
     overflow: hidden;
     flex-shrink: 0;
     position: relative;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
 }
 
 .actorAvatar img {
@@ -1904,21 +1913,22 @@
 .nTitle {
     font-size: 0.92rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
     line-height: 1.3;
 }
 
 .nMsg {
     font-size: 0.82rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted);
     margin: 0;
     line-height: 1.4;
 }
 
 .nTime {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
+    opacity: 0.6;
     font-weight: 500;
     margin-top: 2px;
 }
@@ -1948,9 +1958,9 @@
 .declineBtnSmall {
     padding: 6px 14px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-deep);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
     font-size: 0.75rem;
     font-weight: 700;
     cursor: pointer;
@@ -1981,11 +1991,11 @@
     justify-content: center;
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.12);
+    color: var(--color-text-muted);
+    opacity: 0.3;
     cursor: pointer;
     border-radius: 6px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
     z-index: 10;
 }
 
@@ -2020,7 +2030,7 @@
     justify-content: center;
     padding: 3rem;
     gap: 1rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
 }
 
 .emptyState p {
@@ -2040,8 +2050,8 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 28px;
     padding: 1.5rem;
     min-height: 400px;
@@ -2056,8 +2066,8 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-input-bg);
+    border: 1px solid var(--color-border);
     border-radius: 16px;
     padding: 12px 16px;
     transition: all 0.2s ease;
@@ -2065,17 +2075,17 @@
 
 .searchBox:focus-within {
     border-color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-alt);
 }
 
 .searchIcon {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
 }
 
 .searchBox input {
     background: transparent;
     border: none;
-    color: #fff;
+    color: var(--color-text);
     font-size: 0.95rem;
     flex: 1;
     outline: none;
@@ -2086,12 +2096,12 @@
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    background: rgba(15, 15, 15, 0.95);
+    background: var(--color-bg-alt);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-border);
     border-radius: 20px;
     padding: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: var(--shadow-hover);
     max-height: 300px;
     overflow-y: auto;
 }
@@ -2106,7 +2116,7 @@
 }
 
 .learnerSearchItem:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-hover);
 }
 
 .learnerCore {
@@ -2122,7 +2132,7 @@
     height: 32px;
     border-radius: 50%;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2142,12 +2152,12 @@
 .learnerName {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--color-text);
 }
 
 .learnerEmail {
     font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .addConnBtn {
@@ -2162,8 +2172,8 @@
 
 .addConnBtn:disabled {
     opacity: 0.5;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.4);
+    background: var(--color-bg-deep);
+    color: var(--color-text-muted);
 }
 
 .connGrid {
@@ -2177,17 +2187,17 @@
     align-items: center;
     gap: 12px;
     padding: 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .connCard:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-hover);
     transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-border);
 }
 
 .connAvatar {
@@ -2195,7 +2205,7 @@
     height: 44px;
     border-radius: 14px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2216,12 +2226,12 @@
 .connName {
     font-size: 0.95rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text);
 }
 
 .connRank {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -2230,7 +2240,7 @@
 .subSectionTitle {
     font-size: 1rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
     margin-bottom: 12px;
     display: flex;
     align-items: center;
@@ -2238,14 +2248,14 @@
 }
 
 .learnerModal {
-    background: #0f0f0f;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 32px;
     padding: 2rem;
     width: 90%;
     max-width: 400px;
     position: relative;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    box-shadow: var(--shadow-hover);
     z-index: 1001;
 }
 
@@ -2260,12 +2270,12 @@
     width: 96px;
     height: 96px;
     border-radius: 32px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
-    border: 2px solid rgba(241, 196, 15, 0.2);
+    border: 2px solid var(--color-primary-light);
     overflow: hidden;
 }
 
@@ -2278,13 +2288,13 @@
 .lNameLarge {
     font-size: 1.4rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text);
     margin: 0;
 }
 
 .lEmailLarge {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .lStatsRow {
@@ -2298,12 +2308,12 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-deep);
     padding: 8px 14px;
     border-radius: 12px;
     font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-text);
 }
 
 .lBioSection {
@@ -2313,7 +2323,7 @@
 .lBioTitle {
     font-size: 0.85rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 8px;
@@ -2321,7 +2331,7 @@
 
 .lBioText {
     font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text);
     line-height: 1.5;
 }
 
@@ -2329,16 +2339,17 @@
     width: 100%;
     padding: 14px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .lActionBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border-color: var(--color-primary-light);
 }
 
 .acceptBtn {
@@ -2353,8 +2364,8 @@
 }
 
 .declineBtn {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
+    background: var(--color-bg-deep);
+    color: var(--color-text);
     border: none;
     padding: 8px 16px;
     border-radius: 10px;
@@ -2393,8 +2404,8 @@
 
 
 .markAllBtn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
     color: var(--color-text-muted);
     font-size: 0.8rem;
     font-weight: 700;
@@ -2411,9 +2422,9 @@
 }
 
 .markAllBtn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    border-color: rgba(255, 255, 255, 0.2);
+    background: var(--color-bg-alt);
+    color: var(--color-text);
+    border-color: var(--color-primary-light);
     transform: translateY(-1px);
 }
 
@@ -2437,16 +2448,16 @@
     display: flex;
     flex-direction: column;
     padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 14px;
     transition: all 0.2s ease;
     min-width: 0;
 }
 
 .personalItem:hover {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border);
 }
 
 .personalText {
@@ -2457,7 +2468,7 @@
 
 .personalLabel {
     font-size: 0.62rem;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.8px;
     font-weight: 700;
@@ -2465,7 +2476,7 @@
 
 .personalValue {
     font-size: 0.88rem;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text);
     font-weight: 600;
     white-space: nowrap;
     overflow: hidden;

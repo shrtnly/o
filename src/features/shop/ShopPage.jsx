@@ -19,8 +19,8 @@ import { toast } from 'sonner';
 
 
 
-const QUEEN_BEE_FEATURES = [
-    { emoji: '🍯', text: 'ভুল করলেও শেখা থামবে না। আনলিমিটেড হানি ড্রপ।' },
+const getQueenBeeFeatures = (t) => [
+    { emoji: '🍯', text: t('queen_bee_feature_1') },
 ];
 
 // Numbers are now kept in English per request
@@ -28,6 +28,7 @@ const QUEEN_BEE_FEATURES = [
 const ShopPage = () => {
     const { user } = useAuth();
     const { t, language } = useLanguage();
+    const QUEEN_BEE_FEATURES = getQueenBeeFeatures(t);
     const navigate = useNavigate();
     const location = useLocation();
     const [profile, setProfile] = useState(null);
@@ -164,7 +165,7 @@ const ShopPage = () => {
         }
 
         if (isPremium) {
-            toast.info(language === 'bn' ? 'আপনার আনলিমিটেড হানি ড্রপ সক্রিয় আছে। 👑' : 'Your unlimited honey drops are already active. 👑');
+            toast.info(t('unlimited_hearts_active_msg'));
             return;
         }
 
@@ -204,16 +205,15 @@ const ShopPage = () => {
                 setProcessing('success');
             } else {
                 // Rollback on server failure
-                setProfile(previousProfile);
                 setProcessing(false);
-                toast.error(result?.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
+                toast.error(result?.message || t('conversion_error'));
             }
         } catch (err) {
             console.error('Conversion error:', err);
             // Rollback on network/logic error
             setProfile(previousProfile);
             setProcessing(false);
-            toast.error(err.message || 'কনভার্ট করতে সমস্যা হয়েছে।');
+            toast.error(err.message || t('conversion_error'));
         }
     };
 
@@ -224,7 +224,7 @@ const ShopPage = () => {
             console.log('Shop: [Click Action]', { type, dataArg });
 
             if (!user) {
-                toast.error('অনুগ্রহ করে লগইন করুন।');
+                toast.error(t('please_login'));
                 return;
             }
 
@@ -232,11 +232,11 @@ const ShopPage = () => {
 
             // Block if already active or redundant
             if (type === 'subscription' && isQueenBee) {
-                toast.info(`আপনি বর্তমানে ${profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} মুড-এ আছেন! 👑`);
+                toast.info(t('already_in_mode').replace('{mode}', profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')));
                 return;
             }
             if (type === '1day' && (is1DayActive || isQueenBee)) {
-                toast.info('আপনার আনলিমিটেড হানি ড্রপ আগে থেকেই সক্রিয় আছে।');
+                toast.info(t('unlimited_active_already'));
                 return;
             }
 
@@ -266,11 +266,11 @@ const ShopPage = () => {
                 console.log('Shop: Opening checkout modal with data:', checkoutData);
                 setShowCheckout({ type, data: checkoutData });
             } else {
-                toast.error('তথ্য পাওয়া যায়নি।');
+                toast.error(t('data_not_found'));
             }
         } catch (error) {
             console.error('Shop: handlePurchase error', error);
-            toast.error('দুঃখিত, সমস্যা হয়েছে।');
+            toast.error(t('something_went_wrong'));
         }
     };
 
@@ -281,12 +281,12 @@ const ShopPage = () => {
         }
 
         if (!user?.id) {
-            toast.error('সেশন পাওয়া যায়নি। আবার লগইন করুন।');
+            toast.error(t('session_not_found'));
             return;
         }
 
         setProcessing(true);
-        const toastId = toast.loading('পেমেন্ট প্রসেসিং হচ্ছে...');
+        const toastId = toast.loading(t('payment_processing'));
         const { type, data } = showCheckout;
         console.log(`Shop: completeCheckout [${type}] initiated`, { data });
 
@@ -310,7 +310,7 @@ const ShopPage = () => {
                     }));
                     setActivePlanType(planType);
                     await Promise.all([fetchProfile(), fetchActivePlan()]);
-                    toast.success('সাবস্ক্রিপশন সফল! আপনি এখন মেম্বার! 👑', { id: toastId });
+                    toast.success(t('subscription_success'), { id: toastId });
                 } else throw new Error();
             } else if (type === '1day') {
                 result = await shopService.buy1DayPremium(user.id, data.price);
@@ -334,10 +334,10 @@ const ShopPage = () => {
                     });
                     fetchActivePlan();
 
-                    toast.success('১ দিনের রিচার্জ সফল! আনলিমিটেড হানি ড্রপ উপভোগ করুন 🍯', { id: toastId });
+                    toast.success(t('oneday_recharge_success'), { id: toastId });
                 } else {
                     console.error('Shop: 1-day purchase failed', result);
-                    const msg = result?.message || 'পেমেন্ট প্রসেস করা সম্ভব হয়নি।';
+                    const msg = result?.message || t('payment_process_failed');
                     toast.error(msg, { id: toastId });
                     throw new Error(msg);
                 }
@@ -351,7 +351,7 @@ const ShopPage = () => {
             setShowCheckout(null);
         } catch (err) {
             console.error('Shop: Checkout error', err);
-            toast.error('পেমেন্ট সফল হয়নি। পুনরায় চেষ্টা করুন।', { id: toastId });
+            toast.error(t('payment_failed'), { id: toastId });
         } finally {
             setProcessing(false);
         }
@@ -376,9 +376,9 @@ const ShopPage = () => {
                                     />
                                 </div>
                                 <p className={styles.headerSub}>
-                                    {profile?.gender === 'male'
-                                        ? 'শিখতে থাকুন আনলিমিটেড হানি ড্রপ নিয়ে'
-                                        : 'শিখতে থাকুন আনলিমিটেড হানি ড্রপ নিয়ে'}
+                                    {isQueenBee 
+                                        ? `${t('unlocked_all_features')}, ${profile?.gender === 'male' ? t('male_bee_title') || (language === 'bn' ? 'কিং বি' : 'King Bee') : t('female_bee_title') || (language === 'bn' ? 'কুইন বি' : 'Queen Bee')}! 👑`
+                                        : t('unlimited_hearts_msg') || (language === 'bn' ? 'শিখতে থাকুন আনলিমিটেড হানি ড্রপ নিয়ে' : 'Learn with unlimited honey drops')}
                                 </p>
                             </div>
                             <div className={styles.headerDivider}></div>
@@ -415,8 +415,8 @@ const ShopPage = () => {
                                         disabled={processing || isQueenBee}
                                     >
                                         {isQueenBee
-                                            ? (language === 'bn' ? 'সক্রিয়' : 'Active')
-                                            : (language === 'bn' ? 'সক্রিয় করুন' : 'Activate')
+                                            ? t('active')
+                                            : t('activate')
                                         }
                                     </button>
                                 </div>
@@ -431,11 +431,11 @@ const ShopPage = () => {
 
                                 <div className={styles.qbCardMiddle}>
                                     <h3 className={styles.qbTitleHero}>
-                                        {language === 'bn' ? 'কুইক হানি ড্রপ' : 'Quick Honey Drop'}
+                                        {t('quick_honey_drop')}
                                     </h3>
                                     <div className={styles.qbFeaturesRow} style={{ marginBottom: '8px' }}>
                                         <span className={styles.qbFeaturePill}>
-                                            {language === 'bn' ? 'পুরো 1 দিন আনলিমিটেড হানি ড্রপ উপভোগ করুন!' : 'Enjoy unlimited honey drops for a full day!'}
+                                            {t('enjoy_1day_unlimited')}
                                         </span>
                                     </div>
                                 </div>
@@ -450,8 +450,8 @@ const ShopPage = () => {
                                         {is1DayActive && timeLeft
                                             ? timeLeft
                                             : (isQueenBee || is1DayActive)
-                                                ? (language === 'bn' ? 'সক্রিয়' : 'Active')
-                                                : (language === 'bn' ? 'রিচার্জ 1 দিন' : 'Recharge 1 Day')
+                                                ? t('active')
+                                                : t('recharge_1day')
                                         }
                                     </button>
                                 </div>
@@ -520,10 +520,7 @@ const ShopPage = () => {
                                         {processing === true ? (
                                             <Loader2 size={18} className={styles.spinner} />
                                         ) : (
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <HoneyDropIcon size={18} />
-                                                <span>+{calculatedHearts} {language === 'bn' ? 'হানি ড্রপ' : 'Honey Drop'}</span>
-                                            </div>
+                                                <span>+{calculatedHearts} {t('honey_drop')}</span>
                                         )}
                                     </button>
                                 </div>
@@ -584,11 +581,11 @@ const ShopPage = () => {
                             <div className={styles.paymentMethods}>
                                 <button className={`${styles.methodBtn} ${styles.methodBtnActive}`}>
                                     <CreditCard size={24} />
-                                    <span>{language === 'bn' ? 'বিকাশ' : 'bKash'}</span>
+                                    <span>{t('bkash')}</span>
                                 </button>
                                 <button className={styles.methodBtn}>
                                     <ShoppingBag size={24} />
-                                    <span>{language === 'bn' ? 'নগদ' : 'Nagad'}</span>
+                                    <span>{t('nagad')}</span>
                                 </button>
                             </div>
 
@@ -625,9 +622,9 @@ const ShopPage = () => {
                                             autoplay
                                         />
                                     </div>
-                                    <h2 className={styles.successTitle}>সফল হয়েছে!</h2>
+                                    <h2 className={styles.successTitle}>{t('exchange_success_title')}</h2>
                                     <p className={styles.successDesc}>
-                                        আপনার মধুরেণু সফলভাবে হানি ড্রপে রূপান্তরিত হয়েছে।
+                                        {t('exchange_success_desc')}
                                     </p>
                                     <button 
                                         className={styles.confirmBtn} 
@@ -636,7 +633,7 @@ const ShopPage = () => {
                                         }}
                                         style={{ width: '100%' }}
                                     >
-                                        {language === 'bn' ? 'ফিরে যান' : 'Go Back'}
+                                        {t('go_back')}
                                     </button>
                                 </div>
                             ) : processing === 'insufficient' ? (
@@ -644,9 +641,9 @@ const ShopPage = () => {
                                     <div className={styles.successLottie} style={{ background: 'rgba(241,196,15,0.05)', borderRadius: '50%', padding: '20px' }}>
                                         <PollenIcon size={100} />
                                     </div>
-                                    <h2 className={styles.successTitle} style={{ color: 'var(--color-text)', fontSize: '1.6rem' }}>পর্যাপ্ত মধুরেণু নেই</h2>
+                                    <h2 className={styles.successTitle} style={{ color: 'var(--color-text)', fontSize: '1.6rem' }}>{t('insufficient_pollen_title')}</h2>
                                     <p className={styles.successDesc}>
-                                        হানি ড্রপ এক্সচেঞ্জ করতে কমপক্ষে <strong>{gemToConvert}টি</strong> মধুরেণু প্রয়োজন। আরও আয় করতে পড়া শুরু করুন অথবা {profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} মোড নিন।
+                                        {t('insufficient_pollen_desc').replace('{amount}', gemToConvert)}
                                     </p>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
                                         <button 
@@ -654,7 +651,7 @@ const ShopPage = () => {
                                             style={{ width: '100%', background: 'linear-gradient(135deg, #1cb0f6 0%, #1796d1 100%)', boxShadow: '0 4px 0 #1480b3' }}
                                             onClick={() => navigate('/learn')}
                                         >
-                                            পড়া শুরু করুন (Earn Pollen)
+                                            {t('start_learning_earn_pollen')}
                                         </button>
                                         <button 
                                             className={styles.confirmBtn}
@@ -665,10 +662,7 @@ const ShopPage = () => {
                                             }}
                                             style={{ width: '100%' }}
                                         >
-                                            {profile?.gender === 'male' 
-                                                ? (language === 'bn' ? `${t('king_bee_mode')} মোড দেখুন` : `View ${t('king_bee_mode')} Mode`) 
-                                                : (language === 'bn' ? `${t('queen_bee_mode')} মোড দেখুন` : `View ${t('queen_bee_mode')} Mode`)
-                                            }
+                                            {t('view_mode')}
                                         </button>
                                         <button 
                                             className={styles.cancelBtn}
@@ -678,16 +672,16 @@ const ShopPage = () => {
                                             }}
                                             style={{ border: 'none' }}
                                         >
-                                            এখন নয়
+                                            {t('not_now')}
                                         </button>
                                     </div>
                                 </div>
                             ) : (
                                 <>
                                     <div className={styles.checkoutHeader}>
-                                        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>এক্সচেঞ্জ কনফার্ম করুন</h2>
+                                        <h2 style={{ fontSize: '1.8rem', fontWeight: 900, marginBottom: '8px' }}>{t('confirm_exchange_title')}</h2>
                                         <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem' }}>
-                                            মধুরেণু দিয়ে হানি ড্রপ পাওয়ার জন্য কনফার্ম করুন
+                                            {t('confirm_exchange_desc')}
                                         </p>
                                     </div>
 
@@ -717,14 +711,14 @@ const ShopPage = () => {
                                             className={styles.cancelBtn}
                                             disabled={processing === true}
                                         >
-                                            না
+                                            {t('no')}
                                         </button>
                                         <button
                                             onClick={handleConvertAction}
                                             className={styles.confirmBtn}
                                             disabled={processing === true}
                                         >
-                                            {processing === true ? <Loader2 className={styles.spinner} /> : 'হ্যাঁ, কনফার্ম'}
+                                            {processing === true ? <Loader2 className={styles.spinner} /> : t('yes_confirm')}
                                         </button>
                                     </div>
                                 </>

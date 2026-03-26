@@ -128,7 +128,7 @@ const MainLayout = () => {
                         <button 
                             onClick={() => {
                                 toast.dismiss(t);
-                                navigate(`/profile?tab=connection&sub=inbox&partnerId=${msg.sender_id}`);
+                                navigate(`/connections?sub=inbox&partnerId=${msg.sender_id}`);
                             }}
                             style={{
                                 background: 'var(--color-primary)',

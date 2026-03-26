@@ -83,6 +83,9 @@ const HomePage = () => {
   return <LandingPageContent />;
 };
 
+import ConnectionPage from './features/connections/ConnectionPage';
+import NotificationPage from './features/notifications/NotificationPage';
+
 const AppContent = () => {
   const { user, loading: authLoading } = useAuth();
   const [initialLoading, setInitialLoading] = useState(true);
@@ -118,6 +121,8 @@ const AppContent = () => {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/streak" element={<StreakPage />} />
+            <Route path="/connections" element={<ConnectionPage />} />
+            <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/help" element={<HelpPage />} />

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Home, Trophy, Compass, Store, User, Settings, Flame } from 'lucide-react';
+import { Home, Compass, User, Users, Bell } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
 import { cn } from '../../../lib/utils';
+import { useNotifications } from '../../../context/NotificationContext';
 import styles from './BottomNav.module.css';
 
 const BottomNav = () => {
     const { user } = useAuth();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
+    const { unreadCount } = useNotifications();
     const { courseId: currentCourseId } = useParams();
     const [lastCourseId, setLastCourseId] = useState(null);
 
@@ -60,21 +62,27 @@ const BottomNav = () => {
             </NavLink>
 
 
-            <NavLink to="/leaderboard" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
+
+            <NavLink to="/connections" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
                 {({ isActive }) => (
                     <>
-                        <Trophy size={26} strokeWidth={1.5} />
-                        {isActive && <span className={styles.navLabel}>{t('leaderboard')}</span>}
+                        <Users size={26} strokeWidth={1.5} />
+                        {isActive && <span className={styles.navLabel}>{t('tab_connection')}</span>}
                     </>
                 )}
             </NavLink>
 
-            <NavLink to="/shop" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
+            <NavLink to="/notifications" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
                 {({ isActive }) => (
-                    <>
-                        <Store size={26} strokeWidth={1.5} />
-                        {isActive && <span className={styles.navLabel}>{t('shop')}</span>}
-                    </>
+                    <div className={styles.notifArea}>
+                        <div className={styles.iconWrapper}>
+                            <Bell size={26} strokeWidth={1.5} />
+                            {unreadCount > 0 && (
+                                <span className={styles.navBadge}>{unreadCount > 9 ? '9+' : unreadCount}</span>
+                            )}
+                        </div>
+                        {isActive && <span className={styles.navLabel}>{t('notifications')}</span>}
+                    </div>
                 )}
             </NavLink>
 

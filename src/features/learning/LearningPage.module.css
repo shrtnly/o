@@ -68,9 +68,10 @@
 
 .unitHeader {
     width: 100%;
-    background-color: var(--color-bg-deep);
+    background-color: var(--color-bg-alt);
     padding: 8px 24px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     position: sticky;
@@ -91,13 +92,27 @@
 
 /* Mobile specific header container overrides */
 @media (max-width: 768px) {
+    .unitHeader {
+        padding: 0;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    :global(.light) .unitHeader {
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    :global(.dark) .unitHeader {
+        background-color: rgba(26, 29, 33, 0.85);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
     .unitHeaderInner {
         justify-content: center;
         width: 100%;
         padding: 4px 12px;
-        background: var(--color-bg-deep); /* Use variable for theme compliance */
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        background: transparent;
         border-bottom: 1px solid var(--color-border-muted);
     }
 }
@@ -136,7 +151,7 @@
 .unitInfo h2 {
     font-size: 1.6rem;
     font-weight: 800;
-    color: var(--unit-bg);
+    color: var(--unit-border);
     margin: 0;
     letter-spacing: -0.4px;
     display: flex;

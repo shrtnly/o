@@ -636,7 +636,7 @@ const LearningPage = () => {
 
                                     <div className={styles.mobileHeaderStatWrapper}>
                                         <div className={styles.mobileHeaderStat} onClick={() => setShowXpTooltip(true)} style={{ cursor: 'pointer' }}>
-                                            <ShieldIcon xp={profile?.xp || 0} size={24} />
+                                            <ShieldIcon xp={profile?.xp || 0} size={24} showShadow={false} />
                                             <span>{profile?.xp || 0}</span>
                                         </div>
 

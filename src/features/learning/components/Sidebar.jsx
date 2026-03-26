@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { Home, Trophy, Compass, Store, User, MoreHorizontal, Settings, HelpCircle, LogOut, Flame } from 'lucide-react';
+import { Home, Trophy, Compass, Store, User, Users, MoreHorizontal, Settings, HelpCircle, LogOut, Flame, Bell } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
@@ -8,12 +8,14 @@ import { courseService } from '../../../services/courseService';
 import { cn } from '../../../lib/utils';
 import logo from '../../../assets/shields/Logo_BeeLesson.png';
 import { supabase } from '../../../lib/supabaseClient';
+import { useNotifications } from '../../../context/NotificationContext';
 import styles from './Sidebar.module.css';
 import ConfirmModal from '../../../components/ui/ConfirmModal';
 
 const Sidebar = () => {
+    const { t, language } = useLanguage();
+    const { unreadCount } = useNotifications();
     const { user, signOut } = useAuth();
-    const { t } = useLanguage();
     const { courseId: currentCourseId } = useParams();
     const navigate = useNavigate();
     const [lastCourseId, setLastCourseId] = useState(null);
@@ -80,6 +82,23 @@ const Sidebar = () => {
                     <Store size={24} />
                 </div>
                 <span>{t('shop')}</span>
+            </NavLink>
+
+            <NavLink to="/connections" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
+                <div className={styles.navIconWrapper}>
+                    <Users size={24} />
+                </div>
+                <span>{t('tab_connection')}</span>
+            </NavLink>
+
+            <NavLink to="/notifications" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
+                <div className={styles.navIconWrapper}>
+                    <Bell size={24} />
+                    {unreadCount > 0 && (
+                        <span className={styles.navBadge}>{unreadCount > 9 ? '9+' : unreadCount}</span>
+                    )}
+                </div>
+                <span>{t('notifications')}</span>
             </NavLink>
 
             <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>

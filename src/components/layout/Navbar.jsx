@@ -1,16 +1,18 @@
 import { Link } from 'react-router-dom';
-import { Moon, Sun, LogOut } from 'lucide-react';
+import { Moon, Sun, LogOut, Users, Bell } from 'lucide-react';
 import Button from '../ui/Button';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './Navbar.module.css';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useNotifications } from '../../context/NotificationContext';
 
 const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
     const { t, language, toggleLanguage } = useLanguage();
+    const { unreadCount } = useNotifications();
 
     return (
         <nav className={styles.navbar}>
@@ -38,6 +40,15 @@ const Navbar = () => {
 
                     {user ? (
                         <div className={styles.userSection}>
+                            <Link to="/connections" className={styles.navLink} title={t('tab_connection')}>
+                                <Users size={18} />
+                            </Link>
+                            <Link to="/notifications" className={styles.navLink} title={t('notifications')}>
+                                <Bell size={18} />
+                                {unreadCount > 0 && (
+                                    <span className={styles.badge}>{unreadCount > 9 ? '9+' : unreadCount}</span>
+                                )}
+                            </Link>
                             <div className={styles.userInfo}>
                                 <span className={styles.userName}>{user.email.split('@')[0]}</span>
                             </div>

@@ -23,7 +23,6 @@ import styles from './ProfilePage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel } from '../../utils/shieldSystem';
 import { motion, AnimatePresence } from 'framer-motion';
-import LearnerConnection from './components/LearnerConnection';
 import CertificateCard from './components/CertificateCard';
 import CertificateViewer from './components/CertificateViewer';
 import {
@@ -35,7 +34,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { toast } from 'sonner';
 
 // --- Achievement Badge Constants ---
-import { useNotifications } from '../../context/NotificationContext';
 
 const BADGE_DEFS = [
     { id: 'first_lesson', emoji: '📖', label: 'প্রথম পাঠ', labelEn: 'First Lesson' },
@@ -80,24 +78,9 @@ const ProfilePage = () => {
     const accuracyRef = useRef(null);
     const patternRef = useRef(null);
 
-    // Notification scroll ref
-    const notifScrollRef = useRef(null);
 
 
 
-    const [activitySubTab, setActivitySubTab] = useState('log');
-    const {
-        notifications, unreadCount, markAsRead,
-        markAllAsRead,
-        deleteNotification, refresh: refreshNotifications,
-        respondToConnectionRequest
-    } = useNotifications();
-    const [notifFilter, setNotifFilter] = useState('all');
-    const [activityLogs, setActivityLogs] = useState([]);
-    const [isActivityLoading, setIsActivityLoading] = useState(false);
-
-    const [connections, setConnections] = useState({ pending: [], active: [], outgoing: [] });
-    const [selectedLearner, setSelectedLearner] = useState(null);
 
     // Close dropdown on click outside
     useEffect(() => {
@@ -128,7 +111,15 @@ const ProfilePage = () => {
         // Check for tab param
         const params = new URLSearchParams(location.search);
         const tab = params.get('tab');
-        if (tab && ['general', 'analyze', 'activity', 'connection'].includes(tab)) {
+        if (tab === 'connection') {
+            navigate('/connections', { replace: true });
+            return;
+        }
+        if (tab === 'activity' || tab === 'notifications') {
+            navigate('/notifications', { replace: true });
+            return;
+        }
+        if (tab && ['general', 'analyze'].includes(tab)) {
             setActiveTab(tab);
         }
     }, [user?.id, navigate, location.search]);
@@ -192,23 +183,6 @@ const ProfilePage = () => {
     };
 
 
-    const sendTestNotification = async () => {
-        if (!user?.id) return;
-        try {
-            const { error } = await supabase
-                .from('notifications')
-                .insert([{
-                    user_id: user.id,
-                    type: 'reward',
-                    title: 'টেস্ট নটিফিকেশন 🐝',
-                    message: 'অভিনন্দন! আপনার নোটিফিকেশন সিস্টেম এখন চমৎকারভাবে কাজ করছে।',
-                    data: { test: true }
-                }]);
-            if (error) throw error;
-        } catch (err) {
-            console.error('Error sending test notification:', err);
-        }
-    };
 
 
     const handleUpdateProfile = async (e) => {
@@ -239,28 +213,6 @@ const ProfilePage = () => {
         }
     };
 
-    const formatNotifDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        const today = new Date();
-        const isToday = date.toDateString() === today.toDateString();
-
-        if (isToday) {
-            return date.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
-            });
-        }
-
-        return date.toLocaleString('en-US', {
-            day: 'numeric',
-            month: 'short',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-        });
-    };
 
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
@@ -295,19 +247,6 @@ const ProfilePage = () => {
         }
     }, [user?.id, analysisDays, viewingMonth]);
 
-    const fetchActivityData = useCallback(async () => {
-        if (!user?.id) return;
-        setIsActivityLoading(true);
-        try {
-            const logs = await rewardService.getRecentTransactions(user.id, 20);
-            setActivityLogs(logs);
-            await refreshNotifications();
-        } catch (err) {
-            console.error('Error fetching activity data:', err);
-        } finally {
-            setIsActivityLoading(false);
-        }
-    }, [user?.id, refreshNotifications]);
 
 
     const renderChartNav = () => {
@@ -342,67 +281,17 @@ const ProfilePage = () => {
         );
     };
 
-    const fetchConnectionBadgeData = useCallback(async () => {
-        if (!user?.id) return;
-        try {
-            const data = await connectionService.getConnections(user.id);
-            setConnections(data);
-        } catch (err) {
-            console.error('Error fetching connections for badge:', err);
-        }
-    }, [user?.id]);
 
     useEffect(() => {
         if (activeTab === 'analyze') {
             fetchAnalysisData();
-        } else if (activeTab === 'activity') {
-            fetchActivityData();
         }
-    }, [activeTab, fetchAnalysisData, fetchActivityData]);
+    }, [activeTab, fetchAnalysisData]);
 
 
 
-    // Independent fetch for badges on mount
-    useEffect(() => {
-        if (user?.id) {
-            fetchConnectionBadgeData();
-        }
-    }, [user?.id, fetchConnectionBadgeData]);
 
-    // Real-time listener for connection requests
-    useEffect(() => {
-        if (!user?.id) return;
 
-        // Listen for ANY change in connections
-        const connectionChannel = supabase
-            .channel(`profile-badge-${user.id}`)
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'learner_connections'
-                },
-                (payload) => {
-                    console.log('Real-time sync triggered:', payload.eventType);
-                    fetchConnectionBadgeData();
-                }
-            )
-            .subscribe();
-
-        // Also fetch when window becomes visible (user returns to browser tab)
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'visible') {
-                fetchConnectionBadgeData();
-            }
-        };
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-
-        return () => {
-            supabase.removeChannel(connectionChannel);
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-    }, [user?.id, fetchConnectionBadgeData]);
 
     // Analytics unlock notification handler
     useEffect(() => {
@@ -442,7 +331,6 @@ const ProfilePage = () => {
 
                     if (!error) {
                         localStorage.setItem(`analytics_unlocked_${user.id}`, 'true');
-                        refreshNotifications();
                     } else {
                         console.error('Failed to insert unlock notification:', error);
                     }
@@ -452,7 +340,7 @@ const ProfilePage = () => {
             };
             sendUnlockNotif();
         }
-    }, [streak?.current_streak, user?.id, language, refreshNotifications]);
+    }, [streak?.current_streak, user?.id, language]);
 
 
     // Map enrolled courses with their certificate data if available
@@ -576,33 +464,11 @@ const ProfilePage = () => {
                             {activeTab === 'general' && <span>{t('tab_general')}</span>}
                         </button>
                         <button
-                            className={`${styles.tabItem} ${activeTab === 'connection' ? styles.tabActive : ''}`}
-                            onClick={() => setActiveTab('connection')}
-                        >
-                            <div className={styles.tabIconGroup}>
-                                <Users size={18} />
-                                {connections.pending.length > 0 && (
-                                    <span className={styles.tabBadge}>{connections.pending.length}</span>
-                                )}
-                            </div>
-                            {activeTab === 'connection' && <span>{t('tab_connection')}</span>}
-                        </button>
-                        <button
                             className={`${styles.tabItem} ${activeTab === 'analyze' ? styles.tabActive : ''}`}
                             onClick={() => setActiveTab('analyze')}
                         >
                             <BarChart3 size={18} />
                             {activeTab === 'analyze' && <span>{t('tab_analyze')}</span>}
-                        </button>
-                        <button
-                            className={`${styles.tabItem} ${activeTab === 'activity' ? styles.tabActive : ''}`}
-                            onClick={() => setActiveTab('activity')}
-                        >
-                            <div className={styles.tabIconGroup}>
-                                <Bell size={18} />
-                                {unreadCount > 0 && <span className={styles.tabBadge}>{unreadCount}</span>}
-                            </div>
-                            {activeTab === 'activity' && <span>{t('tab_activity')}</span>}
                         </button>
                     </nav>
 
@@ -755,15 +621,6 @@ const ProfilePage = () => {
                                 )}
                             </AnimatePresence>
 
-                            {/* ========== SECTION 5: ACTIONS & SETTINGS ========== */}
-                            <section className={styles.actionsSection}>
-
-                                <button className={styles.actionOutline} onClick={sendTestNotification}>
-                                    <Bell size={16} />
-                                    টেস্ট নটিফিকেশন
-                                </button>
-
-                            </section>
 
                             {/* Bottom Spacer for extra scrolling room */}
                             <div className={styles.bottomSpacer} />
@@ -1074,247 +931,8 @@ const ProfilePage = () => {
                         </div>
                     )}
 
-                    {activeTab === 'activity' && (
-                        <div className={styles.activityTabContent}>
-                            {/* Sticky Header */}
-                            <div className={styles.notifStickyHeader}>
-                                <div className={styles.notifHeaderRow}>
-                                    <span className={styles.notifCountLabel}>
-                                        {unreadCount > 0 ? `${unreadCount}${t('notif_unread')}` : t('notif_all_read')}
-                                    </span>
-                                    {unreadCount > 0 && (
-                                        <button className={styles.markAllBtnMinimal} onClick={markAllAsRead}>
-                                            {t('notif_mark_all')}
-                                        </button>
-                                    )}
-                                </div>
-                                {/* Filter pills */}
-                                <div className={styles.notifFilters}>
-                                    {[
-                                        { id: 'all', label: t('filter_all_notif') },
-                                        { id: 'achievements', label: t('filter_achievements') },
-                                        { id: 'social', label: t('filter_social') },
-                                        { id: 'system', label: t('filter_system') }
-                                    ].map(f => (
-                                        <button
-                                            key={f.id}
-                                            className={`${styles.filterPill} ${notifFilter === f.id ? styles.filterPillActive : ''}`}
-                                            onClick={() => setNotifFilter(f.id)}
-                                        >
-                                            {f.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
 
-                            {/* Scrollable content */}
-                            <div ref={notifScrollRef} className={styles.notifScrollBody}>
-                                {isActivityLoading ? (
-                                    <div className={styles.activityLoading}><InlineLoader /></div>
-                                ) : (() => {
-                                    const filtered = notifications.filter(n => {
-                                        if (notifFilter === 'all') return true;
-                                        if (notifFilter === 'achievements') return ['reward', 'streak', 'unlock', 'achievement'].includes(n.type);
-                                        if (notifFilter === 'social') return ['connection', 'message'].includes(n.type);
-                                        if (notifFilter === 'system') return ['system', 'course'].includes(n.type);
-                                        return true;
-                                    });
 
-                                    if (filtered.length === 0) {
-                                        return (
-                                            <div className={styles.emptyState}>
-                                                <Bell size={36} opacity={0.15} />
-                                                <p>{t('no_notifications')}</p>
-                                            </div>
-                                        );
-                                    }
-
-                                    const seenIds = new Set();
-                                    const groups = filtered.reduce((acc, notif) => {
-                                        if (seenIds.has(notif.id)) return acc;
-                                        seenIds.add(notif.id);
-                                        const d = new Date(notif.created_at);
-                                        const today = new Date();
-                                        const yesterday = new Date(today);
-                                        yesterday.setDate(yesterday.getDate() - 1);
-                                        let key = t('earlier');
-                                        if (d.toDateString() === today.toDateString()) key = t('today');
-                                        else if (d.toDateString() === yesterday.toDateString()) key = t('yesterday');
-                                        if (!acc[key]) acc[key] = [];
-                                        acc[key].push(notif);
-                                        return acc;
-                                    }, {});
-
-                                    return Object.entries(groups).map(([groupName, items]) => (
-                                        <div key={groupName} className={styles.notifGroup}>
-                                            <h5 className={styles.groupHeading}>{groupName}</h5>
-                                            <div className={styles.groupItems}>
-                                                {items.map(notif => (
-                                                    <div
-                                                        key={notif.id}
-                                                        className={`${styles.notifRow} ${!notif.is_read ? styles.notifRowUnread : ''}`}
-                                                        onClick={() => !notif.is_read && markAsRead(notif.id)}
-                                                    >
-                                                        {/* Unread dot */}
-                                                        <div className={styles.notifUnreadDot}>
-                                                            {!notif.is_read && <div className={styles.unreadDot} />}
-                                                        </div>
-
-                                                        {/* Icon */}
-                                                        <div className={styles.notifTypeIcon} style={{
-                                                            background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
-                                                                notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
-                                                                    notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
-                                                                        notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
-                                                                            'rgba(52,152,219,0.08)'
-                                                        }}>
-                                                            {notif.actor?.avatar_url ? (
-                                                                <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
-                                                            ) : (
-                                                                <>
-                                                                    {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
-                                                                    {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
-                                                                    {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
-                                                                    {(notif.type === 'unlock' || notif.type === 'achievement') && <Award size={15} color="#9B59B6" />}
-                                                                    {!['reward', 'streak', 'course', 'unlock', 'achievement'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
-                                                                </>
-                                                            )}
-                                                        </div>
-
-                                                        {/* Text */}
-                                                        <div className={styles.notifRowText}>
-                                                            <span className={styles.nTitle}>
-                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
-                                                                    ? 'নতুন কানেকশন অনুরোধ!'
-                                                                    : notif.title}
-                                                            </span>
-                                                            <span className={styles.nMsg}>
-                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
-                                                                    ? `${notif.actor?.full_name || 'কেউ একজন'} আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।`
-                                                                    : notif.message}
-                                                            </span>
-
-                                                            {/* Actions */}
-
-                                                            {notif.type === 'connection' && notif.data?.status === 'accepted' && (
-                                                                <div className={styles.respondedStatus}>
-                                                                    <Check size={12} strokeWidth={3} />
-                                                                    <span>সংযুক্ত হয়েছেন</span>
-                                                                </div>
-                                                            )}
-                                                            {notif.type === 'reward' && (
-                                                                <button className={styles.actionLink} onClick={() => navigate('/shop')}>
-                                                                    শপ দেখুন <ChevronRight size={11} />
-                                                                </button>
-                                                            )}
-
-                                                            {notif.type === 'connection' && notif.data?.status === 'pending' && (
-                                                                <button
-                                                                    className={styles.actionLink}
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        navigate('?tab=connection&sub=received');
-                                                                        if (!notif.is_read) markAsRead(notif.id);
-                                                                    }}
-                                                                >
-                                                                    দেখুন <ChevronRight size={11} />
-                                                                </button>
-                                                            )}
-
-                                                            <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
-                                                        </div>
-
-                                                        {/* Delete */}
-                                                        <button
-                                                            type="button"
-                                                            className={styles.deleteNotif}
-                                                            onClick={e => { e.preventDefault(); e.stopPropagation(); deleteNotification(notif.id); }}
-                                                        >
-                                                            <X size={13} />
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ));
-                                })()}
-                                <div style={{ height: 24 }} />
-                            </div>
-                        </div>
-                    )}
-
-                    {activeTab === 'connection' && (
-                        <LearnerConnection
-                            user={user}
-                            userXp={profile?.xp || 0}
-                            onSelectLearner={setSelectedLearner}
-                        />
-                    )}
-
-                    {/* Learner Profile Modal */}
-                    <AnimatePresence>
-                        {selectedLearner && (
-                            <motion.div
-                                className={styles.modalOverlay}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setSelectedLearner(null)}
-                            >
-                                <motion.div
-                                    className={styles.learnerModal}
-                                    initial={{ scale: 0.9, y: 20 }}
-                                    animate={{ scale: 1, y: 0 }}
-                                    exit={{ scale: 0.9, y: 20 }}
-                                    onClick={e => e.stopPropagation()}
-                                >
-                                    <button className={styles.modalClose} onClick={() => setSelectedLearner(null)}>
-                                        <X size={20} />
-                                    </button>
-
-                                    <div className={styles.learnerHeader}>
-                                        <div className={styles.lAvatarLarge}>
-                                            {selectedLearner.avatar_url ? <img src={selectedLearner.avatar_url} /> : <User size={48} color={brandColor} />}
-                                        </div>
-                                        <h3 className={styles.lNameLarge}>{selectedLearner.full_name || selectedLearner.display_name}</h3>
-                                        <p className={styles.lEmailLarge}>{selectedLearner.email}</p>
-                                    </div>
-
-                                    <div className={styles.lStatsRow}>
-                                        <div className={styles.lStatItem}>
-                                            <Zap size={16} color={brandColor} />
-                                            <span>{selectedLearner.xp} XP</span>
-                                        </div>
-                                        {selectedLearner.location && (
-                                            <div className={styles.lStatItem}>
-                                                <MapPin size={16} color="#3498DB" />
-                                                <span>{selectedLearner.location}</span>
-                                            </div>
-                                        )}
-                                        <div className={styles.lStatItem}>
-                                            <User size={16} color="#9B59B6" />
-                                            <span>{t(selectedLearner.gender)}</span>
-                                        </div>
-                                    </div>
-
-                                    {selectedLearner.bio && (
-                                        <div className={styles.lBioSection}>
-                                            <h4 className={styles.lBioTitle}>{t('bio')}</h4>
-                                            <p className={styles.lBioText}>{selectedLearner.bio}</p>
-                                        </div>
-                                    )}
-
-                                    <div className={styles.lBadgesRow}>
-                                        {/* Placeholder for learner's top badges if available */}
-                                    </div>
-
-                                    <button className={styles.lActionBtn} onClick={() => setSelectedLearner(null)}>
-                                        {t('close')}
-                                    </button>
-                                </motion.div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
                 </div>
             )}
 

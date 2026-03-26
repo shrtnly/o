@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Check } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import { surveyService } from '../../services/surveyService';
@@ -50,22 +50,32 @@ const Survey = () => {
         } else {
             setIsPreparing(true);
             
-            // Start progress simulation (at least 4 seconds total)
-            const interval = setInterval(() => {
+            // Start progress simulation (3 seconds)
+            const duration = 3000;
+            const step = 40;
+            const increment = 100 / (duration / step);
+            
+            const timer = setInterval(() => {
                 setPrepareProgress(prev => {
-                    if (prev >= 100) {
-                        clearInterval(interval);
+                    const next = prev + increment;
+                    if (next >= 100) {
+                        clearInterval(timer);
                         return 100;
                     }
-                    return prev + 1;
+                    return next;
                 });
-            }, 40); // 100 * 40ms = 4000ms (4 seconds)
+            }, step);
+
+            // Countdown timer sync (removed timeLeft update)
 
             const finalizeTransition = () => {
                 setTimeout(() => {
-                    if (user) navigate(`/learn/${courseId}`);
-                    else navigate('/auth');
-                }, 4600); // 4s for progress + 600ms to show 100%
+                    if (user) {
+                        navigate('/learning');
+                    } else {
+                        navigate('/auth');
+                    }
+                }, duration + 600); 
             };
 
             if (user) {
@@ -130,7 +140,7 @@ const Survey = () => {
                             />
                         </div>
                         <div className={styles.preparingPercentage}>
-                            {language === 'bn' ? prepareProgress.toLocaleString('bn-BD') : prepareProgress}%
+                            {language === 'bn' ? Math.round(prepareProgress).toLocaleString('bn-BD') : Math.round(prepareProgress)}%
                         </div>
                     </div>
                 </div>
@@ -166,8 +176,8 @@ const Survey = () => {
                 <section className={styles.characterArea}>
                     <motion.div
                         key={`buddy-${currentStep}`}
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{
                             duration: 0.6,
                             ease: [0.22, 1, 0.36, 1]
@@ -183,12 +193,14 @@ const Survey = () => {
                     
                     <motion.div
                         key={`question-${currentStep}`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.8, x: -20, originX: 0 }}
+                        animate={{ opacity: 1, scale: 1, x: 0 }}
                         transition={{
-                            delay: 0.15,
+                            delay: 0.1,
                             duration: 0.5,
-                            ease: [0.22, 1, 0.36, 1]
+                            type: "spring",
+                            stiffness: 100,
+                            damping: 15
                         }}
                         className={styles.speechBubble}
                     >
@@ -221,7 +233,11 @@ const Survey = () => {
                                     onClick={() => handleSelect(option.id)}
                                 >
                                     <div className={styles.optionNumber}>
-                                        {language === 'bn' ? (index + 1).toLocaleString('bn-BD') : index + 1}
+                                        {selections[currentStep] === option.id ? (
+                                            <Check size={18} strokeWidth={3} />
+                                        ) : (
+                                            language === 'bn' ? (index + 1).toLocaleString('bn-BD') : index + 1
+                                        )}
                                     </div>
                                     <span>{language === 'bn' ? option.textBn : option.textEn}</span>
                                 </motion.div>

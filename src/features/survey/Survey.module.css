@@ -88,7 +88,7 @@
     display: flex;
     align-items: center;
     gap: 24px;
-    margin-bottom: 60px;
+    margin-bottom: 40px;
     width: 100%;
     justify-content: flex-start;
 }
@@ -102,8 +102,8 @@
 
 .speechBubble {
     position: relative;
-    background: var(--color-bg-alt);
-    border: 1px solid var(--color-border);
+    background: transparent;
+    border: 2px solid var(--color-border);
     border-radius: 24px;
     padding: 20px 28px;
     width: fit-content;
@@ -113,6 +113,7 @@
     line-height: 1.4;
     color: var(--color-text);
     box-shadow: none;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .speechBubble::after {
@@ -135,8 +136,9 @@
     transform: translateY(-50%);
     border-width: 10px 10px 10px 0;
     border-style: solid;
-    border-color: transparent var(--color-bg-alt) transparent transparent;
+    border-color: transparent var(--color-bg) transparent transparent;
     z-index: 2;
+    display: block;
 }
 
 .optionsGrid {
@@ -145,7 +147,7 @@
     gap: 1.25rem;
     width: 100%;
     max-width: 850px;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
 
 .optionCard {
@@ -163,17 +165,17 @@
 }
 
 .optionCard:hover {
-    border-color: var(--color-primary);
     background-color: var(--color-bg);
     transform: translateY(-2px);
 }
 
-.optionCard.selected {
-    background-color: var(--color-primary-faint);
+.optionCard:hover .optionNumber {
+    transform: scale(1.05);
+}.optionCard.selected {
+    background-color: transparent;
     border-color: var(--color-primary);
     border-width: 2px;
 }
-
 /* Light mode hover adjustment for clarity */
 :global(.light) .optionCard:hover {
     box-shadow: none;
@@ -185,32 +187,49 @@
     color: var(--color-text);
     transition: color 0.2s ease;
 }
-
 .optionCard.selected span {
     color: var(--color-primary);
 }
-
 .optionNumber {
-    width: 38px;
-    height: 38px;
-    border: 1.5px solid var(--color-border);
-    border-radius: 12px;
+    width: 42px; /* Slightly larger */
+    height: 42px;
+    border: 2px solid var(--color-border); /* Thicker border */
+    border-radius: 14px; /* Modern squircle */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 800;
     flex-shrink: 0;
-    background: var(--color-bg);
+    background: transparent;
     color: var(--color-text-muted);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:global(.light) .optionNumber {
+    box-shadow: none;
 }
 
 .selected .optionNumber {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: #fff;
-    transform: scale(1.05);
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-bg) !important;
+    animation: burst 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes burst {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 var(--color-primary-light);
+    }
+    50% { 
+        transform: scale(1.25);
+        box-shadow: 0 0 0 12px transparent;
+    }
+    100% { 
+        transform: scale(1.1);
+        box-shadow: 0 0 0 0 transparent;
+    }
 }
 
 .bottomBar {
@@ -305,23 +324,22 @@
     }
 
     .lottieWrapper {
-        width: 80px;
-        height: 80px;
+        width: 100px;
+        height: 100px;
         flex-shrink: 0;
     }
 
     .speechBubble {
         font-size: 1.15rem;
         padding: 14px 18px;
-        max-width: 100%;
-        flex: 1;
-        border-radius: 18px;
+        max-width: 80%; /* Reduced from right side */
+        flex: 0 1 auto; /* Don't stretch */
+        border-radius: 20px;
     }
 
-    /* Consistent bubble pointer like desktop */
-    .speechBubble::after,
-    .speechBubble::before {
-        display: block;
+    .speechBubble::after {
+        content: '';
+        position: absolute;
         left: -8px;
         top: 50%;
         transform: translateY(-50%);
@@ -329,12 +347,20 @@
         border-style: solid;
         border-color: transparent var(--color-border) transparent transparent;
         z-index: 1;
+        display: block;
     }
 
     .speechBubble::before {
+        content: '';
+        position: absolute;
         left: -6px;
-        border-color: transparent var(--color-bg-alt) transparent transparent;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 8px 8px 8px 0;
+        border-style: solid;
+        border-color: transparent var(--color-bg) transparent transparent;
         z-index: 2;
+        display: block;
     }
 
     .optionsGrid {
@@ -377,14 +403,14 @@
     }
 
     .lottieWrapper {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
     }
 
     .speechBubble {
         font-size: 1rem;
-        padding: 10px 14px;
-        border-radius: 15px;
+        padding: 12px 16px;
+        border-radius: 16px;
     }
 
     .optionsGrid {
@@ -398,9 +424,10 @@
     }
 
     .optionNumber {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 0.95rem;
     }
 
     .optionCard span {
@@ -462,11 +489,17 @@
 }
 
 .preparingPercentage {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    margin-top: 0.8rem;
+}
+
+.preparingCountdown {
     font-size: 0.9rem;
-    font-weight: 700;
     color: var(--color-text-muted);
-    margin-top: 0.5rem;
-    letter-spacing: 0.5px;
+    font-weight: 500;
+    margin-top: 0.3rem;
 }
 
 @media (max-width: 480px) {

@@ -3,6 +3,11 @@
     color: var(--color-text);
     font-family: 'Din Round', 'Inter', sans-serif;
     margin-top: 12px;
+    --color-accent-cyan: #00E5FF;
+}
+
+:global(.light) .container {
+    --color-accent-cyan: #00b8d4;
 }
 
 .header {
@@ -22,13 +27,13 @@
 
 .titleSection p {
     font-size: 13px;
-    color: #afafaf;
+    color: var(--color-text-muted);
     margin: 4px 0 0 0;
 }
 
 .goalBadge {
-    background-color: rgba(0, 229, 255, 0.1);
-    border: 1.5px solid rgba(0, 229, 255, 0.2);
+    background-color: rgba(0, 229, 255, 0.05);
+    border: 1.5px solid var(--color-border);
     padding: 4px 10px;
     border-radius: 12px;
     display: flex;
@@ -36,11 +41,11 @@
     gap: 6px;
     font-size: 12px;
     font-weight: 800;
-    color: #00E5FF;
+    color: var(--color-accent-cyan);
 }
 
 .goalIcon {
-    color: #00E5FF;
+    color: var(--color-accent-cyan);
 }
 
 .divider {
@@ -73,7 +78,7 @@
 .statLabel {
     font-size: 13px;
     font-weight: 700;
-    color: #afafaf;
+    color: var(--color-text-muted);
     margin-bottom: 2px;
 }
 
@@ -88,6 +93,10 @@
     font-weight: 900;
 }
 
+:global(.light) .statValue {
+    color: #FFB800;
+}
+
 .statSub {
     font-size: 12px;
     font-weight: 800;
@@ -97,19 +106,19 @@
 }
 
 .bestLabel {
-    color: #eab308;
+    color: #FFB800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .bestValue {
-    color: #eab308;
+    color: #FFB800;
 }
 
 .tagline {
     font-size: 12px;
     font-weight: 800;
-    color: #afafaf;
+    color: var(--color-text-muted);
     text-align: center;
     margin-top: 2px;
 }
@@ -146,7 +155,7 @@
 .monthYear {
     font-size: 14px;
     font-weight: 700;
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .navControls {
@@ -157,7 +166,7 @@
 .navBtn {
     background: transparent;
     border: none;
-    color: #afafaf;
+    color: var(--color-text-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -175,7 +184,8 @@
 }
 
 :global(.light) .viewSwitcher {
-    background-color: #f1f5f9;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.05);
 }
 
 .switchBtn {
@@ -183,7 +193,7 @@
     border-radius: 8px;
     border: none;
     background: transparent;
-    color: #afafaf;
+    color: var(--color-text-muted);
     font-weight: 800;
     font-size: 13px;
     cursor: pointer;
@@ -199,7 +209,7 @@
 :global(.light) .switchBtnActive {
     background-color: #fff;
     color: #1a272d;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 /* Sections */
@@ -216,7 +226,7 @@
 .weekdayName {
     font-size: 11px;
     font-weight: 800;
-    color: #afafaf;
+    color: var(--color-text-muted);
     text-align: center;
     padding-bottom: 4px;
 }
@@ -234,13 +244,15 @@
 }
 
 :global(.light) .daySquare {
-    border-color: rgba(0, 0, 0, 0.06);
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
 .dayNumber {
     font-size: 13px;
     font-weight: 700;
-    color: #afafaf;
+    color: var(--color-text-muted);
     z-index: 1;
 }
 
@@ -257,7 +269,8 @@
 }
 
 :global(.light) .dayAchieved {
-    background-color: #f8fafc;
+    background-color: transparent;
+    border-color: rgba(241, 196, 15, 0.15);
 }
 
 .dayToday {
@@ -304,6 +317,10 @@
     z-index: 0;
 }
 
+:global(.light) .timelineLine {
+    background-color: #cbd5e1;
+}
+
 .weekNode {
     display: flex;
     flex-direction: column;
@@ -317,24 +334,29 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: var(--color-bg-hover);
+    background-color: var(--color-bg-alt);
     border: 2px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 :global(.light) .weekCircle {
-    background-color: #f8fafc;
+    background-color: #fff;
+    border-color: #cbd5e1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.weekCompleted {
+.weekCompleted,
+:global(.light) .weekCompleted {
     background-color: #58cc02;
     border-color: #58cc02;
 }
 
-.weekIncomplete {
+.weekIncomplete,
+:global(.light) .weekIncomplete {
     background-color: #ff4b4b;
     border-color: #ff4b4b;
 }
@@ -352,10 +374,19 @@
     animation: spin 1s linear infinite;
 }
 
+:global(.light) .progressRing {
+    border-color: #cbd5e1;
+    border-top-color: #16a34a;
+}
+
 .weekLabel {
     font-size: 12px;
     font-weight: 700;
-    color: #afafaf;
+    color: var(--color-text-muted);
+}
+
+:global(.light) .weekLabel {
+    color: #475569;
 }
 
 /* Legend */
@@ -368,7 +399,7 @@
     padding-bottom: 24px;
     font-size: 12px;
     font-weight: 700;
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 .legendItem {
@@ -418,7 +449,7 @@
 .legendBox.paused::before {
     content: '||';
     font-size: 8px;
-    color: #afafaf;
+    color: var(--color-text-muted);
 }
 
 @keyframes spin {

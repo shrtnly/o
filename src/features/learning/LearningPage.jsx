@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import RewardModal from './components/RewardModal';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { courseService } from '../../services/courseService';
+import { useTheme } from '../../context/ThemeContext';
 
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
@@ -94,7 +95,7 @@ const getPathData = (chapters, nodesPerRow) => {
 const CHAPTER_ICONS = [Play, BookOpen, PenTool, Star, Globe, Activity, Send, Shapes, Sparkles, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor];
 
 // Optimized Chapter Node component
-const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, iconIdx, onClick }) => {
+const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, iconIdx, onClick, isDark }) => {
     return (
         <div
             className={cn(styles.nodeWrapper, isLocked && styles.nodeLocked)}
@@ -119,7 +120,7 @@ const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked,
                         {(() => {
                             if (chapter.type === 'mystery_box' || chapter.type === 'heart_box' || chapter.type === 'pollen_box') {
                                 if (isCompleted) {
-                                    return <PackageOpen size={24} color="rgba(255, 215, 0, 0.6)" strokeWidth={2.5} />;
+                                    return <PackageOpen size={24} color={isDark ? "rgba(255, 215, 0, 0.6)" : "rgba(184, 134, 11, 0.7)"} strokeWidth={2.5} />;
                                 }
                                 return <Gift size={24} color="#ffd700" strokeWidth={2.5} />;
                             }
@@ -127,7 +128,7 @@ const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked,
                             return (
                                 <IconComponent
                                     size={24}
-                                    color={isActive || isCompleted ? "var(--unit-color-bg)" : "rgba(255, 255, 255, 0.45)"}
+                                    color={isActive || isCompleted ? "var(--unit-color-bg)" : (isDark ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.25)")}
                                     strokeWidth={2}
                                 />
                             );
@@ -135,7 +136,7 @@ const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked,
                     </div>
                     {isLocked && (
                         <div className={styles.lockIconBadge}>
-                            <Lock size={12} fill="rgba(255, 255, 255, 0.4)" stroke="none" />
+                            <Lock size={12} fill={isDark ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.3)"} stroke="none" />
                         </div>
                     )}
                 </div>
@@ -151,6 +152,7 @@ const LearningPage = () => {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { isDark } = useTheme();
     const [unitsWithChapters, setUnitsWithChapters] = useState([]);
     const [profile, setProfile] = useState(null);
     const [progress, setProgress] = useState([]);
@@ -534,6 +536,7 @@ const LearningPage = () => {
                                     isLocked={isLocked}
                                     iconIdx={cIdx}
                                     onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
+                                    isDark={isDark}
                                 />
                             );
                         })}

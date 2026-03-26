@@ -165,7 +165,10 @@ export const NotificationProvider = ({ children }) => {
                         }
 
                         const enrichedNotif = { ...newNotif, actor: actorProfile };
-                        setNotifications(prev => [enrichedNotif, ...prev]);
+                        setNotifications(prev => {
+                            if (prev.find(n => n.id === enrichedNotif.id)) return prev;
+                            return [enrichedNotif, ...prev];
+                        });
                         refreshUnreadCount();
 
                         // Show Premium Custom Toast

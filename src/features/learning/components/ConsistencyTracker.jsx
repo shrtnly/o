@@ -187,7 +187,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.bestLabel}>{t('my_best')}</span>
-                        <Trophy size={14} color="#eab308" />
+                        <Trophy size={14} color="#FFB800" />
                         <span className={styles.bestValue}>{stats.bestStreak}</span>
                     </div>
                 </div>
@@ -197,8 +197,8 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 <div className={styles.statBox}>
                     <span className={styles.statLabel}>{t('consistency_score')}</span>
                     <div className={styles.statMain}>
-                        <TrendingUp size={40} color="#00E5FF" strokeWidth={2.5} />
-                        <span className={styles.statValue} style={{ color: '#00E5FF' }}>{stats.score}%</span>
+                        <TrendingUp size={40} color="var(--color-accent-cyan)" strokeWidth={2.5} />
+                        <span className={styles.statValue} style={{ color: 'var(--color-accent-cyan)' }}>{stats.score}%</span>
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.tagline}>

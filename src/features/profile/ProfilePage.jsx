@@ -1129,7 +1129,10 @@ const ProfilePage = () => {
                                         );
                                     }
 
+                                    const seenIds = new Set();
                                     const groups = filtered.reduce((acc, notif) => {
+                                        if (seenIds.has(notif.id)) return acc;
+                                        seenIds.add(notif.id);
                                         const d = new Date(notif.created_at);
                                         const today = new Date();
                                         const yesterday = new Date(today);

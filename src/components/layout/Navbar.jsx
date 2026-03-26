@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Moon, Sun, LogOut, User } from 'lucide-react';
+import { Moon, Sun, LogOut } from 'lucide-react';
 import Button from '../ui/Button';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './Navbar.module.css';
@@ -7,14 +7,10 @@ import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 
-import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabaseClient';
-
 const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
-    const { t } = useLanguage();
-
+    const { t, language, toggleLanguage } = useLanguage();
 
     return (
         <nav className={styles.navbar}>
@@ -24,6 +20,14 @@ const Navbar = () => {
                 </Link>
 
                 <div className={styles.actions}>
+                    <button
+                        className={styles.langSwitchBtn}
+                        onClick={toggleLanguage}
+                        aria-label={`Switch to ${language === 'bn' ? 'English' : 'Bangla'}`}
+                    >
+                        {language === 'bn' ? 'EN' : 'BN'}
+                    </button>
+
                     <button
                         className={styles.iconBtn}
                         onClick={toggleTheme}

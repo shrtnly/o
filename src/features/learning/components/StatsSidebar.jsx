@@ -284,7 +284,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
 
 
             {/* Daily Practices Tracker / Consistency Tracker */}
-            <div className={cn(styles.card, styles.cardGolden)} style={{ borderBottom: isExpanded ? '5px solid #37464f' : '' }}>
+            <div className={cn(styles.card, styles.cardGolden)}>
                 <div className={styles.cardHeader}>
                     <h3 className={styles.cardTitle}>
                         <Zap size={20} className={styles.cardTitleIcon} />
@@ -296,7 +296,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                     >
                         <ChevronDown
                             size={20}
-                            color="#ffffff"
+                            color="var(--color-text-muted)"
                             style={{
                                 transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
                                 transition: 'transform 0.3s ease'
@@ -316,11 +316,11 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                         >
                             <svg width="0" height="0" style={{ position: 'absolute' }}>
                                 <defs>
-                                    <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                        <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
-                                        <stop offset="50%" style={{ stopColor: '#F1C40F', stopOpacity: 1 }} />
-                                        <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
-                                    </linearGradient>
+                                     <linearGradient id="flameGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
+                                <stop offset="50%" style={{ stopColor: '#FFB800', stopOpacity: 1 }} />
+                                <stop offset="100%" style={{ stopColor: '#F39C12', stopOpacity: 1 }} />
+                            </linearGradient>
                                 </defs>
                             </svg>
                             <div className={styles.flameRow}>
@@ -331,10 +331,12 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                 ) : (
                                     [...Array(7)].map((_, index) => {
                                         const now = new Date();
-                                        const dayOfWeek = now.getDay(); // 0 = Sunday
+                                        const dayOfWeek = now.getDay(); // 0(Sun) to 6(Sat)
 
+                                        // Adjust index so it starts from Saturday (index 0)
+                                        const daysFromSaturday = (dayOfWeek + 1) % 7;
                                         const d = new Date(now);
-                                        d.setDate(now.getDate() - dayOfWeek + index);
+                                        d.setDate(now.getDate() - daysFromSaturday + index);
 
                                         const dateStr = formatLocalDate(d);
                                         const todayStr = formatLocalDate(now);
@@ -356,16 +358,15 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                                     {isPracticed ? (
                                                         <Flame size={24} fill="url(#flameGradient)" stroke="url(#flameGradient)" />
                                                     ) : (
-                                                        <Flame
+                                                         <Flame
                                                             size={24}
                                                             fill={isToday ? "rgba(241, 196, 15, 0.1)" : "none"}
-                                                            stroke={isToday ? "#f1c40f" : "#37464f"}
-                                                            style={isToday ? { filter: 'drop-shadow(0 0 4px rgba(241, 196, 15, 0.4))' } : {}}
+                                                            stroke={isToday ? "#f1c40f" : "var(--color-border)"}
                                                         />
                                                     )}
                                                 </div>
                                                 <span className={cn(styles.flameDayLabel, (isPast || isPracticed) && styles.flameDayLabelActive)}>
-                                                    {[t('sun'), t('mon'), t('tue'), t('wed'), t('thu'), t('fri'), t('sat')][index]}
+                                                    {[t('sat'), t('sun'), t('mon'), t('tue'), t('wed'), t('thu'), t('fri')][index]}
                                                 </span>
                                             </div>
                                         );

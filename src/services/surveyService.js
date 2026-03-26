@@ -3,40 +3,69 @@ import { courseService } from './courseService';
 
 export const surveyService = {
     async getQuestionsByCourse(courseId) {
-        // For now, we return mock questions. 
-        // In production, you would fetch these from Supabase:
-        // const { data, error } = await supabase.from('survey_questions').select('*').eq('course_id', courseId).order('step_number');
+        try {
+            // Priority 1: Fetch from database
+            const { data, error } = await supabase
+                .from('survey_questions')
+                .select('*')
+                .order('step_number', { ascending: true });
 
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                // Map database columns to names used in the UI (camelCase)
+                return data.map(q => ({
+                    id: q.id,
+                    questionBn: q.question_bn,
+                    questionEn: q.question_en,
+                    options: q.options,
+                    step_number: q.step_number
+                }));
+            }
+        } catch (error) {
+            console.error("Error fetching survey questions from DB:", error);
+        }
+
+        // Priority 2: Fallback to mock data if database is empty or fails
         return [
             {
                 id: 1,
-                question: "আপনি আমাদের কীভাবে খুঁজে পেয়েছেন?",
+                questionBn: "আপনি কেন শিখছেন?",
+                questionEn: "Why are you learning?",
                 options: [
-                    { id: 'a', text: 'ফেসবুক থেকে' },
-                    { id: 'b', text: 'ইউটিউব থেকে' },
-                    { id: 'c', text: 'বন্ধুদের মাধ্যমে' },
-                    { id: 'd', text: 'গুগল সার্চ' },
-                    { id: 'e', text: 'অন্যান্য' }
+                    { id: 'fun', textBn: 'শুধু শখের বসে', textEn: 'Just for fun' },
+                    { id: 'skills', textBn: 'দক্ষতা বাড়াতে', textEn: 'Improve my skills' },
+                    { id: 'career', textBn: 'ক্যারিয়ারের উন্নতির জন্য', textEn: 'Career growth' },
+                    { id: 'other', textBn: 'অন্যান্য', textEn: 'Other' }
                 ]
             },
             {
                 id: 2,
-                question: "আপনার শেখার উদ্দেশ্য কী?",
+                questionBn: "আপনি কি আগে এটি শিখেছেন?",
+                questionEn: "Have you learned this before?",
                 options: [
-                    { id: 'a', text: 'নতুন কিছু শেখা' },
-                    { id: 'b', text: 'ক্যারিয়ারে উন্নতি' },
-                    { id: 'c', text: 'স্কিল বাড়ানো' },
-                    { id: 'd', text: 'শখের বসে' }
+                    { id: 'yes', textBn: 'হ্যাঁ', textEn: 'Yes' },
+                    { id: 'no', textBn: 'না', textEn: 'No' }
                 ]
             },
             {
                 id: 3,
-                question: "প্রতিদিন কতক্ষণ সময় শিখতে চান?",
+                questionBn: "প্রতিদিন কত সময় ব্যয় করতে পারবেন?",
+                questionEn: "How much time can you spend daily?",
                 options: [
-                    { id: 'a', text: '10-20 মিনিট' },
-                    { id: 'b', text: '30-60 মিনিট' },
-                    { id: 'c', text: '1-2 ঘণ্টা' },
-                    { id: 'd', text: '2 ঘণ্টার বেশি' }
+                    { id: '5m', textBn: '৫ মিনিট', textEn: '5 minutes' },
+                    { id: '10m', textBn: '১০ মিনিট', textEn: '10 minutes' },
+                    { id: '15m', textBn: '১৫ মিনিট', textEn: '15 minutes' },
+                    { id: '30m', textBn: '৩০+ মিনিট', textEn: '30+ minutes' }
+                ]
+            },
+            {
+                id: 4,
+                questionBn: "আপনি কি রিমাইন্ডার পেতে চান?",
+                questionEn: "Do you want reminders?",
+                options: [
+                    { id: 'yes', textBn: 'হ্যাঁ', textEn: 'Yes' },
+                    { id: 'no', textBn: 'না', textEn: 'No' }
                 ]
             }
         ];
@@ -47,7 +76,7 @@ export const surveyService = {
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) throw new Error('User not authenticated');
 
-            // 1. Save survey responses
+            // 1. Save all survey responses for analytics/tracking
             const { error: surveyError } = await supabase
                 .from('survey_responses')
                 .insert([{
@@ -56,9 +85,35 @@ export const surveyService = {
                     answers: responses
                 }]);
 
-            if (surveyError) console.error('Error saving survey:', surveyError);
+            if (surveyError) console.error('Error saving survey responses:', surveyError);
 
-            // 2. Enroll user in the course using centralized courseService
+            // 2. Intelligent synchronization for personalized progress tracking
+            const updates = [];
+
+            // Mapping the duration response (index 2) to daily_goal_minutes
+            const goalMap = { '5m': 5, '10m': 10, '15m': 15, '30m': 30 };
+            const dailyGoal = goalMap[responses[2]]; 
+            
+            if (dailyGoal) {
+                updates.push(
+                    supabase.from('profiles').update({ daily_goal_minutes: dailyGoal }).eq('id', user.id)
+                );
+            }
+
+            // Mapping the reminder preference (index 3) to user_notifications
+            const reminderEnabled = responses[3] === 'yes';
+            updates.push(
+                supabase.from('user_notifications').upsert({
+                    user_id: user.id,
+                    daily_reminder_enabled: reminderEnabled,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'user_id' })
+            );
+
+            // Wait for profile and notification updates to finish
+            await Promise.allSettled(updates);
+
+            // 3. Finally, enroll the user in the course
             await courseService.enrollUserInCourse(user.id, courseId);
 
             return { success: true };

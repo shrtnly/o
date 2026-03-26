@@ -74,6 +74,7 @@
 .highlight {
     background: linear-gradient(90deg, var(--color-primary), #00ff88);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 

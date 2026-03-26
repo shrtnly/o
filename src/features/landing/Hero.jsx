@@ -5,7 +5,7 @@ import heroImg from '../../assets/Hero_Dark.webp';
 import { useLanguage } from '../../context/LanguageContext';
 
 const Hero = () => {
-    const { t } = useLanguage();
+    const { t, language, setLanguage } = useLanguage();
 
     return (
         <section className={styles.hero}>

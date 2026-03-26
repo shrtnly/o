@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './CustomSelect.module.css';
 
-const CustomSelect = ({ value, onChange, options, placeholder, required }) => {
+const CustomSelect = ({ value, onChange, options, placeholder, required, isError }) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
 
@@ -28,7 +28,7 @@ const CustomSelect = ({ value, onChange, options, placeholder, required }) => {
         <div className={styles.container} ref={containerRef}>
             <button
                 type="button"
-                className={`${styles.trigger} ${isOpen ? styles.active : ''}`}
+                className={`${styles.trigger} ${isOpen ? styles.active : ''} ${isError ? styles.error : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-haspopup="listbox"
                 aria-expanded={isOpen}

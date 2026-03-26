@@ -10,6 +10,7 @@ import { surveyService } from '../../services/surveyService';
 import { supabase } from '../../lib/supabaseClient';
 import ConfirmationModal from './ConfirmationModal';
 import CustomSelect from '../../components/ui/CustomSelect';
+import { useLanguage } from '../../context/LanguageContext';
 
 const GENDER_OPTIONS = [
     { value: 'male', label: 'পুরুষ' },
@@ -38,16 +39,36 @@ const AuthPage = () => {
     const [gender, setGender] = useState('');
     const [location, setLocation] = useState('');
     const [agreeToTerms, setAgreeToTerms] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [fieldErrors, setFieldErrors] = useState([]);
 
     const { user, signIn, signUp, signInWithOAuth } = useAuth();
+    const { t } = useLanguage();
     const navigate = useNavigate();
 
+    const genderDropdownOptions = GENDER_OPTIONS.map(opt => ({
+        ...opt,
+        label: t(opt.value === 'male' ? 'male' : opt.value === 'female' ? 'female' : 'other_gender')
+    }));
+
+    const locationDropdownOptions = LOCATION_OPTIONS.map(opt => ({
+        ...opt,
+        label: t(`loc_${opt.value.toLowerCase()}`)
+    }));
+
     React.useEffect(() => {
+        // Pre-fill email if remember me was checked previously
+        const savedEmail = localStorage.getItem('remember_me_email');
+        if (savedEmail) {
+            setEmail(savedEmail);
+            setRememberMe(true);
+        }
+
         const checkPendingAction = async () => {
             if (user) {
                 const pendingEnrollment = localStorage.getItem('pending_enrollment');
@@ -81,6 +102,29 @@ const AuthPage = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setFieldErrors([]);
+
+        // Validate fields
+        const errors = [];
+        if (!email) errors.push('email');
+        if (!isForgotPassword) {
+            if (!password) errors.push('password');
+        }
+        if (!isLogin && !isForgotPassword) {
+            if (!name) errors.push('name');
+            if (!gender) errors.push('gender');
+            if (!location) errors.push('location');
+            if (!agreeToTerms) errors.push('agreement');
+        }
+
+        if (errors.length > 0) {
+            setFieldErrors([]); // Quick clear to allow re-triggering animation
+            setTimeout(() => {
+                setFieldErrors(errors);
+            }, 10);
+            setLoading(false);
+            return;
+        }
 
         try {
             if (isForgotPassword) {
@@ -89,7 +133,7 @@ const AuthPage = () => {
                 });
                 if (resetError) throw resetError;
                 setError('');
-                setSuccess('পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে। অনুগ্রহ করে ইনবক্স চেক করুন।');
+                setSuccess(t('auth_reset_success'));
 
                 // Hide success message and go back to login after 5 seconds
                 setTimeout(() => {
@@ -105,9 +149,16 @@ const AuthPage = () => {
             if (isLogin) {
                 const { error: signInError } = await signIn({ email, password });
                 if (signInError) throw signInError;
+
+                // Handle Remember Me
+                if (rememberMe) {
+                    localStorage.setItem('remember_me_email', email);
+                } else {
+                    localStorage.removeItem('remember_me_email');
+                }
             } else {
                 if (!agreeToTerms) {
-                    setError('আমাদের টার্মস এবং কন্ডিশনস এর সাথে সম্মত হওয়া আবশ্যক।');
+                    setError(t('auth_terms_missing'));
                     setLoading(false);
                     return;
                 }
@@ -120,7 +171,7 @@ const AuthPage = () => {
                     .maybeSingle();
 
                 if (existingUser) {
-                    setError('এই ইমেইল দিয়ে ইতঃপূর্বেই অ্যাকাউন্ট তৈরি করা হয়েছে।');
+                    setError(t('auth_account_exists'));
                     setLoading(false);
                     return;
                 }
@@ -142,13 +193,13 @@ const AuthPage = () => {
 
                 if (!data?.user || (data?.session === null && !data?.user?.identities?.length)) {
                     // This is another way Supabase indicates existing user with protection on
-                    setError('এই ইমেইল দিয়ে ইতঃপূর্বেই অ্যাকাউন্ট তৈরি করা হয়েছে।');
+                    setError(t('auth_account_exists'));
                     setLoading(false);
                     return;
                 }
 
                 if (!data?.session) {
-                    setSuccess('সাইন আপ সফল হয়েছে! আপনার ইমেইল ইনবক্স চেক করে অ্যাকাউন্ট ভেরিফাই করুন।');
+                    setSuccess(t('auth_signup_success'));
                     // Go back to login after showing message
                     setTimeout(() => {
                         setSuccess('');
@@ -158,19 +209,19 @@ const AuthPage = () => {
             }
         } catch (err) {
             console.error('Auth error:', err);
-            let message = err.message || 'একটি সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+            let message = t('auth_generic_error');
 
-            const lowMessage = message.toLowerCase();
+            const lowMessage = (err.message || '').toLowerCase();
             if (lowMessage.includes('invalid login credentials')) {
-                message = 'ভুল ইমেইল বা পাসওয়ার্ড। আবার চেষ্টা করুন।';
+                message = t('auth_wrong_credentials');
             } else if (lowMessage.includes('at least 6 characters')) {
-                message = 'পাসওয়ার্ড অন্তত 6 অক্ষরের হতে হবে।';
+                message = t('auth_weak_password');
             } else if (lowMessage.includes('email not confirmed')) {
-                message = 'আপনার ইমেইলটি এখনো ভেরিফাই করা হয়নি। অনুগ্রহ করে ইনবক্স চেক করুন।';
+                message = t('auth_unverified_email');
             } else if (lowMessage.includes('already registered') ||
                 lowMessage.includes('already been registered') ||
                 lowMessage.includes('email already in use')) {
-                message = 'এই ইমেইল দিয়ে ইতঃপূর্বেই অ্যাকাউন্ট তৈরি করা হয়েছে।';
+                message = t('auth_account_exists');
             }
 
             setError(message);
@@ -185,8 +236,9 @@ const AuthPage = () => {
             if (error) throw error;
         } catch (err) {
             console.error(`${provider} login error:`, err);
-            const providerName = provider === 'google' ? 'Google' : provider === 'facebook' ? 'Facebook' : provider;
-            setError(`${providerName} দিয়ে লগইন করতে সমস্যা হয়েছে।`);
+            if (provider === 'google') setError(t('auth_google_failed'));
+            else if (provider === 'facebook') setError(t('auth_facebook_failed'));
+            else setError(t('auth_generic_error'));
         }
     };
 
@@ -204,15 +256,15 @@ const AuthPage = () => {
                     <h1>
                         {isForgotPassword ? (
                             <>
-                                পাসওয়ার্ড <span className={styles.highlight}>রিসেট</span> করুন
+                                {t('auth_reset_title')} <span className={styles.highlight}>{t('auth_reset_highlight')}</span> {t('auth_reset_suffix')}
                             </>
                         ) : isLogin ? (
                             <>
-                                মধু আহরণ করতে <span className={styles.highlight}>লগইন</span> করুন
+                                {t('auth_login_title')} <span className={styles.highlight}>{t('auth_login_highlight')}</span> {t('auth_login_suffix')}
                             </>
                         ) : (
                             <>
-                                মৌচাকে <span className={styles.highlight}>সাইন আপ</span> করুন
+                                {t('auth_signup_title')} <span className={styles.highlight}>{t('auth_signup_highlight')}</span> {t('auth_signup_suffix')}
                             </>
                         )}
                     </h1>
@@ -226,17 +278,20 @@ const AuthPage = () => {
                     </div>
                 )}
 
-                <form className={styles.form} onSubmit={handleSubmit}>
+                <form className={styles.form} onSubmit={handleSubmit} noValidate>
                     {!isLogin && (
                         <div className={styles.field}>
                             <input
                                 type="text"
                                 id="name"
-                                placeholder="আপনার পূর্ণ নাম"
+                                placeholder={t('auth_name_placeholder')}
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e) => {
+                                    setName(e.target.value);
+                                    setFieldErrors(prev => prev.filter(f => f !== 'name'));
+                                }}
                                 required={!isLogin}
-                                className={styles.input}
+                                className={`${styles.input} ${fieldErrors.includes('name') ? styles.inputError : ''}`}
                             />
                         </div>
                     )}
@@ -245,11 +300,14 @@ const AuthPage = () => {
                         <input
                             type="email"
                             id="email"
-                            placeholder="আপনার ইমেইল ঠিকানা"
+                            placeholder={t('auth_email_placeholder')}
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                                setFieldErrors(prev => prev.filter(f => f !== 'email'));
+                            }}
                             required
-                            className={styles.input}
+                            className={`${styles.input} ${fieldErrors.includes('email') ? styles.inputError : ''}`}
                         />
                     </div>
 
@@ -259,11 +317,14 @@ const AuthPage = () => {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     id="password"
-                                    placeholder="পাসওয়ার্ড"
+                                    placeholder={t('auth_password_placeholder')}
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={(e) => {
+                                        setPassword(e.target.value);
+                                        setFieldErrors(prev => prev.filter(f => f !== 'password'));
+                                    }}
                                     required
-                                    className={styles.input}
+                                    className={`${styles.input} ${fieldErrors.includes('password') ? styles.inputError : ''}`}
                                 />
                                 <button
                                     type="button"
@@ -275,13 +336,24 @@ const AuthPage = () => {
                                 </button>
                             </div>
                             {isLogin && (
-                                <button
-                                    type="button"
-                                    className={styles.forgotLink}
-                                    onClick={() => setIsForgotPassword(true)}
-                                >
-                                    পাসওয়ার্ড ভুলে গেছেন?
-                                </button>
+                                <div className={styles.optionsLine}>
+                                    <label className={styles.checkboxContainer}>
+                                        <input
+                                            type="checkbox"
+                                            checked={rememberMe}
+                                            onChange={(e) => setRememberMe(e.target.checked)}
+                                        />
+                                        <span className={styles.checkmark}></span>
+                                        <span>{t('auth_remember_me')}</span>
+                                    </label>
+                                    <button
+                                        type="button"
+                                        className={styles.forgotLink}
+                                        onClick={() => setIsForgotPassword(true)}
+                                    >
+                                        {t('auth_forgot_password')}
+                                    </button>
+                                </div>
                             )}
                         </div>
                     )}
@@ -291,20 +363,28 @@ const AuthPage = () => {
                             <div className={styles.field}>
                                 <CustomSelect
                                     value={gender}
-                                    onChange={(e) => setGender(e.target.value)}
-                                    options={GENDER_OPTIONS}
-                                    placeholder="লিঙ্গ নির্বাচন করুন"
+                                    onChange={(e) => {
+                                        setGender(e.target.value);
+                                        setFieldErrors(prev => prev.filter(f => f !== 'gender'));
+                                    }}
+                                    options={genderDropdownOptions}
+                                    placeholder={t('i_am')}
                                     required
+                                    isError={fieldErrors.includes('gender')}
                                 />
                             </div>
 
                             <div className={styles.field}>
                                 <CustomSelect
                                     value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    options={LOCATION_OPTIONS}
-                                    placeholder="অবস্থান"
+                                    onChange={(e) => {
+                                        setLocation(e.target.value);
+                                        setFieldErrors(prev => prev.filter(f => f !== 'location'));
+                                    }}
+                                    options={locationDropdownOptions}
+                                    placeholder={t('location')}
                                     required
+                                    isError={fieldErrors.includes('location')}
                                 />
                             </div>
                         </div>
@@ -312,15 +392,19 @@ const AuthPage = () => {
 
                     {!isLogin && !isForgotPassword && (
                         <div className={styles.agreement}>
-                            <input
-                                type="checkbox"
-                                id="agree"
-                                checked={agreeToTerms}
-                                onChange={(e) => setAgreeToTerms(e.target.checked)}
-                                className={styles.checkbox}
-                            />
-                            <label htmlFor="agree">
-                                আমি <a href="/terms" target="_blank">টার্মস এবং কন্ডিশনস</a> ও <a href="/privacy" target="_blank">প্রাইভেসি</a> পলিসির সাথে একমত
+                            <label className={`${styles.checkboxContainer} ${fieldErrors.includes('agreement') ? styles.checkboxError : ''}`}>
+                                <input
+                                    type="checkbox"
+                                    id="agree"
+                                    checked={agreeToTerms}
+                                    onChange={(e) => {
+                                        setAgreeToTerms(e.target.checked);
+                                        setFieldErrors(prev => prev.filter(f => f !== 'agreement'));
+                                    }}
+                                    className={styles.checkbox}
+                                />
+                                <span className={styles.checkmark}></span>
+                                {t('auth_agree_prefix')} <a href="/terms" target="_blank">{t('auth_agree_terms')}</a> {t('auth_agree_and')} <a href="/privacy" target="_blank">{t('auth_agree_privacy')}</a> {t('auth_agree_suffix')}
                             </label>
                         </div>
                     )}
@@ -330,12 +414,12 @@ const AuthPage = () => {
                         disabled={loading}
                         className={styles.submitBtn}
                     >
-                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isForgotPassword ? 'রিসেট লিঙ্ক পাঠান' : isLogin ? 'লগইন' : 'সাইন আপ')}
+                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isForgotPassword ? t('auth_send_reset_link') : isLogin ? t('login_btn') : t('signup'))}
                     </button>
                 </form>
 
                 <div className={styles.divider}>
-                    <span>অথবা</span>
+                    <span>{t('auth_or')}</span>
                 </div>
 
                 <div className={styles.socialButtons}>
@@ -362,11 +446,11 @@ const AuthPage = () => {
                             className={styles.switchBtn}
                             onClick={() => setIsForgotPassword(false)}
                         >
-                            লগইন পেজে ফিরে যান
+                            {t('auth_back_to_login')}
                         </button>
                     ) : (
                         <>
-                            <span>{isLogin ? 'নতুন ব্যবহারকারী?' : 'আগে থেকেই অ্যাকাউন্ট আছে?'}</span>
+                            <span>{isLogin ? t('auth_new_user') : t('auth_already_have_account')}</span>
                             <button
                                 className={styles.switchBtn}
                                 onClick={() => {
@@ -374,7 +458,7 @@ const AuthPage = () => {
                                     setError('');
                                 }}
                             >
-                                {isLogin ? 'সাইন আপ করুন' : 'লগইন করুন'}
+                                {isLogin ? t('signup') : t('login_btn')}
                             </button>
                         </>
                     )}

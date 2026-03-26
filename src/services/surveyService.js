@@ -30,42 +30,44 @@ export const surveyService = {
         return [
             {
                 id: 1,
-                questionBn: "আপনি কেন শিখছেন?",
-                questionEn: "Why are you learning?",
+                questionBn: "আপনার শেখার মূল লক্ষ্য কী?",
+                questionEn: "What is your primary goal for learning?",
                 options: [
-                    { id: 'fun', textBn: 'শুধু শখের বসে', textEn: 'Just for fun' },
-                    { id: 'skills', textBn: 'দক্ষতা বাড়াতে', textEn: 'Improve my skills' },
-                    { id: 'career', textBn: 'ক্যারিয়ারের উন্নতির জন্য', textEn: 'Career growth' },
+                    { id: 'hobby', textBn: 'শুধু শখের জন্য', textEn: 'Just as a hobby' },
+                    { id: 'skills', textBn: 'দক্ষতা বাড়াতে', textEn: 'To improve skills' },
+                    { id: 'career', textBn: 'ক্যারিয়ারের উন্নতির জন্য', textEn: 'For career growth' },
                     { id: 'other', textBn: 'অন্যান্য', textEn: 'Other' }
                 ]
             },
             {
                 id: 2,
-                questionBn: "আপনি কি আগে এটি শিখেছেন?",
-                questionEn: "Have you learned this before?",
+                questionBn: "আপনি কি আগে কখনো এই বিষয়ে কোর্স করেছেন?",
+                questionEn: "Have you ever taken a course on this subject before?",
                 options: [
                     { id: 'yes', textBn: 'হ্যাঁ', textEn: 'Yes' },
-                    { id: 'no', textBn: 'না', textEn: 'No' }
+                    { id: 'no', textBn: 'না', textEn: 'No' },
+                    { id: 'somewhat', textBn: 'কিছুটা জানি', textEn: 'Know a little bit' }
                 ]
             },
             {
                 id: 3,
-                questionBn: "প্রতিদিন কত সময় ব্যয় করতে পারবেন?",
-                questionEn: "How much time can you spend daily?",
+                questionBn: "প্রতিদিন কতক্ষণ সময় দিতে পারবেন?",
+                questionEn: "How much time can you spend every day?",
                 options: [
                     { id: '5m', textBn: '৫ মিনিট', textEn: '5 minutes' },
                     { id: '10m', textBn: '১০ মিনিট', textEn: '10 minutes' },
                     { id: '15m', textBn: '১৫ মিনিট', textEn: '15 minutes' },
-                    { id: '30m', textBn: '৩০+ মিনিট', textEn: '30+ minutes' }
+                    { id: '30m_plus', textBn: '৩০+ মিনিট', textEn: '30+ minutes' }
                 ]
             },
             {
                 id: 4,
                 questionBn: "আপনি কি রিমাইন্ডার পেতে চান?",
-                questionEn: "Do you want reminders?",
+                questionEn: "Do you want to receive reminders?",
                 options: [
                     { id: 'yes', textBn: 'হ্যাঁ', textEn: 'Yes' },
-                    { id: 'no', textBn: 'না', textEn: 'No' }
+                    { id: 'no', textBn: 'না', textEn: 'No' },
+                    { id: 'decide_later', textBn: 'পরে সিদ্ধান্ত নেব', textEn: 'Decide later' }
                 ]
             }
         ];
@@ -91,7 +93,7 @@ export const surveyService = {
             const updates = [];
 
             // Mapping the duration response (index 2) to daily_goal_minutes
-            const goalMap = { '5m': 5, '10m': 10, '15m': 15, '30m': 30 };
+            const goalMap = { '5m': 5, '10m': 10, '15m': 15, '30m_plus': 30 };
             const dailyGoal = goalMap[responses[2]]; 
             
             if (dailyGoal) {

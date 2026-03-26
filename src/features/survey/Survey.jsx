@@ -227,8 +227,7 @@ const Survey = () => {
                                         delay: 0.3 + (index * 0.05),
                                         duration: 0.3
                                     }}
-                                    whileHover={{ scale: 1.01 }}
-                                    whileTap={{ scale: 0.99 }}
+                                    whileHover={{ scale: 1.005 }}
                                     className={`${styles.optionCard} ${selections[currentStep] === option.id ? styles.selected : ''}`}
                                     onClick={() => handleSelect(option.id)}
                                 >

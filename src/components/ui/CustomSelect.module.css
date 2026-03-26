@@ -118,4 +118,14 @@
         padding: 12px 16px;
         font-size: 0.95rem;
     }
+}
+
+@keyframes blinkError {
+    0%, 100% { border-color: var(--color-border); }
+    50% { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+}
+
+.error {
+    animation: blinkError 0.5s ease-in-out 1;
+    border-color: #ef4444 !important;
 }

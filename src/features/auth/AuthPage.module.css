@@ -52,7 +52,7 @@
 
 .logoWrapper {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center; /* Centered per request */
     margin-bottom: 24px;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .header {
-    text-align: left;
+    text-align: center; /* Centered per request */
     margin-bottom: 32px;
 }
 
@@ -91,7 +91,7 @@
     border-radius: 12px;
     margin-bottom: 24px;
     font-size: 0.85rem;
-    text-align: left;
+    text-align: center; /* Consistent centering */
 }
 
 .successMessage {
@@ -101,11 +101,12 @@
     border-radius: 16px;
     margin-bottom: 24px;
     font-size: 0.9rem;
-    text-align: left;
+    text-align: center; /* Consistent centering */
     border: 1px solid rgba(241, 196, 15, 0.2);
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center; /* Added to center content */
     gap: 12px;
     animation: slideDown 0.4s ease-out;
 }
@@ -229,11 +230,9 @@
 
 .forgotLink {
     display: block;
-    width: 100%;
-    text-align: right;
-    margin-top: 8px;
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
+    font-size: 0.75rem; /* Smaller font for minimalist look */
+    color: var(--color-text); /* Higher contrast color */
+    opacity: 0.7; /* Slightly softened but darker than muted */
     text-decoration: none;
     background: none;
     border: none;
@@ -242,8 +241,95 @@
     transition: color 0.2s;
 }
 
+.optionsLine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px; /* Reduced from 12px per request */
+}
+
+/* Custom Checkbox Design */
+.checkboxContainer {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.75rem; /* Smaller matched font */
+    color: var(--color-text);
+    opacity: 0.7;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-left: 22px; /* For 14px box */
+    transition: all 0.2s;
+}
+
+.checkboxContainer:hover {
+    color: var(--color-primary);
+    opacity: 1;
+}
+
+/* Override for agreement section to keep color stable */
+.agreement .checkboxContainer:hover {
+    color: var(--color-text);
+}
+
 .forgotLink:hover {
     color: var(--color-primary);
+    opacity: 1;
+}
+
+.checkboxContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    left: 0;
+    top: 2px; /* Fixed top alignment per request */
+    height: 14px;
+    width: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1.2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Checked states */
+.checkboxContainer input:checked ~ .checkmark {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+}
+
+/* Checkmark indicator (tick) */
+.checkmark::after {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg) scale(0);
+    width: 4px;
+    height: 8px;
+    border: solid #000;
+    border-width: 0 1.5px 1.5px 0;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.checkboxContainer input:checked ~ .checkmark::after {
+    transform: translateY(-55%) rotate(45deg) scale(1);
+}
+
+:global(.light) .checkmark {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+:global(.light) .checkboxContainer input:checked ~ .checkmark::after {
+    border-color: #000;
 }
 
 .submitBtn {
@@ -253,7 +339,7 @@
     border: none;
     border-radius: 12px;
     border-bottom: 4px solid var(--color-primary-dark);
-    color: #fff;
+    color: #000; /* Contrast for yellow background */
     font-size: 1rem;
     font-weight: 800;
     cursor: pointer;
@@ -282,29 +368,12 @@
 }
 
 .agreement {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
     margin: 10px 0;
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-}
-
-.agreement label {
-    line-height: 1.4;
-    cursor: pointer;
 }
 
 .agreement a {
     color: var(--color-primary);
     text-decoration: underline;
-}
-
-.checkbox {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    margin-top: 2px;
 }
 
 .divider {
@@ -390,8 +459,44 @@
     animation: spin 1s linear infinite;
 }
 
+@keyframes blinkError {
+    0%, 100% { border-color: var(--color-border); }
+    50% { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+}
+
+@keyframes blinkErrorCheckmark {
+    0%, 100% { border-color: rgba(255, 255, 255, 0.3); }
+    50% { border-color: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+}
+
+.inputError {
+    animation: blinkError 0.5s ease-in-out 1;
+    border-color: #ef4444 !important;
+}
+
+.checkboxError .checkmark {
+    animation: blinkErrorCheckmark 0.5s ease-in-out 1;
+    border-color: #ef4444 !important;
+}
+
 @media (max-width: 480px) {
     .authContainer {
         padding: 0 10px;
+    }
+
+    .authLogo {
+        height: 60px; /* Reduced for mobile version */
+    }
+
+    .logoWrapper {
+        margin-bottom: 20px;
+    }
+
+    .header {
+        margin-bottom: 24px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem; /* Slightly smaller h1 for mobile */
     }
 }

@@ -144,29 +144,37 @@
 .optionsGrid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
+    gap: 1.5rem; /* Increased spacing */
     width: 100%;
     max-width: 850px;
     margin-top: 1rem;
 }
 
 .optionCard {
-    background-color: var(--color-bg-alt);
-    border: 1.5px solid var(--color-border);
+    background-color: transparent; /* Removed fill per request */
+    border: 1px solid rgba(255, 255, 255, 0.15); /* More transparent border */
     border-radius: 20px;
     padding: 1.2rem 1.5rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     gap: 1.25rem;
     position: relative;
-    box-shadow: none;
+    box-shadow: 0 5px 0 0 var(--color-border);
+    margin-bottom: 5px; /* Vertical space for the 3D shadow */
+    top: 0;
 }
 
 .optionCard:hover {
-    background-color: var(--color-bg);
-    transform: translateY(-2px);
+    background-color: var(--color-bg-alt); /* Subtle fill on hover */
+    box-shadow: 0 5px 0 0 var(--color-border);
+}
+
+.optionCard:active {
+    top: 4px;
+    box-shadow: 0 1px 0 0 var(--color-border);
+    margin-bottom: 1px;
 }
 
 .optionCard:hover .optionNumber {
@@ -174,11 +182,37 @@
 }.optionCard.selected {
     background-color: transparent;
     border-color: var(--color-primary);
-    border-width: 2px;
+    border-width: 1px; /* Minimalist thin border */
+    box-shadow: 0 5px 0 0 var(--color-primary-dark);
 }
-/* Light mode hover adjustment for clarity */
+
+.optionCard.selected:active {
+    top: 4px;
+    box-shadow: 0 1px 0 0 var(--color-primary-dark);
+    margin-bottom: 1px;
+}
+
+/* Light mode adjustments */
+:global(.light) .optionCard {
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.08); /* Transparent border for light mode */
+    box-shadow: 0 5px 0 0 #cbd5e1; /* Visible depth for light mode */
+}
+
 :global(.light) .optionCard:hover {
-    box-shadow: none;
+    background-color: #f8fafc; /* Subtle fill on hover in light mode */
+}
+
+:global(.light) .optionCard:active {
+    box-shadow: 0 1px 0 0 #cbd5e1;
+}
+
+:global(.light) .optionCard.selected {
+    box-shadow: 0 5px 0 0 #cc9300; /* More intense golden for light mode depth */
+}
+
+:global(.light) .optionCard.selected:active {
+    box-shadow: 0 1px 0 0 #cc9300;
 }
 
 .optionCard span {
@@ -193,7 +227,7 @@
 .optionNumber {
     width: 42px; /* Slightly larger */
     height: 42px;
-    border: 2px solid var(--color-border); /* Thicker border */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle indicator border */
     border-radius: 14px; /* Modern squircle */
     display: flex;
     align-items: center;
@@ -214,23 +248,8 @@
     background: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
     color: var(--color-bg) !important;
-    animation: burst 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
-@keyframes burst {
-    0% { 
-        transform: scale(1);
-        box-shadow: 0 0 0 0 var(--color-primary-light);
-    }
-    50% { 
-        transform: scale(1.25);
-        box-shadow: 0 0 0 12px transparent;
-    }
-    100% { 
-        transform: scale(1.1);
-        box-shadow: 0 0 0 0 transparent;
-    }
-}
 
 .bottomBar {
     position: fixed;
@@ -365,7 +384,7 @@
 
     .optionsGrid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 16px; /* Increased mobile spacing */
     }
 
     .optionCard {
@@ -415,7 +434,7 @@
 
     .optionsGrid {
         margin-top: 12px;
-        gap: 8px;
+        gap: 12px; /* Balanced spacing for small screens */
     }
 
     .optionCard {

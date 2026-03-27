@@ -154,6 +154,7 @@ const translations = {
         tab_general: "সাধারণ",
         tab_analyze: "এনালিটিক্স",
         tab_activity: "নটিফিকেশন",
+        tab_certificates: "সার্টিফিকেট",
         tab_connection: "সংযোগ",
         subtab_my: "আমার কানেকশন",
         subtab_suggest: "শিক্ষার্থী খুঁজুন",
@@ -164,6 +165,11 @@ const translations = {
 
         certification: "সার্টিফিকেশন",
         earned_certificates: "সার্টিফিকেট",
+        invite_learner: "বন্ধুদের আমন্ত্রণ করুন",
+        invite_success: "কপি হয়েছে!",
+        invite_message: "এখনই বন্ধুদের আমন্ত্রণ জানান, আর বোনাস হিসেবে পান ৫টি হানি ড্রপ!",
+        invite_share_cta: "শেয়ার করুন",
+        invite_share_text: "হ্যালো! আমি BeeLesson-এর সাথে শেখা শুরু করেছি।\nএটি বাংলাদেশের প্রথম গেমিফাইড লার্নিং প্ল্যাটফর্ম, যা আপনাকে দেবে এক নতুন শেখার অভিজ্ঞতা।\nতাই আর দেরি না করে আজই যোগ দিন BeeLesson কমিউনিটিতে এবং উপভোগ করুন শেখার এক নতুন যাত্রা!",
         no_certificates: "আপনি এখনও কোনো সার্টিফিকেট অর্জন করেননি।",
 
         analysis_ov: "অ্যাক্টিভিটি অ্যানালাইসিস",
@@ -631,6 +637,7 @@ const translations = {
         tab_general: "General",
         tab_analyze: "Analytics",
         tab_activity: "Notification",
+        tab_certificates: "Certificates",
         tab_connection: "Connection",
         subtab_my: "My Connections",
         subtab_suggest: "Explore",
@@ -662,6 +669,11 @@ const translations = {
 
         certification: "Certification",
         earned_certificates: "Earned Certificates",
+        invite_learner: "Invite Friends",
+        invite_success: "Copied!",
+        invite_message: "Invite your friends now and get 5 Honey Drops as a bonus!",
+        invite_share_cta: "Share",
+        invite_share_text: "Hello! I have started learning with BeeLesson.\nIt's Bangladesh's first gamified learning platform, offering a whole new learning experience.\nSo don't delay, join the BeeLesson community today and enjoy a new journey of learning!",
         no_certificates: "You haven't earned any certificates yet.",
 
         analysis_ov: "Activity Analysis",

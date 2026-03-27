@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, X, Chrome, Facebook, Loader2, User, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
 import Button from '../../components/ui/Button';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
@@ -50,6 +50,43 @@ const AuthPage = () => {
     const { user, signIn, signUp, signInWithOAuth } = useAuth();
     const { t } = useLanguage();
     const navigate = useNavigate();
+    const locationHook = useLocation();
+
+    // Capture referral from URL
+    React.useEffect(() => {
+        const resolveReferral = async () => {
+            const params = new URLSearchParams(locationHook.search);
+            const ref = params.get('ref');
+            if (!ref) return;
+
+            // Check if it's already a UUID
+            const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ref);
+            
+            if (isUUID) {
+                localStorage.setItem('referral_ref', ref);
+                navigate(locationHook.pathname, { replace: true });
+            } else {
+                // It's a username, look it up
+                try {
+                    const { data, error } = await supabase
+                        .from('profiles')
+                        .select('id')
+                        .eq('username', ref)
+                        .single();
+                    
+                    if (data?.id) {
+                        localStorage.setItem('referral_ref', data.id);
+                    }
+                } catch (err) {
+                    console.error('Referral lookup failed:', err);
+                } finally {
+                    navigate(locationHook.pathname, { replace: true });
+                }
+            }
+        };
+
+        resolveReferral();
+    }, [locationHook.search, navigate]);
 
     const genderDropdownOptions = GENDER_OPTIONS.map(opt => ({
         ...opt,
@@ -189,6 +226,16 @@ const AuthPage = () => {
                     return;
                 }
 
+                // Fetch IP for fraud prevention
+                let userIP = 'unknown';
+                try {
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    userIP = data.ip;
+                } catch (ipErr) {
+                    console.error('IP capture failed:', ipErr);
+                }
+
                 const { data, error: signUpError } = await signUp({
                     email,
                     password,
@@ -198,10 +245,16 @@ const AuthPage = () => {
                             display_name: name,
                             email: email,
                             gender: gender,
-                            location: location
+                            location: location,
+                            referred_by: localStorage.getItem('referral_ref'),
+                            client_ip: userIP
                         }
                     }
                 });
+
+                if (!signUpError) {
+                    localStorage.removeItem('referral_ref');
+                }
                 if (signUpError) throw signUpError;
 
                 if (!data?.user || (data?.session === null && !data?.user?.identities?.length)) {

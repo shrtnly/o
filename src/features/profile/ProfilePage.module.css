@@ -1810,3 +1810,210 @@
     }
 }
 
+/* ─── Standard Invite Section ─── */
+.inviteSection {
+    margin-top: 32px;
+}
+
+.tooltipContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.infoBtn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.infoBtn:hover {
+    color: var(--color-primary);
+    background: rgba(255, 184, 0, 0.1);
+}
+
+.inviteTooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    width: 240px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: var(--color-text);
+    line-height: 1.5;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.tooltipArrow {
+    position: absolute;
+    bottom: -6px;
+    right: 8px;
+    width: 12px;
+    height: 12px;
+    background: var(--color-bg);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    transform: rotate(45deg);
+}
+
+.inviteBtnWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.fullInviteBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 16px; /* slightly larger padding */
+    background: #FFB800; /* Use consistent brand gold */
+    color: #000;
+    border: none;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 850;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 0 #D49B00; /* Thicker shadow for better 3D effect */
+    text-transform: none;
+    position: relative;
+    top: -2px; /* Pull it up slightly to make room for shadow */
+}
+
+.fullInviteBtn:hover {
+    top: -1px;
+    box-shadow: 0 5px 0 #D49B00;
+}
+
+.fullInviteBtn:active {
+    top: 4px; /* Press down deeper */
+    box-shadow: 0 0px 0 #D49B00;
+}
+
+.inviteActionCopied {
+    background: #FFB800; /* Keep original color */
+    box-shadow: 0 6px 0 #D49B00;
+}
+
+.inviteActionCopied:hover {
+    box-shadow: 0 5px 0 #D49B00;
+}
+
+.inviteActionCopied:active {
+    box-shadow: 0 0px 0 #D49B00;
+}
+
+.shareMenu {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 16px;
+    width: 250px;
+    box-shadow: var(--shadow-hover);
+    z-index: 10;
+}
+
+.shareMenu::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--color-border);
+}
+
+.shareMenuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.shareMenuHeader span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.shareMenuHeader button {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.shareOptions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.shareOptions button {
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
+    aspect-ratio: 1;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shareOptions button:hover {
+    background: var(--color-bg-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+}
+
+.shareMenuTip {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-border-muted);
+}
+
+.shareMenuTip span {
+    font-size: 0.65rem;
+    line-height: 1.4;
+    color: var(--color-text-muted);
+    display: block;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .shareMenu {
+        width: 100%;
+        max-width: 260px;
+    }
+}
+
+@media (max-width: 600px) {
+    .inviteTooltip {
+        width: 200px;
+        font-size: 0.75rem;
+    }
+}

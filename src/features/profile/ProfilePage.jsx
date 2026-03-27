@@ -14,7 +14,8 @@ import {
     Heart, Info, Bell, Shield, ChevronRight, ChevronLeft, ChevronDown, Award,
     LogOut, BarChart3, Layout, Activity as ActivityIcon, Compass, Flame,
     Camera, X, Settings, Share2, User, Calendar, Zap, Gem, Trophy, Target, BookOpen,
-    Search, UserPlus, Check, Mail, AtSign, Phone, GraduationCap, ChartNoAxesCombined, SquarePen
+    Search, UserPlus, Check, Mail, AtSign, Phone, GraduationCap, ChartNoAxesCombined, SquarePen, CircleHelp,
+    Twitter, Facebook, Linkedin, MessageCircle
 } from 'lucide-react';
 import { formatLocalDate } from '../../lib/dateUtils';
 import ShieldIcon from '../../components/ShieldIcon';
@@ -63,6 +64,9 @@ const ProfilePage = () => {
     const [activeTab, setActiveTab] = useState('general');
     const [certificates, setCertificates] = useState([]);
     const [viewingCert, setViewingCert] = useState(null);
+    const [copied, setCopied] = useState(false);
+    const [showInviteTooltip, setShowInviteTooltip] = useState(false);
+    const [showInviteMenu, setShowInviteMenu] = useState(false);
     const [certTab, setCertTab] = useState('earned'); // 'earned' or 'progress'
 
     const [analysisData, setAnalysisData] = useState(null);
@@ -119,7 +123,7 @@ const ProfilePage = () => {
             navigate('/notifications', { replace: true });
             return;
         }
-        if (tab && ['general', 'analyze'].includes(tab)) {
+        if (tab && ['general', 'analyze', 'certificates'].includes(tab)) {
             setActiveTab(tab);
         }
     }, [user?.id, navigate, location.search]);
@@ -184,6 +188,86 @@ const ProfilePage = () => {
 
 
 
+
+    const handleInviteRef = () => {
+        if (navigator.share) {
+            const refId = profile?.username || user?.id || profile?.id; // Use username if available
+            const refLink = `${window.location.origin}/auth?ref=${refId}`;
+            const shareMsg = `${t('invite_share_text')}\n\n${refLink}`;
+
+            navigator.share({
+                title: 'BeeLesson Invite',
+                text: shareMsg,
+            }).catch(err => {
+                console.error('Sharing failed:', err);
+                setShowInviteMenu(true);
+            });
+        } else {
+            setShowInviteMenu(true);
+        }
+    };
+
+    const handleSocialInvite = (platform) => {
+        const refId = profile?.username || user?.id || profile?.id;
+        if (!refId) return;
+        const refLink = `${window.location.origin}/auth?ref=${refId}`;
+        const shareMsg = `${t('invite_share_text')}\n\n${refLink}`;
+        const encodedMsg = encodeURIComponent(shareMsg);
+
+        copyToClipboard(shareMsg); // Auto-copy helper
+
+        let shareUrl = '';
+        switch (platform) {
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?text=${encodedMsg}`;
+                break;
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(refLink)}`;
+                break;
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(refLink)}`;
+                break;
+            case 'whatsapp':
+                shareUrl = `https://wa.me/?text=${encodedMsg}`;
+                break;
+            default:
+                break;
+        }
+
+        if (shareUrl) {
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+        setShowInviteMenu(false);
+    };
+
+    const copyToClipboard = (text) => {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2500);
+            }).catch(err => {
+                console.error('Clipboard write failed:', err);
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    };
+
+    const fallbackCopy = (text) => {
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        } catch (err) {
+            console.error('Fallback copy failed:', err);
+        }
+    };
 
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
@@ -470,6 +554,13 @@ const ProfilePage = () => {
                             <BarChart3 size={18} />
                             {activeTab === 'analyze' && <span>{t('tab_analyze')}</span>}
                         </button>
+                        <button
+                            className={`${styles.tabItem} ${activeTab === 'certificates' ? styles.tabActive : ''}`}
+                            onClick={() => setActiveTab('certificates')}
+                        >
+                            <Award size={18} />
+                            {activeTab === 'certificates' && <span>{t('tab_certificates')}</span>}
+                        </button>
                     </nav>
 
                     {activeTab === 'general' && (
@@ -561,8 +652,97 @@ const ProfilePage = () => {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Viral Loop: Standard Section Style */}
+                                <div className={styles.inviteSection}>
+                                    <h4 className={styles.sectionTitle}>
+                                        <div className={styles.sectionTitleLeft}>
+                                            {t('invite_learner')}
+                                        </div>
+                                        <div className={styles.tooltipContainer}>
+                                            <button 
+                                                className={styles.infoBtn}
+                                                onClick={() => setShowInviteTooltip(!showInviteTooltip)}
+                                            >
+                                                <CircleHelp size={18} />
+                                            </button>
+                                            <AnimatePresence>
+                                                {showInviteTooltip && (
+                                                    <motion.div 
+                                                        className={styles.inviteTooltip}
+                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    >
+                                                        {t('invite_message')}
+                                                        <div className={styles.tooltipArrow} />
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </div>
+                                    </h4>
+                                    
+                                    <div className={styles.inviteBtnWrapper}>
+                                        <button 
+                                            className={`${styles.fullInviteBtn} ${copied ? styles.inviteActionCopied : ''}`}
+                                            onClick={handleInviteRef}
+                                        >
+                                            {copied ? (
+                                                <>
+                                                    <Check size={18} />
+                                                    <span>{t('invite_success')}</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Share2 size={18} />
+                                                    <span>{t('invite_share_cta')}</span>
+                                                </>
+                                            )}
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {showInviteMenu && (
+                                                <motion.div
+                                                    className={styles.shareMenu}
+                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                >
+                                                    <div className={styles.shareMenuHeader}>
+                                                        <span>{language === 'bn' ? 'শেয়ার করুন' : 'Share to'}</span>
+                                                        <button onClick={() => setShowInviteMenu(false)}><X size={14} /></button>
+                                                    </div>
+                                                    <div className={styles.shareOptions}>
+                                                        <button onClick={() => handleSocialInvite('facebook')} title="Facebook">
+                                                            <Facebook size={20} fill="#1877F2" color="#1877F2" />
+                                                        </button>
+                                                        <button onClick={() => handleSocialInvite('twitter')} title="Twitter">
+                                                            <Twitter size={20} fill="#1DA1F2" color="#1DA1F2" />
+                                                        </button>
+                                                        <button onClick={() => handleSocialInvite('linkedin')} title="LinkedIn">
+                                                            <Linkedin size={20} fill="#0A66C2" color="#0A66C2" />
+                                                        </button>
+                                                        <button onClick={() => handleSocialInvite('whatsapp')} title="WhatsApp">
+                                                            <MessageCircle size={20} fill="#25D366" color="#25D366" />
+                                                        </button>
+                                                    </div>
+                                                    <div className={styles.shareMenuTip}>
+                                                        <span>💡 {copied ? (language === 'bn' ? 'টেক্সট কপি করা হয়েছে!' : 'Text copied!') : (language === 'bn' ? 'টিপ: টেক্সট অটো-কপি করা হয়েছে!' : 'Tip: Text is auto-copied!')}</span>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                </div>
                             </section>
 
+                            {/* Bottom Spacer for extra scrolling room */}
+                            <div className={styles.bottomSpacer} />
+                        </>
+                    )}
+
+                    {activeTab === 'certificates' && (
+                        <>
                             {/* ========== SECTION 6: CERTIFICATIONS ========== */}
                             <section className={styles.certsSection}>
                                 <div className={styles.sectionTitle}>
@@ -611,18 +791,7 @@ const ProfilePage = () => {
                                 )}
                             </section>
 
-                            <AnimatePresence>
-                                {viewingCert && (
-                                    <CertificateViewer
-                                        certificate={viewingCert}
-                                        learnerName={profile?.full_name || 'Learner'}
-                                        onClose={() => setViewingCert(null)}
-                                    />
-                                )}
-                            </AnimatePresence>
 
-
-                            {/* Bottom Spacer for extra scrolling room */}
                             <div className={styles.bottomSpacer} />
                         </>
                     )}
@@ -1041,6 +1210,16 @@ const ProfilePage = () => {
                     </div>
                 </div>
             )}
+
+            <AnimatePresence>
+                {viewingCert && (
+                    <CertificateViewer
+                        certificate={viewingCert}
+                        learnerName={profile?.full_name || 'Learner'}
+                        onClose={() => setViewingCert(null)}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

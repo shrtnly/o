@@ -11,6 +11,7 @@ export const NotificationProvider = ({ children }) => {
     const { user } = useAuth();
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [pendingConnectionsCount, setPendingConnectionsCount] = useState(0);
 
     const refreshUnreadCount = useCallback(async () => {
         if (!user) return;
@@ -29,6 +30,23 @@ export const NotificationProvider = ({ children }) => {
         }
     }, [user]);
 
+    const refreshConnectionsCount = useCallback(async () => {
+        if (!user) return;
+        try {
+            const { count, error } = await supabase
+                .from('learner_connections')
+                .select('*', { count: 'exact', head: true })
+                .eq('receiver_id', user.id)
+                .eq('status', 'pending');
+            
+            if (!error) {
+                setPendingConnectionsCount(count || 0);
+            }
+        } catch (err) {
+            console.error('Error refreshing connections count:', err);
+        }
+    }, [user]);
+
     const fetchNotifications = useCallback(async () => {
         if (!user) return;
         try {
@@ -42,10 +60,11 @@ export const NotificationProvider = ({ children }) => {
             if (error) throw error;
             setNotifications(data || []);
             refreshUnreadCount();
+            refreshConnectionsCount();
         } catch (err) {
             console.error('Error fetching notifications:', err);
         }
-    }, [user, refreshUnreadCount]);
+    }, [user, refreshUnreadCount, refreshConnectionsCount]);
 
     const deleteNotification = async (id) => {
         try {
@@ -137,7 +156,7 @@ export const NotificationProvider = ({ children }) => {
 
         fetchNotifications();
 
-        const channel = supabase
+        const notificationChannel = supabase
             .channel(`user-notifications-${user.id}`)
             .on(
                 'postgres_changes',
@@ -309,10 +328,27 @@ export const NotificationProvider = ({ children }) => {
             .subscribe();
 
 
+        const connectionsChannel = supabase
+            .channel(`user-connections-${user.id}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'learner_connections',
+                    filter: `receiver_id=eq.${user.id}`
+                },
+                () => {
+                    refreshConnectionsCount();
+                }
+            )
+            .subscribe();
+
         return () => {
-            supabase.removeChannel(channel);
+            supabase.removeChannel(notificationChannel);
+            supabase.removeChannel(connectionsChannel);
         };
-    }, [user, fetchNotifications]);
+    }, [user, fetchNotifications, refreshConnectionsCount]);
 
     const [activeChatId, setActiveChatId] = useState(null);
     const [isInboxOpen, setIsInboxOpen] = useState(false);
@@ -321,6 +357,7 @@ export const NotificationProvider = ({ children }) => {
         <NotificationContext.Provider value={{
             notifications,
             unreadCount,
+            pendingConnectionsCount,
             markAsRead,
             markAllAsRead,
             deleteNotification,

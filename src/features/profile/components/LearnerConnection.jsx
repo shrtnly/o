@@ -657,34 +657,57 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     return (
         <Fragment>
             <div className={styles.container}>
-            {/* Sub-Tab Header */}
             <div className={styles.subTabHeader}>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'my' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('my')}
                 >
-                    <Users size={16} />
-                    {subTab === 'my' && <span>{t('subtab_my')}</span>}
-                    {subTab !== 'my' && connections.active.length > 0 && (
-                        <span className={styles.subTabCount}>{connections.active.length}</span>
+                    {subTab === 'my' && (
+                        <motion.div 
+                            layoutId="activeTabPill"
+                            className={styles.activeBackground}
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                        />
                     )}
+                    <span className={styles.btnContent}>
+                        <Users size={18} />
+                        {subTab === 'my' && <span>{t('subtab_my')}</span>}
+                    </span>
                 </button>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'suggest' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('suggest')}
                 >
-                    <Search size={16} />
-                    {subTab === 'suggest' && <span>{t('subtab_suggest')}</span>}
+                    {subTab === 'suggest' && (
+                        <motion.div 
+                            layoutId="activeTabPill"
+                            className={styles.activeBackground}
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                        />
+                    )}
+                    <span className={styles.btnContent}>
+                        <Search size={18} />
+                        {subTab === 'suggest' && <span>{t('subtab_suggest')}</span>}
+                    </span>
                 </button>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'inbox' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('inbox')}
                 >
-                    <MessageSquare size={16} />
-                    {subTab === 'inbox' && <span>{t('subtab_inbox')}</span>}
-                    {subTab !== 'inbox' && unreadCount > 0 && (
-                        <span className={styles.subTabUnread}>{unreadCount}</span>
+                    {subTab === 'inbox' && (
+                        <motion.div 
+                            layoutId="activeTabPill"
+                            className={styles.activeBackground}
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                        />
                     )}
+                    <span className={styles.btnContent}>
+                        <MessageSquare size={18} />
+                        {subTab === 'inbox' && <span>{t('subtab_inbox')}</span>}
+                        {subTab !== 'inbox' && unreadCount > 0 && (
+                            <span className={styles.subTabUnread}>{unreadCount > 9 ? '9+' : unreadCount}</span>
+                        )}
+                    </span>
                 </button>
             </div>
 
@@ -976,7 +999,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                             >
                                                 {t('filter_all')}
                                                 {connections.active.length > 0 && (
-                                                    <span className={styles.filterCount}>{connections.active.length}</span>
+                                                    <span className={styles.filterCount}>{connections.active.length > 9 ? '9+' : connections.active.length}</span>
                                                 )}
                                             </button>
                                             <button 
@@ -985,7 +1008,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                             >
                                                 {t('filter_received')}
                                                 {connections.pending.length > 0 && (
-                                                    <span className={`${styles.filterCount} ${styles.filterCountAlert}`}>{connections.pending.length}</span>
+                                                    <span className={`${styles.filterCount} ${styles.filterCountAlert}`}>{connections.pending.length > 9 ? '9+' : connections.pending.length}</span>
                                                 )}
                                             </button>
                                             <button 
@@ -994,7 +1017,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                             >
                                                 {t('filter_sent')}
                                                 {connections.outgoing.length > 0 && (
-                                                    <span className={styles.filterCount}>{connections.outgoing.length}</span>
+                                                    <span className={styles.filterCount}>{connections.outgoing.length > 9 ? '9+' : connections.outgoing.length}</span>
                                                 )}
                                             </button>
                                         </div>

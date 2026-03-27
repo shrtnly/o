@@ -12,7 +12,7 @@ const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
     const { t, language, toggleLanguage } = useLanguage();
-    const { unreadCount } = useNotifications();
+    const { unreadCount, pendingConnectionsCount } = useNotifications();
 
     return (
         <nav className={styles.navbar}>
@@ -42,6 +42,9 @@ const Navbar = () => {
                         <div className={styles.userSection}>
                             <Link to="/connections" className={styles.navLink} title={t('tab_connection')}>
                                 <Users size={18} />
+                                {pendingConnectionsCount > 0 && (
+                                    <span className={styles.badge}>{pendingConnectionsCount > 9 ? '9+' : pendingConnectionsCount}</span>
+                                )}
                             </Link>
                             <Link to="/notifications" className={styles.navLink} title={t('notifications')}>
                                 <Bell size={18} />

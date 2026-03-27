@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity, Users, UserPlus } from 'lucide-react';
+import { Zap, Gem, Heart, HeartCrack, Shield, ChevronDown, Check, Play, Plus, Flame, Lock, Trophy, Infinity, Users, User, UserPlus } from 'lucide-react';
 import HoneyDropIcon from '../../../components/HoneyDropIcon';
 import PollenIcon from '../../../components/PollenIcon';
 import { useNavigate } from 'react-router-dom';

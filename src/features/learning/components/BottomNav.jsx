@@ -11,7 +11,7 @@ import styles from './BottomNav.module.css';
 const BottomNav = () => {
     const { user } = useAuth();
     const { t, language } = useLanguage();
-    const { unreadCount } = useNotifications();
+    const { unreadCount, pendingConnectionsCount } = useNotifications();
     const { courseId: currentCourseId } = useParams();
     const [lastCourseId, setLastCourseId] = useState(null);
 
@@ -65,10 +65,15 @@ const BottomNav = () => {
 
             <NavLink to="/connections" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
                 {({ isActive }) => (
-                    <>
-                        <Users size={26} strokeWidth={1.5} />
+                    <div className={styles.notifArea}>
+                        <div className={styles.iconWrapper}>
+                            <Users size={26} strokeWidth={1.5} />
+                            {pendingConnectionsCount > 0 && (
+                                <span className={styles.navBadge}>{pendingConnectionsCount > 9 ? '9+' : pendingConnectionsCount}</span>
+                            )}
+                        </div>
                         {isActive && <span className={styles.navLabel}>{t('tab_connection')}</span>}
-                    </>
+                    </div>
                 )}
             </NavLink>
 

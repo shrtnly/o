@@ -14,7 +14,7 @@ import ConfirmModal from '../../../components/ui/ConfirmModal';
 
 const Sidebar = () => {
     const { t, language } = useLanguage();
-    const { unreadCount } = useNotifications();
+    const { unreadCount, pendingConnectionsCount } = useNotifications();
     const { user, signOut } = useAuth();
     const { courseId: currentCourseId } = useParams();
     const navigate = useNavigate();
@@ -87,6 +87,9 @@ const Sidebar = () => {
             <NavLink to="/connections" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
                     <Users size={24} />
+                    {pendingConnectionsCount > 0 && (
+                        <span className={styles.navBadge}>{pendingConnectionsCount > 9 ? '9+' : pendingConnectionsCount}</span>
+                    )}
                 </div>
                 <span>{t('tab_connection')}</span>
             </NavLink>

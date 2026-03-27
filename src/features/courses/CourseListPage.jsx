@@ -21,7 +21,6 @@ const getCategories = (t) => [
 const CourseListPage = () => {
     const { user } = useAuth();
     const { t } = useLanguage();
-    const categories = getCategories(t);
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [loading, setLoading] = useState(true);
@@ -30,6 +29,13 @@ const CourseListPage = () => {
     const [viewType, setViewType] = useState('grid'); // 'grid' or 'list'
     const [sortBy, setBySort] = useState('popularity'); // 'popularity' or 'rating'
     const navigate = useNavigate();
+
+    const baseCategories = getCategories(t);
+    const categories = [
+        baseCategories[0], // All Courses
+        ...(enrolledCourseIds.size > 0 ? [{ id: 'My Courses', name: t('my_courses') }] : []),
+        ...baseCategories.slice(1)
+    ];
 
     useEffect(() => {
         const fetchData = async () => {
@@ -66,7 +72,18 @@ const CourseListPage = () => {
 
     // Compute filtered and sorted courses
     const filteredCourses = courses.filter(course => {
-        const matchesCategory = activeCategory === 'All' || course.category === activeCategory;
+        const isEnrolled = enrolledCourseIds.has(course.id);
+        
+        // Category filtering
+        let matchesCategory = false;
+        if (activeCategory === 'All') {
+            matchesCategory = true;
+        } else if (activeCategory === 'My Courses') {
+            matchesCategory = isEnrolled;
+        } else {
+            matchesCategory = course.category === activeCategory;
+        }
+
         const matchesSearch = !searchQuery.trim() || 
             course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
             (course.category && course.category.toLowerCase().includes(searchQuery.toLowerCase()));

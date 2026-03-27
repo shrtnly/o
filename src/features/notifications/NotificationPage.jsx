@@ -20,7 +20,7 @@ import styles from './NotificationPage.module.css';
 
 const NotificationPage = () => {
     const { user } = useAuth();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const navigate = useNavigate();
     const { 
         notifications, 
@@ -41,7 +41,21 @@ const NotificationPage = () => {
 
     const formatNotifDate = (dateStr) => {
         const d = new Date(dateStr);
-        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const now = new Date();
+        const isToday = d.toDateString() === now.toDateString();
+        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (isToday) return timeStr;
+
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (d.toDateString() === yesterday.toDateString()) {
+            return `${t('yesterday')}, ${timeStr}`;
+        }
+
+        // For earlier dates, show DD MMM, HH:MM
+        const datePart = d.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { day: '2-digit', month: 'short' });
+        return `${datePart}, ${timeStr}`;
     };
 
     return (

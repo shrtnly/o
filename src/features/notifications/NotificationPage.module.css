@@ -33,7 +33,7 @@
 }
 
 .icon {
-    color: var(--color-primary);
+    color: var(--color-text);
 }
 
 .markAllBtn {
@@ -81,9 +81,6 @@
 .groupItems {
     display: flex;
     flex-direction: column;
-    background: var(--color-bg-alt);
-    border-radius: 20px;
-    border: 1px solid var(--color-border-muted);
     overflow: hidden;
 }
 
@@ -96,14 +93,18 @@
     cursor: pointer;
     transition: background 0.2s ease;
     border-bottom: 1px solid var(--color-border-muted);
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 .notifRow:last-child {
     border-bottom: none;
 }
 
-.notifRow:hover {
-    background: var(--color-bg-hover);
+@media (hover: hover) {
+    .notifRow:hover {
+        background: var(--color-bg-hover);
+    }
 }
 
 .notifRowUnread {

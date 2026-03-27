@@ -7,6 +7,7 @@ import InlineLoader from '../../components/ui/InlineLoader';
 import LearnerConnection from '../profile/components/LearnerConnection';
 import styles from './ConnectionPage.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Users } from 'lucide-react';
 
 const ConnectionPage = () => {
     const { user } = useAuth();
@@ -54,11 +55,9 @@ const ConnectionPage = () => {
                 >
                     <header className={styles.pageHeader}>
                         <h1 className={styles.pageTitle}>
+                            <Users className={styles.titleIcon} strokeWidth={2.5} />
                             {language === 'bn' ? 'কানেকশন' : 'Connections'}
                         </h1>
-                        <p className={styles.pageSubtitle}>
-                            {language === 'bn' ? 'অন্যান্য শিক্ষার্থীদের সাথে যুক্ত হন এবং বার্তা পাঠান' : 'Connect with other learners and send messages'}
-                        </p>
                     </header>
 
                     <div className={styles.connectionWrapper}>

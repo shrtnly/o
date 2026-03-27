@@ -44,8 +44,8 @@ const Sidebar = () => {
         fetchLastCourse();
     }, [user, currentCourseId]);
 
-    // Priority: 1. Current course in URL, 2. Last practiced course from DB, 3. Default courses page
-    const learnPath = currentCourseId ? `/learn/${currentCourseId}` : (lastCourseId ? `/learn/${lastCourseId}` : '/courses');
+    // Priority: 1. Current course in URL, 2. Last practiced course from DB, 3. Default root (which redirects)
+    const learnPath = currentCourseId ? `/learn/${currentCourseId}` : (lastCourseId ? `/learn/${lastCourseId}` : '/');
 
     return (
         <aside className={styles.leftSidebar}>

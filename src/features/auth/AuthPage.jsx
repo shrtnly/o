@@ -70,7 +70,7 @@ const AuthPage = () => {
         }
 
         const checkPendingAction = async () => {
-            if (user) {
+            if (user && !success) { // Don't redirect if we're showing a success message
                 const pendingEnrollment = localStorage.getItem('pending_enrollment');
                 if (pendingEnrollment) {
                     try {
@@ -95,7 +95,7 @@ const AuthPage = () => {
             }
         };
         checkPendingAction();
-    }, [user, navigate]);
+    }, [user, navigate, success]);
 
 
     const handleSubmit = async (e) => {
@@ -128,19 +128,32 @@ const AuthPage = () => {
 
         try {
             if (isForgotPassword) {
-                const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: `${window.location.origin}/reset-password`,
+                const { data: resetResult, error: resetError } = await supabase.functions.invoke('reset-password-email', {
+                    body: { 
+                        email,
+                        origin: window.location.origin
+                    }
                 });
-                if (resetError) throw resetError;
+
+                if (resetError) {
+                    if (resetError.status === 404) {
+                        setError(t('auth_email_not_found'));
+                    } else {
+                        throw resetError;
+                    }
+                    setLoading(false);
+                    return;
+                }
+
                 setError('');
                 setSuccess(t('auth_reset_success'));
 
-                // Hide success message and go back to login after 5 seconds
+                // Hide success message and go back to login after 3 seconds
                 setTimeout(() => {
                     setSuccess('');
                     setIsForgotPassword(false);
                     setIsLogin(true);
-                }, 5000);
+                }, 3000);
 
                 setLoading(false);
                 return;
@@ -198,14 +211,14 @@ const AuthPage = () => {
                     return;
                 }
 
-                if (!data?.session) {
-                    setSuccess(t('auth_signup_success'));
-                    // Go back to login after showing message
-                    setTimeout(() => {
-                        setSuccess('');
-                        setIsLogin(true);
-                    }, 6000);
-                }
+                const message = data?.session ? t('auth_signup_success_immediate') : t('auth_signup_success');
+                setSuccess(message);
+                
+                // Go back to login screen so they can log in manually
+                setTimeout(() => {
+                    setSuccess('');
+                    setIsLogin(true);
+                }, 3000);
             }
         } catch (err) {
             console.error('Auth error:', err);
@@ -264,7 +277,7 @@ const AuthPage = () => {
                             </>
                         ) : (
                             <>
-                                {t('auth_signup_title')} <span className={styles.highlight}>{t('auth_signup_highlight')}</span> {t('auth_signup_suffix')}
+                                {t('auth_signup_title')} <span className={styles.highlight}>{t('auth_signup_highlight')}</span>
                             </>
                         )}
                     </h1>

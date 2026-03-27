@@ -437,7 +437,9 @@ const translations = {
         auth_generic_error: "কিছু একটা সমস্যা হয়েছে। আবার চেষ্টা করুন।",
         auth_google_failed: "Google দিয়ে লগইন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
         auth_facebook_failed: "Facebook দিয়ে লগইন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।",
-        auth_signup_success: "সাইন আপ সফল! অ্যাকাউন্ট ভেরিফাই করতে আপনার ইমেইল ইনবক্স চেক করুন।",
+        auth_signup_success: "রেজিস্ট্রেশন সফল হয়েছে!",
+        auth_email_not_found: "ইমেইল পাওয়া যায়নি",
+        auth_signup_success_immediate: "অভিনন্দন! আপনার অ্যাকাউন্টটি সফলভাবে তৈরি হয়েছে।",
         auth_reset_success: "পাসওয়ার্ড রিসেট লিঙ্ক আপনার ইমেইলে পাঠানো হয়েছে। ইনবক্স চেক করুন।",
         auth_reset_title: "পাসওয়ার্ড",
         auth_reset_highlight: "রিসেট",
@@ -920,7 +922,9 @@ const translations = {
         auth_generic_error: "Something went wrong. Please try again.",
         auth_google_failed: "Failed to login with Google. Please try again.",
         auth_facebook_failed: "Failed to login with Facebook. Please try again.",
-        auth_signup_success: "Signup successful! Check your email inbox to verify your account.",
+        auth_signup_success: "Registration successful!",
+        auth_email_not_found: "Email not found",
+        auth_signup_success_immediate: "Congratulations! Your account has been successfully created.",
         auth_reset_success: "Password reset link sent to your email. Check your inbox.",
         auth_reset_title: "Password",
         auth_reset_highlight: "Reset",
@@ -976,7 +980,7 @@ export const LanguageProvider = ({ children }) => {
     }, [language]);
 
     const t = (key) => {
-        return translations[language][key] || key;
+        return translations[language][key] !== undefined ? translations[language][key] : key;
     };
 
     const toggleLanguage = () => {

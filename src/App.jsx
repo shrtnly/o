@@ -91,6 +91,13 @@ const AppContent = () => {
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
+    // Catch-all for password recovery links landing on the wrong path
+    if (window.location.hash.includes('type=recovery') && !window.location.pathname.includes('/reset-password')) {
+      const { pathname, origin, hash } = window.location;
+      console.log('Recovery link detected, redirecting to /reset-password');
+      window.location.href = `${origin}/reset-password${hash}`;
+    }
+
     const timer = setTimeout(() => {
       setInitialLoading(false);
     }, 100); // Reduced from 300ms to 100ms for near-instant FCP

@@ -123,22 +123,7 @@
     border-bottom: 1px solid var(--color-border-muted);
 }
 
-.mobileHeaderBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 12px 24px;
-}
 
-.mobileHeaderBar {
-    padding: 2px 12px;
-}
-
-.mobileNavAction,
-.mobileHeaderBar {
-    display: none !important;
-}
 
 @media (max-width: 768px) {
 
@@ -1382,6 +1367,14 @@
     width: 100%;
 }
 
+.unitHeaderInner {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 0;
+    gap: 0;
+}
+
 .flameRow {
     display: flex;
     justify-content: space-between;
@@ -1751,6 +1744,7 @@
     transition: all 0.2s;
 }
 
+
 :global(.light) .viewConnectionsBtn {
     border-color: rgba(0, 0, 0, 0.08);
 }
@@ -1822,16 +1816,15 @@
     .unitHeader {
         padding: 0 !important;
         overflow: visible;
+        display: flex !important;
         flex-direction: column !important;
+        justify-content: flex-start !important;
+        gap: 0 !important;
         background: transparent !important;
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
         z-index: 2000 !important;
         border-bottom: none !important;
-        min-height: 48px;
-        /* Standard single bar height baseline */
-        display: flex;
-        justify-content: center;
         width: 100%;
         transition: transform 0.3s ease;
     }
@@ -2058,7 +2051,7 @@
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
-        padding: 6px 4px !important;
+        padding: 0px 4px 6px 4px !important;
         width: 100% !important;
         display: flex !important;
         justify-content: center !important;
@@ -2236,8 +2229,8 @@
     .streakTooltipHeader {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
+        gap: 8px;
+        margin-bottom: 12px;
     }
 
     .streakInfoLeft {
@@ -2245,7 +2238,7 @@
     }
 
     .streakInfoLeft h4 {
-        margin: 0 0 12px 0;
+        margin: 0 0 4px 0;
         font-size: 1rem;
         font-weight: 800;
         color: var(--color-text);
@@ -2253,8 +2246,9 @@
 
     .streakInfoLeft p {
         margin: 0;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
         color: var(--color-text-muted);
+        line-height: 1.2;
     }
 
     .streakSevenDaysRow {
@@ -2374,15 +2368,15 @@
     .tooltipNonSubscriber {
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 8px;
     }
 
     .upsellSection {
         display: flex;
         align-items: flex-start;
-        gap: 12px;
-        padding-bottom: 12px;
-        border-bottom: 2px solid var(--color-border-muted);
+        gap: 8px;
+        padding-bottom: 4px;
+        border-bottom: none;
     }
 
     .dropsSection {
@@ -2427,35 +2421,34 @@
         background: var(--color-primary);
         color: var(--color-on-primary);
         border: none;
-        padding: 12px 20px;
-        border-radius: 14px;
-        font-weight: 800;
-        font-size: 0.95rem;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-weight: 750;
+        font-size: 0.9rem;
         cursor: pointer;
         position: relative;
-        transition: all 0.1s ease;
-        border-bottom: 4px solid var(--color-primary-dark);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        transition: all 0.15s ease;
+        box-shadow: 0 3px 0 var(--color-primary-dark);
+        top: -1px;
         outline: none;
     }
 
     .shopButton:hover {
-        filter: brightness(1.1);
-        transform: translateY(-1px);
-        border-bottom-width: 5px;
+        top: 0px;
+        box-shadow: 0 2px 0 var(--color-primary-dark);
+        filter: brightness(1.05);
     }
 
     .shopButton:active {
-        transform: translateY(2px);
-        border-bottom-width: 1px;
+        top: 2px;
+        box-shadow: 0 0px 0 var(--color-primary-dark);
     }
 
     .shopButtonGold {
         background: linear-gradient(135deg, #FFD700 0%, #F1A20F 100%) !important;
-        border-bottom: 4px solid #d48e00 !important;
-        color: #fff !important;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 0 #d48e00 !important;
+        color: #000 !important;
+        text-shadow: none;
     }
 
     .shopButtonGold:hover {
@@ -2464,7 +2457,7 @@
 
 .shopButtonDark {
     background: #3e4c54 !important;
-    border-bottom: 4px solid #1c2a31 !important;
+    box-shadow: 0 3px 0 #1c2a31 !important;
     color: #fff !important;
 }
 
@@ -2474,7 +2467,7 @@
 
 .shopButtonBlue {
     background: #1cb0f6 !important;
-    border-bottom: 4px solid #1899d6 !important;
+    box-shadow: 0 3px 0 #1899d6 !important;
     color: #fff !important;
 }
 
@@ -2482,38 +2475,7 @@
     background: #4dc3ff !important;
 }
 
-.fullInviteBtn {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 16px;
-    padding: 16px;
-    background: #FFB800; /* Consistent brand gold */
-    color: #000;
-    border: none;
-    border-radius: 16px;
-    font-size: 1rem;
-    font-weight: 850;
-    cursor: pointer;
-    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 6px 0 #D49B00;
-    text-transform: none;
-    position: relative;
-    outline: none;
-}
 
-.fullInviteBtn:hover {
-    filter: brightness(1.05);
-    box-shadow: 0 4px 0 #D49B00;
-    transform: translateY(2px);
-}
-
-.fullInviteBtn:active {
-    transform: translateY(6px);
-    box-shadow: 0 0px 0 #D49B00;
-}
 
     .mobileCourseDropdown {
         position: absolute;
@@ -2560,4 +2522,194 @@
         gap: 10px;
         color: var(--color-primary);
         font-weight: 800;
-    }
+}
+
+/* ─── Standard Invite Section (Copied from Profile) ─── */
+.inviteSection {
+    margin-top: 0px;
+    padding-top: 0px;
+    border-top: none;
+}
+
+.sectionTitleSmall {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 0px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+}
+
+.sectionTitleLeft {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tooltipContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.infoBtn {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.infoBtn:hover {
+    color: var(--color-primary);
+    background: rgba(255, 184, 0, 0.1);
+}
+
+.inviteTooltip {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    width: 200px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: var(--color-text);
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.tooltipArrow {
+    position: absolute;
+    bottom: -6px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background: var(--color-bg);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    transform: rotate(45deg);
+}
+
+.inviteBtnWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.fullInviteBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0px;
+    padding: 10px;
+    background: #1cb0f6;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 750;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 3px 0 #1899d6;
+    position: relative;
+    top: -1px;
+}
+
+.fullInviteBtn:hover {
+    top: 0px;
+    box-shadow: 0 2px 0 #1899d6;
+}
+
+.fullInviteBtn:active {
+    top: 2px;
+    box-shadow: 0 0px 0 #1899d6;
+}
+
+.inviteActionCopied {
+    background: #FFB800;
+    box-shadow: 0 5px 0 #D49B00;
+}
+
+.shareMenuTooltip {
+    position: absolute;
+    bottom: calc(100% + 15px);
+    right: 0;
+    left: 0;
+    margin: 0 auto;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 16px;
+    width: 100%;
+    max-width: 250px;
+    box-shadow: var(--shadow-hover);
+    z-index: 101;
+}
+
+.shareMenuTooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--color-border);
+}
+
+.shareMenuHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.shareMenuHeader span {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.shareMenuHeader button {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.shareOptions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.shareOptions button {
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
+    aspect-ratio: 1;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shareOptions button:hover {
+    background: var(--color-bg-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+}

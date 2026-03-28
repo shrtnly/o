@@ -16,6 +16,74 @@
     overflow-x: hidden;
 }
 
+.studySkeleton {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background: #0b0e11;
+}
+
+.headerSkeleton {
+    height: 64px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contentSkeleton {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 32px;
+}
+
+.mascotSkeleton {
+    display: flex;
+    justify-content: center;
+}
+
+.questionSkeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.optionsGridSkeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.optionSkeleton {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.footerSkeleton {
+    height: 100px;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Lock to single screen when result card is shown */
 .resultsActive {
     height: 100vh;

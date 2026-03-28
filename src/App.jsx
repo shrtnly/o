@@ -24,6 +24,8 @@ import SettingsPage from './features/settings/SettingsPage';
 import HelpPage from './features/help/HelpPage';
 import StreakPage from './features/learning/pages/StreakPage';
 import CertificateVerificationPage from './features/profile/pages/CertificateVerificationPage';
+import CheckoutPage from './features/shop/CheckoutPage';
+
 
 import ResetPassword from './features/auth/ResetPassword';
 import TermsPage from './features/legal/TermsPage';
@@ -131,7 +133,9 @@ const AppContent = () => {
             <Route path="/connections" element={<ConnectionPage />} />
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/shop" element={<ShopPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/settings" element={<SettingsPage />} />
+
             <Route path="/help" element={<HelpPage />} />
           </Route>
 

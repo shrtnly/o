@@ -16,6 +16,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
 import InlineLoader from '../../components/ui/InlineLoader';
+import Skeleton from '../../components/ui/Skeleton';
 import styles from './NotificationPage.module.css';
 
 const NotificationPage = () => {
@@ -27,7 +28,8 @@ const NotificationPage = () => {
         markAsRead, 
         markAllAsRead, 
         deleteNotification,
-        refresh
+        refresh,
+        isLoading
     } = useNotifications();
     const scrollRef = useRef(null);
 
@@ -75,7 +77,23 @@ const NotificationPage = () => {
                 </header>
 
                 <div ref={scrollRef} className={styles.body}>
-                    {notifications.length === 0 ? (
+                    {isLoading ? (
+                        <div className={styles.skeletonList}>
+                            {[...Array(8)].map((_, i) => (
+                                <div key={i} className={styles.notifRow} style={{ pointerEvents: 'none' }}>
+                                    <div className={styles.notifUnreadDot} />
+                                    <div className={styles.notifTypeIcon}>
+                                        <Skeleton width="34px" height="34px" borderRadius="50%" />
+                                    </div>
+                                    <div className={styles.notifRowText} style={{ flex: 1, gap: '8px' }}>
+                                        <Skeleton width="40%" height="14px" />
+                                        <Skeleton width="75%" height="11px" />
+                                        <Skeleton width="20%" height="9px" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : notifications.length === 0 ? (
                         <div className={styles.emptyState}>
                             <div className={styles.emptyIcon}>
                                 <Bell size={48} />

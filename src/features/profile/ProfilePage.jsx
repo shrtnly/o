@@ -7,6 +7,8 @@ import { courseService } from '../../services/courseService';
 import { storageService } from '../../services/storageService';
 import { connectionService } from '../../services/connectionService';
 import InlineLoader from '../../components/ui/InlineLoader';
+import ProfileSkeleton from './components/ProfileSkeleton';
+import ProfileAnalysisSkeleton from './components/ProfileAnalysisSkeleton';
 import PollenIcon from '../../components/PollenIcon';
 import { leaderboardService } from '../../services/leaderboardService';
 import {
@@ -193,7 +195,7 @@ const ProfilePage = () => {
         if (navigator.share) {
             const refId = profile?.username || user?.id || profile?.id; // Use username if available
             const refLink = `${window.location.origin}/auth?ref=${refId}`;
-            const shareMsg = `${t('invite_share_text')}\n\n${refLink}`;
+            const shareMsg = `${t('invite_share_text')} ${refLink}`;
 
             navigator.share({
                 title: 'BeeLesson Invite',
@@ -211,7 +213,7 @@ const ProfilePage = () => {
         const refId = profile?.username || user?.id || profile?.id;
         if (!refId) return;
         const refLink = `${window.location.origin}/auth?ref=${refId}`;
-        const shareMsg = `${t('invite_share_text')}\n\n${refLink}`;
+        const shareMsg = `${t('invite_share_text')} ${refLink}`;
         const encodedMsg = encodeURIComponent(shareMsg);
 
         copyToClipboard(shareMsg); // Auto-copy helper
@@ -488,7 +490,11 @@ const ProfilePage = () => {
                 </defs>
             </svg>
             {loading ? (
-                <div className={styles.loadingContainer}><InlineLoader /></div>
+                <div className={styles.profilePage}>
+                    <div className={styles.container}>
+                        <ProfileSkeleton />
+                    </div>
+                </div>
             ) : (
                 <div className={styles.container}>
 
@@ -853,12 +859,7 @@ const ProfilePage = () => {
                             </div>
 
                             {isAnalysisLoading ? (
-                                <div className={styles.analysisLoading}>
-                                    <InlineLoader showText={false} />
-                                    <p className={styles.typingLoading}>
-                                        {language === 'bn' ? 'লোড হচ্ছে...' : 'Analyzing performance...'}
-                                    </p>
-                                </div>
+                                <ProfileAnalysisSkeleton />
                             ) : (streak?.current_streak || 0) < 3 ? (
                                 <div className={styles.lockedAnalysis}>
                                     <div className={styles.lockContent}>

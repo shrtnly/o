@@ -6,7 +6,8 @@ import {
     Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone,
     LogOut, Flame, Play, Plus, ChevronDown, ChevronLeft, Star, Lock, PenTool, Activity, Share2,
     Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb,
-    Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon
+    Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon,
+    Facebook, Twitter, Linkedin, MessageCircle, X as CloseIcon, CircleHelp
 } from 'lucide-react';
 import { rewardService } from '../../services/rewardService';
 import { leaderboardService } from '../../services/leaderboardService';
@@ -26,6 +27,8 @@ import RewardModal from './components/RewardModal';
 import { useHeartRefill } from '../../hooks/useHeartRefill';
 import { courseService } from '../../services/courseService';
 import { useTheme } from '../../context/ThemeContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
 // Helper for node positioning (Snake pattern: Always 3 nodes per row with scaling)
@@ -185,6 +188,64 @@ const LearningPage = () => {
     const [showHeartsTooltip, setShowHeartsTooltip] = useState(false);
     const [userRank, setUserRank] = useState(null);
     const [inviteCopied, setInviteCopied] = useState(false);
+    const [showInviteMenu, setShowInviteMenu] = useState(false);
+    const [showInviteTooltip, setShowInviteTooltip] = useState(false);
+    const { language, t } = useLanguage();
+
+    const handleInviteRef = () => {
+        if (navigator.share) {
+            const refId = profile?.username || user?.id || profile?.id;
+            const refLink = `${window.location.origin}/auth?ref=${refId}`;
+            const shareMsg = `${t('invite_share_text')} ${refLink}`;
+
+            navigator.share({
+                title: 'BeeLesson Invite',
+                text: shareMsg,
+            }).catch(err => {
+                console.error('Sharing failed:', err);
+                setShowInviteMenu(true);
+            });
+        } else {
+            setShowInviteMenu(true);
+        }
+    };
+
+    const handleSocialInvite = (platform) => {
+        const refId = profile?.username || user?.id || profile?.id;
+        const refLink = `${window.location.origin}/auth?ref=${refId}`;
+        const shareMsg = `${t('invite_share_text')} ${refLink}`;
+        const encodedMsg = encodeURIComponent(shareMsg);
+
+        // Copy to clipboard
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(shareMsg);
+        }
+        setInviteCopied(true);
+        setTimeout(() => setInviteCopied(false), 2500);
+
+        let shareUrl = '';
+        switch (platform) {
+            case 'twitter':
+                shareUrl = `https://twitter.com/intent/tweet?text=${encodedMsg}`;
+                break;
+            case 'facebook':
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(refLink)}`;
+                break;
+            case 'linkedin':
+                shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(refLink)}`;
+                break;
+            case 'whatsapp':
+                shareUrl = `https://wa.me/?text=${encodedMsg}`;
+                break;
+            default:
+                break;
+        }
+
+        if (shareUrl) {
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+        setShowInviteMenu(false);
+    };
 
     const handleScroll = () => {
         if (!mainContentRef.current || unitsWithChapters.length === 0) return;
@@ -698,7 +759,7 @@ const LearningPage = () => {
                                                             <p>
                                                     {(profile?.xp || 0) < 100 
                                                         ? `প্রতিযোগিতায় অংশ নিতে আরও ${100 - (profile?.xp || 0)} মধু অর্জন করুন।`
-                                                        : `দৈনিক অনুশীলন করে মধু সংগ্রহ করুন এবং লিডারবোর্ডে এগিয়ে থাকুন! আপনার অবস্থান ${userRank || '-'}`
+                                                        : `দৈনিক অনুশীলন করে মধু সংগ্রহ করুন এবং লিডারবোর্ডে এগিয়ে থাকুন! আপনার অবস্থান #${userRank || '-'}`
                                                     }
                                                  </p>
                                                         </div>
@@ -766,6 +827,90 @@ const LearningPage = () => {
                                                                         )}
                                                                     </div>
                                                                 </div>
+                                                                <button
+                                                                    className={cn(styles.shopButton, styles.shopButtonDark)}
+                                                                    style={{ width: '100%' }}
+                                                                    onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
+                                                                >
+                                                                    <ShoppingBag size={18} />
+                                                                    <span>শপ দেখুন</span>
+                                                                </button>
+
+                                                                {/* Invite Section */}
+                                                                <div className={styles.inviteSection}>
+                                                                    <h4 className={styles.sectionTitleSmall}>
+                                                                        <div className={styles.tooltipContainer}>
+                                                                            <button 
+                                                                                className={styles.infoBtn}
+                                                                                onClick={() => setShowInviteTooltip(!showInviteTooltip)}
+                                                                            >
+                                                                                <CircleHelp size={18} />
+                                                                            </button>
+                                                                            <AnimatePresence>
+                                                                                {showInviteTooltip && (
+                                                                                    <motion.div 
+                                                                                        className={styles.inviteTooltip}
+                                                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                    >
+                                                                                        বন্ধুদের ইনভাইট লিঙ্ক শেয়ার করুন এবং একসাথে কুইজ খেলুন!
+                                                                                        <div className={styles.tooltipArrow} />
+                                                                                    </motion.div>
+                                                                                )}
+                                                                            </AnimatePresence>
+                                                                        </div>
+                                                                    </h4>
+                                                                    
+                                                                    <div className={styles.inviteBtnWrapper}>
+                                                                        <button 
+                                                                            className={`${styles.fullInviteBtn} ${inviteCopied ? styles.inviteActionCopied : ''}`}
+                                                                            onClick={handleInviteRef}
+                                                                        >
+                                                                            {inviteCopied ? (
+                                                                                <>
+                                                                                    <Check size={18} />
+                                                                                    <span>লিঙ্ক কপি হয়েছে!</span>
+                                                                                </>
+                                                                            ) : (
+                                                                                <>
+                                                                                    <Share2 size={18} />
+                                                                                    <span>বন্ধুদের আমন্ত্রণ জানান</span>
+                                                                                </>
+                                                                            )}
+                                                                        </button>
+
+                                                                        <AnimatePresence>
+                                                                            {showInviteMenu && (
+                                                                                <motion.div
+                                                                                    className={styles.shareMenuTooltip}
+                                                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                >
+                                                                                    <div className={styles.shareMenuHeader}>
+                                                                                        <span>শেয়ার করুন</span>
+                                                                                        <button onClick={() => setShowInviteMenu(false)}><CloseIcon size={14} /></button>
+                                                                                    </div>
+                                                                                    <div className={styles.shareOptions}>
+                                                                                        <button onClick={() => handleSocialInvite('facebook')} title="Facebook">
+                                                                                            <Facebook size={20} fill="#1877F2" color="#1877F2" />
+                                                                                        </button>
+                                                                                        <button onClick={() => handleSocialInvite('twitter')} title="Twitter">
+                                                                                            <Twitter size={20} fill="#1DA1F2" color="#1DA1F2" />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleSocialInvite('linkedin')} title="LinkedIn">
+                                                                                        <Linkedin size={20} fill="#0A66C2" color="#0A66C2" />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleSocialInvite('whatsapp')} title="WhatsApp">
+                                                                                        <MessageCircle size={20} fill="#25D366" color="#25D366" />
+                                                                                    </button>
+                                                                                </div>
+                                                                            </motion.div>
+                                                                        )}
+                                                                    </AnimatePresence>
+                                                                </div>
+                                                            </div>
                                                             </div>
                                                         </div>
                                                     ) : (
@@ -781,48 +926,96 @@ const LearningPage = () => {
 
                                                             <button
                                                                 className={cn(styles.shopButton, styles.shopButtonGold)}
-                                                                style={{ marginTop: '12px' }}
                                                                 onClick={() => { setShowHeartsTooltip(false); navigate('/shop', { state: { directCheckout: 'monthly' } }); }}
                                                             >
                                                                 <Crown size={18} />
                                                                 <span>{(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় করুন' : 'কিং বী সক্রিয় করুন'}</span>
                                                             </button>
 
-                                                            <p style={{ marginTop: '12px', fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: '1.4' }}>
-                                                                বন্ধুদের আমন্ত্রণ জানিয়ে ও-শেখা পরিবার বড় করুন এবং একসাথে শিখুন!
-                                                            </p>
-
                                                             <button
-                                                                className={styles.fullInviteBtn}
-                                                                onClick={() => {
-                                                                    const inviteLink = `${window.location.host === 'localhost:5173' ? 'http://' : 'https://'}${window.location.host}/signup?ref=${profile?.id || user?.id}`;
-                                                                    
-                                                                    if (navigator.share) {
-                                                                        navigator.share({ 
-                                                                            title: 'ও-শেখা (O-sekha)', 
-                                                                            text: 'মজার সাথে বাংলা শিখুন এবং বন্ধুদের সাথে প্রতিযোগিতা করুন!', 
-                                                                            url: inviteLink 
-                                                                        }).catch(() => {});
-                                                                    } else {
-                                                                        if (navigator.clipboard) {
-                                                                            navigator.clipboard.writeText(inviteLink);
-                                                                        } else {
-                                                                            const el = document.createElement('textarea');
-                                                                            el.value = inviteLink;
-                                                                            document.body.appendChild(el);
-                                                                            el.select();
-                                                                            document.execCommand('copy');
-                                                                            document.body.removeChild(el);
-                                                                        }
-                                                                        setInviteCopied(true);
-                                                                        toast.success('ইনভাইট লিঙ্ক কপি হয়েছে!');
-                                                                        setTimeout(() => setInviteCopied(false), 2500);
-                                                                    }
-                                                                }}
+                                                                className={cn(styles.shopButton, styles.shopButtonDark)}
+                                                                style={{ width: '100%' }}
+                                                                onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
                                                             >
-                                                                <Share2 size={18} />
-                                                                <span>বন্ধুদের আমন্ত্রণ জানান</span>
+                                                                <ShoppingBag size={18} />
+                                                                <span>শপ দেখুন</span>
                                                             </button>
+
+                                                            {/* Invite Section Copied from Profile */}
+                                                            <div className={styles.inviteSection}>
+                                                                <h4 className={styles.sectionTitleSmall}>
+                                                                    <div className={styles.tooltipContainer}>
+                                                                        <button 
+                                                                            className={styles.infoBtn}
+                                                                            onClick={() => setShowInviteTooltip(!showInviteTooltip)}
+                                                                        >
+                                                                            <CircleHelp size={18} />
+                                                                        </button>
+                                                                        <AnimatePresence>
+                                                                            {showInviteTooltip && (
+                                                                                <motion.div 
+                                                                                    className={styles.inviteTooltip}
+                                                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                >
+                                                                                    বন্ধুদের ইনভাইট লিঙ্ক শেয়ার করুন এবং একসাথে কুইজ খেলুন!
+                                                                                    <div className={styles.tooltipArrow} />
+                                                                                </motion.div>
+                                                                            )}
+                                                                        </AnimatePresence>
+                                                                    </div>
+                                                                </h4>
+                                                                
+                                                                <div className={styles.inviteBtnWrapper}>
+                                                                    <button 
+                                                                        className={`${styles.fullInviteBtn} ${inviteCopied ? styles.inviteActionCopied : ''}`}
+                                                                        onClick={handleInviteRef}
+                                                                    >
+                                                                        {inviteCopied ? (
+                                                                            <>
+                                                                                <Check size={18} />
+                                                                                <span>লিঙ্ক কপি হয়েছে!</span>
+                                                                            </>
+                                                                        ) : (
+                                                                            <>
+                                                                                <Share2 size={18} />
+                                                                                <span>বন্ধুদের আমন্ত্রণ জানান</span>
+                                                                            </>
+                                                                        )}
+                                                                    </button>
+
+                                                                    <AnimatePresence>
+                                                                        {showInviteMenu && (
+                                                                            <motion.div
+                                                                                className={styles.shareMenuTooltip}
+                                                                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                            >
+                                                                                <div className={styles.shareMenuHeader}>
+                                                                                    <span>শেয়ার করুন</span>
+                                                                                    <button onClick={() => setShowInviteMenu(false)}><CloseIcon size={14} /></button>
+                                                                                </div>
+                                                                                <div className={styles.shareOptions}>
+                                                                                    <button onClick={() => handleSocialInvite('facebook')} title="Facebook">
+                                                                                        <Facebook size={20} fill="#1877F2" color="#1877F2" />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleSocialInvite('twitter')} title="Twitter">
+                                                                                        <Twitter size={20} fill="#1DA1F2" color="#1DA1F2" />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleSocialInvite('linkedin')} title="LinkedIn">
+                                                                                        <Linkedin size={20} fill="#0A66C2" color="#0A66C2" />
+                                                                                    </button>
+                                                                                    <button onClick={() => handleSocialInvite('whatsapp')} title="WhatsApp">
+                                                                                        <MessageCircle size={20} fill="#25D366" color="#25D366" />
+                                                                                    </button>
+                                                                                </div>
+                                                                            </motion.div>
+                                                                        )}
+                                                                    </AnimatePresence>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     )}
                                                 </div>

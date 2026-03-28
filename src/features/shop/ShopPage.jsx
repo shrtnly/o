@@ -15,6 +15,8 @@ import { useLanguage } from '../../context/LanguageContext';
 import HoneyDropIcon from '../../components/HoneyDropIcon';
 import PollenIcon from '../../components/PollenIcon';
 import { toast } from 'sonner';
+import ShopSkeleton from './ShopSkeleton';
+
 
 
 
@@ -36,8 +38,8 @@ const ShopPage = () => {
     const [processing, setProcessing] = useState(false);
     const [planType, setPlanType] = useState('monthly'); // 'monthly' or 'yearly'
     const [gemToConvert, setGemToConvert] = useState(20);
-    const [showCheckout, setShowCheckout] = useState(null); // { type, data }
     const [showConvertConfirmation, setShowConvertConfirmation] = useState(false);
+
     const [activePlanType, setActivePlanType] = useState(null); // '1day' | 'monthly' | 'yearly' | null
     const [planLoading, setPlanLoading] = useState(true);
     const [timeLeft, setTimeLeft] = useState("");
@@ -221,14 +223,10 @@ const ShopPage = () => {
         if (processing) return;
 
         try {
-            console.log('Shop: [Click Action]', { type, dataArg });
-
             if (!user) {
                 toast.error(t('please_login'));
                 return;
             }
-
-            console.log('Shop: Current State for Purchase Check:', { isQueenBee, is1DayActive, type });
 
             // Block if already active or redundant
             if (type === 'subscription' && isQueenBee) {
@@ -263,97 +261,16 @@ const ShopPage = () => {
             }
 
             if (checkoutData) {
-                console.log('Shop: Opening checkout modal with data:', checkoutData);
-                setShowCheckout({ type, data: checkoutData });
-            } else {
-                toast.error(t('data_not_found'));
+                navigate('/checkout', { 
+                    state: { 
+                        checkoutData, 
+                        type, 
+                        planType 
+                    } 
+                });
             }
         } catch (error) {
             console.error('Shop: handlePurchase error', error);
-            toast.error(t('something_went_wrong'));
-        }
-    };
-
-    const completeCheckout = async () => {
-        if (!showCheckout || !showCheckout.data || processing) {
-            console.error('Shop: Cannot complete checkout', { showCheckout, processing });
-            return;
-        }
-
-        if (!user?.id) {
-            toast.error(t('session_not_found'));
-            return;
-        }
-
-        setProcessing(true);
-        const toastId = toast.loading(t('payment_processing'));
-        const { type, data } = showCheckout;
-        console.log(`Shop: completeCheckout [${type}] initiated`, { data });
-
-        try {
-            let result;
-            if (type === 'gems') {
-                result = await shopService.buyGems(user.id, data.amount, data.price, data.id);
-                if (result?.success) {
-                    await fetchProfile();
-                    toast.success(t('gems_added').replace('টি', `${data.amount}টি`), { id: toastId });
-                } else throw new Error();
-            } else if (type === 'subscription') {
-                result = await shopService.subscribeToPremium(user.id, planType, data.price);
-                if (result?.success) {
-                    setProfile(prev => ({ 
-                        ...prev, 
-                        is_premium: true,
-                        premium_until: result.end_date, // Now correctly tracks from DB result
-                        is_1day_premium: false, // Isolate: Queen Bee resets 1-day
-                        one_day_premium_until: null
-                    }));
-                    setActivePlanType(planType);
-                    await Promise.all([fetchProfile(), fetchActivePlan()]);
-                    toast.success(t('subscription_success'), { id: toastId });
-                } else throw new Error();
-            } else if (type === '1day') {
-                result = await shopService.buy1DayPremium(user.id, data.price);
-                console.log('Shop: 1-day purchase result:', result);
-                if (result && result.success) {
-                    // Update state immediately for UI responsiveness
-                    setProfile(prev => ({
-                        ...prev,
-                        is_1day_premium: true, // ONLY set 1-day flag (Isolate)
-                        one_day_premium_until: result.premium_until
-                    }));
-                    setActivePlanType('1day');
-                    setOneDayExpiry(result.premium_until);
-                    setPlanLoading(false);
-
-                    // Refresh fresh data in background
-                    fetchProfile().then(p => {
-                        console.log('Shop: Profile refreshed after 1-day purchase', p);
-                        // Dispatch global event for other components (like Sidebar) to refresh
-                        window.dispatchEvent(new CustomEvent('profileUpdate', { detail: p }));
-                    });
-                    fetchActivePlan();
-
-                    toast.success(t('oneday_recharge_success'), { id: toastId });
-                } else {
-                    console.error('Shop: 1-day purchase failed', result);
-                    const msg = result?.message || t('payment_process_failed');
-                    toast.error(msg, { id: toastId });
-                    throw new Error(msg);
-                }
-            } else if (type === 'hearts') {
-                result = await shopService.buyHearts(user.id, data.amount, data.price, data.id);
-                if (result?.success) {
-                    await fetchProfile();
-                    toast.success(t('hearts_added').replace('টি', `${data.amount}টি`), { id: toastId });
-                } else throw new Error();
-            }
-            setShowCheckout(null);
-        } catch (err) {
-            console.error('Shop: Checkout error', err);
-            toast.error(t('payment_failed'), { id: toastId });
-        } finally {
-            setProcessing(false);
         }
     };
 
@@ -361,10 +278,9 @@ const ShopPage = () => {
         <main className={styles.mainContent}>
             <div className={styles.innerContent}>
                 {loading ? (
-                    <div className={styles.loadingContainer}>
-                        <Loader2 className={styles.spinner} size={48} />
-                    </div>
+                    <ShopSkeleton />
                 ) : (
+
                     <>
                         <header className={styles.header}>
                             <div className={styles.headerWelcomeRow}>
@@ -383,6 +299,9 @@ const ShopPage = () => {
                             </div>
                             <div className={styles.headerDivider}></div>
                         </header>
+
+
+
 
 
                         {/* Queen Bee Membership Section */}
@@ -532,83 +451,6 @@ const ShopPage = () => {
                 )}
             </div>
 
-            {
-                showCheckout && (
-                    <div className={styles.checkoutOverlay}>
-                        <div className={styles.checkoutModal}>
-                            <div className={styles.checkoutHeader}>
-                                <h2>{t('confirm_payment')}</h2>
-                                <p>{t('payment_desc')}</p>
-                            </div>
-
-                            <div className={styles.checkoutPriceLarge}>
-                                ৳ {showCheckout.type === 'subscription'
-                                    ? (planType === 'monthly' ? '99' : '999')
-                                    : showCheckout.data.price}
-                            </div>
-
-                            <div className={styles.orderSummary}>
-                                {showCheckout.type === 'subscription' && (
-                                    <div className={styles.modalToggleWrapper}>
-                                        <div className={styles.planToggle}>
-                                            <button
-                                                className={`${styles.toggleBtn} ${planType === 'monthly' ? styles.toggleBtnActive : ''}`}
-                                                onClick={() => setPlanType('monthly')}
-                                            >
-                                                {t('monthly')}
-                                            </button>
-                                            <button
-                                                className={`${styles.toggleBtn} ${planType === 'yearly' ? styles.toggleBtnActive : ''}`}
-                                                onClick={() => setPlanType('yearly')}
-                                            >
-                                                {t('yearly')}
-                                                <span className={styles.discountBadge}>{t('discount')}</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className={styles.summaryRow}>
-                                    <span>{t('item')}</span>
-                                    <span>
-                                        {showCheckout.type === 'subscription'
-                                            ? `${showCheckout.data.label} (${planType === 'monthly' ? t('monthly') : t('yearly')})`
-                                            : showCheckout.data.label
-                                        }
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className={styles.paymentMethods}>
-                                <button className={`${styles.methodBtn} ${styles.methodBtnActive}`}>
-                                    <CreditCard size={24} />
-                                    <span>{t('bkash')}</span>
-                                </button>
-                                <button className={styles.methodBtn}>
-                                    <ShoppingBag size={24} />
-                                    <span>{t('nagad')}</span>
-                                </button>
-                            </div>
-
-                            <div className={styles.checkoutActions}>
-                                <button
-                                    className={styles.cancelBtn}
-                                    onClick={() => setShowCheckout(null)}
-                                    disabled={processing}
-                                >
-                                    {t('cancel')}
-                                </button>
-                                <button
-                                    className={styles.confirmBtn}
-                                    onClick={completeCheckout}
-                                    disabled={processing}
-                                >
-                                    {processing ? <Loader2 className={styles.spinner} /> : t('pay_now')}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )
-            }
             {
                 showConvertConfirmation && (
                     <div className={styles.checkoutOverlay} onClick={() => !processing && setShowConvertConfirmation(false)}>

@@ -4,6 +4,7 @@ import {
     Lock, Zap, TrendingUp, Share2,
 } from 'lucide-react';
 import InlineLoader from '../../components/ui/InlineLoader';
+import Skeleton from '../../components/ui/Skeleton';
 import { useNavigate } from 'react-router-dom';
 import { leaderboardService } from '../../services/leaderboardService';
 import { useAuth } from '../../context/AuthContext';
@@ -115,8 +116,32 @@ const LeaderboardPage = () => {
 
                 {/* Global loading */}
                 {loading && !leaderboardData.length && !isLocked ? (
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '60vh' }}>
-                        <InlineLoader />
+                    <div style={{ padding: '0 24px' }}>
+                        <div className={styles.progressSection}>
+                            <Skeleton width="180px" height="32px" borderRadius="8px" />
+                            <Skeleton width="240px" height="16px" borderRadius="4px" />
+                        </div>
+                        <div className={styles.leaderboardCard}>
+                            <div className={styles.tableHeader}>
+                                <div className={styles.headerCol}><Skeleton width="30px" height="12px" /></div>
+                                <div className={styles.headerCol}><Skeleton width="80px" height="12px" /></div>
+                                <div className={styles.headerCol}><Skeleton width="60px" height="12px" /></div>
+                                <div className={styles.headerCol}><Skeleton width="40px" height="12px" /></div>
+                            </div>
+                            <div className={styles.tableBody}>
+                                {[...Array(8)].map((_, i) => (
+                                    <div key={i} className={styles.row}>
+                                        <div className={styles.rankCol}><Skeleton width="22px" height="22px" borderRadius="50%" /></div>
+                                        <div className={styles.userCol}>
+                                            <Skeleton width="36px" height="36px" borderRadius="50%" />
+                                            <Skeleton width="100px" height="14px" />
+                                        </div>
+                                        <div className={styles.progressCol}><Skeleton width="100%" height="4px" /></div>
+                                        <div className={styles.xpCol}><Skeleton width="50px" height="14px" /></div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 ) : (
                     <>
@@ -268,20 +293,20 @@ const LeaderboardPage = () => {
                                                 {[...Array(8)].map((_, i) => (
                                                     <div key={i} className={styles.row}>
                                                         <div className={styles.rankCol}>
-                                                            <div className={`${styles.skeleton} ${styles.skeletonRank}`} />
+                                                            <Skeleton width="22px" height="22px" borderRadius="50%" />
                                                         </div>
                                                         <div className={styles.userCol}>
-                                                            <div className={`${styles.skeleton} ${styles.skeletonAvatar}`} />
+                                                            <Skeleton width="36px" height="36px" borderRadius="50%" />
                                                             <div className={styles.userInfo}>
-                                                                <div className={`${styles.skeleton} ${styles.skeletonName}`} />
+                                                                <Skeleton width="110px" height="14px" borderRadius="6px" />
                                                             </div>
                                                         </div>
                                                         <div className={styles.progressCol}>
-                                                            <div className={`${styles.skeleton} ${styles.skeletonShield}`} />
-                                                            <div className={`${styles.skeleton} ${styles.skeletonBar}`} />
+                                                            <Skeleton width="22px" height="22px" borderRadius="4px" />
+                                                            <Skeleton width="100%" height="4px" borderRadius="10px" />
                                                         </div>
                                                         <div className={styles.xpCol}>
-                                                            <div className={`${styles.skeleton} ${styles.skeletonXP}`} />
+                                                            <Skeleton width="52px" height="16px" borderRadius="6px" />
                                                         </div>
                                                     </div>
                                                 ))}

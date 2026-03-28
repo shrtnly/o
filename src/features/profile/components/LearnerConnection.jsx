@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import { useNotifications } from '../../../context/NotificationContext';
 import styles from './LearnerConnection.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import Skeleton from '../../../components/ui/Skeleton';
 
 const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const { t, language } = useLanguage();
@@ -714,8 +715,16 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             {/* Sub-Tab Content */}
             <div className={styles.subTabContent}>
                 {isLoading ? (
-                    <div style={{ padding: '4rem', textAlign: 'center' }}>
-                        <InlineLoader />
+                    <div className={styles.skeletonList}>
+                        {[...Array(6)].map((_, i) => (
+                            <div key={i} className={styles.skeletonItem}>
+                                <Skeleton width="44px" height="44px" borderRadius="50%" />
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                    <Skeleton width="60%" height="16px" />
+                                    <Skeleton width="40%" height="12px" />
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <>
@@ -755,16 +764,10 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                             <div className={styles.skeletonList}>
                                                 {[...Array(6)].map((_, i) => (
                                                     <div key={i} className={styles.skeletonItem}>
-                                                        <div className={styles.skeletonAvatar}>
-                                                            <div className={styles.skeletonShimmer} />
-                                                        </div>
-                                                        <div className={styles.skeletonInfo}>
-                                                            <div className={styles.skeletonLine} style={{ width: '60%' }}>
-                                                                <div className={styles.skeletonShimmer} />
-                                                            </div>
-                                                            <div className={`${styles.skeletonLine} ${styles.skeletonLineShort}`}>
-                                                                <div className={styles.skeletonShimmer} />
-                                                            </div>
+                                                        <Skeleton width="40px" height="40px" borderRadius="50%" />
+                                                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                                            <Skeleton width="60%" height="14px" />
+                                                            <Skeleton width="40%" height="10px" />
                                                         </div>
                                                     </div>
                                                 ))}
@@ -876,7 +879,11 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                         <X size={16} />
                                                     </button>
                                                 )}
-                                                {isSearching && <div className={styles.searchLoader}><InlineLoader size={40} showText={false} /></div>}
+                                                {isSearching && (
+                                                    <div className={styles.searchLoader}>
+                                                        <Skeleton width="100%" height="100%" borderRadius="50%" />
+                                                    </div>
+                                                )}
                                             </div>
                                             {searchResults.length > 0 ? (
                                                 <div className={styles.searchResults}>
@@ -1314,7 +1321,13 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
                                             <div ref={scrollRef} className={styles.messageScroll}>
                                                 {isMessagesLoading ? (
-                                                    <div className={styles.chatLoader}><InlineLoader size={80} showText={false} /></div>
+                                                    <div className={styles.chatSkeletonList}>
+                                                        {[...Array(6)].map((_, i) => (
+                                                            <div key={i} className={`${styles.skeletonBubble} ${i % 2 === 0 ? styles.self : styles.other}`}>
+                                                                <Skeleton width={i % 2 === 0 ? "70%" : "60%"} height="40px" borderRadius="18px" />
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 ) : (
                                                     <AnimatePresence mode="popLayout">
                                                         {messages.map((msg, idx) => {

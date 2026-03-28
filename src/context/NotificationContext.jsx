@@ -12,6 +12,7 @@ export const NotificationProvider = ({ children }) => {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [pendingConnectionsCount, setPendingConnectionsCount] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     const refreshUnreadCount = useCallback(async () => {
         if (!user) return;
@@ -49,6 +50,7 @@ export const NotificationProvider = ({ children }) => {
 
     const fetchNotifications = useCallback(async () => {
         if (!user) return;
+        setIsLoading(true);
         try {
             const { data, error } = await supabase
                 .from('notifications')
@@ -63,6 +65,8 @@ export const NotificationProvider = ({ children }) => {
             refreshConnectionsCount();
         } catch (err) {
             console.error('Error fetching notifications:', err);
+        } finally {
+            setIsLoading(false);
         }
     }, [user, refreshUnreadCount, refreshConnectionsCount]);
 
@@ -363,6 +367,7 @@ export const NotificationProvider = ({ children }) => {
             deleteNotification,
             respondToConnectionRequest,
             refresh: fetchNotifications,
+            isLoading,
             activeChatId,
             setActiveChatId,
             isInboxOpen,

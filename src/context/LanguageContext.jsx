@@ -62,7 +62,10 @@ const translations = {
         no_practice_yet: "কোনো রেকর্ড নেই",
         daily: "দৈনিক",
         weekly: "সাপ্তাহিক",
+        monthly: "মাসিক",
+        yearly: "বার্ষিক",
         week: "সপ্তাহ",
+
         streak_tagline_0: "শুরু করুন! আজ থেকেই আপনার ধারাবাহিকতা তৈরি করুন।",
         streak_tagline_1_3: "আপনি দারুণ শুরু করেছেন! আপনার ধারাবাহিকতা বজায় রাখুন।",
         streak_tagline_4_10: "অসাধারণ! আপনি ধারাবাহিকভাবে এগিয়ে যাচ্ছেন। থামবেন না।",
@@ -174,8 +177,17 @@ const translations = {
         invite_success: "কপি হয়েছে!",
         invite_message: "এখনই বন্ধুদের আমন্ত্রণ জানান, আর বোনাস হিসেবে পান ৫টি হানি ড্রপ!",
         invite_share_cta: "শেয়ার করুন",
-        invite_share_text: "হ্যালো! আমি BeeLesson-এর সাথে শেখা শুরু করেছি।\nএটি বাংলাদেশের প্রথম গেমিফাইড লার্নিং প্ল্যাটফর্ম, যা আপনাকে দেবে এক নতুন শেখার অভিজ্ঞতা।\nতাই আর দেরি না করে আজই যোগ দিন BeeLesson কমিউনিটিতে এবং উপভোগ করুন শেখার এক নতুন যাত্রা!",
+        invite_share_text: "হ্যালো! আমি BeeLesson-এর সাথে শেখা শুরু করেছি। এটি বাংলাদেশের প্রথম গেমিফাইড লার্নিং প্ল্যাটফর্ম, যা আপনাকে দেবে এক নতুন শেখার অভিজ্ঞতা। তাই আর দেরি না করে আজই যোগ দিন BeeLesson কমিউনিটিতে এবং উপভোগ করুন শেখার এক নতুন যাত্রা!",
         no_certificates: "আপনি এখনও কোনো সার্টিফিকেট অর্জন করেননি।",
+        save_percentage_yearly: "১৬% সাশ্রয়",
+        super_bee_title: "আপগ্রেড সুপার বি",
+        order_details: "অর্ডারের বিবরণ",
+        payment_method: "পেমেন্ট পদ্ধতি",
+        tax: "ট্যাক্স",
+        total_due_today: "মোট পরিমাণ",
+
+
+
 
         analysis_ov: "অ্যাক্টিভিটি অ্যানালাইসিস",
         total_time: "মোট সময়",
@@ -550,7 +562,10 @@ const translations = {
         no_practice_yet: "No Practice Yet",
         daily: "Daily",
         weekly: "Weekly",
+        monthly: "Monthly",
+        yearly: "Yearly",
         week: "Week",
+
         streak_tagline_0: "Get started! Build your consistency from today.",
         streak_tagline_1_3: "Great start! Keep up the consistency.",
         streak_tagline_4_10: "Amazing! You're making steady progress. Don't stop.",
@@ -683,7 +698,7 @@ const translations = {
         invite_success: "Copied!",
         invite_message: "Invite your friends now and get 5 Honey Drops as a bonus!",
         invite_share_cta: "Share",
-        invite_share_text: "Hello! I have started learning with BeeLesson.\nIt's Bangladesh's first gamified learning platform, offering a whole new learning experience.\nSo don't delay, join the BeeLesson community today and enjoy a new journey of learning!",
+        invite_share_text: "Hello! I have started learning with BeeLesson. It's Bangladesh's first gamified learning platform, offering a whole new learning experience. So don't delay, join the BeeLesson community today and enjoy a new journey of learning!",
         no_certificates: "You haven't earned any certificates yet.",
 
         analysis_ov: "Activity Analysis",
@@ -983,9 +998,17 @@ const translations = {
         loc_sylhet: "Sylhet",
         loc_rangpur: "Rangpur",
         loc_mymensingh: "Mymensingh",
-        loc_overseas: "Overseas"
+        loc_overseas: "Overseas",
+        save_percentage_yearly: "Save 16%",
+        order_details: "Order Details",
+        payment_method: "Payment Method",
+        tax: "TAX",
+        total_due_today: "Grand Total"
     }
 };
+
+
+
 
 const LanguageContext = createContext();
 

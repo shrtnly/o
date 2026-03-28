@@ -6,7 +6,7 @@ import Button from '../../components/ui/Button';
 import { courseService } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
-import InlineLoader from '../../components/ui/InlineLoader';
+import CourseSkeleton from './CourseSkeleton';
 import styles from './CourseSection.module.css';
 
 const CourseSection = () => {
@@ -47,7 +47,9 @@ const CourseSection = () => {
                 </div>
 
                 {loading ? (
-                    <InlineLoader />
+                    <div className={styles.grid}>
+                        {[...Array(4)].map((_, i) => <CourseSkeleton key={i} />)}
+                    </div>
                 ) : (
                     <>
                         <div className={styles.grid}>

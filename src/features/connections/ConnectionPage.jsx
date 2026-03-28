@@ -37,14 +37,6 @@ const ConnectionPage = () => {
         fetchProfileData();
     }, [fetchProfileData]);
 
-    if (loading) {
-        return (
-            <div className={styles.loadingContainer}>
-                <InlineLoader />
-            </div>
-        );
-    }
-
     return (
         <div className={styles.connectionPage}>
             <div className={styles.container}>
@@ -69,9 +61,6 @@ const ConnectionPage = () => {
                     </div>
                 </motion.div>
             </div>
-
-            {/* Reuse the Learner Profile Modal logic if needed, 
-                but for now we focus on placing the component */}
         </div>
     );
 };

@@ -14,7 +14,7 @@ const HelpPage = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const categories = [
-        { id: 'start', title: language === 'bn' ? 'শুরু করা' : 'Getting Started', icon: Zap, count: 3, color: '#f1c40f' },
+        { id: 'start', title: language === 'bn' ? 'শুরু করা' : 'Getting Started', icon: Zap, count: 6, color: '#f1c40f' },
         { id: 'course', title: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership', icon: BookOpen, count: 4, color: '#3498db' },
         { id: 'payment', title: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing', icon: CreditCard, count: 3, color: '#2ecc71' },
         { id: 'tech', title: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues', icon: Wrench, count: 3, color: '#e74c3c' },
@@ -42,6 +42,27 @@ const HelpPage = () => {
             a: language === 'bn'
                 ? 'অ্যাকাউন্ট খুলতে আমাদের ওয়েবসাইটের মেনু থেকে "লগইন" বাটনে ক্লিক করুন, তারপর "সাইন আপ" অপশনে যান। আপনার ইমেইল এবং একটি পাসওয়ার্ড দিয়ে খুব সহজেই অ্যাকাউন্ট তৈরি করতে পারবেন।'
                 : 'To open an account, click "Login" from the menu, then go to "Sign Up". You can easily create an account with your email and a password.',
+            cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
+        },
+        { 
+            q: language === 'bn' ? 'স্ট্রিক (Streak) কি?' : 'What is a Streak?', 
+            a: language === 'bn'
+                ? 'স্ট্রিক হলো আপনার প্রতিদিনের পড়ার ধারাবাহিকতা। আপনি যদি প্রতিদিন অন্তত একটি লেসন বা কুইজ সম্পন্ন করেন, তবে আপনার স্ট্রিক ১ দিন করে বাড়বে। কোনো দিন বাদ দিলে স্ট্রিক শূন্য (০) হয়ে যাবে।'
+                : 'A streak is your daily learning consistency. If you complete at least one lesson or quiz every day, your streak will increase by 1 day. If you miss a day, your streak will reset to zero (0).',
+            cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
+        },
+        { 
+            q: language === 'bn' ? 'স্ট্রিক স্কোর (Streak Score) কি?' : 'What is a Streak Score?', 
+            a: language === 'bn'
+                ? 'স্ট্রিক স্কোর আপনার বর্তমান মাসের ধারাবাহিকতার একটি পরিমাপ। এটি আপনার সক্রিয় দিন এবং মাসের মোট দিনের অনুপাতের ওপর ভিত্তি করে হিসাব করা হয়, যা আপনাকে নিয়মিত পড়াশোনায় উৎসাহিত করে।'
+                : 'Streak Score is a measure of your consistency for the current month. It is calculated based on the ratio of your active days to the total days in the month, encouraging you to study regularly.',
+            cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
+        },
+        { 
+            q: language === 'bn' ? 'ইনভাইট লিঙ্ক (Invite Link) কীভাবে কাজ করে?' : 'How does the Invite Link work?', 
+            a: language === 'bn'
+                ? 'আপনার প্রোফাইল পেজে একটি ইউনিক ইনভাইট লিঙ্ক পাবেন। কোনো বন্ধু যদি আপনার লিঙ্কে ক্লিক করে সাইন আপ করে, তবে আপনি বনাস হিসেবে ৫টি হানি ড্রপ (Honey Drop) পাবেন। এভাবে আপনি যত খুশি বন্ধুকে ইনভাইট করতে পারেন!'
+                : 'You will find a unique invite link on your profile page. If a friend signs up using your link, you will receive 5 Honey Drops as a bonus. You can invite as many friends as you want!',
             cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
         },
 

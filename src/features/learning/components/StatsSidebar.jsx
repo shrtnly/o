@@ -229,7 +229,6 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                             <ShieldIcon
                                 xp={profile?.xp || 0}
                                 size={30}
-                                showShadow={getShieldLevel(profile?.xp || 0).level !== 'SILVER'}
                             />
                             <span>{profile?.xp || 0}</span>
                         </div>
@@ -435,7 +434,6 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                             xp={profile.xp || 0}
                                             size={22}
                                             showTooltip={false}
-                                            showShadow={getShieldLevel(profile.xp || 0).level !== 'SILVER'}
                                         />
                                         <span className={styles.rowXP}>{profile.xp || 0}</span>
                                     </div>
@@ -474,7 +472,6 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                                             xp={user.xp}
                                                             size={22}
                                                             showTooltip={false}
-                                                            showShadow={getShieldLevel(user.xp).level !== 'SILVER'}
                                                         />
                                                         <span className={styles.rowXP}>{user.xp}</span>
                                                     </div>

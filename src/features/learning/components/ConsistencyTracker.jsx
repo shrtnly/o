@@ -20,7 +20,7 @@ import { formatLocalDate } from '../../../lib/dateUtils';
 import { useLanguage } from '../../../context/LanguageContext';
 
 const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [viewMode, setViewMode] = useState('daily');
     const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -155,10 +155,13 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
         setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + offset, 1));
     };
 
-    const monthDisplay = currentMonth.toLocaleDateString(t('language') === 'bn' ? 'bn-BD' : 'en-US', {
-        month: 'long',
-        year: 'numeric'
+    const monthOnly = currentMonth.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+        month: 'long'
     });
+    const year2Digit = currentMonth.toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+        year: '2-digit'
+    });
+    const monthDisplay = `${monthOnly} -${year2Digit}`;
 
     const getProgressStatus = (percent) => {
         if (percent >= 90) return { key: 'perfect_progress', color: '#FFD700', bg: 'rgba(255, 215, 0, 0.12)', border: 'rgba(255, 215, 0, 0.25)', icon: Trophy };
@@ -203,7 +206,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.bestLabel}>{t('my_best')}</span>
-                        <Trophy size={14} color="#FFB800" />
+                        <Trophy size={14} color="#F1C40F" />
                         <span className={styles.bestValue}>{stats.bestStreak}</span>
                     </div>
                 </div>
@@ -254,6 +257,11 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 </div>
 
                 <div className={styles.viewSwitcher}>
+                    <motion.div
+                        className={styles.switchHighlight}
+                        animate={{ x: viewMode === 'daily' ? 0 : '100%' }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                    />
                     <button
                         className={`${styles.switchBtn} ${viewMode === 'daily' ? styles.switchBtnActive : ''}`}
                         onClick={() => setViewMode('daily')}

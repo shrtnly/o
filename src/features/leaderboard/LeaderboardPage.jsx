@@ -217,7 +217,6 @@ const LeaderboardPage = () => {
                                                         xp={tier.minXP}
                                                         size={activeTier === tier.id ? 68 : 30}
                                                         showTooltip={false}
-                                                        showShadow={false}
                                                     />
                                                 </div>
                                                 {isTierLocked && (
@@ -357,7 +356,7 @@ const LeaderboardPage = () => {
 
                                                             {/* Progress bar */}
                                                             <div className={styles.progressCol}>
-                                                                <ShieldIcon xp={item.xp} size={22} showTooltip={false} showShadow={false} />
+                                                                <ShieldIcon xp={item.xp} size={22} showTooltip={false} />
                                                                 <div className={styles.progressBarWrapper}>
                                                                     <div
                                                                         className={styles.progressBar}
@@ -371,7 +370,7 @@ const LeaderboardPage = () => {
                                                                 <div className={styles.xpScoreWrapper}>
                                                                     <div className={styles.pollenLabel}>
                                                                         <div className={styles.mobileShield}>
-                                                                            <ShieldIcon xp={item.xp} size={18} showTooltip={false} showShadow={false} />
+                                                                            <ShieldIcon xp={item.xp} size={18} showTooltip={false} />
                                                                         </div>
                                                                         <span>{item.xp}</span>
                                                                     </div>

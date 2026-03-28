@@ -2141,31 +2141,32 @@
     .mobileHeaderStatWrapper {
         position: relative;
     }
+}
 
-    .heartsTooltipOverlay,
-    .streakTooltipOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 2001;
-    }
+.heartsTooltipOverlay,
+.streakTooltipOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2001;
+}
 
-    .streakTooltipBox {
-        position: absolute;
-        top: calc(100% + 15px);
-        left: -5px;
-        background: var(--color-bg-alt);
-        border: 2px solid var(--color-border-muted);
-        border-radius: 16px;
-        z-index: 2002;
-        padding: 16px;
-        width: 290px;
-        max-width: calc(100vw - 32px);
-        box-shadow: var(--shadow-card);
-        backdrop-filter: blur(10px);
-    }
+.streakTooltipBox {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: -5px;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-border-muted);
+    border-radius: 16px;
+    z-index: 2002;
+    padding: 16px;
+    width: 290px;
+    max-width: calc(100vw - 32px);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(10px);
+}
     
     .streakTooltipBox::before {
         content: '';
@@ -2244,7 +2245,7 @@
     }
 
     .streakInfoLeft h4 {
-        margin: 0 0 8px 0;
+        margin: 0 0 12px 0;
         font-size: 1rem;
         font-weight: 800;
         color: var(--color-text);
@@ -2318,25 +2319,25 @@
         opacity: 0.5;
     }
 
-    .heartsTooltipBox {
-        position: absolute;
-        top: calc(100% + 15px);
-        right: -10px;
-        background: var(--color-bg-alt);
-        border: 2px solid var(--color-border-muted);
-        border-radius: 16px;
-        z-index: 2002;
-        padding: 16px;
-        width: 260px;
-        box-shadow: var(--shadow-card);
-        color: var(--color-text);
-    }
+.heartsTooltipBox {
+    position: absolute;
+    top: calc(100% + 15px);
+    right: -10px;
+    background: var(--color-bg-alt);
+    border: 2px solid var(--color-border-muted);
+    border-radius: 16px;
+    z-index: 2002;
+    padding: 16px;
+    width: 260px;
+    box-shadow: var(--shadow-card);
+    color: var(--color-text);
+}
 
-    /* Little triangle pointer for tooltip */
-    .heartsTooltipBox::before {
-        content: '';
-        position: absolute;
-        top: -7px;
+/* Little triangle pointer for tooltip */
+.heartsTooltipBox::before {
+    content: '';
+    position: absolute;
+    top: -7px;
         right: 25px;
         width: 12px;
         height: 12px;
@@ -2351,7 +2352,7 @@
     }
 
     .tooltipTextContent h4 {
-        margin: 0 0 2px 0;
+        margin: 0 0 8px 0;
         font-size: 0.9rem;
         font-weight: 800;
         color: var(--color-text);
@@ -2426,32 +2427,33 @@
         background: var(--color-primary);
         color: var(--color-on-primary);
         border: none;
-        padding: 14px 20px;
+        padding: 12px 20px;
         border-radius: 14px;
         font-weight: 800;
         font-size: 0.95rem;
         cursor: pointer;
         position: relative;
-        transition: transform 0.1s, border-bottom-width 0.1s;
-        border-bottom: 5px solid var(--color-primary-dark);
+        transition: all 0.1s ease;
+        border-bottom: 4px solid var(--color-primary-dark);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        outline: none;
     }
 
     .shopButton:hover {
-        filter: brightness(1.08);
+        filter: brightness(1.1);
         transform: translateY(-1px);
-        border-bottom-width: 6px;
+        border-bottom-width: 5px;
     }
 
     .shopButton:active {
-        transform: translateY(3px);
-        border-bottom-width: 2px;
+        transform: translateY(2px);
+        border-bottom-width: 1px;
     }
 
     .shopButtonGold {
         background: linear-gradient(135deg, #FFD700 0%, #F1A20F 100%) !important;
-        border-bottom: 5px solid #d48e00 !important;
+        border-bottom: 4px solid #d48e00 !important;
         color: #fff !important;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
@@ -2460,15 +2462,58 @@
         background: linear-gradient(135deg, #FFE44D 0%, #FFB62E 100%) !important;
     }
 
-    .shopButtonDark {
-        background: #2d383e !important;
-        border-bottom: 5px solid #1a1f22 !important;
-        color: #fff !important;
-    }
+.shopButtonDark {
+    background: #3e4c54 !important;
+    border-bottom: 4px solid #1c2a31 !important;
+    color: #fff !important;
+}
 
-    .shopButtonDark:hover {
-        background: #39464d !important;
-    }
+.shopButtonDark:hover {
+    background: #4a5d6a !important;
+}
+
+.shopButtonBlue {
+    background: #1cb0f6 !important;
+    border-bottom: 4px solid #1899d6 !important;
+    color: #fff !important;
+}
+
+.shopButtonBlue:hover {
+    background: #4dc3ff !important;
+}
+
+.fullInviteBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding: 16px;
+    background: #FFB800; /* Consistent brand gold */
+    color: #000;
+    border: none;
+    border-radius: 16px;
+    font-size: 1rem;
+    font-weight: 850;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 0 #D49B00;
+    text-transform: none;
+    position: relative;
+    outline: none;
+}
+
+.fullInviteBtn:hover {
+    filter: brightness(1.05);
+    box-shadow: 0 4px 0 #D49B00;
+    transform: translateY(2px);
+}
+
+.fullInviteBtn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0px 0 #D49B00;
+}
 
     .mobileCourseDropdown {
         position: absolute;
@@ -2516,4 +2561,3 @@
         color: var(--color-primary);
         font-weight: 800;
     }
-}

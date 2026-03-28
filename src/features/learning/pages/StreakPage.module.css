@@ -1,225 +1,48 @@
 .container {
-    padding: 24px;
+    padding: 20px;
     max-width: 600px;
     margin: 0 auto;
-    padding-bottom: 100px;
+    padding-bottom: 120px; 
 }
 
 .header {
-    text-align: center;
-    padding: 40px 0;
-}
-
-.streakBadge {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-}
-
-.streakHorizontal {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 8px;
-}
-
-.streakNumber {
-    font-size: 4.5rem;
-    font-weight: 900;
-    color: #f1c40f;
-    line-height: 1;
-    text-shadow: 0 0 20px rgba(241, 196, 15, 0.4);
-}
-
-.streakLabel {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
-    letter-spacing: 0.5px;
-}
-
-.tagline {
-    font-size: 1.1rem;
-    color: var(--color-text);
-    max-width: 300px;
-    margin: 0 auto;
-    line-height: 1.5;
-}
-
-.weekSection {
-    background: var(--color-bg-alt);
-    padding: 24px;
-    border-radius: 24px;
-    margin-bottom: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.weekGrid {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.dayCol {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-.dayCircle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: var(--color-text-muted);
-    transition: all 0.3s ease;
-}
-
-.dayCircle.completed {
-    background: #f1c40f;
-    color: #000;
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
-}
-
-.dayName {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    font-weight: 600;
-}
-
-.statsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-}
-
-.statCard {
-    background: var(--color-bg-alt);
-    padding: 20px;
-    border-radius: 20px;
     display: flex;
     align-items: center;
     gap: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 32px;
 }
 
-.statIcon {
-    opacity: 0.8;
-}
-
-.statInfo h3 {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    margin-bottom: 4px;
-}
-
-.statInfo p {
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: var(--color-text);
-}
-
-.milestones {
-    background: transparent;
-    padding: 0;
-    margin-bottom: 24px;
-}
-
-.milestones h3 {
-    margin-bottom: 20px;
-    font-size: 1.1rem;
-    font-weight: 800;
-}
-
-.milestoneList {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.milestoneItem {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 12px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.03);
-}
-
-.milestoneIcon {
+.backButton {
     width: 44px;
     height: 44px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.milestoneText {
-    flex: 1;
-}
-
-.milestoneText h4 {
-    font-size: 0.95rem;
-    margin-bottom: 2px;
-}
-
-.milestoneText p {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-}
-
-.shareButton {
-    width: 100%;
-    padding: 16px;
-    border-radius: 16px;
-    background: #f1c40f;
-    color: #000;
+    background: var(--color-bg-alt);
     border: none;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+    border-bottom: 3px solid var(--color-border-muted);
+    color: var(--color-text);
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.1s ease;
 }
 
-.shareButton:active {
-    transform: scale(0.98);
+.backButton:hover {
+    transform: translateY(-1px);
+    border-bottom-width: 4px;
+    filter: brightness(1.1);
 }
 
-@media (max-width: 480px) {
-    .streakNumber {
-        font-size: 3.5rem;
-    }
-    
-    .statsGrid {
-        grid-template-columns: 1fr;
-    }
-    
-    .dayCircle {
-        width: 36px;
-        height: 36px;
-    }
+.backButton:active {
+    transform: translateY(1px);
+    border-bottom-width: 1px;
 }
 
-@keyframes skeleton-shimmer {
-    0% {
-        background-position: 150% 50%;
-    }
-    100% {
-        background-position: -50% 50%;
-    }
+.title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--color-text);
+    margin: 0;
 }
 
 .skeleton {
@@ -249,11 +72,75 @@
     );
 }
 
+/* ──── MILESTONES ──── */
+.milestones {
+    margin-top: 32px;
+}
+
+.milestones h3 {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.milestoneList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .milestoneItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     transition: all 0.2s ease;
+}
+
+.milestoneIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.milestoneText {
+    flex: 1;
+}
+
+.milestoneText h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.milestoneText p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
 }
 
 .milestoneAchieved {
     background: rgba(241, 196, 15, 0.08) !important;
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    border: 1.5px solid rgba(241, 196, 15, 0.25) !important;
+    box-shadow: 0 4px 15px rgba(241, 196, 15, 0.05);
+}
+
+.milestoneLocked {
+    filter: grayscale(1);
+    opacity: 0.8;
+    background: rgba(255, 255, 255, 0.01) !important;
+}
+
+.lockIcon {
+    opacity: 0.5;
+}
+
+.chevron {
+    opacity: 0.8;
 }

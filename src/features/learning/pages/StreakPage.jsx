@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Flame, Calendar, Trophy, ChevronRight, Share2, ChevronLeft } from 'lucide-react';
+import { Flame, Trophy, ChevronLeft, CircleCheckBig, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { rewardService } from '../../../services/rewardService';
 import ConsistencyTracker from '../components/ConsistencyTracker';
-import InlineLoader from '../../../components/ui/InlineLoader';
 import styles from './StreakPage.module.css';
 
 const StreakPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
     const { t } = useLanguage();
-
     const [streak, setStreak] = useState({ current_streak: 0, longest_streak: 0 });
     const [fullHistory, setFullHistory] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -40,8 +37,6 @@ const StreakPage = () => {
 
         fetchStreakData();
     }, [user?.id]);
-
-    const totalDays = fullHistory.length;
 
     return (
         <div className={styles.container}>
@@ -113,9 +108,6 @@ const StreakPage = () => {
                             </div>
                         ))}
                     </div>
-
-                    {/* Button Skeleton */}
-                    <div className={styles.skeleton} style={{ width: '100%', height: '52px', borderRadius: '16px', marginTop: '8px' }} />
                 </div>
             ) : (
                 <>
@@ -144,8 +136,8 @@ const StreakPage = () => {
                                 const remaining = Math.max(0, m - streak.current_streak);
 
                                 return (
-                                    <div key={m} className={`${styles.milestoneItem} ${isAchieved ? styles.milestoneAchieved : ''}`}>
-                                        <div className={styles.milestoneIcon} style={{ background: isAchieved ? 'rgba(241, 196, 15, 0.2)' : 'rgba(0,0,0,0.2)' }}>
+                                    <div key={m} className={`${styles.milestoneItem} ${isAchieved ? styles.milestoneAchieved : styles.milestoneLocked}`}>
+                                        <div className={styles.milestoneIcon} style={{ background: isAchieved ? 'rgba(241, 196, 15, 0.15)' : 'rgba(255, 255, 255, 0.03)' }}>
                                             <Flame
                                                 size={20}
                                                 fill={isAchieved ? "#f1c40f" : "none"}
@@ -157,17 +149,16 @@ const StreakPage = () => {
                                             <h4 style={{ color: isAchieved ? '#f1c40f' : 'inherit' }}>{m} দিনের মাইলফলক</h4>
                                             <p>{isAchieved ? 'অর্জিত!' : `${remaining} দিন বাকি`}</p>
                                         </div>
-                                        {isAchieved && <ChevronRight size={20} className={styles.chevron} style={{ color: '#f1c40f' }} />}
+                                        {isAchieved ? (
+                                            <CircleCheckBig size={20} className={styles.chevron} style={{ color: '#f1c40f' }} />
+                                        ) : (
+                                            <Lock size={18} className={styles.lockIcon} style={{ color: 'var(--color-text-muted)', opacity: 0.5 }} />
+                                        )}
                                     </div>
                                 );
                             })}
                         </div>
                     </section>
-
-                    <button className={styles.shareButton}>
-                        <Share2 size={20} />
-                        বন্ধুদের সাথে শেয়ার করুন
-                    </button>
                 </>
             )}
         </div>

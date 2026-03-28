@@ -4,11 +4,13 @@ import { supabase } from '../../lib/supabaseClient';
 import {
     Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles,
     Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone,
-    LogOut, Flame, Play, Plus, ChevronDown, ChevronLeft, Star, Lock, PenTool, Activity,
+    LogOut, Flame, Play, Plus, ChevronDown, ChevronLeft, Star, Lock, PenTool, Activity, Share2,
     Gift, PackageOpen, ArrowUp, ArrowDown, Send, Shapes, ChartPie, Command, Lightbulb,
     Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor, Infinity as InfinityIcon
 } from 'lucide-react';
 import { rewardService } from '../../services/rewardService';
+import { leaderboardService } from '../../services/leaderboardService';
+import { getShieldLevel } from '../../utils/shieldSystem';
 import styles from './LearningPage.module.css';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 import InlineLoader from '../../components/ui/InlineLoader';
@@ -181,6 +183,8 @@ const LearningPage = () => {
     const [showRewardModal, setShowRewardModal] = useState(false);
     const [lastReward, setLastReward] = useState({ hearts: 0, gems: 0 }); // Note: 'gems' here refers to the pollen count in DB
     const [showHeartsTooltip, setShowHeartsTooltip] = useState(false);
+    const [userRank, setUserRank] = useState(null);
+    const [inviteCopied, setInviteCopied] = useState(false);
 
     const handleScroll = () => {
         if (!mainContentRef.current || unitsWithChapters.length === 0) return;
@@ -329,7 +333,11 @@ const LearningPage = () => {
                     setCourses(all || []);
                 }
 
-                if (profileData) setProfile(profileData);
+                if (profileData) {
+                    setProfile(profileData);
+                    const tier = getShieldLevel(profileData.xp || 0).level;
+                    leaderboardService.getUserRank(user.id, tier).then(setUserRank);
+                }
                 if (progressData) setProgress(progressData);
                 if (streakData) setStreak(streakData);
                 if (streakHistoryData) setStreakHistory(streakHistoryData);
@@ -428,12 +436,17 @@ const LearningPage = () => {
                 setProgress(prev => [...prev, { chapter_id: chapter.id, is_completed: true }]);
                 
                 // 4. Refresh streak history and info
-                const [newHistory, newStreak] = await Promise.all([
+                const [newHistory, newStreak, newProfile] = await Promise.all([
                     rewardService.getActivityHistory(user.id, 7),
-                    rewardService.getUserStreak(user.id)
+                    rewardService.getUserStreak(user.id),
+                    supabase.from('profiles').select('*').eq('id', user.id).single()
                 ]);
                 if (newHistory) setStreakHistory(newHistory);
                 if (newStreak) setStreak(newStreak);
+                if (newProfile?.data) {
+                     const tier = getShieldLevel(newProfile.data.xp || 0).level;
+                     leaderboardService.getUserRank(user.id, tier).then(setUserRank);
+                }
 
                 // 5. Show Gaming Modal
                 setLastReward({ hearts: finalHReward, gems: finalGReward });
@@ -633,7 +646,7 @@ const LearningPage = () => {
                                                     <div className={styles.streakTooltipHeader}>
                                                         <Flame size={24} color="#f1c40f" fill="#f1c40f" />
                                                         <div className={styles.streakInfoLeft}>
-                                                            <h4 style={{ margin: 0 }}>{streak?.current_streak || 0} দিনের ধারাবাহিকতা</h4>
+                                                            <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{streak?.current_streak || 0} দিনের ধারাবাহিকতা</h4>
                                                         </div>
                                                     </div>
 
@@ -669,7 +682,7 @@ const LearningPage = () => {
 
                                     <div className={styles.mobileHeaderStatWrapper}>
                                         <div className={styles.mobileHeaderStat} onClick={() => setShowXpTooltip(true)} style={{ cursor: 'pointer' }}>
-                                            <ShieldIcon xp={profile?.xp || 0} size={24} showShadow={false} />
+                                            <ShieldIcon xp={profile?.xp || 0} size={24} />
                                             <span>{profile?.xp || 0}</span>
                                         </div>
 
@@ -679,10 +692,15 @@ const LearningPage = () => {
                                                 <div className={styles.streakTooltipBoxCenter}>
                                                     <div className={styles.streakTooltipHeader}>
                                                         <div className={styles.streakInfoLeft}>
-                                                            <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                                 <ShieldIcon xp={profile?.xp || 0} size={24} /> মধু সংগৃহীত &nbsp; {profile?.xp || 0}
                                                             </h4>
-                                                            <p>দৈনিক অনুশীলন করে মধু সংগ্রহ করুন এবং লিডারবোর্ডে এগিয়ে থাকুন!</p>
+                                                            <p>
+                                                    {(profile?.xp || 0) < 100 
+                                                        ? `প্রতিযোগিতায় অংশ নিতে আরও ${100 - (profile?.xp || 0)} মধু অর্জন করুন।`
+                                                        : `দৈনিক অনুশীলন করে মধু সংগ্রহ করুন এবং লিডারবোর্ডে এগিয়ে থাকুন! আপনার অবস্থান ${userRank || '-'}`
+                                                    }
+                                                 </p>
                                                         </div>
                                                     </div>
                                                     <button
@@ -709,7 +727,7 @@ const LearningPage = () => {
                                                 <div className={styles.streakTooltipBoxRight}>
                                                     <div className={styles.streakTooltipHeader}>
                                                         <div className={styles.streakInfoLeft}>
-                                                            <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                            <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                                 <PollenIcon size={24} /> মধুরেণু &nbsp; {profile?.gems || 0}
                                                             </h4>
                                                             <p>দৈনিক এক্টিভিটি এবং স্ট্রিক বজায় রেখে রেণু সংগ্রহ করুন!</p>
@@ -752,23 +770,59 @@ const LearningPage = () => {
                                                         </div>
                                                     ) : (
                                                         <div className={styles.tooltipNonSubscriber}>
-                                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                                                <button
-                                                                    className={cn(styles.shopButton, styles.shopButtonGold)}
-                                                                    onClick={() => { setShowHeartsTooltip(false); navigate('/shop', { state: { directCheckout: 'monthly' } }); }}
-                                                                >
-                                                                    <Crown size={16} />
-                                                                    <span>{(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় করুন' : 'কিং বী সক্রিয় করুন'}</span>
-                                                                </button>
-
-                                                                <button
-                                                                    className={cn(styles.shopButton, styles.shopButtonDark)}
-                                                                    onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
-                                                                >
-                                                                    <ShoppingBag size={16} />
-                                                                    <span>শপে যান</span>
-                                                                </button>
+                                                            <div className={styles.streakTooltipHeader}>
+                                                                <div className={styles.streakInfoLeft}>
+                                                                    <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                        <HoneyDropIcon size={24} /> হানি ড্রপ &nbsp; {refillHearts}
+                                                                    </h4>
+                                                                    <p>কুইজে ভুল উত্তর দিলে আপনার হানি ড্রপ কমে যাবে। আনলিমিটেড হানি ড্রপ পেতে</p>
+                                                                </div>
                                                             </div>
+
+                                                            <button
+                                                                className={cn(styles.shopButton, styles.shopButtonGold)}
+                                                                style={{ marginTop: '12px' }}
+                                                                onClick={() => { setShowHeartsTooltip(false); navigate('/shop', { state: { directCheckout: 'monthly' } }); }}
+                                                            >
+                                                                <Crown size={18} />
+                                                                <span>{(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় করুন' : 'কিং বী সক্রিয় করুন'}</span>
+                                                            </button>
+
+                                                            <p style={{ marginTop: '12px', fontSize: '0.85rem', color: 'var(--color-text-muted)', lineHeight: '1.4' }}>
+                                                                বন্ধুদের আমন্ত্রণ জানিয়ে ও-শেখা পরিবার বড় করুন এবং একসাথে শিখুন!
+                                                            </p>
+
+                                                            <button
+                                                                className={styles.fullInviteBtn}
+                                                                onClick={() => {
+                                                                    const inviteLink = `${window.location.host === 'localhost:5173' ? 'http://' : 'https://'}${window.location.host}/signup?ref=${profile?.id || user?.id}`;
+                                                                    
+                                                                    if (navigator.share) {
+                                                                        navigator.share({ 
+                                                                            title: 'ও-শেখা (O-sekha)', 
+                                                                            text: 'মজার সাথে বাংলা শিখুন এবং বন্ধুদের সাথে প্রতিযোগিতা করুন!', 
+                                                                            url: inviteLink 
+                                                                        }).catch(() => {});
+                                                                    } else {
+                                                                        if (navigator.clipboard) {
+                                                                            navigator.clipboard.writeText(inviteLink);
+                                                                        } else {
+                                                                            const el = document.createElement('textarea');
+                                                                            el.value = inviteLink;
+                                                                            document.body.appendChild(el);
+                                                                            el.select();
+                                                                            document.execCommand('copy');
+                                                                            document.body.removeChild(el);
+                                                                        }
+                                                                        setInviteCopied(true);
+                                                                        toast.success('ইনভাইট লিঙ্ক কপি হয়েছে!');
+                                                                        setTimeout(() => setInviteCopied(false), 2500);
+                                                                    }
+                                                                }}
+                                                            >
+                                                                <Share2 size={18} />
+                                                                <span>বন্ধুদের আমন্ত্রণ জানান</span>
+                                                            </button>
                                                         </div>
                                                     )}
                                                 </div>

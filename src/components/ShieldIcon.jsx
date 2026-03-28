@@ -21,7 +21,7 @@ const getShieldImage = (level) => {
  * Displays an ornate gaming-style shield with wings and gem
  * Uses actual images when available, falls back to SVG
  */
-const ShieldIcon = ({ xp = 0, size = 24, showTooltip = true, useImage = true, showShadow = true }) => {
+const ShieldIcon = ({ xp = 0, size = 24, showTooltip = true, useImage = true, showShadow = false }) => {
     const level = getShieldLevel(xp);
     const shieldImage = getShieldImage(level.level);
     const [imageError, setImageError] = React.useState(false);

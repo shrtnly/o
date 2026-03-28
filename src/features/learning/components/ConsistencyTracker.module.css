@@ -106,13 +106,13 @@
 }
 
 .bestLabel {
-    color: #FFB800;
+    color: #F1C40F;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .bestValue {
-    color: #FFB800;
+    color: #F1C40F;
 }
 
 .tagline {
@@ -136,7 +136,7 @@
 .trackerHeader {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center; /* Center-align month selector and view switcher */
     padding: 0 16px;
     margin-bottom: 16px;
 }
@@ -184,40 +184,61 @@
 
 /* View Switcher */
 .viewSwitcher {
-    background-color: var(--color-bg-hover);
-    padding: 4px;
-    border-radius: 12px;
+    background-color: transparent; /* Background removed as requested */
+    padding: 3px;
+    border-radius: 99px;
     display: flex;
-    border: 1.5px solid var(--color-border);
+    position: relative;
+    border: 1px solid var(--color-border); /* Thinner border */
+    width: 160px; /* Fixed width for better sliding alignment */
+    overflow: hidden;
 }
 
 :global(.light) .viewSwitcher {
-    background-color: rgba(0, 0, 0, 0.03);
-    border-color: rgba(0, 0, 0, 0.05);
+    background-color: transparent;
+}
+
+.switchHighlight {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    bottom: 3px;
+    width: calc(50% - 3px);
+    background-color: var(--color-text);
+    border-radius: 99px;
+    z-index: 1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+:global(.light) .switchHighlight {
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 .switchBtn {
-    padding: 6px 16px;
-    border-radius: 8px;
+    flex: 1;
+    padding: 7px 0;
+    border-radius: 99px;
     border: none;
     background: transparent;
     color: var(--color-text-muted);
     font-weight: 800;
     font-size: 13px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: color 0.3s ease;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .switchBtnActive {
-    background-color: var(--color-text);
-    color: var(--color-bg-alt);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: var(--color-bg-alt) !important;
 }
 
 :global(.light) .switchBtnActive {
-    background-color: #fff;
-    color: #1a272d;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    color: #1a272d !important;
 }
 
 /* Sections */

@@ -2155,14 +2155,16 @@
     .streakTooltipBox {
         position: absolute;
         top: calc(100% + 15px);
-        left: -5px; /* Aligned differently since it's on the left side */
+        left: -5px;
         background: var(--color-bg-alt);
         border: 2px solid var(--color-border-muted);
         border-radius: 16px;
         z-index: 2002;
         padding: 16px;
-        width: 300px; /* Width enough to fit 7 days */
+        width: 290px;
+        max-width: calc(100vw - 32px);
         box-shadow: var(--shadow-card);
+        backdrop-filter: blur(10px);
     }
     
     .streakTooltipBox::before {
@@ -2298,6 +2300,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 0 10px var(--color-primary-faded);
+    }
+
+    .streakDayToday .streakDayName {
+        color: var(--color-primary);
+        font-weight: 800;
+    }
+
+    .streakDayTodayUnfilled {
+        border-color: var(--color-primary) !important;
+        border-style: dashed !important;
+        background: rgba(241, 196, 15, 0.05) !important;
+    }
+
+    .streakDayFuture {
+        opacity: 0.5;
     }
 
     .heartsTooltipBox {
@@ -2408,18 +2426,48 @@
         background: var(--color-primary);
         color: var(--color-on-primary);
         border: none;
-        padding: 12px;
-        border-radius: 12px;
+        padding: 14px 20px;
+        border-radius: 14px;
         font-weight: 800;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         cursor: pointer;
-        transition: transform 0.2s;
-        border-bottom: 3px solid var(--color-primary-dark);
+        position: relative;
+        transition: transform 0.1s, border-bottom-width 0.1s;
+        border-bottom: 5px solid var(--color-primary-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .shopButton:hover {
+        filter: brightness(1.08);
+        transform: translateY(-1px);
+        border-bottom-width: 6px;
     }
 
     .shopButton:active {
-        transform: translateY(2px);
-        border-bottom-width: 1px;
+        transform: translateY(3px);
+        border-bottom-width: 2px;
+    }
+
+    .shopButtonGold {
+        background: linear-gradient(135deg, #FFD700 0%, #F1A20F 100%) !important;
+        border-bottom: 5px solid #d48e00 !important;
+        color: #fff !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .shopButtonGold:hover {
+        background: linear-gradient(135deg, #FFE44D 0%, #FFB62E 100%) !important;
+    }
+
+    .shopButtonDark {
+        background: #2d383e !important;
+        border-bottom: 5px solid #1a1f22 !important;
+        color: #fff !important;
+    }
+
+    .shopButtonDark:hover {
+        background: #39464d !important;
     }
 
     .mobileCourseDropdown {

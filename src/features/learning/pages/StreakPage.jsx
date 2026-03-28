@@ -49,68 +49,127 @@ const StreakPage = () => {
                 <button
                     onClick={() => navigate(-1)}
                     style={{ background: 'none', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '8px 0' }}
+                    className={loading ? styles.skeleton : ''}
                 >
                     <ChevronLeft size={28} />
                 </button>
             </div>
 
             {loading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
-                    <InlineLoader />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                    {/* Tagline Skeleton */}
+                    <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+                        <div className={styles.skeleton} style={{ width: '70%', height: '24px', borderRadius: '8px', marginBottom: '8px' }} />
+                        <div className={styles.skeleton} style={{ width: '50%', height: '20px', borderRadius: '6px' }} />
+                    </div>
+                    
+                    {/* Main Card (ConsistencyTracker replacement) */}
+                    <div style={{ background: 'var(--color-bg-alt)', borderRadius: '24px', padding: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                        {/* Stats Row */}
+                        <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '32px', position: 'relative' }}>
+                            <div style={{ textAlign: 'center' }}>
+                                <div className={styles.skeleton} style={{ width: '100px', height: '14px', marginBottom: '12px' }} />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div className={styles.skeleton} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+                                    <div className={styles.skeleton} style={{ width: '30px', height: '32px' }} />
+                                </div>
+                            </div>
+                            <div style={{ width: '1px', height: '60px', background: 'rgba(255,255,255,0.1)' }} />
+                            <div style={{ textAlign: 'center' }}>
+                                <div className={styles.skeleton} style={{ width: '100px', height: '14px', marginBottom: '12px' }} />
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <div className={styles.skeleton} style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+                                    <div className={styles.skeleton} style={{ width: '30px', height: '32px' }} />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Calendar Header */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                            <div className={styles.skeleton} style={{ width: '140px', height: '28px', borderRadius: '8px' }} />
+                            <div className={styles.skeleton} style={{ width: '100px', height: '28px', borderRadius: '20px' }} />
+                        </div>
+
+                        {/* Calendar Grid */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '8px' }}>
+                            {[...Array(35)].map((_, i) => (
+                                <div key={i} className={styles.skeleton} style={{ width: '100%', aspectRatio: '1/1', borderRadius: '8px' }} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Milestone Header */}
+                    <div className={styles.skeleton} style={{ width: '150px', height: '24px', borderRadius: '6px' }} />
+                    
+                    {/* Milestone List Skeletons */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        {[1, 2, 3, 4].map(i => (
+                            <div key={i} className={styles.milestoneItem} style={{ background: 'rgba(255,255,255,0.02)' }}>
+                                <div className={styles.skeleton} style={{ width: '44px', height: '44px', borderRadius: '12px' }} />
+                                <div className={styles.milestoneText}>
+                                    <div className={styles.skeleton} style={{ width: '160px', height: '14px', marginBottom: '6px', borderRadius: '4px' }} />
+                                    <div className={styles.skeleton} style={{ width: '100px', height: '12px', borderRadius: '4px' }} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Button Skeleton */}
+                    <div className={styles.skeleton} style={{ width: '100%', height: '52px', borderRadius: '16px', marginTop: '8px' }} />
                 </div>
             ) : (
-                <div style={{ marginBottom: '24px' }}>
-                    <ConsistencyTracker
-                        profile={null}
-                        streak={streak}
-                        history={fullHistory}
-                        calendarTopContent={
-                            <h2 className={styles.tagline} style={{ marginBottom: '20px', textAlign: 'center' }}>
-                                {streak.current_streak === 0 ? 'শুরু করুন! আজ থেকেই আপনার ধারাবাহিকতা তৈরি করুন।' :
-                                    streak.current_streak <= 3 ? 'আপনি দারুণ শুরু করেছেন! আপনার ধারাবাহিকতা বজায় রাখুন।' :
-                                        streak.current_streak <= 10 ? 'অসাধারণ! আপনি ধারাবাহিকভাবে এগিয়ে যাচ্ছেন। থামবেন না।' :
-                                            streak.current_streak <= 25 ? 'চমৎকার! আপনার ধারাবাহিকতা সত্যিই শক্তিশালী হয়ে উঠছে।' :
-                                                'অবিশ্বাস্য! আপনি একজন স্ট্রিক লেজেন্ড। এভাবেই চালিয়ে যান।'}
-                            </h2>
-                        }
-                    />
-                </div>
+                <>
+                    <div style={{ marginBottom: '24px' }}>
+                        <ConsistencyTracker
+                            profile={null}
+                            streak={streak}
+                            history={fullHistory}
+                            calendarTopContent={
+                                <h2 className={styles.tagline} style={{ marginBottom: '20px', textAlign: 'center' }}>
+                                    {streak.current_streak === 0 ? t('streak_tagline_0') :
+                                        streak.current_streak <= 3 ? t('streak_tagline_1_3') :
+                                            streak.current_streak <= 10 ? t('streak_tagline_4_10') :
+                                                streak.current_streak <= 25 ? t('streak_tagline_11_25') :
+                                                    t('streak_tagline_legend')}
+                                </h2>
+                            }
+                        />
+                    </div>
+
+                    <section className={styles.milestones}>
+                        <h3>স্ট্রিক মাইলফলক</h3>
+                        <div className={styles.milestoneList}>
+                            {[10, 30, 50, 100].map(m => {
+                                const isAchieved = streak.longest_streak >= m;
+                                const remaining = Math.max(0, m - streak.current_streak);
+
+                                return (
+                                    <div key={m} className={`${styles.milestoneItem} ${isAchieved ? styles.milestoneAchieved : ''}`}>
+                                        <div className={styles.milestoneIcon} style={{ background: isAchieved ? 'rgba(241, 196, 15, 0.2)' : 'rgba(0,0,0,0.2)' }}>
+                                            <Flame
+                                                size={20}
+                                                fill={isAchieved ? "#f1c40f" : "none"}
+                                                stroke={isAchieved ? "#f1c40f" : "#666"}
+                                                strokeWidth={2}
+                                            />
+                                        </div>
+                                        <div className={styles.milestoneText}>
+                                            <h4 style={{ color: isAchieved ? '#f1c40f' : 'inherit' }}>{m} দিনের মাইলফলক</h4>
+                                            <p>{isAchieved ? 'অর্জিত!' : `${remaining} দিন বাকি`}</p>
+                                        </div>
+                                        {isAchieved && <ChevronRight size={20} className={styles.chevron} style={{ color: '#f1c40f' }} />}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </section>
+
+                    <button className={styles.shareButton}>
+                        <Share2 size={20} />
+                        বন্ধুদের সাথে শেয়ার করুন
+                    </button>
+                </>
             )}
-
-
-
-            <section className={styles.milestones}>
-                <h3>স্ট্রিক মাইলফলক</h3>
-                <div className={styles.milestoneList}>
-                    {[10, 30, 50, 100].map(m => {
-                        const isAchieved = streak.longest_streak >= m;
-                        const remaining = Math.max(0, m - streak.current_streak);
-                        
-                        return (
-                            <div key={m} className={styles.milestoneItem}>
-                                <div className={styles.milestoneIcon}>
-                                    <Flame 
-                                        size={20} 
-                                        fill={isAchieved ? "url(#flameGradientTracker)" : "none"} 
-                                        stroke={isAchieved ? "url(#flameGradientTracker)" : "#666"} 
-                                        strokeWidth={2} 
-                                    />
-                                </div>
-                                <div className={styles.milestoneText}>
-                                    <h4>{m} দিনের মাইলফলক</h4>
-                                    <p>{isAchieved ? 'অর্জিত!' : `${remaining} দিন বাকি`}</p>
-                                </div>
-                                {isAchieved && <ChevronRight size={20} className={styles.chevron} />}
-                            </div>
-                        );
-                    })}
-                </div>
-            </section>
-
-            <button className={styles.shareButton}>
-                <Share2 size={20} />
-                বন্ধুদের সাথে শেয়ার করুন
-            </button>
         </div>
     );
 };

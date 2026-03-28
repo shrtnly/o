@@ -212,3 +212,48 @@
         height: 36px;
     }
 }
+
+@keyframes skeleton-shimmer {
+    0% {
+        background-position: 150% 50%;
+    }
+    100% {
+        background-position: -50% 50%;
+    }
+}
+
+.skeleton {
+    background: var(--color-bg-alt);
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.05) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 200% 100%;
+    display: inline-block;
+    position: relative;
+    animation: skeleton-shimmer 2s infinite linear;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+:global(.light) .skeleton {
+    background: #edf2f7;
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+}
+
+.milestoneItem {
+    transition: all 0.2s ease;
+}
+
+.milestoneAchieved {
+    background: rgba(241, 196, 15, 0.08) !important;
+    border: 1px solid rgba(241, 196, 15, 0.2);
+}

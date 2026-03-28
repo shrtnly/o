@@ -395,16 +395,16 @@ const LearningPage = () => {
                 const finalHReward = hReward || (chapter.type === 'heart_box' ? legacyReward : 0);
                 const finalGReward = gReward || (chapter.type === 'pollen_box' ? legacyReward : 0);
 
-                // 1. Update Profile
-                const { error: profileError } = await supabase
-                    .from('profiles')
-                    .update({
-                        hearts: (profile?.hearts || 0) + finalHReward,
-                        gems: (profile?.gems || 0) + finalGReward
-                    })
-                    .eq('id', user.id);
-
-                if (profileError) throw profileError;
+                // 1. Update Profile via Service (Handles transactions and atomicity)
+                if (finalHReward > 0) {
+                    await rewardService.awardHearts(user.id, finalHReward, chapter.type, { chapterId: chapter.id, courseId });
+                }
+                if (finalGReward > 0) {
+                    await rewardService.awardGems(user.id, finalGReward, chapter.type, { chapterId: chapter.id, courseId });
+                }
+                
+                // Track as activity even if no XP gained to ensure streak updates
+                await rewardService.awardXP(user.id, 0, chapter.type, { chapterId: chapter.id, courseId });
 
                 // 2. Mark as completed in user_progress
                 const { error: progressError } = await supabase
@@ -426,8 +426,16 @@ const LearningPage = () => {
                     gems: (prev?.gems || 0) + finalGReward
                 }));
                 setProgress(prev => [...prev, { chapter_id: chapter.id, is_completed: true }]);
+                
+                // 4. Refresh streak history and info
+                const [newHistory, newStreak] = await Promise.all([
+                    rewardService.getActivityHistory(user.id, 7),
+                    rewardService.getUserStreak(user.id)
+                ]);
+                if (newHistory) setStreakHistory(newHistory);
+                if (newStreak) setStreak(newStreak);
 
-                // 4. Show Gaming Modal
+                // 5. Show Gaming Modal
                 setLastReward({ hearts: finalHReward, gems: finalGReward });
                 setShowRewardModal(true);
             } catch (err) {
@@ -438,7 +446,7 @@ const LearningPage = () => {
         }
 
         navigate(`/study/${courseId}/${chapter.id}`);
-    }, [courseId, user, profile, navigate]);
+    }, [courseId, user, profile, navigate, streak]);
 
     const allChapters = unitsWithChapters.flatMap(u => u.chapters);
     const completedChapterIds = new Set(progress.filter(p => p.is_completed).map(p => p.chapter_id));
@@ -552,21 +560,39 @@ const LearningPage = () => {
         if (data) setProfile(data);
     }, [user]);
 
-    // Compute last 7 days for the streak tooltip
+    // Compute last 7 days for the streak tooltip (Fixed week: Saturday to Friday)
     const last7DaysStreak = useMemo(() => {
         const days = [];
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        for (let i = 6; i >= 0; i--) {
-            const d = new Date(today);
-            d.setDate(d.getDate() - i);
-            const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        // Find the start of the week (Saturday)
+        // JS getDay() returns: 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat
+        // We want to map this to an offset from Saturday: Sat:0, Sun:1, Mon:2, ..., Fri:6
+        const dayOfWeek = today.getDay();
+        const diffToSat = (dayOfWeek + 1) % 7;
+        
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - diffToSat);
+
+        for (let i = 0; i < 7; i++) {
+            const d = new Date(startOfWeek);
+            d.setDate(d.getDate() + i);
+            
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
+            
             const isCompleted = streakHistory.some(h => h.activity_date === dateStr);
+            const isToday = d.getTime() === today.getTime();
+            
             days.push({
                 date: dateStr,
                 dayName: d.toLocaleDateString('bn-BD', { weekday: 'short' }),
-                completed: isCompleted
+                completed: isCompleted,
+                isToday,
+                isFuture: d.getTime() > today.getTime()
             });
         }
         return days;
@@ -613,9 +639,16 @@ const LearningPage = () => {
 
                                                     <div className={styles.streakSevenDaysRow}>
                                                         {last7DaysStreak.map((day, idx) => (
-                                                            <div key={idx} className={styles.streakDayItem}>
+                                                            <div key={idx} className={cn(
+                                                                styles.streakDayItem,
+                                                                day.isToday && styles.streakDayToday,
+                                                                day.isFuture && styles.streakDayFuture
+                                                            )}>
                                                                 <div className={styles.streakDayName}>{day.dayName}</div>
-                                                                <div className={day.completed ? styles.streakDayCircleActive : styles.streakDayCircle}>
+                                                                <div className={cn(
+                                                                    day.completed ? styles.streakDayCircleActive : styles.streakDayCircle,
+                                                                    day.isToday && !day.completed && styles.streakDayTodayUnfilled
+                                                                )}>
                                                                     {day.completed ? <Check size={14} strokeWidth={4} color="#f1c40f" /> : null}
                                                                 </div>
                                                             </div>
@@ -623,8 +656,8 @@ const LearningPage = () => {
                                                     </div>
 
                                                     <button
-                                                        className={styles.shopButton}
-                                                        style={{ background: '#2d383e', color: '#fff', borderBottom: '3px solid #1a1f22', width: '100%', marginTop: '16px' }}
+                                                        className={cn(styles.shopButton, styles.shopButtonDark)}
+                                                        style={{ width: '100%', marginTop: '16px' }}
                                                         onClick={() => { setShowStreakTooltip(false); navigate('/streak'); }}
                                                     >
                                                         <span>বিস্তারিত দেখুন</span>
@@ -653,8 +686,8 @@ const LearningPage = () => {
                                                         </div>
                                                     </div>
                                                     <button
-                                                        className={styles.shopButton}
-                                                        style={{ background: '#2d383e', color: '#fff', borderBottom: '3px solid #1a1f22', width: '100%' }}
+                                                        className={cn(styles.shopButton, styles.shopButtonDark)}
+                                                        style={{ width: '100%' }}
                                                         onClick={() => { setShowXpTooltip(false); navigate('/leaderboard'); }}
                                                     >
                                                         <span>লিডারবোর্ড দেখুন</span>
@@ -721,8 +754,7 @@ const LearningPage = () => {
                                                         <div className={styles.tooltipNonSubscriber}>
                                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                                                 <button
-                                                                    className={styles.shopButton}
-                                                                    style={{ background: 'linear-gradient(135deg, #FFD700 0%, #F1A20F 100%)', borderBottom: '3px solid #d48e00' }}
+                                                                    className={cn(styles.shopButton, styles.shopButtonGold)}
                                                                     onClick={() => { setShowHeartsTooltip(false); navigate('/shop', { state: { directCheckout: 'monthly' } }); }}
                                                                 >
                                                                     <Crown size={16} />
@@ -730,8 +762,7 @@ const LearningPage = () => {
                                                                 </button>
 
                                                                 <button
-                                                                    className={styles.shopButton}
-                                                                    style={{ background: '#2d383e', color: '#fff', borderBottom: '3px solid #1a1f22' }}
+                                                                    className={cn(styles.shopButton, styles.shopButtonDark)}
                                                                     onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
                                                                 >
                                                                     <ShoppingBag size={16} />

@@ -8,7 +8,11 @@ import {
     ChevronRight,
     Check,
     X,
-    Trophy
+    Trophy,
+    Star,
+    Target,
+    Rocket,
+    Activity
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import styles from './ConsistencyTracker.module.css';
@@ -156,6 +160,18 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
         year: 'numeric'
     });
 
+    const getProgressStatus = (percent) => {
+        if (percent >= 90) return { key: 'perfect_progress', color: '#FFD700', bg: 'rgba(255, 215, 0, 0.12)', border: 'rgba(255, 215, 0, 0.25)', icon: Trophy };
+        if (percent >= 75) return { key: 'almost_perfect', color: '#4ADE80', bg: 'rgba(74, 222, 128, 0.12)', border: 'rgba(74, 222, 128, 0.25)', icon: Star };
+        if (percent >= 50) return { key: 'good_progress', color: '#22D3EE', bg: 'rgba(34, 211, 238, 0.12)', border: 'rgba(34, 211, 238, 0.25)', icon: TrendingUp };
+        if (percent >= 25) return { key: 'keep_going', color: '#FB923C', bg: 'rgba(251, 146, 60, 0.12)', border: 'rgba(251, 146, 60, 0.25)', icon: Target };
+        if (percent > 0) return { key: 'getting_started', color: '#F87171', bg: 'rgba(248, 113, 113, 0.12)', border: 'rgba(248, 113, 113, 0.25)', icon: Rocket };
+        return { key: 'no_practice_yet', color: '#94A3B8', bg: 'rgba(148, 163, 184, 0.12)', border: 'rgba(148, 163, 184, 0.25)', icon: Activity };
+    };
+
+    const status = getProgressStatus(stats.progressPercentage);
+    const StatusIcon = status.icon;
+
     return (
         <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -197,17 +213,24 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 <div className={styles.statBox}>
                     <span className={styles.statLabel}>{t('consistency_score')}</span>
                     <div className={styles.statMain}>
-                        <TrendingUp size={40} color="var(--color-accent-cyan)" strokeWidth={2.5} />
-                        <span className={styles.statValue} style={{ color: 'var(--color-accent-cyan)' }}>{stats.score}%</span>
+                        <StatusIcon size={40} color={status.color} strokeWidth={2.5} />
+                        <span className={styles.statValue} style={{ color: status.color }}>{stats.score}%</span>
                     </div>
-                    <div className={styles.statSub}>
-                        <span className={styles.tagline}>
-                            {stats.progressPercentage >= 90 ? t('perfect_progress') :
-                                stats.progressPercentage >= 75 ? t('almost_perfect') :
-                                    stats.progressPercentage >= 50 ? t('good_progress') :
-                                        stats.progressPercentage >= 25 ? t('keep_going') :
-                                            stats.progressPercentage > 0 ? t('getting_started') :
-                                                t('no_practice_yet')}
+                    <div className={styles.statSub} style={{ marginTop: '4px' }}>
+                        <span 
+                            className={styles.statusBubble} 
+                            style={{ 
+                                color: status.color, 
+                                backgroundColor: status.bg,
+                                border: `1px solid ${status.border}`,
+                                padding: '4px 10px',
+                                borderRadius: '100px',
+                                fontSize: '0.75rem',
+                                fontWeight: '700',
+                                whiteSpace: 'nowrap'
+                            }}
+                        >
+                            {t(status.key)}
                         </span>
                     </div>
                 </div>

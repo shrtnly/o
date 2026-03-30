@@ -19,11 +19,13 @@ export const shopService = {
     /**
      * Subscribe to premium (monthly or yearly)
      */
-    async subscribeToPremium(userId, planType, price) {
+    async subscribeToPremium(userId, planType, price, originalPrice = null, promoId = null) {
         const { data, error } = await supabase.rpc('process_subscription_purchase', {
             p_user_id: userId,
             p_plan_type: planType,
-            p_amount: price
+            p_amount: price,
+            p_original_price: originalPrice,
+            p_promo_id: promoId
         });
 
         if (error) throw error;
@@ -33,10 +35,12 @@ export const shopService = {
     /**
      * Buy 1-day premium recharge
      */
-    async buy1DayPremium(userId, price) {
+    async buy1DayPremium(userId, price, originalPrice = null, promoId = null) {
         const { data, error } = await supabase.rpc('process_1day_premium_purchase', {
             p_user_id: userId,
-            p_amount: price
+            p_amount: price,
+            p_original_price: originalPrice,
+            p_promo_id: promoId
         });
 
         if (error) throw error;
@@ -46,12 +50,14 @@ export const shopService = {
     /**
      * Buy gems (using secure RPC and transaction tracking)
      */
-    async buyGems(userId, amount, price, itemId) {
+    async buyGems(userId, amount, price, itemId, originalPrice = null, promoId = null) {
         const { data, error } = await supabase.rpc('process_gem_purchase', {
             p_user_id: userId,
             p_gem_amount: amount,
             p_price: price,
-            p_item_id: itemId
+            p_item_id: itemId,
+            p_original_price: originalPrice,
+            p_promo_id: promoId
         });
 
         if (error) throw error;
@@ -61,12 +67,14 @@ export const shopService = {
     /**
      * Buy hearts directly
      */
-    async buyHearts(userId, amount, price, itemId) {
+    async buyHearts(userId, amount, price, itemId, originalPrice = null, promoId = null) {
         const { data, error } = await supabase.rpc('process_heart_purchase', {
             p_user_id: userId,
             p_heart_amount: amount,
             p_price: price,
-            p_item_id: itemId
+            p_item_id: itemId,
+            p_original_price: originalPrice,
+            p_promo_id: promoId
         });
 
         if (error) throw error;

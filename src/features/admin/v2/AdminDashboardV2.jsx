@@ -7,11 +7,13 @@ import {
     Menu,
     LogOut,
     Sun,
-    Moon
+    Moon,
+    Tag
 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import CourseList from './CourseList';
 import CourseEditor from './CourseEditor';
+import PromoCodeManager from './PromoCodeManager';
 import { Toaster } from 'sonner';
 import { useTheme } from '../../../context/ThemeContext';
 
@@ -24,6 +26,7 @@ const AdminDashboardV2 = () => {
     const navItems = [
         { id: 'courses', label: 'Curriculum', icon: BookOpen },
         { id: 'users', label: 'Students', icon: Users },
+        { id: 'promo', label: 'Promo Codes', icon: Tag },
         { id: 'settings', label: 'Settings', icon: Settings },
     ];
 
@@ -98,7 +101,10 @@ const AdminDashboardV2 = () => {
                             onBack={() => setActiveView('courses')}
                         />
                     )}
-                    {(activeView !== 'courses' && activeView !== 'editor') && (
+                    {activeView === 'promo' && (
+                        <PromoCodeManager />
+                    )}
+                    {(activeView !== 'courses' && activeView !== 'editor' && activeView !== 'promo') && (
                         <div className="py-20 text-center text-slate-400 dark:text-slate-600">
                             <Settings size={48} className="mx-auto mb-4 opacity-10" />
                             <p className="text-lg font-medium">Coming Soon</p>

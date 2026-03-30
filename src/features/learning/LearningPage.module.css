@@ -90,6 +90,11 @@
     max-width: 640px;
 }
 
+
+.mobileHeaderBar {
+    display: none;
+}
+
 /* Mobile specific header container overrides */
 @media (max-width: 768px) {
     .unitHeader {

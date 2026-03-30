@@ -133,12 +133,12 @@ const AppContent = () => {
             <Route path="/connections" element={<ConnectionPage />} />
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/shop" element={<ShopPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/settings" element={<SettingsPage />} />
 
             <Route path="/help" element={<HelpPage />} />
           </Route>
 
+          <Route path="/checkout" element={user ? <CheckoutPage /> : <Navigate to="/auth" replace />} />
           <Route path="/study/:courseId/:chapterId" element={<StudyPage />} />
 
           {/* Guest Courses version */}

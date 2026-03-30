@@ -175,16 +175,17 @@
 
 /* Info Box */
 .infoBox {
-    background: #121212;
-    border: 1.2px solid #222;
-    border-radius: 12px;
-    padding: 20px;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    padding: 24px;
     display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    color: rgba(255, 255, 255, 0.6);
+    flex-direction: column;
+    gap: 20px;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.95rem;
     line-height: 1.5;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .infoIcon {
@@ -193,31 +194,229 @@
     margin-top: 2px;
 }
 
-/* Payment Methods Grid */
-.paymentGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.methodBtn {
-    background: #121212;
-    border: 1.5px solid #262626;
-    border-radius: 12px;
-    padding: 20px;
+/* Promo Code Section */
+.promoContainer {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 12px;
-    color: rgba(255, 255, 255, 0.6);
+}
+
+.promoInputWrapper {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    height: 48px;
+}
+
+.inputWithIcon {
+    position: relative;
+    flex: 1;
+    height: 100%;
+}
+
+.promoInput {
+    width: 100%;
+    height: 100%;
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 12px;
+    padding: 0 16px;
+    padding-right: 40px; /* Space for the clear button */
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.clearBtn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 50%;
     transition: all 0.2s;
 }
 
-.methodBtn.active {
+.clearBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ef4444;
+}
+
+.promoInput:focus {
+    outline: none;
     border-color: #3b82f6;
-    background: rgba(29, 78, 216, 0.05);
+    background: #1a1a1a;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+.promoInput::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+    font-weight: 400;
+}
+
+.applyBtn {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    height: 100%;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    white-space: nowrap;
+}
+
+.applyBtn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+.applyBtn:active:not(:disabled) {
+    transform: translateY(0.5px);
+}
+
+.applyBtn:disabled {
+    background: #1a1a1a;
+    border: 1px solid #222;
+    color: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    opacity: 1; /* Reset opacity from previous version */
+}
+
+.promoMessage {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 4px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btnSuccess {
+    background: linear-gradient(135deg, #10b981, #064e3b) !important;
+}
+
+.btnError {
+    background: linear-gradient(135deg, #ef4444, #7f1d1d) !important;
+}
+
+.discountRow {
+    color: #10b981 !important;
+}
+
+.discountAmount {
+    font-weight: 700;
+}
+
+.originalPrice {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    margin-right: 8px;
+    font-weight: 400;
+}
+
+/* Payment Methods Grid */
+.paymentGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.methodCard {
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 16px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Increased gap for left-aligned radio */
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.methodCard:hover:not(.active) {
+    border-color: #333;
+    background: #111;
+}
+
+.methodCard.active {
+    background: #111;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.methodLogo {
+    width: 100px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff; /* White background to make dark logo elements visible */
+    border-radius: 12px;
+    padding: 2px;
+    flex-shrink: 0;
+}
+
+.methodLogo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.methodCard .radioIndicator {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.25s;
+    flex-shrink: 0;
+}
+
+.methodCard.active .radioIndicator {
+    border-color: #3b82f6;
+}
+
+.methodCard.active .radioIndicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: #3b82f6;
+    border-radius: 50%;
+    animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scaleIn {
+    from { transform: translate(-50%, -50%) scale(0); }
+    to { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* Action Area */

@@ -185,6 +185,11 @@ const translations = {
         payment_method: "পেমেন্ট পদ্ধতি",
         tax: "ট্যাক্স",
         total_due_today: "মোট পরিমাণ",
+        discount_label: "ডিসকাউন্ট",
+        promo_success_msg: "সফল",
+        enter_promo_code: "কুপন কোড",
+        apply: "প্রয়োগ",
+        remove: "মুছে ফেলুন",
 
 
 
@@ -1003,7 +1008,12 @@ const translations = {
         order_details: "Order Details",
         payment_method: "Payment Method",
         tax: "TAX",
-        total_due_today: "Grand Total"
+        total_due_today: "Grand Total",
+        discount_label: "Discount",
+        promo_success_msg: "Success",
+        enter_promo_code: "Coupon code",
+        apply: "Apply",
+        remove: "Remove",
     }
 };
 
@@ -1032,8 +1042,14 @@ export const LanguageProvider = ({ children }) => {
         setLanguage(prev => prev === 'bn' ? 'en' : 'bn');
     };
 
+    const formatNumber = (num) => {
+        if (language === 'en') return num;
+        const bnNums = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        return String(num).replace(/[0-9]/g, digit => bnNums[digit]);
+    };
+
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t }}>
+        <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, formatNumber }}>
             {children}
         </LanguageContext.Provider>
     );

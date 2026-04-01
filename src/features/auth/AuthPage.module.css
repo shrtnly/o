@@ -485,23 +485,28 @@
 }
 
 @media (max-width: 480px) {
+    .authWrapper {
+        align-items: flex-start;
+        padding-top: 12vh;
+    }
+
     .authContainer {
         padding: 0 10px;
     }
 
     .authLogo {
-        height: 60px; /* Reduced for mobile version */
+        height: 60px; /* Even smaller for mobile */
     }
 
     .logoWrapper {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 
     .header {
-        margin-bottom: 24px;
+        margin-bottom: 12px;
     }
 
     .header h1 {
-        font-size: 1.5rem; /* Slightly smaller h1 for mobile */
+        font-size: 1.35rem; /* More compact header */
     }
 }

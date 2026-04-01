@@ -100,7 +100,8 @@ const getPathData = (chapters, nodesPerRow) => {
 const CHAPTER_ICONS = [Play, BookOpen, PenTool, Star, Globe, Activity, Send, Shapes, Sparkles, ChartPie, Command, Lightbulb, Timer, Settings2, Rocket, MousePointerClick, Layers2, Anchor];
 
 // Optimized Chapter Node component
-const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, iconIdx, onClick, isDark }) => {
+const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked, isFirstModule, iconIdx, onClick, isDark }) => {
+
     return (
         <div
             className={cn(styles.nodeWrapper, isLocked && styles.nodeLocked)}
@@ -130,10 +131,11 @@ const ChapterNode = React.memo(({ chapter, pos, isCompleted, isActive, isLocked,
                                 return <Gift size={24} color="#ffd700" strokeWidth={2.5} />;
                             }
                             const IconComponent = CHAPTER_ICONS[iconIdx % CHAPTER_ICONS.length];
+                            
                             return (
                                 <IconComponent
                                     size={24}
-                                    color={isActive || isCompleted ? "var(--unit-color-bg)" : (isDark ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.25)")}
+                                    color={(isActive || isCompleted) ? "var(--unit-color-bg)" : (isDark ? "rgba(255, 255, 255, 0.45)" : "rgba(0, 0, 0, 0.25)")}
                                     strokeWidth={2}
                                 />
                             );
@@ -554,7 +556,9 @@ const LearningPage = () => {
         return UNIT_COLORS[idx >= 0 ? idx : 0];
     };
 
-    const currentColor = getUnitColor(activeUnit?.order_index || 1);
+    const currentColor = activeUnit?.order_index === 1 
+        ? { bg: "var(--color-text)", border: "var(--color-text)" } 
+        : getUnitColor(activeUnit?.order_index || 1);
 
     // Optimized Units Calculation moved to top level (Hook)
     const unitSections = useMemo(() => unitsWithChapters.map((unit, index) => {
@@ -571,16 +575,17 @@ const LearningPage = () => {
         const isMobile = windowWidth <= 768;
         const svgWidth = isMobile ? windowWidth : 640;
 
+        const isFirstModule = index === 0;
         const isSeparator = index > 0;
 
         return (
             <React.Fragment key={unit.id}>
                 {isSeparator && (
-                    <div className={styles.unitSeparator}>
+                    <div className={cn(styles.unitSeparator, isFirstModule && styles.firstModuleSeparator)}>
                         <div className={styles.separatorLine} />
                         <div
-                            className={styles.separatorText}
-                            style={{ color: getUnitColor(unit.order_index).border }}
+                            className={cn(styles.separatorText, isFirstModule && styles.firstModuleHeader)}
+                            style={{ color: isFirstModule ? "inherit" : getUnitColor(unit.order_index).border }}
                         >
                             {unit.title}
                         </div>
@@ -589,10 +594,10 @@ const LearningPage = () => {
                 )}
                 <section
                     data-unit-section={unit.id}
-                    className={styles.unitSection}
+                    className={cn(styles.unitSection, isFirstModule && styles.firstModule)}
                     style={{
-                        '--unit-color-bg': getUnitColor(unit.order_index).bg,
-                        '--unit-color-border': getUnitColor(unit.order_index).border
+                        '--unit-color-bg': isFirstModule ? "var(--color-text)" : getUnitColor(unit.order_index).bg,
+                        '--unit-color-border': isFirstModule ? "var(--color-text)" : getUnitColor(unit.order_index).border
                     }}
                 >
                     <div className={styles.pathContainer} style={{ height: `${containerHeight}px` }}>
@@ -616,6 +621,7 @@ const LearningPage = () => {
                                     isCompleted={isCompleted}
                                     isActive={isActive}
                                     isLocked={isLocked}
+                                    isFirstModule={isFirstModule}
                                     iconIdx={cIdx}
                                     onClick={() => handleChapterClick(chapter, isLocked, isCompleted)}
                                     isDark={isDark}

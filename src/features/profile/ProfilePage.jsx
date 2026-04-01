@@ -381,51 +381,64 @@ const ProfilePage = () => {
 
     // Analytics unlock notification handler
     useEffect(() => {
-        if (streak?.current_streak) {
-            console.log('--- Analytics Unlock Logic ---');
-            console.log('Current streak:', streak.current_streak);
-            console.log('Status:', streak.current_streak >= 3 ? 'Eligible for unlock' : 'Need more days');
-        }
+        if (!user?.id || !streak || streak.current_streak < 3) return;
 
-        if (!user?.id || !streak) return;
+        const checkAndSendUnlockNotif = async () => {
+            try {
+                // 1. Quick check localStorage
+                if (localStorage.getItem(`analytics_unlocked_${user.id}`)) return;
 
-        if (streak.current_streak >= 3 && !localStorage.getItem(`analytics_unlocked_${user.id}`)) {
-            const sendUnlockNotif = async () => {
-                try {
-                    // Restore success style and original message, but keep trophy icon
-                    toast.success(
-                        language === 'bn' ? 'অভিনন্দন!পারফরমেন্স অ্যানালিটিক্স আনলক' : 'Congratulations! Your performance analytics are now unlocked.',
-                        {
-                            icon: <Trophy size={18} className={styles.statIconRank} />,
-                            duration: 5000
-                        }
-                    );
+                // 2. Double check Database for existing notification of this type
+                const { data: existingNotif, error: checkError } = await supabase
+                    .from('notifications')
+                    .select('id')
+                    .eq('user_id', user.id)
+                    .eq('type', 'unlock')
+                    .contains('data', { type: 'analytics_unlock' })
+                    .limit(1);
 
-                    const { error } = await supabase.from('notifications').insert({
-                        user_id: user.id,
-                        actor_id: user.id,
-                        title: language === 'bn' ? 'অ্যানালিটিক্স আনলক হয়েছে!' : 'Analytics Unlocked!',
-                        message: language === 'bn' ? 'আপনি ৩ দিনের ধারাবাহিকতা অর্জন করেছেন। এখন আপনার পারফরমেন্স চার্টগুলো দেখতে পারবেন।' : 'You have achieved a 3-day streak. You can now view your performance charts.',
-                        type: 'unlock',
-                        is_read: false,
-                        data: {
-                            type: 'analytics_unlock',
-                            display_title: language === 'bn' ? 'অ্যানালিটিক্স আনলকড! 🏆' : 'Analytics Unlocked! 🏆',
-                            display_msg: language === 'bn' ? '৩ দিনের স্ট্রিক পূর্ণ হয়েছে!' : '3-day streak achieved!'
-                        }
-                    });
+                if (checkError) throw checkError;
 
-                    if (!error) {
-                        localStorage.setItem(`analytics_unlocked_${user.id}`, 'true');
-                    } else {
-                        console.error('Failed to insert unlock notification:', error);
-                    }
-                } catch (err) {
-                    console.error('Error sending unlock notif:', err);
+                // If exists in DB, update localStorage and exit
+                if (existingNotif && existingNotif.length > 0) {
+                    localStorage.setItem(`analytics_unlocked_${user.id}`, 'true');
+                    return;
                 }
-            };
-            sendUnlockNotif();
-        }
+
+                // 3. Send if really new
+                toast.success(
+                    language === 'bn' ? 'অভিনন্দন! পারফরমেন্স অ্যানালিটিক্স আনলক' : 'Congratulations! Your performance analytics are now unlocked.',
+                    {
+                        icon: <Trophy size={18} className={styles.statIconRank} />,
+                        duration: 5000
+                    }
+                );
+
+                const { error } = await supabase.from('notifications').insert({
+                    user_id: user.id,
+                    actor_id: user.id, // self-actor for system unlocks
+                    title: language === 'bn' ? 'অ্যানালিটিক্স আনলক হয়েছে!' : 'Analytics Unlocked!',
+                    message: language === 'bn' ? 'আপনি ৩ দিনের ধারাবাহিকতা অর্জন করেছেন। এখন আপনার পারফরমেন্স চার্টগুলো দেখতে পারবেন।' : 'You have achieved a 3-day streak. You can now view your performance charts.',
+                    type: 'unlock',
+                    is_read: false,
+                    data: {
+                        type: 'analytics_unlock',
+                        display_title: language === 'bn' ? 'অ্যানালিটিক্স আনলকড! 🏆' : 'Analytics Unlocked! 🏆',
+                        display_msg: language === 'bn' ? '৩ দিনের স্ট্রিক পূর্ণ হয়েছে!' : '3-day streak achieved!'
+                    }
+                });
+
+                if (!error) {
+                    localStorage.setItem(`analytics_unlocked_${user.id}`, 'true');
+                } else {
+                    console.error('Failed to insert unlock notification:', error);
+                }
+            } catch (err) {
+                console.error('Error handling analytics unlock notif:', err);
+            }
+        };
+
+        checkAndSendUnlockNotif();
     }, [streak?.current_streak, user?.id, language]);
 
 

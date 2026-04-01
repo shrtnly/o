@@ -494,6 +494,8 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             };
 
             setNewMessage('');
+            // Reset height
+            if (messageInputRef.current) messageInputRef.current.style.height = 'auto';
             setPendingAttachmentUrl(null);
             setFilePreview(null);
             setMessages(prev => [...prev, optimisticMsg]);
@@ -1451,11 +1453,21 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     aria-autocomplete="none"
                                                     placeholder={t('write_msg')} 
                                                     value={newMessage}
-                                                    onChange={(e) => setNewMessage(e.target.value)}
+                                                    onChange={(e) => {
+                                                        setNewMessage(e.target.value);
+                                                        // Auto-expand logic
+                                                        const el = e.target;
+                                                        el.style.height = 'auto';
+                                                        el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+                                                    }}
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter' && !e.shiftKey) {
                                                             e.preventDefault();
                                                             handleSendMessage();
+                                                            // Reset height
+                                                            if (messageInputRef.current) {
+                                                                messageInputRef.current.style.height = 'auto';
+                                                            }
                                                         }
                                                     }}
                                                     className={styles.chatInput}

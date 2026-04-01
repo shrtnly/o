@@ -280,6 +280,8 @@
     transform: scale(1.08);
 }
 
+/* Pulled down to bottom of node section to ensure precedence */
+
 .nodeRing {
     position: absolute;
     inset: 0;
@@ -396,6 +398,41 @@
 :global(.light) .nodeLocked .nodeInner {
     background: #e2e8f0;
     border-color: rgba(0, 0, 0, 0.05);
+}
+
+/* First Module Styles - Minimal & Professional */
+.firstModuleSeparator .separatorText {
+    color: var(--color-text) !important;
+    font-weight: 900 !important;
+    letter-spacing: 2px !important;
+}
+
+:global(.dark) .firstModuleSeparator .separatorText {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+:global(.light) .firstModuleSeparator .separatorText {
+    color: #000000 !important;
+}
+
+.firstModuleSeparator .separatorLine {
+    opacity: 0.8 !important;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.05) 10%, 
+        #ffffff 50%, 
+        rgba(255, 255, 255, 0.05) 90%, 
+        transparent 100%) !important;
+}
+
+:global(.light) .firstModuleSeparator .separatorLine {
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 0, 0, 0.05) 10%, 
+        #000000 50%, 
+        rgba(0, 0, 0, 0.05) 90%, 
+        transparent 100%) !important;
 }
 
 .activeRewardGlow {

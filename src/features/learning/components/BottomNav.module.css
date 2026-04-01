@@ -52,11 +52,10 @@
 }
 
 .navItemActive {
-    color: var(--color-primary);
-    background-color: var(--color-primary-faded);
-    padding: 8px 16px;
-    min-width: 95px;
-    border-radius: 20px;
+    color: #f1c40f;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 8px 12px;
+    min-width: 44px;
 }
 
 .navLabel {
@@ -79,7 +78,7 @@
 
 .navItemActive svg {
     /* More clean, no blurry glow */
-    color: var(--color-primary);
+    color: #f1c40f;
 }
 
 .navItem:active:not(.navItemActive) {

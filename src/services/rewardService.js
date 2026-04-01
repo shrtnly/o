@@ -356,6 +356,10 @@ export const rewardService = {
      */
     async getUserStreak(userId) {
         try {
+            // First, trigger a recalculation to handle potential streak expiry
+            // especially if the user hasn't practiced for a day or two
+            await supabase.rpc('update_user_streaks', { p_user_id: userId });
+
             const { data, error } = await supabase
                 .from('user_streaks')
                 .select('*')
@@ -364,10 +368,26 @@ export const rewardService = {
 
             if (error && error.code !== 'PGRST116') throw error;
 
-            return data || { current_streak: 0, longest_streak: 0, last_activity_date: null };
+            const streak = data || { current_streak: 0, longest_streak: 0, last_activity_date: null };
+            
+            // Check if user has already practiced today in local timezone
+            const today = formatLocalDate(new Date());
+            // Ensure both the date matches AND the streak is actually active (> 0)
+            const isTodayCompleted = streak.current_streak > 0 && streak.last_activity_date === today;
+
+            return { ...streak, is_today_completed: isTodayCompleted };
         } catch (error) {
-            console.error('Error fetching user streak:', error);
-            return { current_streak: 0, longest_streak: 0, last_activity_date: null };
+            console.error('Error fetching/updating user streak:', error);
+            // Fallback: regular fetch if RPC fails, though results might be stale
+            const { data } = await supabase
+                .from('user_streaks')
+                .select('*')
+                .eq('user_id', userId)
+                .single();
+            const streak = data || { current_streak: 0, longest_streak: 0, last_activity_date: null };
+            const today = formatLocalDate(new Date());
+            const isTodayCompleted = streak.last_activity_date === today;
+            return { ...streak, is_today_completed: isTodayCompleted };
         }
     },
 

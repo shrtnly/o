@@ -9,11 +9,16 @@ import { useNotifications } from '../../../context/NotificationContext';
 import styles from './BottomNav.module.css';
 
 const BottomNav = () => {
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
     const { t, language } = useLanguage();
     const { unreadCount, pendingConnectionsCount } = useNotifications();
     const { courseId: currentCourseId } = useParams();
     const [lastCourseId, setLastCourseId] = useState(null);
+    const [imgError, setImgError] = useState(false);
+
+    useEffect(() => {
+        setImgError(false); // Reset error when profile/avatar changes
+    }, [profile?.avatar_url]);
 
     useEffect(() => {
         const fetchLastCourse = async () => {
@@ -94,7 +99,16 @@ const BottomNav = () => {
             <NavLink to="/profile" className={({ isActive }) => cn(styles.navItem, isActive && styles.navItemActive)}>
                 {({ isActive }) => (
                     <>
-                        <User size={26} strokeWidth={1.5} />
+                        {profile?.avatar_url && !imgError ? (
+                            <img 
+                                src={profile.avatar_url} 
+                                alt="Profile" 
+                                className={styles.profileImage}
+                                onError={() => setImgError(true)}
+                            />
+                        ) : (
+                            <User size={26} strokeWidth={1.5} />
+                        )}
                         {isActive && <span className={styles.navLabel}>{t('profile')}</span>}
                     </>
                 )}

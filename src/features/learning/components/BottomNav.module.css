@@ -121,3 +121,18 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     z-index: 10;
 }
+
+.profileImage {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid var(--color-text-muted);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.navItemActive .profileImage {
+    border-color: #f1c40f;
+    box-shadow: 0 0 8px rgba(241, 196, 15, 0.2);
+}

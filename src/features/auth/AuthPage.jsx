@@ -48,7 +48,7 @@ const AuthPage = () => {
     const [fieldErrors, setFieldErrors] = useState([]);
 
     const { user, signIn, signUp, signInWithOAuth } = useAuth();
-    const { t } = useLanguage();
+    const { language, t } = useLanguage();
     const navigate = useNavigate();
     const locationHook = useLocation();
 
@@ -321,17 +321,17 @@ const AuthPage = () => {
                 <div className={styles.header}>
                     <h1>
                         {isForgotPassword ? (
-                            <>
+                            <span key="reset-header">
                                 {t('auth_reset_title')} <span className={styles.highlight}>{t('auth_reset_highlight')}</span> {t('auth_reset_suffix')}
-                            </>
+                            </span>
                         ) : isLogin ? (
-                            <>
+                            <span key="login-header">
                                 {t('auth_login_title')} <span className={styles.highlight}>{t('auth_login_highlight')}</span> {t('auth_login_suffix')}
-                            </>
+                            </span>
                         ) : (
-                            <>
+                            <span key="signup-header">
                                 {t('auth_signup_title')} <span className={styles.highlight}>{t('auth_signup_highlight')}</span>
-                            </>
+                            </span>
                         )}
                     </h1>
                 </div>
@@ -477,10 +477,21 @@ const AuthPage = () => {
 
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={loading || (success && !isLogin)}
                         className={styles.submitBtn}
                     >
-                        {loading ? <Loader2 className={styles.spinner} size={20} /> : (isForgotPassword ? t('auth_send_reset_link') : isLogin ? t('login_btn') : t('signup'))}
+                        {(success && !isLogin) ? (
+                            <div key="logging_in" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                <Loader2 className={styles.spinner} size={20} />
+                                <span>{language === 'bn' ? 'লগইন হচ্ছে...' : 'Logging in...'}</span>
+                            </div>
+                        ) : loading ? (
+                            <Loader2 key="spinner" className={styles.spinner} size={20} />
+                        ) : (
+                            <span key="btn_text">
+                                {isForgotPassword ? t('auth_send_reset_link') : isLogin ? t('login_btn') : t('signup')}
+                            </span>
+                        )}
                     </button>
                 </form>
 

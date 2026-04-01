@@ -702,7 +702,11 @@ const LearningPage = () => {
                                 <div className={styles.mobileHeaderStats}>
                                     <div className={styles.mobileHeaderStatWrapper}>
                                         <div className={styles.mobileHeaderStat} onClick={() => setShowStreakTooltip(true)} style={{ cursor: 'pointer' }}>
-                                            <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                            {streak?.is_today_completed ? (
+                                                <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                            ) : (
+                                                <Flame size={24} color="var(--color-text-muted)" fill="none" style={{ opacity: 0.5 }} />
+                                            )}
                                             <span>{streak?.current_streak || 0}</span>
                                         </div>
 

@@ -61,6 +61,14 @@ const ProfilePage = () => {
     const [loading, setLoading] = useState(true);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [streak, setStreak] = useState(null);
+    const [imgError, setImgError] = useState(false);
+
+    useEffect(() => {
+        if (profile?.avatar_url) {
+            setImgError(false);
+        }
+    }, [profile?.avatar_url]);
+
     const [showShareCard, setShowShareCard] = useState(false);
     const [globalRank, setGlobalRank] = useState('—');
     const [activeTab, setActiveTab] = useState('general');
@@ -522,8 +530,8 @@ const ProfilePage = () => {
                         </button>
                         <div className={styles.avatarWrapper}>
                             <div className={styles.avatar} onClick={() => fileInputRef.current?.click()}>
-                                {profile?.avatar_url
-                                    ? <img src={profile.avatar_url} alt="Profile" />
+                                {profile?.avatar_url && !imgError
+                                    ? <img src={profile.avatar_url} alt="Profile" onError={() => setImgError(true)} />
                                     : <User size={44} color={brandColor} />
                                 }
                                 <div className={styles.avatarOverlay}>
@@ -594,7 +602,13 @@ const ProfilePage = () => {
                                 <div className={styles.statsGrid}>
                                     <div className={styles.statCard}>
                                         <div className={styles.statIconBox}>
-                                            <Flame size={18} fill="url(#flameGradientProfile)" stroke="url(#flameGradientProfile)" className={styles.statIconStreak} />
+                                            <Flame 
+                                                size={18} 
+                                                fill={streak?.is_today_completed ? "url(#flameGradientProfile)" : "none"} 
+                                                stroke={streak?.is_today_completed ? "url(#flameGradientProfile)" : "var(--color-text-muted)"} 
+                                                className={styles.statIconStreak} 
+                                                style={{ opacity: streak?.is_today_completed ? 1 : 0.5 }}
+                                            />
                                         </div>
                                         <div className={styles.statInfoStack}>
                                             <span className={styles.statCardValue}>{streak?.current_streak || 0}</span>

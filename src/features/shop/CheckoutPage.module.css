@@ -38,9 +38,19 @@
 }
 
 .pageTitle {
-    font-size: 1.2rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 800;
     margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.premiumTitle {
+    background: linear-gradient(135deg, #fff 0%, #fccd4d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 /* Plan Selector Cards */
@@ -370,8 +380,8 @@
 }
 
 .methodLogo {
-    width: 100px;
-    height: 64px;
+    width: 64px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -384,6 +394,22 @@
 .methodLogo img {
     width: 100%;
     height: 100%;
+    object-fit: contain;
+}
+
+.methodLogoGroup {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+}
+
+.methodLogoGroup img {
+    height: 28px;
+    width: auto;
     object-fit: contain;
 }
 
@@ -431,27 +457,32 @@
 .confirmBtn {
     width: 100%;
     padding: 18px;
-    border-radius: 12px;
-    background: #fff;
-    color: #000;
+    border-radius: 16px;
+    background: #10b981;
+    color: #fff;
     border: none;
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.15rem;
+    font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    transition: all 0.2s;
+    gap: 12px;
+    transition: all 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 0 #065f46;
+    position: relative;
+    top: -2px;
 }
 
 .confirmBtn:hover:not(:disabled) {
-    background: #f0f0f0;
-    transform: translateY(-2px);
+    background: #059669;
+    top: -1px;
+    box-shadow: 0 4px 0 #065f46;
 }
 
 .confirmBtn:active:not(:disabled) {
-    transform: translateY(1px);
+    top: 3px;
+    box-shadow: 0 0px 0 #065f46;
 }
 
 .secureNote {

@@ -814,37 +814,38 @@ const LearningPage = () => {
                                                 <div className={styles.heartsTooltipOverlay} onClick={() => setShowHeartsTooltip(false)} />
                                                 <div className={styles.heartsTooltipBox}>
                                                     {(profile?.is_premium || profile?.is_1day_premium) ? (
-                                                        <div className={styles.tooltipSubscriber}>
-                                                            <div className={styles.tooltipNonSubscriber}>
-                                                                <div className={styles.upsellSection} style={{ borderBottom: 'none', paddingBottom: 0 }}>
-                                                                    <Crown size={24} color="#f1c40f" />
-                                                                    <div className={styles.tooltipTextContent}>
-                                                                        <h4>{(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় আছে' : 'কিং বী সক্রিয় আছে'}</h4>
-                                                                        {profile?.premium_until ? (
-                                                                            <p>মেয়াদ শেষ হবে: {new Date(profile.premium_until).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                                                                        ) : (
-                                                                            <p>আনলিমিটেড মধু ফোঁটা</p>
-                                                                        )}
-                                                                    </div>
+                                                        <div className={styles.tooltipNonSubscriber}>
+                                                            <div className={styles.streakTooltipHeader}>
+                                                                <div className={styles.streakInfoLeft}>
+                                                                    <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                        <Crown size={24} color="#f1c40f" />
+                                                                        {(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় আছে' : 'কিং বী সক্রিয় আছে'}
+                                                                    </h4>
+                                                                    {profile?.premium_until ? (
+                                                                        <p>মেয়াদ শেষ হবে: {new Date(profile.premium_until).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                                                                    ) : (
+                                                                        <p>আনলিমিটেড মধু ফোঁটা</p>
+                                                                    )}
                                                                 </div>
-                                                                <button
-                                                                    className={cn(styles.shopButton, styles.shopButtonDark)}
-                                                                    style={{ width: '100%' }}
-                                                                    onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
-                                                                >
-                                                                    <ShoppingBag size={18} />
-                                                                    <span>শপ দেখুন</span>
-                                                                </button>
+                                                            </div>
+                                                            <button
+                                                                className={cn(styles.shopButton, styles.shopButtonDark)}
+                                                                style={{ width: '100%' }}
+                                                                onClick={() => { setShowHeartsTooltip(false); navigate('/shop'); }}
+                                                            >
+                                                                <ShoppingBag size={18} />
+                                                                <span>শপ দেখুন</span>
+                                                            </button>
 
                                                                 {/* Invite Section */}
                                                                 <div className={styles.inviteSection}>
-                                                                    <h4 className={styles.sectionTitleSmall}>
+                                                                    <div className={styles.sectionTitleSmall}>
                                                                         <div className={styles.tooltipContainer}>
                                                                             <button 
                                                                                 className={styles.infoBtn}
                                                                                 onClick={() => setShowInviteTooltip(!showInviteTooltip)}
                                                                             >
-                                                                                <CircleHelp size={18} />
+                                                                                <CircleHelp size={15} />
                                                                             </button>
                                                                             <AnimatePresence>
                                                                                 {showInviteTooltip && (
@@ -854,13 +855,13 @@ const LearningPage = () => {
                                                                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                                                                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                                                                                     >
-                                                                                        বন্ধুদের ইনভাইট লিঙ্ক শেয়ার করুন এবং একসাথে কুইজ খেলুন!
+                                                                                        এখনই বন্ধুদের আমন্ত্রণ জানান, আর বোনাস হিসেবে পান ৫টি হানি ড্রপ
                                                                                         <div className={styles.tooltipArrow} />
                                                                                     </motion.div>
                                                                                 )}
                                                                             </AnimatePresence>
                                                                         </div>
-                                                                    </h4>
+                                                                    </div>
                                                                     
                                                                     <div className={styles.inviteBtnWrapper}>
                                                                         <button 
@@ -875,7 +876,7 @@ const LearningPage = () => {
                                                                             ) : (
                                                                                 <>
                                                                                     <Share2 size={18} />
-                                                                                    <span>বন্ধুদের আমন্ত্রণ জানান</span>
+                                                                                    <span>বন্ধুদের আমন্ত্রণ করুন</span>
                                                                                 </>
                                                                             )}
                                                                         </button>
@@ -911,7 +912,6 @@ const LearningPage = () => {
                                                                     </AnimatePresence>
                                                                 </div>
                                                             </div>
-                                                            </div>
                                                         </div>
                                                     ) : (
                                                         <div className={styles.tooltipNonSubscriber}>
@@ -942,30 +942,30 @@ const LearningPage = () => {
                                                             </button>
 
                                                             {/* Invite Section Copied from Profile */}
-                                                            <div className={styles.inviteSection}>
-                                                                <h4 className={styles.sectionTitleSmall}>
-                                                                    <div className={styles.tooltipContainer}>
-                                                                        <button 
-                                                                            className={styles.infoBtn}
-                                                                            onClick={() => setShowInviteTooltip(!showInviteTooltip)}
-                                                                        >
-                                                                            <CircleHelp size={18} />
-                                                                        </button>
-                                                                        <AnimatePresence>
-                                                                            {showInviteTooltip && (
-                                                                                <motion.div 
-                                                                                    className={styles.inviteTooltip}
-                                                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                                >
-                                                                                    বন্ধুদের ইনভাইট লিঙ্ক শেয়ার করুন এবং একসাথে কুইজ খেলুন!
-                                                                                    <div className={styles.tooltipArrow} />
-                                                                                </motion.div>
-                                                                            )}
-                                                                        </AnimatePresence>
+                                                                <div className={styles.inviteSection}>
+                                                                    <div className={styles.sectionTitleSmall}>
+                                                                        <div className={styles.tooltipContainer}>
+                                                                            <button 
+                                                                                className={styles.infoBtn}
+                                                                                onClick={() => setShowInviteTooltip(!showInviteTooltip)}
+                                                                            >
+                                                                                <CircleHelp size={15} />
+                                                                            </button>
+                                                                            <AnimatePresence>
+                                                                                {showInviteTooltip && (
+                                                                                    <motion.div 
+                                                                                        className={styles.inviteTooltip}
+                                                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                                                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                                                    >
+                                                                                        এখনই বন্ধুদের আমন্ত্রণ জানান, আর বোনাস হিসেবে পান ৫টি হানি ড্রপ
+                                                                                        <div className={styles.tooltipArrow} />
+                                                                                    </motion.div>
+                                                                                )}
+                                                                            </AnimatePresence>
+                                                                        </div>
                                                                     </div>
-                                                                </h4>
                                                                 
                                                                 <div className={styles.inviteBtnWrapper}>
                                                                     <button 
@@ -980,7 +980,7 @@ const LearningPage = () => {
                                                                         ) : (
                                                                             <>
                                                                                 <Share2 size={18} />
-                                                                                <span>বন্ধুদের আমন্ত্রণ জানান</span>
+                                                                                <span>বন্ধুদের আমন্ত্রণ করুন</span>
                                                                             </>
                                                                         )}
                                                                     </button>

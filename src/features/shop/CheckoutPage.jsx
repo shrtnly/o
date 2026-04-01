@@ -15,6 +15,9 @@ import {
 } from 'lucide-react';
 import bkashLogo from '../../assets/payments/bkash.png';
 import nagadLogo from '../../assets/payments/nagad.png';
+import visaLogo from '../../assets/payments/visa.png';
+import mastercardLogo from '../../assets/payments/mastercard.png';
+import amexLogo from '../../assets/payments/amex.png';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { shopService } from '../../services/shopService';
@@ -169,7 +172,7 @@ const CheckoutPage = () => {
                     <button onClick={() => navigate(-1)} className={styles.backBtn}>
                         <ArrowLeft size={24} />
                     </button>
-                    <h1 className={styles.pageTitle}>
+                    <h1 className={`${styles.pageTitle} ${isSubscription ? styles.premiumTitle : ''}`}>
                         {isSubscription ? (t('super_bee_title') || 'Super Bee') : checkoutData.label}
                     </h1>
                 </div>
@@ -210,9 +213,9 @@ const CheckoutPage = () => {
                     <div className={styles.detailsList}>
                         <div className={styles.detailRow}>
                             <div className={styles.detailLabel}>
-                                <span className={styles.itemName}>
+                                <span className={`${styles.itemName} ${isSubscription ? styles.premiumTitle : ''}`}>
                                     {isSubscription 
-                                        ? (profile?.gender === 'male' ? t('king_bee_mode') || 'King Bee' : t('queen_bee_mode') || 'Queen Bee')
+                                        ? (profile?.gender === 'female' || profile?.gender === 'নারী' ? t('queen_bee_mode') || 'Queen Bee' : t('king_bee_mode') || 'King Bee')
                                         : checkoutData.label
                                     }
                                 </span>
@@ -323,6 +326,17 @@ const CheckoutPage = () => {
                             <div className={styles.radioIndicator} />
                             <div className={styles.methodLogo}>
                                 <img src={nagadLogo} alt="Nagad" />
+                            </div>
+                        </button>
+                        <button 
+                            className={`${styles.methodCard} ${paymentMethod === 'card' ? styles.active : ''}`}
+                            onClick={() => setPaymentMethod('card')}
+                        >
+                            <div className={styles.radioIndicator} />
+                            <div className={styles.methodLogoGroup}>
+                                <img src={visaLogo} alt="Visa" />
+                                <img src={mastercardLogo} alt="Mastercard" />
+                                <img src={amexLogo} alt="Amex" />
                             </div>
                         </button>
                     </div>

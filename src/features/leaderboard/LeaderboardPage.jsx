@@ -332,6 +332,8 @@ const LeaderboardPage = () => {
                                                         <div
                                                             key={item.id}
                                                             className={`${styles.row} ${user?.id === item.id ? styles.currentUserRow : ''}`}
+                                                            onClick={() => user?.id !== item.id && navigate(`/learner/${item.id}`)}
+                                                            style={{ cursor: user?.id !== item.id ? 'pointer' : 'default' }}
                                                         >
                                                             {/* Rank */}
                                                             <div className={styles.rankCol}>
@@ -344,9 +346,11 @@ const LeaderboardPage = () => {
                                                                     {item.avatar_url ? (
                                                                         <img src={item.avatar_url} alt={item.display_name} className={styles.avatar} />
                                                                     ) : (
-                                                                        <div className={styles.avatarPlaceholder}>
-                                                                            {item.display_name?.charAt(0) || '?'}
-                                                                        </div>
+                                                                        <img 
+                                                                            src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${item.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`} 
+                                                                            className={styles.avatar} 
+                                                                            alt={item.display_name} 
+                                                                        />
                                                                     )}
                                                                 </div>
                                                                 <div className={styles.userInfo}>

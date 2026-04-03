@@ -664,7 +664,7 @@ const LearningPage = () => {
             const day = String(d.getDate()).padStart(2, '0');
             const dateStr = `${year}-${month}-${day}`;
             
-            const isCompleted = streakHistory.some(h => h.activity_date === dateStr);
+            const isCompleted = streakHistory.some(h => h.activity_date === dateStr && (h.xp_earned > 0 || h.lessons_completed > 0));
             const isToday = d.getTime() === today.getTime();
             
             days.push({
@@ -701,11 +701,16 @@ const LearningPage = () => {
                             <div className={styles.mobileMainHeaderArea}>
                                 <div className={styles.mobileHeaderStats}>
                                     <div className={styles.mobileHeaderStatWrapper}>
-                                        <div className={styles.mobileHeaderStat} onClick={() => setShowStreakTooltip(true)} style={{ cursor: 'pointer' }}>
+                                        <div className={cn(styles.mobileHeaderStat, (!streak?.current_streak || streak?.current_streak === 0) && styles.statZero)} onClick={() => setShowStreakTooltip(true)} style={{ cursor: 'pointer' }}>
                                             {streak?.is_today_completed ? (
                                                 <Flame size={24} color="#f1c40f" fill="#f1c40f" />
                                             ) : (
-                                                <Flame size={24} color="var(--color-text-muted)" fill="none" style={{ opacity: 0.5 }} />
+                                                <Flame 
+                                                    size={24} 
+                                                    color={(!streak?.current_streak || streak?.current_streak === 0) ? "var(--color-danger)" : "var(--color-text-muted)"} 
+                                                    fill="none" 
+                                                    style={{ opacity: (!streak?.current_streak || streak?.current_streak === 0) ? 1 : 0.5 }} 
+                                                />
                                             )}
                                             <span>{streak?.current_streak || 0}</span>
                                         </div>

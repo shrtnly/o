@@ -345,7 +345,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                             const activityDate = typeof a.activity_date === 'string'
                                                 ? a.activity_date.split('T')[0]
                                                 : formatLocalDate(new Date(a.activity_date));
-                                            return activityDate === dateStr;
+                                            return activityDate === dateStr && (a.xp_earned > 0 || a.lessons_completed > 0);
                                         });
 
                                         const isToday = dateStr === todayStr;
@@ -421,7 +421,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                     <div className={styles.leaderboardRowLeft}>
                                         <span className={styles.rowRank}>{userRank || '-'}</span>
                                         <img
-                                            src={profile.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${profile.display_name || profile.id}`}
+                                            src={profile.avatar_url || `https://api.dicebear.com/9.x/avataaars/svg?seed=${profile.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`}
                                             className={styles.rowAvatar}
                                             alt={profile.display_name || t('learner')}
                                         />
@@ -449,12 +449,14 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                     ) : (
                                         leaderboardData.slice(0, 2).map((user, index) => {
                                             const avatarSeed = index === 0 ? 'Felix' : 'Vivian';
-                                            const avatarUrl = user.avatar_url || `https://api.dicebear.com/7.x/adventurer/svg?seed=${user.id === profile.id ? (profile.display_name || profile.id) : avatarSeed}`;
+                                            const avatarUrl = user.avatar_url || `https://api.dicebear.com/9.x/avataaars/svg?seed=${user.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`;
 
                                             return (
                                                 <div
                                                     key={user.id}
                                                     className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
+                                                    onClick={() => user.id !== profile.id && navigate(`/learner/${user.id}`)}
+                                                    style={{ cursor: user.id !== profile.id ? 'pointer' : 'default' }}
                                                 >
                                                     <div className={styles.leaderboardRowLeft}>
                                                         <span className={styles.rowRank}>{index + 1}</span>
@@ -502,6 +504,8 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                 <div 
                                     key={s.id} 
                                     className={cn(styles.suggestItem, leavingId === s.id && styles.suggestItemLeaving)}
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => navigate(`/learner/${s.id}`)}
                                 >
                                     <div className={styles.suggestItemLeft}>
                                         <div className={styles.suggestAvatar}>

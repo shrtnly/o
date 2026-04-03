@@ -891,7 +891,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 <div className={styles.searchResults}>
                                                     {searchResults.map(learner => (
                                                         <div key={learner.id} className={styles.learnerItem}>
-                                                            <div className={styles.learnerCore} onClick={() => onSelectLearner(learner)}>
+                                                            <div className={styles.learnerCore} onClick={() => navigate(`/learner/${learner.id}`)} style={{ cursor: 'pointer' }}>
                                                                 <div className={styles.avatarMini}>
                                                                     {learner.avatar_url ? <img src={learner.avatar_url} alt={learner.full_name} /> : <User size={20} />}
                                                                     <StatusIndicator lastSeen={learner.last_seen} />
@@ -952,7 +952,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                         <div className={styles.connGrid}>
                                                         {suggestions.map(s => (
                                                             <div key={s.id} className={styles.connCard}>
-                                                                <div className={styles.learnerCore} onClick={() => onSelectLearner(s)}>
+                                                                <div className={styles.learnerCore} onClick={() => navigate(`/learner/${s.id}`)} style={{ cursor: 'pointer' }}>
                                                                     <div className={styles.avatarMini}>
                                                                         {s.avatar_url ? <img src={s.avatar_url} /> : <User size={20} />}
                                                                         <StatusIndicator lastSeen={s.last_seen} />
@@ -1047,7 +1047,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                         exit={{ opacity: 0, scale: 0.9, x: -20 }}
                                                                         className={styles.connCard}
                                                                     >
-                                                                        <div className={styles.learnerCore} onClick={() => onSelectLearner(other)}>
+                                                                        <div className={styles.learnerCore} onClick={() => navigate(`/learner/${other.id}`)} style={{ cursor: 'pointer' }}>
                                                                             <div className={styles.avatarMini}>
                                                                                 {other.avatar_url ? <img src={other.avatar_url} /> : <User size={20} />}
                                                                                 <StatusIndicator lastSeen={other.last_seen} />
@@ -1109,7 +1109,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                 <div className={styles.connGrid}>
                                                                     {suggestions.slice(0, 6).map(s => (
                                                                         <div key={s.id} className={styles.connCard}>
-                                                                            <div className={styles.learnerCore} onClick={() => onSelectLearner(s)}>
+                                                                            <div className={styles.learnerCore} onClick={() => navigate(`/learner/${s.id}`)} style={{ cursor: 'pointer' }}>
                                                                                 <div className={styles.avatarMini}>
                                                                                     {s.avatar_url ? <img src={s.avatar_url} /> : <User size={20} />}
                                                                                     <StatusIndicator lastSeen={s.last_seen} />

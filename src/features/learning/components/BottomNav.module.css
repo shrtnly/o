@@ -52,10 +52,22 @@
 }
 
 .navItemActive {
-    color: #f1c40f;
+    color: #fff;
     background-color: rgba(0, 0, 0, 0.1);
     padding: 8px 12px;
     min-width: 44px;
+}
+
+/* Dark mode: active item = white text */
+:global(.dark) .navItemActive {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Light mode: active item = black text */
+:global(.light) .navItemActive {
+    color: #000;
+    background-color: rgba(0, 0, 0, 0.06);
 }
 
 .navLabel {
@@ -77,8 +89,15 @@
 }
 
 .navItemActive svg {
-    /* More clean, no blurry glow */
-    color: #f1c40f;
+    color: inherit;
+}
+
+:global(.dark) .navItemActive svg {
+    color: #fff;
+}
+
+:global(.light) .navItemActive svg {
+    color: #000;
 }
 
 .navItem:active:not(.navItemActive) {
@@ -133,6 +152,16 @@
 }
 
 .navItemActive .profileImage {
-    border-color: #f1c40f;
-    box-shadow: 0 0 8px rgba(241, 196, 15, 0.2);
+    border-color: var(--color-text);
+    box-shadow: none;
+}
+
+:global(.dark) .navItemActive .profileImage {
+    border-color: #fff;
+    box-shadow: none;
+}
+
+:global(.light) .navItemActive .profileImage {
+    border-color: #000;
+    box-shadow: none;
 }

@@ -77,7 +77,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
             dateObj.setHours(0, 0, 0, 0);
             const dateStr = formatLocalDate(dateObj);
 
-            const activity = history.find(h => h.activity_date === dateStr);
+            const activity = history.find(h => h.activity_date === dateStr && (h.xp_earned > 0 || h.lessons_completed > 0));
             const isToday = dateObj.getTime() === today.getTime();
             const isFuture = dateObj.getTime() > today.getTime();
 
@@ -127,7 +127,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
             for (let d = weekStartDay; d <= weekEndDay; d++) {
                 const dateObj = new Date(year, month, d);
                 const dateStr = formatLocalDate(dateObj);
-                if (history.some(h => h.activity_date === dateStr)) {
+                if (history.some(h => h.activity_date === dateStr && (h.xp_earned > 0 || h.lessons_completed > 0))) {
                     achievedCount++;
                 }
             }

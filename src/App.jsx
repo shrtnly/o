@@ -25,6 +25,7 @@ import HelpPage from './features/help/HelpPage';
 import StreakPage from './features/learning/pages/StreakPage';
 import CertificateVerificationPage from './features/profile/pages/CertificateVerificationPage';
 import CheckoutPage from './features/shop/CheckoutPage';
+import LearnerProfilePage from './features/profile/LearnerProfilePage';
 
 
 import ResetPassword from './features/auth/ResetPassword';
@@ -131,6 +132,7 @@ const AppContent = () => {
             <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/streak" element={<StreakPage />} />
             <Route path="/connections" element={<ConnectionPage />} />
+            <Route path="/learner/:learnerId" element={<LearnerProfilePage />} />
             <Route path="/notifications" element={<NotificationPage />} />
             <Route path="/shop" element={<ShopPage />} />
             <Route path="/settings" element={<SettingsPage />} />

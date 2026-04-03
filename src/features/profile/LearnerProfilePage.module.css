@@ -1,0 +1,378 @@
+/* ================================================
+   BeeLesson – Learner Public Profile Page
+   Minimal · Professional · Dark + Light
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
+/* ── Shell ── */
+.page {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--color-bg-deep);
+    color: var(--color-text);
+    font-family: 'Inter', 'Hind Siliguri', sans-serif;
+}
+
+.container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 18px 20px 80px;
+}
+
+/* ── Back button ── */
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 0;
+    margin-bottom: 20px;
+    transition: color 0.2s ease;
+}
+
+.backBtn:hover {
+    color: var(--color-text);
+}
+
+/* ── Header Card ── */
+.headerCard {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 14px;
+}
+
+/* Avatar */
+.avatarWrap {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border);
+    display: block;
+    background: var(--color-bg-deep);
+}
+
+.onlineDot {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 2.5px solid var(--color-bg-alt);
+}
+
+.online  { background: #2ECC71; }
+.offline { background: #95A5A6; }
+
+/* Header Info */
+.headerInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.learnerName {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rankChip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.locationLine {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.onlineLabel {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #2ECC71;
+    letter-spacing: 0.3px;
+}
+
+/* ── Action Buttons ── */
+.actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.actionBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: 'Inter', 'Hind Siliguri', sans-serif;
+    border: none;
+}
+
+/* Connect – primary solid */
+.connectBtn {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #F0A30A 100%);
+    color: #000;
+    box-shadow: 0 3px 12px rgba(241, 196, 15, 0.28);
+}
+
+.connectBtn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 18px rgba(241, 196, 15, 0.42);
+}
+
+.connectBtn:disabled {
+    opacity: 0.6;
+
+    transform: none;
+}
+
+/* Connected state */
+.connectedBtn {
+    background: transparent;
+    border: 1.5px solid var(--color-primary-light) !important;
+    color: var(--color-primary);
+    box-shadow: none;
+}
+
+.connectedBtn:hover:not(:disabled) {
+    background: rgba(241, 196, 15, 0.06);
+    box-shadow: none;
+}
+
+/* Outgoing / pending request state */
+.outgoingBtn {
+    background: var(--color-bg-alt);
+    border: 1.5px solid var(--color-border) !important;
+    color: var(--color-text-muted);
+    box-shadow: none;
+}
+
+/* Message – muted outline */
+.msgBtn {
+    background: var(--color-bg-alt);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text);
+}
+
+.msgBtn:hover {
+    background: var(--color-bg-hover);
+    border-color: var(--color-text-muted);
+}
+
+/* ── Stats Row ── */
+.statsRow {
+    display: flex;
+    align-items: center;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 18px;
+    padding: 14px 10px;
+    margin-bottom: 18px;
+    gap: 0;
+}
+
+.statBox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.statDivider {
+    width: 1px;
+    height: 36px;
+    background: var(--color-border-muted);
+    flex-shrink: 0;
+}
+
+.statIconXp     { color: var(--color-primary); }
+.statIconStreak { color: #FF4500; }
+.statIconRank   { color: #FFD700; }
+.statIconCourse { color: var(--color-secondary, #1cb0f6); }
+
+.statVal {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--color-text);
+    line-height: 1;
+}
+
+.statLbl {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+/* ── Section ── */
+.section {
+    margin-bottom: 20px;
+}
+
+.sectionTitle {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin: 0 0 12px 0;
+}
+
+/* ── Personal Info ── */
+.detailsList {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.detailRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--color-border-muted);
+    gap: 12px;
+}
+
+.detailRow:last-child { border-bottom: none; }
+
+.detailKey {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    min-width: 80px;
+}
+
+.detailVal {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: right;
+    word-break: break-word;
+}
+
+
+
+/* ── Bio ── */
+.bioText {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin: 0;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 14px;
+    padding: 14px 16px;
+}
+
+
+
+/* ── Skeletons ── */
+.backRow { margin-bottom: 20px; }
+
+.skeletonHeader {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--color-bg-alt);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 14px;
+}
+
+.skeletonActions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.skeletonStats {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.skeletonBlock {
+    background: linear-gradient(90deg, var(--color-bg-alt) 25%, var(--color-bg-deep) 50%, var(--color-bg-alt) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    border-radius: 10px;
+}
+
+.skeletonCircle {
+    background: linear-gradient(90deg, var(--color-bg-alt) 25%, var(--color-bg-deep) 50%, var(--color-bg-alt) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+@keyframes shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .container { padding: 14px 14px 80px; }
+
+    .headerCard { padding: 16px; gap: 14px; }
+
+    .avatar { width: 68px; height: 68px; }
+
+    .learnerName { font-size: 1.05rem; }
+
+
+
+    .statsRow { padding: 12px 6px; }
+}
+
+@media (min-width: 768px) {
+    .container { padding: 28px 24px 100px; }
+}

@@ -2019,7 +2019,7 @@
     gap: 12px;
     margin-top: 16px;
     padding: 16px; /* slightly larger padding */
-    background: #FFB800; /* Use consistent brand gold */
+    background: #F1C40F; /* Use consistent brand gold */
     color: #000;
     border: none;
     border-radius: 16px;
@@ -2027,7 +2027,7 @@
     font-weight: 850;
     cursor: pointer;
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 6px 0 #D49B00; /* Thicker shadow for better 3D effect */
+    box-shadow: 0 6px 0 #C9A80C; /* Thicker shadow for better 3D effect */
     text-transform: none;
     position: relative;
     top: -2px; /* Pull it up slightly to make room for shadow */
@@ -2035,25 +2035,25 @@
 
 .fullInviteBtn:hover {
     top: -1px;
-    box-shadow: 0 5px 0 #D49B00;
+    box-shadow: 0 5px 0 #C9A80C;
 }
 
 .fullInviteBtn:active {
     top: 4px; /* Press down deeper */
-    box-shadow: 0 0px 0 #D49B00;
+    box-shadow: 0 0px 0 #C9A80C;
 }
 
 .inviteActionCopied {
-    background: #FFB800; /* Keep original color */
-    box-shadow: 0 6px 0 #D49B00;
+    background: #F1C40F; /* Keep original color */
+    box-shadow: 0 6px 0 #C9A80C;
 }
 
 .inviteActionCopied:hover {
-    box-shadow: 0 5px 0 #D49B00;
+    box-shadow: 0 5px 0 #C9A80C;
 }
 
 .inviteActionCopied:active {
-    box-shadow: 0 0px 0 #D49B00;
+    box-shadow: 0 0px 0 #C9A80C;
 }
 
 .shareMenu {

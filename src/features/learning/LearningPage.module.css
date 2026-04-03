@@ -2173,6 +2173,10 @@
         color: var(--color-text) !important;
     }
 
+    .statZero {
+        color: var(--color-danger) !important;
+    }
+
     .mobileHeaderStatWrapper {
         position: relative;
     }

@@ -532,7 +532,10 @@ const ProfilePage = () => {
                             <div className={styles.avatar} onClick={() => fileInputRef.current?.click()}>
                                 {profile?.avatar_url && !imgError
                                     ? <img src={profile.avatar_url} alt="Profile" onError={() => setImgError(true)} />
-                                    : <User size={44} color={brandColor} />
+                                    : <img 
+                                        src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${user?.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`} 
+                                        alt="Profile Fallback" 
+                                      />
                                 }
                                 <div className={styles.avatarOverlay}>
                                     <Camera size={20} />
@@ -887,7 +890,8 @@ const ProfilePage = () => {
 
                             {isAnalysisLoading ? (
                                 <ProfileAnalysisSkeleton />
-                            ) : (streak?.current_streak || 0) < 3 ? (
+                            ) : (streak?.longest_streak || 0) < 3 ? (
+                                // 🔒 Analytics locked — unlocks permanently once longest streak >= 3 days
                                 <div className={styles.lockedAnalysis}>
                                     <div className={styles.lockContent}>
                                         <div className={styles.lockIconBox}>
@@ -901,12 +905,12 @@ const ProfilePage = () => {
                                                 <motion.div
                                                     className={styles.streakBarFill}
                                                     initial={{ width: 0 }}
-                                                    animate={{ width: `${Math.min(100, ((streak?.current_streak || 0) / 3) * 100)}%` }}
+                                                    animate={{ width: `${Math.min(100, ((streak?.longest_streak || 0) / 3) * 100)}%` }}
                                                     transition={{ duration: 1, ease: "easeOut" }}
                                                 />
                                             </div>
                                             <span className={styles.streakCountText}>
-                                                {t('days_earned').replace('{count}', (streak?.current_streak || 0).toString().toLocaleLowerCase(language === 'bn' ? 'bn-BD' : 'en-US'))}
+                                                {t('days_earned').replace('{count}', (streak?.longest_streak || 0).toString().toLocaleLowerCase(language === 'bn' ? 'bn-BD' : 'en-US'))}
                                             </span>
                                         </div>
                                     </div>

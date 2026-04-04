@@ -5,7 +5,7 @@ import {
     Users, Search, UserPlus, UserRoundSearch, UserMinus, 
     Check, CheckCheck, X, ChevronRight, ChevronLeft, Zap, 
     MapPin, User, Send, SendHorizontal, MessageSquare, ImagePlus,
-    ChevronDown, Trash2
+    ChevronDown, Trash2, Ban
 } from 'lucide-react';
 import { connectionService } from '../../../services/connectionService';
 import { messageService } from '../../../services/messageService';
@@ -21,13 +21,19 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const { t, language } = useLanguage();
     const navigate = useNavigate();
     const location = useLocation();
-    const [subTab, setSubTab] = useState('my'); // suggest, my, sent
+    const [subTab, setSubTab] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        const subValue = params.get('sub');
+        if (subValue === 'received' || subValue === 'sent') return 'my';
+        return subValue || 'my';
+    }); // suggest, my, sent, inbox
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     
     const [connections, setConnections] = useState({ pending: [], active: [], outgoing: [] });
     const [suggestions, setSuggestions] = useState([]);
+    const [blockedList, setBlockedList] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     // See All States
@@ -39,7 +45,12 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [sendingId, setSendingId] = useState(null);
     const [cardAction, setCardAction] = useState({ id: null, loading: false, success: false, msg: '' });
     const [isSearchFocused, setIsSearchFocused] = useState(false);
-    const [requestType, setRequestType] = useState('all'); // all, received, sent
+    const [requestType, setRequestType] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        const subValue = params.get('sub');
+        if (subValue === 'received' || subValue === 'sent') return subValue;
+        return 'all';
+    }); // all, received, sent
 
     // Inbox States
     const [conversations, setConversations] = useState([]);
@@ -49,7 +60,14 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [isSendingMsg, setIsSendingMsg] = useState(false);
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
-    const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+    const [isMobileChatOpen, setIsMobileChatOpen] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('sub') === 'inbox' && params.get('partnerId') && window.innerWidth <= 768;
+    });
+    const [isDeepLinking, setIsDeepLinking] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('sub') === 'inbox' && !!params.get('partnerId');
+    });
     const [pendingAttachmentUrl, setPendingAttachmentUrl] = useState(null);
     const [filePreview, setFilePreview] = useState(null);
     const [viewerImage, setViewerImage] = useState(null);
@@ -132,15 +150,30 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         }
     }, [user?.id, userXp]);
 
+    const fetchBlockedList = useCallback(async () => {
+        if (!user?.id) return;
+        try {
+            const { data, error } = await supabase
+                .from('blocked_users')
+                .select('*, blocked:profiles!blocked_id(*)')
+                .eq('blocker_id', user.id)
+                .order('created_at', { ascending: false });
+            if (!error) setBlockedList(data || []);
+        } catch (err) {
+            console.error('Error fetching block list:', err);
+        }
+    }, [user?.id]);
+
     const fetchData = useCallback(async (isSilent = false) => {
         if (!user?.id) return;
         if (!isSilent) setIsLoading(true);
         await Promise.all([
             fetchConnections(true),
-            fetchSuggestions(true)
+            fetchSuggestions(true),
+            fetchBlockedList()
         ]);
         setIsLoading(false);
-    }, [fetchConnections, fetchSuggestions]);
+    }, [fetchConnections, fetchSuggestions, fetchBlockedList]);
 
     useEffect(() => {
         fetchData();
@@ -177,38 +210,43 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         const sub = params.get('sub');
         const partnerId = params.get('partnerId');
 
-        if (sub === 'received') {
-            setSubTab('my');
-            setRequestType('received');
-            // Clear URL params after consuming them so they don't persist on reload
-            navigate(location.pathname, { replace: true });
+        if (sub === 'inbox' && partnerId) {
+            const handleDeepLink = async () => {
+                const existing = conversations.find(c => c.partner.id === partnerId);
+                if (existing) {
+                    handleSelectConversation(existing.partner);
+                } else {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', partnerId)
+                        .single();
+                    if (profile) handleSelectConversation(profile);
+                }
+                setIsDeepLinking(false);
+                // remove only partnerId, keep sub=inbox
+                params.delete('partnerId');
+                navigate(`?${params.toString()}`, { replace: true });
+            };
+            handleDeepLink();
         }
+    }, [location.search, conversations.length]);
 
-        if (sub === 'inbox') {
-            setSubTab('inbox');
-            if (partnerId) {
-                const handleDeepLink = async () => {
-                    // Check if we already have this partner in conversations
-                    const existing = conversations.find(c => c.partner.id === partnerId);
-                    if (existing) {
-                        handleSelectConversation(existing.partner);
-                    } else {
-                        // Fetch profile manually if not in list
-                        const { data: profile } = await supabase
-                            .from('profiles')
-                            .select('*')
-                            .eq('id', partnerId)
-                            .single();
-                        
-                        if (profile) {
-                            handleSelectConversation(profile);
-                        }
-                    }
-                };
-                handleDeepLink();
-            }
+    // Sync URL with Tab State
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        let targetSub = subTab;
+        if (subTab === 'my') {
+            if (requestType === 'received') targetSub = 'received';
+            else if (requestType === 'sent') targetSub = 'sent';
         }
-    }, [location.search, conversations.length]); // Re-run when conversations are loaded
+        
+        if (params.get('sub') !== targetSub && !params.get('partnerId')) {
+            params.set('sub', targetSub);
+            navigate(`?${params.toString()}`, { replace: true });
+        }
+    }, [subTab, requestType, location.pathname]);
+
 
     useEffect(() => {
         setIsInboxOpen(subTab === 'inbox');
@@ -1003,6 +1041,16 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         {/* Connection Filter Toggles */}
                                         <div className={styles.connFilterRow}>
                                             <button 
+                                                className={`${styles.connFilterPill} ${requestType === 'blocked' ? styles.connFilterActive : ''}`}
+                                                onClick={() => setRequestType('blocked')}
+                                                style={requestType === 'blocked' ? { background: 'rgba(231,76,60,0.15)', color: '#E74C3C', borderColor: 'rgba(231,76,60,0.3)' } : {}}
+                                            >
+                                                Block List
+                                                {blockedList.length > 0 && (
+                                                    <span className={`${styles.filterCount}`} style={{ background: '#E74C3C', color: '#fff' }}>{blockedList.length > 9 ? '9+' : blockedList.length}</span>
+                                                )}
+                                            </button>
+                                            <button 
                                                 className={`${styles.connFilterPill} ${requestType === 'all' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('all')}
                                             >
@@ -1030,6 +1078,52 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 )}
                                             </button>
                                         </div>
+
+                                        {requestType === 'blocked' && (
+                                            <>
+                                                {blockedList.length > 0 ? (
+                                                    <div className={styles.connGrid}>
+                                                        <AnimatePresence mode='popLayout'>
+                                                            {blockedList.map(item => (
+                                                                <motion.div
+                                                                    key={item.id}
+                                                                    layout
+                                                                    initial={{ opacity: 0, scale: 0.95 }}
+                                                                    animate={{ opacity: 1, scale: 1 }}
+                                                                    exit={{ opacity: 0, scale: 0.9 }}
+                                                                    className={styles.connCard}
+                                                                >
+                                                                    <div className={styles.learnerCore} onClick={() => navigate(`/learner/${item.blocked_id}`)} style={{ cursor: 'pointer' }}>
+                                                                        <div className={styles.avatarMini}>
+                                                                            {item.blocked?.avatar_url ? <img src={item.blocked.avatar_url} /> : <User size={20} />}
+                                                                        </div>
+                                                                        <div className={styles.learnerText}>
+                                                                            <span className={styles.learnerName}>{item.blocked?.full_name || item.blocked?.display_name || '—'}</span>
+                                                                            <span className={styles.learnerSub} style={{ color: '#E74C3C' }}>ব্লক করা হয়েছে</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <button
+                                                                        className={styles.actionBtn}
+                                                                        style={{ background: 'rgba(231,76,60,0.1)', color: '#E74C3C', fontSize: '11px', padding: '6px 10px' }}
+                                                                        onClick={async () => {
+                                                                            await supabase.from('blocked_users').delete().eq('id', item.id);
+                                                                            setBlockedList(prev => prev.filter(b => b.id !== item.id));
+                                                                        }}
+                                                                    >
+                                                                        Unblock
+                                                                    </button>
+                                                                </motion.div>
+                                                            ))}
+                                                        </AnimatePresence>
+                                                    </div>
+                                                ) : (
+                                                    <div className={styles.emptyState}>
+                                                        <Ban size={40} opacity={0.2} />
+                                                        <p>ব্লক লিস্ট খালি</p>
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
 
                                         {requestType === 'all' && (
                                             <>
@@ -1169,7 +1263,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                     exit={{ opacity: 0, scale: 0.9, x: 20 }}
                                                                     className={styles.connCard}
                                                                 >
-                                                                    <div className={styles.learnerCore} onClick={() => onSelectLearner(conn.sender)}>
+                                                                    <div className={styles.learnerCore} onClick={() => navigate(`/learner/${conn.sender.id}`)} style={{ cursor: 'pointer' }}>
                                                                         <div className={styles.avatarMini}>
                                                                             {conn.sender.avatar_url ? <img src={conn.sender.avatar_url} /> : <User size={20} />}
                                                                             <StatusIndicator lastSeen={conn.sender.last_seen} />
@@ -1235,7 +1329,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                     exit={{ opacity: 0, scale: 0.9, y: 10 }}
                                                                     className={styles.connCard}
                                                                 >
-                                                                    <div className={styles.learnerCore} onClick={() => onSelectLearner(conn.receiver)}>
+                                                                    <div className={styles.learnerCore} onClick={() => navigate(`/learner/${conn.receiver.id}`)} style={{ cursor: 'pointer' }}>
                                                                         <div className={styles.avatarMini}>
                                                                             {conn.receiver.avatar_url ? <img src={conn.receiver.avatar_url} /> : <User size={20} />}
                                                                             <StatusIndicator lastSeen={conn.receiver.last_seen} />
@@ -1290,45 +1384,50 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             </div>
                                 {/* Floating Chat Window (Facebook Style on Desktop, Full Overlay on Mobile) */}
                                 <AnimatePresence>
-                                    {selectedPartner && (
+                                    {(selectedPartner || isDeepLinking) && (
                                         <div ref={chatWindowRef} className={`${styles.chatWindow} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
                                             <div ref={chatHeaderRef} className={styles.chatHeader}>
-                                                <button 
-                                                    className={styles.backToInbox}
-                                                    onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
-                                                >
-                                                    <ChevronLeft size={24} />
-                                                </button>
+                                                {selectedPartner ? (
+                                                    <>
+                                                        <button 
+                                                            className={styles.backToInbox}
+                                                            onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
+                                                        >
+                                                            <ChevronLeft size={24} />
+                                                        </button>
 
-                                                <div className={styles.partnerAvatar} onClick={() => onSelectLearner(selectedPartner)} style={{ cursor: 'pointer' }}>
-                                                    {selectedPartner.avatar_url ? (
-                                                        <img src={selectedPartner.avatar_url} alt="" />
-                                                    ) : (
-                                                        <div className={styles.avatarPlaceholder}><User size={18} /></div>
-                                                    )}
-                                                    <StatusIndicator lastSeen={selectedPartner.last_seen} />
-                                                </div>
+                                                        <div className={styles.partnerAvatar} onClick={() => navigate(`/learner/${selectedPartner.id}`)} style={{ cursor: 'pointer' }}>
+                                                            {selectedPartner.avatar_url ? (
+                                                                <img src={selectedPartner.avatar_url} alt="" />
+                                                            ) : (
+                                                                <div className={styles.avatarPlaceholder}><User size={18} /></div>
+                                                            )}
+                                                            <StatusIndicator lastSeen={selectedPartner.last_seen} />
+                                                        </div>
 
-                                                <div className={styles.headerInfo}>
-                                                    <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
-                                                </div>
+                                                        <div className={styles.headerInfo}>
+                                                            <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
+                                                        </div>
 
-                                                <button 
-                                                    className={styles.closeChatBtn}
-                                                    onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
-                                                >
-                                                    <X size={20} />
-                                                </button>
+                                                        <button 
+                                                            className={styles.closeChatBtn}
+                                                            onClick={() => { setSelectedPartner(null); setIsMobileChatOpen(false); }}
+                                                        >
+                                                            <X size={20} />
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
+                                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-bg-deep)' }} />
+                                                        <div style={{ width: '100px', height: '14px', borderRadius: '4px', background: 'var(--color-bg-deep)' }} />
+                                                    </div>
+                                                )}
                                             </div>
 
                                             <div ref={scrollRef} className={styles.messageScroll}>
-                                                {isMessagesLoading ? (
-                                                    <div className={styles.chatSkeletonList}>
-                                                        {[...Array(6)].map((_, i) => (
-                                                            <div key={i} className={`${styles.skeletonBubble} ${i % 2 === 0 ? styles.self : styles.other}`}>
-                                                                <Skeleton width={i % 2 === 0 ? "70%" : "60%"} height="40px" borderRadius="18px" />
-                                                            </div>
-                                                        ))}
+                                                {(isMessagesLoading || isDeepLinking) ? (
+                                                    <div className={styles.chatLoader}>
+                                                        <InlineLoader size={40} showText={false} />
                                                     </div>
                                                 ) : (
                                                     <AnimatePresence mode="popLayout">

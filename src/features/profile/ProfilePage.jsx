@@ -49,6 +49,32 @@ const BADGE_DEFS = [
     { id: 'bee_master', emoji: '🛡️', label: 'সার্টিফিকেট', labelEn: 'Certificate' },
 ];
 
+// --- DiceBear Avatar with Error Fallback ---
+const DiceBearAvatar = ({ seed, size = 84 }) => {
+    const [error, setError] = React.useState(false);
+    const url = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&top=bob,curly,turban,bigHair,bun,dreads,shortCurly&mouth=smile`;
+    if (error) {
+        return (
+            <div style={{
+                width: '100%', height: '100%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(241,196,15,0.08)',
+                borderRadius: '50%'
+            }}>
+                <User size={Math.floor(size * 0.5)} color="var(--color-primary)" />
+            </div>
+        );
+    }
+    return (
+        <img
+            src={url}
+            alt="Avatar"
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+            onError={() => setError(true)}
+        />
+    );
+};
+
 const ProfilePage = () => {
     const { user, signOut, updateProfile } = useAuth();
     const navigate = useNavigate();
@@ -501,20 +527,9 @@ const ProfilePage = () => {
 
     return (
         <div className={styles.profilePage}>
-            <svg width="0" height="0" style={{ position: 'absolute' }}>
-                <defs>
-                    <linearGradient id="flameGradientProfile" x1="0%" y1="0%" x2="0%" y2="100%">
-                        <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
-                        <stop offset="50%" style={{ stopColor: brandColor, stopOpacity: 1 }} />
-                        <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
-                    </linearGradient>
-                </defs>
-            </svg>
             {loading ? (
-                <div className={styles.profilePage}>
-                    <div className={styles.container}>
-                        <ProfileSkeleton />
-                    </div>
+                <div className={styles.container}>
+                    <ProfileSkeleton />
                 </div>
             ) : (
                 <div className={styles.container}>
@@ -532,10 +547,7 @@ const ProfilePage = () => {
                             <div className={styles.avatar} onClick={() => fileInputRef.current?.click()}>
                                 {profile?.avatar_url && !imgError
                                     ? <img src={profile.avatar_url} alt="Profile" onError={() => setImgError(true)} />
-                                    : <img 
-                                        src={`https://api.dicebear.com/9.x/avataaars/svg?seed=${user?.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`} 
-                                        alt="Profile Fallback" 
-                                      />
+                                    : <DiceBearAvatar seed={user?.id} size={84} />
                                 }
                                 <div className={styles.avatarOverlay}>
                                     <Camera size={20} />
@@ -607,8 +619,8 @@ const ProfilePage = () => {
                                         <div className={styles.statIconBox}>
                                             <Flame 
                                                 size={18} 
-                                                fill={streak?.is_today_completed ? "url(#flameGradientProfile)" : "none"} 
-                                                stroke={streak?.is_today_completed ? "url(#flameGradientProfile)" : "var(--color-text-muted)"} 
+                                                fill={streak?.is_today_completed ? '#FF6B35' : 'none'} 
+                                                stroke={streak?.is_today_completed ? '#FF4500' : 'var(--color-text-muted)'} 
                                                 className={styles.statIconStreak} 
                                                 style={{ opacity: streak?.is_today_completed ? 1 : 0.5 }}
                                             />

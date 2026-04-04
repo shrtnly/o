@@ -124,5 +124,34 @@ export const connectionService = {
 
         if (error) throw error;
         return true;
+    },
+
+    /**
+     * Unfriend / Disconnect by target user ID
+     */
+    async disconnect(userId, targetId) {
+        const { error } = await supabase
+            .from('learner_connections')
+            .delete()
+            .or(`and(sender_id.eq.${userId},receiver_id.eq.${targetId}),and(sender_id.eq.${targetId},receiver_id.eq.${userId})`);
+        
+        if (error) throw error;
+        return true;
+    },
+
+    /**
+     * Block a user
+     */
+    async blockUser(userId, targetId) {
+        // 1. Remove existing connection if any
+        await this.disconnect(userId, targetId);
+        
+        // 2. Add to blocked_users table
+        const { error } = await supabase
+            .from('blocked_users')
+            .insert({ blocker_id: userId, blocked_id: targetId });
+            
+        if (error && error.code !== '23505') throw error; // 23505 is unique violation
+        return true;
     }
 };

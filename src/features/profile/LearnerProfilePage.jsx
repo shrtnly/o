@@ -7,16 +7,14 @@ import { connectionService } from '../../services/connectionService';
 import { rewardService } from '../../services/rewardService';
 import { leaderboardService } from '../../services/leaderboardService';
 import { getShieldLevel } from '../../utils/shieldSystem';
-import ShieldIcon from '../../components/ShieldIcon';
 import { motion } from 'framer-motion';
 import {
-    ArrowLeft, UserPlus, MessageSquare, Check, MapPin,
-    Flame, Trophy, BookOpen, Zap, Clock, UserCheck, UserX,
-    Hourglass
+    ArrowLeft, UserPlus, MessageSquare, Check,
+    Flame, Trophy, BookOpen, Zap, UserCheck,
+    Hourglass, User, UserMinus, Ban
 } from 'lucide-react';
+import { toast } from 'sonner';
 import styles from './LearnerProfilePage.module.css';
-
-
 
 const LearnerProfilePage = () => {
     const { learnerId } = useParams();
@@ -24,16 +22,18 @@ const LearnerProfilePage = () => {
     const { user } = useAuth();
     const { language } = useLanguage();
 
-    const [learner, setLearner]           = useState(null);
-    const [stats, setStats]               = useState(null);
-    const [streak, setStreak]             = useState(null);
-    const [rank, setRank]                 = useState(null);
-    const [certs, setCerts]               = useState(0);
-    const [loading, setLoading]           = useState(true);
-    const [connStatus, setConnStatus]     = useState('none'); // 'none' | 'pending' | 'accepted' | 'outgoing'
-    const [connId, setConnId]             = useState(null);
+    const [learner, setLearner]             = useState(null);
+    const [stats, setStats]                 = useState(null);
+    const [streak, setStreak]               = useState(null);
+    const [rank, setRank]                   = useState(null);
+    const [certs, setCerts]                 = useState(0);
+    const [loading, setLoading]             = useState(true);
+    const [connStatus, setConnStatus]       = useState('none');
+    const [connId, setConnId]               = useState(null);
     const [actionLoading, setActionLoading] = useState(false);
-    const [imgError, setImgError]         = useState(false);
+    const [imgError, setImgError]           = useState(false);
+    const [isBlocked, setIsBlocked]         = useState(false);
+    const [isBlockedByMe, setIsBlockedByMe] = useState(false);
 
     // Redirect self-view to own profile
     useEffect(() => {
@@ -55,7 +55,6 @@ const LearnerProfilePage = () => {
             setLearner(profile);
             setImgError(false);
 
-            // Fetch stats, streaks, rank, and certs
             const [statsData, streakData, certsData] = await Promise.all([
                 rewardService.getUserStats(learnerId),
                 rewardService.getUserStreak(learnerId),
@@ -65,7 +64,6 @@ const LearnerProfilePage = () => {
             setStreak(streakData);
             setCerts(certsData.count || 0);
 
-            // Rank (only if enough XP)
             if (profile.xp >= 100) {
                 try {
                     const { data: rankRow } = await supabase
@@ -89,12 +87,27 @@ const LearnerProfilePage = () => {
     const fetchConnection = useCallback(async () => {
         if (!user || !learnerId) return;
         try {
+            // Check for blocks
+            const { data: blockData } = await supabase
+                .from('blocked_users')
+                .select('*')
+                .or(`and(blocker_id.eq.${user.id},blocked_id.eq.${learnerId}),and(blocker_id.eq.${learnerId},blocked_id.eq.${user.id})`)
+                .maybeSingle();
+            
+            if (blockData) {
+                setIsBlocked(true);
+                setIsBlockedByMe(blockData.blocker_id === user.id);
+                setConnStatus('none');
+                return;
+            }
+
+            setIsBlocked(false);
+            setIsBlockedByMe(false);
+
             const { data } = await supabase
                 .from('learner_connections')
                 .select('*')
-                .or(
-                    `and(sender_id.eq.${user.id},receiver_id.eq.${learnerId}),and(sender_id.eq.${learnerId},receiver_id.eq.${user.id})`
-                )
+                .or(`and(sender_id.eq.${user.id},receiver_id.eq.${learnerId}),and(sender_id.eq.${learnerId},receiver_id.eq.${user.id})`)
                 .maybeSingle();
 
             if (!data) { setConnStatus('none'); setConnId(null); return; }
@@ -105,7 +118,7 @@ const LearnerProfilePage = () => {
                 setConnStatus(data.sender_id === user.id ? 'outgoing' : 'pending');
             }
         } catch (err) {
-            console.error('Connection fetch error:', err);
+            console.error('Connection/Block fetch error:', err);
         }
     }, [user, learnerId]);
 
@@ -134,20 +147,54 @@ const LearnerProfilePage = () => {
         }
     };
 
-    const handleMessage = () => {
-        navigate('/connections?chat=' + learnerId);
+    const handleMessage = () => navigate(`/connections?sub=inbox&partnerId=${learnerId}`);
+
+    const handleDisconnect = async () => {
+        if (!window.confirm(language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি সংযোগ বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?')) return;
+        try {
+            setActionLoading(true);
+            await connectionService.disconnect(user.id, learnerId);
+            setConnStatus('none');
+            toast.success(language === 'bn' ? 'সংযোগ বিচ্ছিন্ন করা হয়েছে' : 'Disconnected successfully');
+        } catch (error) {
+            console.error('Error disconnecting:', error);
+            toast.error('Error disconnecting user');
+        } finally {
+            setActionLoading(false);
+        }
     };
 
-    const avatarSrc = learner?.avatar_url && !imgError
-        ? learner.avatar_url
-        : `https://api.dicebear.com/9.x/avataaars/svg?seed=${learnerId}&top=longButNotTooLong,bob,hijab,curvy,straight01,straight02,turban,miaWallace,frida,shortRound,fro,sides,shortCurly&mouth=smile`;
+    const handleBlock = async () => {
+        if (!window.confirm(language === 'bn' ? 'এই ব্যবহারকারীকে ব্লক করতে চান?' : 'Block this user?')) return;
+        try {
+            setActionLoading(true);
+            await connectionService.blockUser(user.id, learnerId);
+            setIsBlocked(true);
+            setConnStatus('none');
+            toast.success(language === 'bn' ? 'ব্যবহারকারীকে ব্লক করা হয়েছে' : 'User blocked');
+        } catch (error) {
+            console.error('Error blocking user:', error);
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
-    const shieldInfo = getShieldLevel(learner?.xp || 0);
-
-    const isOnline = learner?.last_seen &&
-        (new Date() - new Date(learner.last_seen)) < 5 * 60 * 1000;
-
-
+    const handleUnblock = async () => {
+        try {
+            setActionLoading(true);
+            await supabase
+                .from('blocked_users')
+                .delete()
+                .eq('blocker_id', user.id)
+                .eq('blocked_id', learnerId);
+            setIsBlocked(false);
+            toast.success('Unblocked');
+        } catch (error) {
+            console.error('Error unblocking:', error);
+        } finally {
+            setActionLoading(false);
+        }
+    };
 
     const connectLabel = () => {
         if (actionLoading) return language === 'bn' ? 'লোড...' : 'Loading...';
@@ -160,37 +207,55 @@ const LearnerProfilePage = () => {
     };
 
     const ConnectIcon = () => {
-        if (connStatus === 'accepted') return <UserCheck size={16} />;
-        if (connStatus === 'outgoing') return <Hourglass size={16} />;
-        if (connStatus === 'pending')  return <Check size={16} />;
-        return <UserPlus size={16} />;
+        if (connStatus === 'accepted') return <UserCheck size={15} />;
+        if (connStatus === 'outgoing') return <Hourglass size={15} />;
+        if (connStatus === 'pending')  return <Check size={15} />;
+        return <UserPlus size={15} />;
     };
 
-    /* ─────────── SKELETON ─────────── */
+    const isOnline = learner?.last_seen &&
+        (new Date() - new Date(learner.last_seen)) < 5 * 60 * 1000;
+
+    const shieldInfo = getShieldLevel(learner?.xp || 0);
+
+    /* ─── AVATAR ─── */
+    const AvatarFallback = () => (
+        <div style={{
+            width: '100%', height: '100%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(241,196,15,0.06)', borderRadius: '50%'
+        }}>
+            <User size={30} color="var(--color-primary)" strokeWidth={1.5} />
+        </div>
+    );
+
+    const [avatarFailed, setAvatarFailed] = useState(false);
+
+    const avatarSrc = learner?.avatar_url && !imgError && !avatarFailed
+        ? learner.avatar_url
+        : null;
+
+    /* ─── SKELETON ─── */
     if (loading) {
         return (
             <div className={styles.page}>
                 <div className={styles.container}>
                     <div className={styles.backRow}>
-                        <div className={`${styles.skeletonBlock}`} style={{ width: 80, height: 32, borderRadius: 8 }} />
+                        <div className={styles.skeletonBlock} style={{ width: 72, height: 28, borderRadius: 6 }} />
                     </div>
                     <div className={styles.skeletonHeader}>
-                        <div className={`${styles.skeletonCircle}`} style={{ width: 84, height: 84 }} />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
-                            <div className={styles.skeletonBlock} style={{ width: '60%', height: 20 }} />
-                            <div className={styles.skeletonBlock} style={{ width: '40%', height: 14 }} />
-                            <div className={styles.skeletonBlock} style={{ width: '30%', height: 14 }} />
+                        <div className={styles.skeletonCircle} style={{ width: 72, height: 72 }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+                            <div className={styles.skeletonBlock} style={{ width: '55%', height: 18 }} />
+                            <div className={styles.skeletonBlock} style={{ width: '35%', height: 13 }} />
+                            <div className={styles.skeletonBlock} style={{ width: '28%', height: 13 }} />
                         </div>
                     </div>
                     <div className={styles.skeletonActions}>
-                        <div className={styles.skeletonBlock} style={{ flex: 1, height: 44 }} />
-                        <div className={styles.skeletonBlock} style={{ flex: 1, height: 44 }} />
+                        <div className={styles.skeletonBlock} style={{ height: 42 }} />
+                        <div className={styles.skeletonBlock} style={{ height: 42 }} />
                     </div>
-                    <div className={styles.skeletonStats}>
-                        {[...Array(3)].map((_, i) => (
-                            <div key={i} className={styles.skeletonBlock} style={{ flex: 1, height: 72, borderRadius: 14 }} />
-                        ))}
-                    </div>
+                    <div className={styles.skeletonBlock} style={{ height: 68, borderRadius: 14 }} />
                 </div>
             </div>
         );
@@ -204,25 +269,31 @@ const LearnerProfilePage = () => {
 
                 {/* ── Back Button ── */}
                 <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                    <ArrowLeft size={18} />
+                    <ArrowLeft size={16} />
                     <span>{language === 'bn' ? 'ফিরে যান' : 'Back'}</span>
                 </button>
 
                 {/* ── Header Card ── */}
                 <motion.div
                     className={styles.headerCard}
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, ease: 'easeOut' }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
                 >
-                    {/* Avatar + Online indicator */}
+                    {/* Avatar */}
                     <div className={styles.avatarWrap}>
-                        <img
-                            src={avatarSrc}
-                            alt={learner.display_name || 'Learner'}
-                            className={styles.avatar}
-                            onError={() => setImgError(true)}
-                        />
+                        <div className={styles.avatar}>
+                            {avatarSrc ? (
+                                <img
+                                    src={avatarSrc}
+                                    alt={learner.full_name || 'Learner'}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                                    onError={() => setAvatarFailed(true)}
+                                />
+                            ) : (
+                                <AvatarFallback />
+                            )}
+                        </div>
                         <span className={`${styles.onlineDot} ${isOnline ? styles.online : styles.offline}`} />
                     </div>
 
@@ -231,101 +302,112 @@ const LearnerProfilePage = () => {
                         <h1 className={styles.learnerName}>
                             {learner.full_name || learner.display_name || (language === 'bn' ? 'শিক্ষার্থী' : 'Learner')}
                         </h1>
-                        <div className={styles.rankChip}>
-                            <ShieldIcon xp={learner.xp || 0} size={16} showTooltip={false} />
-                            <span>{shieldInfo.name} Learner</span>
-                        </div>
-                        {learner.location && (
-                            <div className={styles.locationLine}>
-                                <MapPin size={13} />
-                                <span>{learner.location}</span>
-                            </div>
-                        )}
-
+                        <p className={styles.subtitle}>
+                            {shieldInfo.name} Learner{learner.location ? ` @ ${learner.location}` : ''}
+                        </p>
                     </div>
                 </motion.div>
 
-                {/* ── Action buttons ── */}
+                {/* ── Action Buttons ── */}
                 <motion.div
                     className={styles.actions}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, delay: 0.08, ease: 'easeOut' }}
+                    transition={{ duration: 0.3, delay: 0.07, ease: 'easeOut' }}
                 >
-                    <button
-                        className={`${styles.actionBtn} ${styles.connectBtn} ${connStatus === 'accepted' ? styles.connectedBtn : ''} ${connStatus === 'outgoing' ? styles.outgoingBtn : ''}`}
-                        onClick={handleConnect}
-                        disabled={actionLoading}
-                    >
-                        <ConnectIcon />
-                        <span>{connectLabel()}</span>
-                    </button>
-
-                    <button
-                        className={`${styles.actionBtn} ${styles.msgBtn}`}
-                        onClick={handleMessage}
-                    >
-                        <MessageSquare size={16} />
-                        <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
-                    </button>
+                    {isBlocked ? (
+                        <button className={`${styles.actionBtn} ${styles.blockBtnActive}`} onClick={handleUnblock} disabled={actionLoading}>
+                            <Ban size={15} />
+                            <span>{language === 'bn' ? 'আনব্লক' : 'Unblock'}</span>
+                        </button>
+                    ) : (
+                        <>
+                            {connStatus === 'accepted' ? (
+                                <>
+                                    <button className={`${styles.actionBtn} ${styles.msgBtn}`} onClick={handleMessage}>
+                                        <MessageSquare size={15} />
+                                        <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
+                                    </button>
+                                    <button className={`${styles.actionBtn} ${styles.disconnectBtn}`} onClick={handleDisconnect} disabled={actionLoading}>
+                                        <UserMinus size={15} />
+                                        <span>{language === 'bn' ? 'সংযোগ বিচ্ছিন্ন' : 'Disconnect'}</span>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button
+                                        className={`${styles.actionBtn} ${styles.connectBtn} ${connStatus === 'outgoing' ? styles.outgoingBtn : ''}`}
+                                        onClick={handleConnect}
+                                        disabled={actionLoading}
+                                    >
+                                        <ConnectIcon />
+                                        <span>{connectLabel()}</span>
+                                    </button>
+                                    <button className={`${styles.actionBtn} ${styles.msgBtn}`} onClick={handleMessage}>
+                                        <MessageSquare size={15} />
+                                        <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
+                                    </button>
+                                </>
+                            )}
+                            
+                            {!isBlocked && (
+                                <button className={`${styles.actionBtn} ${styles.blockBtn}`} onClick={handleBlock} disabled={actionLoading} style={{ gridColumn: 'span 2' }}>
+                                    <Ban size={15} />
+                                    <span>{language === 'bn' ? 'ব্লক করুন' : 'Block User'}</span>
+                                </button>
+                            )}
+                        </>
+                    )}
                 </motion.div>
 
-
-
-                {/* ── Status Horizontal Row ── */}
+                {/* ── Status Grid ── */}
                 <motion.section
                     className={styles.section}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, delay: 0.15, ease: 'easeOut' }}
+                    transition={{ duration: 0.3, delay: 0.13, ease: 'easeOut' }}
                 >
-                    <h2 className={styles.sectionTitle}>
-                        {language === 'bn' ? 'অবস্থা' : 'Status'}
-                    </h2>
-                    
+                    <p className={styles.sectionTitle}>
+                        {language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}
+                    </p>
+
                     <div className={styles.statsRow}>
                         <div className={styles.statBox}>
-                            <Flame size={20} className={styles.statIconStreak} />
+                            <Flame size={17} className={styles.statIconStreak} strokeWidth={2} />
                             <span className={styles.statVal}>{streak?.longest_streak || 0}</span>
                             <span className={styles.statLbl}>{language === 'bn' ? 'সর্বোচ্চ স্ট্রিক' : 'Best Streak'}</span>
                         </div>
-                        
-                        <div className={styles.statDivider} />
-                        
+
                         <div className={styles.statBox}>
-                            <Zap size={20} className={styles.statIconXp} />
-                            <span className={styles.statVal}>{learner.xp || 0}</span>
+                            <Zap size={17} className={styles.statIconXp} strokeWidth={2} />
+                            <span className={styles.statVal}>{(learner.xp || 0).toLocaleString()}</span>
                             <span className={styles.statLbl}>{language === 'bn' ? 'মধু (XP)' : 'XP'}</span>
                         </div>
 
-                        <div className={styles.statDivider} />
-
                         <div className={styles.statBox}>
-                            <Trophy size={20} className={styles.statIconRank} />
-                            <span className={styles.statVal}>{rank ? `#${rank}` : '0'}</span>
+                            <Trophy size={17} className={styles.statIconRank} strokeWidth={2} />
+                            <span className={styles.statVal}>{rank ? `#${rank}` : '—'}</span>
                             <span className={styles.statLbl}>{language === 'bn' ? 'র‍্যাংক' : 'Rank'}</span>
                         </div>
 
-                        <div className={styles.statDivider} />
-
                         <div className={styles.statBox}>
-                            <BookOpen size={20} className={styles.statIconCourse} />
+                            <BookOpen size={17} className={styles.statIconCourse} strokeWidth={2} />
                             <span className={styles.statVal}>{certs}</span>
                             <span className={styles.statLbl}>{language === 'bn' ? 'সার্টিফিকেট' : 'Certificates'}</span>
                         </div>
                     </div>
                 </motion.section>
 
-                {/* ── Personal Information ── */}
+                {/* ── General Information ── */}
                 <motion.section
                     className={styles.section}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, delay: 0.22, ease: 'easeOut' }}
+                    transition={{ duration: 0.3, delay: 0.19, ease: 'easeOut' }}
                 >
-                    <h2 className={styles.sectionTitle}>
+                    <p className={styles.sectionTitle}>
                         {language === 'bn' ? 'সাধারণ তথ্য' : 'General Information'}
-                    </h2>
+                    </p>
                     <div className={styles.detailsList}>
                         <div className={styles.detailRow}>
                             <span className={styles.detailKey}>{language === 'bn' ? 'ইমেইল' : 'Email'}</span>
@@ -335,7 +417,6 @@ const LearnerProfilePage = () => {
                             <span className={styles.detailKey}>{language === 'bn' ? 'শিক্ষা' : 'Education'}</span>
                             <span className={styles.detailVal}>{learner.education_level || '—'}</span>
                         </div>
-
                         <div className={styles.detailRow}>
                             <span className={styles.detailKey}>{language === 'bn' ? 'যোগ দিয়েছেন' : 'Joined'}</span>
                             <span className={styles.detailVal}>
@@ -352,18 +433,18 @@ const LearnerProfilePage = () => {
                 {learner.bio && (
                     <motion.section
                         className={styles.section}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, delay: 0.28, ease: 'easeOut' }}
+                        transition={{ duration: 0.3, delay: 0.24, ease: 'easeOut' }}
                     >
-                        <h2 className={styles.sectionTitle}>
-                            {language === 'bn' ? 'পরিচয়' : 'About'}
-                        </h2>
+                        <p className={styles.sectionTitle}>
+                            {language === 'bn' ? 'আমার সম্পর্কে' : 'About'}
+                        </p>
                         <p className={styles.bioText}>{learner.bio}</p>
                     </motion.section>
                 )}
 
-                <div style={{ height: 40 }} />
+                <div style={{ height: 32 }} />
             </div>
         </div>
     );

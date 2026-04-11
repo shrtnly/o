@@ -701,33 +701,24 @@
 .separatorLine {
     flex: 1;
     height: 2px;
-    background: linear-gradient(90deg,
-            transparent 0%,
-            var(--color-border-muted) 10%,
-            #e2e8f0 50%,
-            var(--color-border-muted) 90%,
-            transparent 100%);
-    border-radius: 1px;
+    background: var(--color-border-muted);
+    opacity: 1;
 }
 
 :global(.light) .separatorLine {
-    background: linear-gradient(90deg,
-            transparent 0%,
-            rgba(0, 0, 0, 0.03) 10%,
-            #cbd5e1 50%,
-            rgba(0, 0, 0, 0.03) 90%,
-            transparent 100%);
+    background: rgba(0, 0, 0, 0.15);
+    opacity: 1;
 }
 
 .separatorText {
     color: var(--color-text-muted);
-    font-weight: 800;
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 1.5rem;
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: 3px;
     white-space: nowrap;
-    position: relative;
-    padding: 0 15px;
+    opacity: 0.7;
+    padding: 0 12px;
 }
 
 @keyframes bounce {
@@ -2194,7 +2185,7 @@
 
 .streakTooltipBox {
     position: absolute;
-    top: calc(100% + 15px);
+    top: calc(100% + 6px);
     left: -5px;
     background: var(--color-bg-alt);
     border: 2px solid var(--color-border-muted);
@@ -2222,7 +2213,7 @@
 
     .streakTooltipBoxCenter {
         position: absolute;
-        top: calc(100% + 15px);
+        top: calc(100% + 6px);
         left: -60px;
         background: var(--color-bg-alt);
         border: 2px solid var(--color-border-muted);
@@ -2248,7 +2239,7 @@
 
     .streakTooltipBoxRight {
         position: absolute;
-        top: calc(100% + 15px);
+        top: calc(100% + 6px);
         right: -30px;
         background: var(--color-bg-alt);
         border: 2px solid var(--color-border-muted);
@@ -2361,7 +2352,7 @@
 
 .heartsTooltipBox {
     position: absolute;
-    top: calc(100% + 15px);
+    top: calc(100% + 6px);
     right: -10px;
     background: var(--color-bg-alt);
     border: 2px solid var(--color-border-muted);

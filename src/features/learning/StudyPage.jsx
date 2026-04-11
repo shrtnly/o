@@ -196,6 +196,7 @@ const StudyPage = () => {
     const activeQuestionRef = React.useRef(null);
     const mainContentRef = React.useRef(null);
     const prevIndexRef = React.useRef(-1); // Start at -1 to trigger for the first question (0)
+    const isFirstCompletion = React.useRef(true); // Tracks if this chapter was previously completed
 
     // Matching Interaction State
     const [selectedLeft, setSelectedLeft] = useState(null);
@@ -401,10 +402,22 @@ const StudyPage = () => {
                     if (nextC) setNextChapter(nextC);
                 }
 
-                // Fetch streak info
+                // Fetch streak info + check if chapter was already completed
                 if (user?.id) {
                     const streak = await rewardService.getUserStreak(user.id);
                     if (streak) setStreakInfo(streak);
+
+                    // Check prior completion to gate pollen reward
+                    const { data: existingProgress } = await supabase
+                        .from('user_progress')
+                        .select('id')
+                        .eq('user_id', user.id)
+                        .eq('chapter_id', chapterId)
+                        .eq('is_completed', true)
+                        .limit(1)
+                        .maybeSingle();
+                    // If a completed record exists → this is NOT the first time
+                    isFirstCompletion.current = !existingProgress;
                 }
 
                 const { data: points, error: pErr } = await supabase
@@ -660,9 +673,11 @@ const StudyPage = () => {
 
             if (user && courseId && chapterId) {
                 try {
-                    // New Reward Logic: XP (Max 20), Pollen (Max 30)
-                    const earnedXp = Math.round((stats.correct / (stats.total || 1)) * 20);
-                    const earnedPollen = Math.round((stats.correct / (stats.total || 1)) * 30);
+                    // Reward Logic: XP (Max 10), Pollen (Max 14 — first completion only)
+                    const earnedXp = Math.round((stats.correct / (stats.total || 1)) * 10);
+                    const earnedPollen = isFirstCompletion.current
+                        ? Math.round((stats.correct / (stats.total || 1)) * 14)
+                        : 0;
 
                     // Update user progress via Atomic RPC for better reliability and RLS bypass
                     const { error: rpcErr } = await supabase.rpc('upsert_user_progress', {
@@ -678,20 +693,20 @@ const StudyPage = () => {
 
                     // Update Profile Stats & Streak via Reward Service
                     if (user?.id) {
-                        // This awards XP, logs activity, and updates streaks
+                        // This awards XP, logs activity, and updates streaks (always)
                         await rewardService.awardXP(user.id, earnedXp, 'chapter_complete', {
                             courseId,
                             chapterId,
                             accuracy: stats.correct / (stats.total || 1)
                         });
 
-                        // This awards gems (pollen)
-                        await rewardService.awardGems(user.id, earnedPollen, 'chapter_complete', {
-                            courseId,
-                            chapterId
-                        });
-
-
+                        // This awards pollen — only on first completion
+                        if (earnedPollen > 0) {
+                            await rewardService.awardGems(user.id, earnedPollen, 'chapter_complete', {
+                                courseId,
+                                chapterId
+                            });
+                        }
                     }
                 } catch (err) {
                     console.error('Error updating progress:', err);
@@ -949,10 +964,12 @@ const StudyPage = () => {
                                         <div className={cn(styles.minimalChart, styles.chart1, styles.meterChart)}>
                                             {(() => {
                                                 const ARC = 125.7;
-                                                const TOTAL = 50;
                                                 const accuracy = stats.correct / (stats.total || 1);
-                                                const earnedPollen = Math.round(accuracy * 30);
-                                                const earnedXp = Math.round(accuracy * 20);
+                                                const showPollen = isFirstCompletion.current;
+                                                const earnedPollen = showPollen ? Math.round(accuracy * 14) : 0;
+                                                const earnedXp = Math.round(accuracy * 10);
+                                                // Normalizer: 24 when pollen shown, 10 when xp-only
+                                                const TOTAL = showPollen ? 24 : 10;
                                                 const pollenArc = (earnedPollen / TOTAL) * ARC;
                                                 const xpArc = (earnedXp / TOTAL) * ARC;
                                                 return (
@@ -964,17 +981,19 @@ const StudyPage = () => {
                                                             strokeWidth="10"
                                                             fill="none"
                                                         />
-                                                        {/* Pollen segment — fills from start */}
-                                                        <motion.path
-                                                            d="M 10,50 A 40,40 0 0 1 90,50"
-                                                            className={cn(styles.meterFill, styles.pollenSegment)}
-                                                            strokeWidth="10"
-                                                            fill="none"
-                                                            initial={{ strokeDasharray: `0 ${ARC}` }}
-                                                            animate={{ strokeDasharray: `${pollenArc} ${ARC}` }}
-                                                            transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
-                                                        />
-                                                        {/* XP segment — starts right after pollen */}
+                                                        {/* Pollen segment — first completion only */}
+                                                        {showPollen && (
+                                                            <motion.path
+                                                                d="M 10,50 A 40,40 0 0 1 90,50"
+                                                                className={cn(styles.meterFill, styles.pollenSegment)}
+                                                                strokeWidth="10"
+                                                                fill="none"
+                                                                initial={{ strokeDasharray: `0 ${ARC}` }}
+                                                                animate={{ strokeDasharray: `${pollenArc} ${ARC}` }}
+                                                                transition={{ duration: 1.4, delay: 0.3, ease: "easeOut" }}
+                                                            />
+                                                        )}
+                                                        {/* XP segment — starts right after pollen (or from start if no pollen) */}
                                                         <motion.path
                                                             d="M 10,50 A 40,40 0 0 1 90,50"
                                                             className={cn(styles.meterFill, styles.xpSegment)}
@@ -990,18 +1009,21 @@ const StudyPage = () => {
                                             })()}
                                             <div className={styles.meterContent}>
                                                 <div className={styles.rewardIconsCompact}>
-                                                    <div className={styles.rewardIconGroup}>
-                                                        <PollenIcon size={13} />
-                                                        <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 30)}</span>
-                                                    </div>
+                                                    {isFirstCompletion.current && (
+                                                        <div className={styles.rewardIconGroup}>
+                                                            <PollenIcon size={13} />
+                                                            <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 14)}</span>
+                                                        </div>
+                                                    )}
                                                     <div className={styles.rewardIconGroup}>
                                                         <Zap size={13} fill="#1cb0f6" stroke="none" />
-                                                        <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 20)}</span>
+                                                        <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 10)}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </motion.div>
                         )}

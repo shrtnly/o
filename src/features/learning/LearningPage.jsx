@@ -437,13 +437,15 @@ const LearningPage = () => {
         }
     }, [courseId, user?.id]);
 
-    // Auto-scroll to active node on mount/load
+    // Instantly position view at active node on initial load (no scroll animation)
     useEffect(() => {
         if (!loading && unitsWithChapters.length > 0) {
-            // Give a tiny delay for React to finish rendering the DOM
             const timer = setTimeout(() => {
-                scrollToActive();
-            }, 100);
+                const activeNode = mainContentRef.current?.querySelector(`.${styles.nodeActive}`);
+                if (activeNode) {
+                    activeNode.scrollIntoView({ behavior: 'instant', block: 'center' });
+                }
+            }, 50);
             return () => clearTimeout(timer);
         }
     }, [loading, unitsWithChapters.length]);

@@ -203,6 +203,7 @@ const StudyPage = () => {
     const [matches, setMatches] = useState({}); // { leftIdx: rightIdx }
     const [shuffledRight, setShuffledRight] = useState([]);
     const [failedOptions, setFailedOptions] = useState([]); // Track wrong attempts for current question
+    const [flashingMatches, setFlashingMatches] = useState(new Set()); // leftIdx keys currently flashing green
 
     const dialogues = React.useMemo(() => {
         if (questions[currentIndex]?.type === 'storytelling') {
@@ -487,6 +488,7 @@ const StudyPage = () => {
             setShuffledRight([...rightOptions].sort(() => Math.random() - 0.5));
             setMatches({});
             setSelectedLeft(null);
+            setFlashingMatches(new Set());
         }
         setFailedOptions([]); // Clear wrong attempts when moving to new question
     }, [currentIndex, questions]);
@@ -511,9 +513,23 @@ const StudyPage = () => {
             setMatches(newMatches);
             setSelectedLeft(null);
 
+            if (isCorrectPair) {
+                // Flash green for 550ms then settle to disabled style
+                const capturedLeft = selectedLeft;
+                setFlashingMatches(prev => new Set(prev).add(capturedLeft));
+                setTimeout(() => {
+                    setFlashingMatches(prev => {
+                        const next = new Set(prev);
+                        next.delete(capturedLeft);
+                        return next;
+                    });
+                }, 550);
+            }
+
             if (!isCorrectPair) {
-                // Add to failed list for red styling
-                setFailedOptions(prev => [...prev, { left: selectedLeft, right: index }]);
+                // Add to failed list for red styling (blink)
+                const failedEntry = { left: selectedLeft, right: index };
+                setFailedOptions(prev => [...prev, failedEntry]);
                 setShake(true);
                 setTimeout(() => setShake(false), 500);
 
@@ -525,7 +541,7 @@ const StudyPage = () => {
 
                 if (user) await deductHeart(1);
 
-                // After flash delay, clear the wrong match so they can re-try
+                // After blink: clear wrong match AND remove red state → back to unselected
                 const capturedLeft = selectedLeft;
                 setTimeout(() => {
                     setMatches(prev => {
@@ -533,6 +549,10 @@ const StudyPage = () => {
                         delete updated[capturedLeft];
                         return updated;
                     });
+                    // Remove only this specific failed entry so card returns to normal
+                    setFailedOptions(prev =>
+                        prev.filter(f => !(f.left === failedEntry.left && f.right === failedEntry.right))
+                    );
                 }, 800);
             }
 
@@ -1110,6 +1130,8 @@ const StudyPage = () => {
                                                                                 (showResult && !isLatest && isMatched && !isMatchCorrect);
                                                                             // After a failure, this left card has been tried before
                                                                             const hasFailed = isLatest && failedOptions.some(f => f.left === pIdx);
+                                                                            // Green flash: newly correct match (first 550ms)
+                                                                            const isFlashing = isLatest && flashingMatches.has(pIdx);
 
                                                                             if (!pair.left || pair.left.trim() === '') return null;
 
@@ -1119,9 +1141,10 @@ const StudyPage = () => {
                                                                                     className={cn(
                                                                                         styles.matchingCard,
                                                                                         selectedLeft === pIdx && styles.selectedCard,
-                                                                                        isMatchCorrect && styles.matched,
+                                                                                        isFlashing && styles.matchFlash,
+                                                                                        !isFlashing && isMatchCorrect && styles.matched,
                                                                                         isMatchWrong && styles.mismatch,
-                                                                                        hasFailed && !isMatched && styles.hasFailed // subtle indicator
+                                                                                        hasFailed && !isMatched && styles.hasFailed
                                                                                     )}
                                                                                     onClick={() => isLatest && !isMatchCorrect && handleMatchSelect('left', pIdx)}
                                                                                 >
@@ -1136,6 +1159,7 @@ const StudyPage = () => {
                                                                             const isMatched = lIdx !== undefined;
                                                                             const isMatchCorrect = isMatched && (q.metadata.pairs[lIdx]?.right === opt.text);
                                                                             const showResult = isLatest ? isAnswered : true;
+                                                                            const isFlashingRight = isLatest && isMatchCorrect && flashingMatches.has(parseInt(lIdx));
 
                                                                             // GREEN HINT: This right card is the correct answer for any left card that has failed
                                                                             // Persists after failure so learner knows where to click next
@@ -1150,9 +1174,10 @@ const StudyPage = () => {
                                                                                     key={`r-${rIdx}`}
                                                                                     className={cn(
                                                                                         styles.matchingCard,
-                                                                                        isMatchCorrect && styles.matched,  // green for correct match
-                                                                                        isMatchWrong && styles.mismatch,   // red for wrong current match
-                                                                                        isHint && styles.hintCard          // green-outline hint for guidance
+                                                                                        isFlashingRight && styles.matchFlash,
+                                                                                        !isFlashingRight && isMatchCorrect && styles.matched,
+                                                                                        isMatchWrong && styles.mismatch,
+                                                                                        isHint && styles.hintCard
                                                                                     )}
                                                                                     onClick={() => isLatest && handleMatchSelect('right', rIdx)}
                                                                                 >

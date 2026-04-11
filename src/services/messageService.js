@@ -53,20 +53,32 @@ export const messageService = {
     }
   },
 
-  // Get messages for a specific partner
-  async getMessages(userId, partnerId) {
+  // Get messages for a specific partner (paginated — newest first, reversed for display)
+  async getMessages(userId, partnerId, { limit = 25, before = null } = {}) {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('messages')
         .select('*')
         .or(`and(sender_id.eq.${userId},receiver_id.eq.${partnerId}),and(sender_id.eq.${partnerId},receiver_id.eq.${userId})`)
-        .order('created_at', { ascending: true });
+        .order('created_at', { ascending: false })
+        .limit(limit);
 
+      // Cursor: load messages older than this timestamp
+      if (before) {
+        query = query.lt('created_at', before);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
-      return data;
+
+      // Reverse to chronological (oldest → newest) for display
+      return {
+        messages: (data || []).reverse(),
+        hasMore: (data || []).length === limit,
+      };
     } catch (err) {
       console.error('Error fetching messages:', err);
-      return [];
+      return { messages: [], hasMore: false };
     }
   },
 

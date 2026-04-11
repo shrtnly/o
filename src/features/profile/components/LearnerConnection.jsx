@@ -79,6 +79,10 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const chatHeaderRef = React.useRef(null);
     const chatInputRowRef = React.useRef(null);
     const messageInputRef = React.useRef(null);
+    const oldestMsgTimestampRef = React.useRef(null); // cursor for load-more pagination
+
+    const [hasMoreMessages, setHasMoreMessages] = useState(false);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const [inboxSearchQuery, setInboxSearchQuery] = useState('');
     const [isConversationsLoading, setIsConversationsLoading] = useState(false);
@@ -408,13 +412,49 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const handleFetchMessages = useCallback(async (partnerId) => {
         if (!user?.id || !partnerId) return;
         setIsMessagesLoading(true);
-        const data = await messageService.getMessages(user.id, partnerId);
+        oldestMsgTimestampRef.current = null;
+        setHasMoreMessages(false);
+
+        const { messages: data, hasMore } = await messageService.getMessages(user.id, partnerId);
         setMessages(data);
+        setHasMoreMessages(hasMore);
+        if (data.length > 0) {
+            oldestMsgTimestampRef.current = data[0].created_at;
+        }
         setIsMessagesLoading(false);
         // Fire-and-forget: don't block message display on read/conversation refresh
         messageService.markAsRead(user.id, partnerId).catch(() => {});
         handleFetchConversations(true);
     }, [user?.id, handleFetchConversations]);
+
+    const handleLoadMoreMessages = useCallback(async () => {
+        if (!user?.id || !selectedPartner?.id || isLoadingMore || !hasMoreMessages) return;
+        if (!oldestMsgTimestampRef.current) return;
+
+        setIsLoadingMore(true);
+        const container = scrollRef.current;
+        const prevScrollHeight = container?.scrollHeight ?? 0;
+
+        const { messages: older, hasMore } = await messageService.getMessages(
+            user.id, selectedPartner.id,
+            { before: oldestMsgTimestampRef.current }
+        );
+
+        if (older.length > 0) {
+            oldestMsgTimestampRef.current = older[0].created_at;
+            setMessages(prev => [...older, ...prev]);
+            setHasMoreMessages(hasMore);
+            // Restore scroll position — prevent the view jumping to top after prepend
+            requestAnimationFrame(() => {
+                if (container) {
+                    container.scrollTop = container.scrollHeight - prevScrollHeight;
+                }
+            });
+        } else {
+            setHasMoreMessages(false);
+        }
+        setIsLoadingMore(false);
+    }, [user?.id, selectedPartner?.id, isLoadingMore, hasMoreMessages]);
 
     // Heartbeat for real-time messages
     useEffect(() => {
@@ -529,12 +569,31 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         };
     }, [user?.id, handleFetchConversations]);
 
-    // Auto-scroll to bottom
+    // Smart auto-scroll: only jump to bottom on NEW messages, not when prepending older ones
+    const isLoadingMoreRef = React.useRef(false);
+    useEffect(() => { isLoadingMoreRef.current = isLoadingMore; }, [isLoadingMore]);
+
     useEffect(() => {
+        if (isLoadingMoreRef.current) return; // don't scroll when prepending old messages
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
     }, [messages]);
+
+    // Scroll-up listener — trigger load-more when user reaches the top
+    useEffect(() => {
+        const container = scrollRef.current;
+        if (!container) return;
+
+        const handleScroll = () => {
+            if (container.scrollTop < 60 && hasMoreMessages && !isLoadingMore) {
+                handleLoadMoreMessages();
+            }
+        };
+
+        container.addEventListener('scroll', handleScroll, { passive: true });
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, [hasMoreMessages, isLoadingMore, handleLoadMoreMessages]);
 
     const resizeImage = (file) => {
         return new Promise((resolve) => {
@@ -1567,6 +1626,17 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     </div>
                                                 ) : (
                                                     <AnimatePresence>
+                                                        {/* Load-more indicator at the top */}
+                                                        {isLoadingMore && (
+                                                            <div key="load-more-spinner" className={styles.loadMoreSpinner}>
+                                                                <InlineLoader size={24} showText={false} />
+                                                            </div>
+                                                        )}
+                                                        {!isLoadingMore && hasMoreMessages && (
+                                                            <div key="load-more-hint" className={styles.loadMoreHint}>
+                                                                scroll up for older messages
+                                                            </div>
+                                                        )}
                                                         {messages.map((msg, idx) => {
                                                             const msgDate = new Date(msg.created_at).toLocaleDateString();
                                                             const prevMsg = idx > 0 ? messages[idx - 1] : null;

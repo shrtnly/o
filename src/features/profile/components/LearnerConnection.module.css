@@ -942,6 +942,23 @@
     height: 100%;
 }
 
+.loadMoreSpinner {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 4px;
+    width: 100%;
+}
+
+.loadMoreHint {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+    opacity: 0.45;
+    padding: 8px 0 2px;
+    letter-spacing: 0.2px;
+    user-select: none;
+}
+
 .msgSent, .msgReceived {
     display: flex;
     max-width: 80%;

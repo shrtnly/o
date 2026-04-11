@@ -160,6 +160,9 @@ const StudyPage = () => {
     const [showResults, setShowResults] = useState(false);
     const [stats, setStats] = useState({ correct: 0, total: 0 });
     const [shake, setShake] = useState(false);
+    const [selectedOptions, setSelectedOptions] = useState(new Set()); // for checkmark multi-select
+    const [pendingRetries, setPendingRetries] = useState(new Set()); // original indices awaiting retry
+    const originalQuestionsLength = React.useRef(0); // set once on first load
     const [chapterInfo, setChapterInfo] = useState(null);
     const [nextChapter, setNextChapter] = useState(null);
     const [startTime] = useState(Date.now());
@@ -178,6 +181,7 @@ const StudyPage = () => {
         return saved || 'random';
     });
     const [currentModel, setCurrentModel] = useState('/models/NewBee.lottie');
+    const [mascotReady, setMascotReady] = useState(false);
     const [profile, setProfile] = useState(null);
     const [sparkleEnabled, setSparkleEnabled] = useState(() => {
         const saved = localStorage.getItem('sparkleEffectsEnabled');
@@ -353,9 +357,12 @@ const StudyPage = () => {
 
     useEffect(() => {
         if (!dotLottie || selectedAnimation === 'none') return;
-        // All animations will just loop normally
         dotLottie.setLoop(true);
         dotLottie.play();
+        // Show mascot only after first play fires
+        const handlePlay = () => setMascotReady(true);
+        dotLottie.addEventListener('play', handlePlay);
+        return () => dotLottie.removeEventListener('play', handlePlay);
     }, [dotLottie, selectedAnimation, currentModel]);
 
     // Randomize mascot every question if animation is enabled
@@ -372,6 +379,7 @@ const StudyPage = () => {
                 '/models/awkward bee.lottie'
             ];
             const randomModel = models[Math.floor(Math.random() * models.length)];
+            setMascotReady(false); // hide until new model fires play
             setCurrentModel(randomModel);
         }
     }, [currentIndex, selectedAnimation]);
@@ -446,6 +454,7 @@ const StudyPage = () => {
                     });
 
                     setQuestions(enrichedQuestions);
+                    originalQuestionsLength.current = enrichedQuestions.length;
                     setStats(prev => ({ ...prev, total: enrichedQuestions.length }));
                 }
             } catch (err) {
@@ -493,9 +502,19 @@ const StudyPage = () => {
         setFailedOptions([]); // Clear wrong attempts when moving to new question
     }, [currentIndex, questions]);
 
-    const handleOptionSelect = React.useCallback((optionId) => {
+    const handleOptionSelect = React.useCallback((optionId, questionType) => {
         if (isAnswered) return;
-        setSelectedOption(optionId);
+        if (questionType === 'checkmark') {
+            // Multi-select: toggle in/out
+            setSelectedOptions(prev => {
+                const next = new Set(prev);
+                if (next.has(optionId)) next.delete(optionId);
+                else next.add(optionId);
+                return next;
+            });
+        } else {
+            setSelectedOption(optionId);
+        }
     }, [isAnswered]);
 
     const handleMatchSelect = async (type, index) => {
@@ -556,28 +575,7 @@ const StudyPage = () => {
                 }, 800);
             }
 
-            // Check if all pairs are now matched (correct or not) — unlock 'Check' button
-            if (Object.keys(newMatches).length === pairs.length) {
-                if (isCorrectPair) {
-                    // Verify all existing matches are correct
-                    const allCorrect = Object.entries(newMatches).every(([lIdx, rIdx]) =>
-                        pairs[parseInt(lIdx)].right === shuffledRight[rIdx].text
-                    );
-                    if (allCorrect) {
-                        setIsCorrect(true);
-                        setIsAnswered(true);
-
-                        const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
-                        if (correctAudio.current && soundEnabled) {
-                            correctAudio.current.currentTime = 0;
-                            correctAudio.current.play().catch(e => console.error(e));
-                        }
-
-                        setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
-                        setAnswersHistory(prev => ({ ...prev, [currentIndex]: { matches: newMatches, isCorrect: true } }));
-                    }
-                }
-            }
+            // No auto-submit — learner must manually click যাচাই করুন
         }
     };
 
@@ -609,7 +607,9 @@ const StudyPage = () => {
                 correctAudio.current.currentTime = 0;
                 correctAudio.current.play().catch(e => console.error(e));
             }
-            setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            if (!questions[currentIndex]?.isRetry) {
+                setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            }
         } else {
             if (wrongAudio.current && soundEnabled) {
                 wrongAudio.current.currentTime = 0;
@@ -625,29 +625,66 @@ const StudyPage = () => {
     const handleCheck = React.useCallback(async () => {
         const currentQuestion = questions[currentIndex];
         const isMatching = currentQuestion.question_type === 'matching';
+        const isCheckmark = currentQuestion.question_type === 'checkmark';
 
-        if (isMatching || !selectedOption || isAnswered) return;
+        if (isMatching) return;
 
-        if (!canAnswer) {
-            setShowNoHeartsModal(true);
+        // ── Checkmark: multi-select validation ──
+        if (isCheckmark) {
+            if (selectedOptions.size === 0 || isAnswered) return;
+            if (!canAnswer) { setShowNoHeartsModal(true); return; }
+
+            const correctIds = new Set(
+                currentQuestion.mcq_options.filter(o => o.is_correct).map(o => o.id)
+            );
+            // All selected must be correct AND all correct must be selected
+            const allCorrectSelected = [...correctIds].every(id => selectedOptions.has(id));
+            const noWrongSelected = [...selectedOptions].every(id => correctIds.has(id));
+            const correct = allCorrectSelected && noWrongSelected;
+
+            setIsCorrect(correct);
+            setIsAnswered(true);
+            setAnswersHistory(prev => ({ ...prev, [currentIndex]: { selectedOptions: [...selectedOptions], isCorrect: correct } }));
+
+            const soundEnabled = soundEnabledRef.current;
+            if (correct) {
+                if (correctAudio.current && soundEnabled) {
+                    try { correctAudio.current.currentTime = 0; correctAudio.current.play(); } catch (err) { }
+                }
+                setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            } else {
+                // Mark wrong selections as failed
+                const wrongSelected = [...selectedOptions].filter(id => !correctIds.has(id));
+                setFailedOptions(prev => [...prev, ...wrongSelected]);
+                if (wrongAudio.current && soundEnabled) {
+                    try { wrongAudio.current.currentTime = 0; wrongAudio.current.play(); } catch (err) { }
+                }
+                setShake(true);
+                setTimeout(() => setShake(false), 500);
+                if (user) deductHeart(1).catch(console.error);
+            }
             return;
         }
+
+        // ── Standard single-select ──
+        if (!selectedOption || isAnswered) return;
+        if (!canAnswer) { setShowNoHeartsModal(true); return; }
 
         const selected = currentQuestion.mcq_options.find(o => o.id === selectedOption);
         const correct = !!selected?.is_correct;
 
-        // Update UI immediately — don't await anything before this
         setIsCorrect(correct);
         setIsAnswered(true);
         setAnswersHistory(prev => ({ ...prev, [currentIndex]: { selectedOption, isCorrect: correct } }));
 
         const soundEnabled = soundEnabledRef.current;
-
         if (correct) {
             if (correctAudio.current && soundEnabled) {
                 try { correctAudio.current.currentTime = 0; correctAudio.current.play(); } catch (err) { }
             }
-            setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            if (!questions[currentIndex]?.isRetry) {
+                setStats(prev => ({ ...prev, correct: prev.correct + 1 }));
+            }
         } else {
             setFailedOptions(prev => [...prev, selectedOption]);
             if (wrongAudio.current && soundEnabled) {
@@ -655,19 +692,51 @@ const StudyPage = () => {
             }
             setShake(true);
             setTimeout(() => setShake(false), 500);
-            // Deduct heart in background — don't await
             if (user) deductHeart(1).catch(console.error);
         }
-    }, [questions, currentIndex, selectedOption, isAnswered, canAnswer, user, deductHeart]);
+    }, [questions, currentIndex, selectedOption, selectedOptions, isAnswered, canAnswer, user, deductHeart]);
 
     const handleNext = async () => {
-        if (currentIndex < questions.length - 1) {
+        const isSkip = !isAnswered;
+        const isCurrentRetry = !!questions[currentIndex]?.isRetry;
+        const isWrongAnswer = isAnswered && !isCorrect;
+
+        // Accumulate retries for original questions only
+        let updatedRetries = pendingRetries;
+        if (!isCurrentRetry && (isSkip || isWrongAnswer)) {
+            updatedRetries = new Set(pendingRetries).add(currentIndex);
+            setPendingRetries(updatedRetries);
+        }
+
+        const isAtLastQuestion = currentIndex >= questions.length - 1;
+        const isAtLastOriginal = currentIndex === originalQuestionsLength.current - 1;
+
+        if (!isAtLastQuestion) {
+            // Mid-chapter: just advance normally
             if (!isPremium && hearts === 0) {
                 setShowNoHeartsModal(true);
                 return;
             }
             setCurrentIndex(prev => prev + 1);
             setSelectedOption(null);
+            setSelectedOptions(new Set());
+            setIsAnswered(false);
+            setIsCorrect(false);
+            setActiveDialogueIndex(0);
+        } else if (isAtLastOriginal && updatedRetries.size > 0) {
+            // Just finished last ORIGINAL question — append retry round
+            const retryQuestionsToAdd = [...updatedRetries]
+                .sort((a, b) => a - b)
+                .map(idx => ({
+                    ...questions[idx],
+                    isRetry: true,
+                    id: `retry-${questions[idx].id}`,
+                }));
+            setQuestions(prev => [...prev, ...retryQuestionsToAdd]);
+            setPendingRetries(new Set());
+            setCurrentIndex(prev => prev + 1);
+            setSelectedOption(null);
+            setSelectedOptions(new Set());
             setIsAnswered(false);
             setIsCorrect(false);
             setActiveDialogueIndex(0);
@@ -1091,7 +1160,27 @@ const StudyPage = () => {
 
                                                 {showMCQ && (
                                                     <div className="space-y-8">
+                                                        {/* ── Retry banner ── */}
+                                                        {isLatest && q.isRetry && (
+                                                            <div style={{
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: 8,
+                                                                padding: '7px 12px',
+                                                                borderRadius: 10,
+                                                                background: 'rgba(241,196,15,0.06)',
+                                                                border: '1px solid rgba(241,196,15,0.2)',
+                                                                marginBottom: 4,
+                                                            }}>
+                                                                <span style={{ fontSize: '1rem' }}>🔄</span>
+                                                                <div>
+                                                                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#f1c40f' }}>{t('re_practice')}</span>
+                                                                </div>
+                                                            </div>
+                                                        )}
+
                                                         {!isStory && (q.narrative || q.explanation) && (
+
                                                             <div className={styles.contextText}>
                                                                 <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
                                                                 {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
@@ -1100,7 +1189,13 @@ const StudyPage = () => {
 
                                                         <h2 className={styles.questionTitle}>
                                                             {isLatest && selectedAnimation !== 'none' && (
-                                                                <span className={styles.mascotMini}>
+                                                                <span
+                                                                    className={styles.mascotMini}
+                                                                    style={{
+                                                                        opacity: mascotReady ? 1 : 0,
+                                                                        transition: 'opacity 0.2s ease',
+                                                                    }}
+                                                                >
                                                                     <DotLottieReact
                                                                         key={currentModel}
                                                                         src={currentModel}
@@ -1189,35 +1284,49 @@ const StudyPage = () => {
                                                                 </div>
                                                             ) : (
                                                                 (q.mcq_options || []).map((option, optIdx) => {
-                                                                    const isSelected = (isLatest ? selectedOption : answer?.selectedOption) === option.id;
+                                                                    const isCheckmark = q.question_type === 'checkmark';
+                                                                    // For checkmark: use selectedOptions Set; for others: single selectedOption
+                                                                    const isSelected = isCheckmark
+                                                                        ? (isLatest ? selectedOptions.has(option.id) : answer?.selectedOptions?.includes(option.id))
+                                                                        : (isLatest ? selectedOption : answer?.selectedOption) === option.id;
                                                                     const isCorrectOpt = option.is_correct;
                                                                     const showResult = isLatest ? isAnswered : true;
                                                                     const isFailed = isLatest && failedOptions.includes(option.id);
 
-                                                                    // Hint: Show correct answer in green after a failure
+                                                                    // For checkmark: show correct options green whenever answer submitted wrong
+                                                                    // For MCQ: show correct only when question answered correctly OR after a failure
+                                                                    const checkmarkRevealCorrect = isCheckmark && isLatest && isAnswered && !isCorrect && isCorrectOpt;
                                                                     const showCorrect = (showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect)) ||
-                                                                        (isLatest && failedOptions.length > 0 && isCorrectOpt);
+                                                                        (isLatest && failedOptions.length > 0 && isCorrectOpt) ||
+                                                                        checkmarkRevealCorrect;
+
+                                                                    // Wrong: selected a wrong option (checkmark) or standard failed
+                                                                    const isWrongSelected = isCheckmark
+                                                                        ? isAnswered && isSelected && !isCorrectOpt  // submitted & selected wrong
+                                                                        : (showResult && isSelected && !isCorrectOpt) || isFailed;
 
                                                                     return (
                                                                         <button
                                                                             key={option.id}
                                                                             className={cn(
                                                                                 styles.optionBtn,
-                                                                                isSelected && styles.selected,
+                                                                                isSelected && !isWrongSelected && !showCorrect && styles.selected,
                                                                                 showCorrect && styles.correct,
-                                                                                (showResult && isSelected && !isCorrectOpt) || isFailed ? styles.incorrect : ''
+                                                                                isWrongSelected || isFailed ? styles.incorrect : ''
                                                                             )}
-                                                                            onClick={() => isLatest && handleOptionSelect(option.id)}
+                                                                            onClick={() => isLatest && handleOptionSelect(option.id, q.question_type)}
                                                                             disabled={!isLatest || isAnswered || isFailed}
                                                                         >
                                                                             <div className={styles.optionIndex}>
-                                                                                {q.question_type === 'checkmark' ? <CheckSquare size={16} /> : optionLabels[optIdx]}
+                                                                                {isCheckmark ? <CheckSquare size={16} /> : optionLabels[optIdx]}
                                                                             </div>
                                                                             <span className={styles.optionText}>{option.option_text}</span>
-                                                                            {showResult && isCorrectOpt && (isLatest ? isCorrect : answer?.isCorrect) && (
+                                                                            {/* ✅ correct icon — show on correct answer after submit */}
+                                                                            {showResult && isCorrectOpt && (isCheckmark ? (isAnswered && !isCorrect) || isCorrect : (isLatest ? isCorrect : answer?.isCorrect)) && (
                                                                                 <div className={styles.correctIcon}><CircleCheckBig size={20} /></div>
                                                                             )}
-                                                                            {showResult && isSelected && !isCorrectOpt && (
+                                                                            {/* ❌ wrong icon — wrong selected option */}
+                                                                            {isWrongSelected && (
                                                                                 <div className={styles.incorrectIcon}><CircleX size={20} /></div>
                                                                             )}
                                                                         </button>
@@ -1298,11 +1407,22 @@ const StudyPage = () => {
                                         </button>
                                     ) : (
                                         <button
-                                            className={`${styles.checkBtn} ${!selectedOption ? styles.checkBtnDisabled : ''}`}
-                                            aria-disabled={!selectedOption}
+                                            className={`${styles.checkBtn} ${
+                                                questions[currentIndex]?.question_type === 'checkmark'
+                                                    ? selectedOptions.size === 0 ? styles.checkBtnDisabled : ''
+                                                    : !selectedOption ? styles.checkBtnDisabled : ''
+                                            }`}
+                                            aria-disabled={
+                                                questions[currentIndex]?.question_type === 'checkmark'
+                                                    ? selectedOptions.size === 0
+                                                    : !selectedOption
+                                            }
                                             onClick={() => {
                                                 setLastInteractionWasFooter(true);
-                                                if (selectedOption) handleCheck();
+                                                const hasSelection = questions[currentIndex]?.question_type === 'checkmark'
+                                                    ? selectedOptions.size > 0
+                                                    : !!selectedOption;
+                                                if (hasSelection) handleCheck();
                                             }}
                                         >
                                             যাচাই করুন

@@ -505,7 +505,8 @@ const translations = {
         loc_sylhet: "সিলেট",
         loc_rangpur: "রংপুর",
         loc_mymensingh: "ময়মনসিংহ",
-        loc_overseas: "দেশের বাইরে"
+        loc_overseas: "দেশের বাইরে",
+        re_practice: "পুনরায় অনুশীলন"
     },
     en: {
         // Common
@@ -1016,6 +1017,7 @@ const translations = {
         enter_promo_code: "Coupon code",
         apply: "Apply",
         remove: "Remove",
+        re_practice: "Re-practice"
     }
 };
 

@@ -59,47 +59,73 @@ const StudySkeleton = () => {
             overflow: 'hidden',
         }}>
 
-            {/* ── Header ── */}
+            {/* ── Header (matches real: 64px, padding 0 24px) ── */}
             <div style={{
+                height: 64,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 12,
-                padding: '12px 16px',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
+                justifyContent: 'center',
+                background: '#0b0e11',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
                 flexShrink: 0,
             }}>
-                {/* Close button */}
-                <Bone w={36} h={36} r={10} />
-
-                {/* Progress bar */}
                 <div style={{
-                    flex: 1,
-                    height: 14,
-                    borderRadius: 7,
-                    background: 'rgba(255,255,255,0.06)',
-                    overflow: 'hidden',
-                    position: 'relative',
+                    maxWidth: 1100,
+                    width: '100%',
+                    height: '100%',
+                    padding: '0 24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
                 }}>
+                    {/* Close button — 24px icon inside transparent area */}
                     <div style={{
-                        ...shimmerLayer,
-                        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-                    }} />
-                    {/* Partial fill hint */}
-                    <div style={{
-                        position: 'absolute',
-                        left: 0, top: 0, bottom: 0,
-                        width: '28%',
-                        background: 'rgba(241,196,15,0.25)',
-                        borderRadius: 7,
-                    }} />
-                </div>
+                        width: 32,
+                        height: 32,
+                        borderRadius: 10,
+                        background: 'rgba(255,255,255,0.04)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}>
+                        <div style={shimmerLayer} />
+                    </div>
 
-                {/* Hearts */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Bone w={28} h={28} r={8} />
-                    <Bone w={20} h={16} r={4} />
+                    {/* Progress bar — exactly matches real .progressBar */}
+                    <div style={{
+                        flex: 1,
+                        height: 18,
+                        borderRadius: 99,
+                        background: '#1a2226',
+                        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.4)',
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}>
+                        {/* Shimmer over full track */}
+                        <div style={{
+                            ...shimmerLayer,
+                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%)',
+                        }} />
+                    </div>
+
+                    {/* Hearts — HoneyDrop icon shape + count */}
+                    <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 6,
+                        flexShrink: 0,
+                    }}>
+                        {/* HoneyDrop icon placeholder (28×28 teardrop-ish) */}
+                        <Bone w={28} h={28} r="50% 50% 50% 50% / 60% 60% 40% 40%" />
+                        {/* Count */}
+                        <Bone w={18} h={20} r={4} />
+                    </div>
                 </div>
             </div>
+
 
             {/* ── Main content ── */}
             <div style={{

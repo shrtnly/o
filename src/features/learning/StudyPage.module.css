@@ -179,14 +179,15 @@
     100% { background: rgba(46, 204, 113, 0.06); border-color: rgba(46,204,113,0.3); color: rgba(255,255,255,0.3); box-shadow: none; }
 }
 
-/* Final settled state after flash — locked/disabled look */
+/* Final settled state after flash — locked/disabled look (matches checkBtnDisabled style) */
 .matched {
-    border-color: rgba(46, 204, 113, 0.3) !important;
-    background: rgba(46, 204, 113, 0.06) !important;
-    color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    color: rgba(255, 255, 255, 0.18);
     cursor: default;
     pointer-events: none;
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
 .mismatch {
@@ -542,33 +543,32 @@
 }
 
 .activeSpeechBubble {
-    border-color: rgba(241, 196, 15, 0.4) !important;
-    background: rgba(241, 196, 15, 0.04) !important;
-    animation: bubbleRadiance 2s infinite ease-in-out;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    background: transparent !important;
 }
 
 .rakibBubble {
-    background: rgba(52, 152, 219, 0.05);
-    color: #74b9ef;
-    border: 1px solid rgba(241, 196, 15, 0.15);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .lisaBubble {
-    background: rgba(233, 30, 99, 0.05);
-    color: #f48fb1;
-    border: 1px solid rgba(241, 196, 15, 0.15);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .assistantBubble {
-    background: rgba(46, 204, 113, 0.05);
-    color: #a5d6a7;
-    border: 1px solid rgba(241, 196, 15, 0.15);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .andreaBubble {
-    background: rgba(243, 156, 18, 0.05);
-    color: #ffcc80;
-    border: 1px solid rgba(241, 196, 15, 0.15);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 
@@ -1544,9 +1544,9 @@
     justify-content: center;
     margin-top: -6px;
     margin-right: 12px;
-    border: 0.5px solid rgba(241, 196, 15, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     border-radius: 12px;
-    background: rgba(241, 196, 15, 0.02);
+    background: transparent;
     padding: 6px;
     position: relative;
     vertical-align: middle;
@@ -1560,8 +1560,8 @@
     transform: translateY(-50%) rotate(45deg);
     width: 10px;
     height: 10px;
-    border-top: 0.5px solid rgba(241, 196, 15, 0.35);
-    border-right: 0.5px solid rgba(241, 196, 15, 0.35);
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    border-right: 1px solid rgba(255, 255, 255, 0.09);
     background: transparent;
 }
 

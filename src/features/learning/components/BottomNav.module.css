@@ -141,6 +141,19 @@
     z-index: 10;
 }
 
+/* New message indicator dot on Connections nav */
+.msgDot {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 2px solid var(--color-bg-alt);
+    z-index: 10;
+}
+
 .profileImage {
     width: 35px;
     height: 35px;

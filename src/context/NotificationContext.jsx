@@ -356,6 +356,38 @@ export const NotificationProvider = ({ children }) => {
 
     const [activeChatId, setActiveChatId] = useState(null);
     const [isInboxOpen, setIsInboxOpen] = useState(false);
+    const [hasNewMsg, setHasNewMsg] = useState(false);
+
+    const clearMsgIndicator = useCallback(() => {
+        setHasNewMsg(false);
+    }, []);
+
+    // Realtime listener for new incoming messages — drives the Connections nav dot
+    useEffect(() => {
+        if (!user?.id) return;
+
+        const msgChannel = supabase
+            .channel(`msg-indicator-${user.id}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'INSERT',
+                    schema: 'public',
+                    table: 'messages',
+                    filter: `receiver_id=eq.${user.id}`
+                },
+                () => {
+                    // Only light up the indicator when user is NOT already in inbox
+                    setIsInboxOpen(prev => {
+                        if (!prev) setHasNewMsg(true);
+                        return prev;
+                    });
+                }
+            )
+            .subscribe();
+
+        return () => supabase.removeChannel(msgChannel);
+    }, [user?.id]);
 
     return (
         <NotificationContext.Provider value={{
@@ -371,7 +403,9 @@ export const NotificationProvider = ({ children }) => {
             activeChatId,
             setActiveChatId,
             isInboxOpen,
-            setIsInboxOpen
+            setIsInboxOpen,
+            hasNewMsg,
+            clearMsgIndicator
         }}>
             {children}
         </NotificationContext.Provider>

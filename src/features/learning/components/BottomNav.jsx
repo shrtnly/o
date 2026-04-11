@@ -11,7 +11,7 @@ import styles from './BottomNav.module.css';
 const BottomNav = () => {
     const { user, profile } = useAuth();
     const { t, language } = useLanguage();
-    const { unreadCount, pendingConnectionsCount } = useNotifications();
+    const { unreadCount, pendingConnectionsCount, hasNewMsg } = useNotifications();
     const { courseId: currentCourseId } = useParams();
     const [lastCourseId, setLastCourseId] = useState(null);
     const [imgError, setImgError] = useState(false);
@@ -75,6 +75,9 @@ const BottomNav = () => {
                             <Users size={26} strokeWidth={1.5} />
                             {pendingConnectionsCount > 0 && (
                                 <span className={styles.navBadge}>{pendingConnectionsCount > 9 ? '9+' : pendingConnectionsCount}</span>
+                            )}
+                            {hasNewMsg && pendingConnectionsCount === 0 && (
+                                <span className={styles.msgDot} />
                             )}
                         </div>
                         {isActive && <span className={styles.navLabel}>{t('tab_connection')}</span>}

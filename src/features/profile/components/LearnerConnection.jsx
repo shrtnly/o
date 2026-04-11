@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback, Fragment } from 'react';
+import React, { useState, useEffect, useCallback, Fragment, useTransition } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabaseClient';
 import { 
     Users, Search, UserPlus, UserRoundSearch, UserMinus, 
     Check, CheckCheck, X, ChevronRight, ChevronLeft, Zap, 
     MapPin, User, Send, SendHorizontal, MessageSquare, ImagePlus,
-    ChevronDown, Trash2, Ban
+    ChevronDown, Trash2, Ban, Image as ImageIcon
 } from 'lucide-react';
 import { connectionService } from '../../../services/connectionService';
 import { messageService } from '../../../services/messageService';
@@ -56,7 +56,8 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [conversations, setConversations] = useState([]);
     const [selectedPartner, setSelectedPartner] = useState(null);
     const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');
+    const [canSend, setCanSend] = useState(false); // lightweight bool — avoids re-render per keystroke
+    const [, startCanSendTransition] = useTransition(); // defers setCanSend so typing is never blocked
     const [isSendingMsg, setIsSendingMsg] = useState(false);
     const [isMessagesLoading, setIsMessagesLoading] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
@@ -71,7 +72,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [pendingAttachmentUrl, setPendingAttachmentUrl] = useState(null);
     const [filePreview, setFilePreview] = useState(null);
     const [viewerImage, setViewerImage] = useState(null);
-    const { setActiveChatId, setIsInboxOpen } = useNotifications();
+    const { setActiveChatId, setIsInboxOpen, clearMsgIndicator } = useNotifications();
     const scrollRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
     const chatWindowRef = React.useRef(null);
@@ -101,28 +102,21 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         const preventDefault = (e) => {
             if (e.cancelable) e.preventDefault();
         };
+        const stopProp = (e) => e.stopPropagation();
 
         const header = chatHeaderRef.current;
         const inputRow = chatInputRowRef.current;
 
         if (header) {
-            header.addEventListener('touchstart', (e) => e.stopPropagation());
+            header.addEventListener('touchstart', stopProp);
             header.addEventListener('touchmove', preventDefault, { passive: false });
         }
-
-        if (inputRow) {
-            inputRow.addEventListener('touchstart', (e) => e.stopPropagation());
-            inputRow.addEventListener('touchmove', preventDefault, { passive: false });
-        }
+        // NOTE: do NOT block touchmove on inputRow — it freezes the textarea on mobile
 
         return () => {
             if (header) {
-                header.removeEventListener('touchstart', (e) => e.stopPropagation());
+                header.removeEventListener('touchstart', stopProp);
                 header.removeEventListener('touchmove', preventDefault);
-            }
-            if (inputRow) {
-                inputRow.removeEventListener('touchstart', (e) => e.stopPropagation());
-                inputRow.removeEventListener('touchmove', preventDefault);
             }
         };
     }, [isMobileChatOpen]);
@@ -253,17 +247,21 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         // Clear active chat if not in inbox or if switching tabs
         if (subTab !== 'inbox') {
             setActiveChatId(null);
-        } else if (!selectedPartner) {
-             setActiveChatId(null);
         } else {
-             setActiveChatId(selectedPartner.id);
+            // User entered inbox — clear the nav dot indicator
+            clearMsgIndicator();
+            if (!selectedPartner) {
+                setActiveChatId(null);
+            } else {
+                setActiveChatId(selectedPartner.id);
+            }
         }
 
         return () => {
             setIsInboxOpen(false);
             setActiveChatId(null);
         };
-    }, [subTab, selectedPartner, setIsInboxOpen, setActiveChatId]);
+    }, [subTab, selectedPartner, setIsInboxOpen, setActiveChatId, clearMsgIndicator]);
 
     // Handle body scroll locking when mobile chat is open
     useEffect(() => {
@@ -294,48 +292,69 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         };
     }, [isMobileChatOpen]);
 
+    // Intercept browser/hardware back button while mobile chat is open
+    useEffect(() => {
+        if (!isMobileChatOpen || window.innerWidth > 768) return;
+
+        // Push a phantom history entry so the back button can be intercepted
+        window.history.pushState({ mobileChatOpen: true }, '');
+
+        const handlePopState = (e) => {
+            // Back was pressed — close chat instead of navigating away
+            setSelectedPartner(null);
+            setIsMobileChatOpen(false);
+        };
+
+        window.addEventListener('popstate', handlePopState);
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+            // If the chat is closed programmatically (via back button in UI),
+            // consume the phantom entry so history stays clean
+            if (window.history.state?.mobileChatOpen) {
+                window.history.back();
+            }
+        };
+    }, [isMobileChatOpen]);
+
     // Handle mobile keyboard resize using Visual Viewport API
     useEffect(() => {
-        // Only run on mobile
         const isMobileScreen = () => window.innerWidth <= 768;
         if (!window.visualViewport || !isMobileChatOpen || !isMobileScreen()) return;
 
-        let rafId;
+        let rafId = null;
+        let scrollTimer = null;
+
         const handleResize = () => {
             if (!chatWindowRef.current) return;
             const vv = window.visualViewport;
-            
-            // Use requestAnimationFrame for smoother updates
+
+            // Cancel any pending RAF before scheduling a new one (debounce)
+            if (rafId) cancelAnimationFrame(rafId);
             rafId = requestAnimationFrame(() => {
                 const el = chatWindowRef.current;
                 if (!el) return;
-                
-                // Using only height and fixed top:0 to avoid bouncing
                 el.style.setProperty('top', `${vv.offsetTop}px`, 'important');
                 el.style.setProperty('height', `${vv.height}px`, 'important');
                 el.style.setProperty('bottom', 'auto', 'important');
             });
-            
-            // Scroll to bottom after keyboard shows
-            if (scrollRef.current) {
-                // Short delay to allow browser layout to stabilize
-                setTimeout(() => {
-                    if (scrollRef.current) {
-                        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-                    }
-                }, 150);
-            }
+
+            // Debounce scroll-to-bottom so only the final resize fires it
+            if (scrollTimer) clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(() => {
+                if (scrollRef.current) {
+                    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+                }
+            }, 120);
         };
 
         window.visualViewport.addEventListener('resize', handleResize);
-        handleResize(); // call once to initialize
+        handleResize();
 
         return () => {
-            if (window.visualViewport) {
-                window.visualViewport.removeEventListener('resize', handleResize);
-            }
+            window.visualViewport.removeEventListener('resize', handleResize);
             if (rafId) cancelAnimationFrame(rafId);
-            
+            if (scrollTimer) clearTimeout(scrollTimer);
             if (chatWindowRef.current) {
                 const el = chatWindowRef.current;
                 el.style.removeProperty('top');
@@ -348,9 +367,18 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const handleDeleteMessage = async (msgId) => {
         try {
             await messageService.deleteMessage(msgId, user.id);
-            setMessages(prev => prev.filter(m => m.id !== msgId));
+            // Optimistically mark as deleted — shows placeholder in chat on both sides
+            setMessages(prev => prev.map(m => m.id === msgId ? { ...m, is_deleted: true } : m));
             setMsgOptionsId(null);
-            toast.success('বার্তাটি ডিলিট করা হয়েছে');
+            // Instantly update the conversation card for the sender
+            if (selectedPartner) {
+                setConversations(prev => {
+                    const idx = prev.findIndex(c => c.partner.id === selectedPartner.id);
+                    if (idx === -1) return prev;
+                    const updated = { ...prev[idx], lastIsDeleted: true, lastDeletedBySelf: true };
+                    return [updated, ...prev.filter((_, i) => i !== idx)];
+                });
+            }
             handleFetchConversations(true);
         } catch (err) {
             console.error('Error deleting message:', err);
@@ -383,13 +411,46 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         const data = await messageService.getMessages(user.id, partnerId);
         setMessages(data);
         setIsMessagesLoading(false);
-        await messageService.markAsRead(user.id, partnerId);
+        // Fire-and-forget: don't block message display on read/conversation refresh
+        messageService.markAsRead(user.id, partnerId).catch(() => {});
         handleFetchConversations(true);
     }, [user?.id, handleFetchConversations]);
 
     // Heartbeat for real-time messages
     useEffect(() => {
         if (!user?.id) return;
+
+        // Instantly patch the conversations sidebar card from a realtime payload
+        const updateConversationFromPayload = (msg, options = {}) => {
+            const { markNew = false, markDeleted = false } = options;
+            const partnerId = msg.sender_id === user.id ? msg.receiver_id : msg.sender_id;
+
+            setConversations(prev => {
+                const existingIdx = prev.findIndex(c => c.partner.id === partnerId);
+
+                if (existingIdx === -1) {
+                    // New conversation — will be filled in properly by background fetch
+                    return prev;
+                }
+
+                const existing = prev[existingIdx];
+                const updated = {
+                    ...existing,
+                    lastMessage: markDeleted ? existing.lastMessage : (msg.content ?? existing.lastMessage),
+                    lastAttachment: markDeleted ? existing.lastAttachment : (msg.attachment_url ?? existing.lastAttachment),
+                    lastIsDeleted: markDeleted ? true : false,
+                    lastDeletedBySelf: markDeleted ? (msg.sender_id === user.id) : false,
+                    timestamp: msg.created_at ?? existing.timestamp,
+                    isNew: markNew
+                        ? (msg.receiver_id === user.id && partnerRef.current?.id !== partnerId)
+                        : existing.isNew,
+                };
+
+                // Move to top
+                const rest = prev.filter((_, i) => i !== existingIdx);
+                return [updated, ...rest];
+            });
+        };
 
         const messageSub = supabase
             .channel(`message-realtime-${user.id}`)
@@ -411,6 +472,9 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                 messageService.markAsRead(user.id, currentPartner.id);
                             }
                         }
+                        // Instantly update the conversation card (zero latency)
+                        updateConversationFromPayload(payload.new, { markNew: true });
+                        // Background sync for accuracy (unread counts, partner profile etc.)
                         handleFetchConversations(true);
                     }
                 }
@@ -420,9 +484,38 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                 { event: 'UPDATE', schema: 'public', table: 'messages' },
                 (payload) => {
                     if (payload.new.sender_id === user.id || payload.new.receiver_id === user.id) {
-                        setMessages(prev => prev.map(m => m.id === payload.new.id ? { ...m, is_read: payload.new.is_read } : m));
+                        if (payload.new.is_deleted) {
+                            // Mark as deleted in state so both sides show the placeholder
+                            setMessages(prev => prev.map(m =>
+                                m.id === payload.new.id ? { ...m, is_deleted: true } : m
+                            ));
+                            // Clear the last message preview on the card if it was this message
+                            updateConversationFromPayload(payload.new, { markDeleted: true });
+                        } else {
+                            setMessages(prev => prev.map(m => m.id === payload.new.id ? { ...m, is_read: payload.new.is_read } : m));
+                        }
                         handleFetchConversations(true);
                     }
+                }
+            )
+            .on(
+                'postgres_changes',
+                { event: 'DELETE', schema: 'public', table: 'messages' },
+                (payload) => {
+                    // payload.old contains the deleted row (id, sender_id, receiver_id)
+                    const deletedId = payload.old?.id;
+                    if (!deletedId) return;
+
+                    const currentPartner = partnerRef.current;
+                    // Remove from chat window if this conversation is open
+                    if (
+                        currentPartner?.id === payload.old?.sender_id ||
+                        currentPartner?.id === payload.old?.receiver_id
+                    ) {
+                        setMessages(prev => prev.filter(m => m.id !== deletedId));
+                    }
+                    // Refresh conversation list for both sides
+                    handleFetchConversations(true);
                 }
             )
             .subscribe((status) => {
@@ -511,33 +604,52 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
     const handleSendMessage = async (e) => {
         if (e) e.preventDefault();
-        const content = newMessage.trim();
+        // Read directly from DOM ref — no state read, zero extra re-renders
+        const content = messageInputRef.current?.value?.trim() || '';
         const attachment = pendingAttachmentUrl;
 
         if ((!content && !attachment) || !selectedPartner || isSendingMsg || isUploading) return;
 
+        // Declare optimisticId outside try so catch can reference it for rollback
+        const optimisticId = `temp-${Date.now()}`;
+        const optimisticMsg = {
+            id: optimisticId,
+            sender_id: user.id,
+            receiver_id: selectedPartner.id,
+            content: content,
+            attachment_url: attachment,
+            created_at: new Date().toISOString(),
+            is_sending: true
+        };
+
         try {
             setIsSendingMsg(true);
 
-            // Optimistically clear the input and reset state to make it feel instant
-            const optimisticId = `temp-${Date.now()}`;
-            const optimisticMsg = {
-                id: optimisticId,
-                sender_id: user.id,
-                receiver_id: selectedPartner.id,
-                content: content,
-                attachment_url: attachment,
-                created_at: new Date().toISOString(),
-                is_sending: true
-            };
-
-            setNewMessage('');
-            // Reset height
-            if (messageInputRef.current) messageInputRef.current.style.height = 'auto';
+            // Clear the uncontrolled textarea and reset height
+            if (messageInputRef.current) {
+                messageInputRef.current.value = '';
+                messageInputRef.current.style.height = 'auto';
+            }
+            setCanSend(false);
             setPendingAttachmentUrl(null);
             setFilePreview(null);
             setMessages(prev => [...prev, optimisticMsg]);
-            
+
+            // Instantly update the conversation card for the sender (zero latency)
+            setConversations(prev => {
+                const partnerId = selectedPartner.id;
+                const idx = prev.findIndex(c => c.partner.id === partnerId);
+                if (idx === -1) return prev;
+                const updated = {
+                    ...prev[idx],
+                    lastMessage: content,
+                    lastAttachment: attachment || null,
+                    timestamp: optimisticMsg.created_at,
+                    isNew: false,
+                };
+                return [updated, ...prev.filter((_, i) => i !== idx)];
+            });
+
             messageInputRef.current?.focus();
 
             const msg = await messageService.sendMessage(user.id, selectedPartner.id, content, attachment);
@@ -545,11 +657,12 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             // Replace optimistic message with the real one from DB
             setMessages(prev => prev.map(m => m.id === optimisticId ? msg : m));
         } catch (err) {
-            toast.error('মেসেজ পাঠানো সম্ভব হয়নি');
-            // Revert message if it failed or add back content to input? 
-            // For now, just remove the failed optimistic message
+            toast.error('মেসেজ পাঠানো সম্ভব হয়নি');
+            // Remove failed optimistic message and restore text to input
             setMessages(prev => prev.filter(m => m.id !== optimisticId));
-            setNewMessage(content); // Restore content to try again
+            if (messageInputRef.current) messageInputRef.current.value = content;
+            setCanSend(true);
+            setPendingAttachmentUrl(attachment);
         } finally {
             setIsSendingMsg(false);
             messageInputRef.current?.focus();
@@ -564,6 +677,11 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             setIsMobileChatOpen(true);
         }
     };
+
+    useEffect(() => {
+        // Always fetch on mount so unread badge is visible from any tab
+        handleFetchConversations(true);
+    }, [handleFetchConversations]);
 
     useEffect(() => {
         if (subTab === 'inbox') {
@@ -842,7 +960,29 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <span className={styles.lastMsg}>{conv.lastMessage}</span>
+                                                            <span className={styles.lastMsg}>
+                                                                {conv.lastIsDeleted ? (
+                                                                    <span className={styles.lastMsgDeleted}>
+                                                                        <Ban size={11} strokeWidth={1.8} />
+                                                                        {conv.lastDeletedBySelf
+                                                                            ? (language === 'bn' ? 'আপনি এই বার্তাটি মুছে ফেলেছেন' : 'You deleted this message')
+                                                                            : (language === 'bn' ? 'এই বার্তাটি মুছে ফেলা হয়েছে' : 'This message was deleted')
+                                                                        }
+                                                                    </span>
+                                                                ) : conv.lastAttachment && !conv.lastMessage ? (
+                                                                    <span className={styles.lastMsgPhoto}>
+                                                                        <ImageIcon size={13} strokeWidth={1.8} />
+                                                                        {language === 'bn' ? 'ছবি' : 'Photo'}
+                                                                    </span>
+                                                                ) : conv.lastAttachment && conv.lastMessage ? (
+                                                                    <span className={styles.lastMsgPhoto}>
+                                                                        <ImageIcon size={13} strokeWidth={1.8} />
+                                                                        {conv.lastMessage}
+                                                                    </span>
+                                                                ) : (
+                                                                    conv.lastMessage
+                                                                )}
+                                                            </span>
                                                         </div>
                                                         {conv.isNew && (
                                                             <div className={styles.unreadBadge}>
@@ -1041,23 +1181,10 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                         {/* Connection Filter Toggles */}
                                         <div className={styles.connFilterRow}>
                                             <button 
-                                                className={`${styles.connFilterPill} ${requestType === 'blocked' ? styles.connFilterActive : ''}`}
-                                                onClick={() => setRequestType('blocked')}
-                                                style={requestType === 'blocked' ? { background: 'rgba(231,76,60,0.15)', color: '#E74C3C', borderColor: 'rgba(231,76,60,0.3)' } : {}}
-                                            >
-                                                Block List
-                                                {blockedList.length > 0 && (
-                                                    <span className={`${styles.filterCount}`} style={{ background: '#E74C3C', color: '#fff' }}>{blockedList.length > 9 ? '9+' : blockedList.length}</span>
-                                                )}
-                                            </button>
-                                            <button 
                                                 className={`${styles.connFilterPill} ${requestType === 'all' ? styles.connFilterActive : ''}`}
                                                 onClick={() => setRequestType('all')}
                                             >
                                                 {t('filter_all')}
-                                                {connections.active.length > 0 && (
-                                                    <span className={styles.filterCount}>{connections.active.length > 9 ? '9+' : connections.active.length}</span>
-                                                )}
                                             </button>
                                             <button 
                                                 className={`${styles.connFilterPill} ${requestType === 'received' ? styles.connFilterActive : ''}`}
@@ -1073,9 +1200,13 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                 onClick={() => setRequestType('sent')}
                                             >
                                                 {t('filter_sent')}
-                                                {connections.outgoing.length > 0 && (
-                                                    <span className={styles.filterCount}>{connections.outgoing.length > 9 ? '9+' : connections.outgoing.length}</span>
-                                                )}
+                                            </button>
+                                            <button 
+                                                className={`${styles.connFilterPill} ${requestType === 'blocked' ? styles.connFilterActive : ''}`}
+                                                onClick={() => setRequestType('blocked')}
+                                                style={requestType === 'blocked' ? { background: 'rgba(231,76,60,0.15)', color: '#E74C3C', borderColor: 'rgba(231,76,60,0.3)' } : {}}
+                                            >
+                                                {t('filter_blocked')}
                                             </button>
                                         </div>
 
@@ -1396,17 +1527,22 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                             <ChevronLeft size={24} />
                                                         </button>
 
-                                                        <div className={styles.partnerAvatar} onClick={() => navigate(`/learner/${selectedPartner.id}`)} style={{ cursor: 'pointer' }}>
-                                                            {selectedPartner.avatar_url ? (
-                                                                <img src={selectedPartner.avatar_url} alt="" />
-                                                            ) : (
-                                                                <div className={styles.avatarPlaceholder}><User size={18} /></div>
-                                                            )}
-                                                            <StatusIndicator lastSeen={selectedPartner.last_seen} />
-                                                        </div>
+                                                        <div 
+                                                            className={styles.headerPartnerLink}
+                                                            onClick={() => navigate(`/learner/${selectedPartner.id}`)}
+                                                        >
+                                                            <div className={styles.partnerAvatar}>
+                                                                {selectedPartner.avatar_url ? (
+                                                                    <img src={selectedPartner.avatar_url} alt="" />
+                                                                ) : (
+                                                                    <div className={styles.avatarPlaceholder}><User size={18} /></div>
+                                                                )}
+                                                                <StatusIndicator lastSeen={selectedPartner.last_seen} />
+                                                            </div>
 
-                                                        <div className={styles.headerInfo}>
-                                                            <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
+                                                            <div className={styles.headerInfo}>
+                                                                <span className={styles.partnerTitle}>{selectedPartner.full_name || selectedPartner.display_name}</span>
+                                                            </div>
                                                         </div>
 
                                                         <button 
@@ -1430,7 +1566,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                         <InlineLoader size={40} showText={false} />
                                                     </div>
                                                 ) : (
-                                                    <AnimatePresence mode="popLayout">
+                                                    <AnimatePresence>
                                                         {messages.map((msg, idx) => {
                                                             const msgDate = new Date(msg.created_at).toLocaleDateString();
                                                             const prevMsg = idx > 0 ? messages[idx - 1] : null;
@@ -1438,51 +1574,65 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                             const showDivider = msgDate !== prevDate;
 
                                                             return (
-                                                                <motion.div key={msg.id || idx} layout style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                                                                <div key={msg.id || idx} style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                                                                     {showDivider && (
                                                                         <div className={styles.dateDivider}>
                                                                             <span>{getDateLabel(msg.created_at)}</span>
                                                                         </div>
                                                                     )}
                                                                     <motion.div 
-                                                                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                                                        exit={{ opacity: 0, scale: 0.9 }}
+                                                                        initial={{ opacity: 0, y: 8 }}
+                                                                        animate={{ opacity: 1, y: 0 }}
+                                                                        exit={{ opacity: 0 }}
+                                                                        transition={{ duration: 0.15 }}
                                                                         className={msg.sender_id === user.id ? styles.msgSent : styles.msgReceived}
                                                                         style={{ alignSelf: msg.sender_id === user.id ? 'flex-end' : 'flex-start' }}
                                                                     >
                                                                         <div className={styles.msgBubble}>
-                                                                            {msg.sender_id === user.id && (
+                                                                            {msg.is_deleted ? (
+                                                                                /* Deleted message placeholder */
+                                                                                <span className={styles.msgDeletedText}>
+                                                                                    <Ban size={11} strokeWidth={1.8} />
+                                                                                    {msg.sender_id === user.id
+                                                                                        ? (language === 'bn' ? 'আপনি এই বার্তাটি মুছে ফেলেছেন' : 'You deleted this message')
+                                                                                        : (language === 'bn' ? 'এই বার্তাটি মুছে ফেলা হয়েছে' : 'This message was deleted')
+                                                                                    }
+                                                                                </span>
+                                                                            ) : (
                                                                                 <>
-                                                                                    <button 
-                                                                                        className={styles.msgOptionBtn} 
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation();
-                                                                                            setMsgOptionsId(msgOptionsId === msg.id ? null : msg.id);
-                                                                                        }}
-                                                                                    >
-                                                                                        <ChevronDown size={14} />
-                                                                                    </button>
-                                                                                    {msgOptionsId === msg.id && (
-                                                                                        <div className={styles.deleteMenu}>
-                                                                                            <button className={styles.deleteBtn} onClick={() => handleDeleteMessage(msg.id)}>
-                                                                                                {t('delete_msg')}
+                                                                                    {msg.sender_id === user.id && (
+                                                                                        <>
+                                                                                            <button 
+                                                                                                className={styles.msgOptionBtn} 
+                                                                                                onClick={(e) => {
+                                                                                                    e.stopPropagation();
+                                                                                                    setMsgOptionsId(msgOptionsId === msg.id ? null : msg.id);
+                                                                                                }}
+                                                                                            >
+                                                                                                <ChevronDown size={14} />
                                                                                             </button>
+                                                                                            {msgOptionsId === msg.id && (
+                                                                                                <div className={styles.deleteMenu}>
+                                                                                                    <button className={styles.deleteBtn} onClick={() => handleDeleteMessage(msg.id)}>
+                                                                                                        {t('delete_msg')}
+                                                                                                    </button>
+                                                                                                </div>
+                                                                                            )}
+                                                                                        </>
+                                                                                    )}
+                                                                                    {msg.attachment_url && (
+                                                                                        <div className={styles.msgAttachment} onClick={() => setViewerImage(msg.attachment_url)}>
+                                                                                            <img src={msg.attachment_url} alt="" />
                                                                                         </div>
                                                                                     )}
+                                                                                    {msg.content && <span>{msg.content}</span>}
                                                                                 </>
                                                                             )}
-                                                                            {msg.attachment_url && (
-                                                                                <div className={styles.msgAttachment} onClick={() => setViewerImage(msg.attachment_url)}>
-                                                                                    <img src={msg.attachment_url} alt="" />
-                                                                                </div>
-                                                                            )}
-                                                                            {msg.content && <span>{msg.content}</span>}
                                                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: msg.sender_id === user.id ? 'flex-end' : 'flex-start', gap: '4px' }}>
                                                                                 <span className={styles.msgTime}>
                                                                                     {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                                 </span>
-                                                                                {msg.sender_id === user.id && (
+                                                                                {msg.sender_id === user.id && !msg.is_deleted && (
                                                                                     <span style={{ display: 'flex' }}>
                                                                                             <CheckCheck 
                                                                                                 size={12} 
@@ -1495,7 +1645,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                                             </div>
                                                                         </div>
                                                                     </motion.div>
-                                                                </motion.div>
+                                                                </div>
                                                             );
                                                         })}
                                                     </AnimatePresence>
@@ -1551,13 +1701,16 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     inputMode="text"
                                                     aria-autocomplete="none"
                                                     placeholder={t('write_msg')} 
-                                                    value={newMessage}
                                                     onChange={(e) => {
-                                                        setNewMessage(e.target.value);
-                                                        // Auto-expand logic
+                                                        // Auto-expand height — pure DOM, zero React re-render
                                                         const el = e.target;
                                                         el.style.height = 'auto';
                                                         el.style.height = `${Math.min(el.scrollHeight, 120)}px`;
+                                                        // Defer state update — never blocks keystrokes
+                                                        const hasText = el.value.trim().length > 0;
+                                                        startCanSendTransition(() => {
+                                                            setCanSend(prev => prev !== hasText ? hasText : prev);
+                                                        });
                                                     }}
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter' && !e.shiftKey) {
@@ -1575,7 +1728,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                                     type="button" 
                                                     className={styles.sendBtn}
                                                     onClick={() => handleSendMessage()}
-                                                    disabled={(!newMessage.trim() && !pendingAttachmentUrl) || isSendingMsg || isUploading}
+                                                    disabled={(!canSend && !pendingAttachmentUrl) || isSendingMsg || isUploading}
                                                 >
                                                     {isSendingMsg ? (
                                                         <InlineLoader size={20} showText={false} />

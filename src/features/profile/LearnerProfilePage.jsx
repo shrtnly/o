@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import {
     ArrowLeft, UserPlus, MessageSquare, Check,
     Flame, Trophy, BookOpen, Zap, UserCheck,
-    Hourglass, User, UserMinus, Ban
+    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical
 } from 'lucide-react';
 import { toast } from 'sonner';
 import styles from './LearnerProfilePage.module.css';
@@ -34,6 +34,17 @@ const LearnerProfilePage = () => {
     const [imgError, setImgError]           = useState(false);
     const [isBlocked, setIsBlocked]         = useState(false);
     const [isBlockedByMe, setIsBlockedByMe] = useState(false);
+    const [linkCopied, setLinkCopied]       = useState(false);
+    const [menuOpen, setMenuOpen]           = useState(false);
+    const menuRef                           = useRef(null);
+
+    // Close dropdown on outside click
+    useEffect(() => {
+        if (!menuOpen) return;
+        const handler = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false); };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, [menuOpen]);
 
     // Redirect self-view to own profile
     useEffect(() => {
@@ -303,7 +314,7 @@ const LearnerProfilePage = () => {
                             {learner.full_name || learner.display_name || (language === 'bn' ? 'শিক্ষার্থী' : 'Learner')}
                         </h1>
                         <p className={styles.subtitle}>
-                            {shieldInfo.name} Learner{learner.location ? ` @ ${learner.location}` : ''}
+                            {[shieldInfo.name, learner.location].filter(Boolean).join(' · ')}
                         </p>
                     </div>
                 </motion.div>
@@ -315,49 +326,24 @@ const LearnerProfilePage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: 0.07, ease: 'easeOut' }}
                 >
-                    {isBlocked ? (
-                        <button className={`${styles.actionBtn} ${styles.blockBtnActive}`} onClick={handleUnblock} disabled={actionLoading}>
-                            <Ban size={15} />
-                            <span>{language === 'bn' ? 'আনব্লক' : 'Unblock'}</span>
-                        </button>
-                    ) : (
-                        <>
-                            {connStatus === 'accepted' ? (
-                                <>
-                                    <button className={`${styles.actionBtn} ${styles.msgBtn}`} onClick={handleMessage}>
-                                        <MessageSquare size={15} />
-                                        <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
-                                    </button>
-                                    <button className={`${styles.actionBtn} ${styles.disconnectBtn}`} onClick={handleDisconnect} disabled={actionLoading}>
-                                        <UserMinus size={15} />
-                                        <span>{language === 'bn' ? 'সংযোগ বিচ্ছিন্ন' : 'Disconnect'}</span>
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <button
-                                        className={`${styles.actionBtn} ${styles.connectBtn} ${connStatus === 'outgoing' ? styles.outgoingBtn : ''}`}
-                                        onClick={handleConnect}
-                                        disabled={actionLoading}
-                                    >
-                                        <ConnectIcon />
-                                        <span>{connectLabel()}</span>
-                                    </button>
-                                    <button className={`${styles.actionBtn} ${styles.msgBtn}`} onClick={handleMessage}>
-                                        <MessageSquare size={15} />
-                                        <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
-                                    </button>
-                                </>
-                            )}
-                            
-                            {!isBlocked && (
-                                <button className={`${styles.actionBtn} ${styles.blockBtn}`} onClick={handleBlock} disabled={actionLoading} style={{ gridColumn: 'span 2' }}>
-                                    <Ban size={15} />
-                                    <span>{language === 'bn' ? 'ব্লক করুন' : 'Block User'}</span>
-                                </button>
-                            )}
-                        </>
-                    )}
+                    {/* Connect button – always visible */}
+                    <button
+                        className={`${styles.actionBtn} ${styles.connectBtn} ${
+                            connStatus === 'accepted' ? styles.connectedBtn :
+                            connStatus === 'outgoing' ? styles.outgoingBtn : ''
+                        }`}
+                        onClick={handleConnect}
+                        disabled={actionLoading}
+                    >
+                        <ConnectIcon />
+                        <span>{connectLabel()}</span>
+                    </button>
+
+                    {/* Message button – always visible */}
+                    <button className={`${styles.actionBtn} ${styles.msgBtn}`} onClick={handleMessage}>
+                        <MessageSquare size={15} />
+                        <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
+                    </button>
                 </motion.div>
 
                 {/* ── Status Grid ── */}
@@ -444,7 +430,91 @@ const LearnerProfilePage = () => {
                     </motion.section>
                 )}
 
-                <div style={{ height: 32 }} />
+                {/* ── Copy Link + 3-dot menu row ── */}
+                <motion.div
+                    className={styles.bottomRow}
+                    ref={menuRef}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.28, ease: 'easeOut' }}
+                >
+                    <button
+                        className={`${styles.actionBtn} ${styles.copyLinkBtn} ${linkCopied ? styles.copyLinkCopied : ''}`}
+                        onClick={() => {
+                            if (linkCopied) return;
+                            const url = `${window.location.origin}/learner/${learnerId}`;
+                            const succeed = () => { setLinkCopied(true); setTimeout(() => setLinkCopied(false), 2000); };
+                            if (navigator.clipboard) {
+                                navigator.clipboard.writeText(url).then(succeed).catch(() => {});
+                            } else {
+                                try {
+                                    const ta = document.createElement('textarea');
+                                    ta.value = url;
+                                    ta.style.cssText = 'position:fixed;top:-9999px;left:-9999px;opacity:0';
+                                    document.body.appendChild(ta);
+                                    ta.focus();
+                                    ta.select();
+                                    document.execCommand('copy');
+                                    document.body.removeChild(ta);
+                                    succeed();
+                                } catch { /* silent fail */ }
+                            }
+                        }}
+                    >
+                        {linkCopied ? <CheckCheck size={14} /> : <Link size={14} />}
+                        <span>{linkCopied
+                            ? (language === 'bn' ? 'কপি হয়েছে ✓' : 'Copied!')
+                            : (language === 'bn' ? 'প্রোফাইল লিংক কপি করুন' : 'Copy Profile Link')
+                        }</span>
+                    </button>
+
+                    {/* 3-dot more menu */}
+                    <div className={styles.moreWrap}>
+                        <button
+                            className={`${styles.moreBtn} ${menuOpen ? styles.moreBtnActive : ''}`}
+                            onClick={() => setMenuOpen(o => !o)}
+                            aria-label="More options"
+                        >
+                            <MoreVertical size={15} />
+                        </button>
+
+                        {menuOpen && (
+                            <div className={styles.dropdown}>
+                                {connStatus === 'accepted' && (
+                                    <button
+                                        className={`${styles.dropdownItem} ${styles.dropdownDanger}`}
+                                        onClick={() => { setMenuOpen(false); handleDisconnect(); }}
+                                        disabled={actionLoading}
+                                    >
+                                        <UserMinus size={14} />
+                                        <span>{language === 'bn' ? 'সংযোগ বিচ্ছিন্ন' : 'Disconnect'}</span>
+                                    </button>
+                                )}
+                                {isBlocked ? (
+                                    <button
+                                        className={styles.dropdownItem}
+                                        onClick={() => { setMenuOpen(false); handleUnblock(); }}
+                                        disabled={actionLoading}
+                                    >
+                                        <Ban size={14} />
+                                        <span>{language === 'bn' ? 'আনব্লক' : 'Unblock'}</span>
+                                    </button>
+                                ) : (
+                                    <button
+                                        className={`${styles.dropdownItem} ${styles.dropdownDanger}`}
+                                        onClick={() => { setMenuOpen(false); handleBlock(); }}
+                                        disabled={actionLoading}
+                                    >
+                                        <Ban size={14} />
+                                        <span>{language === 'bn' ? 'ব্লক করুন' : 'Block User'}</span>
+                                    </button>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </motion.div>
+
+                <div style={{ height: 24 }} />
             </div>
         </div>
     );

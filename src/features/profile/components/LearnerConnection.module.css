@@ -827,6 +827,22 @@
     text-overflow: ellipsis;
 }
 
+.lastMsgPhoto {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: inherit;
+}
+
+.lastMsgDeleted {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--color-text-muted);
+    font-style: italic;
+    opacity: 0.7;
+}
+
 .unreadBadge {
     background: var(--color-primary);
     color: var(--color-on-primary);
@@ -861,7 +877,6 @@
     z-index: 1000;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-bottom: none;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1041,6 +1056,19 @@
     opacity: 0.5;
 }
 
+/* Deleted message placeholder */
+.msgDeletedText {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    opacity: 0.55;
+    user-select: none;
+    letter-spacing: 0.1px;
+}
+
 .chatWindow {
     position: fixed;
     bottom: 0;
@@ -1052,7 +1080,6 @@
     display: flex;
     flex-direction: column;
     z-index: 9999;
-    box-shadow: var(--shadow-hover);
     border: 1px solid var(--color-border);
     border-bottom: none;
     overflow: hidden;
@@ -1083,11 +1110,24 @@
     transition: background 0.2s;
 }
 
+.headerPartnerLink {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 2px 6px 2px 2px;
+    margin-left: -2px;
+    flex: 1;
+    min-width: 0;
+}
+
 .headerInfo {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-width: 0;
 }
 
 .partnerTitle {
@@ -1095,6 +1135,9 @@
     color: var(--color-text);
     font-size: 0.95rem;
     letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .closeChatBtn {
@@ -1124,18 +1167,19 @@
 
 .chatInputRow {
     padding: 14px 20px;
-    background: var(--color-bg-deep); /* Alternative match on theme */
+    background: var(--color-bg-deep);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border-top: 1px solid var(--color-border-muted);
     display: flex;
-    align-items: center;
+    align-items: flex-end; /* anchor to bottom when textarea grows */
     gap: 12px;
+    flex-shrink: 0; /* never collapse */
 }
 
 .chatInput {
     flex: 1;
-    background: rgba(var(--color-bg-deep-rgb), 0.5);
+    background: var(--color-bg-alt);
     border: 1px solid var(--color-border-muted);
     padding: 10px 18px;
     border-radius: 24px;
@@ -1143,40 +1187,47 @@
     font-size: 0.9rem;
     outline: none;
     letter-spacing: 0.2px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     resize: none;
     line-height: 1.4;
     min-height: 42px;
     max-height: 120px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* smooth momentum scroll on iOS */
+    touch-action: manipulation;        /* eliminate 300ms tap delay on mobile */
+    font-family: inherit;
 }
 
 .chatInput:focus {
-    background: rgba(var(--color-bg-deep-rgb), 0.8);
     border-color: var(--color-primary);
-    box-shadow: 0 0 15px rgba(var(--color-primary-rgb), 0.1);
+    box-shadow: 0 0 15px rgba(22, 160, 133, 0.12);
 }
 
+.chatInput::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.8;
+}
+
+/* Send button — filled round pill */
 .sendBtn {
-    background: var(--color-primary); /* Round background implement */
+    background: var(--color-primary);
     border: none;
-    color: #000; /* Dark icon on primary gold/yellow */
+    color: #000;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.2);
 }
 
 .sendBtn:hover:not(:disabled) {
-    background: var(--color-primary);
     filter: brightness(1.1);
     transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 6px 15px rgba(var(--color-primary-rgb), 0.3);
 }
 
 .sendBtn:active:not(:disabled) {
@@ -1188,36 +1239,6 @@
     color: var(--color-text-muted);
     cursor: default;
     opacity: 0.5;
-    box-shadow: none;
-}
-
-.chatInput::placeholder {
-    color: var(--color-text-muted);
-    opacity: 0.8;
-}
-
-.chatInputRow button {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: transparent;
-    border: none;
-    color: var(--color-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    flex-shrink: 0;
-}
-
-.chatInputRow button:hover:not(:disabled) {
-    transform: translateY(-2px) scale(1.05);
-}
-
-.chatInputRow button:disabled {
-    opacity: 0.2;
-    cursor: default;
 }
 
 .skeletonList {
@@ -1411,11 +1432,10 @@
         position: sticky;
         top: 0;
         z-index: 100;
-        padding: 14px 16px; /* Slightly taller for mobile */
-        height: 64px; /* Standardize height */
-        background: linear-gradient(to bottom, var(--color-bg-alt), var(--color-bg-deep));
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
+        padding: 14px 16px;
+        height: 64px;
+        /* No backdrop-filter on mobile — blur compositing tanks GPU performance */
+        background: var(--color-bg-alt);
         border-bottom: 1px solid var(--color-border-muted);
         display: flex;
         align-items: center;
@@ -1440,21 +1460,26 @@
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
+        will-change: transform; /* promote to GPU layer — scroll/render independent of parent */
     }
 
     .chatInputRow {
         padding: 12px 16px;
         padding-bottom: max(16px, env(safe-area-inset-bottom));
-        background: var(--color-bg-deep); /* Alternative match on theme */
-        backdrop-filter: blur(25px);
-        -webkit-backdrop-filter: blur(25px);
+        /* No backdrop-filter on mobile — causes GPU compositing lag during typing */
+        background: var(--color-bg-deep);
         border-top: 1px solid var(--color-border-muted);
         flex-shrink: 0;
         width: 100%;
         display: flex;
-        align-items: center;
+        align-items: flex-end;
         gap: 10px;
         box-sizing: border-box;
+    }
+
+    /* Remove transition on mobile — eliminates style recalculation per keystroke */
+    .chatInput {
+        transition: none;
     }
 }
 

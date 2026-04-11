@@ -170,6 +170,7 @@ const translations = {
         filter_all: "কানেকশন",
         filter_received: "প্রাপ্ত",
         filter_sent: "পাঠানো",
+        filter_blocked: "ব্লক লিস্ট",
 
         certification: "সার্টিফিকেশন",
         earned_certificates: "সার্টিফিকেট",
@@ -675,6 +676,7 @@ const translations = {
         filter_all: "Connections",
         filter_received: "Received",
         filter_sent: "Sent",
+        filter_blocked: "Block List",
         search_learner: "Search learners...",
         send_request: "Send Request",
         pending_requests: "Pending Requests",

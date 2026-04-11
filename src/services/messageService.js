@@ -13,30 +13,35 @@ export const messageService = {
           content,
           attachment_url,
           is_read,
+          is_deleted,
           created_at,
           sender:profiles!messages_sender_id_fkey(id, full_name, display_name, avatar_url, last_seen),
           receiver:profiles!messages_receiver_id_fkey(id, full_name, display_name, avatar_url, last_seen)
         `)
         .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
+        // No is_deleted filter — we need the true last message (deleted or not)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Group by distinct partner
+      // Group by distinct partner — first message per partner is the last sent
       const conversations = [];
       const seen = new Set();
 
       data.forEach(msg => {
         const partner = msg.sender_id === userId ? msg.receiver : msg.sender;
         if (!partner) return;
-        
+
         if (!seen.has(partner.id)) {
           seen.add(partner.id);
           conversations.push({
             partner,
-            lastMessage: msg.content,
+            lastMessage: msg.is_deleted ? null : msg.content,
+            lastAttachment: msg.is_deleted ? null : (msg.attachment_url || null),
+            lastIsDeleted: msg.is_deleted || false,
+            lastDeletedBySelf: msg.is_deleted ? (msg.sender_id === userId) : false,
             timestamp: msg.created_at,
-            isNew: !msg.is_read && msg.receiver_id === userId
+            isNew: !msg.is_read && msg.receiver_id === userId && !msg.is_deleted
           });
         }
       });
@@ -127,14 +132,14 @@ export const messageService = {
     }
   },
 
-  // Delete a message
+  // Soft-delete a message (marks is_deleted = true so both sides see removal via UPDATE realtime)
   async deleteMessage(messageId, userId) {
     try {
       const { error } = await supabase
         .from('messages')
-        .delete()
+        .update({ is_deleted: true })
         .eq('id', messageId)
-        .eq('sender_id', userId);
+        .eq('sender_id', userId); // only sender can delete
 
       if (error) throw error;
       return true;

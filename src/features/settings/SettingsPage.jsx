@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, X, Zap, ShoppingBag, Drone, LogOut } from 'lucide-react';
+import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, Save, X, Zap, ShoppingBag, Drone, LogOut } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
@@ -17,7 +17,7 @@ import CustomSelect from '../../components/ui/CustomSelect';
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();
     const { language, toggleLanguage, t } = useLanguage();
-    const { user, updateProfile, signOut } = useAuth();
+    const { user, profile, updateProfile, signOut } = useAuth();
     const [activeTab, setActiveTab] = useState('preferences');
     const [selectedAnimation, setSelectedAnimation] = useState('random');
     const [enrolledCourses, setEnrolledCourses] = useState([]);
@@ -63,21 +63,28 @@ const SettingsPage = () => {
     });
 
     useEffect(() => {
-        const savedAnimation = localStorage.getItem('studyPageAnimation');
-        if (savedAnimation) {
-            setSelectedAnimation(savedAnimation);
-        }
+        if (profile) {
+            setSelectedAnimation(profile.study_page_animation || 'random');
+            setSoundEnabled(profile.sound_effects_enabled !== false);
+            setSparkleEnabled(profile.sparkle_effects_enabled !== false);
+            setPublicProfile(profile.is_public !== false);
+        } else {
+            const savedAnimation = localStorage.getItem('studyPageAnimation');
+            if (savedAnimation) {
+                setSelectedAnimation(savedAnimation);
+            }
 
-        const savedSound = localStorage.getItem('soundEffectsEnabled');
-        if (savedSound !== null) {
-            setSoundEnabled(savedSound === 'true');
-        }
+            const savedSound = localStorage.getItem('soundEffectsEnabled');
+            if (savedSound !== null) {
+                setSoundEnabled(savedSound === 'true');
+            }
 
-        const savedSparkle = localStorage.getItem('sparkleEffectsEnabled');
-        if (savedSparkle !== null) {
-            setSparkleEnabled(savedSparkle === 'true');
+            const savedSparkle = localStorage.getItem('sparkleEffectsEnabled');
+            if (savedSparkle !== null) {
+                setSparkleEnabled(savedSparkle === 'true');
+            }
         }
-    }, []);
+    }, [profile]);
 
     // Handle deep linking for tabs
     useEffect(() => {
@@ -260,11 +267,20 @@ const SettingsPage = () => {
 
 
 
-    // Save animation preference to localStorage
-    const toggleAnimation = () => {
+    // Save animation preference to database and localStorage
+    const toggleAnimation = async () => {
         const newValue = selectedAnimation === 'none' ? 'random' : 'none';
         setSelectedAnimation(newValue);
         localStorage.setItem('studyPageAnimation', newValue);
+        
+        if (user) {
+            try {
+                await updateProfile({ study_page_animation: newValue });
+            } catch (error) {
+                console.error('Error saving animation setting:', error);
+            }
+        }
+
         if (newValue === 'random') {
             toast.success(t('random_animation') + ' ' + t('on'));
         } else {
@@ -272,10 +288,19 @@ const SettingsPage = () => {
         }
     };
 
-    const toggleSound = () => {
+    const toggleSound = async () => {
         const newValue = !soundEnabled;
         setSoundEnabled(newValue);
         localStorage.setItem('soundEffectsEnabled', String(newValue));
+
+        if (user) {
+            try {
+                await updateProfile({ sound_effects_enabled: newValue });
+            } catch (error) {
+                console.error('Error saving sound setting:', error);
+            }
+        }
+
         if (newValue) {
             toast.success(t('sound_on'));
         } else {
@@ -283,14 +308,43 @@ const SettingsPage = () => {
         }
     };
 
-    const toggleSparkleBurst = () => {
+    const toggleSparkleBurst = async () => {
         const newValue = !sparkleEnabled;
         setSparkleEnabled(newValue);
         localStorage.setItem('sparkleEffectsEnabled', String(newValue));
+
+        if (user) {
+            try {
+                await updateProfile({ sparkle_effects_enabled: newValue });
+            } catch (error) {
+                console.error('Error saving sparkle setting:', error);
+            }
+        }
+
         if (newValue) {
             toast.success(t('sparkle_effects') + ' ' + t('on'));
         } else {
             toast.info(t('sparkle_effects') + ' ' + t('off'));
+        }
+    };
+
+    const togglePublicProfile = async () => {
+        const newValue = !publicProfile;
+        setPublicProfile(newValue);
+        
+        if (user) {
+            try {
+                await updateProfile({ is_public: newValue });
+                if (newValue) {
+                    toast.success(t('public_profile') + ' ' + t('on'));
+                } else {
+                    toast.info(t('public_profile') + ' ' + t('off'));
+                }
+            } catch (error) {
+                console.error('Error saving public profile setting:', error);
+                toast.error(t('error_update_settings'));
+                setPublicProfile(!newValue); // rollback
+            }
         }
     };
 
@@ -501,7 +555,7 @@ const SettingsPage = () => {
                                     <input 
                                         type="checkbox" 
                                         checked={publicProfile} 
-                                        onChange={() => setPublicProfile(!publicProfile)} 
+                                        onChange={togglePublicProfile} 
                                     />
                                     <span className={styles.slider}>
                                         <span className={styles.knob}>
@@ -652,7 +706,7 @@ const SettingsPage = () => {
                                     ) : isSaved ? (
                                         <Check size={24} strokeWidth={4} />
                                     ) : (
-                                        t('save')
+                                        <><Save size={20} /> {t('save')}</>
                                     )}
                                 </button>
                             </div>

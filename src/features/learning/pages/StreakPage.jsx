@@ -58,7 +58,7 @@ const StreakPage = () => {
                         <div className={styles.skeleton} style={{ width: '50%', height: '20px', borderRadius: '6px' }} />
                     </div>
                     
-                    {/* Main Card (ConsistencyTracker replacement) */}
+                    {/* Main Card (ConsistencyTracker_replacement) */}
                     <div style={{ background: 'var(--color-bg-alt)', borderRadius: '24px', padding: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
                         {/* Stats Row */}
                         <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '32px', position: 'relative' }}>

@@ -281,3 +281,19 @@
         padding: 8px;
     }
 }
+
+.loadMoreRow {
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.noMoreNotifs {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.4;
+}
+

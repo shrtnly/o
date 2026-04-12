@@ -37,6 +37,18 @@ const ConnectionPage = () => {
         fetchProfileData();
     }, [fetchProfileData]);
 
+    if (loading && !profile) {
+        return (
+            <div className={styles.connectionPage}>
+                <div className={styles.container}>
+                    <div className={styles.loadingContainer}>
+                        <InlineLoader size={40} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.connectionPage}>
             <div className={styles.container}>

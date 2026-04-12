@@ -13,6 +13,9 @@ export const NotificationProvider = ({ children }) => {
     const [unreadCount, setUnreadCount] = useState(0);
     const [pendingConnectionsCount, setPendingConnectionsCount] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const PAGE_SIZE = 15;
 
     const refreshUnreadCount = useCallback(async () => {
         if (!user) return;
@@ -57,10 +60,11 @@ export const NotificationProvider = ({ children }) => {
                 .select('*, actor:profiles!actor_id(*)')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
-                .limit(50);
+                .limit(PAGE_SIZE);
             
             if (error) throw error;
             setNotifications(data || []);
+            setHasMore((data || []).length === PAGE_SIZE);
             refreshUnreadCount();
             refreshConnectionsCount();
         } catch (err) {
@@ -69,6 +73,46 @@ export const NotificationProvider = ({ children }) => {
             setIsLoading(false);
         }
     }, [user, refreshUnreadCount, refreshConnectionsCount]);
+
+    const loadMoreNotifications = useCallback(async () => {
+        if (!user || isLoading || isLoadingMore || !hasMore) return;
+        
+        setIsLoadingMore(true);
+        try {
+            const lastNotif = notifications[notifications.length - 1];
+            if (!lastNotif) {
+                setHasMore(false);
+                return;
+            }
+
+            const { data, error } = await supabase
+                .from('notifications')
+                .select('*, actor:profiles!actor_id(*)')
+                .eq('user_id', user.id)
+                .lt('created_at', lastNotif.created_at)
+                .order('created_at', { ascending: false })
+                .limit(PAGE_SIZE);
+            
+            if (error) throw error;
+            
+            if (data && data.length > 0) {
+                // Avoid duplicates if realtime listener already added them
+                setNotifications(prev => {
+                    const existingIds = new Set(prev.map(n => n.id));
+                    const newData = data.filter(n => !existingIds.has(n.id));
+                    return [...prev, ...newData];
+                });
+                setHasMore(data.length === PAGE_SIZE);
+            } else {
+                setHasMore(false);
+            }
+        } catch (err) {
+            console.error('Error loading more notifications:', err);
+        } finally {
+            setIsLoadingMore(false);
+        }
+    }, [user, notifications, hasMore, isLoading, isLoadingMore]);
+
 
     const deleteNotification = async (id) => {
         try {
@@ -399,7 +443,10 @@ export const NotificationProvider = ({ children }) => {
             deleteNotification,
             respondToConnectionRequest,
             refresh: fetchNotifications,
+            loadMore: loadMoreNotifications,
             isLoading,
+            hasMore,
+            isLoadingMore,
             activeChatId,
             setActiveChatId,
             isInboxOpen,

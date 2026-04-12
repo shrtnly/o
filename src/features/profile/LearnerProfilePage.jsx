@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import {
     ArrowLeft, UserPlus, MessageSquare, Check,
     Flame, Trophy, BookOpen, Zap, UserCheck,
-    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical
+    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
 import styles from './LearnerProfilePage.module.css';
@@ -357,31 +357,38 @@ const LearnerProfilePage = () => {
                         {language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}
                     </p>
 
-                    <div className={styles.statsRow}>
-                        <div className={styles.statBox}>
-                            <Flame size={17} className={styles.statIconStreak} strokeWidth={2} />
-                            <span className={styles.statVal}>{streak?.longest_streak || 0}</span>
-                            <span className={styles.statLbl}>{language === 'bn' ? 'সর্বোচ্চ স্ট্রিক' : 'Best Streak'}</span>
-                        </div>
+                    {learner.is_public !== false ? (
+                        <div className={styles.statsRow}>
+                            <div className={styles.statBox}>
+                                <Flame size={17} className={styles.statIconStreak} strokeWidth={2} />
+                                <span className={styles.statVal}>{streak?.longest_streak || 0}</span>
+                                <span className={styles.statLbl}>{language === 'bn' ? 'সর্বোচ্চ স্ট্রিক' : 'Best Streak'}</span>
+                            </div>
 
-                        <div className={styles.statBox}>
-                            <Zap size={17} className={styles.statIconXp} strokeWidth={2} />
-                            <span className={styles.statVal}>{(learner.xp || 0).toLocaleString()}</span>
-                            <span className={styles.statLbl}>{language === 'bn' ? 'মধু (XP)' : 'XP'}</span>
-                        </div>
+                            <div className={styles.statBox}>
+                                <Zap size={17} className={styles.statIconXp} strokeWidth={2} />
+                                <span className={styles.statVal}>{(learner.xp || 0).toLocaleString()}</span>
+                                <span className={styles.statLbl}>{language === 'bn' ? 'মধু (XP)' : 'XP'}</span>
+                            </div>
 
-                        <div className={styles.statBox}>
-                            <Trophy size={17} className={styles.statIconRank} strokeWidth={2} />
-                            <span className={styles.statVal}>{rank ? `#${rank}` : '—'}</span>
-                            <span className={styles.statLbl}>{language === 'bn' ? 'র‍্যাংক' : 'Rank'}</span>
-                        </div>
+                            <div className={styles.statBox}>
+                                <Trophy size={17} className={styles.statIconRank} strokeWidth={2} />
+                                <span className={styles.statVal}>{rank ? `#${rank}` : '—'}</span>
+                                <span className={styles.statLbl}>{language === 'bn' ? 'র‍্যাংক' : 'Rank'}</span>
+                            </div>
 
-                        <div className={styles.statBox}>
-                            <BookOpen size={17} className={styles.statIconCourse} strokeWidth={2} />
-                            <span className={styles.statVal}>{certs}</span>
-                            <span className={styles.statLbl}>{language === 'bn' ? 'সার্টিফিকেট' : 'Certificates'}</span>
+                            <div className={styles.statBox}>
+                                <BookOpen size={17} className={styles.statIconCourse} strokeWidth={2} />
+                                <span className={styles.statVal}>{certs}</span>
+                                <span className={styles.statLbl}>{language === 'bn' ? 'সার্টিফিকেট' : 'Certificates'}</span>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div className={styles.privateInfoBox}>
+                            <Shield size={20} className={styles.privateIcon} />
+                            <span>{language === 'bn' ? 'এই প্রোফাইলটি বর্তমানে প্রাইভেট করা আছে' : 'This profile is currently private'}</span>
+                        </div>
+                    )}
                 </motion.section>
 
                 {/* ── General Information ── */}
@@ -395,10 +402,12 @@ const LearnerProfilePage = () => {
                         {language === 'bn' ? 'সাধারণ তথ্য' : 'General Information'}
                     </p>
                     <div className={styles.detailsList}>
-                        <div className={styles.detailRow}>
-                            <span className={styles.detailKey}>{language === 'bn' ? 'ইমেইল' : 'Email'}</span>
-                            <span className={styles.detailVal}>{learner.email || '—'}</span>
-                        </div>
+                        {learner.is_public !== false && (
+                            <div className={styles.detailRow}>
+                                <span className={styles.detailKey}>{language === 'bn' ? 'ইমেইল' : 'Email'}</span>
+                                <span className={styles.detailVal}>{learner.email || '—'}</span>
+                            </div>
+                        )}
                         <div className={styles.detailRow}>
                             <span className={styles.detailKey}>{language === 'bn' ? 'শিক্ষা' : 'Education'}</span>
                             <span className={styles.detailVal}>{learner.education_level || '—'}</span>

@@ -34,7 +34,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [connections, setConnections] = useState({ pending: [], active: [], outgoing: [] });
     const [suggestions, setSuggestions] = useState([]);
     const [blockedList, setBlockedList] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     // See All States
     const [showAllSuggest, setShowAllSuggest] = useState(false);
@@ -85,7 +85,7 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
     const [inboxSearchQuery, setInboxSearchQuery] = useState('');
-    const [isConversationsLoading, setIsConversationsLoading] = useState(false);
+    const [isConversationsLoading, setIsConversationsLoading] = useState(true);
     const [msgOptionsId, setMsgOptionsId] = useState(null);
 
     // Derived filtered lists for the inbox search
@@ -931,20 +931,33 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
 
             {/* Sub-Tab Content */}
             <div className={styles.subTabContent}>
-                {isLoading ? (
-                    <div className={styles.skeletonList}>
-                        {[...Array(6)].map((_, i) => (
-                            <div key={i} className={styles.skeletonItem}>
-                                <Skeleton width="44px" height="44px" borderRadius="50%" />
-                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                    <Skeleton width="60%" height="16px" />
-                                    <Skeleton width="40%" height="12px" />
+                <AnimatePresence mode="wait">
+                    {(subTab === 'inbox' ? isConversationsLoading : isLoading) ? (
+                        <motion.div 
+                            key="skeleton"
+                            initial={false}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className={styles.skeletonList}
+                        >
+                            {[...Array(6)].map((_, i) => (
+                                <div key={i} className={styles.skeletonItem}>
+                                    <Skeleton width="44px" height="44px" borderRadius="50%" />
+                                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <Skeleton width="60%" height="16px" />
+                                        <Skeleton width="40%" height="12px" />
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <>
+                            ))}
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key={subTab}
+                            initial={{ opacity: 0, scale: 0.98 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                        >
                         {subTab === 'inbox' ? (
                             <div className={`${styles.inboxWrapper} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
                                 {/* Conversation Sidebar */}
@@ -1569,8 +1582,9 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                                 )}
                             </>
                         )}
-                    </>
-                )}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
                                 {/* Floating Chat Window (Facebook Style on Desktop, Full Overlay on Mobile) */}
                                 <AnimatePresence>

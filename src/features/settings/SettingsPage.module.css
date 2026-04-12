@@ -354,36 +354,41 @@
 
 .primaryBtn {
     background-color: var(--color-primary);
-    color: var(--color-on-primary, #000);
+    color: #000;
     border: none;
+    border-bottom: 4px solid var(--color-primary-dark);
     padding: 12px 28px;
     border-radius: 14px;
     font-weight: 800;
     font-size: 0.95rem;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.1s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 140px;
+    gap: 10px;
     height: 48px;
 }
 
+
 .primaryBtn:hover:not(:disabled) {
-    background-color: var(--color-primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px var(--color-primary-faint);
+    border-bottom-width: 6px;
 }
 
+
 .primaryBtn:active:not(:disabled) {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(2px);
+    border-bottom-width: 0;
 }
+
 
 .btnLoader {
     width: 20px;
     height: 20px;
     border: 3px solid var(--color-primary-faint);
-    border-top-color: var(--color-on-primary, #000);
+    border-top-color: #000;
     border-radius: 50%;
     animation: btnSpin 0.8s linear infinite;
 }

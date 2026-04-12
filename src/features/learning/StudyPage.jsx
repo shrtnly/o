@@ -136,7 +136,7 @@ const StorytellingDisplay = ({ content, visibleCount }) => {
 const StudyPage = () => {
     const { courseId, chapterId } = useParams();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, profile: authProfile } = useAuth();
     const { t } = useLanguage();
 
     // Use heart refill system
@@ -177,6 +177,7 @@ const StudyPage = () => {
     // Animation states
     const [dotLottie, setDotLottie] = useState(null);
     const [selectedAnimation, setSelectedAnimation] = useState(() => {
+        if (authProfile?.study_page_animation) return authProfile.study_page_animation;
         const saved = localStorage.getItem('studyPageAnimation');
         return saved || 'random';
     });
@@ -184,6 +185,7 @@ const StudyPage = () => {
     const [mascotReady, setMascotReady] = useState(false);
     const [profile, setProfile] = useState(null);
     const [sparkleEnabled, setSparkleEnabled] = useState(() => {
+        if (authProfile?.sparkle_effects_enabled !== undefined) return authProfile.sparkle_effects_enabled;
         const saved = localStorage.getItem('sparkleEffectsEnabled');
         return saved !== null ? saved === 'true' : true;
     });
@@ -256,13 +258,34 @@ const StudyPage = () => {
         return () => clearTimeout(timer);
     }, [currentIndex, activeDialogueIndex, isAnswered, failedOptions.length, isMobile]);
 
-    // Read sound preference once per render cycle via ref — avoids repeated localStorage hits
-    const soundEnabledRef = React.useRef(localStorage.getItem('soundEffectsEnabled') !== 'false');
+    // Sync preferences from AuthContext profile
     useEffect(() => {
-        const handler = () => { soundEnabledRef.current = localStorage.getItem('soundEffectsEnabled') !== 'false'; };
+        if (authProfile) {
+            soundEnabledRef.current = authProfile.sound_effects_enabled !== false;
+            setSparkleEnabled(authProfile.sparkle_effects_enabled !== false);
+            setSelectedAnimation(authProfile.study_page_animation || 'random');
+            // If gender exists in profile, use it
+            if (authProfile.gender) setProfile(p => ({ ...p, gender: authProfile.gender }));
+        }
+    }, [authProfile]);
+
+    const soundEnabledRef = React.useRef(true);
+
+    useEffect(() => {
+        if (authProfile) {
+            soundEnabledRef.current = authProfile.sound_effects_enabled !== false;
+        } else {
+            soundEnabledRef.current = localStorage.getItem('soundEffectsEnabled') !== 'false';
+        }
+        
+        const handler = () => { 
+            if (!authProfile) {
+                soundEnabledRef.current = localStorage.getItem('soundEffectsEnabled') !== 'false'; 
+            }
+        };
         window.addEventListener('storage', handler);
         return () => window.removeEventListener('storage', handler);
-    }, []);
+    }, [authProfile]);
 
     // Audio pre-loading
     const correctAudio = React.useRef(null);
@@ -340,20 +363,16 @@ const StudyPage = () => {
         }
     };
 
-    // Load animation preference and profile from localStorage/DB
     useEffect(() => {
-        const savedAnimation = localStorage.getItem('studyPageAnimation');
-        if (savedAnimation) {
-            setSelectedAnimation(savedAnimation);
+        if (authProfile?.study_page_animation) {
+            setSelectedAnimation(authProfile.study_page_animation);
+        } else {
+            const savedAnimation = localStorage.getItem('studyPageAnimation');
+            if (savedAnimation) {
+                setSelectedAnimation(savedAnimation);
+            }
         }
-
-        const fetchProfile = async () => {
-            if (!user?.id) return;
-            const { data } = await supabase.from('profiles').select('gender').eq('id', user.id).single();
-            setProfile(data);
-        };
-        fetchProfile();
-    }, [user?.id]);
+    }, [authProfile?.study_page_animation]);
 
     useEffect(() => {
         if (!dotLottie || selectedAnimation === 'none') return;
@@ -552,7 +571,7 @@ const StudyPage = () => {
                 setShake(true);
                 setTimeout(() => setShake(false), 500);
 
-                const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
+                const soundEnabled = soundEnabledRef.current;
                 if (wrongAudio.current && soundEnabled) {
                     wrongAudio.current.currentTime = 0;
                     wrongAudio.current.play().catch(e => console.error(e));
@@ -601,7 +620,7 @@ const StudyPage = () => {
         setIsCorrect(allCorrect);
         setIsAnswered(true);
 
-        const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
+        const soundEnabled = soundEnabledRef.current;
         if (allCorrect) {
             if (correctAudio.current && soundEnabled) {
                 correctAudio.current.currentTime = 0;
@@ -815,7 +834,7 @@ const StudyPage = () => {
             }
 
             // Play completion sound
-            const soundEnabled = localStorage.getItem('soundEffectsEnabled') !== 'false';
+            const soundEnabled = soundEnabledRef.current;
             if (completeAudio.current && soundEnabled) {
                 try {
                     completeAudio.current.currentTime = 0;

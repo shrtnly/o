@@ -11,23 +11,10 @@
 
 .progressBar {
     height: 100%;
-    background: linear-gradient(90deg,
-            #f1c40f 0%,
-            #ffd700 40%,
-            #ffec6e 60%,
-            #f1c40f 100%);
-    background-size: 200% 100%;
-    box-shadow: 0 0 4px rgba(241, 196, 15, 0.4);
+    background: linear-gradient(90deg, 
+        var(--color-primary) 0%, 
+        var(--color-primary-dark) 100%);
+    box-shadow: 0 0 10px var(--color-primary-light);
     transition: width 0.3s ease-out, opacity 0.4s ease-in-out;
-    animation: shimmer 1.2s linear infinite;
 }
-
-@keyframes shimmer {
-    0% {
-        background-position: 200% 0;
-    }
-
-    100% {
-        background-position: -200% 0;
-    }
-}
+

@@ -321,8 +321,15 @@
     }
     
     .tabsContainer {
-        margin-bottom: 24px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
     }
+
+    .stickyHeader {
+        margin-bottom: 16px;
+        padding-top: 20px;
+    }
+
     
     .tab {
         padding: 8px 16px;

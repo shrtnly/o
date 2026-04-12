@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
     Bell, 
@@ -17,6 +17,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
 import InlineLoader from '../../components/ui/InlineLoader';
 import Skeleton from '../../components/ui/Skeleton';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './NotificationPage.module.css';
 
 const NotificationPage = () => {
@@ -29,17 +30,31 @@ const NotificationPage = () => {
         markAllAsRead, 
         deleteNotification,
         refresh,
-        isLoading
+        loadMore,
+        isLoading,
+        hasMore,
+        isLoadingMore
     } = useNotifications();
     const scrollRef = useRef(null);
+    const observer = useRef();
+
+    const lastNotifRef = useCallback(node => {
+        if (isLoading || isLoadingMore) return;
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                loadMore();
+            }
+        }, { threshold: 0.1 });
+        if (node) observer.current.observe(node);
+    }, [isLoading, isLoadingMore, hasMore, loadMore]);
 
     useEffect(() => {
         if (!user) {
             navigate('/auth');
             return;
         }
-        refresh();
-    }, [user, navigate, refresh]);
+    }, [user, navigate]);
 
     const formatNotifDate = (dateStr) => {
         const d = new Date(dateStr);
@@ -61,14 +76,19 @@ const NotificationPage = () => {
     };
 
     return (
-        <div className={styles.notifPage}>
+        <motion.div 
+            className={styles.notifPage}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+        >
             <div className={styles.container}>
                 <header className={styles.header}>
                     <div className={styles.headerTitle}>
                         <Bell size={24} className={styles.icon} />
                         <h1>{t('notifications')}</h1>
                     </div>
-                    {notifications.length > 0 && (
+                    { !isLoading && notifications.length > 0 && (
                         <button className={styles.markAllBtn} onClick={markAllAsRead}>
                             <CheckCheck size={16} />
                             <span>{t('notif_mark_all')}</span>
@@ -77,144 +97,183 @@ const NotificationPage = () => {
                 </header>
 
                 <div ref={scrollRef} className={styles.body}>
-                    {isLoading ? (
-                        <div className={styles.skeletonList}>
-                            {[...Array(8)].map((_, i) => (
-                                <div key={i} className={styles.notifRow} style={{ pointerEvents: 'none' }}>
-                                    <div className={styles.notifUnreadDot} />
-                                    <div className={styles.notifTypeIcon}>
-                                        <Skeleton width="34px" height="34px" borderRadius="50%" />
-                                    </div>
-                                    <div className={styles.notifRowText} style={{ flex: 1, gap: '8px' }}>
-                                        <Skeleton width="40%" height="14px" />
-                                        <Skeleton width="75%" height="11px" />
-                                        <Skeleton width="20%" height="9px" />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : notifications.length === 0 ? (
-                        <div className={styles.emptyState}>
-                            <div className={styles.emptyIcon}>
-                                <Bell size={48} />
-                            </div>
-                            <h3>{t('empty_notif')}</h3>
-                            <p>{t('no_notifications')}</p>
-                        </div>
-                    ) : (() => {
-                        const seenIds = new Set();
-                        const groups = notifications.reduce((acc, notif) => {
-                            if (seenIds.has(notif.id)) return acc;
-                            seenIds.add(notif.id);
-                            const d = new Date(notif.created_at);
-                            const today = new Date();
-                            const yesterday = new Date(today);
-                            yesterday.setDate(yesterday.getDate() - 1);
-                            
-                            let key = t('earlier');
-                            if (d.toDateString() === today.toDateString()) key = t('today');
-                            else if (d.toDateString() === yesterday.toDateString()) key = t('yesterday');
-                            
-                            if (!acc[key]) acc[key] = [];
-                            acc[key].push(notif);
-                            return acc;
-                        }, {});
-
-                        return Object.entries(groups).map(([groupName, items]) => (
-                            <div key={groupName} className={styles.notifGroup}>
-                                <h5 className={styles.groupHeading}>{groupName}</h5>
-                                <div className={styles.groupItems}>
-                                    {items.map(notif => (
-                                        <div
-                                            key={notif.id}
-                                            className={`${styles.notifRow} ${!notif.is_read ? styles.notifRowUnread : ''}`}
-                                            onClick={() => !notif.is_read && markAsRead(notif.id)}
-                                        >
-                                            {/* Unread dot */}
-                                            <div className={styles.notifUnreadDot}>
-                                                {!notif.is_read && <div className={styles.unreadDot} />}
-                                            </div>
-
-                                            {/* Icon */}
-                                            <div className={styles.notifTypeIcon} style={{
-                                                background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
-                                                    notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
-                                                        notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
-                                                            notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
-                                                                'rgba(52,152,219,0.08)'
-                                            }}>
-                                                {notif.actor?.avatar_url ? (
-                                                    <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
-                                                ) : (
-                                                    <>
-                                                        {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
-                                                        {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
-                                                        {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
-                                                        {(notif.type === 'unlock' || notif.type === 'achievement') && <Award size={15} color="#9B59B6" />}
-                                                        {!['reward', 'streak', 'course', 'unlock', 'achievement'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
-                                                    </>
-                                                )}
-                                            </div>
-
-                                            {/* Text */}
-                                            <div className={styles.notifRowText}>
-                                                <span className={styles.nTitle}>
-                                                    {notif.type === 'connection' && notif.data?.status === 'pending'
-                                                        ? 'নতুন কানেকশন অনুরোধ!'
-                                                        : notif.title}
-                                                </span>
-                                                <span className={styles.nMsg}>
-                                                    {notif.type === 'connection' && notif.data?.status === 'pending'
-                                                        ? `${notif.actor?.full_name || 'কেউ একজন'} আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।`
-                                                        : notif.message}
-                                                </span>
-
-                                                {/* Actions */}
-                                                {notif.type === 'connection' && notif.data?.status === 'accepted' && (
-                                                    <div className={styles.respondedStatus}>
-                                                        <Check size={12} strokeWidth={3} />
-                                                        <span>সংযুক্ত হয়েছেন</span>
-                                                    </div>
-                                                )}
-                                                {notif.type === 'reward' && (
-                                                    <button className={styles.actionLink} onClick={() => navigate('/shop')}>
-                                                        শপ দেখুন <ChevronRight size={11} />
-                                                    </button>
-                                                )}
-
-                                                {notif.type === 'connection' && notif.data?.status === 'pending' && (
-                                                    <button
-                                                        className={styles.actionLink}
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            navigate('/connections?sub=received');
-                                                            if (!notif.is_read) markAsRead(notif.id);
-                                                        }}
-                                                    >
-                                                        দেখুন <ChevronRight size={11} />
-                                                    </button>
-                                                )}
-
-                                                <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
-                                            </div>
-
-                                            {/* Delete */}
-                                            <button
-                                                type="button"
-                                                className={styles.deleteNotif}
-                                                onClick={e => { e.preventDefault(); e.stopPropagation(); deleteNotification(notif.id); }}
-                                            >
-                                                <X size={13} />
-                                            </button>
+                    <AnimatePresence>
+                        {isLoading ? (
+                            <motion.div 
+                                key="skeleton"
+                                initial={false}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className={styles.skeletonList}
+                            >
+                                {[...Array(8)].map((_, i) => (
+                                    <div key={i} className={styles.notifRow} style={{ pointerEvents: 'none' }}>
+                                        <div className={styles.notifUnreadDot} />
+                                        <div className={styles.notifTypeIcon}>
+                                            <Skeleton width="34px" height="34px" borderRadius="50%" />
                                         </div>
-                                    ))}
+                                        <div className={styles.notifRowText} style={{ flex: 1, gap: '8px' }}>
+                                            <Skeleton width="40%" height="14px" />
+                                            <Skeleton width="75%" height="11px" />
+                                            <Skeleton width="20%" height="9px" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </motion.div>
+                        ) : notifications.length === 0 ? (
+                            <motion.div 
+                                key="empty"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.2 }}
+                                className={styles.emptyState}
+                            >
+                                <div className={styles.emptyIcon}>
+                                    <Bell size={48} />
                                 </div>
-                            </div>
-                        ));
-                    })()}
+                                <h3>{t('empty_notif')}</h3>
+                                <p>{t('no_notifications')}</p>
+                            </motion.div>
+                        ) : (
+                            <motion.div
+                                key="list"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {(() => {
+                                    const seenIds = new Set();
+                                    const groups = notifications.reduce((acc, notif) => {
+                                        if (seenIds.has(notif.id)) return acc;
+                                        seenIds.add(notif.id);
+                                        const d = new Date(notif.created_at);
+                                        const today = new Date();
+                                        const yesterday = new Date(today);
+                                        yesterday.setDate(yesterday.getDate() - 1);
+                                        
+                                        let key = t('earlier');
+                                        if (d.toDateString() === today.toDateString()) key = t('today');
+                                        else if (d.toDateString() === yesterday.toDateString()) key = t('yesterday');
+                                        
+                                        if (!acc[key]) acc[key] = [];
+                                        acc[key].push(notif);
+                                        return acc;
+                                    }, {});
+
+                                    return Object.entries(groups).map(([groupName, items]) => (
+                                        <div key={groupName} className={styles.notifGroup}>
+                                            <h5 className={styles.groupHeading}>{groupName}</h5>
+                                            <div className={styles.groupItems}>
+                                                {items.map((notif, idx) => {
+                                                    const isLastOverall = groupName === Object.keys(groups)[Object.keys(groups).length - 1] && idx === items.length - 1;
+                                                    return (
+                                                        <div
+                                                            key={notif.id}
+                                                            ref={isLastOverall ? lastNotifRef : null}
+                                                            className={`${styles.notifRow} ${!notif.is_read ? styles.notifRowUnread : ''}`}
+                                                            onClick={() => !notif.is_read && markAsRead(notif.id)}
+                                                        >
+                                                            {/* Unread dot */}
+                                                            <div className={styles.notifUnreadDot}>
+                                                                {!notif.is_read && <div className={styles.unreadDot} />}
+                                                            </div>
+
+                                                            {/* Icon */}
+                                                            <div className={styles.notifTypeIcon} style={{
+                                                                background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
+                                                                    notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
+                                                                        notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
+                                                                            notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
+                                                                                'rgba(52,152,219,0.08)'
+                                                            }}>
+                                                                {notif.actor?.avatar_url ? (
+                                                                    <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
+                                                                ) : (
+                                                                    <>
+                                                                        {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
+                                                                        {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
+                                                                        {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
+                                                                        {(notif.type === 'unlock' || notif.type === 'achievement') && <Award size={15} color="#9B59B6" />}
+                                                                        {!['reward', 'streak', 'course', 'unlock', 'achievement'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
+                                                                    </>
+                                                                )}
+                                                            </div>
+
+                                                        {/* Text */}
+                                                        <div className={styles.notifRowText}>
+                                                            <span className={styles.nTitle}>
+                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
+                                                                    ? 'নতুন কানেকশন অনুরোধ!'
+                                                                    : notif.title}
+                                                            </span>
+                                                            <span className={styles.nMsg}>
+                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
+                                                                    ? `${notif.actor?.full_name || 'কেউ একজন'} আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।`
+                                                                    : notif.message}
+                                                            </span>
+
+                                                            {/* Actions */}
+                                                            {notif.type === 'connection' && notif.data?.status === 'accepted' && (
+                                                                <div className={styles.respondedStatus}>
+                                                                    <Check size={12} strokeWidth={3} />
+                                                                    <span>সংযুক্ত হয়েছেন</span>
+                                                                </div>
+                                                            )}
+                                                            {notif.type === 'reward' && (
+                                                                <button className={styles.actionLink} onClick={() => navigate('/shop')}>
+                                                                    শপ দেখুন <ChevronRight size={11} />
+                                                                </button>
+                                                            )}
+
+                                                            {notif.type === 'connection' && notif.data?.status === 'pending' && (
+                                                                <button
+                                                                    className={styles.actionLink}
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        navigate('/connections?sub=received');
+                                                                        if (!notif.is_read) markAsRead(notif.id);
+                                                                    }}
+                                                                >
+                                                                    দেখুন <ChevronRight size={11} />
+                                                                </button>
+                                                            )}
+
+                                                            <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
+                                                        </div>
+
+                                                        {/* Delete */}
+                                                        <button
+                                                            type="button"
+                                                            className={styles.deleteNotif}
+                                                            onClick={e => { e.preventDefault(); e.stopPropagation(); deleteNotification(notif.id); }}
+                                                        >
+                                                            <X size={13} />
+                                                        </button>
+                                                    </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    ));
+                                })()}
+                                {isLoadingMore && (
+                                    <div className={styles.loadMoreRow}>
+                                        <InlineLoader size={20} />
+                                    </div>
+                                )}
+                                {!hasMore && notifications.length > 0 && (
+                                    <div className={styles.noMoreNotifs}>
+                                        {t('no_more_notifications') || 'সব নোটিফিকেশন লোড হয়েছে'}
+                                    </div>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
+
             </div>
-        </div>
+        </motion.div>
     );
 };
 

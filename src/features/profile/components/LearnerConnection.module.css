@@ -116,13 +116,8 @@
 
 .subTabContent {
     margin-top: 0.5rem;
-    animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
 
 .searchSection {
     position: relative;

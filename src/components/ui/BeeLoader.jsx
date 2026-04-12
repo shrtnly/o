@@ -1,4 +1,4 @@
-1import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import styles from './BeeLoader.module.css';
 

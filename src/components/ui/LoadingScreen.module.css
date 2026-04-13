@@ -2,66 +2,10 @@
     position: fixed;
     inset: 0;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: var(--color-bg);
     z-index: 9999;
-    user-select: none;
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2.5rem;
-}
-
-.logoCont {
-    position: relative;
-    width: 64px;
-    height: 64px;
-}
-
-.hexWrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.hexIcon {
-    color: var(--color-primary);
-    z-index: 2;
-}
-
-.pulse {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    border: 2px solid var(--color-primary);
-    z-index: 1;
-}
-
-.content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 280px;
-}
-
-.title {
-    font-size: 1.75rem;
-    font-weight: 900;
-    color: var(--color-text);
-    margin: 0;
-    letter-spacing: -1px;
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-text-muted) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 

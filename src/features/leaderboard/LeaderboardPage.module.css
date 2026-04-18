@@ -248,7 +248,7 @@
 }
 
 /* ============================================
-   UNLOCKED STATE — TIER TABS (Minimal & Professional)
+   UNLOCKED STATE — TIER TABS
    ============================================ */
 
 .tabs {
@@ -292,20 +292,14 @@
 }
 
 .tab:hover:not(.lockedTab) {
-    background: transparent;
     border-color: var(--color-primary-light);
     transform: translateY(-2px);
 }
 
 .activeTab {
-    background: transparent;
     border: 1.5px solid var(--color-primary);
     width: 72px;
     height: 72px;
-}
-
-.activeTab .tabShield {
-    filter: none;
 }
 
 /* Subtle Active Indicator Dot */
@@ -371,18 +365,15 @@
 }
 
 /* ============================================
-   LEADERBOARD TABLE CARD
+   LEADERBOARD TABLE
    ============================================ */
 
 .leaderboardCard {
     background: transparent;
     border: none;
-    border-radius: 0;
     overflow: hidden;
     margin-bottom: 32px;
 }
-
-
 
 .tableHeader {
     display: grid;
@@ -397,18 +388,6 @@
     letter-spacing: 1.5px;
 }
 
-.headerCol {
-    display: flex;
-    align-items: center;
-}
-
-.headerCol:nth-child(1) { justify-content: center; }
-.headerCol:nth-child(2) { justify-content: flex-start; }
-.headerCol:nth-child(3) { justify-content: center; }
-.headerCol:nth-child(4) { justify-content: flex-end; }
-
-
-
 /* ---------- Rows ---------- */
 .row {
     display: grid;
@@ -420,13 +399,8 @@
     background: var(--color-bg);
 }
 
-.row:last-child {
-    border-bottom: none;
-}
-
-.row:hover {
-    background: var(--color-bg-hover);
-}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--color-bg-hover); }
 
 /* ---------- Current user row ---------- */
 .currentUserRow {
@@ -436,15 +410,9 @@
     position: relative;
 }
 
-.currentUserRow .userName {
-    color: var(--color-primary);
-}
+.currentUserRow .userName,
+.currentUserRow .rankNumber { color: var(--color-primary); }
 
-.currentUserRow .rankNumber {
-    color: var(--color-primary);
-}
-
-/* Subtle left accent bar */
 .currentUserRow::before {
     content: '';
     position: absolute;
@@ -456,38 +424,18 @@
     border-radius: 0 3px 3px 0;
 }
 
-/* ---------- Rank column ---------- */
-.rankCol {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* ---------- Columns ---------- */
+.rankCol { display: flex; justify-content: center; align-items: center; }
+.rankNumber { font-size: 0.95rem; font-weight: 700; color: var(--color-text-muted); }
+.medalWrapper { display: flex; align-items: center; justify-content: center; }
 
-.rankNumber {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--color-text-muted);
-}
+.headerCol { display: flex; align-items: center; }
+.headerCol:nth-child(1) { justify-content: center; }
+.headerCol:nth-child(2) { justify-content: flex-start; }
+.headerCol:nth-child(3) { justify-content: center; }
+.headerCol:nth-child(4) { justify-content: flex-end; }
 
-.medalWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Gold / Silver / Bronze medals — subtle size scaling */
-.medalGold   { color: var(--color-primary); }
-.medalSilver { color: #9ca3af; }
-.medalBronze { color: #b87333; }
-
-/* ---------- User column ---------- */
-.userCol {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 0;
-}
-
+.userCol { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .avatarWrapper {
     width: 36px;
     height: 36px;
@@ -496,34 +444,10 @@
     background: var(--color-bg-deep);
     border: 1.5px solid var(--color-border);
     flex-shrink: 0;
-    position: relative;
 }
+.avatar { width: 100%; height: 100%; object-fit: cover; }
 
-.avatar {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.avatarPlaceholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    font-weight: 900;
-    color: var(--color-bg-deep);
-    background: linear-gradient(135deg, var(--color-primary) 0%, #e68a00 100%);
-}
-
-.userInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-}
-
+.userInfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .userName {
     font-size: 0.925rem;
     font-weight: 600;
@@ -532,29 +456,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.nameAndShare { display: flex; align-items: center; gap: 8px; min-width: 0; }
 
-.nameAndShare {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-}
-
-/* ---------- Progress column ---------- */
-.progressCol {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-}
-
-.progressCol img,
-.progressCol svg {
-    filter: none !important;
-    flex-shrink: 0;
-}
-
+.progressCol { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
 .progressBarWrapper {
     flex: 1;
     height: 4px;
@@ -562,7 +466,6 @@
     border-radius: 10px;
     overflow: hidden;
 }
-
 .progressBar {
     height: 100%;
     background: linear-gradient(90deg, var(--color-primary), #ff8200);
@@ -570,32 +473,8 @@
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ---------- XP column ---------- */
-.xpCol {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 8px;
-    position: relative;
-}
-
-.xpScoreWrapper {
-    display: flex;
-    align-items: center;
-}
-
-.pollenLabel {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--color-primary);
-}
-
-.mobileShield {
-    display: none;
-}
+.xpCol { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.pollenLabel { display: flex; align-items: center; gap: 5px; font-size: 0.95rem; font-weight: 700; color: var(--color-primary); }
 
 .shareIconBtn {
     background: var(--color-border-muted);
@@ -609,71 +488,38 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s ease;
-    padding: 0;
-    flex-shrink: 0;
 }
 
 .shareIconBtn:hover {
-    background: var(--color-primary-faint);
     border-color: var(--color-primary-light);
     color: var(--color-primary);
 }
 
-/* ---------- Empty state ---------- */
-.emptyState {
-    padding: 64px 40px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-.emptyStateIcon {
-    color: var(--color-text-muted);
-    opacity: 0.3;
-}
-
-.emptyState p {
-    color: var(--color-text-muted);
-    font-weight: 600;
-    font-size: 0.9rem;
-    max-width: 340px;
-    line-height: 1.6;
-}
-
-/* ============================================
-   FOOTER STATUS + PAGINATION
-   ============================================ */
-
+/* ---------- Footer Status ---------- */
 .footerStatus {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 18px 24px;
-    border-top: none;
-    background: transparent;
-    border-radius: 0 0 20px 20px;
     margin-top: -32px;
 }
 
-.footerRank {
+.userRankStatus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     font-size: 0.875rem;
     font-weight: 700;
     color: var(--color-text-muted);
+    background: var(--color-bg-alt);
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
 }
 
-.footerRank strong {
-    color: var(--color-primary);
-    font-weight: 900;
-}
+.userRankStatus strong { color: var(--color-primary); font-weight: 900; }
 
-.paginationControls {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
+.paginationControls { display: flex; align-items: center; gap: 10px; }
 .pageBtn {
     background: var(--color-bg-deep);
     border: 1px solid var(--color-border);
@@ -686,128 +532,30 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.15s ease;
-    padding: 0;
 }
 
-.pageBtn:hover:not(:disabled) {
-    border-color: var(--color-primary-light);
-    color: var(--color-primary);
-    background: var(--color-primary-faint);
-}
+.pageBtn:hover:not(:disabled) { border-color: var(--color-primary-light); color: var(--color-primary); }
+.pageBtn:disabled { opacity: 0.3; cursor: not-allowed; }
+.pageInfo { font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); min-width: 80px; text-align: center; }
 
-.pageBtn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-}
+/* ---------- Empty State ---------- */
+.emptyState { padding: 64px 40px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.emptyStateIcon { color: var(--color-text-muted); opacity: 0.3; }
+.emptyState p { color: var(--color-text-muted); font-weight: 600; font-size: 0.9rem; max-width: 340px; line-height: 1.6; }
 
-.pageInfo {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--color-text-muted);
-    min-width: 80px;
-    text-align: center;
-}
-
-/* ============================================
-   SKELETON LOADER
-   ============================================ */
-
-.skeleton {
-    background: linear-gradient(90deg, var(--color-bg-alt) 25%, var(--color-bg-deep) 50%, var(--color-bg-alt) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.6s infinite;
-    border-radius: 4px;
-}
-
-@keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-.skeletonRank   { width: 22px; height: 22px; border-radius: 50%; }
-.skeletonAvatar { width: 36px; height: 36px; border-radius: 50%; }
-.skeletonName   { width: 110px; height: 14px; border-radius: 6px; }
-.skeletonShield { width: 22px; height: 22px; border-radius: 4px; }
-.skeletonBar    { flex: 1; height: 4px; border-radius: 10px; }
-.skeletonXP     { width: 52px; height: 16px; border-radius: 6px; }
-
-/* ============================================
-   BADGE HELPERS
-   ============================================ */
-
-.avatarFlameBadge {
-    position: absolute;
-    bottom: -4px;
-    right: -4px;
-    z-index: 10;
-    pointer-events: none;
-}
-
-.nameBadge {
-    margin-left: 6px;
-    margin-right: 0;
-    flex-shrink: 0;
-}
-
-/* ============================================
-   RESPONSIVE
-   ============================================ */
-
+/* ---------- Mobile ---------- */
 @media (max-width: 768px) {
-    .mainContent {
-        padding: 24px 16px 80px;
-    }
-
-    /* Collapse progress col on small screens */
-    .progressCol,
-    .headerCol:nth-child(3) {
-        display: none;
-    }
-
-    .row,
-    .tableHeader {
-        grid-template-columns: 40px 1fr 85px;
-        padding: 12px 16px;
-    }
-
+    .mainContent { padding: 24px 16px 80px; }
+    .progressCol, .headerCol:nth-child(3) { display: none; }
+    .row, .tableHeader { grid-template-columns: 40px 1fr 85px; padding: 12px 16px; }
     .headerCol:nth-child(4) { justify-content: flex-end; }
-
-    .lockBanner {
-        flex-direction: column;
-        text-align: center;
-        padding: 24px 20px;
-    }
-
-    .introGrid {
-        grid-template-columns: 1fr;
-    }
-
-    .footerStatus {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
-    }
-
-    .tabs {
-        gap: 4px;
-        padding: 16px 0 20px;
-    }
-
-    .mobileShield {
-        display: flex;
-        align-items: center;
-        margin-right: 2px;
-    }
+    .lockBanner { flex-direction: column; text-align: center; padding: 24px 20px; }
+    .introGrid { grid-template-columns: 1fr; }
+    .footerStatus { flex-direction: column; gap: 12px; text-align: center; }
+    .tabs { gap: 4px; padding: 16px 0 20px; }
+    .mobileShield { display: flex; align-items: center; margin-right: 2px; }
 }
 
-/* Light mode specific refinements */
-:global(.light) .row:hover {
-    background: var(--color-bg-deep);
-}
-
-:global(.light) .pageBtn {
-    background: var(--color-bg);
-}
-
-
-
+/* Light Mode */
+:global(.light) .row:hover { background: var(--color-bg-deep); }
+:global(.light) .pageBtn { background: var(--color-bg); }

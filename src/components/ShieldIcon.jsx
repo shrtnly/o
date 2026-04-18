@@ -10,8 +10,8 @@ const getShieldImage = (level) => {
     const images = {
         SILVER: silverShield,
         GOLD: goldShield,
-        PLATINUM: diamondShield, // Bee Master
-        DIAMOND: platinumShield   // Bee Legendary
+        PLATINUM: platinumShield, // Bee Master
+        DIAMOND: diamondShield   // Bee Legendary
     };
     return images[level] || null;
 };

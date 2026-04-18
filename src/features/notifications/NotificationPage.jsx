@@ -194,7 +194,13 @@ const NotificationPage = () => {
                                                                         {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
                                                                         {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
                                                                         {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
-                                                                        {(notif.type === 'unlock' || notif.type === 'achievement') && <Award size={15} color="#9B59B6" />}
+                                                                        {notif.type === 'unlock' && (
+                                                                            notif.data?.unlock_type === 'shield_gold' ? <Trophy size={15} color="#F1C40F" /> :
+                                                                            notif.data?.unlock_type === 'shield_platinum' ? <Award size={15} color="#9B59B6" /> :
+                                                                            notif.data?.unlock_type === 'shield_diamond' ? <Award size={15} color="#3498DB" /> :
+                                                                            <Award size={15} color="#9B59B6" />
+                                                                        )}
+                                                                        {notif.type === 'achievement' && <Award size={15} color="#9B59B6" />}
                                                                         {!['reward', 'streak', 'course', 'unlock', 'achievement'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
                                                                     </>
                                                                 )}

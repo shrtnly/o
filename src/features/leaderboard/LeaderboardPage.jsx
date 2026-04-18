@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
     Trophy, Medal, ChevronLeft, ChevronRight,
-    Lock, Zap, TrendingUp, Share2,
+    Lock, Zap, TrendingUp, Share2
 } from 'lucide-react';
-import InlineLoader from '../../components/ui/InlineLoader';
 import Skeleton from '../../components/ui/Skeleton';
 import { useNavigate } from 'react-router-dom';
 import { leaderboardService } from '../../services/leaderboardService';
@@ -16,10 +15,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
 const TIERS = [
-    { id: 'SILVER',   name: 'Bee Kid',      nameBn: 'Bee Kid',      color: '#CD7F32', minXP: SHIELD_LEVELS.SILVER.minXP   },
-    { id: 'GOLD',     name: 'Bee Warrior',  nameBn: 'Bee Warrior',  color: '#C0C0C0', minXP: SHIELD_LEVELS.GOLD.minXP     },
-    { id: 'PLATINUM', name: 'Bee Master',   nameBn: 'Bee Master',   color: '#FFD700', minXP: SHIELD_LEVELS.PLATINUM.minXP },
-    { id: 'DIAMOND',  name: 'Bee Legendary',nameBn: 'Bee Legendary',color: '#B9F2FF', minXP: SHIELD_LEVELS.DIAMOND.minXP  },
+    { id: 'SILVER',   name: 'Bee Kid',      color: '#8B7355', minXP: SHIELD_LEVELS.SILVER.minXP   },
+    { id: 'GOLD',     name: 'Bee Warrior',  color: '#FFD700', minXP: SHIELD_LEVELS.GOLD.minXP     },
+    { id: 'PLATINUM', name: 'Bee Master',   color: '#5B7C99', minXP: SHIELD_LEVELS.PLATINUM.minXP },
+    { id: 'DIAMOND',  name: 'Bee Legendary',color: '#B9F2FF', minXP: SHIELD_LEVELS.DIAMOND.minXP  },
 ];
 
 const ITEMS_PER_PAGE = 20;
@@ -28,7 +27,7 @@ const UNLOCK_XP = 100;
 const LeaderboardPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { t, language } = useLanguage();
+    const { t } = useLanguage();
 
     const [activeTier,      setActiveTier]      = useState('SILVER');
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -67,13 +66,16 @@ const LeaderboardPage = () => {
                 return;
             }
             setLoading(true);
-            const { data, total } = await leaderboardService.getLeaderboardByTier(
+
+            const result = await leaderboardService.getLeaderboardByTier(
                 activeTier,
                 ITEMS_PER_PAGE,
-                (currentPage - 1) * ITEMS_PER_PAGE,
+                (currentPage - 1) * ITEMS_PER_PAGE
             );
-            setLeaderboardData(data);
-            setTotalUsers(total);
+
+            setLeaderboardData(result.data);
+            setTotalUsers(result.total);
+
             if (user) {
                 const rank = await leaderboardService.getUserRank(user.id, activeTier);
                 setUserRank(rank);
@@ -414,32 +416,36 @@ const LeaderboardPage = () => {
                                 </div>
 
                                 {/* Footer: rank + pagination */}
-                                {userRank && (
-                                    <div className={styles.footerStatus}>
+                                <div className={styles.footerStatus}>
+                                    {!loading && userRank && leaderboardData.length > 0 && (
+                                        <div className={styles.userRankStatus}>
+                                            <TrendingUp size={16} />
+                                            <span>{t('your_rank')}: <strong>#{userRank}</strong></span>
+                                        </div>
+                                    )}
 
-                                        {!loading && totalUsers > ITEMS_PER_PAGE && (
-                                            <div className={styles.paginationControls}>
-                                                <button
-                                                    className={styles.pageBtn}
-                                                    disabled={currentPage === 1}
-                                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                                                >
-                                                    <ChevronLeft size={18} />
-                                                </button>
-                                                <span className={styles.pageInfo}>
-                                                    {currentPage} / {Math.ceil(totalUsers / ITEMS_PER_PAGE) || 1}
-                                                </span>
-                                                <button
-                                                    className={styles.pageBtn}
-                                                    disabled={currentPage >= Math.ceil(totalUsers / ITEMS_PER_PAGE)}
-                                                    onClick={() => setCurrentPage(p => p + 1)}
-                                                >
-                                                    <ChevronRight size={18} />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                    {!loading && totalUsers > ITEMS_PER_PAGE && (
+                                        <div className={styles.paginationControls}>
+                                            <button
+                                                className={styles.pageBtn}
+                                                disabled={currentPage === 1}
+                                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                            >
+                                                <ChevronLeft size={18} />
+                                            </button>
+                                            <span className={styles.pageInfo}>
+                                                {currentPage} / {Math.ceil(totalUsers / ITEMS_PER_PAGE) || 1}
+                                            </span>
+                                            <button
+                                                className={styles.pageBtn}
+                                                disabled={currentPage >= Math.ceil(totalUsers / ITEMS_PER_PAGE)}
+                                                onClick={() => setCurrentPage(p => p + 1)}
+                                            >
+                                                <ChevronRight size={18} />
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </>
                         )}
                     </>

@@ -279,7 +279,13 @@ export const NotificationProvider = ({ children }) => {
                                                      newNotif.data?.type === 'module_complete' ? '🌟' : '📚'}
                                                 </span>
                                             )}
-                                            {newNotif.type === 'unlock' && <span style={{ fontSize: '18px' }}>🏆</span>}
+                                            {newNotif.type === 'unlock' && (
+                                                <span style={{ fontSize: '18px' }}>
+                                                    {newNotif.data?.unlock_type === 'shield_gold' ? '🏆' :
+                                                     newNotif.data?.unlock_type === 'shield_platinum' ? '💎' :
+                                                     newNotif.data?.unlock_type === 'shield_diamond' ? '💠' : '🏆'}
+                                                </span>
+                                            )}
                                             {(!['reward', 'streak', 'course', 'unlock'].includes(newNotif.type)) && <span style={{ fontSize: '18px' }}>🔔</span>}
                                         </div>
                                     )}

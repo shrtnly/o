@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import { toast } from 'sonner';
-import { Users, Check, X, User } from 'lucide-react';
+import { Users, Check, X, User, Swords } from 'lucide-react';
 import Sidebar from '../../features/learning/components/Sidebar';
 import BottomNav from '../../features/learning/components/BottomNav';
 import { rewardService } from '../../services/rewardService';
@@ -168,8 +168,145 @@ const MainLayout = () => {
             )
             .subscribe();
 
+        const inviteChannel = supabase
+            .channel(`global-battle-invites-${user.id}`)
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'battle_invitations' },
+                async (payload) => {
+                    const inv = payload.new;
+                    if (inv.sender_id === user.id) return;
+
+                    // If already on battle war page, we might want to skip global toast 
+                    // but usually it's fine to show it.
+                    
+                    const { data: sender } = await supabase
+                        .from('profiles')
+                        .select('full_name, display_name, avatar_url')
+                        .eq('id', inv.sender_id)
+                        .single();
+
+                    const senderName = sender?.full_name || sender?.display_name || '?';
+                    
+                    toast.custom((t) => (
+                        <div style={{
+                            background: 'rgba(12, 12, 12, 0.98)',
+                            padding: '10px 14px',
+                            borderRadius: '16px',
+                            border: '1px solid rgba(245, 158, 11, 0.4)',
+                            backdropFilter: 'blur(16px)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            width: '320px',
+                            minWidth: '280px',
+                            color: '#fff',
+                            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5)',
+                            fontFamily: "'Hind Siliguri', sans-serif"
+                        }}>
+                            {/* Avatar/Icon Area */}
+                            <div style={{
+                                width: '38px',
+                                height: '38px',
+                                borderRadius: '50%',
+                                overflow: 'hidden',
+                                background: 'rgba(245, 158, 11, 0.1)',
+                                flexShrink: 0,
+                                border: '1px solid rgba(245, 158, 11, 0.2)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                {sender?.avatar_url ? (
+                                    <img src={sender.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                ) : (
+                                    <Swords size={18} color="#f59e0b" />
+                                )}
+                            </div>
+
+                            {/* Content Area */}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ 
+                                    fontSize: '9px', 
+                                    color: '#f59e0b', 
+                                    fontWeight: '800', 
+                                    textTransform: 'uppercase', 
+                                    letterSpacing: '1px', 
+                                    marginBottom: '2px' 
+                                }}>
+                                    ব্যাটল চ্যালেঞ্জ
+                                </div>
+                                <div style={{ 
+                                    fontSize: '0.82rem', 
+                                    fontWeight: '800', 
+                                    color: '#fff', 
+                                    lineHeight: '1.2',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }}>
+                                    {senderName}
+                                </div>
+                                <div style={{ 
+                                    fontSize: '11px', 
+                                    color: 'rgba(255,255,255,0.5)',
+                                    marginTop: '1px'
+                                }}>
+                                    {inv.course_title}
+                                </div>
+                            </div>
+
+                            {/* Actions Area */}
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                                <button 
+                                    onClick={() => {
+                                        toast.dismiss(t);
+                                        navigate(`/connections?sub=battle&joinCode=${inv.room_code}`);
+                                    }}
+                                    style={{
+                                        background: '#f59e0b',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        width: '32px',
+                                        height: '32px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        color: '#000'
+                                    }}
+                                    title="Accept"
+                                >
+                                    <Check size={18} strokeWidth={3} />
+                                </button>
+                                <button 
+                                    onClick={() => toast.dismiss(t)}
+                                    style={{
+                                        background: 'rgba(255, 255, 255, 0.05)',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        width: '32px',
+                                        height: '32px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        color: 'rgba(255, 255, 255, 0.4)'
+                                    }}
+                                    title="Decline"
+                                >
+                                    <X size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    ), { duration: 15000, position: 'top-center' });
+                }
+            )
+            .subscribe();
+
         return () => {
             supabase.removeChannel(messageChannel);
+            supabase.removeChannel(inviteChannel);
         };
     }, [user?.id, isInboxOpen, activeChatId]);
 

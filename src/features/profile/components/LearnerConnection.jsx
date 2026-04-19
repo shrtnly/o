@@ -5,7 +5,7 @@ import {
     Users, Search, UserPlus, UserRoundSearch, UserMinus, 
     Check, CheckCheck, X, ChevronRight, ChevronLeft, Zap, 
     MapPin, User, Send, SendHorizontal, MessageSquare, ImagePlus,
-    ChevronDown, Trash2, Ban, Image as ImageIcon
+    ChevronDown, Trash2, Ban, Image as ImageIcon, Swords
 } from 'lucide-react';
 import { connectionService } from '../../../services/connectionService';
 import { messageService } from '../../../services/messageService';
@@ -16,8 +16,9 @@ import { useNotifications } from '../../../context/NotificationContext';
 import styles from './LearnerConnection.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Skeleton from '../../../components/ui/Skeleton';
+import BattleWar from '../../connections/components/BattleWar';
 
-const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
+const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
     const { t, language } = useLanguage();
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,8 +26,8 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
         const params = new URLSearchParams(window.location.search);
         const subValue = params.get('sub');
         if (subValue === 'received' || subValue === 'sent') return 'my';
-        return subValue || 'my';
-    }); // suggest, my, sent, inbox
+        return subValue || 'battle';
+    }); // battle, suggest, my, sent, inbox
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -877,6 +878,22 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
             <div className={styles.container}>
             <div className={styles.subTabHeader}>
                 <button 
+                    className={`${styles.subTabBtn} ${subTab === 'battle' ? styles.subTabActive : ''}`}
+                    onClick={() => setSubTab('battle')}
+                >
+                    {subTab === 'battle' && (
+                        <motion.div 
+                            layoutId="activeTabPill"
+                            className={styles.activeBackground}
+                            transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                        />
+                    )}
+                    <span className={styles.btnContent}>
+                        <Swords size={18} />
+                        {subTab === 'battle' && <span>{t('subtab_battle')}</span>}
+                    </span>
+                </button>
+                <button 
                     className={`${styles.subTabBtn} ${subTab === 'my' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('my')}
                 >
@@ -958,7 +975,9 @@ const LearnerConnection = ({ user, userXp, onSelectLearner }) => {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.2, ease: "easeOut" }}
                         >
-                        {subTab === 'inbox' ? (
+                        {subTab === 'battle' ? (
+                            <BattleWar user={user} userProfile={userProfile} />
+                        ) : subTab === 'inbox' ? (
                             <div className={`${styles.inboxWrapper} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
                                 {/* Conversation Sidebar */}
                                 <div className={styles.conversationsSidebar}>

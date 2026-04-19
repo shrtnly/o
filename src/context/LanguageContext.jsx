@@ -165,9 +165,10 @@ const translations = {
         tab_activity: "নটিফিকেশন",
         tab_certificates: "সার্টিফিকেট",
         tab_connection: "সংযোগ",
-        subtab_my: "আমার কানেকশন",
+        subtab_my: "কানেকশন",
         subtab_suggest: "শিক্ষার্থী খুঁজুন",
         subtab_inbox: "ইনবক্স",
+        subtab_battle: "ব্যাটল ওয়ার",
         filter_all: "কানেকশন",
         filter_received: "প্রাপ্ত",
         filter_sent: "পাঠানো",
@@ -507,7 +508,31 @@ const translations = {
         loc_rangpur: "রংপুর",
         loc_mymensingh: "ময়মনসিংহ",
         loc_overseas: "দেশের বাইরে",
-        re_practice: "পুনরায় অনুশীলন"
+        re_practice: "পুনরায় অনুশীলন",
+
+        // Battle War
+        battle_create: "নতুন ব্যাটল তৈরি করুন",
+        battle_join: "রুমে যোগ দিন",
+        waiting_opponent: "প্রতিপক্ষের জন্য অপেক্ষা করা হচ্ছে...",
+        battle_mode: "ব্যাটল মোড",
+        battle_mode_active: "সক্রিয়",
+        battle_mode_inactive: "নিষ্ক্রিয়",
+        battle_waiting: "প্রতিপক্ষের জন্য অপেক্ষা করছি...",
+        battle_starting: "ব্যাটল শুরু হচ্ছে...",
+        battle_lost: "আপনি হেরেছেন",
+        select_course: "কোর্স নির্বাচন করুন",
+        select_module: "মডিউল নির্বাচন করুন",
+        start_battle: "ব্যাটল শুরু করুন",
+        back_to_lobby: "লবিতে ফিরে যান",
+        battle_won: "🎉 আপনি জিতেছেন!",
+        battle_lost: "পরাজিত",
+        battle_draw: "ড্র!",
+        battle_play_again: "আবার খেলুন",
+        battle_cancel: "বাতিল করুন",
+        battle_share_code: "এই কোডটি শেয়ার করুন:",
+        battle_room_code: "রুম কোড লিখুন...",
+        battle_desc: "রিয়েল-টাইম কুইজ প্রতিযোগিতায় আপনার দক্ষতা প্রমাণ করুন!",
+        battle_disconnected: "প্রতিপক্ষ ডিসকানেক্ট হয়েছেন"
     },
     en: {
         // Common
@@ -676,6 +701,7 @@ const translations = {
         subtab_my: "My Connections",
         subtab_suggest: "Explore",
         subtab_inbox: "Inbox",
+        subtab_battle: "Battle War",
         filter_all: "Connections",
         filter_received: "Received",
         filter_sent: "Sent",
@@ -1019,7 +1045,29 @@ const translations = {
         enter_promo_code: "Coupon code",
         apply: "Apply",
         remove: "Remove",
-        re_practice: "Re-practice"
+        re_practice: "Re-practice",
+
+        // Battle War
+        battle_create: "Create Battle",
+        battle_join: "Join Room",
+        waiting_opponent: "Waiting for opponent...",
+        battle_mode: "Battle Mode",
+        battle_mode_active: "Active",
+        battle_mode_inactive: "Inactive",
+        battle_starting: "Battle starting...",
+        battle_won: "🎉 You Won!",
+        battle_lost: "Defeated",
+        select_course: "Select Course",
+        select_module: "Select Module",
+        start_battle: "Start Battle",
+        back_to_lobby: "Back to Lobby",
+        battle_draw: "Draw!",
+        battle_play_again: "Play Again",
+        battle_cancel: "Cancel",
+        battle_share_code: "Share this code:",
+        battle_room_code: "Enter room code...",
+        battle_desc: "Prove your knowledge in a real-time quiz duel!",
+        battle_disconnected: "Opponent disconnected"
     }
 };
 

@@ -68,6 +68,7 @@ const ConnectionPage = () => {
                         <LearnerConnection 
                             user={user} 
                             userXp={profile?.xp || 0}
+                            userProfile={profile}
                             onSelectLearner={setSelectedLearner}
                         />
                     </div>

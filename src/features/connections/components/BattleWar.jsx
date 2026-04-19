@@ -382,8 +382,8 @@ const BattleWar = ({ user, userProfile }) => {
     // ── Bot simulation: answer after random delay ────────────
     const scheduleBotAnswer = useCallback((qs, idx) => {
         if (!isBotRef.current || !isBotGameActive.current) return;
-        // Bot answers between 2-8 seconds, with ~85% accuracy
-        const delay = 2000 + Math.random() * 6000;
+        // Bot answers between 3-8 seconds, with ~85% accuracy
+        const delay = 3000 + Math.random() * 5000;
         const isCorrect = Math.random() < 0.85;
         setTimeout(() => {
             if (!isBotRef.current || !isBotGameActive.current) return;
@@ -413,7 +413,7 @@ const BattleWar = ({ user, userProfile }) => {
             id: 'bot',
             full_name: botName,
             display_name: botName,
-            avatar_url: null,
+            avatar_url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${botName}`,
             xp: Math.floor(Math.random() * 500) + 200,
             league_id: Math.floor(Math.random() * 3) + 1,
             isBot: true

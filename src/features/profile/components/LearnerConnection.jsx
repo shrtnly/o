@@ -88,6 +88,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
     const [inboxSearchQuery, setInboxSearchQuery] = useState('');
     const [isConversationsLoading, setIsConversationsLoading] = useState(true);
     const [msgOptionsId, setMsgOptionsId] = useState(null);
+    const [battlePhase, setBattlePhase] = useState('lobby'); // lobby, searching, matchmaking, game, result
 
     // Derived filtered lists for the inbox search
     const filteredConversations = conversations.filter(conv => 
@@ -876,7 +877,8 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
     return (
         <Fragment>
             <div className={styles.container}>
-            <div className={styles.subTabHeader}>
+            {!(subTab === 'battle' && battlePhase !== 'lobby') && (
+                <div className={styles.subTabHeader}>
                 <button 
                     className={`${styles.subTabBtn} ${subTab === 'battle' ? styles.subTabActive : ''}`}
                     onClick={() => setSubTab('battle')}
@@ -945,6 +947,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                     </span>
                 </button>
             </div>
+            )}
 
             {/* Sub-Tab Content */}
             <div className={styles.subTabContent}>
@@ -976,7 +979,11 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                             transition={{ duration: 0.2, ease: "easeOut" }}
                         >
                         {subTab === 'battle' ? (
-                            <BattleWar user={user} userProfile={userProfile} />
+                            <BattleWar 
+                                user={user} 
+                                userProfile={userProfile} 
+                                onPhaseChange={setBattlePhase}
+                            />
                         ) : subTab === 'inbox' ? (
                             <div className={`${styles.inboxWrapper} ${isMobileChatOpen ? styles.mobileChatActive : ''}`}>
                                 {/* Conversation Sidebar */}

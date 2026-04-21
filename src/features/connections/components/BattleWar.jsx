@@ -5,8 +5,8 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Swords, Trophy, Crown, Zap, Clock, CheckCircle2, XCircle,
-    Users, Search, Loader2, Shield, Star, RotateCcw, ChevronRight, ChevronLeft,
-    Wifi, WifiOff, Target, Award
+    Users, Search, Loader2, Star, RotateCcw, ChevronRight, ChevronLeft,
+    Wifi, WifiOff, Target, Award, Copy, User, X
 } from 'lucide-react';
 import styles from './BattleWar.module.css';
 import CustomSelect from '../../../components/ui/CustomSelect';
@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 
 // ─── constants ────────────────────────────────────────────────
 const TOTAL_QUESTIONS = 15;
-const QUESTION_TIME = 10; // seconds
+const QUESTION_TIME = 15; // seconds
 const MAX_SCORE_PER_Q = 100;
 
 // ─── helpers ──────────────────────────────────────────────────
@@ -27,14 +27,10 @@ function calcSpeed(timeLeft) {
 }
 
 // ─── sub-components ───────────────────────────────────────────
-const ShieldIcon = ({ tier = 1, size = 28 }) => {
-    const colors = ['#95a5a6', '#F1C40F', '#E67E22', '#E74C3C', '#8E44AD'];
-    const c = colors[Math.min(tier - 1, 4)];
-    return (
-        <div style={{ display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <Shield size={size} color={c} fill={c} fillOpacity={0.25} strokeWidth={2} />
-        </div>
-    );
+const getTierName = (tier) => {
+    const tiersEn = ["Bee Kid", "Bee Warrior", "Bee Master", "Bee Champion", "Bee Legend"];
+    const idx = Math.min(Math.max((tier || 1) - 1, 0), 4);
+    return tiersEn[idx];
 };
 
 const Avatar = ({ url, name, size = 42 }) => (
@@ -49,7 +45,7 @@ const Avatar = ({ url, name, size = 42 }) => (
 );
 
 // ─── main component ───────────────────────────────────────────
-const BattleWar = ({ user, userProfile }) => {
+const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const { t, language } = useLanguage();
 
     // ── phase: 'lobby' | 'searching' | 'matchmaking' | 'game' | 'result'
@@ -60,6 +56,7 @@ const BattleWar = ({ user, userProfile }) => {
     const [opponentProfile, setOpponentProfile] = useState(null);
     const [battleMode, setBattleMode] = useState(userProfile?.battle_mode !== false);
     const [isUpdatingMode, setIsUpdatingMode] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     // Setup state
     const [allCourses, setAllCourses] = useState([]);
@@ -77,6 +74,7 @@ const BattleWar = ({ user, userProfile }) => {
     const [oppScore, setOppScore] = useState(0);
     const [myCorrect, setMyCorrect] = useState(0);
     const [oppCorrect, setOppCorrect] = useState(0);
+    const [oppQIndex, setOppQIndex] = useState(0);
     const [isAnswerLocked, setIsAnswerLocked] = useState(false);
 
     // realtime
@@ -95,6 +93,10 @@ const BattleWar = ({ user, userProfile }) => {
     useEffect(() => { phaseRef.current = phase; }, [phase]);
     useEffect(() => { isBotRef.current = isVsBot; }, [isVsBot]);
 
+    useEffect(() => {
+        if (onPhaseChange) onPhaseChange(phase);
+    }, [phase, onPhaseChange]);
+
     const isPlayer1 = session ? session.player1_id === user?.id : false;
     const isPlayer1Ref = useRef(isPlayer1);
     useEffect(() => { isPlayer1Ref.current = isPlayer1; }, [isPlayer1]);
@@ -103,6 +105,7 @@ const BattleWar = ({ user, userProfile }) => {
     const myScoreRef = useRef(0);
     const myCorrectRef = useRef(0);
     const oppScoreRef = useRef(0);
+    const oppQIndexRef = useRef(0);
     const qIndexRef = useRef(0);
     const questionsRef = useRef([]);
     const isBotGameActive = useRef(false);
@@ -110,6 +113,7 @@ const BattleWar = ({ user, userProfile }) => {
     useEffect(() => { myScoreRef.current = myScore; }, [myScore]);
     useEffect(() => { myCorrectRef.current = myCorrect; }, [myCorrect]);
     useEffect(() => { oppScoreRef.current = oppScore; }, [oppScore]);
+    useEffect(() => { oppQIndexRef.current = oppQIndex; }, [oppQIndex]);
     useEffect(() => { qIndexRef.current = qIndex; }, [qIndex]);
     useEffect(() => { questionsRef.current = questions; }, [questions]);
 
@@ -190,6 +194,7 @@ const BattleWar = ({ user, userProfile }) => {
                 if (payload.user_id !== user?.id) {
                     setOppScore(payload.score);
                     setOppCorrect(payload.correct);
+                    setOppQIndex(payload.qIndex || 0);
                 }
             })
             // DB changes: session status / scores
@@ -209,9 +214,11 @@ const BattleWar = ({ user, userProfile }) => {
                     if (s.player1_id === user?.id) {
                         setOppScore(s.player2_score || 0);
                         setOppCorrect(s.player2_correct || 0);
+                        setOppQIndex(s.player2_q_index || 0);
                     } else {
                         setOppScore(s.player1_score || 0);
                         setOppCorrect(s.player1_correct || 0);
+                        setOppQIndex(s.player1_q_index || 0);
                     }
                 }
             )
@@ -272,6 +279,85 @@ const BattleWar = ({ user, userProfile }) => {
             mcq_options: (q.mcq_options || []).sort((a,b) => a.order_index - b.order_index)
         }));
     }, []);
+    // ── Bot simulation: human-like independent logic loop ────────────
+    const runBotLogic = useCallback(() => {
+        if (!isBotRef.current || !isBotGameActive.current) return;
+        
+        const currentProgress = oppQIndexRef.current;
+        const totalQs = questionsRef.current.length || TOTAL_QUESTIONS;
+        
+        if (currentProgress >= totalQs) {
+            isBotGameActive.current = false;
+            return;
+        }
+
+        // Human-like reading + thinking time (based on 15s total time):
+        const rand = Math.random();
+        let delay;
+        if (rand < 0.25) {
+            // Focused/Expert: 5 - 9s
+            delay = 5000 + Math.random() * 4000;
+        } else if (rand < 0.80) {
+            // Average Learner: 9 - 14s
+            delay = 9000 + Math.random() * 5000;
+        } else {
+            // Distracted/Struggling: 14 - 18s (might miss the 15s window)
+            delay = 14000 + Math.random() * 4000;
+        }
+        
+        botTimeoutRef.current = setTimeout(() => {
+            if (!isBotRef.current || !isBotGameActive.current) return;
+
+            const hardnessFactor = currentProgress / totalQs;
+            const accuracy = 0.85 - hardnessFactor * 0.20; // 85% → 65% accuracy
+            const isCorrect = Math.random() < accuracy;
+
+            const maxBonus = delay < 9000 ? 45 : delay < 14000 ? 25 : 8;
+            const speedBonus = Math.floor(Math.random() * maxBonus);
+            const gained = isCorrect ? (MAX_SCORE_PER_Q + speedBonus) : 0;
+            
+            setOppScore(prev => prev + gained);
+            if (isCorrect) setOppCorrect(prev => prev + 1);
+            
+            setOppQIndex(prev => {
+                const next = prev + 1;
+                if (next < totalQs) {
+                    runBotLogic(); 
+                } else {
+                    isBotGameActive.current = false;
+                }
+                return next;
+            });
+        }, delay);
+    }, []);
+
+    // ── Start vs Bot game ─────────────────────────────────────
+    const startBotGame = useCallback((qs) => {
+        clearTimeout(botTimeoutRef.current);
+        clearInterval(searchCountdownRef.current);
+
+        const BOT_NAMES = ['অর্জুন AI', 'প্রজ্ঞা Bot', 'বুদ্ধিমান Bot', 'কিরণ AI'];
+        const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+
+        setIsVsBot(true);
+        isBotRef.current = true;
+        isBotGameActive.current = true;
+
+        setOpponentProfile({
+            id: 'bot',
+            full_name: botName,
+            display_name: botName,
+            avatar_url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${botName}`,
+            xp: Math.floor(Math.random() * 500) + 200,
+            league_id: Math.floor(Math.random() * 3) + 1,
+            isBot: true
+        });
+
+        setPhase('matchmaking');
+        setTimeout(() => {
+            startGame(qs);
+        }, 3000);
+    }, []);
 
     // ── start game ────────────────────────────────────────────
     const startGame = useCallback((qs) => {
@@ -281,10 +367,15 @@ const BattleWar = ({ user, userProfile }) => {
         setOppScore(0);
         setMyCorrect(0);
         setOppCorrect(0);
+        setOppQIndex(0);
         setSelectedOption(null);
         setIsAnswerLocked(false);
         setTimeLeft(QUESTION_TIME);
-    }, []);
+
+        if (isBotRef.current) {
+            runBotLogic();
+        }
+    }, [runBotLogic]);
 
     // ── join existing room ────────────────────────────────────
     const handleJoinRoom = useCallback(async (forcedCode = null) => {
@@ -311,14 +402,12 @@ const BattleWar = ({ user, userProfile }) => {
             return;
         }
 
-        // fetch same questions as player1
         const qs = existing.question_ids?.length
             ? await fetchQuestionsByIds(existing.question_ids)
             : await fetchBattleQuestions(null);
 
         setQuestions(qs);
 
-        // Update session: add player2 and start
         const { data: updated } = await supabase
             .from('battle_sessions')
             .update({
@@ -344,8 +433,6 @@ const BattleWar = ({ user, userProfile }) => {
     useEffect(() => {
         const code = searchParams.get('joinCode');
         if (code && user?.id && phase === 'lobby') {
-            console.log('Auto-joining battle from URL:', code);
-            // Clear param from URL and join
             const newParams = new URLSearchParams(searchParams);
             newParams.delete('joinCode');
             setSearchParams(newParams, { replace: true });
@@ -379,52 +466,6 @@ const BattleWar = ({ user, userProfile }) => {
         }
     }, [opponentOnline, phase, session?.id, user?.id]);
 
-    // ── Bot simulation: answer after random delay ────────────
-    const scheduleBotAnswer = useCallback((qs, idx) => {
-        if (!isBotRef.current || !isBotGameActive.current) return;
-        // Bot answers between 3-8 seconds, with ~85% accuracy
-        const delay = 3000 + Math.random() * 5000;
-        const isCorrect = Math.random() < 0.85;
-        setTimeout(() => {
-            if (!isBotRef.current || !isBotGameActive.current) return;
-            const gained = isCorrect ? (MAX_SCORE_PER_Q + Math.floor(Math.random() * 30)) : 0;
-            const newOppScore = oppScoreRef.current + gained;
-            const newOppCorrect = oppScoreRef.current + (isCorrect ? 1 : 0);
-            setOppScore(newOppScore);
-            if (isCorrect) setOppCorrect(prev => prev + 1);
-        }, delay);
-    }, []);
-
-    // ── Start vs Bot game ─────────────────────────────────────
-    const startBotGame = useCallback((qs) => {
-        // Clear search timers
-        clearTimeout(botTimeoutRef.current);
-        clearInterval(searchCountdownRef.current);
-
-        const BOT_NAMES = ['অর্জুন AI', 'প্রজ্ঞা Bot', 'বুদ্ধিমান Bot', 'কিরণ AI'];
-        const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
-
-        setIsVsBot(true);
-        isBotRef.current = true;
-        isBotGameActive.current = true;
-
-        // Set bot as opponent with a fake profile
-        setOpponentProfile({
-            id: 'bot',
-            full_name: botName,
-            display_name: botName,
-            avatar_url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${botName}`,
-            xp: Math.floor(Math.random() * 500) + 200,
-            league_id: Math.floor(Math.random() * 3) + 1,
-            isBot: true
-        });
-
-        setPhase('matchmaking');
-        setTimeout(() => {
-            startGame(qs);
-        }, 3000);
-    }, [startGame]);
-
     // ── reset ─────────────────────────────────────────────────
     const handleReset = () => {
         if (channelRef.current) supabase.removeChannel(channelRef.current);
@@ -444,15 +485,24 @@ const BattleWar = ({ user, userProfile }) => {
         setQIndex(0);
         setMyScore(0);
         setOppScore(0);
+        setOppCorrect(0);
+        setOppQIndex(0);
         setJoinCode('');
         setSelectedCourse(null);
         setSelectedModule(null);
     };
-    const handleCreateRoom = async () => {
-        if (!user?.id) {
-            console.error('User not authenticated for Battle War');
-            return;
+
+    const handleExitGame = () => {
+        const msg = language === 'bn' 
+            ? 'আপনি কি নিশ্চিত যে আপনি ব্যাটল থেকে বের হতে চান?' 
+            : 'Are you sure you want to exit the battle?';
+        if (window.confirm(msg)) {
+            handleReset();
         }
+    };
+
+    const handleCreateRoom = async () => {
+        if (!user?.id) return;
         setPhase('searching');
         setSearchCountdown(20);
         isBotGameActive.current = false;
@@ -461,7 +511,6 @@ const BattleWar = ({ user, userProfile }) => {
         const code = generateRoomCode();
         setRoomCode(code);
 
-        // fetch questions from selected module or course
         const qs = await fetchBattleQuestions({ 
             courseId: selectedCourse?.id, 
             unitId: selectedModule?.id 
@@ -490,14 +539,12 @@ const BattleWar = ({ user, userProfile }) => {
         setSession(newSession);
         setQuestions(qs);
 
-        // Insert invitation into DB
         await supabase.from('battle_invitations').insert({
             room_code: code,
             sender_id: user.id,
             course_title: selectedCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
         });
 
-        // ── 20s countdown — then fallback to bot ────────────────
         let countdown = 20;
         setSearchCountdown(20);
         clearInterval(searchCountdownRef.current);
@@ -507,13 +554,10 @@ const BattleWar = ({ user, userProfile }) => {
             if (countdown <= 0) clearInterval(searchCountdownRef.current);
         }, 1000);
 
-        // After 20s with no player, start bot game
         clearTimeout(botTimeoutRef.current);
         botTimeoutRef.current = setTimeout(() => {
-            // Only trigger bot if still searching
             if (phaseRef.current === 'searching') {
                 clearInterval(searchCountdownRef.current);
-                // Clean up the waiting session and invitation
                 supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
                 supabase.from('battle_sessions').update({ status: 'cancelled' }).eq('id', newSession.id);
                 supabase.removeChannel(waitChannel);
@@ -521,7 +565,6 @@ const BattleWar = ({ user, userProfile }) => {
             }
         }, 20000);
 
-        // Wait for real player 2
         const waitChannel = supabase
             .channel(`battle-wait-${newSession.id}`)
             .on(
@@ -530,10 +573,8 @@ const BattleWar = ({ user, userProfile }) => {
                 async (payload) => {
                     const s = payload.new;
                     if (s.player2_id && s.status === 'in_game') {
-                        // Real player found — cancel bot fallback
                         clearTimeout(botTimeoutRef.current);
                         clearInterval(searchCountdownRef.current);
-                        // Clean up invitation
                         supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
                         setSession(s);
                         await fetchOpponent(s.player2_id);
@@ -549,9 +590,6 @@ const BattleWar = ({ user, userProfile }) => {
             });
     };
 
-    // ── start game ──────────────────────────────────────────── (moved up)
-
-    // ── timer ─────────────────────────────────────────────────
     useEffect(() => {
         if (phase !== 'game') return;
         setTimeLeft(QUESTION_TIME);
@@ -570,7 +608,6 @@ const BattleWar = ({ user, userProfile }) => {
         }, 1000);
 
         return () => clearInterval(timerRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [qIndex, phase]);
 
     const handleTimeUp = useCallback(() => {
@@ -587,6 +624,40 @@ const BattleWar = ({ user, userProfile }) => {
         }, 1800);
     }, []);
 
+    const handleCopyRoomCode = () => {
+        if (!roomCode) return;
+        
+        const doCopy = (text) => {
+            // Modern API
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(text);
+            } else {
+                // Fallback: execCommand('copy')
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                textArea.style.position = "fixed";
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                return new Promise((res, rej) => {
+                    document.execCommand('copy') ? res() : rej();
+                    textArea.remove();
+                });
+            }
+        };
+
+        doCopy(roomCode)
+            .then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+            })
+            .catch(() => {
+                console.error('Failed to copy room code');
+            });
+    };
+
     const moveToNextQuestion = useCallback(async () => {
         const nextIdx = qIndexRef.current + 1;
         if (nextIdx >= Math.min(TOTAL_QUESTIONS, questionsRef.current.length)) {
@@ -594,10 +665,10 @@ const BattleWar = ({ user, userProfile }) => {
         } else {
             setQIndex(nextIdx);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const finishGame = useCallback(async () => {
+        isBotGameActive.current = false;
         if (!sessionRef.current?.id) { setPhase('result'); return; }
         const sess = sessionRef.current;
         const myFinalScore = myScoreRef.current;
@@ -612,15 +683,13 @@ const BattleWar = ({ user, userProfile }) => {
                 : null;
 
         const updateData = p1
-            ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
-            : { player2_score: myFinalScore, player2_correct: myFinalCorrect, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
+            ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, player1_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
+            : { player2_score: myFinalScore, player2_correct: myFinalCorrect, player2_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
 
         await supabase.from('battle_sessions').update(updateData).eq('id', sess.id);
         setPhase('result');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user?.id]);
 
-    // ── answer a question ─────────────────────────────────────
     const handleAnswer = useCallback(async (option) => {
         if (isAnswerLocked) return;
         clearInterval(timerRef.current);
@@ -636,32 +705,24 @@ const BattleWar = ({ user, userProfile }) => {
         setMyScore(newScore);
         if (correct) setMyCorrect(newCorrect);
 
-        // If vs bot: simulate bot answer, skip real-time channel
-        if (isBotRef.current) {
-            scheduleBotAnswer(questionsRef.current, qIndexRef.current);
-        } else {
-            // Broadcast to real opponent
+        if (!isBotRef.current) {
             if (channelRef.current) {
                 channelRef.current.send({
                     type: 'broadcast',
                     event: 'score_update',
-                    payload: { user_id: user?.id, score: newScore, correct: newCorrect }
+                    payload: { user_id: user?.id, score: newScore, correct: newCorrect, qIndex: qIndexRef.current + 1 }
                 });
             }
-            // Persist my score to DB
             if (sessionRef.current?.id) {
                 const field = isPlayer1Ref.current
-                    ? { player1_score: newScore, player1_correct: newCorrect }
-                    : { player2_score: newScore, player2_correct: newCorrect };
+                    ? { player1_score: newScore, player1_correct: newCorrect, player1_q_index: qIndexRef.current + 1 }
+                    : { player2_score: newScore, player2_correct: newCorrect, player2_q_index: qIndexRef.current + 1 };
                 supabase.from('battle_sessions').update(field).eq('id', sessionRef.current.id).then(() => {});
             }
         }
 
         scheduleNextQuestion();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAnswerLocked, timeLeft, scheduleBotAnswer]);
-
-    // ── start game ──────────────────────────────────────────── (moved up)
+    }, [isAnswerLocked, timeLeft]);
 
     const handleToggleBattleMode = async () => {
         if (isUpdatingMode) return;
@@ -682,10 +743,9 @@ const BattleWar = ({ user, userProfile }) => {
         }
     };
 
-    // ── derived ───────────────────────────────────────────────
     const currentQ = questions[qIndex];
     const myProgress = Math.min((qIndex) / Math.max(questions.length, 1) * 100, 100);
-    const oppProgress = Math.min((qIndex) / Math.max(questions.length, 1) * 100, 100);
+    const oppProgress = Math.min((oppQIndex) / Math.max(questions.length, 1) * 100, 100);
     const myAcc = qIndex > 0 ? Math.round((myCorrect / qIndex) * 100) : 0;
     const oppAcc = qIndex > 0 ? Math.round((oppCorrect / qIndex) * 100) : 0;
     const myName = userProfile?.full_name || userProfile?.display_name || 'আমি';
@@ -693,62 +753,84 @@ const BattleWar = ({ user, userProfile }) => {
     const isWinner = myScore > oppScore;
     const isDraw = myScore === oppScore;
 
-    // ══════════════════════════════════════════════════════════
-    // RENDER
-    // ══════════════════════════════════════════════════════════
-
     // ── LOBBY ─────────────────────────────────────────────────
     if (phase === 'lobby') return (
         <div className={styles.lobbyWrap}>
             <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
+                initial={{ opacity: 0, y: 32, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className={styles.lobbyCard}
             >
                 <div className={styles.lobbyHero}>
-                    <div className={styles.vsCircle}>
-                        <Swords size={32} />
-                    </div>
-                    <h2 className={styles.lobbyTitle}>
-                        {language === 'bn' ? 'ব্যাটল ওয়ার' : 'Battle War'}
-                    </h2>
-                    <p className={styles.lobbySubtitle}>
-                        {language === 'bn'
-                            ? 'রিয়েল-টাইম কুইজ প্রতিযোগিতায় আপনার দক্ষতা প্রমাণ করুন!'
-                            : 'Prove your knowledge in a real-time quiz duel!'}
-                    </p>
-                </div>
-
-                <div className={styles.lobbyActions}>
-                    <div className={styles.modeToggleRow}>
-                        <div className={styles.modeLabelGroup}>
-                            <Zap size={16} className={battleMode ? styles.zapActive : styles.zapInactive} />
-                            <span className={styles.modeTitle}>{t('battle_mode')}</span>
-                        </div>
+                    <div className={styles.modeToggleFloating}>
                         <button 
-                            className={`${styles.toggleSwitch} ${battleMode ? styles.toggleOn : styles.toggleOff}`}
+                            className={`${styles.toggleSwitchSmall} ${battleMode ? styles.toggleOn : styles.toggleOff}`}
                             onClick={handleToggleBattleMode}
                             disabled={isUpdatingMode}
                         >
-                            <span className={styles.toggleKnob} />
-                            <span className={styles.toggleText}>
-                                {battleMode ? t('battle_mode_active') : t('battle_mode_inactive')}
-                            </span>
+                            <span className={styles.toggleKnobSmall} />
                         </button>
                     </div>
+                    <motion.div 
+                        className={styles.vsCircle}
+                        initial={{ rotate: -20, scale: 0.5, opacity: 0 }}
+                        animate={battleMode ? { 
+                            rotate: [-5, 5],
+                            scale: [1, 1.1],
+                            opacity: 1
+                        } : { 
+                            rotate: 0,
+                            scale: 1,
+                            opacity: 1 
+                        }}
+                        transition={{ 
+                            initial: { delay: 0.2, type: "spring", stiffness: 200 },
+                            rotate: battleMode ? { duration: 0.8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" } : { duration: 0.4 },
+                            scale: battleMode ? { duration: 0.8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" } : { duration: 0.4 }
+                        }}
+                    >
+                        <Swords size={36} />
+                    </motion.div>
+                    <motion.h2 
+                        className={styles.lobbyTitle}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                    >
+                        {language === 'bn' ? 'ব্যাটল ওয়ার' : 'Battle War'}
+                    </motion.h2>
+                    <motion.p 
+                        className={styles.lobbySubtitle}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                    >
+                        {language === 'bn'
+                            ? 'সরাসরি কুইজ লড়াইয়ে নিজেকে সেরা প্রমাণ করুন!'
+                            : 'Prove yourself the best in the live quiz duel!'}
+                    </motion.p>
+                </div>
 
-                    <button 
+                <motion.div 
+                    className={styles.lobbyActions}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                >
+                    <motion.button 
                         className={styles.createBtn} 
                         onClick={() => {
                             setPhase('setup');
                             fetchCourses();
                         }} 
                         disabled={!battleMode}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                     >
                         <Swords size={18} />
                         {language === 'bn' ? 'নতুন ব্যাটল তৈরি করুন' : 'Create Battle'}
-                    </button>
+                    </motion.button>
 
                     <div className={styles.dividerRow}>
                         <span className={styles.divider}>{language === 'bn' ? 'অথবা' : 'or'}</span>
@@ -770,13 +852,7 @@ const BattleWar = ({ user, userProfile }) => {
                             <ChevronRight size={20} />
                         </button>
                     </div>
-                </div>
-
-                <div className={styles.rulesSection}>
-                    <div className={styles.ruleItem}><Clock size={14} /><span>{language === 'bn' ? `প্রতিটি প্রশ্নে ${QUESTION_TIME} সেকেন্ড` : `${QUESTION_TIME}s per question`}</span></div>
-                    <div className={styles.ruleItem}><Target size={14} /><span>{language === 'bn' ? `${TOTAL_QUESTIONS}টি প্রশ্ন` : `${TOTAL_QUESTIONS} questions`}</span></div>
-                    <div className={styles.ruleItem}><Zap size={14} /><span>{language === 'bn' ? 'দ্রুত উত্তরে বেশি পয়েন্ট' : 'Speed = bonus points'}</span></div>
-                </div>
+                </motion.div>
             </motion.div>
         </div>
     );
@@ -833,14 +909,23 @@ const BattleWar = ({ user, userProfile }) => {
                 </div>
 
                 <div className={styles.setupFooter}>
-                    <button 
+                    <motion.button 
                         className={styles.startBtn}
                         disabled={!selectedCourse || isLoadingSetup}
                         onClick={handleCreateRoom}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                     >
-                        <Zap size={18} />
+                        <motion.div
+                            animate={{ 
+                                scale: [1, 1.2, 1]
+                            }}
+                            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            <Swords size={20} />
+                        </motion.div>
                         {t('start_battle')}
-                    </button>
+                    </motion.button>
                 </div>
             </motion.div>
         </div>
@@ -850,42 +935,160 @@ const BattleWar = ({ user, userProfile }) => {
     if (phase === 'searching') return (
         <div className={styles.lobbyWrap}>
             <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className={styles.lobbyCard}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={styles.searchingCard}
             >
-                <div className={styles.searchingHero}>
-                    {/* Countdown Ring */}
-                    <div className={styles.countdownRing}>
-                        <svg viewBox="0 0 100 100" className={styles.countdownSvg}>
-                            <circle cx="50" cy="50" r="44" className={styles.countdownTrack} />
-                            <circle
-                                cx="50" cy="50" r="44"
-                                className={styles.countdownFill}
-                                strokeDasharray={`${2 * Math.PI * 44}`}
-                                strokeDashoffset={`${2 * Math.PI * 44 * (1 - searchCountdown / 20)}`}
-                            />
-                        </svg>
-                        <div className={styles.countdownInner}>
-                            <span className={styles.countdownNum}>{searchCountdown}</span>
-                            <span className={styles.countdownLabel}>sec</span>
-                        </div>
-                    </div>
-
-                    <h3 className={styles.lobbyTitle}>
-                        {language === 'bn' ? 'প্রতিপক্ষ খোঁজা হচ্ছে...' : 'Finding opponent...'}
-                    </h3>
-                    <p className={styles.lobbySubtitle}>
-                        {searchCountdown > 10
-                            ? (language === 'bn' ? 'অন্য লার্নারদের জন্য অপেক্ষা করছি...' : 'Waiting for other learners...')
-                            : (language === 'bn' ? 'কেউ না পেলে AI বট দিয়ে শুরু হবে!' : 'No player found, AI bot will join!')
-                        }
-                    </p>
-                    <div className={styles.roomCodeDisplay}>{roomCode}</div>
+                {/* HUD: Top Status & Countdown */}
+                <div className={styles.countdownTop}>
+                    <div className={styles.countdownNum}>{searchCountdown}s</div>
                 </div>
-                <button className={styles.cancelBtn} onClick={handleReset}>
-                    {language === 'bn' ? 'বাতিল করুন' : 'Cancel'}
-                </button>
+
+                <div className={styles.matchmakingGrid}>
+                    {/* LEFT: MY PROFILE */}
+                    <motion.div 
+                        className={styles.playerSide}
+                        initial={{ x: -20, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                    >
+                        <div className={styles.playerAvatar}>
+                            <Avatar url={userProfile?.avatar_url} name={myName} size={70} />
+                        </div>
+                        <div className={styles.playerName}>{myName}</div>
+                        <div className={styles.playerLevel}>
+                            {getTierName(userProfile?.league_id || 1)}
+                        </div>
+                    </motion.div>
+
+                    {/* CENTER: VS SEPARATOR */}
+                    <motion.div 
+                        className={styles.vsContainer}
+                        initial={{ scale: 0, rotate: -180 }}
+                        animate={{ scale: 1, rotate: 0 }}
+                        transition={{ type: "spring", delay: 0.4 }}
+                    >
+                        <div className={styles.vsBadge}>
+                            <span>VS</span>
+                        </div>
+                    </motion.div>
+
+                    {/* RIGHT: SEARCHING AREA */}
+                    <div className={styles.searchingSide}>
+                        {/* Rotating Radar Sweep */}
+                        <motion.div 
+                            className={styles.radarSweep}
+                            animate={{ rotate: 360 }}
+                            transition={{ 
+                                duration: 5, 
+                                repeat: Infinity, 
+                                ease: "linear" 
+                            }}
+                        />
+
+                        {/* Center Search Icon Animation (Scanning Motion) */}
+                        <motion.div 
+                            className={styles.centerSearchIcon}
+                            animate={{ 
+                                x: [0, 15, -15, 0],
+                                y: [0, -10, 10, 0],
+                                rotate: [0, 20, -20, 0],
+                                scale: [1, 1.15, 1]
+                            }}
+                            transition={{ 
+                                duration: 5, 
+                                repeat: Infinity, 
+                                ease: "easeInOut" 
+                            }}
+                        >
+                            <Search size={32} strokeWidth={2.5} />
+                        </motion.div>
+
+                        {/* Radar Rings */}
+                        {[1, 2, 3, 4, 5, 6].map(i => (
+                            <motion.div
+                                key={i}
+                                className={styles.radarRing}
+                                initial={{ scale: 1, opacity: 0 }}
+                                animate={{ scale: 3.5, opacity: [0, 0.6, 0] }}
+                                transition={{ 
+                                    duration: 6, 
+                                    repeat: Infinity, 
+                                    delay: i * 0.9,
+                                    ease: "easeOut" 
+                                }}
+                            />
+                        ))}
+
+                        {/* Floating phantom profiles */}
+                        {[1, 2, 3].map(i => (
+                            <motion.div
+                                key={i}
+                                className={styles.phantomAvatar}
+                                animate={{ 
+                                    x: [Math.random() * 80 - 40, Math.random() * 80 - 40],
+                                    y: [Math.random() * 80 - 40, Math.random() * 80 - 40],
+                                    opacity: [0, 0.6, 0]
+                                }}
+                                transition={{ 
+                                    duration: 3, 
+                                    repeat: Infinity, 
+                                    delay: i * 1,
+                                    ease: "easeInOut"
+                                }}
+                            >
+                                <User size={16} />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
+            </motion.div>
+
+            {/* SEPARATE FOOTER SECTION */}
+            <motion.div 
+                className={styles.searchingFooter}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+            >
+                <motion.div 
+                    className={styles.roomCodeBottom} 
+                    onClick={handleCopyRoomCode}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                >
+                    <span className={styles.codeLabel}>
+                        {copied 
+                            ? (language === 'bn' ? 'অনুলিপি!' : 'COPIED!') 
+                            : (language === 'bn' ? 'রুম কোড:' : 'ROOM CODE:')
+                        }
+                    </span>
+                    <span className={styles.codeVal}>{roomCode}</span>
+                    
+                    <div className={styles.copyIconWrap}>
+                        <AnimatePresence mode="wait">
+                            <motion.div 
+                                key={copied ? 'check' : 'copy'}
+                                initial={{ scale: 0.5, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.5, opacity: 0 }}
+                            >
+                                {copied ? <CheckCircle2 size={16} color="#2ecc71" /> : <Copy size={16} />}
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
+                </motion.div>
+
+                <motion.button 
+                    className={styles.cancelBtn}
+                    style={{ padding: '10px 20px', fontSize: '0.8rem' }}
+                    onClick={handleReset}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    {language === 'bn' ? 'বাতিল' : 'Cancel'}
+                </motion.button>
             </motion.div>
         </div>
     );
@@ -899,26 +1102,27 @@ const BattleWar = ({ user, userProfile }) => {
                 className={styles.matchmakingCard}
             >
                 <div className={styles.splitScreen}>
-                    {/* Player 1 (Me) */}
                     <div className={styles.playerPanel}>
                         <Avatar url={userProfile?.avatar_url} name={myName} size={64} />
-                        <ShieldIcon tier={userProfile?.league_id || 1} size={32} />
+                        <div className={styles.playerLevel}>
+                            {getTierName(userProfile?.league_id || 1)}
+                        </div>
                         <span className={styles.playerName}>{myName}</span>
                         <span className={styles.youBadge}>{language === 'bn' ? 'আমি' : 'You'}</span>
                     </div>
 
-                    {/* VS */}
                     <div className={styles.vsBadge}>
                         <span>VS</span>
                     </div>
 
-                    {/* Player 2 (Opponent) */}
                     <div className={styles.playerPanel}>
                         <Avatar url={opponentProfile?.avatar_url} name={oppName} size={64} />
                         {isVsBot ? (
                             <span className={styles.botBadge}>🤖 AI Bot</span>
                         ) : (
-                            <ShieldIcon tier={opponentProfile?.league_id || 1} size={32} />
+                            <div className={styles.playerLevel}>
+                                {getTierName(opponentProfile?.league_id || 1)}
+                            </div>
                         )}
                         <span className={styles.playerName}>{oppName}</span>
                         {isVsBot && <span className={styles.botSubtext}>{language === 'bn' ? 'কোনো লার্নার পাওয়া যায়নি' : 'No player found'}</span>}
@@ -941,9 +1145,15 @@ const BattleWar = ({ user, userProfile }) => {
     // ── GAME ──────────────────────────────────────────────────
     if (phase === 'game') return (
         <div className={styles.gameWrap}>
-            {/* ── Header: dual progress ── */}
+            <button 
+                className={styles.gameExitBtn} 
+                onClick={handleExitGame}
+                title={language === 'bn' ? 'বের হয়ে যান' : 'Exit Battle'}
+            >
+                <X size={18} />
+            </button>
+
             <div className={styles.gameHeader}>
-                {/* Me */}
                 <div className={styles.playerHeader}>
                     <Avatar url={userProfile?.avatar_url} name={myName} size={34} />
                     <div className={styles.progressBar}>
@@ -954,15 +1164,15 @@ const BattleWar = ({ user, userProfile }) => {
                             transition={{ duration: 0.5 }}
                         />
                     </div>
-                    <span className={styles.scoreLabel}>{myScore}</span>
+                    <div className={styles.playerMeta}>
+                        <span className={styles.scoreLabel}>{myScore}</span>
+                    </div>
                 </div>
 
-                {/* Timer */}
                 <div className={`${styles.timerCircle} ${timeLeft <= 5 ? styles.timerUrgent : ''}`}>
                     <span>{timeLeft}</span>
                 </div>
 
-                {/* Opponent */}
                 <div className={styles.playerHeader} style={{ flexDirection: 'row-reverse' }}>
                     <Avatar url={opponentProfile?.avatar_url} name={oppName} size={34} />
                     <div className={styles.progressBar}>
@@ -973,11 +1183,12 @@ const BattleWar = ({ user, userProfile }) => {
                             transition={{ duration: 0.5 }}
                         />
                     </div>
-                    <span className={styles.scoreLabel}>{oppScore}</span>
+                    <div className={styles.playerMeta} style={{ alignItems: 'flex-start' }}>
+                        <span className={styles.scoreLabel}>{oppScore}</span>
+                    </div>
                 </div>
             </div>
 
-            {/* Offline warning */}
             <AnimatePresence>
                 {!opponentOnline && (
                     <motion.div
@@ -992,12 +1203,10 @@ const BattleWar = ({ user, userProfile }) => {
                 )}
             </AnimatePresence>
 
-            {/* Q counter */}
             <div className={styles.qCounter}>
                 <span>{language === 'bn' ? `প্রশ্ন ${qIndex + 1} / ${Math.min(TOTAL_QUESTIONS, questions.length)}` : `Question ${qIndex + 1} / ${Math.min(TOTAL_QUESTIONS, questions.length)}`}</span>
             </div>
 
-            {/* Question & options */}
             <AnimatePresence mode="wait">
                 {currentQ && (
                     <motion.div
@@ -1009,13 +1218,11 @@ const BattleWar = ({ user, userProfile }) => {
                         className={`${styles.questionCard}`}
                     >
                         <p className={styles.questionText}>{currentQ.question_text}</p>
-
                         <div className={styles.optionsGrid}>
                             {(currentQ.mcq_options || []).map((opt) => {
                                 const isSelected = selectedOption === opt.id;
                                 const showCorrect = isAnswerLocked && opt.is_correct;
                                 const showWrong = isAnswerLocked && isSelected && !opt.is_correct;
-
                                 return (
                                     <motion.button
                                         key={opt.id}
@@ -1035,7 +1242,6 @@ const BattleWar = ({ user, userProfile }) => {
                                 );
                             })}
                         </div>
-
                     </motion.div>
                 )}
             </AnimatePresence>
@@ -1051,7 +1257,6 @@ const BattleWar = ({ user, userProfile }) => {
                 transition={{ type: 'spring', bounce: 0.3 }}
                 className={styles.resultCard}
             >
-                {/* Winner crown */}
                 <div className={styles.resultHero}>
                     {isDraw ? (
                         <div className={styles.drawBadge}>
@@ -1073,7 +1278,6 @@ const BattleWar = ({ user, userProfile }) => {
                     )}
                 </div>
 
-                {/* Score comparison */}
                 <div className={styles.scoreComparison}>
                     <div className={`${styles.scoreBlock} ${isWinner ? styles.scoreBlockWinner : ''}`}>
                         <Avatar url={userProfile?.avatar_url} name={myName} size={52} />
@@ -1086,9 +1290,7 @@ const BattleWar = ({ user, userProfile }) => {
                             <span>{myAcc}%</span>
                         </div>
                     </div>
-
                     <div className={styles.vsSmall}>VS</div>
-
                     <div className={`${styles.scoreBlock} ${!isWinner && !isDraw ? styles.scoreBlockWinner : ''}`}>
                         <Avatar url={opponentProfile?.avatar_url} name={oppName} size={52} />
                         <span className={styles.finalScore}>{oppScore}</span>

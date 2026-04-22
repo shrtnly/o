@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams, useNavigate } from 'react-router-dom';
-import { Home, Trophy, Compass, Store, User, Users, MoreHorizontal, Settings, HelpCircle, LogOut, Flame, Bell } from 'lucide-react';
+import { Home, Trophy, Compass, Store, User, Swords, MoreHorizontal, Settings, HelpCircle, LogOut, Flame, Bell } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
@@ -86,7 +86,7 @@ const Sidebar = () => {
 
             <NavLink to="/connections" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}>
                 <div className={styles.navIconWrapper}>
-                    <Users size={24} />
+                    <Swords size={24} />
                     {pendingConnectionsCount > 0 && (
                         <span className={styles.navBadge}>{pendingConnectionsCount > 9 ? '9+' : pendingConnectionsCount}</span>
                     )}

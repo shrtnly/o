@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
-import { Home, Compass, User, Users, Bell } from 'lucide-react';
+import { Home, Compass, User, Swords, Bell } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
 import { courseService } from '../../../services/courseService';
@@ -72,7 +72,7 @@ const BottomNav = () => {
                 {({ isActive }) => (
                     <div className={styles.notifArea}>
                         <div className={styles.iconWrapper}>
-                            <Users size={26} strokeWidth={1.5} />
+                            <Swords size={26} strokeWidth={1.5} />
                             {pendingConnectionsCount > 0 && (
                                 <span className={styles.navBadge}>{pendingConnectionsCount > 9 ? '9+' : pendingConnectionsCount}</span>
                             )}

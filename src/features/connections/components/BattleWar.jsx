@@ -39,7 +39,7 @@ const Avatar = ({ url, name, size = 42 }) => (
             ? <img src={url} alt={name} />
             : <span style={{ fontSize: size * 0.42, fontWeight: 700, color: 'var(--color-primary)' }}>
                 {(name || '?')[0].toUpperCase()}
-              </span>
+            </span>
         }
     </div>
 );
@@ -96,6 +96,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     useEffect(() => {
         if (onPhaseChange) onPhaseChange(phase);
     }, [phase, onPhaseChange]);
+
 
     const isPlayer1 = session ? session.player1_id === user?.id : false;
     const isPlayer1Ref = useRef(isPlayer1);
@@ -163,7 +164,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 uniqueQs.push(q);
             }
         });
-        
+
         // shuffle and take TOTAL_QUESTIONS
         return [...uniqueQs].sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS).map(q => ({
             ...q,
@@ -245,18 +246,23 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 courses!inner(id, title)
             `)
             .eq('user_id', user.id);
-        
+
         if (!error && data) {
             // Transform data to get course objects and sort by title
             const enrolledCourses = data
                 .map(item => item.courses)
                 .filter(Boolean)
                 .sort((a, b) => a.title.localeCompare(b.title));
-            
+
             setAllCourses(enrolledCourses);
         }
         setIsLoadingSetup(false);
     }, [user?.id]);
+
+    // Fetch courses on mount so selectors are ready in the lobby
+    useEffect(() => {
+        fetchCourses();
+    }, [fetchCourses]);
 
     const fetchModules = useCallback(async (courseId) => {
         setIsLoadingSetup(true);
@@ -276,16 +282,16 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         (data || []).forEach(q => { map[q.id] = q; });
         return ids.map(id => map[id]).filter(Boolean).map(q => ({
             ...q,
-            mcq_options: (q.mcq_options || []).sort((a,b) => a.order_index - b.order_index)
+            mcq_options: (q.mcq_options || []).sort((a, b) => a.order_index - b.order_index)
         }));
     }, []);
     // ── Bot simulation: human-like independent logic loop ────────────
     const runBotLogic = useCallback(() => {
         if (!isBotRef.current || !isBotGameActive.current) return;
-        
+
         const currentProgress = oppQIndexRef.current;
         const totalQs = questionsRef.current.length || TOTAL_QUESTIONS;
-        
+
         if (currentProgress >= totalQs) {
             isBotGameActive.current = false;
             return;
@@ -304,7 +310,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             // Distracted/Struggling: 14 - 18s (might miss the 15s window)
             delay = 14000 + Math.random() * 4000;
         }
-        
+
         botTimeoutRef.current = setTimeout(() => {
             if (!isBotRef.current || !isBotGameActive.current) return;
 
@@ -315,14 +321,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             const maxBonus = delay < 9000 ? 45 : delay < 14000 ? 25 : 8;
             const speedBonus = Math.floor(Math.random() * maxBonus);
             const gained = isCorrect ? (MAX_SCORE_PER_Q + speedBonus) : 0;
-            
+
             setOppScore(prev => prev + gained);
             if (isCorrect) setOppCorrect(prev => prev + 1);
-            
+
             setOppQIndex(prev => {
                 const next = prev + 1;
                 if (next < totalQs) {
-                    runBotLogic(); 
+                    runBotLogic();
                 } else {
                     isBotGameActive.current = false;
                 }
@@ -436,7 +442,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             const newParams = new URLSearchParams(searchParams);
             newParams.delete('joinCode');
             setSearchParams(newParams, { replace: true });
-            
+
             setJoinCode(code);
             handleJoinRoom(code);
         }
@@ -492,9 +498,89 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setSelectedModule(null);
     };
 
+    const finishGame = useCallback(async () => {
+        isBotGameActive.current = false;
+        if (!sessionRef.current?.id) { setPhase('result'); return; }
+        const sess = sessionRef.current;
+        const myFinalScore = myScoreRef.current;
+        const oppFinalScore = oppScoreRef.current;
+        const myFinalCorrect = myCorrectRef.current;
+        const p1 = isPlayer1Ref.current;
+
+        const winnerId = myFinalScore > oppFinalScore
+            ? user?.id
+            : myFinalScore < oppFinalScore
+                ? (p1 ? sess.player2_id : sess.player1_id)
+                : null;
+
+        const updateData = p1
+            ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, player1_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
+            : { player2_score: myFinalScore, player2_correct: myFinalCorrect, player2_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
+
+        await supabase.from('battle_sessions').update(updateData).eq('id', sess.id);
+        setPhase('result');
+    }, [user?.id]);
+
+    const moveToNextQuestion = useCallback(async () => {
+        const nextIdx = qIndexRef.current + 1;
+        if (nextIdx >= Math.min(TOTAL_QUESTIONS, questionsRef.current.length)) {
+            await finishGame();
+        } else {
+            setQIndex(nextIdx);
+        }
+    }, [finishGame]);
+
+    const scheduleNextQuestion = useCallback(() => {
+        clearTimeout(autoAdvanceRef.current);
+        autoAdvanceRef.current = setTimeout(() => {
+            moveToNextQuestion();
+        }, 1800);
+    }, [moveToNextQuestion]);
+
+    const handleTimeUp = useCallback(() => {
+        if (isAnswerLocked) return;
+        setIsAnswerLocked(true);
+        setSelectedOption('timeout'); // Set explicit timeout state
+        scheduleNextQuestion();
+    }, [isAnswerLocked, scheduleNextQuestion]);
+
+    const handleAnswer = useCallback(async (option) => {
+        if (isAnswerLocked) return;
+        clearInterval(timerRef.current);
+        setIsAnswerLocked(true);
+        setSelectedOption(option.id);
+
+        const correct = option.is_correct;
+        const speedBonus = calcSpeed(timeLeft);
+        const gained = correct ? (MAX_SCORE_PER_Q + speedBonus) : 0;
+
+        const newScore = myScoreRef.current + gained;
+        const newCorrect = myCorrectRef.current + (correct ? 1 : 0);
+        setMyScore(newScore);
+        if (correct) setMyCorrect(newCorrect);
+
+        if (!isBotRef.current) {
+            if (channelRef.current) {
+                channelRef.current.send({
+                    type: 'broadcast',
+                    event: 'score_update',
+                    payload: { user_id: user?.id, score: newScore, correct: newCorrect, qIndex: qIndexRef.current + 1 }
+                });
+            }
+            if (sessionRef.current?.id) {
+                const field = isPlayer1Ref.current
+                    ? { player1_score: newScore, player1_correct: newCorrect, player1_q_index: qIndexRef.current + 1 }
+                    : { player2_score: newScore, player2_correct: newCorrect, player2_q_index: qIndexRef.current + 1 };
+                supabase.from('battle_sessions').update(field).eq('id', sessionRef.current.id).then(() => { });
+            }
+        }
+
+        scheduleNextQuestion();
+    }, [isAnswerLocked, timeLeft, user?.id, scheduleNextQuestion]);
+
     const handleExitGame = () => {
-        const msg = language === 'bn' 
-            ? 'আপনি কি নিশ্চিত যে আপনি ব্যাটল থেকে বের হতে চান?' 
+        const msg = language === 'bn'
+            ? 'আপনি কি নিশ্চিত যে আপনি ব্যাটল থেকে বের হতে চান?'
             : 'Are you sure you want to exit the battle?';
         if (window.confirm(msg)) {
             handleReset();
@@ -511,9 +597,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         const code = generateRoomCode();
         setRoomCode(code);
 
-        const qs = await fetchBattleQuestions({ 
-            courseId: selectedCourse?.id, 
-            unitId: selectedModule?.id 
+        const qs = await fetchBattleQuestions({
+            courseId: selectedCourse?.id,
+            unitId: selectedModule?.id
         });
         const qIds = qs.map(q => q.id);
 
@@ -610,23 +696,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         return () => clearInterval(timerRef.current);
     }, [qIndex, phase]);
 
-    const handleTimeUp = useCallback(() => {
-        if (isAnswerLocked) return;
-        setIsAnswerLocked(true);
-        setSelectedOption(null);
-        scheduleNextQuestion();
-    }, [isAnswerLocked]);
 
-    const scheduleNextQuestion = useCallback(() => {
-        clearTimeout(autoAdvanceRef.current);
-        autoAdvanceRef.current = setTimeout(() => {
-            moveToNextQuestion();
-        }, 1800);
-    }, []);
 
     const handleCopyRoomCode = () => {
         if (!roomCode) return;
-        
+
         const doCopy = (text) => {
             // Modern API
             if (navigator.clipboard && window.isSecureContext) {
@@ -658,71 +732,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             });
     };
 
-    const moveToNextQuestion = useCallback(async () => {
-        const nextIdx = qIndexRef.current + 1;
-        if (nextIdx >= Math.min(TOTAL_QUESTIONS, questionsRef.current.length)) {
-            await finishGame();
-        } else {
-            setQIndex(nextIdx);
-        }
-    }, []);
 
-    const finishGame = useCallback(async () => {
-        isBotGameActive.current = false;
-        if (!sessionRef.current?.id) { setPhase('result'); return; }
-        const sess = sessionRef.current;
-        const myFinalScore = myScoreRef.current;
-        const oppFinalScore = oppScoreRef.current;
-        const myFinalCorrect = myCorrectRef.current;
-        const p1 = isPlayer1Ref.current;
 
-        const winnerId = myFinalScore > oppFinalScore
-            ? user?.id
-            : myFinalScore < oppFinalScore
-                ? (p1 ? sess.player2_id : sess.player1_id)
-                : null;
 
-        const updateData = p1
-            ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, player1_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
-            : { player2_score: myFinalScore, player2_correct: myFinalCorrect, player2_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
 
-        await supabase.from('battle_sessions').update(updateData).eq('id', sess.id);
-        setPhase('result');
-    }, [user?.id]);
 
-    const handleAnswer = useCallback(async (option) => {
-        if (isAnswerLocked) return;
-        clearInterval(timerRef.current);
-        setIsAnswerLocked(true);
-        setSelectedOption(option.id);
-
-        const correct = option.is_correct;
-        const speedBonus = calcSpeed(timeLeft);
-        const gained = correct ? (MAX_SCORE_PER_Q + speedBonus) : 0;
-
-        const newScore = myScoreRef.current + gained;
-        const newCorrect = myCorrectRef.current + (correct ? 1 : 0);
-        setMyScore(newScore);
-        if (correct) setMyCorrect(newCorrect);
-
-        if (!isBotRef.current) {
-            if (channelRef.current) {
-                channelRef.current.send({
-                    type: 'broadcast',
-                    event: 'score_update',
-                    payload: { user_id: user?.id, score: newScore, correct: newCorrect, qIndex: qIndexRef.current + 1 }
-                });
-            }
-            if (sessionRef.current?.id) {
-                const field = isPlayer1Ref.current
-                    ? { player1_score: newScore, player1_correct: newCorrect, player1_q_index: qIndexRef.current + 1 }
-                    : { player2_score: newScore, player2_correct: newCorrect, player2_q_index: qIndexRef.current + 1 };
-                supabase.from('battle_sessions').update(field).eq('id', sessionRef.current.id).then(() => {});
-            }
-        }
-
-        scheduleNextQuestion();
-    }, [isAnswerLocked, timeLeft]);
 
     const handleToggleBattleMode = async () => {
         if (isUpdatingMode) return;
@@ -764,7 +778,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             >
                 <div className={styles.lobbyHero}>
                     <div className={styles.modeToggleFloating}>
-                        <button 
+                        <button
                             className={`${styles.toggleSwitchSmall} ${battleMode ? styles.toggleOn : styles.toggleOff}`}
                             onClick={handleToggleBattleMode}
                             disabled={isUpdatingMode}
@@ -772,19 +786,19 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             <span className={styles.toggleKnobSmall} />
                         </button>
                     </div>
-                    <motion.div 
+                    <motion.div
                         className={styles.vsCircle}
                         initial={{ rotate: -20, scale: 0.5, opacity: 0 }}
-                        animate={battleMode ? { 
+                        animate={battleMode ? {
                             rotate: [-5, 5],
                             scale: [1, 1.1],
                             opacity: 1
-                        } : { 
+                        } : {
                             rotate: 0,
                             scale: 1,
-                            opacity: 1 
+                            opacity: 1
                         }}
-                        transition={{ 
+                        transition={{
                             initial: { delay: 0.2, type: "spring", stiffness: 200 },
                             rotate: battleMode ? { duration: 0.8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" } : { duration: 0.4 },
                             scale: battleMode ? { duration: 0.8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" } : { duration: 0.4 }
@@ -792,7 +806,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     >
                         <Swords size={36} />
                     </motion.div>
-                    <motion.h2 
+                    <motion.h2
                         className={styles.lobbyTitle}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -800,31 +814,72 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     >
                         {language === 'bn' ? 'ব্যাটল ওয়ার' : 'Battle War'}
                     </motion.h2>
-                    <motion.p 
+                    <motion.p
                         className={styles.lobbySubtitle}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
                     >
                         {language === 'bn'
-                            ? 'সরাসরি কুইজ লড়াইয়ে নিজেকে সেরা প্রমাণ করুন!'
+                            ? 'সেরাদের সাথে লাইভ ব্যাটেলে আসুন জিতে নিন এক্সক্লুসিভ রিওয়ার্ড!'
                             : 'Prove yourself the best in the live quiz duel!'}
                     </motion.p>
                 </div>
 
-                <motion.div 
+                <motion.div
                     className={styles.lobbyActions}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
                 >
-                    <motion.button 
-                        className={styles.createBtn} 
-                        onClick={() => {
-                            setPhase('setup');
-                            fetchCourses();
-                        }} 
-                        disabled={!battleMode}
+                    {/* Course selector */}
+                    <div className={styles.selectGroup}>
+                        <label className={styles.selectLabel}>{t('select_course')}</label>
+                        <CustomSelect
+                            value={selectedCourse?.id || ''}
+                            onChange={(e) => {
+                                const course = allCourses.find(c => c.id === e.target.value);
+                                setSelectedCourse(course);
+                                setSelectedModule(null);
+                                if (course) fetchModules(course.id);
+                            }}
+                            options={allCourses.map(c => ({ value: c.id, label: c.title }))}
+                            placeholder={language === 'bn' ? '-- কোর্স --' : '-- Course --'}
+                            disabled={!battleMode || isLoadingSetup}
+                        />
+                    </div>
+
+                    {/* Module selector - Only show if course is selected */}
+                    {selectedCourse && (
+                        <motion.div
+                            className={styles.selectGroup}
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                        >
+                            <label className={styles.selectLabel}>
+                                {t('select_module')} {language === 'bn' ? '(ঐচ্ছিক)' : '(Optional)'}
+                            </label>
+                            {isLoadingSetup ? (
+                                <div className={styles.selectLoader}><Loader2 className={styles.spin} size={18} /></div>
+                            ) : (
+                                <CustomSelect
+                                    value={selectedModule?.id || ''}
+                                    onChange={(e) => {
+                                        const mod = allModules.find(m => m.id === e.target.value);
+                                        setSelectedModule(mod);
+                                    }}
+                                    options={allModules.map(m => ({ value: m.id, label: m.title }))}
+                                    disabled={!battleMode}
+                                    placeholder={language === 'bn' ? '-- সকল মডিউল --' : '-- All Modules --'}
+                                />
+                            )}
+                        </motion.div>
+                    )}
+
+                    <motion.button
+                        className={styles.createBtn}
+                        onClick={handleCreateRoom}
+                        disabled={!battleMode || !selectedCourse}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                     >
@@ -844,9 +899,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             onChange={e => setJoinCode(e.target.value.toUpperCase())}
                             maxLength={6}
                         />
-                        <button 
-                            className={styles.joinBtn} 
-                            onClick={handleJoinRoom} 
+                        <button
+                            className={styles.joinBtn}
+                            onClick={handleJoinRoom}
                             disabled={joinCode.length < 4 || !battleMode}
                         >
                             <ChevronRight size={20} />
@@ -857,79 +912,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         </div>
     );
 
-    // ── SETUP (Course/Module Selection) ──────────────────────
-    if (phase === 'setup') return (
-        <div className={styles.lobbyWrap}>
-            <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                className={styles.lobbyCard}
-                style={{ maxWidth: '420px' }}
-            >
-                <div className={styles.setupHeader}>
-                    <button className={styles.backBtn} onClick={() => setPhase('lobby')}>
-                        <ChevronLeft size={20} />
-                    </button>
-                    <h3 className={styles.setupTitle}>{t('battle_create')}</h3>
-                </div>
 
-                <div className={styles.setupBody}>
-                    <div className={styles.selectGroup}>
-                        <label className={styles.selectLabel}>{t('select_course')}</label>
-                        <CustomSelect
-                            value={selectedCourse?.id || ''}
-                            onChange={(e) => {
-                                const course = allCourses.find(c => c.id === e.target.value);
-                                setSelectedCourse(course);
-                                setSelectedModule(null);
-                                if (course) fetchModules(course.id);
-                            }}
-                            options={allCourses.map(c => ({ value: c.id, label: c.title }))}
-                            placeholder={language === 'bn' ? '-- কোর্স --' : '-- Course --'}
-                        />
-                    </div>
-
-                    <div className={styles.selectGroup}>
-                        <label className={styles.selectLabel}>{t('select_module')}</label>
-                        {isLoadingSetup ? (
-                            <div className={styles.selectLoader}><Loader2 className={styles.spin} size={18} /></div>
-                        ) : (
-                            <CustomSelect
-                                value={selectedModule?.id || ''}
-                                onChange={(e) => {
-                                    const mod = allModules.find(m => m.id === e.target.value);
-                                    setSelectedModule(mod);
-                                }}
-                                options={allModules.map(m => ({ value: m.id, label: m.title }))}
-                                disabled={!selectedCourse}
-                                placeholder={language === 'bn' ? '-- সকল মডিউল --' : '-- All Modules --'}
-                            />
-                        )}
-                    </div>
-                </div>
-
-                <div className={styles.setupFooter}>
-                    <motion.button 
-                        className={styles.startBtn}
-                        disabled={!selectedCourse || isLoadingSetup}
-                        onClick={handleCreateRoom}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                    >
-                        <motion.div
-                            animate={{ 
-                                scale: [1, 1.2, 1]
-                            }}
-                            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            <Swords size={20} />
-                        </motion.div>
-                        {t('start_battle')}
-                    </motion.button>
-                </div>
-            </motion.div>
-        </div>
-    );
 
     // ── SEARCHING (created room, waiting) ─────────────────────
     if (phase === 'searching') return (
@@ -946,7 +929,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
                 <div className={styles.matchmakingGrid}>
                     {/* LEFT: MY PROFILE */}
-                    <motion.div 
+                    <motion.div
                         className={styles.playerSide}
                         initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
@@ -956,13 +939,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             <Avatar url={userProfile?.avatar_url} name={myName} size={70} />
                         </div>
                         <div className={styles.playerName}>{myName}</div>
-                        <div className={styles.playerLevel}>
-                            {getTierName(userProfile?.league_id || 1)}
-                        </div>
                     </motion.div>
 
                     {/* CENTER: VS SEPARATOR */}
-                    <motion.div 
+                    <motion.div
                         className={styles.vsContainer}
                         initial={{ scale: 0, rotate: -180 }}
                         animate={{ scale: 1, rotate: 0 }}
@@ -976,29 +956,29 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     {/* RIGHT: SEARCHING AREA */}
                     <div className={styles.searchingSide}>
                         {/* Rotating Radar Sweep */}
-                        <motion.div 
+                        <motion.div
                             className={styles.radarSweep}
                             animate={{ rotate: 360 }}
-                            transition={{ 
-                                duration: 5, 
-                                repeat: Infinity, 
-                                ease: "linear" 
+                            transition={{
+                                duration: 5,
+                                repeat: Infinity,
+                                ease: "linear"
                             }}
                         />
 
                         {/* Center Search Icon Animation (Scanning Motion) */}
-                        <motion.div 
+                        <motion.div
                             className={styles.centerSearchIcon}
-                            animate={{ 
+                            animate={{
                                 x: [0, 15, -15, 0],
                                 y: [0, -10, 10, 0],
                                 rotate: [0, 20, -20, 0],
                                 scale: [1, 1.15, 1]
                             }}
-                            transition={{ 
-                                duration: 5, 
-                                repeat: Infinity, 
-                                ease: "easeInOut" 
+                            transition={{
+                                duration: 5,
+                                repeat: Infinity,
+                                ease: "easeInOut"
                             }}
                         >
                             <Search size={32} strokeWidth={2.5} />
@@ -1011,11 +991,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                 className={styles.radarRing}
                                 initial={{ scale: 1, opacity: 0 }}
                                 animate={{ scale: 3.5, opacity: [0, 0.6, 0] }}
-                                transition={{ 
-                                    duration: 6, 
-                                    repeat: Infinity, 
+                                transition={{
+                                    duration: 6,
+                                    repeat: Infinity,
                                     delay: i * 0.9,
-                                    ease: "easeOut" 
+                                    ease: "easeOut"
                                 }}
                             />
                         ))}
@@ -1025,14 +1005,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             <motion.div
                                 key={i}
                                 className={styles.phantomAvatar}
-                                animate={{ 
+                                animate={{
                                     x: [Math.random() * 80 - 40, Math.random() * 80 - 40],
                                     y: [Math.random() * 80 - 40, Math.random() * 80 - 40],
                                     opacity: [0, 0.6, 0]
                                 }}
-                                transition={{ 
-                                    duration: 3, 
-                                    repeat: Infinity, 
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
                                     delay: i * 1,
                                     ease: "easeInOut"
                                 }}
@@ -1046,29 +1026,29 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             </motion.div>
 
             {/* SEPARATE FOOTER SECTION */}
-            <motion.div 
+            <motion.div
                 className={styles.searchingFooter}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
             >
-                <motion.div 
-                    className={styles.roomCodeBottom} 
+                <motion.div
+                    className={styles.roomCodeBottom}
                     onClick={handleCopyRoomCode}
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                 >
                     <span className={styles.codeLabel}>
-                        {copied 
-                            ? (language === 'bn' ? 'অনুলিপি!' : 'COPIED!') 
+                        {copied
+                            ? (language === 'bn' ? 'অনুলিপি!' : 'COPIED!')
                             : (language === 'bn' ? 'রুম কোড:' : 'ROOM CODE:')
                         }
                     </span>
                     <span className={styles.codeVal}>{roomCode}</span>
-                    
+
                     <div className={styles.copyIconWrap}>
                         <AnimatePresence mode="wait">
-                            <motion.div 
+                            <motion.div
                                 key={copied ? 'check' : 'copy'}
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -1080,7 +1060,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     </div>
                 </motion.div>
 
-                <motion.button 
+                <motion.button
                     className={styles.cancelBtn}
                     style={{ padding: '10px 20px', fontSize: '0.8rem' }}
                     onClick={handleReset}
@@ -1145,8 +1125,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     // ── GAME ──────────────────────────────────────────────────
     if (phase === 'game') return (
         <div className={styles.gameWrap}>
-            <button 
-                className={styles.gameExitBtn} 
+            <button
+                className={styles.gameExitBtn}
                 onClick={handleExitGame}
                 title={language === 'bn' ? 'বের হয়ে যান' : 'Exit Battle'}
             >
@@ -1154,8 +1134,12 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             </button>
 
             <div className={styles.gameHeader}>
-                <div className={styles.playerHeader}>
-                    <Avatar url={userProfile?.avatar_url} name={myName} size={34} />
+                {/* LEFT SIDE: YOU */}
+                <div className={styles.playerWrapper}>
+                    <div className={styles.playerTop}>
+                        <Avatar url={userProfile?.avatar_url} name={myName} size={32} />
+                        <span className={styles.scoreValue}>{myScore}</span>
+                    </div>
                     <div className={styles.progressBar}>
                         <motion.div
                             className={styles.progressFill}
@@ -1164,17 +1148,19 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             transition={{ duration: 0.5 }}
                         />
                     </div>
-                    <div className={styles.playerMeta}>
-                        <span className={styles.scoreLabel}>{myScore}</span>
-                    </div>
                 </div>
 
+                {/* CENTER: TIMER */}
                 <div className={`${styles.timerCircle} ${timeLeft <= 5 ? styles.timerUrgent : ''}`}>
                     <span>{timeLeft}</span>
                 </div>
 
-                <div className={styles.playerHeader} style={{ flexDirection: 'row-reverse' }}>
-                    <Avatar url={opponentProfile?.avatar_url} name={oppName} size={34} />
+                {/* RIGHT SIDE: OPPONENT */}
+                <div className={styles.playerWrapper} style={{ alignItems: 'flex-end' }}>
+                    <div className={styles.playerTop} style={{ flexDirection: 'row-reverse' }}>
+                        <Avatar url={opponentProfile?.avatar_url} name={oppName} size={32} />
+                        <span className={styles.scoreValue}>{oppScore}</span>
+                    </div>
                     <div className={styles.progressBar}>
                         <motion.div
                             className={styles.progressFill}
@@ -1182,9 +1168,6 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             animate={{ width: `${oppProgress}%` }}
                             transition={{ duration: 0.5 }}
                         />
-                    </div>
-                    <div className={styles.playerMeta} style={{ alignItems: 'flex-start' }}>
-                        <span className={styles.scoreLabel}>{oppScore}</span>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import InlineLoader from '../../components/ui/InlineLoader';
 import LearnerConnection from '../profile/components/LearnerConnection';
 import styles from './ConnectionPage.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users } from 'lucide-react';
+import { Swords } from 'lucide-react';
 
 const ConnectionPage = () => {
     const { user } = useAuth();
@@ -59,8 +59,8 @@ const ConnectionPage = () => {
                 >
                     <header className={styles.pageHeader}>
                         <h1 className={styles.pageTitle}>
-                            <Users className={styles.titleIcon} strokeWidth={2.5} />
-                            {language === 'bn' ? 'কানেকশন' : 'Connections'}
+                            <Swords className={styles.titleIcon} strokeWidth={2.5} />
+                            {language === 'bn' ? 'ব্যাটেল রুম' : 'Battle Room'}
                         </h1>
                     </header>
 

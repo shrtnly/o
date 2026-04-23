@@ -168,7 +168,7 @@ const translations = {
         subtab_my: "কানেকশন",
         subtab_suggest: "শিক্ষার্থী খুঁজুন",
         subtab_inbox: "ইনবক্স",
-        subtab_battle: "ব্যাটল ওয়ার",
+        subtab_battle: "ব্যাটেল",
         filter_all: "কানেকশন",
         filter_received: "প্রাপ্ত",
         filter_sent: "পাঠানো",
@@ -510,8 +510,8 @@ const translations = {
         loc_overseas: "দেশের বাইরে",
         re_practice: "পুনরায় অনুশীলন",
 
-        // Battle War
-        battle_create: "নতুন ব্যাটল তৈরি করুন",
+        // Battle
+        battle_create: "ব্যাটেল শুরু করুন",
         battle_join: "রুমে যোগ দিন",
         waiting_opponent: "প্রতিপক্ষের জন্য অপেক্ষা করা হচ্ছে...",
         battle_mode: "ব্যাটল মোড",
@@ -701,7 +701,7 @@ const translations = {
         subtab_my: "My Connections",
         subtab_suggest: "Explore",
         subtab_inbox: "Inbox",
-        subtab_battle: "Battle War",
+        subtab_battle: "Battle",
         filter_all: "Connections",
         filter_received: "Received",
         filter_sent: "Sent",
@@ -1047,8 +1047,8 @@ const translations = {
         remove: "Remove",
         re_practice: "Re-practice",
 
-        // Battle War
-        battle_create: "Create Battle",
+        // Battle
+        battle_create: "Start Battle",
         battle_join: "Join Room",
         waiting_opponent: "Waiting for opponent...",
         battle_mode: "Battle Mode",

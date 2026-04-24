@@ -1,6 +1,7 @@
 import React from 'react';
 import Skeleton from '../../../components/ui/Skeleton';
 import styles from '../ConnectionPage.module.css';
+import BattleSkeleton from './BattleSkeleton';
 
 const ConnectionSkeleton = () => {
     return (
@@ -16,17 +17,8 @@ const ConnectionSkeleton = () => {
                 ))}
             </div>
             
-            <div className={styles.listSkeleton}>
-                {[...Array(6)].map((_, i) => (
-                    <div key={i} className={styles.itemSkeleton}>
-                        <Skeleton width="48px" height="48px" borderRadius="50%" />
-                        <div className={styles.itemInfoSkeleton}>
-                            <Skeleton width="140px" height="16px" borderRadius="4px" />
-                            <Skeleton width="100px" height="12px" borderRadius="4px" />
-                        </div>
-                        <Skeleton width="80px" height="32px" borderRadius="10px" />
-                    </div>
-                ))}
+            <div className={styles.containerSkeleton}>
+                <BattleSkeleton hideWrapper={true} />
             </div>
         </div>
     );

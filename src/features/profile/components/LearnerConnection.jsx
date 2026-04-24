@@ -17,6 +17,7 @@ import styles from './LearnerConnection.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import Skeleton from '../../../components/ui/Skeleton';
 import BattleWar from '../../connections/components/BattleWar';
+import BattleSkeleton from '../../connections/components/BattleSkeleton';
 
 const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
     const { t, language } = useLanguage();
@@ -952,22 +953,27 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
             {/* Sub-Tab Content */}
             <div className={styles.subTabContent}>
                 <AnimatePresence mode="wait">
-                    {(subTab === 'inbox' ? isConversationsLoading : isLoading) ? (
+                    {(subTab !== 'battle' && (subTab === 'inbox' ? isConversationsLoading : isLoading)) ? (
                         <motion.div 
-                            key="skeleton"
-                            initial={false}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.15 }}
-                            className={styles.skeletonList}
-                        >
-                            {[...Array(6)].map((_, i) => (
-                                <div key={i} className={styles.skeletonItem}>
-                                    <Skeleton width="44px" height="44px" borderRadius="50%" />
-                                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                                        <Skeleton width="60%" height="16px" />
-                                        <Skeleton width="40%" height="12px" />
-                                    </div>
+                                key="skeleton"
+                                initial={false}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.15 }}
+                                className={styles.skeletonList}
+                            >
+                                {[...Array(6)].map((_, i) => (
+                                    <div key={i} className={styles.skeletonItem}>
+                                        <div className={styles.skeletonAvatarWrapper}>
+                                            <Skeleton width="48px" height="48px" borderRadius="50%" />
+                                        </div>
+                                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            <Skeleton width="140px" height="18px" borderRadius="6px" />
+                                            <Skeleton width="100px" height="13px" borderRadius="4px" />
+                                        </div>
+                                        <div className={styles.skeletonActionWrapper}>
+                                            <Skeleton width="40px" height="40px" borderRadius="12px" />
+                                        </div>
                                 </div>
                             ))}
                         </motion.div>

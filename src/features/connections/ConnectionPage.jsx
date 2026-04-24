@@ -4,6 +4,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { supabase } from '../../lib/supabaseClient';
 import { rewardService } from '../../services/rewardService';
 import InlineLoader from '../../components/ui/InlineLoader';
+import ConnectionSkeleton from './components/ConnectionSkeleton';
 import LearnerConnection from '../profile/components/LearnerConnection';
 import styles from './ConnectionPage.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -37,42 +38,46 @@ const ConnectionPage = () => {
         fetchProfileData();
     }, [fetchProfileData]);
 
-    if (loading && !profile) {
-        return (
-            <div className={styles.connectionPage}>
-                <div className={styles.container}>
-                    <div className={styles.loadingContainer}>
-                        <InlineLoader size={40} />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className={styles.connectionPage}>
             <div className={styles.container}>
-                <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                    <header className={styles.pageHeader}>
-                        <h1 className={styles.pageTitle}>
-                            <Swords className={styles.titleIcon} strokeWidth={2.5} />
-                            {language === 'bn' ? 'ব্যাটেল রুম' : 'Battle Room'}
-                        </h1>
-                    </header>
+                <AnimatePresence mode="wait">
+                    {loading && !profile ? (
+                        <motion.div
+                            key="page-skeleton"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                        >
+                            <ConnectionSkeleton />
+                        </motion.div>
+                    ) : (
+                        <motion.div 
+                            key="page-content"
+                            initial={{ opacity: 0, scale: 0.99 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        >
+                            <header className={styles.pageHeader}>
+                                <h1 className={styles.pageTitle}>
+                                    <Swords className={styles.titleIcon} strokeWidth={2.5} />
+                                    {language === 'bn' ? 'ব্যাটেল রুম' : 'Battle Room'}
+                                </h1>
+                            </header>
 
-                    <div className={styles.connectionWrapper}>
-                        <LearnerConnection 
-                            user={user} 
-                            userXp={profile?.xp || 0}
-                            userProfile={profile}
-                            onSelectLearner={setSelectedLearner}
-                        />
-                    </div>
-                </motion.div>
+                            <div className={styles.connectionWrapper}>
+                                <LearnerConnection 
+                                    user={user} 
+                                    userXp={profile?.xp || 0}
+                                    userProfile={profile}
+                                    onSelectLearner={(l) => {}} 
+                                />
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );

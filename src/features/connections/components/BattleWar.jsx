@@ -11,6 +11,7 @@ import {
 import styles from './BattleWar.module.css';
 import CustomSelect from '../../../components/ui/CustomSelect';
 import { toast } from 'sonner';
+import BattleSkeleton from './BattleSkeleton';
 
 // ─── constants ────────────────────────────────────────────────
 const TOTAL_QUESTIONS = 15;
@@ -18,7 +19,10 @@ const QUESTION_TIME = 15; // seconds
 const MAX_SCORE_PER_Q = 100;
 const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-const HistoryModal = ({ history, onClose, language }) => {
+const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onPageChange }) => {
+    const PAGE_SIZE = 10;
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
     return (
         <motion.div 
             className={styles.modalOverlay}
@@ -35,7 +39,10 @@ const HistoryModal = ({ history, onClose, language }) => {
                 onClick={e => e.stopPropagation()}
             >
                 <div className={styles.modalHeader}>
-                    <h3>{language === 'bn' ? 'ব্যাটল ইতিহাস' : 'Battle History'}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Swords size={20} className={styles.headerIcon} />
+                        <h3>{language === 'bn' ? 'ব্যাটেল ইতিহাস' : 'Battle History'}</h3>
+                    </div>
                     <button className={styles.closeBtnSmall} onClick={onClose}>
                         <X size={20} />
                     </button>
@@ -43,52 +50,79 @@ const HistoryModal = ({ history, onClose, language }) => {
                 
                 <div className={styles.historyTableContainer}>
                     {history.length > 0 ? (
-                        <table className={styles.historyTable}>
-                            <thead>
-                                <tr>
-                                    <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
-                                    <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
-                                    <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
-                                    <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {history.map((record) => (
-                                    <tr key={record.id}>
-                                        <td className={styles.dateCol}>
-                                            {new Date(record.created_at).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
-                                                month: 'short', day: 'numeric'
-                                            })}
-                                        </td>
-                                        <td className={styles.oppCol}>
-                                            <div className={styles.oppInfoMini}>
-                                                <div className={styles.avatarMini}>
-                                                    {record.opponent_avatar ? (
-                                                        <img src={record.opponent_avatar} alt="" />
-                                                    ) : (
-                                                        <span>{record.opponent_name?.[0] || '?'}</span>
-                                                    )}
-                                                </div>
-                                                <span>{record.opponent_name}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span className={`${styles.resultBadge} ${styles[`badge${record.result}`]}`}>
-                                                {record.result === 'win' 
-                                                    ? (language === 'bn' ? 'জয়' : 'Win')
-                                                    : record.result === 'loss'
-                                                        ? (language === 'bn' ? 'হার' : 'Loss')
-                                                        : (language === 'bn' ? 'ড্র' : 'Draw')
-                                                }
-                                            </span>
-                                        </td>
-                                        <td className={styles.scoreCol}>
-                                            {record.my_score} - {record.opponent_score}
-                                        </td>
+                        <>
+                            <table className={styles.historyTable}>
+                                <thead>
+                                    <tr>
+                                        <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
+                                        <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
+                                        <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
+                                        <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {history.map((record) => (
+                                        <tr key={record.id}>
+                                            <td className={styles.dateCol}>
+                                                {new Date(record.created_at).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                                                    month: 'short', day: 'numeric'
+                                                })}
+                                            </td>
+                                            <td className={styles.oppCol}>
+                                                <div className={styles.oppInfoMini}>
+                                                    <div className={styles.avatarMini}>
+                                                        {record.opponent_avatar ? (
+                                                            <img src={record.opponent_avatar} alt="" />
+                                                        ) : (
+                                                            <span>{record.opponent_name?.[0] || '?'}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className={styles.oppNameGroup}>
+                                                        <span>{record.opponent_name}</span>
+                                                        {record.is_bot && <span className={styles.botTag}>AI</span>}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span className={`${styles.resultBadge} ${styles[`badge${record.result}`]}`}>
+                                                    {record.result === 'win' 
+                                                        ? (language === 'bn' ? 'জয়' : 'Win')
+                                                        : record.result === 'loss'
+                                                            ? (language === 'bn' ? 'হার' : 'Loss')
+                                                            : (language === 'bn' ? 'ড্র' : 'Draw')
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td className={styles.scoreCol}>
+                                                {record.my_score} - {record.opponent_score}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+
+                            {totalPages > 1 && (
+                                <div className={styles.pagination}>
+                                    <button 
+                                        disabled={currentPage === 0}
+                                        onClick={() => onPageChange(currentPage - 1)}
+                                        className={styles.pageBtn}
+                                    >
+                                        <ChevronLeft size={18} />
+                                    </button>
+                                    <span className={styles.pageInfo}>
+                                        {language === 'bn' ? `পৃষ্ঠা ${currentPage + 1} / ${totalPages}` : `Page ${currentPage + 1} of ${totalPages}`}
+                                    </span>
+                                    <button 
+                                        disabled={currentPage >= totalPages - 1}
+                                        onClick={() => onPageChange(currentPage + 1)}
+                                        className={styles.pageBtn}
+                                    >
+                                        <ChevronRight size={18} />
+                                    </button>
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <div className={styles.emptyHistory}>
                             <Trophy size={48} className={styles.emptyIcon} />
@@ -128,6 +162,43 @@ const Avatar = ({ url, name, size = 42 }) => (
     </div>
 );
 
+const ExitModal = ({ onConfirm, onCancel, language }) => (
+    <motion.div 
+        className={styles.modalOverlay}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onCancel}
+        style={{ zIndex: 3000 }}
+    >
+        <motion.div 
+            className={styles.confirmModal}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={e => e.stopPropagation()}
+        >
+            <div className={styles.confirmIconWrap}>
+                <XCircle size={48} strokeWidth={2.5} />
+            </div>
+            <h3>{language === 'bn' ? 'ব্যাটল থেকে বের হচ্ছেন?' : 'Exiting Battle?'}</h3>
+            <p>
+                {language === 'bn' 
+                    ? 'আপনি কি নিশ্চিত যে আপনি এই ব্যাটলটি মাঝপথে ছেড়ে দিতে চান? আপনার কোনো পয়েন্ট বা রেকর্ড জমা হবে না।' 
+                    : 'Are you sure you want to quit? No points or history records will be saved if you leave now.'}
+            </p>
+            <div className={styles.confirmActions}>
+                <button className={styles.stayBtn} onClick={onCancel}>
+                    {language === 'bn' ? 'না, লড়াই করি' : 'No, Keep Fighting'}
+                </button>
+                <button className={styles.quitBtn} onClick={onConfirm}>
+                    {language === 'bn' ? 'হ্যাঁ, বের হন' : 'Yes, Quit Session'}
+                </button>
+            </div>
+        </motion.div>
+    </motion.div>
+);
+
 // ─── main component ───────────────────────────────────────────
 const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const { t, language } = useLanguage();
@@ -142,7 +213,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [isUpdatingMode, setIsUpdatingMode] = useState(false);
     const [copied, setCopied] = useState(false);
     const [showHistory, setShowHistory] = useState(false);
+    const [showExitConfirm, setShowExitConfirm] = useState(false);
     const [battleHistory, setBattleHistory] = useState([]);
+    const [historyPage, setHistoryPage] = useState(0);
+    const [totalHistory, setTotalHistory] = useState(0);
     const [isSavingRecord, setIsSavingRecord] = useState(false);
 
     // Setup state
@@ -150,7 +224,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [allModules, setAllModules] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedModule, setSelectedModule] = useState(null);
-    const [isLoadingSetup, setIsLoadingSetup] = useState(false);
+    const [isLoadingSetup, setIsLoadingSetup] = useState(true);
 
     // game state
     const [questions, setQuestions] = useState([]);
@@ -197,6 +271,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const qIndexRef = useRef(0);
     const questionsRef = useRef([]);
     const isBotGameActive = useRef(false);
+    const isAnswerLockedRef = useRef(false);
 
     useEffect(() => { myScoreRef.current = myScore; }, [myScore]);
     useEffect(() => { myCorrectRef.current = myCorrect; }, [myCorrect]);
@@ -204,6 +279,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     useEffect(() => { oppQIndexRef.current = oppQIndex; }, [oppQIndex]);
     useEffect(() => { qIndexRef.current = qIndex; }, [qIndex]);
     useEffect(() => { questionsRef.current = questions; }, [questions]);
+    useEffect(() => { isAnswerLockedRef.current = isAnswerLocked; }, [isAnswerLocked]);
 
     // ── fetch opponent profile ─────────────────────────────────
     const fetchOpponent = useCallback(async (oppId) => {
@@ -583,6 +659,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setJoinCode('');
         setSelectedCourse(null);
         setSelectedModule(null);
+        setIsSavingRecord(false);
     };
 
     const finishGame = useCallback(async () => {
@@ -609,11 +686,13 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     }, [user?.id]);
 
     const moveToNextQuestion = useCallback(async () => {
-        const nextIdx = qIndexRef.current + 1;
-        if (nextIdx >= Math.min(TOTAL_QUESTIONS, questionsRef.current.length)) {
+        const currentIdx = qIndexRef.current;
+        const total = Math.min(TOTAL_QUESTIONS, questionsRef.current.length);
+        
+        if (currentIdx + 1 >= total) {
             await finishGame();
         } else {
-            setQIndex(nextIdx);
+            setQIndex(prev => prev + 1);
         }
     }, [finishGame]);
 
@@ -621,20 +700,44 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         clearTimeout(autoAdvanceRef.current);
         autoAdvanceRef.current = setTimeout(() => {
             moveToNextQuestion();
-        }, 1800);
+        }, 2000);
     }, [moveToNextQuestion]);
 
     const handleTimeUp = useCallback(() => {
-        if (isAnswerLocked) return;
+        if (isAnswerLockedRef.current || phaseRef.current !== 'game') return;
         setIsAnswerLocked(true);
-        setSelectedOption('timeout'); // Set explicit timeout state
+        isAnswerLockedRef.current = true;
+        setSelectedOption('timeout');
+
+        // Broadcast progress even on timeout to sync opponent's view
+        if (!isBotRef.current) {
+            const currentScore = myScoreRef.current;
+            const currentCorrect = myCorrectRef.current;
+            const nextIdx = qIndexRef.current + 1;
+
+            if (channelRef.current) {
+                channelRef.current.send({
+                    type: 'broadcast',
+                    event: 'score_update',
+                    payload: { user_id: user?.id, score: currentScore, correct: currentCorrect, qIndex: nextIdx }
+                });
+            }
+            if (sessionRef.current?.id) {
+                const field = isPlayer1Ref.current
+                    ? { player1_score: currentScore, player1_correct: currentCorrect, player1_q_index: nextIdx }
+                    : { player2_score: currentScore, player2_correct: currentCorrect, player2_q_index: nextIdx };
+                supabase.from('battle_sessions').update(field).eq('id', sessionRef.current.id).then(() => { });
+            }
+        }
+
         scheduleNextQuestion();
-    }, [isAnswerLocked, scheduleNextQuestion]);
+    }, [scheduleNextQuestion, user?.id]);
 
     const handleAnswer = useCallback(async (option) => {
-        if (isAnswerLocked) return;
+        if (isAnswerLockedRef.current || phaseRef.current !== 'game') return;
         clearInterval(timerRef.current);
         setIsAnswerLocked(true);
+        isAnswerLockedRef.current = true;
         setSelectedOption(option.id);
 
         const correct = option.is_correct;
@@ -666,12 +769,18 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     }, [isAnswerLocked, timeLeft, user?.id, scheduleNextQuestion]);
 
     const handleExitGame = () => {
-        const msg = language === 'bn'
-            ? 'আপনি কি নিশ্চিত যে আপনি ব্যাটল থেকে বের হতে চান?'
-            : 'Are you sure you want to exit the battle?';
-        if (window.confirm(msg)) {
-            handleReset();
+        setShowExitConfirm(true);
+    };
+
+    const confirmExit = async () => {
+        if (!isBotRef.current && sessionRef.current?.id) {
+            // Mark session as cancelled so history logic isn't triggered for others
+            await supabase.from('battle_sessions')
+                .update({ status: 'cancelled' })
+                .eq('id', sessionRef.current.id);
         }
+        handleReset();
+        setShowExitConfirm(false);
     };
 
     const handleCreateRoom = async () => {
@@ -765,8 +874,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     useEffect(() => {
         if (phase !== 'game') return;
+        
         setTimeLeft(QUESTION_TIME);
         setIsAnswerLocked(false);
+        isAnswerLockedRef.current = false;
         setSelectedOption(null);
 
         timerRef.current = setInterval(() => {
@@ -780,8 +891,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             });
         }, 1000);
 
-        return () => clearInterval(timerRef.current);
-    }, [qIndex, phase]);
+        return () => {
+            clearInterval(timerRef.current);
+            clearTimeout(autoAdvanceRef.current);
+        };
+    }, [qIndex, phase]); // Removed handleTimeUp to prevent feedback loop
 
     useEffect(() => {
         if (phase === 'result' && !isSavingRecord && user?.id) {
@@ -795,36 +909,48 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             const finalResult = myScore === oppScore ? 'draw' : (myScore > oppScore ? 'win' : 'loss');
             await supabase.from('battle_history').insert({
                 user_id: user.id,
-                opponent_id: opponentProfile?.id || null,
+                opponent_id: isVsBot ? null : (opponentProfile?.id || null),
                 opponent_name: oppName,
                 opponent_avatar: opponentProfile?.avatar_url || null,
                 my_score: myScore,
                 opponent_score: oppScore,
                 my_correct: myCorrect,
-                result: finalResult
+                result: finalResult,
+                is_bot: isVsBot
             });
+            // Refresh history state immediately after saving
+            fetchHistory(0);
         } catch (err) {
             console.error('Error saving history:', err);
         }
     };
 
-    const fetchHistory = async () => {
+    const fetchHistory = useCallback(async (page = 0) => {
         if (!user?.id) return;
+        const PAGE_SIZE = 10;
+        const from = page * PAGE_SIZE;
+        const to = from + PAGE_SIZE - 1;
+
         try {
-            const { data, error } = await supabase
+            const { data, count, error } = await supabase
                 .from('battle_history')
-                .select('*')
+                .select('*', { count: 'exact' })
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
-                .limit(10);
-            if (data) setBattleHistory(data);
+                .range(from, to);
+            
+            if (data) {
+                setBattleHistory(data);
+                if (count !== null) setTotalHistory(count);
+                setHistoryPage(page);
+            }
         } catch (err) {
             console.error('Error fetching history:', err);
         }
-    };
+    }, [user?.id]);
 
     const handleOpenHistory = () => {
-        fetchHistory();
+        fetchHistory(0);
         setShowHistory(true);
     };
 
@@ -892,6 +1018,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const isDraw = myScore === oppScore;
 
     // ── LOBBY ─────────────────────────────────────────────────
+    if (phase === 'lobby' && allCourses.length === 0 && isLoadingSetup) {
+        return <BattleSkeleton />;
+    }
+
     if (phase === 'lobby') return (
         <div className={styles.lobbyWrap}>
             <AnimatePresence>
@@ -1037,12 +1167,12 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             onChange={e => setJoinCode(e.target.value.toUpperCase())}
                             maxLength={6}
                         />
-                        <button
+                        <button 
                             className={styles.joinBtn}
                             onClick={handleJoinRoom}
                             disabled={joinCode.length < 4 || !battleMode}
                         >
-                            <ChevronRight size={20} />
+                            <ChevronRight size={22} strokeWidth={3} />
                         </button>
                     </div>
                 </motion.div>
@@ -1295,6 +1425,16 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     // ── GAME ──────────────────────────────────────────────────
     if (phase === 'game') return (
         <div className={styles.gameWrap}>
+            <AnimatePresence>
+                {showExitConfirm && (
+                    <ExitModal 
+                        language={language}
+                        onConfirm={confirmExit}
+                        onCancel={() => setShowExitConfirm(false)}
+                    />
+                )}
+            </AnimatePresence>
+
             <button
                 className={styles.gameExitBtn}
                 onClick={handleExitGame}
@@ -1373,6 +1513,16 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         <h2 className={styles.questionTitle}>
                             {currentQ.question_text}
                         </h2>
+
+                        {selectedOption === 'timeout' && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className={styles.timeoutWarning}
+                            >
+                                {language === 'bn' ? 'সময় শেষ!' : 'Time Up!'}
+                            </motion.div>
+                        )}
 
                         <div className={styles.optionsList}>
                             {(currentQ.mcq_options || []).map((opt, optIdx) => {
@@ -1481,6 +1631,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 {showHistory && (
                     <HistoryModal 
                         history={battleHistory} 
+                        totalCount={totalHistory}
+                        currentPage={historyPage}
+                        onPageChange={fetchHistory}
                         onClose={() => setShowHistory(false)}
                         language={language}
                     />

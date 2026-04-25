@@ -113,46 +113,54 @@
 /* ── Action Buttons ── */
 .actions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     margin-bottom: 14px;
 }
 
-/* Base action button */
 .actionBtn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 0.83rem;
-    font-weight: 600;
+    gap: 7px;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: inherit;
-    border: 1.5px solid transparent;
+    border: 1px solid transparent;
     letter-spacing: 0.01em;
     white-space: nowrap;
 }
 
 /* ── Connect: solid primary ── */
 .connectBtn {
-    background: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary), #f1c40f);
     color: #000;
-    border-color: var(--color-primary);
+    border-color: rgba(0, 0, 0, 0.05);
 }
-.connectBtn:hover:not(:disabled) { opacity: 0.85; }
-.connectBtn:disabled              { opacity: 0.45; pointer-events: none; }
+.connectBtn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+.connectBtn:disabled {
+    opacity: 0.45;
+    pointer-events: none;
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+}
 
-/* Connected state: outlined gold */
+/* Connected state: subtle gold outline */
 .connectedBtn {
-    background: rgba(241, 196, 15, 0.07) !important;
-    border-color: rgba(241, 196, 15, 0.3) !important;
+    background: rgba(241, 196, 15, 0.05) !important;
+    border-color: rgba(241, 196, 15, 0.25) !important;
     color: var(--color-primary) !important;
+    box-shadow: none !important;
 }
 .connectedBtn:hover:not(:disabled) {
-    background: rgba(241, 196, 15, 0.12) !important;
+    background: rgba(241, 196, 15, 0.1) !important;
+    border-color: var(--color-primary) !important;
 }
 
 /* Pending / outgoing: muted */
@@ -160,17 +168,29 @@
     background: var(--color-bg-alt) !important;
     border-color: var(--color-border) !important;
     color: var(--color-text-muted) !important;
+    box-shadow: none !important;
 }
 
-/* Message: subtle secondary */
+/* Message: subtle glass (matches battle style) */
 .msgBtn {
-    background: var(--color-bg-alt);
-    border-color: var(--color-border);
-    color: var(--color-text);
+    background: rgba(241, 196, 15, 0.03);
+    border-color: rgba(241, 196, 15, 0.15);
+    color: var(--color-primary);
 }
 .msgBtn:hover {
-    background: var(--color-bg-hover);
-    border-color: var(--color-text-muted);
+    background: rgba(241, 196, 15, 0.08);
+    border-color: var(--color-primary);
+}
+
+/* Battle: subtle primary glass */
+.battleBtn {
+    background: rgba(241, 196, 15, 0.03);
+    border-color: rgba(241, 196, 15, 0.15);
+    color: var(--color-primary);
+}
+.battleBtn:hover {
+    background: rgba(241, 196, 15, 0.08);
+    border-color: var(--color-primary);
 }
 
 /* ── Bottom row: copy link + 3-dot ── */
@@ -408,7 +428,7 @@
 
 .skeletonActions {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
     margin-bottom: 14px;
 }

@@ -4,7 +4,7 @@ import { supabase } from '../../../lib/supabaseClient';
 import { useLanguage } from '../../../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Swords, Trophy, Crown, Zap, Clock, CheckCircle2, XCircle,
+    Swords, Trophy, Zap, Clock, CheckCircle2, XCircle,
     Users, Search, Loader2, Star, RotateCcw, ChevronRight, ChevronLeft,
     Wifi, WifiOff, Target, Award, Copy, User, X, Shield, History
 } from 'lucide-react';
@@ -12,26 +12,29 @@ import styles from './BattleWar.module.css';
 import CustomSelect from '../../../components/ui/CustomSelect';
 import { toast } from 'sonner';
 import BattleSkeleton from './BattleSkeleton';
+import { rewardService } from '../../../services/rewardService';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import PollenIcon from '../../../components/PollenIcon';
 
 // ─── constants ────────────────────────────────────────────────
 const TOTAL_QUESTIONS = 15;
 const QUESTION_TIME = 15; // seconds
-const MAX_SCORE_PER_Q = 100;
+const MAX_SCORE_PER_Q = 10;
 const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onPageChange }) => {
+const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onPageChange, isLoading }) => {
     const PAGE_SIZE = 10;
     const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
     return (
-        <motion.div 
+        <motion.div
             className={styles.modalOverlay}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
         >
-            <motion.div 
+            <motion.div
                 className={styles.historyModal}
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -47,13 +50,42 @@ const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onP
                         <X size={20} />
                     </button>
                 </div>
-                
+
                 <div className={styles.historyTableContainer}>
-                    {history.length > 0 ? (
+                    {isLoading ? (
+                        <table className={styles.historyTable}>
+                            <thead>
+                                <tr>
+                                    <th>{language === 'bn' ? 'নং' : 'Sl'}</th>
+                                    <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
+                                    <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
+                                    <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
+                                    <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[1, 2, 3, 4, 5].map(i => (
+                                    <tr key={i}>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '20px', margin: '0 auto' }} /></td>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '40px' }} /></td>
+                                        <td>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <div className={styles.skeletonPulse} style={{ height: '24px', width: '24px', borderRadius: '50%' }} />
+                                                <div className={styles.skeletonPulse} style={{ height: '12px', width: '60px' }} />
+                                            </div>
+                                        </td>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '16px', width: '40px', borderRadius: '4px' }} /></td>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '40px' }} /></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : history.length > 0 ? (
                         <>
                             <table className={styles.historyTable}>
                                 <thead>
                                     <tr>
+                                        <th>{language === 'bn' ? 'নং' : 'Sl'}</th>
                                         <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
                                         <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
                                         <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
@@ -61,8 +93,9 @@ const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onP
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {history.map((record) => (
+                                    {history.map((record, index) => (
                                         <tr key={record.id}>
+                                            <td className={styles.slCol}>{currentPage * PAGE_SIZE + index + 1}</td>
                                             <td className={styles.dateCol}>
                                                 {new Date(record.created_at).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
                                                     month: 'short', day: 'numeric'
@@ -85,7 +118,7 @@ const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onP
                                             </td>
                                             <td>
                                                 <span className={`${styles.resultBadge} ${styles[`badge${record.result}`]}`}>
-                                                    {record.result === 'win' 
+                                                    {record.result === 'win'
                                                         ? (language === 'bn' ? 'জয়' : 'Win')
                                                         : record.result === 'loss'
                                                             ? (language === 'bn' ? 'হার' : 'Loss')
@@ -103,7 +136,7 @@ const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onP
 
                             {totalPages > 1 && (
                                 <div className={styles.pagination}>
-                                    <button 
+                                    <button
                                         disabled={currentPage === 0}
                                         onClick={() => onPageChange(currentPage - 1)}
                                         className={styles.pageBtn}
@@ -113,7 +146,7 @@ const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onP
                                     <span className={styles.pageInfo}>
                                         {language === 'bn' ? `পৃষ্ঠা ${currentPage + 1} / ${totalPages}` : `Page ${currentPage + 1} of ${totalPages}`}
                                     </span>
-                                    <button 
+                                    <button
                                         disabled={currentPage >= totalPages - 1}
                                         onClick={() => onPageChange(currentPage + 1)}
                                         className={styles.pageBtn}
@@ -141,7 +174,7 @@ function generateRoomCode() {
 }
 
 function calcSpeed(timeLeft) {
-    return Math.round((timeLeft / QUESTION_TIME) * 50);
+    return Math.round((timeLeft / QUESTION_TIME) * 5);
 }
 
 // ─── sub-components ───────────────────────────────────────────
@@ -163,7 +196,7 @@ const Avatar = ({ url, name, size = 42 }) => (
 );
 
 const ExitModal = ({ onConfirm, onCancel, language }) => (
-    <motion.div 
+    <motion.div
         className={styles.modalOverlay}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -171,7 +204,7 @@ const ExitModal = ({ onConfirm, onCancel, language }) => (
         onClick={onCancel}
         style={{ zIndex: 3000 }}
     >
-        <motion.div 
+        <motion.div
             className={styles.confirmModal}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -183,8 +216,8 @@ const ExitModal = ({ onConfirm, onCancel, language }) => (
             </div>
             <h3>{language === 'bn' ? 'ব্যাটল থেকে বের হচ্ছেন?' : 'Exiting Battle?'}</h3>
             <p>
-                {language === 'bn' 
-                    ? 'আপনি কি নিশ্চিত যে আপনি এই ব্যাটলটি মাঝপথে ছেড়ে দিতে চান? আপনার কোনো পয়েন্ট বা রেকর্ড জমা হবে না।' 
+                {language === 'bn'
+                    ? 'আপনি কি নিশ্চিত যে আপনি এই ব্যাটলটি মাঝপথে ছেড়ে দিতে চান? আপনার কোনো পয়েন্ট বা রেকর্ড জমা হবে না।'
                     : 'Are you sure you want to quit? No points or history records will be saved if you leave now.'}
             </p>
             <div className={styles.confirmActions}>
@@ -218,6 +251,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [historyPage, setHistoryPage] = useState(0);
     const [totalHistory, setTotalHistory] = useState(0);
     const [isSavingRecord, setIsSavingRecord] = useState(false);
+    const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+    const [challengeId, setChallengeId] = useState(null);
+    const [challengeProfile, setChallengeProfile] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
     // Setup state
     const [allCourses, setAllCourses] = useState([]);
@@ -481,7 +518,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             const accuracy = 0.85 - hardnessFactor * 0.20; // 85% → 65% accuracy
             const isCorrect = Math.random() < accuracy;
 
-            const maxBonus = delay < 9000 ? 45 : delay < 14000 ? 25 : 8;
+            const maxBonus = delay < 9000 ? 4 : delay < 14000 ? 2 : 1;
             const speedBonus = Math.floor(Math.random() * maxBonus);
             const gained = isCorrect ? (MAX_SCORE_PER_Q + speedBonus) : 0;
 
@@ -547,7 +584,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     }, [runBotLogic]);
 
     // ── join existing room ────────────────────────────────────
-    const handleJoinRoom = useCallback(async (forcedCode = null) => {
+    const handleJoinRoom = useCallback(async (forcedCodeParam = null) => {
+        const forcedCode = typeof forcedCodeParam === 'string' ? forcedCodeParam : null;
         const code = (forcedCode || joinCode).trim().toUpperCase();
         if (!code || code.length < 4 || !user?.id) return;
         setPhase('searching');
@@ -596,7 +634,138 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setTimeout(() => startGame(qs), 3000);
     }, [joinCode, user?.id, fetchQuestionsByIds, fetchBattleQuestions, fetchOpponent, subscribeToSession, startGame]);
 
-    const [searchParams, setSearchParams] = useSearchParams();
+    const handleCreateRoom = useCallback(async (forcedCodeParam = null, forcedCourseParam = null) => {
+        // Ensure we don't treat event objects from onClick as room codes
+        const forcedCode = typeof forcedCodeParam === 'string' ? forcedCodeParam : null;
+        const forcedCourse = (forcedCourseParam && typeof forcedCourseParam === 'object' && !forcedCourseParam.nativeEvent) ? forcedCourseParam : null;
+
+        if (!user?.id) return;
+        setPhase('searching');
+        setSearchCountdown(20);
+        isBotGameActive.current = false;
+        setIsVsBot(false);
+
+        const code = forcedCode || generateRoomCode();
+        setRoomCode(code);
+
+        const activeCourse = forcedCourse || selectedCourse;
+
+        const qs = await fetchBattleQuestions({
+            courseId: activeCourse?.id,
+            unitId: selectedModule?.id
+        });
+        const qIds = qs.map(q => q.id);
+
+        if (qIds.length === 0) {
+            toast.error(language === 'bn' ? "কোনো উপযুক্ত প্রশ্ন পাওয়া যায়নি!" : "No suitable questions found!");
+            setPhase('lobby');
+            return;
+        }
+
+        const { data: newSession, error } = await supabase
+            .from('battle_sessions')
+            .insert({
+                room_code: code,
+                player1_id: user.id,
+                status: 'waiting',
+                question_ids: qIds,
+                course_id: selectedCourse?.id
+            })
+            .select()
+            .single();
+
+        if (error || !newSession) { setPhase('lobby'); return; }
+        setSession(newSession);
+        setQuestions(qs);
+
+        // If it's a direct challenge, send notification to the learner
+        if (challengeId) {
+            await supabase.from('notifications').insert({
+                user_id: challengeId,
+                actor_id: user.id,
+                type: 'battle_invite',
+                title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ!' : 'Battle Challenge!',
+                message: language === 'bn'
+                    ? `${userProfile?.full_name || 'কেউ একজন'} আপনাকে একটি ব্যাটেল চ্যালেঞ্জ পাঠিয়েছেন।`
+                    : `${userProfile?.full_name || 'Someone'} has sent you a battle challenge.`,
+                data: {
+                    roomCode: code,
+                    display_title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'BATTLE CHALLENGE',
+                    display_msg: language === 'bn'
+                        ? `${userProfile?.full_name || 'কেউ একজন'} ব্যাটেল চ্যালেঞ্জ পাঠিয়েছেন।`
+                        : `${userProfile?.full_name || 'Someone'} has sent a battle challenge.`,
+                    course_name: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
+                }
+            });
+        }
+
+        // Only add to public invitations if NOT a direct challenge
+        if (!challengeId) {
+            await supabase.from('battle_invitations').insert({
+                room_code: code,
+                sender_id: user.id,
+                course_title: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
+            });
+        }
+
+        let countdown = 20;
+        setSearchCountdown(20);
+        clearInterval(searchCountdownRef.current);
+        searchCountdownRef.current = setInterval(() => {
+            countdown -= 1;
+            setSearchCountdown(countdown);
+            if (countdown <= 0) clearInterval(searchCountdownRef.current);
+        }, 1000);
+
+        clearTimeout(botTimeoutRef.current);
+        botTimeoutRef.current = setTimeout(() => {
+            if (phaseRef.current === 'searching') {
+                clearInterval(searchCountdownRef.current);
+                supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
+                supabase.from('battle_sessions').update({ status: 'cancelled' }).eq('id', newSession.id);
+                supabase.removeChannel(waitChannel);
+                startBotGame(qs);
+            }
+        }, 20000);
+
+        const waitChannel = supabase
+            .channel(`battle-wait-${newSession.id}`)
+            .on(
+                'postgres_changes',
+                { event: 'UPDATE', schema: 'public', table: 'battle_sessions', filter: `id=eq.${newSession.id}` },
+                async (payload) => {
+                    const s = payload.new;
+                    if (s.player2_id && s.status === 'in_game') {
+                        clearTimeout(botTimeoutRef.current);
+                        clearInterval(searchCountdownRef.current);
+                        supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
+                        setSession(s);
+                        await fetchOpponent(s.player2_id);
+                        setPhase('matchmaking');
+                        supabase.removeChannel(waitChannel);
+                        subscribeToSession(s.id, s.player2_id);
+                        setTimeout(() => startGame(qs), 3000);
+                    }
+                }
+            )
+            .subscribe((status, err) => {
+                if (err) console.error(`Wait channel error:`, err);
+            });
+    }, [user?.id, language, selectedCourse, selectedModule, challengeId, userProfile?.full_name, fetchBattleQuestions, startBotGame, fetchOpponent, subscribeToSession, startGame]);
+
+
+    // ── Challenge Tracking ────────────────────────────────────
+    useEffect(() => {
+        const cId = searchParams.get('challengeId');
+        if (cId && user?.id) {
+            setChallengeId(cId);
+            const fetchChallengeProfile = async (id) => {
+                const { data } = await supabase.from('profiles').select('id, full_name, display_name').eq('id', id).single();
+                if (data) setChallengeProfile(data);
+            };
+            fetchChallengeProfile(cId);
+        }
+    }, [searchParams, user?.id]);
 
     // ── Auto-join from URL ────────────────────────────────────
     useEffect(() => {
@@ -610,6 +779,24 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             handleJoinRoom(code);
         }
     }, [searchParams, user?.id, phase, handleJoinRoom]);
+
+    // ── Auto-host from URL (Direct Invite) ────────────────────
+    useEffect(() => {
+        const code = searchParams.get('roomCode');
+        const role = searchParams.get('role');
+
+        if (code && role === 'host' && user?.id && phase === 'lobby' && allCourses.length > 0) {
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('roomCode');
+            newParams.delete('role');
+            setSearchParams(newParams, { replace: true });
+
+            // Default to first course if none selected
+            const defaultCourse = allCourses[0];
+            setSelectedCourse(defaultCourse);
+            handleCreateRoom(code, defaultCourse);
+        }
+    }, [searchParams, user?.id, phase, allCourses, handleCreateRoom]);
 
     // ── cleanup on unmount ────────────────────────────────────
     useEffect(() => {
@@ -688,7 +875,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const moveToNextQuestion = useCallback(async () => {
         const currentIdx = qIndexRef.current;
         const total = Math.min(TOTAL_QUESTIONS, questionsRef.current.length);
-        
+
         if (currentIdx + 1 >= total) {
             await finishGame();
         } else {
@@ -783,98 +970,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setShowExitConfirm(false);
     };
 
-    const handleCreateRoom = async () => {
-        if (!user?.id) return;
-        setPhase('searching');
-        setSearchCountdown(20);
-        isBotGameActive.current = false;
-        setIsVsBot(false);
-
-        const code = generateRoomCode();
-        setRoomCode(code);
-
-        const qs = await fetchBattleQuestions({
-            courseId: selectedCourse?.id,
-            unitId: selectedModule?.id
-        });
-        const qIds = qs.map(q => q.id);
-
-        if (qIds.length === 0) {
-            toast.error(language === 'bn' ? "কোনো উপযুক্ত প্রশ্ন পাওয়া যায়নি!" : "No suitable questions found!");
-            setPhase('lobby');
-            return;
-        }
-
-        const { data: newSession, error } = await supabase
-            .from('battle_sessions')
-            .insert({
-                room_code: code,
-                player1_id: user.id,
-                status: 'waiting',
-                question_ids: qIds,
-                course_id: selectedCourse?.id
-            })
-            .select()
-            .single();
-
-        if (error || !newSession) { setPhase('lobby'); return; }
-        setSession(newSession);
-        setQuestions(qs);
-
-        await supabase.from('battle_invitations').insert({
-            room_code: code,
-            sender_id: user.id,
-            course_title: selectedCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
-        });
-
-        let countdown = 20;
-        setSearchCountdown(20);
-        clearInterval(searchCountdownRef.current);
-        searchCountdownRef.current = setInterval(() => {
-            countdown -= 1;
-            setSearchCountdown(countdown);
-            if (countdown <= 0) clearInterval(searchCountdownRef.current);
-        }, 1000);
-
-        clearTimeout(botTimeoutRef.current);
-        botTimeoutRef.current = setTimeout(() => {
-            if (phaseRef.current === 'searching') {
-                clearInterval(searchCountdownRef.current);
-                supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
-                supabase.from('battle_sessions').update({ status: 'cancelled' }).eq('id', newSession.id);
-                supabase.removeChannel(waitChannel);
-                startBotGame(qs);
-            }
-        }, 20000);
-
-        const waitChannel = supabase
-            .channel(`battle-wait-${newSession.id}`)
-            .on(
-                'postgres_changes',
-                { event: 'UPDATE', schema: 'public', table: 'battle_sessions', filter: `id=eq.${newSession.id}` },
-                async (payload) => {
-                    const s = payload.new;
-                    if (s.player2_id && s.status === 'in_game') {
-                        clearTimeout(botTimeoutRef.current);
-                        clearInterval(searchCountdownRef.current);
-                        supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
-                        setSession(s);
-                        await fetchOpponent(s.player2_id);
-                        setPhase('matchmaking');
-                        supabase.removeChannel(waitChannel);
-                        subscribeToSession(s.id, s.player2_id);
-                        setTimeout(() => startGame(qs), 3000);
-                    }
-                }
-            )
-            .subscribe((status, err) => {
-                if (err) console.error(`Wait channel error:`, err);
-            });
-    };
 
     useEffect(() => {
         if (phase !== 'game') return;
-        
+
         setTimeLeft(QUESTION_TIME);
         setIsAnswerLocked(false);
         isAnswerLockedRef.current = false;
@@ -907,6 +1006,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setIsSavingRecord(true);
         try {
             const finalResult = myScore === oppScore ? 'draw' : (myScore > oppScore ? 'win' : 'loss');
+            const isWinner = finalResult === 'win';
+            const accuracy = myCorrect / TOTAL_QUESTIONS;
+            const isEligible = accuracy >= 0.5;
+
+            // 1. Save to History
             await supabase.from('battle_history').insert({
                 user_id: user.id,
                 opponent_id: isVsBot ? null : (opponentProfile?.id || null),
@@ -916,12 +1020,41 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 opponent_score: oppScore,
                 my_correct: myCorrect,
                 result: finalResult,
-                is_bot: isVsBot
+                is_bot: isVsBot,
+                is_initiator: isPlayer1
             });
+
+            // 2. Award Rewards if Winner & Eligible
+            if (isWinner && isEligible) {
+                // XP based on correct answers (15 correct = 10 XP)
+                const xpToAward = Math.round((myCorrect / TOTAL_QUESTIONS) * 10);
+                if (xpToAward > 0) {
+                    const xpRes = await rewardService.awardXP(user.id, xpToAward, 'battle_win', {
+                        is_bot: isVsBot,
+                        opponent: oppName,
+                        correct: myCorrect
+                    });
+                    if (xpRes.success) {
+                        // User profile in state might be updated by parent or on next fetch
+                    }
+                }
+
+                // Fixed 2 Pollen for win
+                if (isWinner) {
+                    const gemsRes = await rewardService.awardGems(user.id, 2, 'battle_win', {
+                        is_bot: isVsBot,
+                        opponent: oppName
+                    });
+                    if (gemsRes.success) {
+                        // User profile in state might be updated by parent or on next fetch
+                    }
+                }
+            }
+
             // Refresh history state immediately after saving
             fetchHistory(0);
         } catch (err) {
-            console.error('Error saving history:', err);
+            console.error('Error saving history/rewards:', err);
         }
     };
 
@@ -931,6 +1064,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         const from = page * PAGE_SIZE;
         const to = from + PAGE_SIZE - 1;
 
+        setIsLoadingHistory(true);
         try {
             const { data, count, error } = await supabase
                 .from('battle_history')
@@ -938,7 +1072,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
                 .range(from, to);
-            
+
             if (data) {
                 setBattleHistory(data);
                 if (count !== null) setTotalHistory(count);
@@ -946,6 +1080,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             }
         } catch (err) {
             console.error('Error fetching history:', err);
+        } finally {
+            setIsLoadingHistory(false);
         }
     }, [user?.id]);
 
@@ -1026,10 +1162,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         <div className={styles.lobbyWrap}>
             <AnimatePresence>
                 {showHistory && (
-                    <HistoryModal 
-                        history={battleHistory} 
-                        onClose={() => setShowHistory(false)} 
-                        language={language} 
+                    <HistoryModal
+                        history={battleHistory}
+                        onClose={() => setShowHistory(false)}
+                        language={language}
+                        currentPage={historyPage}
+                        totalCount={totalHistory}
+                        onPageChange={fetchHistory}
+                        isLoading={isLoadingHistory}
                     />
                 )}
             </AnimatePresence>
@@ -1082,6 +1222,33 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         </motion.div>
                         <span>{language === 'bn' ? 'ব্যাটেল ফিল্ড' : 'Battlefield'}</span>
                     </motion.h2>
+
+                    {challengeProfile && (
+                        <motion.div
+                            className={styles.challengeIndicator}
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                        >
+                            <div className={styles.challengePulse} />
+                            <span>
+                                {language === 'bn' ? 'চ্যালেঞ্জ করছেন: ' : 'Challenging: '}
+                                <strong>{challengeProfile.full_name || challengeProfile.display_name}</strong>
+                            </span>
+                            <button
+                                className={styles.cancelChallenge}
+                                onClick={() => {
+                                    setChallengeId(null);
+                                    setChallengeProfile(null);
+                                    const newParams = new URLSearchParams(searchParams);
+                                    newParams.delete('challengeId');
+                                    setSearchParams(newParams, { replace: true });
+                                }}
+                            >
+                                <X size={14} />
+                            </button>
+                        </motion.div>
+                    )}
+
                     <motion.p
                         className={styles.lobbySubtitle}
                         initial={{ opacity: 0 }}
@@ -1146,7 +1313,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
                     <motion.button
                         className={styles.createBtn}
-                        onClick={handleCreateRoom}
+                        onClick={() => handleCreateRoom()}
                         disabled={!battleMode || !selectedCourse}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -1167,7 +1334,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             onChange={e => setJoinCode(e.target.value.toUpperCase())}
                             maxLength={6}
                         />
-                        <button 
+                        <button
                             className={styles.joinBtn}
                             onClick={handleJoinRoom}
                             disabled={joinCode.length < 4 || !battleMode}
@@ -1213,20 +1380,20 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     <motion.div
                         className={styles.vsContainer}
                         initial={{ scale: 0, rotate: -180 }}
-                        animate={{ 
-                            scale: 1, 
-                            rotate: 0 
+                        animate={{
+                            scale: 1,
+                            rotate: 0
                         }}
                         transition={{ type: "spring", delay: 0.4 }}
                     >
-                        <motion.div 
+                        <motion.div
                             className={styles.vsBadge}
-                            animate={{ 
+                            animate={{
                                 scale: [1, 1.1, 1],
                                 rotate: [-10, -5, -12, -10],
                                 filter: ["brightness(1) contrast(1)", "brightness(1.2) contrast(1.1)", "brightness(1) contrast(1)"]
                             }}
-                            transition={{ 
+                            transition={{
                                 duration: 2,
                                 repeat: Infinity,
                                 ease: "easeInOut"
@@ -1379,9 +1546,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         <span className={styles.youBadge}>{language === 'bn' ? 'আমি' : 'You'}</span>
                     </div>
 
-                    <motion.div 
+                    <motion.div
                         className={styles.vsBadge}
-                        animate={{ 
+                        animate={{
                             scale: [1, 1.15, 1],
                             rotate: [-12, -8, -14, -12],
                         }}
@@ -1405,7 +1572,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             </div>
                         )}
                         <span className={styles.playerName}>{oppName}</span>
-                        {isVsBot && <span className={styles.botSubtext}>{language === 'bn' ? 'কোনো লার্নার পাওয়া যায়নি' : 'No player found'}</span>}
+                        {isVsBot && <span className={styles.botSubtext}>{language === 'bn' ? 'লার্নার পাওয়া যায়নি' : 'No player found'}</span>}
                     </div>
                 </div>
 
@@ -1427,7 +1594,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         <div className={styles.gameWrap}>
             <AnimatePresence>
                 {showExitConfirm && (
-                    <ExitModal 
+                    <ExitModal
                         language={language}
                         onConfirm={confirmExit}
                         onCancel={() => setShowExitConfirm(false)}
@@ -1515,7 +1682,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         </h2>
 
                         {selectedOption === 'timeout' && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className={styles.timeoutWarning}
@@ -1546,7 +1713,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                             {optionLabels[optIdx]}
                                         </div>
                                         <span className={styles.optionText}>{opt.option_text}</span>
-                                        
+
                                         {showCorrect && (
                                             <div className={styles.feedbackIcon}>
                                                 <CheckCircle2 size={24} color="var(--color-success)" strokeWidth={2.5} />
@@ -1570,6 +1737,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     // ── RESULT ────────────────────────────────────────────────
     if (phase === 'result') return (
         <div className={styles.resultWrap}>
+
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -1584,18 +1752,65 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         </div>
                     ) : (
                         <div className={styles.winnerBadge}>
+                            {isWinner && (
+                                <div className={styles.fireworksWrapper}>
+                                    <DotLottieReact
+                                        src="/models/Fireworks.lottie"
+                                        autoplay
+                                        loop
+                                    />
+                                </div>
+                            )}
+
                             <motion.div
                                 animate={{ rotate: [-8, 8, -8] }}
                                 transition={{ repeat: Infinity, duration: 1.4 }}
+                                style={{ position: 'relative', zIndex: 2 }}
                             >
-                                <Crown size={48} className={isWinner ? styles.crownGold : styles.crownSilver} />
+                                <Trophy size={48} className={isWinner ? styles.trophyGold : styles.trophySilver} />
                             </motion.div>
                             <h3>{isWinner
-                                ? (language === 'bn' ? '🎉 আপনি জিতেছেন!' : '🎉 You Won!')
+                                ? (language === 'bn' ? 'আপনি জিতেছেন!' : 'You Won!')
                                 : (language === 'bn' ? 'পরাজিত' : 'Defeated')}</h3>
                         </div>
                     )}
                 </div>
+
+                {isWinner && isEligible ? (
+                    <motion.div
+                        className={styles.rewardSummary}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        <div className={styles.rewardItem}>
+                            <Star size={16} fill="var(--color-primary)" color="var(--color-primary)" />
+                            <span>+{Math.round((myCorrect / TOTAL_QUESTIONS) * 10)} XP</span>
+                        </div>
+                        {isWinner && (
+                            <div className={styles.rewardItem}>
+                                <PollenIcon size={16} />
+                                <span>+2 {language === 'bn' ? 'মধুরেণু' : 'Pollen'}</span>
+                            </div>
+                        )}
+                    </motion.div>
+                ) : (
+                    isWinner && (
+                        <motion.div
+                            className={styles.rewardNotice}
+                            initial={{ opacity: 0, y: 5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                        >
+                            <Shield size={14} className={styles.noticeIcon} />
+                            <span>
+                                {language === 'bn'
+                                    ? 'রিওয়ার্ড পেতে নূন্যতম ৫০% সঠিক উত্তর দিতে হবে'
+                                    : 'Minimum 50% correct answers required for rewards'}
+                            </span>
+                        </motion.div>
+                    )
+                )}
+
 
                 <div className={styles.scoreComparison}>
                     <div className={`${styles.scoreBlock} ${isWinner ? styles.scoreBlockWinner : ''}`}>
@@ -1629,8 +1844,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
             <AnimatePresence>
                 {showHistory && (
-                    <HistoryModal 
-                        history={battleHistory} 
+                    <HistoryModal
+                        history={battleHistory}
                         totalCount={totalHistory}
                         currentPage={historyPage}
                         onPageChange={fetchHistory}

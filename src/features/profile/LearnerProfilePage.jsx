@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import {
     ArrowLeft, UserPlus, MessageSquare, Check,
     Flame, Trophy, BookOpen, Zap, UserCheck,
-    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical, Shield
+    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical, Shield, Swords
 } from 'lucide-react';
 import { toast } from 'sonner';
 import styles from './LearnerProfilePage.module.css';
@@ -149,7 +149,11 @@ const LearnerProfilePage = () => {
             } else if (connStatus === 'outgoing') {
                 await connectionService.removeConnection(connId);
                 setConnStatus('none');
-                setConnId(null);
+            } else if (connStatus === 'accepted') {
+                if (window.confirm(language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি কানেকশন বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?')) {
+                    await connectionService.disconnect(user.id, learnerId);
+                    setConnStatus('none');
+                }
             }
         } catch (err) {
             console.error('Connection action error:', err);
@@ -157,8 +161,15 @@ const LearnerProfilePage = () => {
             setActionLoading(false);
         }
     };
+    const handleMessage = () => {
+        if (!user) { navigate('/auth'); return; }
+        navigate(`/connections?sub=inbox&partnerId=${learnerId}`);
+    };
 
-    const handleMessage = () => navigate(`/connections?sub=inbox&partnerId=${learnerId}`);
+    const handleBattleRequest = () => {
+        if (!user) { navigate('/auth'); return; }
+        navigate(`/connections?sub=battle&challengeId=${learnerId}`);
+    };
 
     const handleDisconnect = async () => {
         if (!window.confirm(language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি সংযোগ বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?')) return;
@@ -319,7 +330,6 @@ const LearnerProfilePage = () => {
                     </div>
                 </motion.div>
 
-                {/* ── Action Buttons ── */}
                 <motion.div
                     className={styles.actions}
                     initial={{ opacity: 0, y: 8 }}
@@ -327,23 +337,41 @@ const LearnerProfilePage = () => {
                     transition={{ duration: 0.3, delay: 0.07, ease: 'easeOut' }}
                 >
                     {/* Connect button – always visible */}
-                    <button
+                    <motion.button
                         className={`${styles.actionBtn} ${styles.connectBtn} ${
                             connStatus === 'accepted' ? styles.connectedBtn :
                             connStatus === 'outgoing' ? styles.outgoingBtn : ''
                         }`}
                         onClick={handleConnect}
                         disabled={actionLoading}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                     >
                         <ConnectIcon />
                         <span>{connectLabel()}</span>
-                    </button>
+                    </motion.button>
 
                     {/* Message button – always visible */}
-                    <button className={`${styles.actionBtn} ${styles.msgBtn}`} onClick={handleMessage}>
+                    <motion.button 
+                        className={`${styles.actionBtn} ${styles.msgBtn}`} 
+                        onClick={handleMessage}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
                         <MessageSquare size={15} />
                         <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
-                    </button>
+                    </motion.button>
+
+                    {/* Battle Request button */}
+                    <motion.button 
+                        className={`${styles.actionBtn} ${styles.battleBtn}`} 
+                        onClick={handleBattleRequest}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Swords size={15} />
+                        <span>{language === 'bn' ? 'ব্যাটেল' : 'Battle'}</span>
+                    </motion.button>
                 </motion.div>
 
                 {/* ── Status Grid ── */}

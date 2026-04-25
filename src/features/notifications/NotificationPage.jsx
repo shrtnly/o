@@ -201,7 +201,8 @@ const NotificationPage = () => {
                                                                             <Award size={15} color="#9B59B6" />
                                                                         )}
                                                                         {notif.type === 'achievement' && <Award size={15} color="#9B59B6" />}
-                                                                        {!['reward', 'streak', 'course', 'unlock', 'achievement'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
+                                                                        {notif.type === 'battle_invite' && <Swords size={15} color="var(--color-primary)" />}
+                                                                        {!['reward', 'streak', 'course', 'unlock', 'achievement', 'battle_invite'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
                                                                     </>
                                                                 )}
                                                             </div>
@@ -230,6 +231,51 @@ const NotificationPage = () => {
                                                                 <button className={styles.actionLink} onClick={() => navigate('/shop')}>
                                                                     শপ দেখুন <ChevronRight size={11} />
                                                                 </button>
+                                                            )}
+
+                                                            {notif.type === 'battle_invite' && notif.data?.status === 'accepted' && (
+                                                                <div className={styles.respondedStatus}>
+                                                                    <Check size={12} strokeWidth={3} />
+                                                                    <span>ব্যাটেল করেছেন</span>
+                                                                </div>
+                                                            )}
+
+                                                            {notif.type === 'battle_invite' && notif.data?.status === 'finished' && (
+                                                                <div className={styles.respondedStatus} style={{ color: 'var(--color-primary)' }}>
+                                                                    <Trophy size={12} strokeWidth={3} />
+                                                                    <span>ফলাফল দেখুন</span>
+                                                                </div>
+                                                            )}
+
+                                                            {notif.type === 'battle_invite' && !notif.data?.status && (
+                                                                (() => {
+                                                                    const createdAt = new Date(notif.created_at).getTime();
+                                                                    const now = new Date().getTime();
+                                                                    const diffSeconds = (now - createdAt) / 1000;
+                                                                    const isExpired = diffSeconds > 20;
+
+                                                                    if (isExpired) {
+                                                                        return (
+                                                                            <div className={styles.respondedStatus} style={{ color: 'rgba(255,255,255,0.3)' }}>
+                                                                                <X size={12} strokeWidth={3} />
+                                                                                <span>গ্রহণ করা হয়নি</span>
+                                                                            </div>
+                                                                        );
+                                                                    }
+
+                                                                    return (
+                                                                        <button
+                                                                            className={styles.actionLink}
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                window.location.href = `/connections?sub=battle&joinCode=${notif.data?.roomCode}`;
+                                                                                if (!notif.is_read) markAsRead(notif.id);
+                                                                            }}
+                                                                        >
+                                                                            ব্যাটলে যোগ দিন <ChevronRight size={11} />
+                                                                        </button>
+                                                                    );
+                                                                })()
                                                             )}
 
                                                             {notif.type === 'connection' && notif.data?.status === 'pending' && (

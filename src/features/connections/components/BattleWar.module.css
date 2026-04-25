@@ -74,6 +74,53 @@
     }
 }
 
+/* ── Challenge Indicator ───────────────────────────────────── */
+.challengeIndicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(241, 196, 15, 0.08);
+    border: 1px dashed var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 10px;
+    margin: 5px 0 10px;
+    font-size: 0.82rem;
+    color: var(--color-text-dim);
+}
+
+.challengePulse {
+    width: 6px;
+    height: 6px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+.cancelChallenge {
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s;
+    margin-left: 2px;
+}
+
+.cancelChallenge:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: var(--color-danger);
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(241, 196, 15, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
+}
+
 .lobbyHero {
     display: flex;
     flex-direction: column;
@@ -1436,6 +1483,8 @@
     flex-direction: column;
     align-items: center;
     gap: 1.5rem;
+    position: relative;
+    z-index: 10;
 }
 
 .resultHero {
@@ -1448,6 +1497,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
+    position: relative;
 }
 
 .winnerBadge h3,
@@ -1458,11 +1508,11 @@
     margin: 0;
 }
 
-.crownGold {
+.trophyGold {
     color: #F1C40F;
 }
 
-.crownSilver {
+.trophySilver {
     color: #95a5a6;
 }
 
@@ -1920,6 +1970,36 @@
     white-space: nowrap;
 }
 
+.slCol {
+    color: var(--color-text-muted);
+    font-weight: 700;
+    font-size: 0.8rem;
+    width: 30px;
+    text-align: center;
+}
+
+.typeBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.typeSent {
+    background: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+}
+
+.typeReceived {
+    background: rgba(46, 204, 113, 0.1);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
 .emptyHistory {
     padding: 4rem 2rem;
     display: flex;
@@ -2080,7 +2160,85 @@
     color: var(--color-primary);
 }
 
-.quitBtn:active, .stayBtn:active {
+.stayBtn:active, .stayBtn:active {
     transform: translateY(2px);
     border-bottom-width: 2px;
 }
+
+.fireworksWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 240px;
+    height: 240px;
+    pointer-events: none;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+}
+
+.rewardSummary {
+    display: flex;
+    gap: 1rem;
+    padding: 0.6rem 1rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 12px;
+    margin-top: -0.5rem;
+    z-index: 10;
+}
+
+.rewardItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.rewardNotice {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1rem;
+    background: rgba(231, 76, 60, 0.08);
+    border: 1px solid rgba(231, 76, 60, 0.2);
+    border-radius: 12px;
+    margin-top: -0.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #E74C3C;
+    z-index: 10;
+}
+
+.noticeIcon {
+    flex-shrink: 0;
+    opacity: 0.8;
+}
+
+.skeletonPulse {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05) 25%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonPulse 1.5s infinite linear;
+    border-radius: 4px;
+}
+
+@keyframes skeletonPulse {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+

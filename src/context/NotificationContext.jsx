@@ -303,17 +303,20 @@ export const NotificationProvider = ({ children }) => {
                                     }}>
                                         {newNotif.data?.display_title || newNotif.title}
                                     </div>
-                                    <div style={{ 
-                                        fontSize: '0.82rem', 
-                                        fontWeight: '800', 
-                                        color: '#fff', 
-                                        lineHeight: '1.2' 
-                                    }}>
                                         {newNotif.data?.display_msg || (actorProfile?.full_name || actorProfile?.display_name || 'BeeLesson Achievement')}
                                     </div>
+                                    {newNotif.data?.course_name && (
+                                        <div style={{ 
+                                            fontSize: '11px', 
+                                            color: 'rgba(255,255,255,0.5)',
+                                            marginTop: '1px'
+                                        }}>
+                                            {newNotif.data.course_name}
+                                        </div>
+                                    )}
                                 </div>
 
-                                {/* Action Buttons for Connection */}
+                                {/* Action Buttons for Connection or Battle Invite */}
                                 {newNotif.type === 'connection' && newNotif.data?.status === 'pending' ? (
                                     <div style={{ display: 'flex', gap: '6px' }}>
                                         <button 
@@ -355,6 +358,60 @@ export const NotificationProvider = ({ children }) => {
                                                 cursor: 'pointer',
                                                 color: 'rgba(255, 255, 255, 0.4)'
                                             }}
+                                        >
+                                            <X size={18} />
+                                        </button>
+                                    </div>
+                                ) : newNotif.type === 'battle_invite' ? (
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button 
+                                            onClick={async (e) => {
+                                                e.stopPropagation();
+                                                toast.dismiss(t);
+                                                // Update status to accepted
+                                                if (newNotif.id) {
+                                                    await supabase.from('notifications').update({
+                                                        data: { ...newNotif.data, status: 'accepted' }
+                                                    }).eq('id', newNotif.id);
+                                                }
+                                                window.location.href = `/connections?sub=battle&joinCode=${newNotif.data?.roomCode}`;
+                                            }}
+                                            style={{
+                                                background: 'var(--color-primary)',
+                                                border: 'none',
+                                                borderRadius: '10px',
+                                                padding: '0 14px',
+                                                height: '34px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '6px',
+                                                cursor: 'pointer',
+                                                color: '#000',
+                                                fontSize: '11px',
+                                                fontWeight: '800'
+                                            }}
+                                        >
+                                            <Swords size={16} strokeWidth={2.5} />
+                                            BATTLE
+                                        </button>
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toast.dismiss(t);
+                                            }}
+                                            style={{
+                                                background: 'rgba(255, 255, 255, 0.05)',
+                                                border: 'none',
+                                                borderRadius: '10px',
+                                                width: '34px',
+                                                height: '34px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                color: 'rgba(255, 255, 255, 0.4)'
+                                            }}
+                                            title="Decline"
                                         >
                                             <X size={18} />
                                         </button>

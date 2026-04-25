@@ -24,7 +24,7 @@ const CourseListPage = () => {
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [loading, setLoading] = useState(true);
-    const [activeCategory, setActiveCategory] = useState('All');
+    const [activeCategory, setActiveCategory] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [viewType, setViewType] = useState('grid'); // 'grid' or 'list'
     const [sortBy, setSortBy] = useState('popularity'); // 'popularity' or 'rating'
@@ -110,128 +110,133 @@ const CourseListPage = () => {
         <div className={styles.pageWrapper}>
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
-                    {/* Sticky Header for Search and Categories */}
-                    <div className={styles.stickyHeader}>
-                        <div className={styles.topBar}>
-                            <div className={styles.searchBox}>
-                                <Search size={18} className={styles.searchIcon} />
-                                <input 
-                                    type="text" 
-                                    placeholder={t('search_courses')} 
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                                {searchQuery && (
-                                    <button 
-                                        className={styles.clearSearch} 
-                                        onClick={() => setSearchQuery('')}
-                                    >
-                                        <X size={16} />
-                                    </button>
-                                )}
-                            </div>
-
-                            <div className={styles.controls}>
-                                <div className={styles.sortGroup}>
-                                    <span className={styles.controlLabel}>{t('sort_by')}</span>
-                                    <div className={styles.togglePair}>
-                                        <button 
-                                            className={`${styles.toggleBtn} ${sortBy === 'popularity' ? styles.activeToggle : ''}`}
-                                            onClick={() => setSortBy('popularity')}
-                                            title={t('sort_popularity')}
-                                        >
-                                            <TrendingUp size={16} />
-                                        </button>
-                                        <button 
-                                            className={`${styles.toggleBtn} ${sortBy === 'rating' ? styles.activeToggle : ''}`}
-                                            onClick={() => setSortBy('rating')}
-                                            title={t('sort_rating')}
-                                        >
-                                            <Star size={16} />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className={styles.divider} />
-
-                                <div className={styles.viewToggle}>
-                                    <div className={styles.togglePair}>
-                                        <button 
-                                            className={`${styles.toggleBtn} ${viewType === 'grid' ? styles.activeToggle : ''}`}
-                                            onClick={() => setViewType('grid')}
-                                            title={t('grid_view')}
-                                        >
-                                            <LayoutGrid size={18} />
-                                        </button>
-                                        <button 
-                                            className={`${styles.toggleBtn} ${viewType === 'list' ? styles.activeToggle : ''}`}
-                                            onClick={() => setViewType('list')}
-                                            title={t('list_view')}
-                                        >
-                                            <ListIcon size={18} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Horizontal Category Tabs */}
-                        <div className={styles.tabsRow}>
-                            <div className={styles.tabsContainer}>
-                                {categories.map(cat => (
-                                    <button
-                                        key={cat.id}
-                                        className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
-                                        onClick={() => setActiveCategory(cat.id)}
-                                    >
-                                        {cat.name}
-                                    </button>
+                    {loading ? (
+                        <div className={styles.loadingState}>
+                            <div className={styles.skeletonHeader} />
+                            <div className={styles.grid}>
+                                {[...Array(6)].map((_, i) => (
+                                    <CourseSkeleton key={i} />
                                 ))}
                             </div>
-                            <div className={styles.resultsCount}>
-                                {filteredCourses.length} {t('courses_found_small')}
-                            </div>
-                        </div>
-                    </div>
-
-                    {loading ? (
-                        <div className={styles.grid}>
-                            {[...Array(6)].map((_, i) => (
-                                <CourseSkeleton key={i} />
-                            ))}
                         </div>
                     ) : (
-                        <div className={styles.content}>
-                            {filteredCourses.length > 0 ? (
-                                <div className={viewType === 'grid' ? styles.grid : styles.list}>
-                                    {filteredCourses.map(course => (
-                                        <CourseCard
-                                            key={course.id}
-                                            course={course}
-                                            isEnrolled={enrolledCourseIds.has(course.id)}
-                                            viewType={viewType}
+                        <>
+                            {/* Sticky Header for Search and Categories */}
+                            <div className={styles.stickyHeader}>
+                                <div className={styles.topBar}>
+                                    <div className={styles.searchBox}>
+                                        <Search size={18} className={styles.searchIcon} />
+                                        <input 
+                                            type="text" 
+                                            placeholder={t('search_courses')} 
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
                                         />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className={styles.emptyState}>
-                                    <div className={styles.emptyIcon}>
-                                        <Info size={48} />
+                                        {searchQuery && (
+                                            <button 
+                                                className={styles.clearSearch} 
+                                                onClick={() => setSearchQuery('')}
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        )}
                                     </div>
-                                    <h3>{t('no_courses_found')}</h3>
-                                    <p>{t('try_different_filter')}</p>
-                                    <button 
-                                        className={styles.resetBtn}
-                                        onClick={() => {
-                                            setActiveCategory('All');
-                                            setSearchQuery('');
-                                        }}
-                                    >
-                                        {t('reset_filters')}
-                                    </button>
+
+                                    <div className={styles.controls}>
+                                        <div className={styles.sortGroup}>
+                                            <span className={styles.controlLabel}>{t('sort_by')}</span>
+                                            <div className={styles.togglePair}>
+                                                <button 
+                                                    className={`${styles.toggleBtn} ${sortBy === 'popularity' ? styles.activeToggle : ''}`}
+                                                    onClick={() => setSortBy('popularity')}
+                                                    title={t('sort_popularity')}
+                                                >
+                                                    <TrendingUp size={16} />
+                                                </button>
+                                                <button 
+                                                    className={`${styles.toggleBtn} ${sortBy === 'rating' ? styles.activeToggle : ''}`}
+                                                    onClick={() => setSortBy('rating')}
+                                                    title={t('sort_rating')}
+                                                >
+                                                    <Star size={16} />
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.divider} />
+
+                                        <div className={styles.viewToggle}>
+                                            <div className={styles.togglePair}>
+                                                <button 
+                                                    className={`${styles.toggleBtn} ${viewType === 'grid' ? styles.activeToggle : ''}`}
+                                                    onClick={() => setViewType('grid')}
+                                                    title={t('grid_view')}
+                                                >
+                                                    <LayoutGrid size={18} />
+                                                </button>
+                                                <button 
+                                                    className={`${styles.toggleBtn} ${viewType === 'list' ? styles.activeToggle : ''}`}
+                                                    onClick={() => setViewType('list')}
+                                                    title={t('list_view')}
+                                                >
+                                                    <ListIcon size={18} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            )}
-                        </div>
+
+                                {/* Horizontal Category Tabs */}
+                                <div className={styles.tabsRow}>
+                                    <div className={styles.tabsContainer}>
+                                        {categories.map(cat => (
+                                            <button
+                                                key={cat.id}
+                                                className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
+                                                onClick={() => setActiveCategory(cat.id)}
+                                            >
+                                                {cat.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <div className={styles.resultsCount}>
+                                        {filteredCourses.length} {t('courses_found_small')}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={styles.content}>
+                                {filteredCourses.length > 0 ? (
+                                    <div className={viewType === 'grid' ? styles.grid : styles.list}>
+                                        {filteredCourses.map(course => (
+                                            <CourseCard
+                                                key={course.id}
+                                                course={course}
+                                                isEnrolled={enrolledCourseIds.has(course.id)}
+                                                viewType={viewType}
+                                            />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={styles.emptyState}>
+                                        <div className={styles.emptyIcon}>
+                                            <Info size={48} />
+                                        </div>
+                                        <h3>{t('no_courses_found')}</h3>
+                                        <p>{t('try_different_filter')}</p>
+                                        <button 
+                                            className={styles.resetBtn}
+                                            onClick={() => {
+                                                setActiveCategory('All');
+                                                setSearchQuery('');
+                                            }}
+                                        >
+                                            {t('reset_filters')}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

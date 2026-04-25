@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Info, LayoutGrid, List as ListIcon, TrendingUp, Star } from 'lucide-react';
+import { Search, Info, LayoutGrid, List as ListIcon, TrendingUp, Star, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
@@ -27,13 +27,13 @@ const CourseListPage = () => {
     const [activeCategory, setActiveCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
     const [viewType, setViewType] = useState('grid'); // 'grid' or 'list'
-    const [sortBy, setBySort] = useState('popularity'); // 'popularity' or 'rating'
+    const [sortBy, setSortBy] = useState('popularity'); // 'popularity' or 'rating'
     const navigate = useNavigate();
 
     const baseCategories = getCategories(t);
     const categories = [
-        baseCategories[0], // All Courses
         ...(enrolledCourseIds.size > 0 ? [{ id: 'My Courses', name: t('my_courses') }] : []),
+        baseCategories[0], // All Courses
         ...baseCategories.slice(1)
     ];
 
@@ -58,8 +58,12 @@ const CourseListPage = () => {
                 }));
 
                 setCourses(updatedCourses);
-                if (enrolledData?.data) {
-                    setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
+                if (enrolledData?.data && enrolledData.data.length > 0) {
+                    const enrolledIds = new Set(enrolledData.data.map(d => d.course_id));
+                    setEnrolledCourseIds(enrolledIds);
+                    setActiveCategory('My Courses');
+                } else {
+                    setActiveCategory('All');
                 }
             } catch (error) {
                 console.error('Error fetching course data:', error);
@@ -117,45 +121,76 @@ const CourseListPage = () => {
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
+                                {searchQuery && (
+                                    <button 
+                                        className={styles.clearSearch} 
+                                        onClick={() => setSearchQuery('')}
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                )}
                             </div>
 
                             <div className={styles.controls}>
                                 <div className={styles.sortGroup}>
                                     <span className={styles.controlLabel}>{t('sort_by')}</span>
-                                    <button 
-                                        className={`${styles.sortBtn} ${styles.activeSort}`}
-                                        onClick={() => setBySort(sortBy === 'popularity' ? 'rating' : 'popularity')}
-                                        title={sortBy === 'popularity' ? t('sort_popularity') : t('sort_rating')}
-                                    >
-                                        {sortBy === 'popularity' ? <TrendingUp size={16} /> : <Star size={16} />}
-                                    </button>
+                                    <div className={styles.togglePair}>
+                                        <button 
+                                            className={`${styles.toggleBtn} ${sortBy === 'popularity' ? styles.activeToggle : ''}`}
+                                            onClick={() => setSortBy('popularity')}
+                                            title={t('sort_popularity')}
+                                        >
+                                            <TrendingUp size={16} />
+                                        </button>
+                                        <button 
+                                            className={`${styles.toggleBtn} ${sortBy === 'rating' ? styles.activeToggle : ''}`}
+                                            onClick={() => setSortBy('rating')}
+                                            title={t('sort_rating')}
+                                        >
+                                            <Star size={16} />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className={styles.divider} />
 
                                 <div className={styles.viewToggle}>
-                                    <button 
-                                        className={`${styles.viewBtn} ${styles.activeView}`}
-                                        onClick={() => setViewType(viewType === 'grid' ? 'list' : 'grid')}
-                                        title={viewType === 'grid' ? t('grid_view') : t('list_view')}
-                                    >
-                                        {viewType === 'grid' ? <LayoutGrid size={18} /> : <ListIcon size={18} />}
-                                    </button>
+                                    <div className={styles.togglePair}>
+                                        <button 
+                                            className={`${styles.toggleBtn} ${viewType === 'grid' ? styles.activeToggle : ''}`}
+                                            onClick={() => setViewType('grid')}
+                                            title={t('grid_view')}
+                                        >
+                                            <LayoutGrid size={18} />
+                                        </button>
+                                        <button 
+                                            className={`${styles.toggleBtn} ${viewType === 'list' ? styles.activeToggle : ''}`}
+                                            onClick={() => setViewType('list')}
+                                            title={t('list_view')}
+                                        >
+                                            <ListIcon size={18} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Horizontal Category Tabs */}
-                        <div className={styles.tabsContainer}>
-                            {categories.map(cat => (
-                                <button
-                                    key={cat.id}
-                                    className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
-                                    onClick={() => setActiveCategory(cat.id)}
-                                >
-                                    {cat.name}
-                                </button>
-                            ))}
+                        <div className={styles.tabsRow}>
+                            <div className={styles.tabsContainer}>
+                                {categories.map(cat => (
+                                    <button
+                                        key={cat.id}
+                                        className={`${styles.tab} ${activeCategory === cat.id ? styles.activeTab : ''}`}
+                                        onClick={() => setActiveCategory(cat.id)}
+                                    >
+                                        {cat.name}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className={styles.resultsCount}>
+                                {filteredCourses.length} {t('courses_found_small')}
+                            </div>
                         </div>
                     </div>
 

@@ -12,7 +12,7 @@ import { useNotifications } from '../../context/NotificationContext';
 import styles from './MainLayout.module.css';
 
 const MainLayout = () => {
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
     const navigate = useNavigate();
     const { isInboxOpen, activeChatId } = useNotifications();
     const intervalRef = useRef(null);
@@ -176,6 +176,7 @@ const MainLayout = () => {
                 async (payload) => {
                     const inv = payload.new;
                     if (inv.sender_id === user.id) return;
+                    if (profile?.battle_mode === false) return; // Skip if battle mode is OFF
 
                     // If already on battle war page, we might want to skip global toast 
                     // but usually it's fine to show it.
@@ -308,7 +309,7 @@ const MainLayout = () => {
             supabase.removeChannel(messageChannel);
             supabase.removeChannel(inviteChannel);
         };
-    }, [user?.id, isInboxOpen, activeChatId]);
+    }, [user?.id, isInboxOpen, activeChatId, profile]);
 
     return (
         <div className={styles.appLayout}>

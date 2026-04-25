@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Hero from './features/landing/Hero';
 import CourseSection from './features/landing/CourseSection';
@@ -51,7 +51,12 @@ const LandingPageContent = () => {
         </div>
       </section>
       <footer style={{ padding: '60px 0', borderTop: '2px solid var(--color-border)', textAlign: 'center', backgroundColor: 'var(--color-bg-alt)' }}>
-        <p>&copy; {t('footer_copy')}</p>
+        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
+          <Link to="/help" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>{t('help')}</Link>
+          <Link to="/privacy" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>{t('privacy_policy')}</Link>
+          <Link to="/terms" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>{t('terms_title')}</Link>
+        </div>
+        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>&copy; {t('footer_copy')}</p>
       </footer>
     </>
   );

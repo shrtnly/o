@@ -193,6 +193,7 @@ const LearningPage = () => {
     const [showInviteMenu, setShowInviteMenu] = useState(false);
     const [showInviteTooltip, setShowInviteTooltip] = useState(false);
     const { language, t } = useLanguage();
+    const [premiumTimeRemaining, setPremiumTimeRemaining] = useState('');
 
     const handleInviteRef = () => {
         if (navigator.share) {
@@ -436,6 +437,51 @@ const LearningPage = () => {
             if (checkAndRefillHearts) checkAndRefillHearts();
         }
     }, [courseId, user?.id]);
+
+    const toBengaliDigits = (str) => {
+        if (!str) return '';
+        const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        return str.toString().split('').map(digit => bengaliDigits[digit] || digit).join('');
+    };
+
+    // Handle 1-day premium countdown
+    useEffect(() => {
+        // Match ShopPage logic for source priority
+        const endGoal = profile?.one_day_premium_until || (profile?.is_1day_premium ? profile?.premium_until : null);
+
+        if (!profile?.is_1day_premium || !endGoal) {
+            setPremiumTimeRemaining('');
+            return;
+        }
+
+        const updateCountdown = () => {
+            try {
+                const now = new Date();
+                // Ensure we handle different date formats safely
+                const until = new Date(endGoal.toString().replace(' ', 'T'));
+                const diff = until.getTime() - now.getTime();
+
+                if (diff <= 0) {
+                    setPremiumTimeRemaining('');
+                    return;
+                }
+
+                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                setPremiumTimeRemaining(language === 'bn' ? toBengaliDigits(display) : display);
+            } catch (err) {
+                console.error("Countdown error:", err);
+                setPremiumTimeRemaining('');
+            }
+        };
+
+        updateCountdown();
+        const timer = setInterval(updateCountdown, 1000);
+        return () => clearInterval(timer);
+    }, [profile?.is_1day_premium, profile?.premium_until, profile?.one_day_premium_until, language]);
 
     // Instantly position view at active node on initial load (no scroll animation)
     useEffect(() => {
@@ -838,7 +884,13 @@ const LearningPage = () => {
                                                                         <Crown size={24} color="#f1c40f" />
                                                                         {(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় আছে' : 'কিং বী সক্রিয় আছে'}
                                                                     </h4>
-                                                                    {profile?.premium_until ? (
+                                                                    {profile?.is_1day_premium ? (
+                                                                        <p>
+                                                                            {language === 'bn' 
+                                                                                ? `আনলিমিটেড হানি ড্রপ শেষ হবে: ${premiumTimeRemaining || 'হিসাব করা হচ্ছে...'}` 
+                                                                                : `Unlimited honey drops ends in: ${premiumTimeRemaining || 'calculating...'}`}
+                                                                        </p>
+                                                                    ) : profile?.premium_until ? (
                                                                         <p>মেয়াদ শেষ হবে: {new Date(profile.premium_until).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
                                                                     ) : (
                                                                         <p>আনলিমিটেড মধু ফোঁটা</p>
@@ -937,7 +989,11 @@ const LearningPage = () => {
                                                                     <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                                                         <HoneyDropIcon size={24} /> হানি ড্রপ &nbsp; {refillHearts}
                                                                     </h4>
-                                                                    <p>কুইজে ভুল উত্তর দিলে আপনার হানি ড্রপ কমে যাবে। আনলিমিটেড হানি ড্রপ পেতে</p>
+                                                                    <p>
+                                                                        {refillHearts === 0 
+                                                                            ? (language === 'bn' ? `আপনার হানি ড্রপ শেষ হয়েছে। পুনরায় রিফিল হবে: ${refillTimeDisplay}` : `Your honey drops are empty. Refilling in: ${refillTimeDisplay}`)
+                                                                            : (language === 'bn' ? 'কুইজে ভুল উত্তর দিলে আপনার হানি ড্রপ কমে যাবে। আনলিমিটেড হানি ড্রপ পেতে' : 'Answering incorrectly will decrease your honey drops. To get unlimited honey drops')}
+                                                                    </p>
                                                                 </div>
                                                             </div>
 

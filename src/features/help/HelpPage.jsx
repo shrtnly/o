@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
     Search, BookOpen, CreditCard, Wrench, Mail,
-    ChevronDown, Zap, Globe, X
+    ChevronDown, Zap, Globe, X, Swords
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './HelpPage.module.css';
@@ -18,7 +18,8 @@ const HelpPage = () => {
         { id: 'course', title: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership', icon: BookOpen, count: 4, color: '#3498db' },
         { id: 'payment', title: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing', icon: CreditCard, count: 3, color: '#2ecc71' },
         { id: 'tech', title: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues', icon: Wrench, count: 3, color: '#e74c3c' },
-        { id: 'about', title: language === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us', icon: Globe, count: 2, color: '#e67e22' }
+        { id: 'about', title: language === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us', icon: Globe, count: 2, color: '#e67e22' },
+        { id: 'battle', title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge', icon: Swords, count: 4, color: '#9b59b6' }
     ];
 
     const faqs = [
@@ -156,6 +157,36 @@ const HelpPage = () => {
                 ? 'আপনি যদি এই প্রজেক্টে কন্ট্রিবিউট করতে চান বা কোনো ফিডব্যাক দিতে চান, তবে আমাদের ইমেইল (support@beelesson.com) করুন। আপনার পরামর্শ আমাদের জন্য অত্যন্ত মূল্যবান।'
                 : 'If you want to contribute to this project or give feedback, email us at support@beelesson.com. Your suggestions are highly valuable to us.',
             cat: language === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us'
+        },
+        
+        // ব্যাটেল চ্যালেঞ্জ (Battle Challenge)
+        { 
+            q: language === 'bn' ? 'ব্যাটেল (Battle) কি?' : 'What is Battle?', 
+            a: language === 'bn'
+                ? 'ব্যাটেল হলো একটি রিয়েল-টাইম কুইজ প্রতিযোগিতা যেখানে আপনি অন্য একজন শিক্ষার্থীর সাথে সরাসরি লড়তে পারেন। নির্দিষ্ট সময়ের মধ্যে বেশি সঠিক উত্তর দিয়ে আপনি জয়ী হতে পারেন এবং অতিরিক্ত পুরষ্কার অর্জন করতে পারেন।'
+                : 'Battle is a real-time quiz competition where you can compete directly with another learner. You can win and earn extra rewards by giving more correct answers within a specified time.',
+            cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
+        },
+        { 
+            q: language === 'bn' ? 'ব্যাটেল শুরু করবো কীভাবে?' : 'How to start a Battle?', 
+            a: language === 'bn'
+                ? 'আপনি কানেকশন ট্যাব থেকে যেকোনো শিক্ষার্থীকে চ্যালেঞ্জ পাঠাতে পারেন অথবা সরাসরি ব্যাটেল লবিতে গিয়ে "র‍্যান্ডম ম্যাচ" বা "রুম কোড" ব্যবহার করে নতুন ব্যাটেল শুরু করতে পারেন।'
+                : 'You can send a challenge to any learner from the connections tab or directly go to the battle lobby and start a new battle using "Random Match" or a "Room Code".',
+            cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
+        },
+        { 
+            q: language === 'bn' ? 'ব্যাটেল মোড (Battle Mode) অন/অফ করা যায়?' : 'Can I turn off Battle Mode?', 
+            a: language === 'bn'
+                ? 'হ্যাঁ, আপনি যদি কারো চ্যালেঞ্জ পেতে না চান, তবে ব্যাটেল লবিতে গিয়ে "ব্যাটেল মোড" সুইচটি অফ করে রাখতে পারেন। মোড অফ থাকলে কেউ আপনাকে চ্যালেঞ্জ পাঠাতে পারবে না এবং আপনি গ্লোবাল চ্যালেঞ্জ নোটিফিকেশন পাবেন না।'
+                : 'Yes, if you don\'t want to receive challenges, you can turn off the "Battle Mode" switch in the battle lobby. When off, no one can send you challenges and you won\'t receive global challenge notifications.',
+            cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
+        },
+        { 
+            q: language === 'bn' ? 'ব্যাটেল জিতলে কি পুরস্কার পাওয়া যায়?' : 'What rewards do I get for winning?', 
+            a: language === 'bn'
+                ? 'ব্যাটেল জিতলে আপনি অতিরিক্ত XP এবং মধুরেণু (Pollen) পুরস্কার হিসেবে পাবেন। কমপক্ষে ৫০% নির্ভুল উত্তর দিলে আপনি এই পুরস্কারগুলো পাবেন। এটি আপনার লিডারবোর্ড র‍্যাঙ্ক বাড়াতে দারুণ সাহায্য করবে।'
+                : 'Winning a battle awards you extra XP and Pollen. You will receive these rewards if you achieve at least 50% accuracy. This significantly helps in increasing your leaderboard rank.',
+            cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
         }
     ];
 

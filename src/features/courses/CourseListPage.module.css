@@ -103,6 +103,28 @@
     background-color: var(--color-bg-hover);
 }
 
+.clearSearch {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.clearSearch:hover {
+    background-color: var(--color-bg-hover);
+    color: var(--color-text);
+}
+
 .controls {
     display: flex;
     align-items: center;
@@ -122,36 +144,38 @@
     font-weight: 500;
 }
 
-.sortButtons, .viewToggle {
+.togglePair {
     display: flex;
-    gap: 8px;
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 3px;
+    gap: 2px;
 }
 
-.sortBtn, .viewBtn {
-    width: 38px;
-    height: 38px;
+.toggleBtn {
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
-    border: 1px solid var(--color-border);
-    background-color: var(--color-bg-alt);
+    border-radius: 9px;
+    border: none;
+    background-color: transparent;
     color: var(--color-text-muted);
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
 }
 
-.sortBtn:hover, .viewBtn:hover {
+.toggleBtn:hover {
     color: var(--color-text);
     background-color: var(--color-bg-hover);
-    border-color: var(--color-text-muted);
 }
 
-.activeSort, .activeView {
-    background-color: var(--color-bg-hover) !important;
-    color: var(--color-text) !important;
-    border-color: var(--color-border) !important;
-    box-shadow: none !important;
+.activeToggle {
+    background-color: #f1c40f !important;
+    color: #000 !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .divider {
@@ -163,14 +187,31 @@
 
 
 /* Horizontal Category Tabs */
+.tabsRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 2px;
+}
+
 .tabsContainer {
     display: flex;
     gap: 12px;
     margin-bottom: 0;
     overflow-x: auto;
-    padding-bottom: 15px;
+    padding-bottom: 12px;
     scrollbar-width: none;
     background-color: var(--color-bg-deep);
+    flex: 1;
+}
+
+.resultsCount {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    padding-bottom: 12px;
 }
 
 .tabsContainer::-webkit-scrollbar {
@@ -310,6 +351,10 @@
     }
 
     .divider {
+        display: none;
+    }
+
+    .resultsCount {
         display: none;
     }
 }

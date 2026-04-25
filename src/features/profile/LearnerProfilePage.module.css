@@ -163,6 +163,13 @@
     border-color: var(--color-primary) !important;
 }
 
+.disabledBtn {
+    opacity: 0.45 !important;
+    cursor: not-allowed !important;
+    filter: grayscale(0.8);
+    pointer-events: auto !important;
+}
+
 /* Pending / outgoing: muted */
 .outgoingBtn {
     background: var(--color-bg-alt) !important;

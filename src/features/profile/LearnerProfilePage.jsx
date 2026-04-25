@@ -14,6 +14,7 @@ import {
     Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical, Shield, Swords
 } from 'lucide-react';
 import { toast } from 'sonner';
+import ConfirmModal from '../../components/ui/ConfirmModal';
 import styles from './LearnerProfilePage.module.css';
 
 const LearnerProfilePage = () => {
@@ -37,6 +38,17 @@ const LearnerProfilePage = () => {
     const [linkCopied, setLinkCopied]       = useState(false);
     const [menuOpen, setMenuOpen]           = useState(false);
     const menuRef                           = useRef(null);
+
+    const [confirmState, setConfirmState] = useState({
+        isOpen: false,
+        title: '',
+        message: '',
+        icon: null,
+        type: 'danger',
+        onConfirm: () => {}
+    });
+
+    const closeConfirm = () => setConfirmState(prev => ({ ...prev, isOpen: false }));
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -150,10 +162,17 @@ const LearnerProfilePage = () => {
                 await connectionService.removeConnection(connId);
                 setConnStatus('none');
             } else if (connStatus === 'accepted') {
-                if (window.confirm(language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি কানেকশন বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?')) {
-                    await connectionService.disconnect(user.id, learnerId);
-                    setConnStatus('none');
-                }
+                setConfirmState({
+                    isOpen: true,
+                    title: language === 'bn' ? 'সংযোগ বিচ্ছিন্ন' : 'Disconnect',
+                    message: language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি কানেকশন বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?',
+                    icon: UserMinus,
+                    type: 'danger',
+                    onConfirm: async () => {
+                        await connectionService.disconnect(user.id, learnerId);
+                        setConnStatus('none');
+                    }
+                });
             }
         } catch (err) {
             console.error('Connection action error:', err);
@@ -172,33 +191,49 @@ const LearnerProfilePage = () => {
     };
 
     const handleDisconnect = async () => {
-        if (!window.confirm(language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি সংযোগ বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?')) return;
-        try {
-            setActionLoading(true);
-            await connectionService.disconnect(user.id, learnerId);
-            setConnStatus('none');
-            toast.success(language === 'bn' ? 'সংযোগ বিচ্ছিন্ন করা হয়েছে' : 'Disconnected successfully');
-        } catch (error) {
-            console.error('Error disconnecting:', error);
-            toast.error('Error disconnecting user');
-        } finally {
-            setActionLoading(false);
-        }
+        setConfirmState({
+            isOpen: true,
+            title: language === 'bn' ? 'সংযোগ বিচ্ছিন্ন' : 'Disconnect',
+            message: language === 'bn' ? 'আপনি কি নিশ্চিত যে আপনি কানেকশন বিচ্ছিন্ন করতে চান?' : 'Are you sure you want to disconnect?',
+            icon: UserMinus,
+            type: 'danger',
+            onConfirm: async () => {
+                try {
+                    setActionLoading(true);
+                    await connectionService.disconnect(user.id, learnerId);
+                    setConnStatus('none');
+                    toast.success(language === 'bn' ? 'সংযোগ বিচ্ছিন্ন করা হয়েছে' : 'Disconnected successfully');
+                } catch (error) {
+                    console.error('Error disconnecting:', error);
+                    toast.error('Error disconnecting user');
+                } finally {
+                    setActionLoading(false);
+                }
+            }
+        });
     };
 
     const handleBlock = async () => {
-        if (!window.confirm(language === 'bn' ? 'এই ব্যবহারকারীকে ব্লক করতে চান?' : 'Block this user?')) return;
-        try {
-            setActionLoading(true);
-            await connectionService.blockUser(user.id, learnerId);
-            setIsBlocked(true);
-            setConnStatus('none');
-            toast.success(language === 'bn' ? 'ব্যবহারকারীকে ব্লক করা হয়েছে' : 'User blocked');
-        } catch (error) {
-            console.error('Error blocking user:', error);
-        } finally {
-            setActionLoading(false);
-        }
+        setConfirmState({
+            isOpen: true,
+            title: language === 'bn' ? 'ব্লক করুন' : 'Block User',
+            message: language === 'bn' ? 'এই ব্যবহারকারীকে ব্লক করতে চান?' : 'Do you want to block this user?',
+            icon: Ban,
+            type: 'danger',
+            onConfirm: async () => {
+                try {
+                    setActionLoading(true);
+                    await connectionService.blockUser(user.id, learnerId);
+                    setIsBlocked(true);
+                    setConnStatus('none');
+                    toast.success(language === 'bn' ? 'ব্যবহারকারীকে ব্লক করা হয়েছে' : 'User blocked');
+                } catch (error) {
+                    console.error('Error blocking user:', error);
+                } finally {
+                    setActionLoading(false);
+                }
+            }
+        });
     };
 
     const handleUnblock = async () => {
@@ -364,10 +399,18 @@ const LearnerProfilePage = () => {
 
                     {/* Battle Request button */}
                     <motion.button 
-                        className={`${styles.actionBtn} ${styles.battleBtn}`} 
-                        onClick={handleBattleRequest}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        className={`${styles.actionBtn} ${styles.battleBtn} ${learner.battle_mode === false ? styles.disabledBtn : ''}`} 
+                        onClick={() => {
+                            if (learner.battle_mode === false) {
+                                toast.error(language === 'bn' ? 'এই শিক্ষার্থী বর্তমানে ব্যাটেল মোড বন্ধ রেখেছেন' : 'This learner has disabled battle mode');
+                                return;
+                            }
+                            handleBattleRequest();
+                        }}
+                        whileHover={learner.battle_mode !== false ? { scale: 1.02 } : {}}
+                        whileTap={learner.battle_mode !== false ? { scale: 0.98 } : {}}
+                        disabled={learner.battle_mode === false}
+                        title={learner.battle_mode === false ? (language === 'bn' ? 'ব্যাটেল মোড বন্ধ' : 'Battle mode disabled') : ''}
                     >
                         <Swords size={15} />
                         <span>{language === 'bn' ? 'ব্যাটেল' : 'Battle'}</span>
@@ -553,6 +596,18 @@ const LearnerProfilePage = () => {
 
                 <div style={{ height: 24 }} />
             </div>
+
+            <ConfirmModal
+                isOpen={confirmState.isOpen}
+                onClose={closeConfirm}
+                onConfirm={confirmState.onConfirm}
+                title={confirmState.title}
+                message={confirmState.message}
+                icon={confirmState.icon}
+                type={confirmState.type}
+                confirmText={language === 'bn' ? 'হ্যাঁ' : 'Yes'}
+                cancelText={language === 'bn' ? 'না' : 'No'}
+            />
         </div>
     );
 };

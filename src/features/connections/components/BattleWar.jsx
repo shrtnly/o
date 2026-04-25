@@ -692,8 +692,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     roomCode: code,
                     display_title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'BATTLE CHALLENGE',
                     display_msg: language === 'bn'
-                        ? `${userProfile?.full_name || 'কেউ একজন'} ব্যাটেল চ্যালেঞ্জ পাঠিয়েছেন।`
-                        : `${userProfile?.full_name || 'Someone'} has sent a battle challenge.`,
+                        ? `${userProfile?.full_name || 'কেউ একজন'} চ্যালেঞ্জ পাঠিয়েছেন।`
+                        : `${userProfile?.full_name || 'Someone'} has sent a challenge.`,
                     course_name: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
                 }
             });
@@ -760,8 +760,23 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         if (cId && user?.id) {
             setChallengeId(cId);
             const fetchChallengeProfile = async (id) => {
-                const { data } = await supabase.from('profiles').select('id, full_name, display_name').eq('id', id).single();
-                if (data) setChallengeProfile(data);
+                const { data } = await supabase
+                    .from('profiles')
+                    .select('id, full_name, display_name, battle_mode')
+                    .eq('id', id)
+                    .single();
+                
+                if (data) {
+                    if (data.battle_mode === false) {
+                        toast.error(language === 'bn' ? 'এই শিক্ষার্থী বর্তমানে ব্যাটেল মোড বন্ধ রেখেছেন' : 'This learner has disabled battle mode');
+                        const newParams = new URLSearchParams(searchParams);
+                        newParams.delete('challengeId');
+                        setSearchParams(newParams, { replace: true });
+                        setChallengeId(null);
+                    } else {
+                        setChallengeProfile(data);
+                    }
+                }
             };
             fetchChallengeProfile(cId);
         }
@@ -1007,8 +1022,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         try {
             const finalResult = myScore === oppScore ? 'draw' : (myScore > oppScore ? 'win' : 'loss');
             const isWinner = finalResult === 'win';
-            const accuracy = myCorrect / TOTAL_QUESTIONS;
-            const isEligible = accuracy >= 0.5;
+            const accuracyPercent = qIndexRef.current > 0 ? Math.round((myCorrect / qIndexRef.current) * 100) : 0;
+            const isEligible = accuracyPercent >= 50;
 
             // 1. Save to History
             await supabase.from('battle_history').insert({
@@ -1152,6 +1167,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const oppName = opponentProfile?.full_name || opponentProfile?.display_name || 'প্রতিপক্ষ';
     const isWinner = myScore > oppScore;
     const isDraw = myScore === oppScore;
+    const isEligible = myAcc >= 50;
 
     // ── LOBBY ─────────────────────────────────────────────────
     if (phase === 'lobby' && allCourses.length === 0 && isLoadingSetup) {

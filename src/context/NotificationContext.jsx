@@ -2,13 +2,15 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from './AuthContext';
 import { toast } from 'sonner';
-import { X, Check } from 'lucide-react';
+import { X, Check, Swords, Trophy, Bell, Flame, BookOpen, Award } from 'lucide-react';
 import { connectionService } from '../services/connectionService';
+import { useLanguage } from './LanguageContext';
 
 const NotificationContext = createContext();
 
 export const NotificationProvider = ({ children }) => {
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
+    const { language } = useLanguage();
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [pendingConnectionsCount, setPendingConnectionsCount] = useState(0);
@@ -63,7 +65,11 @@ export const NotificationProvider = ({ children }) => {
                 .limit(PAGE_SIZE);
             
             if (error) throw error;
-            setNotifications(data || []);
+            let filteredData = data || [];
+            if (profile?.battle_mode === false) {
+                filteredData = filteredData.filter(n => n.type !== 'battle_invite');
+            }
+            setNotifications(filteredData);
             setHasMore((data || []).length === PAGE_SIZE);
             refreshUnreadCount();
             refreshConnectionsCount();
@@ -96,10 +102,16 @@ export const NotificationProvider = ({ children }) => {
             if (error) throw error;
             
             if (data && data.length > 0) {
+                // Filter out battle invites if mode is OFF
+                let processedData = data;
+                if (profile?.battle_mode === false) {
+                    processedData = data.filter(n => n.type !== 'battle_invite');
+                }
+
                 // Avoid duplicates if realtime listener already added them
                 setNotifications(prev => {
                     const existingIds = new Set(prev.map(n => n.id));
-                    const newData = data.filter(n => !existingIds.has(n.id));
+                    const newData = processedData.filter(n => !existingIds.has(n.id));
                     return [...prev, ...newData];
                 });
                 setHasMore(data.length === PAGE_SIZE);
@@ -221,6 +233,11 @@ export const NotificationProvider = ({ children }) => {
                     refreshUnreadCount();
 
                     if (eventType === 'INSERT') {
+                        // Suppress battle notifications if battle mode is OFF
+                        if (newNotif.type === 'battle_invite' && profile?.battle_mode === false) {
+                            return;
+                        }
+
                         let actorProfile = null;
                         if (newNotif.actor_id) {
                             const { data } = await supabase
@@ -241,31 +258,36 @@ export const NotificationProvider = ({ children }) => {
                         // Show Premium Custom Toast
                         toast.custom((t) => (
                             <div style={{
-                                background: 'rgba(12, 12, 12, 0.98)',
-                                padding: '10px 14px',
-                                borderRadius: '16px',
-                                border: '1px solid rgba(255, 255, 255, 0.1)',
-                                backdropFilter: 'blur(16px)',
+                                background: 'rgba(18, 18, 18, 0.94)',
+                                padding: '12px 16px',
+                                borderRadius: '20px',
+                                border: '1px solid rgba(255, 255, 255, 0.08)',
+                                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+                                backdropFilter: 'blur(24px)',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '12px',
-                                width: '320px',
-                                minWidth: '280px',
+                                gap: '14px',
+                                width: '340px',
+                                minWidth: '300px',
                                 color: '#fff',
-                                fontFamily: "'Hind Siliguri', sans-serif"
+                                fontFamily: "'Hind Siliguri', sans-serif",
+                                position: 'relative',
+                                overflow: 'hidden'
                             }}>
                                 {/* Icon/Avatar */}
                                 <div style={{
-                                    width: '36px',
-                                    height: '36px',
-                                    borderRadius: '50%',
+                                    width: '40px',
+                                    height: '40px',
+                                    borderRadius: '12px',
                                     overflow: 'hidden',
-                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    background: 'rgba(255, 255, 255, 0.03)',
                                     flexShrink: 0,
                                     border: '1px solid rgba(255, 255, 255, 0.1)',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    justifyContent: 'center'
+                                    justifyContent: 'center',
+                                    position: 'relative',
+                                    zIndex: 1
                                 }}>
                                     {actorProfile?.avatar_url ? (
                                         <img src={actorProfile.avatar_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -292,24 +314,32 @@ export const NotificationProvider = ({ children }) => {
                                 </div>
 
                                 {/* Text Info */}
-                                <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
                                     <div style={{ 
-                                        fontSize: '9px', 
-                                        color: 'var(--color-primary)', 
+                                        fontSize: '10px', 
+                                        color: newNotif.type === 'battle_invite' ? 'var(--color-primary)' : 'rgba(255,255,255,0.4)', 
                                         fontWeight: '800', 
                                         textTransform: 'uppercase', 
-                                        letterSpacing: '1px', 
-                                        marginBottom: '2px' 
+                                        letterSpacing: '1.2px', 
+                                        marginBottom: '3px' 
                                     }}>
                                         {newNotif.data?.display_title || newNotif.title}
                                     </div>
+                                    <div style={{ 
+                                        fontSize: '0.8rem', 
+                                        fontWeight: '600', 
+                                        color: '#fff', 
+                                        lineHeight: '1.4',
+                                        letterSpacing: '-0.1px'
+                                    }}>
                                         {newNotif.data?.display_msg || (actorProfile?.full_name || actorProfile?.display_name || 'BeeLesson Achievement')}
                                     </div>
                                     {newNotif.data?.course_name && (
                                         <div style={{ 
                                             fontSize: '11px', 
-                                            color: 'rgba(255,255,255,0.5)',
-                                            marginTop: '1px'
+                                            color: 'rgba(255,255,255,0.4)',
+                                            marginTop: '3px',
+                                            fontWeight: '500'
                                         }}>
                                             {newNotif.data.course_name}
                                         </div>
@@ -379,20 +409,23 @@ export const NotificationProvider = ({ children }) => {
                                             style={{
                                                 background: 'var(--color-primary)',
                                                 border: 'none',
-                                                borderRadius: '10px',
-                                                padding: '0 14px',
-                                                height: '34px',
+                                                borderRadius: '12px',
+                                                width: '38px',
+                                                height: '38px',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                gap: '6px',
+                                                justifyContent: 'center',
                                                 cursor: 'pointer',
                                                 color: '#000',
-                                                fontSize: '11px',
-                                                fontWeight: '800'
+                                                transition: 'transform 0.2s',
+                                                position: 'relative',
+                                                zIndex: 1
                                             }}
+                                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                            title="Join Battle"
                                         >
-                                            <Swords size={16} strokeWidth={2.5} />
-                                            BATTLE
+                                            <Swords size={20} strokeWidth={2.5} />
                                         </button>
                                         <button 
                                             onClick={(e) => {
@@ -402,14 +435,25 @@ export const NotificationProvider = ({ children }) => {
                                             style={{
                                                 background: 'rgba(255, 255, 255, 0.05)',
                                                 border: 'none',
-                                                borderRadius: '10px',
-                                                width: '34px',
-                                                height: '34px',
+                                                borderRadius: '12px',
+                                                width: '38px',
+                                                height: '38px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                color: 'rgba(255, 255, 255, 0.4)'
+                                                color: 'rgba(255, 255, 255, 0.4)',
+                                                transition: 'all 0.2s',
+                                                position: 'relative',
+                                                zIndex: 1
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.background = 'rgba(231, 76, 60, 0.1)';
+                                                e.currentTarget.style.color = '#E74C3C';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                                                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
                                             }}
                                             title="Decline"
                                         >
@@ -419,7 +463,28 @@ export const NotificationProvider = ({ children }) => {
                                 ) : (
                                     <button 
                                         onClick={() => toast.dismiss(t)} 
-                                        style={{ background: 'none', border: 'none', color: 'rgba(255, 255, 255, 0.2)', cursor: 'pointer', padding: '4px' }}
+                                        style={{ 
+                                            background: 'rgba(255, 255, 255, 0.05)', 
+                                            border: 'none', 
+                                            color: 'rgba(255, 255, 255, 0.3)', 
+                                            cursor: 'pointer', 
+                                            padding: '6px',
+                                            borderRadius: '8px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            transition: 'all 0.2s',
+                                            position: 'relative',
+                                            zIndex: 1
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                                            e.currentTarget.style.color = '#fff';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                                            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)';
+                                        }}
                                     >
                                         <X size={16} />
                                     </button>
@@ -459,7 +524,7 @@ export const NotificationProvider = ({ children }) => {
             supabase.removeChannel(notificationChannel);
             supabase.removeChannel(connectionsChannel);
         };
-    }, [user, fetchNotifications, refreshConnectionsCount]);
+    }, [user, fetchNotifications, refreshConnectionsCount, profile]);
 
     const [activeChatId, setActiveChatId] = useState(null);
     const [isInboxOpen, setIsInboxOpen] = useState(false);

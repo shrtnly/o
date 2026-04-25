@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, Save, X, Zap, ShoppingBag, Drone, LogOut } from 'lucide-react';
+import { Settings, Bell, Shield, User, Sliders, BookOpen, ChevronRight, Moon, Sun, Globe, Sparkles, Volume2, VolumeX, Crown, RotateCcw, AlertTriangle, Check, Save, X, Zap, ShoppingBag, Drone, LogOut, HelpCircle, ExternalLink } from 'lucide-react';
 import styles from './SettingsPage.module.css';
 import { cn } from '../../lib/utils';
 import { useTheme } from '../../context/ThemeContext';
@@ -414,6 +414,7 @@ const SettingsPage = () => {
         { id: 'notifications', label: t('notifications'), icon: Bell },
         { id: 'courses', label: t('courses'), icon: BookOpen },
         { id: 'subscription', label: t('subscription'), icon: Crown },
+        { id: 'legal', label: t('legal'), icon: Shield },
     ];
 
     const renderContent = () => {
@@ -903,6 +904,51 @@ const SettingsPage = () => {
                                     </button>
                                 )}
                             </div>
+                        </div>
+                    </div>
+                );
+            case 'legal':
+                return (
+                    <div className={styles.tabContent}>
+                        <div className={styles.sectionHeader}>
+                            <h2>{t('legal')}</h2>
+                        </div>
+                        <div className={styles.cardList}>
+                            <button className={styles.settingCard} onClick={() => navigate('/privacy')}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
+                                        <Shield size={20} />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>{t('privacy_policy')}</h3>
+                                    </div>
+                                </div>
+                                <ExternalLink size={16} className={styles.menuChevron} />
+                            </button>
+
+                            <button className={styles.settingCard} onClick={() => navigate('/terms')}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
+                                        <BookOpen size={20} />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>{t('terms_title')}</h3>
+                                    </div>
+                                </div>
+                                <ExternalLink size={16} className={styles.menuChevron} />
+                            </button>
+
+                            <button className={styles.settingCard} onClick={() => navigate('/help')}>
+                                <div className={styles.cardHeaderArea}>
+                                    <div className={styles.iconCircle}>
+                                        <HelpCircle size={20} />
+                                    </div>
+                                    <div className={styles.cardText}>
+                                        <h3>{t('help_center')}</h3>
+                                    </div>
+                                </div>
+                                <ExternalLink size={16} className={styles.menuChevron} />
+                            </button>
                         </div>
                     </div>
                 );

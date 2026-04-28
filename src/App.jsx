@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
-import Hero from './features/landing/Hero';
-import CourseSection from './features/landing/CourseSection';
 import AuthPage from './features/auth/AuthPage';
+
 import Survey from './features/survey/Survey';
 import LoadingScreen from './components/ui/LoadingScreen';
 import LearningPage from './features/learning/LearningPage';
@@ -34,34 +33,7 @@ import PrivacyPage from './features/legal/PrivacyPage';
 
 import { Toaster } from 'sonner';
 
-// Landing Page UI Component
-const LandingPageContent = () => {
-  const { t } = useLanguage();
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <CourseSection />
-      <section style={{ padding: '100px 0', textAlign: 'center', backgroundColor: 'var(--color-bg)' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 24px' }}>
-          <h2 style={{ fontSize: '2.5rem', color: 'var(--color-primary)', marginBottom: '24px' }}>{t('proven_title')}</h2>
-          <p style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', lineHeight: '1.6' }}>
-            {t('proven_desc')}
-          </p>
-        </div>
-      </section>
-      <footer style={{ padding: '60px 0', borderTop: '2px solid var(--color-border)', textAlign: 'center', backgroundColor: 'var(--color-bg-alt)' }}>
-        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-          <Link to="/help" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>{t('help')}</Link>
-          <Link to="/privacy" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>{t('privacy_policy')}</Link>
-          <Link to="/terms" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>{t('terms_title')}</Link>
-        </div>
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>&copy; {t('footer_copy')}</p>
-      </footer>
-    </>
-  );
-};
-
+import LandingPage from './features/landing/LandingPage';
 
 const HomePage = () => {
   const { user } = useAuth();
@@ -88,8 +60,9 @@ const HomePage = () => {
       return <Navigate to="/courses" replace />;
     }
   }
-  return <LandingPageContent />;
+  return <LandingPage />;
 };
+
 
 import ConnectionPage from './features/connections/ConnectionPage';
 import NotificationPage from './features/notifications/NotificationPage';

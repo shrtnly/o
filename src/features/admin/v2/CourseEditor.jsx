@@ -113,15 +113,27 @@ const CourseEditor = ({ courseId, onBack }) => {
             <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8">
                 {activeTab === 'essentials' ? (
                     <div className="max-w-2xl space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Course Title</label>
-                            <input
-                                type="text"
-                                className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium text-slate-900 dark:text-slate-100"
-                                value={course.title}
-                                onChange={(e) => setCourse({ ...course, title: e.target.value })}
-                                onBlur={(e) => handleAutoSave({ title: e.target.value })}
-                            />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Course Title (Bangla)</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium text-slate-900 dark:text-slate-100"
+                                    value={course.title || ''}
+                                    onChange={(e) => setCourse({ ...course, title: e.target.value })}
+                                    onBlur={(e) => handleAutoSave({ title: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-bold text-slate-600 dark:text-slate-400">Course Title (English)</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl p-3 outline-none focus:border-slate-900 dark:focus:border-slate-100 transition-all font-medium text-slate-900 dark:text-slate-100"
+                                    value={course.title_en || ''}
+                                    onChange={(e) => setCourse({ ...course, title_en: e.target.value })}
+                                    onBlur={(e) => handleAutoSave({ title_en: e.target.value })}
+                                />
+                            </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">

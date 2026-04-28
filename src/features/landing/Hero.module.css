@@ -87,15 +87,35 @@
 
 .cta {
     margin-top: 16px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
 }
 
 .mainBtn {
-    font-size: 1.2rem !important;
-    padding: 18px 44px !important;
+    font-size: 1.1rem !important;
+    padding: 14px 32px !important;
     box-shadow: var(--glow-primary) !important;
 }
 
-.mainBtn:hover {
-    transform: translateY(-4px) scale(1.02) !important;
-    box-shadow: 0 10px 40px rgba(46, 204, 113, 0.4) !important;
+.secondaryBtn {
+    font-size: 1.1rem !important;
+    padding: 14px 32px !important;
+    border-color: var(--color-border) !important;
 }
+
+.mainBtn:hover, .secondaryBtn:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+}
+
+.mainBtn:hover {
+    box-shadow: 0 10px 40px rgba(241, 196, 15, 0.4) !important;
+}
+
+@media (max-width: 600px) {
+    .cta {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+    }
+}

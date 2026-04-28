@@ -246,13 +246,6 @@
     flex: 1;
 }
 
-.resultsCount {
-    white-space: nowrap;
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    font-weight: 500;
-    padding-bottom: 12px;
-}
 
 .tabsContainer::-webkit-scrollbar {
     display: none;
@@ -394,9 +387,6 @@
         display: none;
     }
 
-    .resultsCount {
-        display: none;
-    }
 }
 
 @media (max-width: 600px) {

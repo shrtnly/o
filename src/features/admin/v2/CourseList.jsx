@@ -49,7 +49,8 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
     };
 
     const filteredCourses = courses.filter(course =>
-        course.title.toLowerCase().includes(searchQuery.toLowerCase())
+        (course.title && course.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (course.title_en && course.title_en.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     return (
@@ -156,7 +157,7 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                                 )}
                             </div>
                             <div className="p-6 flex-1 flex flex-col">
-                                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">{course.title}</h3>
+                                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">{course.title} {course.title_en ? `(${course.title_en})` : ''}</h3>
                                 <p className="text-slate-500 dark:text-slate-400 text-sm mt-2 line-clamp-2 leading-relaxed">
                                     {course.description || "No description provided for this course architecture."}
                                 </p>
@@ -202,7 +203,7 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
                                                 {course.image_url && <img src={course.image_url} className="w-full h-full object-cover" />}
                                             </div>
                                             <div>
-                                                <div className="text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{course.title}</div>
+                                                <div className="text-slate-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{course.title} {course.title_en ? `(${course.title_en})` : ''}</div>
                                                 <div className="text-slate-400 dark:text-slate-500 text-xs mt-0.5">{course.category || 'Curriculum'}</div>
                                             </div>
                                         </div>

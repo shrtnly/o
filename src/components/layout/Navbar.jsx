@@ -8,14 +8,26 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
 
+import React, { useState, useEffect } from 'react';
+
 const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
     const { t, language, toggleLanguage } = useLanguage();
     const { unreadCount, pendingConnectionsCount } = useNotifications();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <nav className={styles.navbar}>
+        <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''}`}>
+
             <div className={styles.container}>
                 <Link to="/" className={styles.logo}>
                     <img src={logo} alt="BeeLesson" className={styles.navLogo} />

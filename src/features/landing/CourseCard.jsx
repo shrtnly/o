@@ -6,12 +6,14 @@ import { useLanguage } from '../../context/LanguageContext';
 import styles from './CourseCard.module.css';
 
 const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const navigate = useNavigate();
 
     // Use values from course object, fallback to 0
     const rating = parseFloat(course.rating) || 0;
     const students = Number(course.students_count) || 0;
+
+    const displayTitle = (language === 'en' && course.title_en) ? course.title_en : course.title;
 
     const handleClick = () => {
         if (isEnrolled) {
@@ -24,7 +26,7 @@ const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
     return (
         <div className={`${styles.card} ${viewType === 'list' ? styles.listCard : ''}`} onClick={handleClick}>
             <div className={styles.imageWrapper}>
-                <img src={course.image_url} alt={course.title} className={styles.image} />
+                <img src={course.image_url} alt={displayTitle} className={styles.image} />
                 {isEnrolled && (
                     <div className={styles.enrolledBadge}>
                         <CheckCircle2 size={12} />
@@ -32,7 +34,7 @@ const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
                 )}
             </div>
             <div className={styles.content}>
-                <h3 className={styles.title}>{course.title}</h3>
+                <h3 className={styles.title}>{displayTitle}</h3>
                 <div className={styles.meta}>
                     <div className={styles.stat} title={t('students_count')}>
                         <Users size={14} />

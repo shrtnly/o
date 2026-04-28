@@ -42,7 +42,6 @@ const CourseListPage = () => {
             try {
                 // Fetch basic course data first to show something immediately if possible
                 const allCourses = await courseService.getAllCourses();
-                setCourses(allCourses || []);
                 
                 // Then fetch optional stats and enrollment
                 const [enrolledData, bulkStats] = await Promise.all([
@@ -89,7 +88,8 @@ const CourseListPage = () => {
         }
 
         const matchesSearch = !searchQuery.trim() || 
-            course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (course.title && course.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+            (course.title_en && course.title_en.toLowerCase().includes(searchQuery.toLowerCase())) ||
             (course.category && course.category.toLowerCase().includes(searchQuery.toLowerCase()));
         
         return matchesCategory && matchesSearch;
@@ -199,9 +199,7 @@ const CourseListPage = () => {
                                             </button>
                                         ))}
                                     </div>
-                                    <div className={styles.resultsCount}>
-                                        {filteredCourses.length} {t('courses_found_small')}
-                                    </div>
+
                                 </div>
                             </div>
 

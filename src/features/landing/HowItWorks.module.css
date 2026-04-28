@@ -1,0 +1,118 @@
+.howItWorks {
+    padding: 100px 24px;
+    background-color: var(--color-bg-alt);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: var(--color-text);
+    margin-bottom: 16px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+}
+
+.stepsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.stepWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stepCard {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    background: var(--color-bg);
+    padding: 30px;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border-muted);
+    width: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+.stepNumber {
+    position: absolute;
+    left: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background: var(--color-primary);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1rem;
+    box-shadow: var(--glow-primary);
+}
+
+.iconCircle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--color-bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+.stepContent {
+    flex: 1;
+}
+
+.stepTitle {
+    font-size: 1.4rem;
+    color: var(--color-text);
+    margin-bottom: 8px;
+}
+
+.stepDesc {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.connector {
+    width: 2px;
+    height: 50px;
+    background: linear-gradient(to bottom, var(--color-primary), transparent);
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .stepCard {
+        flex-direction: column;
+        text-align: center;
+        padding-top: 40px;
+    }
+    
+    .stepNumber {
+        left: 50%;
+        top: -15px;
+        transform: translateX(-50%);
+    }
+}

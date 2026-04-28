@@ -34,6 +34,7 @@ import PrivacyPage from './features/legal/PrivacyPage';
 import { Toaster } from 'sonner';
 
 import LandingPage from './features/landing/LandingPage';
+import AdminRoute from './components/routing/AdminRoute';
 
 const HomePage = () => {
   const { user } = useAuth();
@@ -124,7 +125,11 @@ const AppContent = () => {
           {/* Guest Courses version */}
           <Route path="/guest/courses" element={<GuestCoursePage />} />
 
-          <Route path="/admin" element={<AdminDashboardV2 />} />
+          <Route path="/admin" element={
+            <AdminRoute>
+              <AdminDashboardV2 />
+            </AdminRoute>
+          } />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

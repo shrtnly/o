@@ -28,7 +28,7 @@ const CourseList = ({ onEditCourse, onCreateCourse }) => {
 
     const loadCourses = async () => {
         try {
-            const data = await courseService.getAllCourses();
+            const data = await courseService.getAllCourses(true);
             setCourses(data || []);
         } catch (err) {
             toast.error('Failed to load courses: ' + err.message);

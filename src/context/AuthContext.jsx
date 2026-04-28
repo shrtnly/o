@@ -42,11 +42,14 @@ export const AuthProvider = ({ children }) => {
         getSession();
 
         // Listen for changes on auth state (signed in, signed out, etc.)
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             const currentUser = session?.user ?? null;
             setUser(currentUser);
-            if (currentUser) fetchProfile(currentUser.id);
-            else setProfile(null);
+            if (currentUser) {
+                await fetchProfile(currentUser.id);
+            } else {
+                setProfile(null);
+            }
             setLoading(false);
         });
 

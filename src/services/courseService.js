@@ -1,10 +1,26 @@
 import { supabase } from '../lib/supabaseClient';
 
+// Simple in-memory cache
+const cache = {
+    courses: null,
+    stats: null,
+    lastFetched: {
+        courses: 0,
+        stats: 0
+    }
+};
+
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+const COURSE_COLUMNS = 'id, title, title_en, description, description_en, image_url, is_featured, created_at, category, status, students_count, rating';
+const UNIT_COLUMNS = 'id, course_id, title, order_index';
+const CHAPTER_COLUMNS = 'id, unit_id, title, order_index, type, is_trophy, is_claimed, reward_hearts, reward_gems, estimated_time';
+
 export const courseService = {
     async getFeaturedCourses() {
         const { data, error } = await supabase
             .from('courses')
-            .select('*')
+            .select(COURSE_COLUMNS)
             .eq('is_featured', true)
             .order('created_at', { ascending: false });
 
@@ -12,20 +28,28 @@ export const courseService = {
         return data;
     },
 
-    async getAllCourses() {
+    async getAllCourses(forceRefresh = false) {
+        const now = Date.now();
+        if (!forceRefresh && cache.courses && (now - cache.lastFetched.courses < CACHE_DURATION)) {
+            return cache.courses;
+        }
+
         const { data, error } = await supabase
             .from('courses')
-            .select('*')
+            .select(COURSE_COLUMNS)
             .order('created_at', { ascending: false });
 
         if (error) throw error;
+        
+        cache.courses = data;
+        cache.lastFetched.courses = now;
         return data;
     },
 
     async getCourseById(id) {
         const { data, error } = await supabase
             .from('courses')
-            .select('*')
+            .select(COURSE_COLUMNS)
             .eq('id', id)
             .single();
 
@@ -40,6 +64,7 @@ export const courseService = {
             .select();
 
         if (error) throw error;
+        cache.courses = null; // Invalidate cache
         return data ? data[0] : null;
     },
 
@@ -51,6 +76,7 @@ export const courseService = {
             .select();
 
         if (error) throw error;
+        cache.courses = null; // Invalidate cache
         return data ? data[0] : null;
     },
 
@@ -61,6 +87,7 @@ export const courseService = {
             .eq('id', id);
 
         if (error) throw error;
+        cache.courses = null; // Invalidate cache
         return true;
     },
 
@@ -68,7 +95,7 @@ export const courseService = {
     async getUnits(courseId) {
         const { data, error } = await supabase
             .from('units')
-            .select('*')
+            .select(UNIT_COLUMNS)
             .eq('course_id', courseId)
             .order('order_index', { ascending: true });
         if (error) throw error;
@@ -94,7 +121,7 @@ export const courseService = {
     async getChapters(unitId) {
         const { data, error } = await supabase
             .from('chapters')
-            .select('*')
+            .select(CHAPTER_COLUMNS)
             .eq('unit_id', unitId)
             .order('order_index', { ascending: true });
         if (error) throw error;
@@ -118,6 +145,7 @@ export const courseService = {
 
     // Content (Learning Points & Questions)
     async getChapterContent(chapterId) {
+        // Here we keep * as we need most content for the learning experience
         const { data: points, error: pErr } = await supabase
             .from('learning_points')
             .select('*, mcq_questions(*, mcq_options(*))')
@@ -137,10 +165,7 @@ export const courseService = {
                 .eq('id', id)
                 .select()
                 .single();
-            if (error) {
-                console.error('Error updating learning point:', error);
-                throw error;
-            }
+            if (error) throw error;
             return data;
         } else {
             const { data, error } = await supabase
@@ -148,10 +173,7 @@ export const courseService = {
                 .insert([dataToSave])
                 .select()
                 .single();
-            if (error) {
-                console.error('Error inserting learning point:', error);
-                throw error;
-            }
+            if (error) throw error;
             return data;
         }
     },
@@ -164,10 +186,7 @@ export const courseService = {
                 .eq('id', id)
                 .select()
                 .single();
-            if (error) {
-                console.error('Error updating question:', error);
-                throw error;
-            }
+            if (error) throw error;
             return data;
         } else {
             const { data, error } = await supabase
@@ -175,18 +194,13 @@ export const courseService = {
                 .insert([dataToSave])
                 .select()
                 .single();
-            if (error) {
-                console.error('Error inserting question:', error);
-                throw error;
-            }
+            if (error) throw error;
             return data;
         }
     },
     async saveOptions(questionId, options) {
-        // Delete old options and insert new ones
         await supabase.from('mcq_options').delete().eq('question_id', questionId);
 
-        // Filter out options with no text and strip id/created_at
         const cleanOptions = options
             .filter(o => o.option_text && o.option_text.trim() !== '')
             .map(({ id, created_at, ...o }) => ({
@@ -212,7 +226,6 @@ export const courseService = {
         if (!userId) return null;
 
         try {
-            // 1. Check user_progress for actual activity (most recent)
             const { data: progressData } = await supabase
                 .from('user_progress')
                 .select('course_id')
@@ -224,15 +237,12 @@ export const courseService = {
                 return progressData[0].course_id;
             }
 
-            // 2. Fallback to latest enrollment if no progress yet
-            const { data: enrollmentData, error: enrollError } = await supabase
+            const { data: enrollmentData } = await supabase
                 .from('user_courses')
                 .select('course_id')
                 .eq('user_id', userId)
                 .order('created_at', { ascending: false })
                 .limit(1);
-
-            if (enrollError) throw enrollError;
 
             return enrollmentData && enrollmentData.length > 0 ? enrollmentData[0].course_id : null;
         } catch (error) {
@@ -244,7 +254,7 @@ export const courseService = {
     async checkEnrollment(userId, courseId) {
         const { data, error } = await supabase
             .from('user_courses')
-            .select('*')
+            .select('id')
             .eq('user_id', userId)
             .eq('course_id', courseId)
             .maybeSingle();
@@ -254,20 +264,19 @@ export const courseService = {
     },
 
     async enrollUserInCourse(userId, courseId) {
-        const isEnrolled = await this.checkEnrollment(userId, courseId);
-        if (isEnrolled) return true;
-
+        // Optimization: Directly attempt insert and handle conflict
         const { data, error } = await supabase
             .from('user_courses')
             .insert([{ user_id: userId, course_id: courseId }])
-            .select();
+            .select('id');
 
         if (error) {
+            if (error.code === '23505') return true; // Already enrolled (Unique constraint conflict)
             console.error('Error enrolling user:', error);
             throw error;
         }
 
-        // Update public stats table
+        // Update public stats via RPC if possible, otherwise keep optimized JS logic
         try {
             const { data: stats } = await supabase
                 .from('course_public_stats')
@@ -285,6 +294,7 @@ export const courseService = {
                     .from('course_public_stats')
                     .insert([{ course_id: courseId, enrolled_count: 1 }]);
             }
+            cache.stats = null; // Invalidate stats cache
         } catch (err) {
             console.error('Error updating public stats:', err);
         }
@@ -313,7 +323,6 @@ export const courseService = {
         return true;
     },
 
-    // Course Reviews & Ratings
     async submitReview(userId, courseId, rating, feedback = '') {
         const { data, error } = await supabase
             .from('course_reviews')
@@ -326,26 +335,30 @@ export const courseService = {
             }, {
                 onConflict: 'course_id,user_id'
             })
-            .select();
+            .select('id');
 
         if (error) throw error;
         
-        // Update public stats
+        // Optimized avg calculation: fetch only needed stats
         try {
-            const { data: allReviews } = await supabase
+            const { data: reviewStats, error: statErr } = await supabase
                 .from('course_reviews')
                 .select('rating')
                 .eq('course_id', courseId);
             
-            if (allReviews && allReviews.length > 0) {
-                const avg = (allReviews.reduce((a, b) => a + b.rating, 0) / allReviews.length).toFixed(1);
+            if (reviewStats && reviewStats.length > 0) {
+                const totalRating = reviewStats.reduce((acc, curr) => acc + curr.rating, 0);
+                const avg = (totalRating / reviewStats.length).toFixed(1);
+                
                 await supabase
                     .from('course_public_stats')
                     .upsert({ 
                         course_id: courseId, 
                         average_rating: avg,
-                        review_count: allReviews.length 
+                        review_count: reviewStats.length 
                     }, { onConflict: 'course_id' });
+                
+                cache.stats = null; // Invalidate stats cache
             }
         } catch (err) {
             console.error('Error updating public rating:', err);
@@ -357,7 +370,7 @@ export const courseService = {
     async getCourseReviews(courseId) {
         const { data, error } = await supabase
             .from('course_reviews')
-            .select('*, profiles(full_name, avatar_url)')
+            .select('id, rating, feedback, created_at, profiles(full_name, avatar_url)')
             .eq('course_id', courseId)
             .order('created_at', { ascending: false });
 
@@ -376,24 +389,16 @@ export const courseService = {
         return data?.average_rating || 0;
     },
 
-    async checkUserRating(userId, courseId) {
-        if (!userId) return false;
-        const { data, error } = await supabase
-            .from('course_reviews')
-            .select('id')
-            .eq('user_id', userId)
-            .eq('course_id', courseId)
-            .maybeSingle();
-            
-        if (error) return false;
-        return !!data;
-    },
+    async getBulkCourseStats(forceRefresh = false) {
+        const now = Date.now();
+        if (!forceRefresh && cache.stats && (now - cache.lastFetched.stats < CACHE_DURATION)) {
+            return cache.stats;
+        }
 
-    async getBulkCourseStats() {
         try {
             const { data, error } = await supabase
                 .from('course_public_stats')
-                .select('*');
+                .select('course_id, enrolled_count, average_rating');
             
             if (error) throw error;
 
@@ -404,10 +409,13 @@ export const courseService = {
                     rating: s.average_rating || 0
                 };
             });
+
+            cache.stats = stats;
+            cache.lastFetched.stats = now;
             return stats;
         } catch (err) {
             console.error('Error fetching bulk stats:', err);
-            return {};
+            return cache.stats || {};
         }
     },
 
@@ -431,3 +439,4 @@ export const courseService = {
         return data?.reduce((acc, curr) => acc + (curr.enrolled_count || 0), 0) || 0;
     }
 };
+

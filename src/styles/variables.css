@@ -35,7 +35,7 @@
     --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     --color-bg-hover: #233138;
     --color-text-hover: #ffffff;
-    --color-on-primary: #ffffff;
+    --color-on-primary: #000000;
     --color-on-secondary: #ffffff;
     --color-primary-faded: rgba(241, 196, 15, 0.1);
 }

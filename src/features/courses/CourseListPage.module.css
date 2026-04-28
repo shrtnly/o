@@ -99,7 +99,7 @@
 .statValue {
     font-size: 1.1rem;
     font-weight: 800;
-    color: #f1c40f;
+    color: var(--color-primary);
     line-height: 1;
 }
 
@@ -213,8 +213,8 @@
 }
 
 .activeToggle {
-    background-color: #f1c40f !important;
-    color: #000 !important;
+    background-color: var(--color-primary) !important;
+    color: var(--color-on-primary) !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -271,14 +271,14 @@
 }
 
 .activeTab {
-    background-color: #f1c40f;
-    border-color: #f1c40f;
-    color: #000;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-on-primary);
 }
 
 .activeTab:hover {
-    background-color: #f1c40f;
-    color: #000;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
 }
 
 .grid {
@@ -333,8 +333,8 @@
 
 .resetBtn {
     padding: 10px 24px;
-    background-color: #f1c40f;
-    color: #000;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
     border: none;
     border-radius: 12px;
     font-weight: 700;
@@ -426,4 +426,4 @@
     margin-top: 72px; /* Offset for the fixed Navbar */
     padding-top: 0;
 }
-
+

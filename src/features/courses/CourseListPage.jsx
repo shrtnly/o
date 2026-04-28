@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Info, LayoutGrid, List as ListIcon, TrendingUp, Star, X } from 'lucide-react';
+import { Search, Info, LayoutGrid, List as ListIcon, TrendingUp, Star, X, WifiOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
 import { courseService } from '../../services/courseService';
@@ -24,6 +24,8 @@ const CourseListPage = () => {
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [retryCount, setRetryCount] = useState(0);
     const [activeCategory, setActiveCategory] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [viewType, setViewType] = useState('grid'); // 'grid' or 'list'
@@ -39,6 +41,7 @@ const CourseListPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setError(null);
             try {
                 // Fetch basic course data first to show something immediately if possible
                 const allCourses = await courseService.getAllCourses();
@@ -64,14 +67,15 @@ const CourseListPage = () => {
                 } else {
                     setActiveCategory('All');
                 }
-            } catch (error) {
-                console.error('Error fetching course data:', error);
+            } catch (err) {
+                console.error('Error fetching course data:', err);
+                setError(true);
             } finally {
                 setLoading(false);
             }
         };
         fetchData();
-    }, [user]);
+    }, [user, retryCount]);
 
     // Compute filtered and sorted courses
     const filteredCourses = courses.filter(course => {
@@ -118,6 +122,23 @@ const CourseListPage = () => {
                                     <CourseSkeleton key={i} />
                                 ))}
                             </div>
+                        </div>
+                    ) : error ? (
+                        <div className={styles.emptyState}>
+                            <div className={styles.emptyIcon} style={{ color: 'var(--color-danger)' }}>
+                                <WifiOff size={48} />
+                            </div>
+                            <h3>{t('error_fetch_courses')}</h3>
+                            <p>{t('check_internet')}</p>
+                            <button 
+                                className={styles.resetBtn}
+                                onClick={() => {
+                                    setLoading(true);
+                                    setRetryCount(prev => prev + 1);
+                                }}
+                            >
+                                {t('try_again')}
+                            </button>
                         </div>
                     ) : (
                         <>

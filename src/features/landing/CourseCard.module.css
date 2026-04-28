@@ -61,8 +61,8 @@
     position: absolute;
     top: -2px;
     right: -2px;
-    background: #f1c40f;
-    color: #000;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -110,6 +110,6 @@
 }
 
 .starIcon {
-    color: #f1c40f;
-    fill: #f1c40f;
-}
+    color: var(--color-primary);
+    fill: var(--color-primary);
+}

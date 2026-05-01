@@ -14,9 +14,16 @@ import { toast } from 'sonner';
 import BattleSkeleton from './BattleSkeleton';
 import HistoryModal from './HistoryModal';
 import ExitModal from './ExitModal';
+import BattleModeSelector from './BattleModeSelector';
 import { rewardService } from '../../../services/rewardService';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import PollenIcon from '../../../components/PollenIcon';
+
+// ─── file-level cache to prevent skeleton loading on remount ──────
+let cachedCourses = [];
+let cachedModules = {};
+let cachedSelectedCourse = null;
+let cachedSelectedModule = null;
 
 // ─── constants ────────────────────────────────────────────────
 const TOTAL_QUESTIONS = 15;
@@ -94,11 +101,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     // Setup state
-    const [allCourses, setAllCourses] = useState([]);
-    const [allModules, setAllModules] = useState([]);
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [selectedModule, setSelectedModule] = useState(null);
-    const [isLoadingCourses, setIsLoadingCourses] = useState(true);
+    const [allCourses, setAllCourses] = useState(cachedCourses);
+    const [allModules, setAllModules] = useState(cachedSelectedCourse ? (cachedModules[cachedSelectedCourse.id] || []) : []);
+    const [selectedCourse, setSelectedCourse] = useState(cachedSelectedCourse);
+    const [selectedModule, setSelectedModule] = useState(cachedSelectedModule);
+    const [isLoadingCourses, setIsLoadingCourses] = useState(cachedCourses.length === 0);
     const [isLoadingModules, setIsLoadingModules] = useState(false);
 
     // game state
@@ -125,6 +132,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const sessionRef = useRef(session);
     const phaseRef = useRef('lobby');
     const isBotRef = useRef(false);
+    const [matchMode, setMatchMode] = useState('both');
+    const matchModeRef = useRef('both');
+    useEffect(() => { matchModeRef.current = matchMode; }, [matchMode]);
+
+    const [difficulty, setDifficulty] = useState('easy');
+    const difficultyRef = useRef('easy');
+    useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+
     useEffect(() => { sessionRef.current = session; }, [session]);
     useEffect(() => { phaseRef.current = phase; }, [phase]);
     useEffect(() => { isBotRef.current = isVsBot; }, [isVsBot]);
@@ -132,6 +147,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     useEffect(() => {
         if (onPhaseChange) onPhaseChange(phase);
     }, [phase, onPhaseChange]);
+
+    useEffect(() => {
+        return () => {
+            if (channelRef.current) {
+                supabase.removeChannel(channelRef.current);
+            }
+        };
+    }, []);
 
 
     const isPlayer1 = session ? session.player1_id === user?.id : false;
@@ -195,6 +218,13 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 });
             }
         });
+
+        // Difficulty sorting by text length
+        if (difficultyRef.current === 'easy') {
+            uniqueQs.sort((a, b) => (a.question_text || '').length - (b.question_text || '').length);
+        } else {
+            uniqueQs.sort((a, b) => (b.question_text || '').length - (a.question_text || '').length);
+        }
 
         // Take exactly TOTAL_QUESTIONS and shuffle the options for variety
         return uniqueQs.slice(0, TOTAL_QUESTIONS).map(q => ({
@@ -266,12 +296,12 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     }, [user?.id, phase]);
 
     // ── Pre-setup fetch ───────────────────────────────────────
-    const fetchCourses = useCallback(async () => {
+    const fetchCourses = useCallback(async (isSilent = false) => {
         if (!user?.id) {
             setIsLoadingCourses(false);
             return;
         }
-        setIsLoadingCourses(true);
+        if (!isSilent) setIsLoadingCourses(true);
         try {
             // Step 1: Try fetching enrolled courses
             const { data: enrolledData, error: enrolledError } = await supabase
@@ -299,23 +329,29 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 .sort((a, b) => a.title.localeCompare(b.title));
 
             setAllCourses(uniqueCourses);
+            cachedCourses = uniqueCourses;
         } catch (err) {
             console.error('Error fetching courses:', err);
         } finally {
-            setIsLoadingCourses(false);
+            if (!isSilent) setIsLoadingCourses(false);
         }
     }, [user?.id]);
 
     useEffect(() => {
         let mounted = true;
         if (user?.id && mounted) {
-            fetchCourses();
+            const isSilent = cachedCourses.length > 0;
+            fetchCourses(isSilent);
         }
         return () => { mounted = false; };
     }, [user?.id, fetchCourses]);
 
     const fetchModules = useCallback(async (courseId) => {
         if (!courseId) return;
+        if (cachedModules[courseId]) {
+            setAllModules(cachedModules[courseId]);
+            return;
+        }
         setIsLoadingModules(true);
         const fallbackTimer = setTimeout(() => {
             setIsLoadingModules(false);
@@ -330,6 +366,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             
             if (!error && data) {
                 setAllModules(data);
+                cachedModules[courseId] = data;
             }
         } catch (err) {
             console.error('Error fetching modules:', err);
@@ -513,6 +550,17 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         isBotGameActive.current = false;
         setIsVsBot(false);
 
+        clearInterval(searchCountdownRef.current);
+        searchCountdownRef.current = setInterval(() => {
+            setSearchCountdown(prev => {
+                if (prev <= 1) {
+                    clearInterval(searchCountdownRef.current);
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
         const code = forcedCode || generateRoomCode();
         setRoomCode(code);
 
@@ -526,7 +574,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
         if (qIds.length === 0) {
             toast.error(language === 'bn' ? "কোনো উপযুক্ত প্রশ্ন পাওয়া যায়নি!" : "No suitable questions found!");
+            clearInterval(searchCountdownRef.current);
             setPhase('lobby');
+            return;
+        }
+
+        if (matchModeRef.current === 'bot') {
+            clearInterval(searchCountdownRef.current);
+            startBotGame(qs);
             return;
         }
 
@@ -542,7 +597,11 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             .select()
             .single();
 
-        if (error || !newSession) { setPhase('lobby'); return; }
+        if (error || !newSession) {
+            clearInterval(searchCountdownRef.current);
+            setPhase('lobby');
+            return;
+        }
         setSession(newSession);
         setQuestions(qs);
 
@@ -576,15 +635,6 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             });
         }
 
-        let countdown = 20;
-        setSearchCountdown(20);
-        clearInterval(searchCountdownRef.current);
-        searchCountdownRef.current = setInterval(() => {
-            countdown -= 1;
-            setSearchCountdown(countdown);
-            if (countdown <= 0) clearInterval(searchCountdownRef.current);
-        }, 1000);
-
         clearTimeout(botTimeoutRef.current);
         let waitChannel;
         botTimeoutRef.current = setTimeout(() => {
@@ -595,7 +645,12 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     if (error) console.error('Error cancelling session:', error);
                 });
                 if (waitChannel) supabase.removeChannel(waitChannel);
-                startBotGame(qs);
+
+                if (matchModeRef.current === 'pvp') {
+                    setPhase('search_failed');
+                } else {
+                    startBotGame(qs);
+                }
             }
         }, 20000);
 
@@ -904,23 +959,21 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             const accuracyPercent = qIndexRef.current > 0 ? Math.round((myCorrectRef.current / qIndexRef.current) * 100) : 0;
             const isEligible = accuracyPercent >= 50;
 
-            // 1. Save to History - Rewards are now automatically handled by a DB Trigger (trg_award_battle_win) on the server!
-            await supabase.from('battle_history').insert({
-                user_id: user.id,
-                opponent_id: isBotRef.current ? null : (opponentProfile?.id || null),
-                opponent_name: oppName,
-                opponent_avatar: opponentProfile?.avatar_url || null,
-                my_score: myScoreRef.current,
-                opponent_score: oppScoreRef.current,
-                my_correct: myCorrectRef.current,
-                result: finalResult,
-                is_bot: isBotRef.current,
-                is_initiator: isPlayer1Ref.current
+            // Use secure stored procedure for result storage & anti-cheat
+            await supabase.rpc('record_battle_result', {
+                p_opponent_id: isBotRef.current ? null : (opponentProfile?.id || null),
+                p_opponent_name: oppName || 'Opponent',
+                p_opponent_avatar: opponentProfile?.avatar_url || null,
+                p_my_score: myScoreRef.current,
+                p_opponent_score: oppScoreRef.current,
+                p_my_correct: myCorrectRef.current,
+                p_is_bot: isBotRef.current,
+                p_is_initiator: isPlayer1Ref.current
             });
 
             fetchHistory(0);
         } catch (err) {
-            console.error('Error saving history:', err);
+            console.error('Error saving history via RPC:', err);
         }
     };
 
@@ -1133,7 +1186,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                     onChange={(e) => {
                                         const course = allCourses.find(c => c.id === e.target.value);
                                         setSelectedCourse(course);
+                                        cachedSelectedCourse = course;
                                         setSelectedModule(null);
+                                        cachedSelectedModule = null;
                                         if (course) fetchModules(course.id);
                                     }}
                                     options={allCourses.map(c => ({ value: c.id, label: c.title }))}
@@ -1159,6 +1214,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                         onChange={(e) => {
                                             const mod = allModules.find(m => m.id === e.target.value);
                                             setSelectedModule(mod);
+                                            cachedSelectedModule = mod;
                                         }}
                                         options={allModules.map(m => ({ value: m.id, label: m.title }))}
                                         disabled={!battleMode}
@@ -1178,27 +1234,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             <Zap size={18} fill="currentColor" />
                             {language === 'bn' ? 'ব্যাটেল শুরু করুন' : 'Start Battle'}
                         </motion.button>
-                    </div>
 
-                    <div className={styles.dividerRow}>
-                        <span className={styles.divider}>{language === 'bn' ? 'অথবা' : 'or'}</span>
-                    </div>
-
-                    <div className={styles.joinRow}>
-                        <input
-                            className={styles.codeInput}
-                            placeholder={language === 'bn' ? 'রুম কোড লিখুন...' : 'Enter room code...'}
-                            value={joinCode}
-                            onChange={e => setJoinCode(e.target.value.toUpperCase())}
-                            maxLength={6}
+                        <BattleModeSelector
+                            language={language}
+                            value={matchMode}
+                            onChange={setMatchMode}
+                            difficulty={difficulty}
+                            onDifficultyChange={setDifficulty}
                         />
-                        <button
-                            className={styles.joinBtn}
-                            onClick={handleJoinRoom}
-                            disabled={joinCode.length < 4 || !battleMode}
-                        >
-                            <ChevronRight size={22} strokeWidth={3} />
-                        </button>
                     </div>
                 </motion.div>
 
@@ -1218,7 +1261,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                 exit={{ scale: 0.9, y: 10 }}
                             >
                                 <div className={styles.noticeIconWrap}>
-                                    <Swords size={48} strokeWidth={2.5} />
+                                    <XCircle size={48} strokeWidth={2.5} />
                                 </div>
                                 <div className={styles.noticeContentCenter}>
                                     <h3>{language === 'bn' ? 'ব্যাটেল মোড বন্ধ আছে' : 'Battle Mode Inactive'}</h3>
@@ -1427,6 +1470,51 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 >
                     {language === 'bn' ? 'বাতিল' : 'Cancel'}
                 </motion.button>
+            </motion.div>
+        </div>
+    );
+
+    // ── SEARCH FAILED (No opponent found for PvP) ─────────────
+    if (phase === 'search_failed') return (
+        <div className={styles.lobbyWrap}>
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={styles.searchingCard}
+                style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', minHeight: '350px', padding: '2rem' }}
+            >
+                <div style={{ color: 'var(--color-danger)', display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
+                    <Cpu size={48} strokeWidth={1.5} />
+                </div>
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-text)', fontWeight: '800' }}>
+                    {language === 'bn' ? 'কোনো প্লেয়ার পাওয়া যায়নি!' : 'No Players Found!'}
+                </h3>
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', maxWidth: '300px', lineHeight: '1.5' }}>
+                    {language === 'bn' 
+                        ? 'লাইভ ব্যাটেল খেলার জন্য কোনো সক্রিয় লার্নার পাওয়া যায়নি। আপনি আবার চেষ্টা করতে পারেন অথবা ফিরে যেতে পারেন।' 
+                        : 'No active learners were found for the PvP match. You can try again or go back.'}
+                </p>
+
+                <div style={{ display: 'flex', gap: '12px', marginTop: '12px', width: '100%', justifyContent: 'center' }}>
+                    <motion.button
+                        className={styles.createBtn}
+                        style={{ padding: '12px 24px', flex: 1, maxWidth: '160px', fontSize: '0.85rem' }}
+                        onClick={() => handleCreateRoom()}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        {language === 'bn' ? 'আবার চেষ্টা করুন' : 'Try Again'}
+                    </motion.button>
+                    <motion.button
+                        className={styles.cancelBtn}
+                        style={{ padding: '12px 24px', flex: 1, maxWidth: '160px', fontSize: '0.85rem' }}
+                        onClick={handleReset}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        {language === 'bn' ? 'ফিরে যান' : 'Go Back'}
+                    </motion.button>
+                </div>
             </motion.div>
         </div>
     );

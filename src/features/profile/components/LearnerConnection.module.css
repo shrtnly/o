@@ -4,13 +4,15 @@
     gap: 1rem;
     height: 100%;
     min-height: 600px;
-    max-height: 850px;
+    max-height: none;
     overflow: visible;
 }
 
 @media (max-width: 768px) {
     .container {
         gap: 0.5rem;
+        max-height: none;
+        height: auto;
     }
 }
 
@@ -21,7 +23,7 @@
     padding: 6px;
     border-radius: 16px;
     width: 100%;
-    margin-bottom: 1rem;
+    margin-bottom: 0.25rem;
     border: 1px solid var(--color-border-muted);
     position: relative;
 }
@@ -30,7 +32,7 @@
     .subTabHeader {
         gap: 4px;
         padding: 4px;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.25rem;
     }
 }
 
@@ -115,7 +117,7 @@
 }
 
 .subTabContent {
-    margin-top: 0.5rem;
+    margin-top: 0px;
 }
 
 .comingSoonSection {

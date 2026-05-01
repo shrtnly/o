@@ -6,12 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Swords, Trophy, Zap, Clock, CheckCircle2, XCircle,
     Users, Search, Loader2, Star, RotateCcw, ChevronRight, ChevronLeft,
-    Wifi, WifiOff, Target, Award, Copy, User, X, Shield, History
+    Wifi, WifiOff, Target, Award, Copy, User, X, Shield, History, Power
 } from 'lucide-react';
 import styles from './BattleWar.module.css';
 import CustomSelect from '../../../components/ui/CustomSelect';
 import { toast } from 'sonner';
 import BattleSkeleton from './BattleSkeleton';
+import HistoryModal from './HistoryModal';
+import ExitModal from './ExitModal';
 import { rewardService } from '../../../services/rewardService';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import PollenIcon from '../../../components/PollenIcon';
@@ -21,152 +23,6 @@ const TOTAL_QUESTIONS = 15;
 const QUESTION_TIME = 15; // seconds
 const MAX_SCORE_PER_Q = 10;
 const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
-
-const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onPageChange, isLoading }) => {
-    const PAGE_SIZE = 10;
-    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
-
-    return (
-        <motion.div
-            className={styles.modalOverlay}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-        >
-            <motion.div
-                className={styles.historyModal}
-                initial={{ scale: 0.95, opacity: 0, y: 20 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                onClick={e => e.stopPropagation()}
-            >
-                <div className={styles.modalHeader}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <Swords size={20} className={styles.headerIcon} />
-                        <h3>{language === 'bn' ? 'ব্যাটেল ইতিহাস' : 'Battle History'}</h3>
-                    </div>
-                    <button className={styles.closeBtnSmall} onClick={onClose}>
-                        <X size={20} />
-                    </button>
-                </div>
-
-                <div className={styles.historyTableContainer}>
-                    {isLoading ? (
-                        <table className={styles.historyTable}>
-                            <thead>
-                                <tr>
-                                    <th>{language === 'bn' ? 'নং' : 'Sl'}</th>
-                                    <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
-                                    <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
-                                    <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
-                                    <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {[1, 2, 3, 4, 5].map(i => (
-                                    <tr key={i}>
-                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '20px', margin: '0 auto' }} /></td>
-                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '40px' }} /></td>
-                                        <td>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <div className={styles.skeletonPulse} style={{ height: '24px', width: '24px', borderRadius: '50%' }} />
-                                                <div className={styles.skeletonPulse} style={{ height: '12px', width: '60px' }} />
-                                            </div>
-                                        </td>
-                                        <td><div className={styles.skeletonPulse} style={{ height: '16px', width: '40px', borderRadius: '4px' }} /></td>
-                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '40px' }} /></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : history.length > 0 ? (
-                        <>
-                            <table className={styles.historyTable}>
-                                <thead>
-                                    <tr>
-                                        <th>{language === 'bn' ? 'নং' : 'Sl'}</th>
-                                        <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
-                                        <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
-                                        <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
-                                        <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {history.map((record, index) => (
-                                        <tr key={record.id}>
-                                            <td className={styles.slCol}>{currentPage * PAGE_SIZE + index + 1}</td>
-                                            <td className={styles.dateCol}>
-                                                {new Date(record.created_at).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
-                                                    month: 'short', day: 'numeric'
-                                                })}
-                                            </td>
-                                            <td className={styles.oppCol}>
-                                                <div className={styles.oppInfoMini}>
-                                                    <div className={styles.avatarMini}>
-                                                        {record.opponent_avatar ? (
-                                                            <img src={record.opponent_avatar} alt="" />
-                                                        ) : (
-                                                            <span>{record.opponent_name?.[0] || '?'}</span>
-                                                        )}
-                                                    </div>
-                                                    <div className={styles.oppNameGroup}>
-                                                        <span>{record.opponent_name}</span>
-                                                        {record.is_bot && <span className={styles.botTag}>AI</span>}
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span className={`${styles.resultBadge} ${styles[`badge${record.result}`]}`}>
-                                                    {record.result === 'win'
-                                                        ? (language === 'bn' ? 'জয়' : 'Win')
-                                                        : record.result === 'loss'
-                                                            ? (language === 'bn' ? 'হার' : 'Loss')
-                                                            : (language === 'bn' ? 'ড্র' : 'Draw')
-                                                    }
-                                                </span>
-                                            </td>
-                                            <td className={styles.scoreCol}>
-                                                {record.my_score} - {record.opponent_score}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-
-                            {totalPages > 1 && (
-                                <div className={styles.pagination}>
-                                    <button
-                                        disabled={currentPage === 0}
-                                        onClick={() => onPageChange(currentPage - 1)}
-                                        className={styles.pageBtn}
-                                    >
-                                        <ChevronLeft size={18} />
-                                    </button>
-                                    <span className={styles.pageInfo}>
-                                        {language === 'bn' ? `পৃষ্ঠা ${currentPage + 1} / ${totalPages}` : `Page ${currentPage + 1} of ${totalPages}`}
-                                    </span>
-                                    <button
-                                        disabled={currentPage >= totalPages - 1}
-                                        onClick={() => onPageChange(currentPage + 1)}
-                                        className={styles.pageBtn}
-                                    >
-                                        <ChevronRight size={18} />
-                                    </button>
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <div className={styles.emptyHistory}>
-                            <Trophy size={48} className={styles.emptyIcon} />
-                            <p>{language === 'bn' ? 'এখনো কোন ব্যাটল ইতিহাস নেই' : 'No battle history yet'}</p>
-                        </div>
-                    )}
-                </div>
-            </motion.div>
-        </motion.div>
-    );
-};
 
 // ─── helpers ──────────────────────────────────────────────────
 function generateRoomCode() {
@@ -195,42 +51,23 @@ const Avatar = ({ url, name, size = 42 }) => (
     </div>
 );
 
-const ExitModal = ({ onConfirm, onCancel, language }) => (
-    <motion.div
-        className={styles.modalOverlay}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        onClick={onCancel}
-        style={{ zIndex: 3000 }}
-    >
-        <motion.div
-            className={styles.confirmModal}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            onClick={e => e.stopPropagation()}
-        >
-            <div className={styles.confirmIconWrap}>
-                <XCircle size={48} strokeWidth={2.5} />
-            </div>
-            <h3>{language === 'bn' ? 'ব্যাটল থেকে বের হচ্ছেন?' : 'Exiting Battle?'}</h3>
-            <p>
-                {language === 'bn'
-                    ? 'আপনি কি নিশ্চিত যে আপনি এই ব্যাটলটি মাঝপথে ছেড়ে দিতে চান? আপনার কোনো পয়েন্ট বা রেকর্ড জমা হবে না।'
-                    : 'Are you sure you want to quit? No points or history records will be saved if you leave now.'}
-            </p>
-            <div className={styles.confirmActions}>
-                <button className={styles.stayBtn} onClick={onCancel}>
-                    {language === 'bn' ? 'না, লড়াই করি' : 'No, Keep Fighting'}
-                </button>
-                <button className={styles.quitBtn} onClick={onConfirm}>
-                    {language === 'bn' ? 'হ্যাঁ, বের হন' : 'Yes, Quit Session'}
-                </button>
-            </div>
-        </motion.div>
-    </motion.div>
-);
+const LottieWrapper = ({ src }) => {
+    const [shouldRender, setShouldRender] = useState(false);
+    useEffect(() => {
+        const timer = setTimeout(() => setShouldRender(true), 800);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (!shouldRender) return <div style={{ width: 240, height: 240 }} />;
+
+    return (
+        <DotLottieReact
+            src={src}
+            autoplay
+            loop
+        />
+    );
+};
 
 // ─── main component ───────────────────────────────────────────
 const BattleWar = ({ user, userProfile, onPhaseChange }) => {
@@ -261,7 +98,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [allModules, setAllModules] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [selectedModule, setSelectedModule] = useState(null);
-    const [isLoadingSetup, setIsLoadingSetup] = useState(true);
+    const [isLoadingCourses, setIsLoadingCourses] = useState(true);
+    const [isLoadingModules, setIsLoadingModules] = useState(false);
 
     // game state
     const [questions, setQuestions] = useState([]);
@@ -331,44 +169,37 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── fetch random questions for a unit or course ───────────
     const fetchBattleQuestions = useCallback(async ({ courseId, unitId }) => {
-        let query = supabase
-            .from('mcq_questions')
-            .select(`
-                id, question_text, question_type,
-                mcq_options(id, option_text, is_correct, order_index),
-                learning_points!inner(
-                    chapters!inner(
-                        unit_id,
-                        units!inner(course_id)
-                    )
-                )
-            `)
-            .in('question_type', ['mcq', 'boolean']);
+        const { data, error } = await supabase.rpc('get_battle_questions', {
+            p_course_id: courseId || null,
+            p_unit_id: unitId || null,
+            p_limit: 50 // Fetch enough to ensure we have enough after filtering
+        });
 
-        if (unitId) {
-            query = query.eq('learning_points.chapters.unit_id', unitId);
-        } else if (courseId) {
-            query = query.eq('learning_points.chapters.units.course_id', courseId);
+        if (error || !data || data.length === 0) {
+            if (error) console.error('Error fetching battle questions:', error);
+            return [];
         }
 
-        const { data, error } = await query;
-        if (error || !data || data.length === 0) return [];
-
-        // filter out duplicates by text and those with fewer than 2 options
+        // Filter out duplicates and questions with fewer than 2 options
         const uniqueQs = [];
         const seenTexts = new Set();
-        (data || []).forEach(q => {
+        data.forEach(q => {
             const text = q.question_text?.trim();
-            if (text && !seenTexts.has(text) && q.mcq_options && q.mcq_options.length >= 2) {
+            // Map 'options' from RPC to 'mcq_options' for frontend compatibility
+            const mcqOptions = q.options || [];
+            if (text && !seenTexts.has(text) && mcqOptions.length >= 2) {
                 seenTexts.add(text);
-                uniqueQs.push(q);
+                uniqueQs.push({
+                    ...q,
+                    mcq_options: mcqOptions
+                });
             }
         });
 
-        // shuffle and take TOTAL_QUESTIONS
-        return [...uniqueQs].sort(() => Math.random() - 0.5).slice(0, TOTAL_QUESTIONS).map(q => ({
+        // Take exactly TOTAL_QUESTIONS and shuffle the options for variety
+        return uniqueQs.slice(0, TOTAL_QUESTIONS).map(q => ({
             ...q,
-            mcq_options: (q.mcq_options || []).sort(() => Math.random() - 0.5)
+            mcq_options: [...q.mcq_options].sort(() => Math.random() - 0.5)
         }));
     }, []);
 
@@ -436,39 +267,76 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── Pre-setup fetch ───────────────────────────────────────
     const fetchCourses = useCallback(async () => {
-        if (!user?.id) return;
-        setIsLoadingSetup(true);
-        // Only fetch courses the user is enrolled in
-        const { data, error } = await supabase
-            .from('user_courses')
-            .select(`
-                course_id,
-                courses!inner(id, title)
-            `)
-            .eq('user_id', user.id);
+        if (!user?.id) {
+            setIsLoadingCourses(false);
+            return;
+        }
+        setIsLoadingCourses(true);
+        try {
+            // Step 1: Try fetching enrolled courses
+            const { data: enrolledData, error: enrolledError } = await supabase
+                .from('user_courses')
+                .select('course_id, courses(id, title)')
+                .eq('user_id', user.id);
 
-        if (!error && data) {
-            // Transform data to get course objects and sort by title
-            const enrolledCourses = data
-                .map(item => item.courses)
-                .filter(Boolean)
+            let coursesToSet = [];
+
+            if (!enrolledError && enrolledData && enrolledData.length > 0) {
+                coursesToSet = enrolledData
+                    .map(item => item.courses)
+                    .filter(Boolean);
+            } else {
+                // Step 2: Fallback - Fetch all courses if none found or error
+                const { data: allData } = await supabase
+                    .from('courses')
+                    .select('id, title')
+                    .limit(20);
+                if (allData) coursesToSet = allData;
+            }
+
+            // Remove duplicates and sort
+            const uniqueCourses = Array.from(new Map(coursesToSet.map(c => [c.id, c])).values())
                 .sort((a, b) => a.title.localeCompare(b.title));
 
-            setAllCourses(enrolledCourses);
+            setAllCourses(uniqueCourses);
+        } catch (err) {
+            console.error('Error fetching courses:', err);
+        } finally {
+            setIsLoadingCourses(false);
         }
-        setIsLoadingSetup(false);
     }, [user?.id]);
 
-    // Fetch courses on mount so selectors are ready in the lobby
     useEffect(() => {
-        fetchCourses();
-    }, [fetchCourses]);
+        let mounted = true;
+        if (user?.id && mounted) {
+            fetchCourses();
+        }
+        return () => { mounted = false; };
+    }, [user?.id, fetchCourses]);
 
     const fetchModules = useCallback(async (courseId) => {
-        setIsLoadingSetup(true);
-        const { data } = await supabase.from('units').select('id, title').eq('course_id', courseId).order('order_index');
-        if (data) setAllModules(data);
-        setIsLoadingSetup(false);
+        if (!courseId) return;
+        setIsLoadingModules(true);
+        const fallbackTimer = setTimeout(() => {
+            setIsLoadingModules(false);
+        }, 5000);
+
+        try {
+            const { data, error } = await supabase
+                .from('units')
+                .select('id, title')
+                .eq('course_id', courseId)
+                .order('order_index');
+            
+            if (!error && data) {
+                setAllModules(data);
+            }
+        } catch (err) {
+            console.error('Error fetching modules:', err);
+        } finally {
+            clearTimeout(fallbackTimer);
+            setIsLoadingModules(false);
+        }
     }, []);
 
     const fetchQuestionsByIds = useCallback(async (ids) => {
@@ -718,17 +586,20 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         }, 1000);
 
         clearTimeout(botTimeoutRef.current);
+        let waitChannel;
         botTimeoutRef.current = setTimeout(() => {
             if (phaseRef.current === 'searching') {
                 clearInterval(searchCountdownRef.current);
                 supabase.from('battle_invitations').delete().eq('room_code', code).eq('sender_id', user.id);
-                supabase.from('battle_sessions').update({ status: 'cancelled' }).eq('id', newSession.id);
-                supabase.removeChannel(waitChannel);
+                supabase.from('battle_sessions').update({ status: 'cancelled' }).eq('id', newSession.id).then(({ error }) => {
+                    if (error) console.error('Error cancelling session:', error);
+                });
+                if (waitChannel) supabase.removeChannel(waitChannel);
                 startBotGame(qs);
             }
         }, 20000);
 
-        const waitChannel = supabase
+        waitChannel = supabase
             .channel(`battle-wait-${newSession.id}`)
             .on(
                 'postgres_changes',
@@ -866,7 +737,13 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     const finishGame = useCallback(async () => {
         isBotGameActive.current = false;
-        if (!sessionRef.current?.id) { setPhase('result'); return; }
+        
+        // Transition to result phase immediately
+        setPhase('result');
+
+        const sessId = sessionRef.current?.id;
+        if (!sessId) return;
+        
         const sess = sessionRef.current;
         const myFinalScore = myScoreRef.current;
         const oppFinalScore = oppScoreRef.current;
@@ -883,8 +760,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, player1_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
             : { player2_score: myFinalScore, player2_correct: myFinalCorrect, player2_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
 
-        await supabase.from('battle_sessions').update(updateData).eq('id', sess.id);
-        setPhase('result');
+        // Perform update in background
+        supabase.from('battle_sessions').update(updateData).eq('id', sess.id).then(({ error }) => {
+            if (error) console.error('Error finalising session:', error);
+        });
     }, [user?.id]);
 
     const moveToNextQuestion = useCallback(async () => {
@@ -976,10 +855,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     const confirmExit = async () => {
         if (!isBotRef.current && sessionRef.current?.id) {
-            // Mark session as cancelled so history logic isn't triggered for others
-            await supabase.from('battle_sessions')
+            const { error } = await supabase.from('battle_sessions')
                 .update({ status: 'cancelled' })
                 .eq('id', sessionRef.current.id);
+            if (error) console.error('Error cancelling session on exit:', error);
         }
         handleReset();
         setShowExitConfirm(false);
@@ -1020,56 +899,28 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const saveBattleResult = async () => {
         setIsSavingRecord(true);
         try {
-            const finalResult = myScore === oppScore ? 'draw' : (myScore > oppScore ? 'win' : 'loss');
+            const finalResult = myScoreRef.current === oppScoreRef.current ? 'draw' : (myScoreRef.current > oppScoreRef.current ? 'win' : 'loss');
             const isWinner = finalResult === 'win';
-            const accuracyPercent = qIndexRef.current > 0 ? Math.round((myCorrect / qIndexRef.current) * 100) : 0;
+            const accuracyPercent = qIndexRef.current > 0 ? Math.round((myCorrectRef.current / qIndexRef.current) * 100) : 0;
             const isEligible = accuracyPercent >= 50;
 
-            // 1. Save to History
+            // 1. Save to History - Rewards are now automatically handled by a DB Trigger (trg_award_battle_win) on the server!
             await supabase.from('battle_history').insert({
                 user_id: user.id,
-                opponent_id: isVsBot ? null : (opponentProfile?.id || null),
+                opponent_id: isBotRef.current ? null : (opponentProfile?.id || null),
                 opponent_name: oppName,
                 opponent_avatar: opponentProfile?.avatar_url || null,
-                my_score: myScore,
-                opponent_score: oppScore,
-                my_correct: myCorrect,
+                my_score: myScoreRef.current,
+                opponent_score: oppScoreRef.current,
+                my_correct: myCorrectRef.current,
                 result: finalResult,
-                is_bot: isVsBot,
-                is_initiator: isPlayer1
+                is_bot: isBotRef.current,
+                is_initiator: isPlayer1Ref.current
             });
 
-            // 2. Award Rewards if Winner & Eligible
-            if (isWinner && isEligible) {
-                // XP based on correct answers (15 correct = 10 XP)
-                const xpToAward = Math.round((myCorrect / TOTAL_QUESTIONS) * 10);
-                if (xpToAward > 0) {
-                    const xpRes = await rewardService.awardXP(user.id, xpToAward, 'battle_win', {
-                        is_bot: isVsBot,
-                        opponent: oppName,
-                        correct: myCorrect
-                    });
-                    if (xpRes.success) {
-                        // User profile in state might be updated by parent or on next fetch
-                    }
-                }
-
-                // Fixed 2 Pollen for win
-                if (isWinner) {
-                    const gemsRes = await rewardService.awardGems(user.id, 2, 'battle_win', {
-                        is_bot: isVsBot,
-                        opponent: oppName
-                    });
-                    if (gemsRes.success) {
-                        // User profile in state might be updated by parent or on next fetch
-                    }
-                }
-            }
-
-            // Refresh history state immediately after saving
             fetchHistory(0);
         } catch (err) {
-            console.error('Error saving history/rewards:', err);
+            console.error('Error saving history:', err);
         }
     };
 
@@ -1109,16 +960,14 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         if (!roomCode) return;
 
         const doCopy = (text) => {
-            // Modern API
             if (navigator.clipboard && window.isSecureContext) {
                 return navigator.clipboard.writeText(text);
             } else {
-                // Fallback: execCommand('copy')
                 const textArea = document.createElement("textarea");
                 textArea.value = text;
                 textArea.style.position = "fixed";
-                textArea.style.left = "-999999px";
-                textArea.style.top = "-999999px";
+                textArea.style.left = "-9999px";
+                textArea.style.top = "-9999px";
                 document.body.appendChild(textArea);
                 textArea.focus();
                 textArea.select();
@@ -1170,7 +1019,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const isEligible = myAcc >= 50;
 
     // ── LOBBY ─────────────────────────────────────────────────
-    if (phase === 'lobby' && allCourses.length === 0 && isLoadingSetup) {
+    if (phase === 'lobby' && allCourses.length === 0 && isLoadingCourses) {
         return <BattleSkeleton />;
     }
 
@@ -1189,56 +1038,63 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     />
                 )}
             </AnimatePresence>
-            <motion.div
-                initial={{ opacity: 0, y: 32, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className={styles.lobbyCard}
-            >
-                <div className={styles.lobbyHero}>
-                    <div className={styles.historyBtnFloating}>
-                        <button className={styles.iconBtnMinimal} onClick={handleOpenHistory}>
-                            <History size={20} />
-                        </button>
-                    </div>
+
+            <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
+                <motion.div
+                    initial={{ opacity: 0, y: 32, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className={`${styles.lobbyCard} ${!battleMode ? styles.lobbyCardDisabled : ''}`}
+                >
+                    {/* Floating Controls */}
                     <div className={styles.modeToggleFloating}>
                         <button
                             className={`${styles.toggleSwitchSmall} ${battleMode ? styles.toggleOn : styles.toggleOff}`}
                             onClick={handleToggleBattleMode}
                             disabled={isUpdatingMode}
+                            title={language === 'bn' ? 'ব্যাটেল মোড' : 'Battle Mode'}
                         >
                             <span className={styles.toggleKnobSmall} />
                         </button>
                     </div>
-                    <motion.h2
-                        className={styles.lobbyTitle}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                    >
-                        <motion.div
-                            className={styles.vsCircle}
-                            initial={{ rotate: -20, scale: 0.5, opacity: 0 }}
-                            animate={battleMode ? {
-                                rotate: [-5, 5],
-                                scale: [1, 1.1],
-                                opacity: 1
-                            } : {
-                                rotate: 0,
-                                scale: 1,
-                                opacity: 1
-                            }}
-                            transition={{
-                                initial: { delay: 0.2, type: "spring", stiffness: 200 },
-                                rotate: battleMode ? { duration: 0.8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" } : { duration: 0.4 },
-                                scale: battleMode ? { duration: 0.8, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" } : { duration: 0.4 }
-                            }}
-                        >
-                            <Swords size={28} />
-                        </motion.div>
-                        <span>{language === 'bn' ? 'ব্যাটেল ফিল্ড' : 'Battlefield'}</span>
-                    </motion.h2>
 
+                    <div className={styles.historyBtnFloating}>
+                        <button className={styles.iconBtnMinimal} onClick={() => setShowHistory(true)}>
+                            <History size={18} />
+                        </button>
+                    </div>
+
+                    {/* Hero Section */}
+                    <div className={styles.lobbyHero}>
+                        <div className={styles.vsCircle}>
+                            <motion.div
+                                animate={battleMode ? {
+                                    rotate: [-5, 5],
+                                    scale: [1, 1.1],
+                                    opacity: 1
+                                } : {
+                                    rotate: 0,
+                                    scale: 1,
+                                    opacity: 1
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    repeatType: "reverse"
+                                }}
+                            >
+                                <Swords size={48} strokeWidth={2.5} />
+                            </motion.div>
+                        </div>
+                        <h2 className={styles.lobbyTitle}>
+                            {language === 'bn' ? 'কুইজ ব্যাটেল' : 'Quiz Battle'}
+                        </h2>
+                        <p className={styles.lobbySubtitle}>
+                            {language === 'bn' ? 'অন্যদের সাথে লড়াই করুন এবং কুইজ মাস্টার হন!' : 'Duel with others and become a quiz master!'}
+                        </p>
+                    </div>
+
+                    {/* Challenge Indicator */}
                     {challengeProfile && (
                         <motion.div
                             className={styles.challengeIndicator}
@@ -1265,78 +1121,64 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         </motion.div>
                     )}
 
-                    <motion.p
-                        className={styles.lobbySubtitle}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        {language === 'bn'
-                            ? 'সেরাদের সাথে লাইভ ব্যাটেলে আসুন জিতে নিন এক্সক্লুসিভ রিওয়ার্ড!'
-                            : 'Prove yourself the best in the live quiz duel!'}
-                    </motion.p>
-                </div>
-
-                <motion.div
-                    className={styles.lobbyActions}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                >
-                    {/* Course selector */}
-                    <div className={styles.selectGroup}>
-                        <label className={styles.selectLabel}>{t('select_course')}</label>
-                        <CustomSelect
-                            value={selectedCourse?.id || ''}
-                            onChange={(e) => {
-                                const course = allCourses.find(c => c.id === e.target.value);
-                                setSelectedCourse(course);
-                                setSelectedModule(null);
-                                if (course) fetchModules(course.id);
-                            }}
-                            options={allCourses.map(c => ({ value: c.id, label: c.title }))}
-                            placeholder={language === 'bn' ? '-- কোর্স --' : '-- Course --'}
-                            disabled={!battleMode || isLoadingSetup}
-                        />
-                    </div>
-
-                    {/* Module selector - Only show if course is selected */}
-                    {selectedCourse && (
-                        <motion.div
-                            className={styles.selectGroup}
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                        >
-                            <label className={styles.selectLabel}>
-                                {t('select_module')} {language === 'bn' ? '(ঐচ্ছিক)' : '(Optional)'}
-                            </label>
-                            {isLoadingSetup ? (
-                                <div className={styles.selectLoader}><Loader2 className={styles.spin} size={18} /></div>
+                    {/* Lobby Actions */}
+                    <div className={styles.lobbyActions}>
+                        <div className={styles.selectGroup}>
+                            <label className={styles.selectLabel}>{language === 'bn' ? 'কোর্স নির্বাচন করুন' : 'Select Course'}</label>
+                            {isLoadingCourses ? (
+                                <div className={styles.selectLoader}><Loader2 className={styles.spin} size={20} /></div>
                             ) : (
                                 <CustomSelect
-                                    value={selectedModule?.id || ''}
+                                    value={selectedCourse?.id || ''}
                                     onChange={(e) => {
-                                        const mod = allModules.find(m => m.id === e.target.value);
-                                        setSelectedModule(mod);
+                                        const course = allCourses.find(c => c.id === e.target.value);
+                                        setSelectedCourse(course);
+                                        setSelectedModule(null);
+                                        if (course) fetchModules(course.id);
                                     }}
-                                    options={allModules.map(m => ({ value: m.id, label: m.title }))}
-                                    disabled={!battleMode}
-                                    placeholder={language === 'bn' ? '-- সকল মডিউল --' : '-- All Modules --'}
+                                    options={allCourses.map(c => ({ value: c.id, label: c.title }))}
+                                    placeholder={language === 'bn' ? 'কোর্স...' : 'Course...'}
                                 />
                             )}
-                        </motion.div>
-                    )}
+                        </div>
 
-                    <motion.button
-                        className={styles.createBtn}
-                        onClick={() => handleCreateRoom()}
-                        disabled={!battleMode || !selectedCourse}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                    >
-                        <Swords size={18} />
-                        {language === 'bn' ? 'ব্যাটেল শুরু করুন' : 'Start Battle'}
-                    </motion.button>
+                        {selectedCourse && (
+                            <motion.div 
+                                className={styles.selectGroup}
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                            >
+                                <label className={styles.selectLabel}>
+                                    {t('select_module')} {language === 'bn' ? '(ঐচ্ছিক)' : '(Optional)'}
+                                </label>
+                                {isLoadingModules ? (
+                                    <div className={styles.selectLoader}><Loader2 className={styles.spin} size={18} /></div>
+                                ) : (
+                                    <CustomSelect
+                                        value={selectedModule?.id || ''}
+                                        onChange={(e) => {
+                                            const mod = allModules.find(m => m.id === e.target.value);
+                                            setSelectedModule(mod);
+                                        }}
+                                        options={allModules.map(m => ({ value: m.id, label: m.title }))}
+                                        disabled={!battleMode}
+                                        placeholder={language === 'bn' ? '-- সকল মডিউল --' : '-- All Modules --'}
+                                    />
+                                )}
+                            </motion.div>
+                        )}
+
+                        <motion.button
+                            className={styles.createBtn}
+                            onClick={() => handleCreateRoom()}
+                            disabled={!battleMode || !selectedCourse}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                        >
+                            <Zap size={18} fill="currentColor" />
+                            {language === 'bn' ? 'ব্যাটেল শুরু করুন' : 'Start Battle'}
+                        </motion.button>
+                    </div>
 
                     <div className={styles.dividerRow}>
                         <span className={styles.divider}>{language === 'bn' ? 'অথবা' : 'or'}</span>
@@ -1359,7 +1201,52 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         </button>
                     </div>
                 </motion.div>
-            </motion.div>
+
+                {/* Quick Enable Overlay */}
+                <AnimatePresence>
+                    {!battleMode && (
+                        <motion.div
+                            className={styles.disabledOverlay}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                        >
+                            <motion.div 
+                                className={styles.noticeCard}
+                                initial={{ scale: 0.9, y: 10 }}
+                                animate={{ scale: 1, y: 0 }}
+                                exit={{ scale: 0.9, y: 10 }}
+                            >
+                                <div className={styles.noticeIconWrap}>
+                                    <Swords size={48} strokeWidth={2.5} />
+                                </div>
+                                <div className={styles.noticeContentCenter}>
+                                    <h3>{language === 'bn' ? 'ব্যাটেল মোড বন্ধ আছে' : 'Battle Mode Inactive'}</h3>
+                                    <p>
+                                        {language === 'bn' 
+                                            ? 'সেরাদের সাথে লাইভ ব্যাটেলে অংশ নিতে মোডটি চালু করুন' 
+                                            : 'Enable battle mode to challenge others and compete on the leaderboard.'}
+                                    </p>
+                                </div>
+                                <button 
+                                    className={styles.enableQuickBtn} 
+                                    onClick={handleToggleBattleMode}
+                                    disabled={isUpdatingMode}
+                                >
+                                    {isUpdatingMode ? (
+                                        <Loader2 size={18} className={styles.spin} />
+                                    ) : (
+                                        <>
+                                            <Power size={16} strokeWidth={3} />
+                                            {language === 'bn' ? 'ব্যাটেল অন করুন' : 'Enable Battle Mode'}
+                                        </>
+                                    )}
+                                </button>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
         </div>
     );
 
@@ -1770,11 +1657,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         <div className={styles.winnerBadge}>
                             {isWinner && (
                                 <div className={styles.fireworksWrapper}>
-                                    <DotLottieReact
-                                        src="/models/Fireworks.lottie"
-                                        autoplay
-                                        loop
-                                    />
+                                    <LottieWrapper src="/models/Fireworks.lottie" />
                                 </div>
                             )}
 

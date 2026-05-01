@@ -5,17 +5,20 @@ import { supabase } from '../../lib/supabaseClient';
 import { rewardService } from '../../services/rewardService';
 import InlineLoader from '../../components/ui/InlineLoader';
 import ConnectionSkeleton from './components/ConnectionSkeleton';
+import BattleWar from './components/BattleWar';
 import LearnerConnection from '../profile/components/LearnerConnection';
 import styles from './ConnectionPage.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swords } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 
 const ConnectionPage = () => {
     const { user } = useAuth();
     const { t, language } = useLanguage();
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [selectedLearner, setSelectedLearner] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [currentPhase, setCurrentPhase] = useState('lobby');
 
     const fetchProfileData = useCallback(async () => {
         if (!user?.id) return;
@@ -68,12 +71,35 @@ const ConnectionPage = () => {
                             </header>
 
                             <div className={styles.connectionWrapper}>
-                                <LearnerConnection 
+                                <BattleWar 
                                     user={user} 
-                                    userXp={profile?.xp || 0}
-                                    userProfile={profile}
-                                    onSelectLearner={(l) => {}} 
+                                    userProfile={profile} 
+                                    onPhaseChange={setCurrentPhase}
                                 />
+                                
+                                {currentPhase === 'lobby' && (
+                                    <div className={styles.learnerSelectSection}>
+                                        <div className={styles.sectionDivider}>
+                                            <span className={styles.dividerLine}></span>
+                                            <span className={styles.dividerText}>
+                                                {language === 'bn' ? 'বন্ধুদের চ্যালেঞ্জ করুন' : 'Challenge Friends'}
+                                            </span>
+                                            <span className={styles.dividerLine}></span>
+                                        </div>
+
+                                        <LearnerConnection 
+                                            user={user} 
+                                            userXp={profile?.xp || 0}
+                                            userProfile={profile}
+                                            onSelectLearner={(l) => {
+                                                // BattleWar component picks this up via its own useSearchParams hook
+                                                setSearchParams({ challengeId: l.id });
+                                                // Scroll to top where BattleWar lobby is
+                                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                            }} 
+                                        />
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     )}

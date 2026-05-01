@@ -1,0 +1,160 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Swords, X, Trophy, ChevronLeft, ChevronRight } from 'lucide-react';
+import styles from './BattleWar.module.css';
+
+export const HistoryModal = ({ history, onClose, language, currentPage, totalCount, onPageChange, isLoading }) => {
+    const PAGE_SIZE = 10;
+    const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+
+    return (
+        <motion.div
+            className={styles.modalOverlay}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+        >
+            <motion.div
+                className={styles.historyModal}
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                onClick={e => e.stopPropagation()}
+            >
+                <div className={styles.modalHeader}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <Swords size={20} className={styles.headerIcon} />
+                        <h3>{language === 'bn' ? 'ব্যাটেল ইতিহাস' : 'Battle History'}</h3>
+                    </div>
+                    <button className={styles.closeBtnSmall} onClick={onClose}>
+                        <X size={20} />
+                    </button>
+                </div>
+
+                <div className={styles.historyTableContainer}>
+                    {isLoading ? (
+                        <table className={styles.historyTable}>
+                            <thead>
+                                <tr>
+                                    <th>{language === 'bn' ? 'নং' : 'Sl'}</th>
+                                    <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
+                                    <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
+                                    <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
+                                    <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {[1, 2, 3, 4, 5].map(i => (
+                                    <tr key={i}>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '20px', margin: '0 auto' }} /></td>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '40px' }} /></td>
+                                        <td>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                <div className={styles.skeletonPulse} style={{ height: '24px', width: '24px', borderRadius: '50%' }} />
+                                                <div className={styles.skeletonPulse} style={{ height: '12px', width: '60px' }} />
+                                            </div>
+                                        </td>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '16px', width: '40px', borderRadius: '4px' }} /></td>
+                                        <td><div className={styles.skeletonPulse} style={{ height: '12px', width: '40px' }} /></td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (history && history.length > 0) ? (
+                        <>
+                            <table className={styles.historyTable}>
+                                <thead>
+                                    <tr>
+                                        <th>{language === 'bn' ? 'নং' : 'Sl'}</th>
+                                        <th>{language === 'bn' ? 'তারিখ' : 'Date'}</th>
+                                        <th>{language === 'bn' ? 'প্রতিপক্ষ' : 'Opponent'}</th>
+                                        <th>{language === 'bn' ? 'ফল' : 'Result'}</th>
+                                        <th>{language === 'bn' ? 'স্কোর' : 'Score'}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {history.map((record, index) => (
+                                        <tr key={record.id}>
+                                            <td className={styles.slCol}>{currentPage * PAGE_SIZE + index + 1}</td>
+                                            <td className={styles.dateCol}>
+                                                {new Date(record.created_at).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                                                    month: 'short', day: 'numeric'
+                                                })}
+                                            </td>
+                                            <td className={styles.oppCol}>
+                                                <div className={styles.oppInfoMini}>
+                                                    <div className={styles.avatarMini}>
+                                                        {record.opponent_avatar ? (
+                                                            <img src={record.opponent_avatar} alt="" />
+                                                        ) : (
+                                                            <span>{record.opponent_name?.[0] || '?'}</span>
+                                                        )}
+                                                    </div>
+                                                    <div className={styles.oppNameGroup}>
+                                                        <span>{record.opponent_name}</span>
+                                                        {record.is_bot && <span className={styles.botTag}>AI</span>}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span className={`${styles.resultBadge} ${styles[`badge${record.result}`]}`}>
+                                                    {record.result === 'win'
+                                                        ? (language === 'bn' ? 'জয়' : 'Win')
+                                                        : record.result === 'loss'
+                                                            ? (language === 'bn' ? 'হার' : 'Loss')
+                                                            : (language === 'bn' ? 'ড্র' : 'Draw')
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td className={styles.scoreCol}>
+                                                {record.my_score} - {record.opponent_score}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+
+                            {totalPages > 1 && (
+                                <div className={styles.pagination}>
+                                    <button
+                                        disabled={currentPage === 0}
+                                        onClick={() => onPageChange(currentPage - 1)}
+                                        className={styles.pageBtn}
+                                    >
+                                        <ChevronLeft size={18} />
+                                    </button>
+                                    <span className={styles.pageInfo}>
+                                        {language === 'bn' ? `পৃষ্ঠা ${currentPage + 1} / ${totalPages}` : `Page ${currentPage + 1} of ${totalPages}`}
+                                    </span>
+                                    <button
+                                        disabled={currentPage >= totalPages - 1}
+                                        onClick={() => onPageChange(currentPage + 1)}
+                                        className={styles.pageBtn}
+                                    >
+                                        <ChevronRight size={18} />
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className={styles.emptyHistory}>
+                            <div className={styles.emptyIconBox}>
+                                <Trophy size={48} className={styles.emptyIcon} />
+                            </div>
+                            <div className={styles.emptyTextGroup}>
+                                <h4>{language === 'bn' ? 'কোন ইতিহাস নেই' : 'No History Found'}</h4>
+                                <p>{language === 'bn' ? 'আপনি এখনো কোনো ব্যাটেলে অংশ নেননি।' : "You haven't participated in any battles yet."}</p>
+                            </div>
+                            <button className={styles.emptyActionBtn} onClick={onClose}>
+                                {language === 'bn' ? 'ব্যাটেল শুরু করুন' : 'Start a Battle'}
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+};
+
+export default HistoryModal;

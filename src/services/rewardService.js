@@ -60,47 +60,7 @@ export const rewardService = {
             };
         } catch (error) {
             console.error('Error awarding XP:', error);
-
-            // Fallback: direct update if function doesn't exist
-            try {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('xp')
-                    .eq('id', userId)
-                    .single();
-
-                const newXp = (profile?.xp || 0) + amount;
-
-                await supabase
-                    .from('profiles')
-                    .update({ xp: newXp })
-                    .eq('id', userId);
-
-                // Ensure activity is logged even in fallback
-                const today = formatLocalDate(new Date());
-                const { data: currentActivity } = await supabase
-                    .from('user_daily_activity')
-                    .select('xp_earned, lessons_completed')
-                    .eq('user_id', userId)
-                    .eq('activity_date', today)
-                    .maybeSingle();
-
-                const isLesson = source === 'chapter_complete';
-                const newDailyXp = (currentActivity?.xp_earned || 0) + amount;
-                const newDailyLessons = (currentActivity?.lessons_completed || 0) + (isLesson ? 1 : 0);
-
-                await supabase.from('user_daily_activity').upsert({
-                    user_id: userId,
-                    activity_date: today,
-                    xp_earned: newDailyXp,
-                    lessons_completed: newDailyLessons
-                }, { onConflict: 'user_id,activity_date' });
-
-                return { success: true, newXp, transactionId: null };
-            } catch (fallbackError) {
-                console.error('Fallback XP update failed:', fallbackError);
-                return { success: false, newXp: 0, transactionId: null };
-            }
+            return { success: false, newXp: 0, transactionId: null };
         }
     },
 
@@ -132,27 +92,7 @@ export const rewardService = {
             };
         } catch (error) {
             console.error('Error awarding gems:', error);
-
-            // Fallback: direct update
-            try {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('gems')
-                    .eq('id', userId)
-                    .single();
-
-                const newGems = (profile?.gems || 0) + amount;
-
-                await supabase
-                    .from('profiles')
-                    .update({ gems: newGems })
-                    .eq('id', userId);
-
-                return { success: true, newGems, transactionId: null };
-            } catch (fallbackError) {
-                console.error('Fallback gems update failed:', fallbackError);
-                return { success: false, newGems: 0, transactionId: null };
-            }
+            return { success: false, newGems: 0, transactionId: null };
         }
     },
 
@@ -178,27 +118,7 @@ export const rewardService = {
             };
         } catch (error) {
             console.error('Error deducting hearts:', error);
-
-            // Fallback: direct update
-            try {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('hearts')
-                    .eq('id', userId)
-                    .single();
-
-                const newHearts = Math.max(0, (profile?.hearts || 0) - amount);
-
-                await supabase
-                    .from('profiles')
-                    .update({ hearts: newHearts })
-                    .eq('id', userId);
-
-                return { success: true, newHearts, transactionId: null };
-            } catch (fallbackError) {
-                console.error('Fallback hearts update failed:', fallbackError);
-                return { success: false, newHearts: 0, transactionId: null };
-            }
+            return { success: false, newHearts: 0, transactionId: null };
         }
     },
 
@@ -279,27 +199,7 @@ export const rewardService = {
             };
         } catch (error) {
             console.error('Error awarding hearts:', error);
-
-            // Fallback: direct update
-            try {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('hearts, max_hearts')
-                    .eq('id', userId)
-                    .single();
-
-                const newHearts = (profile?.hearts || 0) + amount;
-
-                await supabase
-                    .from('profiles')
-                    .update({ hearts: newHearts })
-                    .eq('id', userId);
-
-                return { success: true, newHearts, transactionId: null };
-            } catch (fallbackError) {
-                console.error('Fallback hearts award failed:', fallbackError);
-                return { success: false, newHearts: 0, transactionId: null };
-            }
+            return { success: false, newHearts: 0, transactionId: null };
         }
     },
 

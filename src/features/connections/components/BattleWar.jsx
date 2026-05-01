@@ -1087,10 +1087,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             </motion.div>
                         </div>
                         <h2 className={styles.lobbyTitle}>
-                            {language === 'bn' ? 'কুইজ ব্যাটেল' : 'Quiz Battle'}
+                            {language === 'bn' ? 'লাইভ কুইজ ব্যাটেল' : 'Live Quiz Battle'}
                         </h2>
                         <p className={styles.lobbySubtitle}>
-                            {language === 'bn' ? 'অন্যদের সাথে লড়াই করুন এবং কুইজ মাস্টার হন!' : 'Duel with others and become a quiz master!'}
+                            {language === 'bn' ? 'অন্যদের সাথে রিয়েল-টাইমে প্রতিযোগিতা করুন এবং সর্বোচ্চ স্কোর তুলুন!' : 'Compete in real-time and achieve the ultimate victory!'}
                         </p>
                     </div>
 

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
     Swords, Trophy, Zap, Clock, CheckCircle2, XCircle,
     Users, Search, Loader2, Star, RotateCcw, ChevronRight, ChevronLeft,
-    Wifi, WifiOff, Target, Award, Copy, User, X, Shield, History, Power
+    Wifi, WifiOff, Target, Award, Copy, User, X, Shield, History, Power, Cpu, UserX, Bot, Brain
 } from 'lucide-react';
 import styles from './BattleWar.module.css';
 import CustomSelect from '../../../components/ui/CustomSelect';
@@ -15,6 +15,7 @@ import BattleSkeleton from './BattleSkeleton';
 import HistoryModal from './HistoryModal';
 import ExitModal from './ExitModal';
 import BattleModeSelector from './BattleModeSelector';
+import BattleBetSelector from './BattleBetSelector';
 import { rewardService } from '../../../services/rewardService';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import PollenIcon from '../../../components/PollenIcon';
@@ -139,6 +140,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [difficulty, setDifficulty] = useState('easy');
     const difficultyRef = useRef('easy');
     useEffect(() => { difficultyRef.current = difficulty; }, [difficulty]);
+
+    const [betInfo, setBetInfo] = useState({ type: 'xp', amount: 0 });
+    const betInfoRef = useRef({ type: 'xp', amount: 0 });
+    useEffect(() => { betInfoRef.current = betInfo; }, [betInfo]);
 
     useEffect(() => { sessionRef.current = session; }, [session]);
     useEffect(() => { phaseRef.current = phase; }, [phase]);
@@ -450,6 +455,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         const BOT_NAMES = ['অর্জুন AI', 'প্রজ্ঞা Bot', 'বুদ্ধিমান Bot', 'কিরণ AI'];
         const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
 
+        setQuestions(qs);
         setIsVsBot(true);
         isBotRef.current = true;
         isBotGameActive.current = true;
@@ -514,6 +520,22 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             return;
         }
 
+        // XP or Pollen check for player 2
+        if (existing.xp_stake > 0 || existing.pollen_stake > 0) {
+            const { data: profile } = await supabase.from('profiles').select('xp, gems').eq('id', user.id).single();
+            if (existing.xp_stake > 0) {
+                if (!profile || (profile.xp || 0) < existing.xp_stake) {
+                    toast.error(language === 'bn' ? "আপনার পর্যাপ্ত XP নেই!" : "You don't have enough XP!");
+                    return;
+                }
+            } else if (existing.pollen_stake > 0) {
+                if (!profile || (profile.gems || 0) < existing.pollen_stake) {
+                    toast.error(language === 'bn' ? "আপনার পর্যাপ্ত মধুরেণু (Pollen) নেই!" : "You don't have enough Pollen!");
+                    return;
+                }
+            }
+        }
+
         const qs = existing.question_ids?.length
             ? await fetchQuestionsByIds(existing.question_ids)
             : await fetchBattleQuestions(null);
@@ -545,6 +567,24 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         const forcedCourse = (forcedCourseParam && typeof forcedCourseParam === 'object' && !forcedCourseParam.nativeEvent) ? forcedCourseParam : null;
 
         if (!user?.id) return;
+
+        // XP or Pollen check for creator
+        const b = betInfoRef.current;
+        if (matchModeRef.current !== 'bot' && b.amount > 0) {
+            const { data: profile } = await supabase.from('profiles').select('xp, gems').eq('id', user.id).single();
+            if (b.type === 'xp') {
+                if (!profile || (profile.xp || 0) < b.amount) {
+                    toast.error(language === 'bn' ? "আপনার পর্যাপ্ত XP নেই!" : "You don't have enough XP!");
+                    return;
+                }
+            } else if (b.type === 'pollen') {
+                if (!profile || (profile.gems || 0) < b.amount) {
+                    toast.error(language === 'bn' ? "আপনার পর্যাপ্ত মধুরেণু (Pollen) নেই!" : "You don't have enough Pollen!");
+                    return;
+                }
+            }
+        }
+
         setPhase('searching');
         setSearchCountdown(20);
         isBotGameActive.current = false;
@@ -592,7 +632,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 player1_id: user.id,
                 status: 'waiting',
                 question_ids: qIds,
-                course_id: selectedCourse?.id
+                course_id: selectedCourse?.id,
+                xp_stake: betInfoRef.current.type === 'xp' ? betInfoRef.current.amount : 0,
+                pollen_stake: betInfoRef.current.type === 'pollen' ? betInfoRef.current.amount : 0
             })
             .select()
             .single();
@@ -791,6 +833,15 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     };
 
     const finishGame = useCallback(async () => {
+        // !! IMPORTANT: Snapshot ref values BEFORE any await, to avoid stale closures
+        const isBotMatch = isBotRef.current;
+        const myFinalScore = myScoreRef.current;
+        const oppFinalScore = oppScoreRef.current;
+        const myFinalCorrect = myCorrectRef.current;
+        const p1 = isPlayer1Ref.current;
+        const currentQIndex = qIndexRef.current;
+        const totalQs = questionsRef.current.length || TOTAL_QUESTIONS;
+
         isBotGameActive.current = false;
         
         // Transition to result phase immediately
@@ -798,12 +849,20 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
         const sessId = sessionRef.current?.id;
         if (!sessId) return;
-        
-        const sess = sessionRef.current;
-        const myFinalScore = myScoreRef.current;
-        const oppFinalScore = oppScoreRef.current;
-        const myFinalCorrect = myCorrectRef.current;
-        const p1 = isPlayer1Ref.current;
+
+        // Fetch direct ground truth from database to completely avoid any caching/real-time lag problems
+        const { data: dbSess, error: dbError } = await supabase
+            .from('battle_sessions')
+            .select('*')
+            .eq('id', sessId)
+            .single();
+
+        if (dbError || !dbSess) {
+            console.error('Error fetching latest session state inside finishGame:', dbError);
+            return;
+        }
+
+        const sess = dbSess;
 
         const winnerId = myFinalScore > oppFinalScore
             ? user?.id
@@ -812,14 +871,57 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 : null;
 
         const updateData = p1
-            ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, player1_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
-            : { player2_score: myFinalScore, player2_correct: myFinalCorrect, player2_q_index: qIndexRef.current, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
+            ? { player1_score: myFinalScore, player1_correct: myFinalCorrect, player1_q_index: currentQIndex, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() }
+            : { player2_score: myFinalScore, player2_correct: myFinalCorrect, player2_q_index: currentQIndex, status: 'finished', winner_id: winnerId, finished_at: new Date().toISOString() };
 
         // Perform update in background
         supabase.from('battle_sessions').update(updateData).eq('id', sess.id).then(({ error }) => {
             if (error) console.error('Error finalising session:', error);
         });
-    }, [user?.id]);
+
+        const myAcc = totalQs > 0 ? Math.round((myFinalCorrect / totalQs) * 100) : 0;
+        const isWinner = myFinalScore > oppFinalScore;
+        const isEligible = myAcc >= 50;
+
+        console.log('[finishGame] isBotMatch:', isBotMatch, '| isWinner:', isWinner, '| isEligible:', isEligible, '| xp_stake:', sess.xp_stake, '| pollen_stake:', sess.pollen_stake);
+
+        // ── Normal Rewards (Any winner gets normal rewards if eligible) ──
+        if (isWinner && isEligible) {
+            const normalXp = Math.round((myFinalCorrect / totalQs) * 10);
+            const normalPollen = 2;
+
+            if (normalXp > 0) {
+                supabase.rpc('award_user_xp', { p_user_id: user.id, p_amount: normalXp, p_source: 'battle_win' })
+                    .then(({ error }) => {
+                        if (error) console.error('Error awarding normal XP:', error);
+                    });
+            }
+            if (normalPollen > 0) {
+                supabase.rpc('award_user_gems', { p_user_id: user.id, p_amount: normalPollen, p_source: 'battle_win' })
+                    .then(({ error }) => {
+                        if (error) console.error('Error awarding normal Pollen:', error);
+                    });
+            }
+        }
+        // -- Stake Toasts (DB trigger handles actual award/deduction) --
+        // trg_process_battle_stakes trigger fires server-side on session update
+        if (!isBotMatch) {
+            if (sess.xp_stake > 0) {
+                if (isWinner && isEligible) {
+                    toast.success(language === 'bn' ? `অভিনন্দন! আপনি ${sess.xp_stake} XP বোনাস পেয়েছেন!` : `Congrats! You won ${sess.xp_stake} XP bonus!`);
+                } else if (!isWinner) {
+                    toast.error(language === 'bn' ? `আপনি ${sess.xp_stake} XP হারিয়েছেন।` : `You lost ${sess.xp_stake} XP.`);
+                }
+            }
+            if (sess.pollen_stake > 0) {
+                if (isWinner && isEligible) {
+                    toast.success(language === 'bn' ? `অভিনন্দন! আপনি ${sess.pollen_stake} মধুরেণু বোনাস পেয়েছেন!` : `Congrats! You won ${sess.pollen_stake} Pollen bonus!`);
+                } else if (!isWinner) {
+                    toast.error(language === 'bn' ? `আপনি ${sess.pollen_stake} মধুরেণু হারিয়েছেন।` : `You lost ${sess.pollen_stake} Pollen.`);
+                }
+            }
+        }
+    }, [user?.id, language]);
 
     const moveToNextQuestion = useCallback(async () => {
         const currentIdx = qIndexRef.current;
@@ -1077,7 +1179,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     }
 
     if (phase === 'lobby') return (
-        <div className={styles.lobbyWrap}>
+        <div key="phase-lobby" className={styles.lobbyWrap}>
             <AnimatePresence>
                 {showHistory && (
                     <HistoryModal
@@ -1197,8 +1299,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             )}
                         </div>
 
-                        {selectedCourse && (
+                        {selectedCourse ? (
                             <motion.div 
+                                key="selected-course-module-select"
                                 className={styles.selectGroup}
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -1222,7 +1325,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                     />
                                 )}
                             </motion.div>
-                        )}
+                        ) : null}
 
                         <motion.button
                             className={styles.createBtn}
@@ -1242,6 +1345,16 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                             difficulty={difficulty}
                             onDifficultyChange={setDifficulty}
                         />
+
+                        {matchMode !== 'bot' ? (
+                            <div key="battle-bet-wrapper" style={{ width: '100%', minWidth: '100%' }}>
+                                <BattleBetSelector
+                                    language={language}
+                                    value={betInfo}
+                                    onChange={setBetInfo}
+                                />
+                            </div>
+                        ) : null}
                     </div>
                 </motion.div>
 
@@ -1297,7 +1410,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── SEARCHING (created room, waiting) ─────────────────────
     if (phase === 'searching') return (
-        <div className={styles.lobbyWrap}>
+        <div key="phase-searching" className={styles.lobbyWrap}>
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1476,43 +1589,80 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── SEARCH FAILED (No opponent found for PvP) ─────────────
     if (phase === 'search_failed') return (
-        <div className={styles.lobbyWrap}>
+        <div key="phase-search-failed" className={styles.lobbyWrap}>
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={styles.searchingCard}
-                style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '20px', minHeight: '350px', padding: '2rem' }}
+                style={{
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '20px',
+                    minHeight: '350px',
+                    padding: '2.5rem',
+                    position: 'relative'
+                }}
             >
+                {/* Close Button Top Right */}
+                <button
+                    onClick={handleReset}
+                    style={{
+                        position: 'absolute',
+                        top: '16px',
+                        right: '16px',
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'var(--color-text-muted)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '4px',
+                        transition: 'all 0.2s ease'
+                    }}
+                >
+                    <X size={20} />
+                </button>
+
                 <div style={{ color: 'var(--color-danger)', display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
-                    <Cpu size={48} strokeWidth={1.5} />
+                    <UserX size={48} strokeWidth={1.5} />
                 </div>
-                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-text)', fontWeight: '800' }}>
-                    {language === 'bn' ? 'কোনো প্লেয়ার পাওয়া যায়নি!' : 'No Players Found!'}
+                <h3 style={{ fontSize: '1.25rem', color: 'var(--color-text)', fontWeight: '800', lineHeight: '1.4', maxWidth: '340px' }}>
+                    {language === 'bn' ? 'ওহ! এখানে কোনো শিক্ষার্থী নেই। কিছুক্ষণ পরে আবার দেখুন' : 'Oh! No learners found here. Please check back later.'}
                 </h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', maxWidth: '300px', lineHeight: '1.5' }}>
                     {language === 'bn' 
-                        ? 'লাইভ ব্যাটেল খেলার জন্য কোনো সক্রিয় লার্নার পাওয়া যায়নি। আপনি আবার চেষ্টা করতে পারেন অথবা ফিরে যেতে পারেন।' 
-                        : 'No active learners were found for the PvP match. You can try again or go back.'}
+                        ? 'লাইভ ব্যাটেল খেলার জন্য কোনো সক্রিয় লার্নার পাওয়া যায়নি। আপনি আবার চেষ্টা করতে পারেন অথবা এআই বটের সাথে খেলতে পারেন।' 
+                        : 'No active learners were found for the PvP match. You can try again or play against an AI bot.'}
                 </p>
 
                 <div style={{ display: 'flex', gap: '12px', marginTop: '12px', width: '100%', justifyContent: 'center' }}>
                     <motion.button
                         className={styles.createBtn}
-                        style={{ padding: '12px 24px', flex: 1, maxWidth: '160px', fontSize: '0.85rem' }}
+                        style={{ padding: '10px 16px', flex: 1, minWidth: '130px', maxWidth: '160px', height: '70px', fontSize: '0.82rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                         onClick={() => handleCreateRoom()}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                     >
-                        {language === 'bn' ? 'আবার চেষ্টা করুন' : 'Try Again'}
+                        <RotateCcw size={20} />
+                        <span style={{ whiteSpace: 'nowrap' }}>{language === 'bn' ? 'পুনরায় খুঁজুন' : 'Search Again'}</span>
                     </motion.button>
                     <motion.button
-                        className={styles.cancelBtn}
-                        style={{ padding: '12px 24px', flex: 1, maxWidth: '160px', fontSize: '0.85rem' }}
-                        onClick={handleReset}
-                        whileHover={{ scale: 1.05 }}
+                        className={styles.createBtn}
+                        style={{ padding: '10px 16px', flex: 1, minWidth: '130px', maxWidth: '160px', height: '70px', fontSize: '0.82rem', background: 'transparent', border: '1px solid #ffffff', color: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                        onClick={() => {
+                            matchModeRef.current = 'bot';
+                            setMatchMode('bot');
+                            handleCreateRoom();
+                        }}
+                        whileHover={{ scale: 1.05, background: 'rgba(255, 255, 255, 0.1)' }}
                         whileTap={{ scale: 0.95 }}
                     >
-                        {language === 'bn' ? 'ফিরে যান' : 'Go Back'}
+                        <Brain size={20} />
+                        <span style={{ whiteSpace: 'nowrap' }}>{language === 'bn' ? 'এআই এজেন্ট' : 'AI Agent'}</span>
                     </motion.button>
                 </div>
             </motion.div>
@@ -1521,7 +1671,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── MATCHMAKING (countdown) ───────────────────────────────
     if (phase === 'matchmaking') return (
-        <div className={styles.lobbyWrap}>
+        <div key="phase-matchmaking" className={styles.lobbyWrap}>
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -1582,7 +1732,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── GAME ──────────────────────────────────────────────────
     if (phase === 'game') return (
-        <div className={styles.gameWrap}>
+        <div key="phase-game" className={styles.gameWrap}>
             <AnimatePresence>
                 {showExitConfirm && (
                     <ExitModal
@@ -1727,7 +1877,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
     // ── RESULT ────────────────────────────────────────────────
     if (phase === 'result') return (
-        <div className={styles.resultWrap}>
+        <div key="phase-result" className={styles.resultWrap}>
 
             <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}

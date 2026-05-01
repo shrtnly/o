@@ -1,7 +1,8 @@
-import React from 'react';
-import { Check } from 'lucide-react';
+import React, { useState } from 'react';
+import { Check, HelpCircle } from 'lucide-react';
 
-const BattleModeSelector = ({ language, value, onChange, difficulty = 'easy', onDifficultyChange }) => {
+const BattleModeSelector = ({ language, value, onChange }) => {
+    const [showTooltip, setShowTooltip] = useState(false);
     const isLiveActive = value === 'both' || value === 'pvp';
     const isAiActive = value === 'both' || value === 'bot';
 
@@ -29,21 +30,20 @@ const BattleModeSelector = ({ language, value, onChange, difficulty = 'easy', on
         <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '8px',
             width: '100%',
             marginTop: '16px',
-            alignItems: 'flex-start'
+            alignItems: 'flex-start',
+            position: 'relative'
         }}>
-            {/* Horizontal Line with centered text */}
+            {/* Left aligned header/label with question small icon */}
             <div style={{
                 display: 'flex',
                 alignItems: 'center',
-                width: '100%',
-                marginBottom: '4px'
+                gap: '6px',
+                marginBottom: '2px'
             }}>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
                 <span style={{
-                    padding: '0 12px',
                     fontSize: '0.72rem',
                     color: 'var(--color-text-muted)',
                     fontWeight: '700',
@@ -52,10 +52,76 @@ const BattleModeSelector = ({ language, value, onChange, difficulty = 'easy', on
                 }}>
                     {language === 'bn' ? 'ব্যাটেল মোড নির্বাচন করুন' : 'Select Battle Mode'}
                 </span>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
+                <div 
+                    onClick={() => setShowTooltip(!showTooltip)}
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        color: 'var(--color-text-muted)',
+                        transition: 'color 0.2s ease',
+                        padding: '2px',
+                        position: 'relative'
+                    }}
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                >
+                    <HelpCircle size={14} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+
+                    {/* Tooltip Box with Arrow pointing to the question icon */}
+                    {showTooltip && (
+                        <div style={{
+                            position: 'absolute',
+                            bottom: '26px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: '260px',
+                            background: 'var(--color-bg-deep, #141419)',
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            borderRadius: '8px',
+                            padding: '12px',
+                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.35)',
+                            zIndex: 9999,
+                            pointerEvents: 'none'
+                        }}>
+                            {/* Little triangle arrow pointing down to the question icon */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: '-5px',
+                                left: '50%',
+                                transform: 'translateX(-50%) rotate(45deg)',
+                                width: '8px',
+                                height: '8px',
+                                background: 'var(--color-bg-deep, #141419)',
+                                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
+                                borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                            }} />
+
+                            <div style={{
+                                fontSize: '0.74rem',
+                                color: '#ffffff',
+                                lineHeight: '1.4',
+                                fontWeight: '500'
+                            }}>
+                                {language === 'bn' ? (
+                                    <ul style={{ margin: 0, paddingLeft: '14px' }}>
+                                        <li style={{ marginBottom: '6px' }}><strong>লাইভ শিক্ষার্থী:</strong> অন্য একজন সক্রিয় শিক্ষার্থীর সাথে ম্যাচ খুঁজবে।</li>
+                                        <li><strong>এআই এজেন্ট:</strong> সরাসরি একটি কৃত্রিম বুদ্ধিমত্তা সম্পন্ন রোবটের সাথে খেলা শুরু হবে।</li>
+                                    </ul>
+                                ) : (
+                                    <ul style={{ margin: 0, paddingLeft: '14px' }}>
+                                        <li style={{ marginBottom: '6px' }}><strong>Live Learner:</strong> Matches you with another active real learner.</li>
+                                        <li><strong>AI Agent:</strong> Lets you play instantly against an AI bot.</li>
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            {/* Flex Row Aligned with Left */}
+            {/* Combined Flex Row Aligned with Left for Battle Mode */}
             <div style={{
                 display: 'flex',
                 justifyContent: 'flex-start',
@@ -152,131 +218,7 @@ const BattleModeSelector = ({ language, value, onChange, difficulty = 'easy', on
                         pointerEvents: 'none',
                         whiteSpace: 'nowrap'
                     }}>
-                        {language === 'bn' ? 'এআই বট' : 'AI Bot'}
-                    </span>
-                </div>
-            </div>
-
-            {/* Horizontal Line with centered text for Difficulty */}
-            <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                width: '100%',
-                marginTop: '12px',
-                marginBottom: '4px'
-            }}>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
-                <span style={{
-                    padding: '0 12px',
-                    fontSize: '0.72rem',
-                    color: 'var(--color-text-muted)',
-                    fontWeight: '700',
-                    whiteSpace: 'nowrap',
-                    letterSpacing: '0.4px'
-                }}>
-                    {language === 'bn' ? 'প্রশ্নের লেভেল নির্বাচন করুন' : 'Select Question Difficulty'}
-                </span>
-                <div style={{ flex: 1, height: '1px', background: 'rgba(255, 255, 255, 0.08)' }} />
-            </div>
-
-            {/* Difficulty Flex Row */}
-            <div style={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                flexWrap: 'wrap',
-                gap: '16px',
-                width: '100%',
-                padding: '2px 0'
-            }}>
-                {/* Easy Option */}
-                <div 
-                    onClick={() => onDifficultyChange && onDifficultyChange('easy')}
-                    style={{
-                        width: 'fit-content',
-                        height: '34px',
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        userSelect: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '10px',
-                        padding: '0 6px'
-                    }}
-                >
-                    {/* Checkbox with tick mark inside */}
-                    <div style={{
-                        width: '16px',
-                        height: '16px',
-                        borderRadius: '4px',
-                        border: difficulty === 'easy' ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.25)',
-                        background: difficulty === 'easy' ? '#ffffff' : 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s ease'
-                    }}>
-                        {difficulty === 'easy' && <Check size={12} strokeWidth={3} style={{ color: 'var(--color-bg-deep, #000)' }} />}
-                    </div>
-
-                    {/* Label inside */}
-                    <span style={{
-                        color: difficulty === 'easy' ? '#ffffff' : 'rgba(255, 255, 255, 0.4)',
-                        fontSize: '0.74rem',
-                        fontWeight: '700',
-                        transition: 'all 0.2s ease',
-                        pointerEvents: 'none',
-                        whiteSpace: 'nowrap'
-                    }}>
-                        {language === 'bn' ? 'সহজ' : 'Easy'}
-                    </span>
-                </div>
-
-                {/* Hard Option */}
-                <div 
-                    onClick={() => onDifficultyChange && onDifficultyChange('hard')}
-                    style={{
-                        width: 'fit-content',
-                        height: '34px',
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        userSelect: 'none',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '10px',
-                        padding: '0 6px'
-                    }}
-                >
-                    {/* Checkbox with tick mark inside */}
-                    <div style={{
-                        width: '16px',
-                        height: '16px',
-                        borderRadius: '4px',
-                        border: difficulty === 'hard' ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.25)',
-                        background: difficulty === 'hard' ? '#ffffff' : 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s ease'
-                    }}>
-                        {difficulty === 'hard' && <Check size={12} strokeWidth={3} style={{ color: 'var(--color-bg-deep, #000)' }} />}
-                    </div>
-
-                    {/* Label inside */}
-                    <span style={{
-                        color: difficulty === 'hard' ? '#ffffff' : 'rgba(255, 255, 255, 0.4)',
-                        fontSize: '0.74rem',
-                        fontWeight: '700',
-                        transition: 'all 0.2s ease',
-                        pointerEvents: 'none',
-                        whiteSpace: 'nowrap'
-                    }}>
-                        {language === 'bn' ? 'কঠিন' : 'Hard'}
+                        {language === 'bn' ? 'এআই এজেন্ট' : 'AI Agent'}
                     </span>
                 </div>
             </div>

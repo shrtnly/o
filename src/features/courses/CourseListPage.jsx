@@ -40,17 +40,22 @@ const CourseListPage = () => {
     ];
 
     useEffect(() => {
+        let isMounted = true;
         const fetchData = async () => {
             setError(null);
             try {
                 // Fetch basic course data first to show something immediately if possible
                 const allCourses = await courseService.getAllCourses();
                 
+                if (!isMounted) return;
+
                 // Then fetch optional stats and enrollment
                 const [enrolledData, bulkStats] = await Promise.all([
-                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : Promise.resolve({ data: [] }),
+                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id).then(r => r).catch(() => null) : Promise.resolve({ data: [] }),
                     courseService.getBulkCourseStats().catch(() => ({}))
                 ]);
+
+                if (!isMounted) return;
 
                 // Merge live stats into course data
                 const updatedCourses = (allCourses || []).map(course => ({
@@ -68,14 +73,21 @@ const CourseListPage = () => {
                     setActiveCategory('All');
                 }
             } catch (err) {
-                console.error('Error fetching course data:', err);
-                setError(true);
+                if (isMounted) {
+                    console.error('Error fetching course data:', err);
+                    setError(true);
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
         fetchData();
-    }, [user, retryCount]);
+        return () => {
+            isMounted = false;
+        };
+    }, [user?.id, retryCount]);
 
     // Compute filtered and sorted courses
     const filteredCourses = courses.filter(course => {

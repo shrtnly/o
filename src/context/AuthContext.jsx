@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabaseClient';
 
 const AuthContext = createContext({});
@@ -29,28 +29,57 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    // useRef so the flag persists across async callbacks without causing re-renders
+    const isInitialisedRef = useRef(false);
+
     useEffect(() => {
-        // Check active sessions and sets the user
         const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            const currentUser = session?.user ?? null;
-            setUser(currentUser);
-            if (currentUser) await fetchProfile(currentUser.id);
-            setLoading(false);
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                const currentUser = session?.user ?? null;
+                setUser(currentUser);
+                if (currentUser) await fetchProfile(currentUser.id);
+            } catch (err) {
+                console.error('AuthContext: getSession error', err);
+            } finally {
+                isInitialisedRef.current = true;
+                setLoading(false);
+            }
         };
 
         getSession();
 
-        // Listen for changes on auth state (signed in, signed out, etc.)
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             const currentUser = session?.user ?? null;
+
+            // TOKEN_REFRESHED — silent token refresh on tab return, just update user
+            if (event === 'TOKEN_REFRESHED') {
+                setUser(currentUser);
+                return;
+            }
+
+            // SIGNED_IN after first load = Supabase re-fires this on tab return (PKCE flow behavior)
+            // We silently update user but do NOT trigger profile fetch or loading changes
+            if (event === 'SIGNED_IN' && isInitialisedRef.current) {
+                setUser(currentUser);
+                return;
+            }
+
+            // First-time SIGNED_IN, SIGNED_OUT, USER_UPDATED, PASSWORD_RECOVERY
             setUser(currentUser);
             if (currentUser) {
-                await fetchProfile(currentUser.id);
+                if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+                    await fetchProfile(currentUser.id);
+                }
             } else {
                 setProfile(null);
             }
-            setLoading(false);
+
+            // Only set loading=false once (on first auth resolution)
+            if (!isInitialisedRef.current) {
+                isInitialisedRef.current = true;
+                setLoading(false);
+            }
         });
 
         return () => subscription.unsubscribe();
@@ -121,7 +150,10 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {/* Always render children — individual pages handle their own loading states.
+                Blocking render here caused infinite loading on tab switch because
+                TOKEN_REFRESHED event re-triggers auth state but never clears loading. */}
+            {children}
         </AuthContext.Provider>
     );
 };

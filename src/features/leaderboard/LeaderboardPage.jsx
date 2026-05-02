@@ -40,6 +40,7 @@ const LeaderboardPage = () => {
 
     /* ---------- fetch user XP ---------- */
     useEffect(() => {
+        let isMounted = true;
         const fetchUserData = async () => {
             if (user) {
                 const { data } = await supabase
@@ -47,43 +48,47 @@ const LeaderboardPage = () => {
                     .select('xp')
                     .eq('id', user.id)
                     .single();
-                if (data) {
+                if (data && isMounted) {
                     setUserXP(data.xp);
                     const currentLevel = getShieldLevel(data.xp);
                     setActiveTier(currentLevel.level);
                 }
             }
-            setXpLoading(false);
+            if (isMounted) setXpLoading(false);
         };
         fetchUserData();
-    }, [user]);
+        return () => { isMounted = false; };
+    }, [user?.id]); // user?.id prevents re-fetch on token refresh
 
     /* ---------- fetch leaderboard ---------- */
     useEffect(() => {
+        let isMounted = true;
         const fetchLeaderboard = async () => {
             if (userXP < UNLOCK_XP && !xpLoading) {
-                setLoading(false);
+                if (isMounted) setLoading(false);
                 return;
             }
-            setLoading(true);
+            if (isMounted) setLoading(true);
 
             const result = await leaderboardService.getLeaderboardByTier(
                 activeTier,
                 ITEMS_PER_PAGE,
                 (currentPage - 1) * ITEMS_PER_PAGE
-            );
+            ).catch(() => ({ data: [], total: 0 }));
 
+            if (!isMounted) return;
             setLeaderboardData(result.data);
             setTotalUsers(result.total);
 
             if (user) {
-                const rank = await leaderboardService.getUserRank(user.id, activeTier);
-                setUserRank(rank);
+                const rank = await leaderboardService.getUserRank(user.id, activeTier).catch(() => null);
+                if (isMounted) setUserRank(rank);
             }
-            setLoading(false);
+            if (isMounted) setLoading(false);
         };
         if (!xpLoading) fetchLeaderboard();
-    }, [activeTier, user, userXP, xpLoading, currentPage]);
+        return () => { isMounted = false; };
+    }, [activeTier, user?.id, userXP, xpLoading, currentPage]);
 
     /* ---------- helpers ---------- */
     const getRankIcon = (index) => {

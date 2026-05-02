@@ -42,15 +42,17 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchLastCourse = async () => {
       if (user) {
-        const id = await courseService.getLastPracticedCourseId(user.id);
-        setLastCourseId(id);
+        const id = await courseService.getLastPracticedCourseId(user.id).catch(() => null);
+        if (isMounted) setLastCourseId(id);
       }
-      setLoading(false);
+      if (isMounted) setLoading(false);
     };
     fetchLastCourse();
-  }, [user]);
+    return () => { isMounted = false; };
+  }, [user?.id]); // Only re-run when user ID changes, not on token refresh
 
   if (loading) return <LoadingScreen />;
 
@@ -69,24 +71,24 @@ import ConnectionPage from './features/connections/ConnectionPage';
 import NotificationPage from './features/notifications/NotificationPage';
 
 const AppContent = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     // Catch-all for password recovery links landing on the wrong path
     if (window.location.hash.includes('type=recovery') && !window.location.pathname.includes('/reset-password')) {
-      const { pathname, origin, hash } = window.location;
+      const { origin, hash } = window.location;
       console.log('Recovery link detected, redirecting to /reset-password');
       window.location.href = `${origin}/reset-password${hash}`;
     }
 
     const timer = setTimeout(() => {
       setInitialLoading(false);
-    }, 100); // Reduced from 300ms to 100ms for near-instant FCP
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
 
-  if (initialLoading || authLoading) {
+  if (initialLoading) {
     return <LoadingScreen />;
   }
 

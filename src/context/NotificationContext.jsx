@@ -34,7 +34,7 @@ export const NotificationProvider = ({ children }) => {
         } catch (err) {
             console.error('Error refreshing unread count:', err);
         }
-    }, [user]);
+    }, [user?.id]);
 
     const refreshConnectionsCount = useCallback(async () => {
         if (!user) return;
@@ -51,7 +51,7 @@ export const NotificationProvider = ({ children }) => {
         } catch (err) {
             console.error('Error refreshing connections count:', err);
         }
-    }, [user]);
+    }, [user?.id]);
 
     const fetchNotifications = useCallback(async () => {
         if (!user) return;
@@ -78,7 +78,7 @@ export const NotificationProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [user, refreshUnreadCount, refreshConnectionsCount]);
+    }, [user?.id, refreshUnreadCount, refreshConnectionsCount]); // user?.id not full user object
 
     const loadMoreNotifications = useCallback(async () => {
         if (!user || isLoading || isLoadingMore || !hasMore) return;
@@ -524,7 +524,7 @@ export const NotificationProvider = ({ children }) => {
             supabase.removeChannel(notificationChannel);
             supabase.removeChannel(connectionsChannel);
         };
-    }, [user, fetchNotifications, refreshConnectionsCount, profile]);
+    }, [user?.id, fetchNotifications, refreshConnectionsCount]); // user?.id prevents re-run on token refresh
 
     const [activeChatId, setActiveChatId] = useState(null);
     const [isInboxOpen, setIsInboxOpen] = useState(false);

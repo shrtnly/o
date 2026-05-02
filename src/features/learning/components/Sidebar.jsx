@@ -42,7 +42,7 @@ const Sidebar = () => {
             }
         };
         fetchLastCourse();
-    }, [user, currentCourseId]);
+    }, [user?.id, currentCourseId]);
 
     // Priority: 1. Current course in URL, 2. Last practiced course from DB, 3. Default root (which redirects)
     const learnPath = currentCourseId ? `/learn/${currentCourseId}` : (lastCourseId ? `/learn/${lastCourseId}` : '/');

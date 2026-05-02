@@ -100,7 +100,7 @@ const SettingsPage = () => {
         if (activeTab === 'courses' && user) {
             fetchEnrolledCourses();
         }
-    }, [activeTab, user]);
+    }, [activeTab, user?.id]);
 
     const fetchEnrolledCourses = async () => {
         setLoadingCourses(true);
@@ -119,7 +119,7 @@ const SettingsPage = () => {
         if (activeTab === 'notifications' && user) {
             fetchNotificationSettings();
         }
-    }, [activeTab, user]);
+    }, [activeTab, user?.id]);
 
     const fetchNotificationSettings = async () => {
         try {
@@ -173,7 +173,7 @@ const SettingsPage = () => {
         if ((activeTab === 'profile' || activeTab === 'subscription') && user) {
             fetchUserProfile();
         }
-    }, [activeTab, user]);
+    }, [activeTab, user?.id]);
 
     const fetchUserProfile = async () => {
         try {

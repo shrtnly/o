@@ -96,7 +96,7 @@ const ShopPage = () => {
     useEffect(() => {
         fetchProfile();
         fetchActivePlan();
-    }, [user]);
+    }, [user?.id]);
 
     useEffect(() => {
         if (location.state?.directCheckout && !loading && !planLoading && profile) {

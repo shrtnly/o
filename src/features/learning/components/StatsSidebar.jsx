@@ -217,7 +217,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
             </div>
 
             <div className={styles.statsRow}>
-                {(!profile || streakLoading) ? (
+                {!profile ? (
                     <>
                         <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
                         <div className={`${styles.statItem} ${styles.skeleton}`} style={{ width: '80px', height: '40px' }}></div>
@@ -323,7 +323,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                 </defs>
                             </svg>
                             <div className={styles.flameRow}>
-                                {(!profile || streakLoading) ? (
+                                {!profile ? (
                                     [...Array(7)].map((_, i) => (
                                         <div key={i} className={`${styles.flameIcon} ${styles.skeleton}`} style={{ width: '32px', height: '32px', borderRadius: '50%' }}></div>
                                     ))
@@ -441,7 +441,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                 <div className={styles.leaderboardDivider}>•••</div>
 
                                 <div className={styles.leaderboardPreview}>
-                                    {(!leaderboardData?.length) ? (
+                                    {leaderboardLoading ? (
                                         <div className={styles.leaderboardPreview}>
                                             <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
                                             <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>

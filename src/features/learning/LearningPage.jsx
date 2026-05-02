@@ -158,10 +158,10 @@ const LearningPage = () => {
 
     const { courseId } = useParams();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, profile: authProfile } = useAuth();
     const { isDark } = useTheme();
     const [unitsWithChapters, setUnitsWithChapters] = useState([]);
-    const [profile, setProfile] = useState(null);
+    const [profile, setProfile] = useState(authProfile || null);
     const [progress, setProgress] = useState([]);
     const [courses, setCourses] = useState([]); // Added to store all enrolled courses
     const [streak, setStreak] = useState(null);
@@ -323,42 +323,77 @@ const LearningPage = () => {
     }, []);
 
     useEffect(() => {
+        let isMounted = true;
         const fetchDeepContent = async () => {
             // Only show full loading if we have no data yet
             if (unitsWithChapters.length === 0) {
                 setLoading(true);
             }
             try {
-                const promises = [];
-
-                // 1. Universal data for units (Doesn't depend on user)
-                promises.push(supabase
+                // 1. Fetch units
+                const { data: unitsData, error: unitsError } = await supabase
                     .from('units')
                     .select('*')
                     .eq('course_id', courseId)
-                    .order('order_index', { ascending: true })
-                );
+                    .order('order_index', { ascending: true });
 
-                // 2. User-specific data
-                if (user) {
-                    promises.push(supabase
-                        .from('user_courses')
-                        .select('course_id, courses(*)')
-                        .eq('user_id', user.id)
-                    );
-                    promises.push(supabase
-                        .from('profiles')
+                if (unitsError) throw unitsError;
+
+                if (!isMounted) return;
+
+                // 2. Fetch chapters for the units
+                if (unitsData && unitsData.length > 0) {
+                    const unitIds = unitsData.map(u => u.id);
+                    const { data: chaptersData, error: chaptersError } = await supabase
+                        .from('chapters')
                         .select('*')
-                        .eq('id', user.id)
-                        .single()
-                    );
-                    promises.push(supabase
-                        .from('user_progress')
-                        .select('*')
-                        .eq('user_id', user.id)
-                    );
-                    promises.push(rewardService.getUserStreak(user.id));
-                    promises.push(rewardService.getActivityHistory(user.id, 7));
+                        .in('unit_id', unitIds)
+                        .order('order_index', { ascending: true });
+
+                    if (chaptersError) throw chaptersError;
+
+                    if (!isMounted) return;
+
+                    const integratedData = unitsData.map(unit => ({
+                        ...unit,
+                        chapters: chaptersData.filter(c => c.unit_id === unit.id)
+                    }));
+
+                    setUnitsWithChapters(integratedData);
+                    setActiveUnit(integratedData[0]);
+                }
+
+                // 3. Fetch user data in parallel
+                if (user && isMounted) {
+                    const [enrolledRes, profileRes, progressRes, streakRes, streakHistoryRes] = await Promise.all([
+                        supabase.from('user_courses').select('course_id, courses(*)').eq('user_id', user.id).then(r => r).catch(() => null),
+                        supabase.from('profiles').select('*').eq('id', user.id).single().then(r => r).catch(() => null),
+                        supabase.from('user_progress').select('*').eq('user_id', user.id).then(r => r).catch(() => null),
+                        rewardService.getUserStreak(user.id).catch(() => null),
+                        rewardService.getActivityHistory(user.id, 7).catch(() => null)
+                    ]);
+
+                    if (!isMounted) return;
+
+                    if (enrolledRes?.data) {
+                        const enrolledCourses = enrolledRes.data.map(d => d.courses).filter(Boolean);
+                        setCourses(enrolledCourses);
+                    } else {
+                        const { data: all } = await supabase.from('courses').select('*');
+                        if (isMounted) setCourses(all || []);
+                    }
+
+                    if (profileRes?.data) {
+                        setProfile(profileRes.data);
+                        const tier = getShieldLevel(profileRes.data.xp || 0).level;
+                        leaderboardService.getUserRank(user.id, tier).then(rank => {
+                            if (isMounted) setUserRank(rank);
+                        });
+                    }
+
+                    if (progressRes?.data) setProgress(progressRes.data);
+                    if (streakRes) setStreak(streakRes);
+                    if (streakHistoryRes) setStreakHistory(streakHistoryRes);
 
                     // Update last practiced tracking in background
                     courseService.getLastPracticedCourseId(user.id).then(() => {
@@ -375,60 +410,14 @@ const LearningPage = () => {
                                         .then(() => { });
                                 }
                             });
-                    });
-                }
-
-                const results = await Promise.all(promises);
-
-                let unitsData = results[0]?.data;
-                let enrolledCoursesData = results[1]?.data;
-                let profileData = results[2]?.data;
-                let progressData = results[3]?.data;
-                let streakData = results[4];
-                let streakHistoryData = results[5];
-
-                // Set course selector data
-                if (enrolledCoursesData) {
-                    const enrolledCourses = enrolledCoursesData.map(d => d.courses).filter(Boolean);
-                    setCourses(enrolledCourses);
-                } else if (user) {
-                    // Fallback
-                    const { data: all } = await supabase.from('courses').select('*');
-                    setCourses(all || []);
-                }
-
-                if (profileData) {
-                    setProfile(profileData);
-                    const tier = getShieldLevel(profileData.xp || 0).level;
-                    leaderboardService.getUserRank(user.id, tier).then(setUserRank);
-                }
-                if (progressData) setProgress(progressData);
-                if (streakData) setStreak(streakData);
-                if (streakHistoryData) setStreakHistory(streakHistoryData);
-
-                // 3. Fetch chapters for the identified units
-                if (unitsData && unitsData.length > 0) {
-                    const unitIds = unitsData.map(u => u.id);
-                    const { data: chaptersData, error: chaptersError } = await supabase
-                        .from('chapters')
-                        .select('*')
-                        .in('unit_id', unitIds)
-                        .order('order_index', { ascending: true });
-
-                    if (chaptersError) throw chaptersError;
-
-                    const integratedData = unitsData.map(unit => ({
-                        ...unit,
-                        chapters: chaptersData.filter(c => c.unit_id === unit.id)
-                    }));
-
-                    setUnitsWithChapters(integratedData);
-                    setActiveUnit(integratedData[0]);
+                    }).catch(console.error);
                 }
             } catch (err) {
                 console.error('Error fetching deep course content:', err);
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -436,6 +425,10 @@ const LearningPage = () => {
             fetchDeepContent();
             if (checkAndRefillHearts) checkAndRefillHearts();
         }
+
+        return () => {
+            isMounted = false;
+        };
     }, [courseId, user?.id]);
 
     const toBengaliDigits = (str) => {
@@ -570,7 +563,7 @@ const LearningPage = () => {
         }
 
         navigate(`/study/${courseId}/${chapter.id}`);
-    }, [courseId, user, profile, navigate, streak]);
+    }, [courseId, user?.id, profile?.id, navigate, streak]);
 
     const allChapters = unitsWithChapters.flatMap(u => u.chapters);
     const completedChapterIds = new Set(progress.filter(p => p.is_completed).map(p => p.chapter_id));

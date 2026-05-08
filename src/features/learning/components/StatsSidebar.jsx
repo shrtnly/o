@@ -282,7 +282,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
             </div>
 
 
-            {/* Daily Practices Tracker / Consistency Tracker */}
+            {/* ─── Streak Card ─── */}
             <div className={cn(styles.card, styles.cardGolden)}>
                 <div className={styles.cardHeader}>
                     <h3 className={styles.cardTitle}>
@@ -323,34 +323,28 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                 </defs>
                             </svg>
                             <div className={styles.flameRow}>
-                                {!profile ? (
+                                {/* Show skeleton when profile not yet loaded OR streak data is loading */}
+                                {(!profile || streakLoading) ? (
                                     [...Array(7)].map((_, i) => (
                                         <div key={i} className={`${styles.flameIcon} ${styles.skeleton}`} style={{ width: '32px', height: '32px', borderRadius: '50%' }}></div>
                                     ))
                                 ) : (
                                     [...Array(7)].map((_, index) => {
                                         const now = new Date();
-                                        const dayOfWeek = now.getDay(); // 0(Sun) to 6(Sat)
-
-                                        // Adjust index so it starts from Saturday (index 0)
+                                        const dayOfWeek = now.getDay();
                                         const daysFromSaturday = (dayOfWeek + 1) % 7;
                                         const d = new Date(now);
                                         d.setDate(now.getDate() - daysFromSaturday + index);
-
                                         const dateStr = formatLocalDate(d);
                                         const todayStr = formatLocalDate(now);
-
-                                        // Check if this date has any practice recorded
                                         const isPracticed = weeklyActivity.some(a => {
                                             const activityDate = typeof a.activity_date === 'string'
                                                 ? a.activity_date.split('T')[0]
                                                 : formatLocalDate(new Date(a.activity_date));
                                             return activityDate === dateStr && (a.xp_earned > 0 || a.lessons_completed > 0);
                                         });
-
                                         const isToday = dateStr === todayStr;
                                         const isPast = index <= dayOfWeek;
-
                                         return (
                                             <div key={index} className={styles.flameContainer} title={dateStr}>
                                                 <div className={cn(styles.flameIcon, isPracticed && styles.flameActive, isToday && styles.flameToday)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -391,6 +385,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                 </AnimatePresence>
             </div>
 
+            {/* ─── Leaderboard Card ─── */}
             <div className={cn(styles.card, styles.cardGolden)} onClick={() => profile?.xp >= 100 && navigate('/leaderboard')} style={{ cursor: profile?.xp >= 100 ? 'pointer' : 'default' }}>
                 <div className={styles.cardHeader}>
                     <h3 className={styles.cardTitle}>
@@ -402,88 +397,87 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                     )}
                 </div>
                 <div className={styles.leaderboardContent}>
-                    {profile && (
-                        profile.xp < 100 ? (
-                            <div className={styles.unlockContent}>
-                                <div className={styles.iconBoxLocked}>
-                                    <Lock size={40} className={styles.lockIconLarge} />
+                    {/* 1. No profile yet → skeleton row */}
+                    {!profile ? (
+                        <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '45px', marginBottom: '12px' }}></div>
+                    ) : profile.xp < 100 ? (
+                        /* 2. Profile loaded but not enough XP → locked state */
+                        <div className={styles.unlockContent}>
+                            <div className={styles.iconBoxLocked}>
+                                <Lock size={40} className={styles.lockIconLarge} />
+                            </div>
+                            <div className={styles.unlockInfo}>
+                                <h4 className={styles.unlockTitle}>{t('unlock_leaderboard_title')}</h4>
+                                <p className={styles.unlockDesc}>{t('unlock_leaderboard_desc')}</p>
+                            </div>
+                        </div>
+                    ) : leaderboardLoading ? (
+                        /* 3. Profile loaded, XP OK, waiting for leaderboard data → skeleton */
+                        <>
+                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '45px', marginBottom: '12px' }}></div>
+                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
+                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
+                        </>
+                    ) : (
+                        /* 4. All loaded → show real data */
+                        <>
+                            <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
+                                <div className={styles.leaderboardRowLeft}>
+                                    <span className={styles.rowRank}>{userRank || '-'}</span>
+                                    <img
+                                        src={profile.avatar_url || `https://api.dicebear.com/9.x/avataaars/svg?seed=${profile.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`}
+                                        className={styles.rowAvatar}
+                                        alt={profile.display_name || t('learner')}
+                                    />
+                                    <span className={styles.rowName}>
+                                        {profile.display_name || t('learner')}
+                                    </span>
                                 </div>
-                                <div className={styles.unlockInfo}>
-                                    <h4 className={styles.unlockTitle}>{t('unlock_leaderboard_title')}</h4>
-                                    <p className={styles.unlockDesc}>{t('unlock_leaderboard_desc')}</p>
+                                <div className={styles.leaderboardRowRight}>
+                                    <ShieldIcon
+                                        xp={profile.xp || 0}
+                                        size={22}
+                                        showTooltip={false}
+                                    />
+                                    <span className={styles.rowXP}>{profile.xp || 0}</span>
                                 </div>
                             </div>
-                        ) : leaderboardLoading ? (
-                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '45px', marginBottom: '12px' }}></div>
-                        ) : (
-                            <>
-                                <div className={`${styles.leaderboardRow} ${styles.leaderboardRowActive}`}>
-                                    <div className={styles.leaderboardRowLeft}>
-                                        <span className={styles.rowRank}>{userRank || '-'}</span>
-                                        <img
-                                            src={profile.avatar_url || `https://api.dicebear.com/9.x/avataaars/svg?seed=${profile.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`}
-                                            className={styles.rowAvatar}
-                                            alt={profile.display_name || t('learner')}
-                                        />
-                                        <span className={styles.rowName}>
-                                            {profile.display_name || t('learner')}
-                                        </span>
-                                    </div>
-                                    <div className={styles.leaderboardRowRight}>
-                                        <ShieldIcon
-                                            xp={profile.xp || 0}
-                                            size={22}
-                                            showTooltip={false}
-                                        />
-                                        <span className={styles.rowXP}>{profile.xp || 0}</span>
-                                    </div>
-                                </div>
-                                <div className={styles.leaderboardDivider}>•••</div>
+                            <div className={styles.leaderboardDivider}>•••</div>
 
-                                <div className={styles.leaderboardPreview}>
-                                    {leaderboardLoading ? (
-                                        <div className={styles.leaderboardPreview}>
-                                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px', marginBottom: '8px' }}></div>
-                                            <div className={`${styles.leaderboardRow} ${styles.skeleton}`} style={{ height: '40px' }}></div>
+                            <div className={styles.leaderboardPreview}>
+                                {leaderboardData.slice(0, 2).map((user, index) => {
+                                    const avatarUrl = user.avatar_url || `https://api.dicebear.com/9.x/avataaars/svg?seed=${user.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`;
+                                    return (
+                                        <div
+                                            key={user.id}
+                                            className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
+                                            onClick={(e) => { e.stopPropagation(); user.id !== profile.id && navigate(`/learner/${user.id}`); }}
+                                            style={{ cursor: user.id !== profile.id ? 'pointer' : 'default' }}
+                                        >
+                                            <div className={styles.leaderboardRowLeft}>
+                                                <span className={styles.rowRank}>{index + 1}</span>
+                                                <img
+                                                    src={avatarUrl}
+                                                    className={styles.rowAvatar}
+                                                    alt={user.display_name || t('learner')}
+                                                />
+                                                <span className={styles.rowName}>
+                                                    {user.display_name || t('learner')}
+                                                </span>
+                                            </div>
+                                            <div className={styles.leaderboardRowRight}>
+                                                <ShieldIcon
+                                                    xp={user.xp}
+                                                    size={22}
+                                                    showTooltip={false}
+                                                />
+                                                <span className={styles.rowXP}>{user.xp}</span>
+                                            </div>
                                         </div>
-                                    ) : (
-                                        leaderboardData.slice(0, 2).map((user, index) => {
-                                            const avatarSeed = index === 0 ? 'Felix' : 'Vivian';
-                                            const avatarUrl = user.avatar_url || `https://api.dicebear.com/9.x/avataaars/svg?seed=${user.id}&top=bob,curly,hijab,turban,bigHair,bun,dreads,shortCurly,longButNotTooLong,miaWallace,straight01,straight02,curvy&mouth=smile`;
-
-                                            return (
-                                                <div
-                                                    key={user.id}
-                                                    className={`${styles.leaderboardRow} ${user.id === profile.id ? styles.leaderboardRowActive : ''}`}
-                                                    onClick={() => user.id !== profile.id && navigate(`/learner/${user.id}`)}
-                                                    style={{ cursor: user.id !== profile.id ? 'pointer' : 'default' }}
-                                                >
-                                                    <div className={styles.leaderboardRowLeft}>
-                                                        <span className={styles.rowRank}>{index + 1}</span>
-                                                        <img
-                                                            src={avatarUrl}
-                                                            className={styles.rowAvatar}
-                                                            alt={user.display_name || t('learner')}
-                                                        />
-                                                        <span className={styles.rowName}>
-                                                            {user.display_name || t('learner')}
-                                                        </span>
-                                                    </div>
-                                                    <div className={styles.leaderboardRowRight}>
-                                                        <ShieldIcon
-                                                            xp={user.xp}
-                                                            size={22}
-                                                            showTooltip={false}
-                                                        />
-                                                        <span className={styles.rowXP}>{user.xp}</span>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })
-                                    )}
-                                </div>
-                            </>
-                        )
+                                    );
+                                })}
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

@@ -42,10 +42,11 @@ function calcSpeed(timeLeft) {
 }
 
 // ─── sub-components ───────────────────────────────────────────
-const getTierName = (tier) => {
-    const tiersEn = ["Bee Kid", "Bee Warrior", "Bee Master", "Bee Champion", "Bee Legend"];
+const getTierName = (tier, language) => {
+    const tiersEn = ["Bee Kid learner", "Bee Warrior", "Bee Master", "Bee Champion", "Bee Legend"];
+    const tiersBn = ["বি কিড লার্নার", "মৌমাছি যোদ্ধা", "মৌমাছি মাস্টার", "মৌমাছি চ্যাম্পিয়ন", "মৌমাছি লিজেন্ড"];
     const idx = Math.min(Math.max((tier || 1) - 1, 0), 4);
-    return tiersEn[idx];
+    return language === 'bn' ? tiersBn[idx] : tiersEn[idx];
 };
 
 const Avatar = ({ url, name, size = 42 }) => (
@@ -903,24 +904,82 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     });
             }
         }
-        // -- Stake Toasts (DB trigger handles actual award/deduction) --
-        // trg_process_battle_stakes trigger fires server-side on session update
-        if (!isBotMatch) {
-            if (sess.xp_stake > 0) {
-                if (isWinner && isEligible) {
-                    toast.success(language === 'bn' ? `অভিনন্দন! আপনি ${sess.xp_stake} XP বোনাস পেয়েছেন!` : `Congrats! You won ${sess.xp_stake} XP bonus!`);
-                } else if (!isWinner) {
-                    toast.error(language === 'bn' ? `আপনি ${sess.xp_stake} XP হারিয়েছেন।` : `You lost ${sess.xp_stake} XP.`);
+
+        // Insert notification record on game completion
+        const normalXp = Math.round((myFinalCorrect / totalQs) * 10);
+        const normalPollen = 2;
+
+        let notificationTitle = '';
+        let notificationMsg = '';
+
+        if (isWinner && isEligible) {
+            if (language === 'bn') {
+                notificationTitle = 'ব্যাটেল বিজয়!';
+                notificationMsg = `অভিনন্দন! আপনি ব্যাটেলে জিতেছেন। রিওয়ার্ড: +${normalXp} XP এবং +${normalPollen} মধুরেণু (Pollen)।`;
+                if (sess.xp_stake > 0) {
+                    notificationMsg += ` সাথে ${sess.xp_stake} XP বাজি বোনাস পেয়েছেন!`;
+                }
+                if (sess.pollen_stake > 0) {
+                    notificationMsg += ` সাথে ${sess.pollen_stake} মধুরেণু বাজি বোনাস পেয়েছেন!`;
+                }
+            } else {
+                notificationTitle = 'Battle Victory!';
+                notificationMsg = `Congrats! You won the battle. Rewards: +${normalXp} XP and +${normalPollen} Pollen.`;
+                if (sess.xp_stake > 0) {
+                    notificationMsg += ` Plus you earned ${sess.xp_stake} XP stake bonus!`;
+                }
+                if (sess.pollen_stake > 0) {
+                    notificationMsg += ` Plus you earned ${sess.pollen_stake} Pollen stake bonus!`;
                 }
             }
-            if (sess.pollen_stake > 0) {
-                if (isWinner && isEligible) {
-                    toast.success(language === 'bn' ? `অভিনন্দন! আপনি ${sess.pollen_stake} মধুরেণু বোনাস পেয়েছেন!` : `Congrats! You won ${sess.pollen_stake} Pollen bonus!`);
-                } else if (!isWinner) {
-                    toast.error(language === 'bn' ? `আপনি ${sess.pollen_stake} মধুরেণু হারিয়েছেন।` : `You lost ${sess.pollen_stake} Pollen.`);
+        } else if (isWinner && !isEligible) {
+            if (language === 'bn') {
+                notificationTitle = 'ব্যাটেল বিজয়!';
+                notificationMsg = `আপনি ব্যাটেলে জিতেছেন কিন্তু রিওয়ার্ড পেতে নূন্যতম ৫০% সঠিক উত্তর দিতে হবে।`;
+            } else {
+                notificationTitle = 'Battle Victory!';
+                notificationMsg = `You won the battle but minimum 50% accuracy is required for rewards.`;
+            }
+        } else {
+            if (language === 'bn') {
+                notificationTitle = 'ব্যাটেল পরাজয়';
+                notificationMsg = `আপনি ব্যাটেলে পরাজিত হয়েছেন।`;
+                if (sess.xp_stake > 0) {
+                    notificationMsg += ` আপনার বাজি ধরা ${sess.xp_stake} XP কেটে নেওয়া হয়েছে।`;
+                }
+                if (sess.pollen_stake > 0) {
+                    notificationMsg += ` আপনার বাজি ধরা ${sess.pollen_stake} মধুরেণু কেটে নেওয়া হয়েছে।`;
+                }
+            } else {
+                notificationTitle = 'Battle Defeat';
+                notificationMsg = `You were defeated in the battle.`;
+                if (sess.xp_stake > 0) {
+                    notificationMsg += ` Your staked ${sess.xp_stake} XP was deducted.`;
+                }
+                if (sess.pollen_stake > 0) {
+                    notificationMsg += ` Your staked ${sess.pollen_stake} Pollen was deducted.`;
                 }
             }
         }
+
+        supabase.from('notifications').insert({
+            user_id: user.id,
+            actor_id: sess.player1_id === user.id ? sess.player2_id : sess.player1_id,
+            type: 'battle_result',
+            title: notificationTitle,
+            message: notificationMsg,
+            is_read: false,
+            data: {
+                is_winner: isWinner,
+                is_eligible: isEligible,
+                xp_stake: sess.xp_stake,
+                pollen_stake: sess.pollen_stake,
+                normal_xp: normalXp,
+                normal_pollen: normalPollen
+            }
+        }).then(({ error }) => {
+            if (error) console.error('Error inserting battle notification:', error);
+        });
     }, [user?.id, language]);
 
     const moveToNextQuestion = useCallback(async () => {
@@ -1546,37 +1605,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
             >
-                <motion.div
-                    className={styles.roomCodeBottom}
-                    onClick={handleCopyRoomCode}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                >
-                    <span className={styles.codeLabel}>
-                        {copied
-                            ? (language === 'bn' ? 'অনুলিপি!' : 'COPIED!')
-                            : (language === 'bn' ? 'রুম কোড:' : 'ROOM CODE:')
-                        }
-                    </span>
-                    <span className={styles.codeVal}>{roomCode}</span>
-
-                    <div className={styles.copyIconWrap}>
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={copied ? 'check' : 'copy'}
-                                initial={{ scale: 0.5, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.5, opacity: 0 }}
-                            >
-                                {copied ? <CheckCircle2 size={16} color="#2ecc71" /> : <Copy size={16} />}
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-                </motion.div>
-
                 <motion.button
                     className={styles.cancelBtn}
-                    style={{ padding: '10px 20px', fontSize: '0.8rem' }}
                     onClick={handleReset}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -1681,10 +1711,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     <div className={styles.playerPanel}>
                         <Avatar url={userProfile?.avatar_url} name={myName} size={64} />
                         <div className={styles.playerLevel}>
-                            {getTierName(userProfile?.league_id || 1)}
+                            {getTierName(userProfile?.league_id || 1, language)}
                         </div>
                         <span className={styles.playerName}>{myName}</span>
-                        <span className={styles.youBadge}>{language === 'bn' ? 'আমি' : 'You'}</span>
                     </div>
 
                     <motion.div
@@ -1706,14 +1735,13 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     <div className={styles.playerPanel}>
                         <Avatar url={opponentProfile?.avatar_url} name={oppName} size={64} />
                         {isVsBot ? (
-                            <span className={styles.botBadge}>🤖 AI Bot</span>
+                            <span className={styles.botBadge}>🤖 {language === 'bn' ? 'এআই এজেন্ট' : 'AI agent'}</span>
                         ) : (
                             <div className={styles.playerLevel}>
-                                {getTierName(opponentProfile?.league_id || 1)}
+                                {getTierName(opponentProfile?.league_id || 1, language)}
                             </div>
                         )}
                         <span className={styles.playerName}>{oppName}</span>
-                        {isVsBot && <span className={styles.botSubtext}>{language === 'bn' ? 'লার্নার পাওয়া যায়নি' : 'No player found'}</span>}
                     </div>
                 </div>
 
@@ -1888,7 +1916,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 <div className={styles.resultHero}>
                     {isDraw ? (
                         <div className={styles.drawBadge}>
-                            <Shield size={40} />
+                            <Shield size={34} />
                             <h3>{language === 'bn' ? 'ড্র!' : 'Draw!'}</h3>
                         </div>
                     ) : (
@@ -1904,7 +1932,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                                 transition={{ repeat: Infinity, duration: 1.4 }}
                                 style={{ position: 'relative', zIndex: 2 }}
                             >
-                                <Trophy size={48} className={isWinner ? styles.trophyGold : styles.trophySilver} />
+                                <Trophy size={40} className={isWinner ? styles.trophyGold : styles.trophySilver} />
                             </motion.div>
                             <h3>{isWinner
                                 ? (language === 'bn' ? 'আপনি জিতেছেন!' : 'You Won!')
@@ -1921,12 +1949,12 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         transition={{ delay: 0.5 }}
                     >
                         <div className={styles.rewardItem}>
-                            <Star size={16} fill="var(--color-primary)" color="var(--color-primary)" />
+                            <Star size={14} fill="var(--color-primary)" color="var(--color-primary)" />
                             <span>+{Math.round((myCorrect / TOTAL_QUESTIONS) * 10)} XP</span>
                         </div>
                         {isWinner && (
                             <div className={styles.rewardItem}>
-                                <PollenIcon size={16} />
+                                <PollenIcon size={14} />
                                 <span>+2 {language === 'bn' ? 'মধুরেণু' : 'Pollen'}</span>
                             </div>
                         )}
@@ -1948,14 +1976,46 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     )
                 )}
 
+                {(session?.xp_stake > 0 || session?.pollen_stake > 0) && (
+                    <motion.div
+                        className={styles.rewardSummary}
+                        style={{
+                            background: isWinner ? 'rgba(46, 204, 113, 0.12)' : 'rgba(231, 76, 60, 0.12)',
+                            border: isWinner ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)'
+                        }}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                    >
+                        {session?.xp_stake > 0 && (
+                            <div className={styles.rewardItem} style={{ color: isWinner ? '#2ecc71' : '#e74c3c', borderColor: isWinner ? 'rgba(46,204,113,0.3)' : 'rgba(231,76,60,0.3)', background: isWinner ? 'rgba(46,204,113,0.1)' : 'rgba(231,76,60,0.1)' }}>
+                                <Star size={14} fill={isWinner ? '#2ecc71' : '#e74c3c'} color={isWinner ? '#2ecc71' : '#e74c3c'} />
+                                <span>
+                                    {isWinner ? '+' : '-'}
+                                    {session?.xp_stake} XP {language === 'bn' ? '(বাজি)' : '(Bet)'}
+                                </span>
+                            </div>
+                        )}
+                        {session?.pollen_stake > 0 && (
+                            <div className={styles.rewardItem} style={{ color: isWinner ? '#2ecc71' : '#e74c3c', borderColor: isWinner ? 'rgba(46,204,113,0.3)' : 'rgba(231,76,60,0.3)', background: isWinner ? 'rgba(46,204,113,0.1)' : 'rgba(231,76,60,0.1)' }}>
+                                <PollenIcon size={14} />
+                                <span>
+                                    {isWinner ? '+' : '-'}
+                                    {session?.pollen_stake} {language === 'bn' ? 'মধুরেণু (বাজি)' : 'Pollen (Bet)'}
+                                </span>
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+
 
                 <div className={styles.scoreComparison}>
                     <div className={`${styles.scoreBlock} ${isWinner ? styles.scoreBlockWinner : ''}`}>
-                        <Avatar url={userProfile?.avatar_url} name={myName} size={52} />
+                        <Avatar url={userProfile?.avatar_url} name={myName} size={40} />
                         <span className={styles.finalScore}>{myScore}</span>
                         <span className={styles.finalName}>{myName}</span>
                         <div className={styles.statRow}>
-                            <CheckCircle2 size={13} color="#2ecc71" />
+                            <CheckCircle2 size={11} color="#2ecc71" />
                             <span>{myCorrect}/{Math.min(TOTAL_QUESTIONS, questions.length)}</span>
                             <span>·</span>
                             <span>{myAcc}%</span>
@@ -1963,18 +2023,18 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     </div>
                     <div className={styles.vsSmall}>VS</div>
                     <div className={`${styles.scoreBlock} ${!isWinner && !isDraw ? styles.scoreBlockWinner : ''}`}>
-                        <Avatar url={opponentProfile?.avatar_url} name={oppName} size={52} />
+                        <Avatar url={opponentProfile?.avatar_url} name={oppName} size={40} />
                         <span className={styles.finalScore}>{oppScore}</span>
                         <span className={styles.finalName}>{oppName}</span>
                         <div className={styles.statRow}>
-                            <CheckCircle2 size={13} color="#2ecc71" />
+                            <CheckCircle2 size={11} color="#2ecc71" />
                             <span>{oppCorrect}/{Math.min(TOTAL_QUESTIONS, questions.length)}</span>
                         </div>
                     </div>
                 </div>
 
-                <button className={styles.createBtn} onClick={handleReset} style={{ marginTop: '1.5rem' }}>
-                    <RotateCcw size={16} />
+                <button className={styles.createBtn} onClick={handleReset}>
+                    <RotateCcw size={15} />
                     {language === 'bn' ? 'আবার খেলুন' : 'Play Again'}
                 </button>
             </motion.div>

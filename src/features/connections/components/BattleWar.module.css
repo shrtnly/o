@@ -65,15 +65,17 @@
     max-width: 440px;
     background: var(--color-bg-alt);
     border: 1px solid var(--color-border-muted);
-    border-radius: 32px;
+    border-radius: 28px;
     padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.75rem;
     position: relative;
-    /* overflow: hidden; */
     box-sizing: border-box;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 .lobbyCardDisabled {
@@ -137,7 +139,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 1.5rem;
-    color: var(--color-primary);
+    color: var(--color-danger);
 }
 
 .noticeContentCenter h3 {
@@ -189,10 +191,10 @@
     cursor: not-allowed;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
     .lobbyCard {
-        padding: 1.75rem 1.25rem;
-        border-radius: 28px;
+        padding: 2rem 1.25rem;
+        border-radius: 24px;
         gap: 1.5rem;
     }
 }
@@ -415,6 +417,11 @@
     opacity: 0.4;
     cursor: not-allowed;
     filter: grayscale(1);
+}
+
+/* Play Again button inside result card gets extra breathing room above */
+.resultCard .createBtn {
+    margin-top: 0.75rem;
 }
 
 
@@ -769,7 +776,6 @@
     background: var(--color-primary-faded);
     padding: 2px 10px;
     border-radius: 100px;
-    text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 0.2rem;
 }
@@ -862,91 +868,30 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.roomCodeBottom {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: rgba(var(--color-primary-rgb), 0.05);
-    padding: 8px 16px;
-    border-radius: 100px;
-    border: 1px solid var(--color-primary-faded);
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.roomCodeBottom:hover {
-    background: rgba(var(--color-primary-rgb), 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    border-color: var(--color-primary);
-}
-
-.roomCodeBottom:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    background: rgba(var(--color-primary-rgb), 0.15);
-}
-
 .searchingFooter {
     width: 100%;
     max-width: 580px;
     margin-top: 1rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    gap: 1rem;
-    padding: 1.25rem 2rem;
-    background: var(--color-bg-alt);
-    border: 1px solid var(--color-border-faint);
-    border-radius: 24px;
+    padding: 1rem 0;
     box-sizing: border-box;
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 @media (max-width: 520px) {
     .searchingFooter {
-        flex-direction: row; /* Force horizontal */
-        padding: 1rem;
-        gap: 0.5rem;
-        justify-content: space-between;
-    }
-    
-    .roomCodeBottom {
-        padding: 6px 12px;
-        width: fit-content;
-        flex: 0 1 auto;
+        padding: 1rem 0;
+        justify-content: flex-end;
     }
     
     .cancelBtn {
-        padding: 8px 12px !important;
-        white-space: nowrap;
+        padding: 8px 20px !important;
+        min-width: 120px;
     }
-
-    .codeLabel {
-        display: none; /* Hide label on very small screens to save space */
-    }
-}
-
-.codeLabel {
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-}
-
-.codeVal {
-    font-size: 0.85rem;
-    font-weight: 900;
-    color: var(--color-primary);
-    letter-spacing: 0.5px;
-}
-
-.copyIconWrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin-left: 4px;
 }
 
 .floatingTag {
@@ -1006,49 +951,32 @@
     font-family: monospace;
 }
 
-
-.roomCodePlaceholder {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: -0.5rem;
-}
-
-.roomCodeDisplay {
-    font-size: 2rem;
-    font-weight: 900;
-    letter-spacing: 8px;
-    color: var(--color-primary);
-    background: var(--color-bg-deep);
-    border: 1px dashed var(--color-primary);
-    border-radius: 20px;
-    padding: 1.25rem 2.5rem;
-}
-
-
 .cancelBtn {
-    width: auto;
-    padding: 14px;
-    background: var(--color-bg-deep);
-    border: 1px solid var(--color-border-muted);
+    min-width: 140px;
+    padding: 12px 28px;
+    background: rgba(231, 76, 60, 0.08);
+    border: 1px solid rgba(231, 76, 60, 0.2);
     border-radius: 14px;
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-    font-weight: 700;
+    color: var(--color-danger);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .cancelBtn:hover {
-    border-color: var(--color-text-muted);
-    color: var(--color-text);
+    background: rgba(231, 76, 60, 0.14);
+    border-color: rgba(231, 76, 60, 0.35);
 }
 
 .cancelBtn:active {
-    transform: scale(0.98);
+    background: rgba(231, 76, 60, 0.2);
+    transform: scale(0.97);
 }
 
 /* ── Matchmaking split-screen ────────────────────────────── */
@@ -1593,11 +1521,11 @@
     background: var(--color-bg-alt);
     border: 1px solid var(--color-border-muted);
     border-radius: 24px;
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
     position: relative;
     z-index: 10;
 }
@@ -1611,13 +1539,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     position: relative;
 }
 
 .winnerBadge h3,
 .drawBadge h3 {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: var(--color-text);
     margin: 0;
@@ -1631,35 +1559,88 @@
     color: #95a5a6;
 }
 
+/* ── Fireworks wrapper ─────────────────────────────────────── */
+.fireworksWrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 160px;
+    height: 160px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Reward section ────────────────────────────────────────── */
+.rewardSummary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border-radius: 12px;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
+}
+
+.rewardItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(var(--color-primary-rgb), 0.08);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(var(--color-primary-rgb), 0.2);
+    white-space: nowrap;
+}
+
+.rewardNotice {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 600;
+    padding: 6px 12px;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 10px;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.noticeIcon {
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+}
+
+/* ── Score comparison grid ─────────────────────────────────── */
 .scoreComparison {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     width: 100%;
-}
-
-@media (max-width: 420px) {
-    .scoreComparison {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-    
-    .vsSmall {
-        display: none;
-    }
 }
 
 .scoreBlock {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    padding: 1rem 0.75rem;
-    border-radius: 18px;
+    gap: 0.3rem;
+    padding: 0.75rem 0.5rem;
+    border-radius: 14px;
     border: 1px solid var(--color-border-muted);
     background: var(--color-bg-deep);
     transition: all 0.2s;
+    min-width: 0;
 }
 
 .scoreBlockWinner {
@@ -1668,7 +1649,7 @@
 }
 
 .finalScore {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 900;
     color: var(--color-text);
     letter-spacing: -0.5px;
@@ -1676,11 +1657,11 @@
 }
 
 .finalName {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     color: var(--color-text-muted);
     text-align: center;
-    max-width: 90px;
+    max-width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1689,20 +1670,22 @@
 .statRow {
     display: flex;
     align-items: center;
-    gap: 0.3rem;
-    font-size: 0.7rem;
+    gap: 0.25rem;
+    font-size: 0.65rem;
     color: var(--color-text-muted);
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .vsSmall {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 900;
     color: var(--color-text-muted);
-    padding: 6px 8px;
+    padding: 5px 6px;
     background: var(--color-bg-deep);
     border-radius: 8px;
     border: 1px solid var(--color-border-muted);
+    flex-shrink: 0;
 }
 
 /* ── Responsive tweaks ────────────────────────────────────── */
@@ -1720,9 +1703,69 @@
 
 @media (max-width: 480px) {
     .lobbyCard,
-    .matchmakingCard,
-    .resultCard {
+    .matchmakingCard {
         padding: 1.5rem 1rem;
+    }
+
+    /* Mobile result card — compact */
+    .resultCard {
+        padding: 1.1rem 0.85rem;
+        gap: 0.75rem;
+        border-radius: 18px;
+    }
+
+    .resultHero {
+        margin-bottom: 0;
+    }
+
+    .winnerBadge h3,
+    .drawBadge h3 {
+        font-size: 1rem;
+    }
+
+    .scoreComparison {
+        gap: 0.5rem;
+    }
+
+    .scoreBlock {
+        padding: 0.6rem 0.4rem;
+        gap: 0.2rem;
+        border-radius: 12px;
+    }
+
+    .finalScore {
+        font-size: 1.25rem;
+    }
+
+    .finalName {
+        font-size: 0.62rem;
+        max-width: 68px;
+    }
+
+    .statRow {
+        font-size: 0.6rem;
+        gap: 0.2rem;
+    }
+
+    .vsSmall {
+        font-size: 0.6rem;
+        padding: 4px 5px;
+    }
+
+    .rewardSummary {
+        padding: 0.45rem 0.6rem;
+        gap: 0.35rem;
+        border-radius: 10px;
+    }
+
+    .rewardItem {
+        font-size: 0.72rem;
+        padding: 3px 8px;
+    }
+
+    .rewardNotice {
+        font-size: 0.66rem;
+        padding: 5px 10px;
     }
 
     .gameHeader {
@@ -1737,10 +1780,6 @@
 
     .questionTitle {
         font-size: 0.95rem;
-    }
-
-    .finalScore {
-        font-size: 1.4rem;
     }
     
     .optionsList {

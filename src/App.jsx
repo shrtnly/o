@@ -17,6 +17,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { LanguageProvider, useLanguage } from './context/LanguageContext';
 import { courseService } from './services/courseService';
+import { NotificationProvider } from './context/NotificationContext';
 import CourseListPage from './features/courses/CourseListPage';
 import GuestCoursePage from './features/courses/GuestCoursePage';
 import SettingsPage from './features/settings/SettingsPage';
@@ -139,7 +140,6 @@ const AppContent = () => {
   );
 };
 
-import { NotificationProvider } from './context/NotificationContext';
 
 function App() {
   return (

@@ -52,7 +52,7 @@ const getTierName = (tier, language) => {
 const Avatar = ({ url, name, size = 42 }) => (
     <div className={styles.avatar} style={{ width: size, height: size }}>
         {url
-            ? <img src={url} alt={name} />
+            ? <img src={url} alt={name} crossOrigin="anonymous" referrerPolicy="no-referrer" />
             : <span style={{ fontSize: size * 0.42, fontWeight: 700, color: 'var(--color-primary)' }}>
                 {(name || '?')[0].toUpperCase()}
             </span>
@@ -650,21 +650,27 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
 
         // If it's a direct challenge, send notification to the learner
         if (challengeId) {
+            const stakeAmt = betInfoRef.current.amount || 0;
+            const stakeType = betInfoRef.current.type || 'xp';
+            const stakeText = stakeAmt > 0 ? ` ( Bet - ${stakeAmt}${stakeType === 'pollen' ? ' Pollen' : 'XP'} )` : '';
+
             await supabase.from('notifications').insert({
                 user_id: challengeId,
                 actor_id: user.id,
                 type: 'battle_invite',
-                title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ!' : 'Battle Challenge!',
+                title: language === 'bn' ? `ব্যাটেল চ্যালেঞ্জ!${stakeText}` : `Battle Challenge!${stakeText}`,
                 message: language === 'bn'
                     ? `${userProfile?.full_name || 'কেউ একজন'} আপনাকে একটি ব্যাটেল চ্যালেঞ্জ পাঠিয়েছেন।`
                     : `${userProfile?.full_name || 'Someone'} has sent you a battle challenge.`,
                 data: {
                     roomCode: code,
-                    display_title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'BATTLE CHALLENGE',
+                    display_title: language === 'bn' ? `ব্যাটেল চ্যালেঞ্জ${stakeText}` : `BATTLE CHALLENGE${stakeText}`,
                     display_msg: language === 'bn'
                         ? `${userProfile?.full_name || 'কেউ একজন'} চ্যালেঞ্জ পাঠিয়েছেন।`
                         : `${userProfile?.full_name || 'Someone'} has sent a challenge.`,
-                    course_name: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
+                    course_name: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle'),
+                    stake_type: stakeType,
+                    stake_amount: stakeAmt
                 }
             });
         }
@@ -674,7 +680,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             await supabase.from('battle_invitations').insert({
                 room_code: code,
                 sender_id: user.id,
-                course_title: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle')
+                course_title: activeCourse?.title || (language === 'bn' ? 'সাধারণ ব্যাটল' : 'General Battle'),
+                xp_stake: betInfoRef.current.type === 'xp' ? betInfoRef.current.amount : 0,
+                pollen_stake: betInfoRef.current.type === 'pollen' ? betInfoRef.current.amount : 0
             });
         }
 
@@ -975,7 +983,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 xp_stake: sess.xp_stake,
                 pollen_stake: sess.pollen_stake,
                 normal_xp: normalXp,
-                normal_pollen: normalPollen
+                normal_pollen: normalPollen,
+                display_title: notificationTitle,
+                display_msg: notificationMsg
             }
         }).then(({ error }) => {
             if (error) console.error('Error inserting battle notification:', error);
@@ -1129,7 +1139,9 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 p_opponent_score: oppScoreRef.current,
                 p_my_correct: myCorrectRef.current,
                 p_is_bot: isBotRef.current,
-                p_is_initiator: isPlayer1Ref.current
+                p_is_initiator: isPlayer1Ref.current,
+                p_xp_stake: sessionRef.current?.xp_stake || 0,
+                p_pollen_stake: sessionRef.current?.pollen_stake || 0
             });
 
             fetchHistory(0);
@@ -1273,7 +1285,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     </div>
 
                     <div className={styles.historyBtnFloating}>
-                        <button className={styles.iconBtnMinimal} onClick={() => setShowHistory(true)}>
+                        <button className={styles.iconBtnMinimal} onClick={handleOpenHistory}>
                             <History size={18} />
                         </button>
                     </div>
@@ -1980,27 +1992,36 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                     <motion.div
                         className={styles.rewardSummary}
                         style={{
-                            background: isWinner ? 'rgba(46, 204, 113, 0.12)' : 'rgba(231, 76, 60, 0.12)',
-                            border: isWinner ? '1px solid rgba(46, 204, 113, 0.3)' : '1px solid rgba(231, 76, 60, 0.3)'
+                            background: (isWinner && isEligible) ? 'rgba(46, 204, 113, 0.12)' : (!isWinner ? 'rgba(231, 76, 60, 0.12)' : 'rgba(255, 255, 255, 0.05)'),
+                            border: (isWinner && isEligible) ? '1px solid rgba(46, 204, 113, 0.3)' : (!isWinner ? '1px solid rgba(231, 76, 60, 0.3)' : '1px solid rgba(255, 255, 255, 0.1)'),
+                            opacity: (isWinner && !isEligible) ? 0.6 : 1
                         }}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                     >
                         {session?.xp_stake > 0 && (
-                            <div className={styles.rewardItem} style={{ color: isWinner ? '#2ecc71' : '#e74c3c', borderColor: isWinner ? 'rgba(46,204,113,0.3)' : 'rgba(231,76,60,0.3)', background: isWinner ? 'rgba(46,204,113,0.1)' : 'rgba(231,76,60,0.1)' }}>
-                                <Star size={14} fill={isWinner ? '#2ecc71' : '#e74c3c'} color={isWinner ? '#2ecc71' : '#e74c3c'} />
+                            <div className={styles.rewardItem} style={{ 
+                                color: (isWinner && isEligible) ? '#f1c40f' : (!isWinner ? '#e74c3c' : '#afafaf'),
+                                background: 'transparent',
+                                border: 'none'
+                            }}>
+                                <Star size={14} fill={(isWinner && isEligible) ? '#f1c40f' : (!isWinner ? '#e74c3c' : '#afafaf')} color={(isWinner && isEligible) ? '#f1c40f' : (!isWinner ? '#e74c3c' : '#afafaf')} />
                                 <span>
-                                    {isWinner ? '+' : '-'}
+                                    {isWinner ? (isEligible ? '+' : '+0 ') : '-'}
                                     {session?.xp_stake} XP {language === 'bn' ? '(বাজি)' : '(Bet)'}
                                 </span>
                             </div>
                         )}
                         {session?.pollen_stake > 0 && (
-                            <div className={styles.rewardItem} style={{ color: isWinner ? '#2ecc71' : '#e74c3c', borderColor: isWinner ? 'rgba(46,204,113,0.3)' : 'rgba(231,76,60,0.3)', background: isWinner ? 'rgba(46,204,113,0.1)' : 'rgba(231,76,60,0.1)' }}>
+                            <div className={styles.rewardItem} style={{ 
+                                color: (isWinner && isEligible) ? '#f1c40f' : (!isWinner ? '#e74c3c' : '#afafaf'),
+                                background: 'transparent',
+                                border: 'none'
+                            }}>
                                 <PollenIcon size={14} />
                                 <span>
-                                    {isWinner ? '+' : '-'}
+                                    {isWinner ? (isEligible ? '+' : '+0 ') : '-'}
                                     {session?.pollen_stake} {language === 'bn' ? 'মধুরেণু (বাজি)' : 'Pollen (Bet)'}
                                 </span>
                             </div>
@@ -2015,7 +2036,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         <span className={styles.finalScore}>{myScore}</span>
                         <span className={styles.finalName}>{myName}</span>
                         <div className={styles.statRow}>
-                            <CheckCircle2 size={11} color="#2ecc71" />
+                            <CheckCircle2 size={11} color="#f1c40f" />
                             <span>{myCorrect}/{Math.min(TOTAL_QUESTIONS, questions.length)}</span>
                             <span>·</span>
                             <span>{myAcc}%</span>
@@ -2027,7 +2048,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         <span className={styles.finalScore}>{oppScore}</span>
                         <span className={styles.finalName}>{oppName}</span>
                         <div className={styles.statRow}>
-                            <CheckCircle2 size={11} color="#2ecc71" />
+                            <CheckCircle2 size={11} color="#f1c40f" />
                             <span>{oppCorrect}/{Math.min(TOTAL_QUESTIONS, questions.length)}</span>
                         </div>
                     </div>
@@ -2048,6 +2069,7 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         onPageChange={fetchHistory}
                         onClose={() => setShowHistory(false)}
                         language={language}
+                        isLoading={isLoadingHistory}
                     />
                 )}
             </AnimatePresence>

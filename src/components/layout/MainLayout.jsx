@@ -174,19 +174,25 @@ const MainLayout = () => {
                 'postgres_changes',
                 { event: 'INSERT', schema: 'public', table: 'battle_invitations' },
                 async (payload) => {
-                    const inv = payload.new;
-                    if (inv.sender_id === user.id) return;
-                    if (profile?.battle_mode === false) return; // Skip if battle mode is OFF
+                    const rawInv = payload.new;
+                    if (rawInv.sender_id === user.id) return;
+                    if (profile?.battle_mode === false) return;
 
-                    // If already on battle war page, we might want to skip global toast 
-                    // but usually it's fine to show it.
-                    
-                    const { data: sender } = await supabase
-                        .from('profiles')
-                        .select('full_name, display_name, avatar_url')
-                        .eq('id', inv.sender_id)
-                        .single();
+                    // Fetch full row from DB so we get all columns including xp_stake/pollen_stake
+                    const [{ data: invFull }, { data: sender }] = await Promise.all([
+                        supabase
+                            .from('battle_invitations')
+                            .select('*')
+                            .eq('id', rawInv.id)
+                            .single(),
+                        supabase
+                            .from('profiles')
+                            .select('full_name, display_name, avatar_url')
+                            .eq('id', rawInv.sender_id)
+                            .single()
+                    ]);
 
+                    const inv = invFull || rawInv;
                     const senderName = sender?.full_name || sender?.display_name || '?';
                     
                     toast.custom((t) => (
@@ -228,6 +234,9 @@ const MainLayout = () => {
                             {/* Content Area */}
                             <div style={{ flex: 1, minWidth: 0 }}>
                                 <div style={{ 
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '5px',
                                     fontSize: '9px', 
                                     color: '#f59e0b', 
                                     fontWeight: '800', 
@@ -236,6 +245,13 @@ const MainLayout = () => {
                                     marginBottom: '2px' 
                                 }}>
                                     ব্যাটল চ্যালেঞ্জ
+                                    {(inv.xp_stake > 0 || inv.pollen_stake > 0) && (
+                                        <span style={{ opacity: 0.9, fontSize: '8px', whiteSpace: 'nowrap' }}>
+                                            {inv.xp_stake > 0
+                                                ? `( Bet - ${inv.xp_stake}XP )`
+                                                : `( Bet - ${inv.pollen_stake} Pollen )`}
+                                        </span>
+                                    )}
                                 </div>
                                 <div style={{ 
                                     fontSize: '0.82rem', 

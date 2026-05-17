@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from './AuthContext';
 import { toast } from 'sonner';
@@ -19,22 +19,44 @@ export const NotificationProvider = ({ children }) => {
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const PAGE_SIZE = 15;
 
+    // Ref that always reflects the latest battle_mode — used in realtime callbacks
+    // to avoid stale closure issues when the Supabase channel is long-lived
+    const battleModeRef = useRef(profile?.battle_mode);
+    useEffect(() => {
+        battleModeRef.current = profile?.battle_mode;
+    }, [profile?.battle_mode]);
+
+    // Tracks whether the user is currently in an active battle
+    // Used to suppress battle_invite notifications while playing
+    const [isInBattle, setIsInBattle] = useState(false);
+    const isInBattleRef = useRef(false);
+    useEffect(() => {
+        isInBattleRef.current = isInBattle;
+    }, [isInBattle]);
+
     const refreshUnreadCount = useCallback(async () => {
         if (!user) return;
         try {
-            const { count, error } = await supabase
+            let query = supabase
                 .from('notifications')
                 .select('*', { count: 'exact', head: true })
                 .eq('user_id', user.id)
                 .eq('is_read', false);
+
+            // Exclude all battle notifications from the count when battle mode is off
+            if (profile?.battle_mode === false) {
+                query = query.not('type', 'ilike', 'battle_%');
+            }
             
+            const { count, error } = await query;
             if (!error) {
                 setUnreadCount(count || 0);
             }
         } catch (err) {
             console.error('Error refreshing unread count:', err);
         }
-    }, [user?.id]);
+    }, [user?.id, profile?.battle_mode]);
+
 
     const refreshConnectionsCount = useCallback(async () => {
         if (!user) return;
@@ -67,7 +89,8 @@ export const NotificationProvider = ({ children }) => {
             if (error) throw error;
             let filteredData = data || [];
             if (profile?.battle_mode === false) {
-                filteredData = filteredData.filter(n => n.type !== 'battle_invite');
+                // When battle mode is OFF, hide ALL battle-related notifications
+                filteredData = filteredData.filter(n => !n.type?.startsWith('battle_'));
             }
             setNotifications(filteredData);
             setHasMore((data || []).length === PAGE_SIZE);
@@ -78,7 +101,7 @@ export const NotificationProvider = ({ children }) => {
         } finally {
             setIsLoading(false);
         }
-    }, [user?.id, refreshUnreadCount, refreshConnectionsCount]); // user?.id not full user object
+    }, [user?.id, profile?.battle_mode, refreshUnreadCount, refreshConnectionsCount]); // user?.id not full user object
 
     const loadMoreNotifications = useCallback(async () => {
         if (!user || isLoading || isLoadingMore || !hasMore) return;
@@ -102,10 +125,10 @@ export const NotificationProvider = ({ children }) => {
             if (error) throw error;
             
             if (data && data.length > 0) {
-                // Filter out battle invites if mode is OFF
+                // Filter out all battle notifications if mode is OFF
                 let processedData = data;
                 if (profile?.battle_mode === false) {
-                    processedData = data.filter(n => n.type !== 'battle_invite');
+                    processedData = data.filter(n => !n.type?.startsWith('battle_'));
                 }
 
                 // Avoid duplicates if realtime listener already added them
@@ -233,8 +256,13 @@ export const NotificationProvider = ({ children }) => {
                     refreshUnreadCount();
 
                     if (eventType === 'INSERT') {
-                        // Suppress battle notifications if battle mode is OFF
-                        if (newNotif.type === 'battle_invite' && profile?.battle_mode === false) {
+                        // Suppress ALL battle notifications if battle mode is OFF
+                        // Use ref to always read the latest value (avoids stale closure)
+                        if (newNotif.type?.startsWith('battle_') && battleModeRef.current === false) {
+                            return;
+                        }
+                        // Suppress battle_invite if user is currently in an active battle
+                        if (newNotif.type === 'battle_invite' && isInBattleRef.current) {
                             return;
                         }
 
@@ -625,7 +653,9 @@ export const NotificationProvider = ({ children }) => {
             isInboxOpen,
             setIsInboxOpen,
             hasNewMsg,
-            clearMsgIndicator
+            clearMsgIndicator,
+            isInBattle,
+            setIsInBattle
         }}>
             {children}
         </NotificationContext.Provider>

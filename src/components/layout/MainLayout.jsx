@@ -14,8 +14,21 @@ import styles from './MainLayout.module.css';
 const MainLayout = () => {
     const { user, profile } = useAuth();
     const navigate = useNavigate();
-    const { isInboxOpen, activeChatId } = useNotifications();
+    const { isInboxOpen, activeChatId, isInBattle } = useNotifications();
     const intervalRef = useRef(null);
+
+    // Ref that always holds the latest battle_mode — prevents stale closure
+    // in the long-lived Supabase realtime callback below
+    const battleModeRef = useRef(profile?.battle_mode);
+    useEffect(() => {
+        battleModeRef.current = profile?.battle_mode;
+    }, [profile?.battle_mode]);
+
+    // Ref for isInBattle — same stale-closure protection
+    const isInBattleRef = useRef(false);
+    useEffect(() => {
+        isInBattleRef.current = isInBattle;
+    }, [isInBattle]);
 
     // Heartbeat tracker
     useEffect(() => {
@@ -176,7 +189,9 @@ const MainLayout = () => {
                 async (payload) => {
                     const rawInv = payload.new;
                     if (rawInv.sender_id === user.id) return;
-                    if (profile?.battle_mode === false) return;
+                    if (battleModeRef.current === false) return;
+                    // Don't interrupt the user while they are in an active battle
+                    if (isInBattleRef.current) return;
 
                     // Fetch full row from DB so we get all columns including xp_stake/pollen_stake
                     const [{ data: invFull }, { data: sender }] = await Promise.all([
@@ -325,7 +340,7 @@ const MainLayout = () => {
             supabase.removeChannel(messageChannel);
             supabase.removeChannel(inviteChannel);
         };
-    }, [user?.id, isInboxOpen, activeChatId, profile]);
+    }, [user?.id, isInboxOpen, activeChatId]);
 
     return (
         <div className={styles.appLayout}>

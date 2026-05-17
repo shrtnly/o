@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../../../lib/supabaseClient';
 import { useLanguage } from '../../../context/LanguageContext';
+import { useAuth } from '../../../context/AuthContext';
+import { useNotifications } from '../../../context/NotificationContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Swords, Trophy, Zap, Clock, CheckCircle2, XCircle,
@@ -28,7 +30,7 @@ let cachedSelectedModule = null;
 
 // ─── constants ────────────────────────────────────────────────
 const TOTAL_QUESTIONS = 15;
-const QUESTION_TIME = 15; // seconds
+const QUESTION_TIME = 10; // seconds
 const MAX_SCORE_PER_Q = 10;
 const optionLabels = ['A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -49,16 +51,27 @@ const getTierName = (tier, language) => {
     return language === 'bn' ? tiersBn[idx] : tiersEn[idx];
 };
 
-const Avatar = ({ url, name, size = 42 }) => (
-    <div className={styles.avatar} style={{ width: size, height: size }}>
-        {url
-            ? <img src={url} alt={name} crossOrigin="anonymous" referrerPolicy="no-referrer" />
-            : <span style={{ fontSize: size * 0.42, fontWeight: 700, color: 'var(--color-primary)' }}>
-                {(name || '?')[0].toUpperCase()}
-            </span>
-        }
-    </div>
-);
+const Avatar = ({ url, name, size = 42 }) => {
+    const [failed, setFailed] = useState(false);
+    const isDicebear = url?.includes('dicebear.com');
+
+    return (
+        <div className={styles.avatar} style={{ width: size, height: size }}>
+            {url && !failed
+                ? <img 
+                    src={url} 
+                    alt={name} 
+                    crossOrigin={isDicebear ? undefined : "anonymous"} 
+                    referrerPolicy="no-referrer" 
+                    onError={() => setFailed(true)} 
+                  />
+                : <span style={{ fontSize: size * 0.42, fontWeight: 700, color: 'var(--color-primary)' }}>
+                    {(name || '?')[0].toUpperCase()}
+                  </span>
+            }
+        </div>
+    );
+};
 
 const LottieWrapper = ({ src }) => {
     const [shouldRender, setShouldRender] = useState(false);
@@ -81,6 +94,8 @@ const LottieWrapper = ({ src }) => {
 // ─── main component ───────────────────────────────────────────
 const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const { t, language } = useLanguage();
+    const { updateProfile } = useAuth();
+    const { setIsInBattle } = useNotifications();
 
     // ── phase: 'lobby' | 'searching' | 'matchmaking' | 'game' | 'result'
     const [phase, setPhase] = useState('lobby');
@@ -101,6 +116,13 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
     const [challengeId, setChallengeId] = useState(null);
     const [challengeProfile, setChallengeProfile] = useState(null);
     const [searchParams, setSearchParams] = useSearchParams();
+
+    // Notify NotificationContext whenever battle phase changes
+    // so battle_invite toasts are suppressed while user is in a match
+    useEffect(() => {
+        setIsInBattle(phase !== 'lobby');
+        return () => setIsInBattle(false); // cleanup on unmount
+    }, [phase, setIsInBattle]);
 
     // Setup state
     const [allCourses, setAllCourses] = useState(cachedCourses);
@@ -196,12 +218,27 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         if (data) setOpponentProfile(data);
     }, []);
 
-    // ── fetch random questions for a unit or course ───────────
+    // ── Fisher-Yates shuffle (true random, unbiased) ──────────────────
+    const fisherYatesShuffle = (arr) => {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    };
+
+    // ── Fetch random battle questions ─────────────────────────────────
+    // Strategy: DB returns a large randomized pool → frontend does weighted
+    // random selection so difficulty is respected but set is NEVER the same.
     const fetchBattleQuestions = useCallback(async ({ courseId, unitId }) => {
+        // Request 4× what we need so we always have a rich pool to sample from
+        const poolSize = TOTAL_QUESTIONS * 4;
+
         const { data, error } = await supabase.rpc('get_battle_questions', {
             p_course_id: courseId || null,
             p_unit_id: unitId || null,
-            p_limit: 50 // Fetch enough to ensure we have enough after filtering
+            p_limit: poolSize
         });
 
         if (error || !data || data.length === 0) {
@@ -209,35 +246,59 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             return [];
         }
 
-        // Filter out duplicates and questions with fewer than 2 options
-        const uniqueQs = [];
+        // ── Step 1: Deduplicate and require ≥2 options ─────────────────
         const seenTexts = new Set();
+        const validPool = [];
         data.forEach(q => {
             const text = q.question_text?.trim();
-            // Map 'options' from RPC to 'mcq_options' for frontend compatibility
             const mcqOptions = q.options || [];
             if (text && !seenTexts.has(text) && mcqOptions.length >= 2) {
                 seenTexts.add(text);
-                uniqueQs.push({
-                    ...q,
-                    mcq_options: mcqOptions
-                });
+                validPool.push({ ...q, mcq_options: mcqOptions });
             }
         });
 
-        // Difficulty sorting by text length
-        if (difficultyRef.current === 'easy') {
-            uniqueQs.sort((a, b) => (a.question_text || '').length - (b.question_text || '').length);
-        } else {
-            uniqueQs.sort((a, b) => (b.question_text || '').length - (a.question_text || '').length);
-        }
+        if (validPool.length === 0) return [];
 
-        // Take exactly TOTAL_QUESTIONS and shuffle the options for variety
-        return uniqueQs.slice(0, TOTAL_QUESTIONS).map(q => ({
+        // ── Step 2: Shuffle the entire pool first (Fisher-Yates) ───────
+        // This ensures the base order is completely random each game
+        const shuffledPool = fisherYatesShuffle(validPool);
+
+        // ── Step 3: Weighted difficulty scoring with noise ──────────────
+        // We score each question by difficulty (text length proxy), then add
+        // random noise. This means difficulty preference is respected on average,
+        // but the exact 15 questions chosen are NEVER deterministic.
+        const isDifficultMode = difficultyRef.current !== 'easy';
+        const scored = shuffledPool.map(q => {
+            const textLen = (q.question_text || '').length;
+            // Normalize difficulty score: 0 (short/easy) → 1 (long/hard)
+            const diffScore = Math.min(textLen / 200, 1);
+            // Add strong random noise (±0.4) so same-difficulty Qs mix up
+            const noise = (Math.random() - 0.5) * 0.8;
+            // In easy mode: prefer lower diffScore; in hard mode: prefer higher
+            const weight = isDifficultMode
+                ? diffScore + noise
+                : (1 - diffScore) + noise;
+            return { q, weight };
+        });
+
+        // ── Step 4: Sort by weight (higher weight = more preferred) ─────
+        scored.sort((a, b) => b.weight - a.weight);
+
+        // ── Step 5: Pick top TOTAL_QUESTIONS from weighted list ──────────
+        // Then shuffle the final selection so question ORDER is also random
+        const selected = fisherYatesShuffle(
+            scored.slice(0, TOTAL_QUESTIONS).map(s => s.q)
+        );
+
+        // ── Step 6: Shuffle MCQ options within each question ─────────────
+        // Answer positions rotate every game — "A" is never always correct
+        return selected.map(q => ({
             ...q,
-            mcq_options: [...q.mcq_options].sort(() => Math.random() - 0.5)
+            mcq_options: fisherYatesShuffle([...q.mcq_options])
         }));
     }, []);
+
 
     // ── subscribe to session changes ──────────────────────────
     const subscribeToSession = useCallback((sessionId, oppId) => {
@@ -388,93 +449,247 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             .select('id, question_text, mcq_options(id, option_text, is_correct, order_index)')
             .in('id', ids);
 
-        // preserve order from ids array and shuffle options
+        // Preserve question order from ids (host determines question order)
+        // but independently shuffle each player's option positions
         const map = {};
         (data || []).forEach(q => { map[q.id] = q; });
         return ids.map(id => map[id]).filter(Boolean).map(q => ({
             ...q,
-            mcq_options: (q.mcq_options || []).sort((a, b) => a.order_index - b.order_index)
+            mcq_options: fisherYatesShuffle([...(q.mcq_options || [])])
         }));
     }, []);
-    // ── Bot simulation: human-like independent logic loop ────────────
-    const runBotLogic = useCallback(() => {
+
+    // ── Bot persona ref: assigned once per match, shared with triggerBotNextMove ──
+    const botPersonaRef = useRef(null);
+    const botStreakRef = useRef(0); // positive = correct streak, negative = wrong streak
+
+    // ── Human-like bot simulation loop (strictly synchronized with human's progress) ──
+    const triggerBotNextMove = useCallback(() => {
         if (!isBotRef.current || !isBotGameActive.current) return;
 
-        const currentProgress = oppQIndexRef.current;
+        const botQ = oppQIndexRef.current; // The question the bot is currently trying to answer
+        const humanQ = qIndexRef.current;  // The question the human player is currently on
         const totalQs = questionsRef.current.length || TOTAL_QUESTIONS;
 
-        if (currentProgress >= totalQs) {
+        if (botQ >= totalQs) {
             isBotGameActive.current = false;
             return;
         }
 
-        // Human-like reading + thinking time (based on 15s total time):
-        const rand = Math.random();
-        let delay;
-        if (rand < 0.25) {
-            // Focused/Expert: 5 - 9s
-            delay = 5000 + Math.random() * 4000;
-        } else if (rand < 0.80) {
-            // Average Learner: 9 - 14s
-            delay = 9000 + Math.random() * 5000;
-        } else {
-            // Distracted/Struggling: 14 - 18s (might miss the 15s window)
-            delay = 14000 + Math.random() * 4000;
+        // ─── STRICT SYNCHRONIZATION CONSTRAINT ────────────────────────
+        // To keep the game feeling like an active, neck-and-neck human match,
+        // the bot should never race ahead. It can be at most 1 question ahead.
+        if (botQ > humanQ + 1) {
+            // Wait for human to catch up. When qIndex changes, it will trigger again.
+            return;
         }
 
+        // If a move is already scheduled, don't trigger duplicate timeouts
+        if (botTimeoutRef.current) return;
+
+        const persona = botPersonaRef.current;
+        if (!persona) return;
+
+        const currentQ = questionsRef.current[botQ];
+        const questionLength = currentQ?.question_text?.length || 60;
+        const optionCount = currentQ?.mcq_options?.length || 4;
+
+        // ─── ১. SUBJECT SPECIALTY & TOPIC VARIATION ───────────────────
+        const isSpecialtyQ = persona.specialtyPattern.includes(botQ % 5);
+        const specialtyAccuracyMod = isSpecialtyQ ? 0.08 : -0.05;
+
+        // ─── ২. OPPONENT AWARENESS & EMOTIONAL STATES ─────────────────
+        const userScore = myScoreRef.current;
+        const botScore = oppScoreRef.current;
+        const scoreDiff = userScore - botScore;
+        const isLateGame = botQ >= 10;
+
+        let psychologySpeedMod = 1.0;
+        let psychologyAccuracyMod = 0.0;
+        let isPanicked = false;
+        let isClutched = false;
+
+        if (scoreDiff >= 20) {
+            psychologySpeedMod = 0.85; 
+            psychologyAccuracyMod = -0.12; 
+            isPanicked = true;
+        } else if (scoreDiff > 0 && scoreDiff < 20) {
+            psychologySpeedMod = 0.92;
+            psychologyAccuracyMod = -0.04;
+        } else if (scoreDiff < -30) {
+            psychologySpeedMod = 1.15; 
+            psychologyAccuracyMod = -0.08;
+        } else if (Math.abs(scoreDiff) <= 10 && isLateGame) {
+            psychologySpeedMod = 1.10; 
+            psychologyAccuracyMod = 0.08; 
+            isClutched = true;
+        }
+
+        // ─── ৩. INSTANT INTUITION (১-২ সেকেন্ডের দ্রুত উত্তর) ───────────
+        const isShortQ = questionLength < 45;
+        const isTrueFalse = optionCount === 2;
+        const hasIntuition = (isShortQ || isTrueFalse) && Math.random() < 0.12;
+
+        let totalDelay = 0;
+        let isCorrect = false;
+
+        if (hasIntuition) {
+            totalDelay = 1800 + Math.random() * 800;
+            const intuitionAcc = Math.min(0.94, persona.baseAccuracy + 0.10);
+            isCorrect = Math.random() < intuitionAcc;
+        } else {
+            // ─── ৪. READING & THINKING TIME ───────
+            const readFactor = Math.min(questionLength / 100, 1.5);
+            const baseReadTime = persona.readSpeed * (1000 + readFactor * 1200) * psychologySpeedMod;
+            const readingTime = baseReadTime + Math.random() * 400;
+
+            const streak = botStreakRef.current;
+            const streakBoost = streak >= 2 ? -400 : streak <= -2 ? 700 : 0;
+            const baseThinkTime = (persona.thinkMin + Math.random() * persona.thinkRange + streakBoost) * psychologySpeedMod;
+            let thinkingTime = Math.max(300, baseThinkTime);
+
+            // ─── ৫. HESITATION / HITTING WRONG AND CHANGING MIND ────────
+            const doesChangeMind = Math.random() < 0.15;
+            const hesitationDelay = doesChangeMind ? (800 + Math.random() * 1000) : 0;
+
+            // ─── ৬. DISTRACTION EVENT (Relaxed states only) ────────────────
+            const canBeDistracted = !isPanicked && !isClutched;
+            const isDistracted = canBeDistracted && Math.random() < (isPanicked ? 0.01 : scoreDiff < -30 ? 0.15 : 0.05);
+            const distractionPause = isDistracted ? (1000 + Math.random() * 1500) : 0;
+
+            // ─── ৭. FATIGUE (Late-game slowdown) ──────────────────────────
+            const fatiguePenalty = isLateGame ? Math.random() * 350 : 0;
+
+            totalDelay = readingTime + thinkingTime + hesitationDelay + distractionPause + fatiguePenalty;
+
+            // ─── ৮. TIME PANIC (BUZZER BEATER GUESS) ──────────────────────
+            if (totalDelay > 8500) {
+                totalDelay = 8700 + Math.random() * 900; 
+                const guessAcc = 1.0 / optionCount;
+                isCorrect = Math.random() < (guessAcc + 0.05); 
+            } else {
+                const difficultyMod = difficultyRef.current === 'easy' ? 0.08 : -0.06;
+                const streakAccBoost = streak >= 2 ? 0.05 : streak <= -2 ? -0.07 : 0;
+                const progressDecay = (botQ / totalQs) * 0.08;
+
+                const accuracy = Math.min(0.95, Math.max(0.20,
+                    persona.baseAccuracy + 
+                    difficultyMod + 
+                    streakAccBoost + 
+                    psychologyAccuracyMod + 
+                    specialtyAccuracyMod - 
+                    progressDecay
+                ));
+                isCorrect = Math.random() < accuracy;
+            }
+        }
+
+        // ─── ৯. HARD MINIMUM DELAY FLOOR ──────────────────────────────
+        totalDelay = Math.max(2800, Math.min(totalDelay, 9700));
+
+        // ─── ১০. SPEED BONUS CALCULATION ──────────────────────────────
+        const speedRatio = 1 - (totalDelay / 10000);
+        const speedBonus = isCorrect ? Math.round(Math.max(0, speedRatio) * 5) : 0;
+        const gained = isCorrect ? (MAX_SCORE_PER_Q + speedBonus) : 0;
+
         botTimeoutRef.current = setTimeout(() => {
+            botTimeoutRef.current = null; // Clear scheduled ref
             if (!isBotRef.current || !isBotGameActive.current) return;
 
-            const hardnessFactor = currentProgress / totalQs;
-            const accuracy = 0.85 - hardnessFactor * 0.20; // 85% → 65% accuracy
-            const isCorrect = Math.random() < accuracy;
-
-            const maxBonus = delay < 9000 ? 4 : delay < 14000 ? 2 : 1;
-            const speedBonus = Math.floor(Math.random() * maxBonus);
-            const gained = isCorrect ? (MAX_SCORE_PER_Q + speedBonus) : 0;
+            // Update streak memory
+            botStreakRef.current = isCorrect
+                ? Math.min(botStreakRef.current + 1, 4)
+                : Math.max(botStreakRef.current - 1, -4);
 
             setOppScore(prev => prev + gained);
             if (isCorrect) setOppCorrect(prev => prev + 1);
 
             setOppQIndex(prev => {
                 const next = prev + 1;
-                if (next < totalQs) {
-                    runBotLogic();
-                } else {
-                    isBotGameActive.current = false;
-                }
+                // Once bot finishes this question, check if it should proceed
+                setTimeout(() => {
+                    triggerBotNextMove();
+                }, 100);
                 return next;
             });
-        }, delay);
+        }, totalDelay);
     }, []);
 
-    // ── Start vs Bot game ─────────────────────────────────────
+    // ── Start vs Bot game ──────────────────────────────────────────────────
     const startBotGame = useCallback((qs) => {
         clearTimeout(botTimeoutRef.current);
+        botTimeoutRef.current = null;
         clearInterval(searchCountdownRef.current);
 
-        const BOT_NAMES = ['অর্জুন AI', 'প্রজ্ঞা Bot', 'বুদ্ধিমান Bot', 'কিরণ AI'];
-        const botName = BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)];
+        const diff = difficultyRef.current;
+
+        // Persona pool: 3 distinct learner archetypes
+        const PERSONAS = [
+            {   // Focused learner — fast reader, sharp thinker, high accuracy
+                names: ['Arif', 'Tanjim', 'Nadia', 'Riya'],
+                readSpeed: 0.7,
+                thinkMin: 1200,
+                thinkRange: 1200,
+                baseAccuracy: diff === 'easy' ? 0.88 : 0.76,
+                specialtyPattern: [0, 2, 4], 
+            },
+            {   // Average learner — moderate speed and accuracy
+                names: ['Sumaiya', 'Rakib', 'Faria', 'Imran'],
+                readSpeed: 0.95,
+                thinkMin: 1800,
+                thinkRange: 1800,
+                baseAccuracy: diff === 'easy' ? 0.73 : 0.60,
+                specialtyPattern: [1, 3],
+            },
+            {   // Struggling learner — slow, hesitant, lower accuracy
+                names: ['Habib', 'Sadia', 'Mamun', 'Rupa'],
+                readSpeed: 1.30,
+                thinkMin: 2600,
+                thinkRange: 2200,
+                baseAccuracy: diff === 'easy' ? 0.58 : 0.44,
+                specialtyPattern: [2],
+            },
+        ];
+
+        // Weighted selection: average persona most common
+        const weights = [0.25, 0.55, 0.20];
+        const roll = Math.random();
+        let cumulative = 0;
+        let template = PERSONAS[1];
+        for (let i = 0; i < PERSONAS.length; i++) {
+            cumulative += weights[i];
+            if (roll < cumulative) { template = PERSONAS[i]; break; }
+        }
+
+        const firstName = template.names[Math.floor(Math.random() * template.names.length)];
+        const suffix = diff === 'easy' ? ' AI' : ' Agent';
+        const botName = firstName + suffix;
+
+        // Persist persona + reset streak for this match
+        botPersonaRef.current = { ...template };
+        botStreakRef.current = 0;
 
         setQuestions(qs);
         setIsVsBot(true);
         isBotRef.current = true;
         isBotGameActive.current = true;
 
+        // Human-style avatar (avataaars style — looks like a real learner)
+        const seed = `learner-${firstName}-${Math.floor(Math.random() * 99)}`;
         setOpponentProfile({
             id: 'bot',
             full_name: botName,
             display_name: botName,
-            avatar_url: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${botName}`,
-            xp: Math.floor(Math.random() * 500) + 200,
-            league_id: Math.floor(Math.random() * 3) + 1,
+            avatar_url: `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&radius=50`,
+            xp: Math.floor(Math.random() * 900) + 150,
+            league_id: Math.floor(Math.random() * 4) + 1,
             isBot: true
         });
 
         setPhase('matchmaking');
-        setTimeout(() => {
-            startGame(qs);
-        }, 3000);
+        // Variable connect delay — feels like the opponent is joining
+        const connectDelay = 2000 + Math.random() * 1800;
+        setTimeout(() => startGame(qs), connectDelay);
     }, []);
 
     // ── start game ────────────────────────────────────────────
@@ -489,11 +704,20 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setSelectedOption(null);
         setIsAnswerLocked(false);
         setTimeLeft(QUESTION_TIME);
+    }, []);
 
-        if (isBotRef.current) {
-            runBotLogic();
+    // ── Synchronize Bot move with question progression ──
+    useEffect(() => {
+        if (phase === 'game' && isVsBot && isBotRef.current) {
+            triggerBotNextMove();
         }
-    }, [runBotLogic]);
+        return () => {
+            if (phaseRef.current !== 'game') {
+                clearTimeout(botTimeoutRef.current);
+                botTimeoutRef.current = null;
+            }
+        };
+    }, [qIndex, phase, isVsBot, triggerBotNextMove]);
 
     // ── join existing room ────────────────────────────────────
     const handleJoinRoom = useCallback(async (forcedCodeParam = null) => {
@@ -796,6 +1020,8 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
             if (channelRef.current) supabase.removeChannel(channelRef.current);
             clearInterval(timerRef.current);
             clearTimeout(autoAdvanceRef.current);
+            clearTimeout(botTimeoutRef.current);
+            botTimeoutRef.current = null;
         };
     }, []);
 
@@ -821,10 +1047,13 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         clearInterval(timerRef.current);
         clearTimeout(autoAdvanceRef.current);
         clearTimeout(botTimeoutRef.current);
+        botTimeoutRef.current = null;
         clearInterval(searchCountdownRef.current);
         isBotGameActive.current = false;
         setIsVsBot(false);
         isBotRef.current = false;
+        botPersonaRef.current = null;
+        botStreakRef.current = 0;
         setSearchCountdown(20);
         setPhase('lobby');
         setSession(null);
@@ -1219,13 +1448,10 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
         setIsUpdatingMode(true);
         const newMode = !battleMode;
         try {
-            const { error } = await supabase
-                .from('profiles')
-                .update({ battle_mode: newMode })
-                .eq('id', user.id);
-            if (!error) {
-                setBattleMode(newMode);
-            }
+            // Use AuthContext.updateProfile so global profile.battle_mode
+            // updates instantly in memory — no waiting for realtime roundtrip
+            await updateProfile({ battle_mode: newMode });
+            setBattleMode(newMode);
         } catch (err) {
             console.error('Error updating battle mode:', err);
         } finally {

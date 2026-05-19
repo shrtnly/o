@@ -1,20 +1,17 @@
 .hero {
     position: relative;
-    min-height: 85vh;
+    min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding-top: 72px;
+    padding: 82px 0 30px;
     overflow: hidden;
 }
 
 .heroBg {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     z-index: -1;
 }
 
@@ -31,17 +28,17 @@
 }
 
 :global(.dark) .overlay {
-    background: radial-gradient(circle at center, rgba(11, 14, 17, 0.4) 0%, rgba(11, 14, 17, 0.9) 100%);
+    background: radial-gradient(circle at center, rgba(11, 14, 17, 0.42) 0%, rgba(11, 14, 17, 0.9) 100%);
 }
 
 :global(.light) .overlay {
-    background: radial-gradient(circle at center, rgba(248, 250, 252, 0.4) 0%, rgba(248, 250, 252, 0.9) 100%);
+    background: radial-gradient(circle at center, rgba(248, 250, 252, 0.42) 0%, rgba(248, 250, 252, 0.9) 100%);
 }
 
 .container {
     width: 100%;
-    max-width: 1000px;
-    padding: 0 24px;
+    max-width: 1200px;
+    padding: 0 18px;
     position: relative;
     z-index: 10;
 }
@@ -50,25 +47,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 18px;
+    width: 100%;
 }
 
-.badge {
-    background: rgba(46, 204, 113, 0.1);
-    border: 1px solid rgba(46, 204, 113, 0.3);
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    color: var(--color-primary);
-    backdrop-filter: blur(4px);
-    font-weight: 500;
+.textContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    text-align: center;
 }
 
 .title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    width: 100%;
+    margin: 0;
+    font-size: clamp(0.92rem, 3.9vw, 3.15rem);
     font-weight: 800;
-    line-height: 1.1;
+    line-height: 1.24;
     color: var(--color-text);
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
+.titleLine {
+    display: inline;
 }
 
 .highlight {
@@ -78,44 +82,214 @@
     -webkit-text-fill-color: transparent;
 }
 
+.golden {
+    background: linear-gradient(90deg, #ffd700, #f39c12);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #ffd700;
+}
+
+.wordWrapper {
+    display: inline-grid;
+    overflow: hidden;
+    min-height: 1.22em;
+    margin-left: 0.2em;
+    padding-bottom: 0.06em;
+    vertical-align: -0.08em;
+}
+
+.animatedWord {
+    display: inline-block;
+    will-change: transform, opacity, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animatedWord {
+        will-change: auto;
+    }
+}
+
 .description {
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
-    color: var(--color-text-muted);
     max-width: 700px;
     margin: 0 auto;
+    font-size: clamp(0.94rem, 3.7vw, 1.35rem);
+    line-height: 1.64;
+    color: var(--color-text-muted);
 }
 
 .cta {
-    margin-top: 16px;
+    margin-top: 4px;
     display: flex;
-    gap: 16px;
+    flex-direction: column;
+    gap: 10px;
     justify-content: center;
+    width: 100%;
+    max-width: 290px;
 }
 
 .mainBtn {
-    font-size: 1.1rem !important;
-    padding: 14px 32px !important;
+    width: 100%;
+    min-height: 46px;
+    font-size: 0.95rem !important;
+    padding: 12px 22px !important;
     box-shadow: var(--glow-primary) !important;
 }
 
 .secondaryBtn {
-    font-size: 1.1rem !important;
-    padding: 14px 32px !important;
+    width: 100%;
+    min-height: 46px;
+    font-size: 0.95rem !important;
+    padding: 12px 22px !important;
     border-color: var(--color-border) !important;
 }
 
-.mainBtn:hover, .secondaryBtn:hover {
-    transform: translateY(-4px) scale(1.02) !important;
+.mainBtn:hover,
+.secondaryBtn:hover {
+    transform: translateY(-3px) scale(1.01) !important;
 }
 
 .mainBtn:hover {
-    box-shadow: 0 10px 40px rgba(241, 196, 15, 0.4) !important;
+    box-shadow: 0 10px 34px rgba(241, 196, 15, 0.34) !important;
 }
 
-@media (max-width: 600px) {
-    .cta {
-        flex-direction: column;
-        width: 100%;
-        max-width: 300px;
+.imageContent {
+    order: 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.beeLottie {
+    display: block;
+    width: 55%;
+    max-width: 200px;
+    height: 20vh;
+    min-height: 120px;
+    max-height: 160px;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+@media (max-width: 380px) {
+    .hero {
+        min-height: 64svh;
+        padding-top: 76px;
+        padding-bottom: 24px;
     }
-}
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .textContent {
+        gap: 14px;
+    }
+
+    .title {
+        font-size: clamp(0.82rem, 3.7vw, 0.98rem);
+    }
+
+    .description {
+        font-size: 0.9rem;
+        line-height: 1.58;
+    }
+
+    .cta {
+        max-width: 262px;
+    }
+}
+
+@media (min-width: 768px) {
+    .hero {
+        min-height: 68vh;
+        padding-top: 88px;
+    }
+
+    .container {
+        padding: 0 24px;
+    }
+
+    .content {
+        gap: 30px;
+    }
+
+    .title {
+        font-size: clamp(1.42rem, 4.25vw, 2.6rem);
+    }
+
+    .description {
+        font-size: clamp(1rem, 1.9vw, 1.2rem);
+    }
+
+    .cta {
+        flex-direction: row;
+        gap: 14px;
+        max-width: none;
+        width: auto;
+    }
+
+    .mainBtn,
+    .secondaryBtn {
+        width: auto;
+        min-height: 48px;
+        font-size: 1rem !important;
+        padding: 12px 26px !important;
+    }
+
+    .beeLottie {
+        width: clamp(180px, 26vw, 270px);
+        height: clamp(180px, 26vw, 270px);
+    }
+}
+
+@media (min-width: 992px) {
+    .content {
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: 40px;
+    }
+
+    .textContent {
+        flex: 0 0 50%;
+        max-width: 50%;
+        align-items: flex-start;
+        text-align: left;
+        gap: 22px;
+        justify-content: center;
+    }
+
+    .title {
+        text-align: left;
+        font-size: clamp(1.9rem, 3.9vw, 3.15rem);
+    }
+
+    .description {
+        text-align: left;
+        margin: 0;
+        max-width: 640px;
+    }
+
+    .cta {
+        justify-content: flex-start;
+    }
+
+    .imageContent {
+        order: 0;
+        flex: 0 0 50%;
+        max-width: 50%;
+        justify-content: center;
+        align-items: flex-start;
+        margin-top: 0;
+    }
+
+    .beeLottie {
+        width: 100%;
+        height: 60vh;
+        min-height: 400px;
+        max-height: 600px;
+    }
+}

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Moon, Sun, LogOut, Users, Bell } from 'lucide-react';
+import { Moon, Sun, LogOut, Users, Bell, User } from 'lucide-react';
 import Button from '../ui/Button';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
 import styles from './Navbar.module.css';
@@ -13,7 +13,7 @@ import React, { useState, useEffect } from 'react';
 const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
     const { user, signOut } = useAuth();
-    const { t, language, toggleLanguage } = useLanguage();
+    const { t } = useLanguage();
     const { unreadCount, pendingConnectionsCount } = useNotifications();
     const [isScrolled, setIsScrolled] = useState(false);
 
@@ -34,13 +34,6 @@ const Navbar = () => {
                 </Link>
 
                 <div className={styles.actions}>
-                    <button
-                        className={styles.langSwitchBtn}
-                        onClick={toggleLanguage}
-                        aria-label={`Switch to ${language === 'bn' ? 'English' : 'Bangla'}`}
-                    >
-                        {language === 'bn' ? 'EN' : 'BN'}
-                    </button>
 
                     <button
                         className={styles.iconBtn}
@@ -76,10 +69,8 @@ const Navbar = () => {
                             </button>
                         </div>
                     ) : (
-                        <Link to="/auth">
-                            <Button variant="primary" className={styles.loginBtn}>
-                                {t('login_btn')}
-                            </Button>
+                        <Link to="/auth" className={styles.iconBtn} title={t('login_btn')}>
+                            <User size={20} />
                         </Link>
                     )}
                 </div>

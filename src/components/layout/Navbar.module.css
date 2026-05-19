@@ -3,22 +3,24 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 72px;
+    height: 76px;
     z-index: 1000;
     display: flex;
     align-items: center;
     transition: var(--transition);
-    border-bottom: 2px solid transparent;
+    border-bottom: 1px solid transparent;
 }
 
 .scrolled {
-    background-color: rgba(11, 14, 17, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 2px solid var(--color-border);
+    background-color: rgba(11, 14, 17, 0.78);
+    backdrop-filter: blur(16px);
+    border-bottom-color: var(--color-border);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
 }
 
 :global(.light) .scrolled {
-    background-color: rgba(248, 250, 252, 0.85);
+    background-color: rgba(248, 250, 252, 0.82);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 
@@ -26,7 +28,7 @@
     max-width: 1200px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 40px;
+    padding: 0 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -41,52 +43,27 @@
 }
 
 .navLogo {
-    height: 48px;
+    height: 56px;
     width: auto;
     object-fit: contain;
+    display: block;
 }
 
 .actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
-.langSwitchBtn {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    font-size: 0.65rem;
-    font-weight: 900;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 0.5px;
-}
 
-.langSwitchBtn:hover {
-    background: var(--color-bg-alt);
-    color: var(--color-text);
-    border-color: var(--color-text-muted);
-}
-
-.langSwitchBtn:active {
-    scale: 0.95;
-    background: var(--color-border);
-}
 
 .iconBtn {
-    background: transparent;
+    background: color-mix(in srgb, var(--color-bg-alt) 60%, transparent);
     border: 1px solid var(--color-border);
     color: var(--color-text-muted);
     cursor: pointer;
-    width: 40px;
-    height: 40px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -96,25 +73,22 @@
 
 .iconBtn:hover {
     background: var(--color-bg-alt);
-    color: var(--color-text);
-    border-color: var(--color-text-muted);
+    color: var(--color-primary);
+    border-color: color-mix(in srgb, var(--color-primary) 45%, var(--color-border));
 }
 
 .iconBtn:active {
     scale: 0.95;
 }
 
-.loginBtn {
-    font-size: 0.9rem !important;
-    padding: 10px 20px !important;
-}
+
 
 .userSection {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background-color: var(--color-bg-alt);
-    padding: 4px 4px 4px 12px;
+    gap: 8px;
+    background: color-mix(in srgb, var(--color-bg-alt) 72%, transparent);
+    padding: 4px 4px 4px 10px;
     border-radius: 100px;
     border: 1px solid var(--color-border);
 }
@@ -136,11 +110,11 @@
 }
 
 .logoutBtn {
-    background-color: var(--color-border);
-    border: none;
+    background: transparent;
+    border: 1px solid transparent;
     color: var(--color-text-muted);
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -151,6 +125,7 @@
 
 .logoutBtn:hover {
     background-color: #e74c3c;
+    border-color: #e74c3c;
     color: #fff;
 }
 .avatarMiniWrapper {
@@ -180,10 +155,10 @@
 
 .navLink {
     background: transparent;
-    border: none;
+    border: 1px solid transparent;
     color: var(--color-text-muted);
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -195,6 +170,7 @@
 
 .navLink:hover {
     background: var(--color-bg-hover);
+    border-color: var(--color-border);
     color: var(--color-primary);
 }
 
@@ -215,4 +191,52 @@
     padding: 0 4px;
     border: none;
     box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        height: 68px;
+    }
+
+    .container {
+        padding: 0 18px;
+    }
+
+    .navLogo {
+        height: 44px;
+    }
+
+    .actions {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .navLogo {
+        height: 40px;
+    }
+
+    .userSection {
+        padding: 4px;
+        gap: 6px;
+    }
+    .userName {
+        display: none;
+    }
+    .navLink {
+        width: 34px;
+        height: 34px;
+    }
+    .iconBtn {
+        width: 36px;
+        height: 36px;
+    }
+    .logoutBtn {
+        width: 30px;
+        height: 30px;
+    }
 }

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../components/ui/Button';
 import styles from './Hero.module.css';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import BeeModel from './BeeModel';
 
 const MotionDiv = motion.div;
 const MotionSpan = motion.span;
@@ -53,7 +52,7 @@ const Hero = () => {
                 <div className={styles.content}>
                     <div className={styles.textContent}>
                         <h1 className={styles.title}>
-                            <span className={styles.titleLine}>গেম খেলুন শিখতে থাকুন</span>
+                            <span className={styles.titleLine}>গেম খেলে শিখুন</span>
                             <span className={styles.wordWrapper}>
                                 <AnimatePresence mode="wait">
                                     <MotionSpan
@@ -68,7 +67,7 @@ const Hero = () => {
                         </h1>
 
                         <p className={styles.description}>
-                            বোরিং লেকচার ভুলে যান! গেম খেলতে খেলতেই শিখুন রিয়েল লাইফ স্কিল এবং অর্জন করুন ভেরিফাইড সার্টিফিকেট।
+                            ইন্টারেক্টিভ স্টোরি, কুইজ ও গ্যামিফিকেশনের মাধ্যমে শিখুন সহজ ও মজার উপায়ে। এবং অর্জন করুন ভেরিফাইড সার্টিফিকেট।
                         </p>
 
                         <div className={styles.cta}>
@@ -91,12 +90,16 @@ const Hero = () => {
 
                     <MotionDiv
                         className={styles.imageContent}
-                        aria-hidden="true"
-                        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.9, y: 20 }}
+                        initial={shouldReduceMotion ? false : { opacity: 0, scale: 0.95, y: 15 }}
                         animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        <BeeModel className={styles.beeLottie} />
+                        <img 
+                            src="/beelessonhero.webp" 
+                            alt="BeeLesson Hero" 
+                            className={styles.heroImg} 
+                            loading="eager"
+                        />
                     </MotionDiv>
                 </div>
             </MotionDiv>

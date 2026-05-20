@@ -63,20 +63,20 @@
 .title {
     width: 100%;
     margin: 0;
-    font-size: clamp(0.92rem, 3.9vw, 3.15rem);
+    font-size: clamp(2rem, 7.5vw, 2.6rem);
     font-weight: 800;
-    line-height: 1.24;
+    line-height: 1.2;
     color: var(--color-text);
-    letter-spacing: 0;
-    white-space: nowrap;
+    letter-spacing: -0.01em;
 }
 
 .titleLine {
-    display: inline;
+    display: block;
+    margin-bottom: 0.12em;
 }
 
 .highlight {
-    background: linear-gradient(90deg, var(--color-primary), #00ff88);
+    background: linear-gradient(90deg, var(--color-primary), #ffd700);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -88,15 +88,16 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: #ffd700;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
 }
 
 .wordWrapper {
     display: inline-grid;
     overflow: hidden;
-    min-height: 1.22em;
-    margin-left: 0.2em;
-    padding-bottom: 0.06em;
-    vertical-align: -0.08em;
+    min-height: 1.35em;
+    padding-top: 0.05em;
+    padding-bottom: 0.15em;
+    vertical-align: -0.18em;
 }
 
 .animatedWord {
@@ -111,10 +112,10 @@
 }
 
 .description {
-    max-width: 700px;
+    max-width: 600px;
     margin: 0 auto;
-    font-size: clamp(0.94rem, 3.7vw, 1.35rem);
-    line-height: 1.64;
+    font-size: clamp(1rem, 4vw, 1.15rem);
+    line-height: 1.6;
     color: var(--color-text-muted);
 }
 
@@ -154,24 +155,39 @@
 }
 
 .imageContent {
-    order: 2;
     width: 100%;
+    max-width: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 24px;
 }
 
-.beeLottie {
+.heroImg {
+    width: 100%;
+    height: auto;
     display: block;
-    width: 55%;
-    max-width: 200px;
-    height: 20vh;
-    min-height: 120px;
-    max-height: 160px;
-    flex-shrink: 0;
-    margin: 0 auto;
+    object-fit: contain;
+    border-radius: 16px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
 }
+
+:global(.light) .heroImg {
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.heroImg:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
+}
+
+:global(.light) .heroImg:hover {
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12);
+}
+
 
 @media (max-width: 380px) {
     .hero {
@@ -189,12 +205,13 @@
     }
 
     .title {
-        font-size: clamp(0.82rem, 3.7vw, 0.98rem);
+        font-size: clamp(1.6rem, 7vw, 1.9rem);
+        line-height: 1.25;
     }
 
     .description {
-        font-size: 0.9rem;
-        line-height: 1.58;
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
 
     .cta {
@@ -217,11 +234,11 @@
     }
 
     .title {
-        font-size: clamp(1.42rem, 4.25vw, 2.6rem);
+        font-size: clamp(2.4rem, 5.5vw, 3.2rem);
     }
 
     .description {
-        font-size: clamp(1rem, 1.9vw, 1.2rem);
+        font-size: clamp(1.1rem, 1.9vw, 1.2rem);
     }
 
     .cta {
@@ -238,39 +255,34 @@
         font-size: 1rem !important;
         padding: 12px 26px !important;
     }
-
-    .beeLottie {
-        width: clamp(180px, 26vw, 270px);
-        height: clamp(180px, 26vw, 270px);
-    }
 }
 
 @media (min-width: 992px) {
     .content {
         flex-direction: row;
-        align-items: stretch;
+        align-items: center;
         justify-content: space-between;
-        gap: 40px;
+        gap: 48px;
     }
 
     .textContent {
-        flex: 0 0 50%;
-        max-width: 50%;
+        flex: 0 0 52%;
+        max-width: 52%;
         align-items: flex-start;
         text-align: left;
-        gap: 22px;
-        justify-content: center;
+        gap: 24px;
     }
 
     .title {
         text-align: left;
-        font-size: clamp(1.9rem, 3.9vw, 3.15rem);
+        font-size: clamp(3rem, 4.5vw, 3.8rem);
     }
 
     .description {
         text-align: left;
         margin: 0;
-        max-width: 640px;
+        max-width: 100%;
+        font-size: clamp(1.15rem, 1.6vw, 1.25rem);
     }
 
     .cta {
@@ -278,18 +290,17 @@
     }
 
     .imageContent {
-        order: 0;
-        flex: 0 0 50%;
-        max-width: 50%;
-        justify-content: center;
-        align-items: flex-start;
+        flex: 0 0 44%;
+        max-width: 44%;
         margin-top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .beeLottie {
+    .heroImg {
         width: 100%;
-        height: 60vh;
-        min-height: 400px;
-        max-height: 600px;
+        max-height: 480px;
+        object-fit: contain;
     }
 }

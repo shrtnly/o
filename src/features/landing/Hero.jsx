@@ -67,23 +67,16 @@ const Hero = () => {
                         </h1>
 
                         <p className={styles.description}>
-                            ইন্টারেক্টিভ স্টোরি, কুইজ ও গ্যামিফিকেশনের মাধ্যমে শিখুন সহজ ও মজার উপায়ে। এবং অর্জন করুন ভেরিফাইড সার্টিফিকেট।
+                            শুধু ভিডিও দেখে নয়— ইন্টারেক্টিভ স্টোরি, কুইজ ও গ্যামিফিকেশন অভিজ্ঞতার মাধ্যমে শেখাকে করা হয়েছে আরও কার্যকর, মজার ও বাস্তবমুখী।
                         </p>
 
                         <div className={styles.cta}>
                             <Button
-                                variant="primary"
+                                variant="primary3d"
                                 className={styles.mainBtn}
                                 onClick={() => window.location.href = '/auth'}
                             >
-                                শেখা শুরু করুন
-                            </Button>
-                            <Button
-                                variant="outline"
-                                className={styles.secondaryBtn}
-                                onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
-                            >
-                                ফিচারগুলো দেখুন
+                                ফ্রিতে শেখা শুরু করুন
                             </Button>
                         </div>
                     </div>

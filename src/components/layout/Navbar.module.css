@@ -18,6 +18,10 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
 }
 
+.navHidden {
+    transform: translateY(-100%);
+}
+
 :global(.light) .scrolled {
     background-color: rgba(248, 250, 252, 0.82);
     box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);

@@ -134,25 +134,8 @@
     min-height: 46px;
     font-size: 0.95rem !important;
     padding: 12px 22px !important;
-    box-shadow: var(--glow-primary) !important;
 }
 
-.secondaryBtn {
-    width: 100%;
-    min-height: 46px;
-    font-size: 0.95rem !important;
-    padding: 12px 22px !important;
-    border-color: var(--color-border) !important;
-}
-
-.mainBtn:hover,
-.secondaryBtn:hover {
-    transform: translateY(-3px) scale(1.01) !important;
-}
-
-.mainBtn:hover {
-    box-shadow: 0 10px 34px rgba(241, 196, 15, 0.34) !important;
-}
 
 .imageContent {
     width: 100%;
@@ -189,10 +172,16 @@
 }
 
 
+@media (max-width: 767px) {
+    .hero {
+        padding-top: 112px;
+    }
+}
+
 @media (max-width: 380px) {
     .hero {
         min-height: 64svh;
-        padding-top: 76px;
+        padding-top: 96px;
         padding-bottom: 24px;
     }
 
@@ -248,8 +237,7 @@
         width: auto;
     }
 
-    .mainBtn,
-    .secondaryBtn {
+    .mainBtn {
         width: auto;
         min-height: 48px;
         font-size: 1rem !important;

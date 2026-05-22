@@ -8,7 +8,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotifications } from '../../context/NotificationContext';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const Navbar = () => {
     const { isDark, toggleTheme } = useTheme();
@@ -16,17 +16,32 @@ const Navbar = () => {
     const { t } = useLanguage();
     const { unreadCount, pendingConnectionsCount } = useNotifications();
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+    const lastScrollY = useRef(0);
 
     useEffect(() => {
         const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
+            const currentScrollY = window.scrollY;
+            
+            // Add scrolled style if scrolled down more than 50px
+            setIsScrolled(currentScrollY > 50);
+
+            // Hide header if scrolling down past 100px threshold, show if scrolling up
+            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+            
+            lastScrollY.current = currentScrollY;
         };
-        window.addEventListener('scroll', handleScroll);
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''}`}>
+        <nav className={`${styles.navbar} ${isScrolled ? styles.scrolled : ''} ${!isVisible ? styles.navHidden : ''}`}>
 
             <div className={styles.container}>
                 <Link to="/" className={styles.logo}>

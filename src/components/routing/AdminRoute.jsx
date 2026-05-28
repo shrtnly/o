@@ -4,9 +4,10 @@ import { useAuth } from '../../context/AuthContext';
 import LoadingScreen from '../ui/LoadingScreen';
 
 const AdminRoute = ({ children }) => {
-    const { user, profile, loading } = useAuth();
+    const { user, profile, loading, profileLoading } = useAuth();
 
-    if (loading) {
+    // Wait for both auth session AND profile to finish loading
+    if (loading || profileLoading) {
         return <LoadingScreen />;
     }
 

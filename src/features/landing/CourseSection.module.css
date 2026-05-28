@@ -31,6 +31,30 @@
     margin-bottom: 24px;
 }
 
+/* Edge fade effects for horizontal scroll indications */
+.sliderWrapper::before,
+.sliderWrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 24px;
+    z-index: 5;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sliderWrapper::before {
+    left: 0;
+    background: linear-gradient(to right, var(--color-bg), transparent);
+}
+
+.sliderWrapper::after {
+    right: 0;
+    background: linear-gradient(to left, var(--color-bg), transparent);
+}
+
 /* Scroll container */
 .scrollContainer {
     display: flex;
@@ -197,14 +221,52 @@
 }
 
 @media (max-width: 768px) {
-    .leftArrow {
-        left: -8px;
+    .container {
+        padding: 0 16px;
     }
-    .rightArrow {
-        right: -8px;
+
+    .sliderWrapper {
+        margin-left: -16px;
+        margin-right: -16px;
+        padding: 12px 0;
     }
+
+    .sliderWrapper::before,
+    .sliderWrapper::after {
+        opacity: 1;
+    }
+
     .scrollContainer {
-        gap: 14px;
-        padding: 4px 8px;
+        gap: 12px;
+        padding: 4px 16px;
+    }
+
+    .arrowBtn {
+        display: none;
+    }
+
+    .courseItem {
+        padding: 6px 14px;
+        gap: 8px;
+    }
+
+    .courseIcon {
+        width: 22px;
+        height: 15px;
+        border-radius: 2px;
+    }
+
+    .courseTitle {
+        font-size: 0.9rem;
+    }
+
+    .skeletonIcon {
+        width: 22px;
+        height: 15px;
+    }
+
+    .skeletonText {
+        width: 70px;
+        height: 12px;
     }
 }

@@ -88,7 +88,6 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: #ffd700;
-    text-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
 }
 
 .wordWrapper {

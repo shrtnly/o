@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
-import Button from '../../components/ui/Button';
+import { CheckCircle2 } from 'lucide-react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import styles from './CertificateSection.module.css';
 
 const CertificateSection = () => {
@@ -39,7 +39,7 @@ const CertificateSection = () => {
                         >
                             <div className={styles.bulletItem}>
                                 <CheckCircle2 size={18} className={styles.bulletIcon} />
-                                <span>অনন্য আইডি-সহ ভেরিফাইড ডিজিটাল সার্টিফিকেট</span>
+                                <span>আইডি-সহ ভেরিফাইড ডিজিটাল সার্টিফিকেট</span>
                             </div>
                             <div className={styles.bulletItem}>
                                 <CheckCircle2 size={18} className={styles.bulletIcon} />
@@ -59,10 +59,11 @@ const CertificateSection = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
                     >
-                        <img 
-                            src="/certificate_bee.png" 
-                            alt="Certificate illustration" 
-                            className={styles.image}
+                        <DotLottieReact
+                            src="/models/Section4.lottie"
+                            loop
+                            autoplay
+                            style={{ background: 'transparent' }}
                         />
                     </motion.div>
                 </div>

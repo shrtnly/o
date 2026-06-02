@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
-import Button from '../../components/ui/Button';
+import { CheckCircle2 } from 'lucide-react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import styles from './BattleSection.module.css';
 
 const BattleSection = () => {
@@ -43,7 +43,7 @@ const BattleSection = () => {
                             </div>
                             <div className={styles.bulletItem}>
                                 <CheckCircle2 size={18} className={styles.bulletIcon} />
-                                <span>সাপ্তাহিক ও মাসিক লিডারবোর্ডে সেরাদের তালিকায় জায়গা</span>
+                                <span>লিডারবোর্ডে সেরাদের তালিকায় জায়গা</span>
                             </div>
                             <div className={styles.bulletItem}>
                                 <CheckCircle2 size={18} className={styles.bulletIcon} />
@@ -59,10 +59,11 @@ const BattleSection = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
                     >
-                        <img 
-                            src="/battle_bee.png" 
-                            alt="Battle & Leaderboard illustration" 
-                            className={styles.image}
+                        <DotLottieReact
+                            src="/models/Section3.2.lottie"
+                            loop
+                            autoplay
+                            style={{ background: 'transparent' }}
                         />
                     </motion.div>
                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle2, ArrowRight } from 'lucide-react';
-import Button from '../../components/ui/Button';
+import { CheckCircle2 } from 'lucide-react';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import styles from './GamifiedLearningSection.module.css';
 
 const GamifiedLearningSection = () => {
@@ -39,7 +39,7 @@ const GamifiedLearningSection = () => {
                         >
                             <div className={styles.bulletItem}>
                                 <CheckCircle2 size={18} className={styles.bulletIcon} />
-                                <span>পয়েন্ট, স্ট্রিক এবং আকর্ষণীয় গেম মেকানিক্স</span>
+                                <span>পয়েন্ট, এক্সপি, স্ট্রিক এবং আকর্ষণীয় গেম মেকানিক্স</span>
                             </div>
                             <div className={styles.bulletItem}>
                                 <CheckCircle2 size={18} className={styles.bulletIcon} />
@@ -59,10 +59,11 @@ const GamifiedLearningSection = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
                     >
-                        <img 
-                            src="/gamified_bee.png" 
-                            alt="Gamified learning illustration" 
-                            className={styles.image}
+                        <DotLottieReact
+                            src="/models/Section-2.lottie"
+                            loop
+                            autoplay
+                            style={{ background: 'transparent' }}
                         />
                     </motion.div>
                 </div>

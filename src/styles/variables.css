@@ -1,9 +1,10 @@
 :root {
     /* Common Variables */
-    --color-primary: #f1c40f;
-    --color-primary-dark: #d4ac0d;
-    --color-primary-light: rgba(241, 196, 15, 0.4);
-    --color-primary-faint: rgba(241, 196, 15, 0.05);
+    --color-primary: #FFB800;
+    --color-primary-dark: #e6a600;
+    --color-primary-light: rgba(255, 184, 0, 0.4);
+    --color-primary-faint: rgba(255, 184, 0, 0.05);
+    --color-primary-faded: rgba(255, 184, 0, 0.12);
     --color-secondary: #1cb0f6;
     --color-secondary-dark: #1899d6;
     --color-danger: #ff4b4b;
@@ -15,10 +16,57 @@
     --radius-xl: 20px;
 
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Light Mode (Default Variables) */
+    --color-bg: #f8fafc;
+    --color-bg-alt: #ffffff;
+    --color-bg-deep: #f1f5f9;
+    --color-bg-card: #ffffff;
+    --color-input-bg: #f1f5f9;
+    --color-bg-hover: #ffffff;
+    --color-text: #1e293b;
+    --color-text-muted: #64748b;
+    --color-text-hover: #0f172a;
+    --color-on-primary: #000;
+    --color-on-secondary: #ffffff;
+    --color-border: #e2e8f0;
+    --color-border-muted: rgba(0, 0, 0, 0.05);
+
+    --glow-primary: 0 0 15px rgba(255, 184, 0, 0.15);
+    --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.08);
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Dark Mode (Default) */
-:root,
+/* Light Mode Explicit */
+.light {
+    --color-bg: #f8fafc;
+    --color-bg-alt: #ffffff;
+    --color-bg-deep: #f1f5f9;
+    --color-bg-card: #ffffff;
+    --color-input-bg: #f1f5f9;
+    --color-bg-hover: #ffffff;
+    --color-text: #1e293b;
+    --color-text-muted: #64748b;
+    --color-text-hover: #0f172a;
+    --color-on-primary: #000;
+    --color-on-secondary: #ffffff;
+    --color-border: #e2e8f0;
+    --color-border-muted: rgba(0, 0, 0, 0.05);
+
+    --color-primary: #FFB800;
+    --color-primary-dark: #e6a600;
+    --color-primary-light: rgba(255, 184, 0, 0.4);
+    --color-primary-faint: rgba(255, 184, 0, 0.05);
+    --color-primary-faded: rgba(255, 184, 0, 0.12);
+
+    --glow-primary: 0 0 15px rgba(255, 184, 0, 0.15);
+    --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.08);
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark Mode Overrides */
 .dark {
     --color-bg: #0b0e11;
     --color-bg-alt: #1a1d21;
@@ -37,34 +85,11 @@
     --color-text-hover: #ffffff;
     --color-on-primary: #000000;
     --color-on-secondary: #ffffff;
+
+    /* Golden Colors for Dark Mode */
+    --color-primary: #f1c40f;
+    --color-primary-dark: #d4ac0d;
+    --color-primary-light: rgba(241, 196, 15, 0.4);
+    --color-primary-faint: rgba(241, 196, 15, 0.05);
     --color-primary-faded: rgba(241, 196, 15, 0.1);
 }
-
-/* Light Mode */
-.light {
-    --color-bg: #f8fafc;
-    --color-bg-alt: #ffffff;
-    --color-bg-deep: #f1f5f9;
-    --color-bg-card: #ffffff;
-    --color-input-bg: #f1f5f9;
-    --color-bg-hover: #ffffff;
-    --color-text: #1e293b;
-    --color-text-muted: #64748b;
-    --color-text-hover: #0f172a;
-    --color-on-primary: #000;
-    --color-on-secondary: #ffffff;
-    --color-border: #e2e8f0;
-    --color-border-muted: rgba(0, 0, 0, 0.05);
-
-    /* Golden Color Overrides for Light Mode */
-    --color-primary: #FFB800;
-    --color-primary-dark: #e6a600;
-    --color-primary-light: rgba(255, 184, 0, 0.4);
-    --color-primary-faint: rgba(255, 184, 0, 0.05);
-    --color-primary-faded: rgba(255, 184, 0, 0.12);
-
-    --glow-primary: 0 0 15px rgba(255, 184, 0, 0.15);
-    --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.05);
-    --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.08);
-    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-}

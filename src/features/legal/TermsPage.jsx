@@ -49,7 +49,8 @@ const TermsPage = () => {
                 </div>
 
                 <div className={styles.footer}>
-                    <p>© ২০২৪ বি লেসন (BeeLesson). {t('p_contact_us')}</p>
+                    <p className={styles.copyright}>
+                        &copy; {new Date().getFullYear()} BeeLesson. সকল স্বত্ব সংরক্ষিত।</p>
                 </div>
             </div>
         </div>

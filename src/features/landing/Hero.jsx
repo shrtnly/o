@@ -74,7 +74,7 @@ const Hero = () => {
                             <Button
                                 variant="primary3d"
                                 className={styles.mainBtn}
-                                onClick={() => window.location.href = '/auth'}
+                                onClick={() => window.location.href = '/courses'}
                             >
                                 ফ্রিতে শেখা শুরু করুন
                             </Button>

@@ -1,37 +1,9 @@
 -- ========================================================
--- DISABLE EMAIL VERIFICATION (AUTO-CONFIRM NEW USERS)
+-- DATABASE FIX: AUTOMATIC PROFILE CREATION ON USER SIGNUP
+-- Run this SQL in your Supabase SQL Editor
 -- ========================================================
 
--- Create a trigger that automatically marks new users as verified
--- This is useful if you cannot access the Supabase Dashboard settings.
-
-CREATE OR REPLACE FUNCTION public.auto_confirm_new_user() 
-RETURNS TRIGGER 
-SECURITY DEFINER 
-SET search_path = auth, public
-AS $$
-BEGIN
-  -- Set the email as confirmed before the record is saved
-  NEW.email_confirmed_at = now();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Drop trigger if exists
-DROP TRIGGER IF EXISTS on_auth_user_created_confirm ON auth.users;
-
--- Bind the trigger to run BEFORE a user is created in auth.users
-CREATE TRIGGER on_auth_user_created_confirm
-  BEFORE INSERT ON auth.users
-  FOR EACH ROW 
-  EXECUTE FUNCTION public.auto_confirm_new_user();
-
-
--- ========================================================
--- AUTOMATIC WELCOME NOTIFICATION
--- ========================================================
-
--- Create a function to send a welcome notification and create the profile
+-- Update the existing send_welcome_notification function to also handle profile creation
 CREATE OR REPLACE FUNCTION public.send_welcome_notification() 
 RETURNS TRIGGER 
 SECURITY DEFINER 
@@ -99,9 +71,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Bind the trigger to run AFTER a user is created in auth.users
+-- Bind/Re-bind the trigger to run AFTER a user is created in auth.users
 DROP TRIGGER IF EXISTS on_auth_user_created_welcome ON auth.users;
 CREATE TRIGGER on_auth_user_created_welcome
   AFTER INSERT ON auth.users
   FOR EACH ROW 
   EXECUTE FUNCTION public.send_welcome_notification();
+
+-- OPTIONAL: Create profiles for any existing users that might be missing one
+INSERT INTO public.profiles (id, xp, gems, hearts, max_hearts, display_name, full_name, avatar_url, battle_mode, role)
+SELECT 
+  u.id,
+  250,
+  120,
+  8,
+  10,
+  COALESCE(u.raw_user_meta_data->>'full_name', u.raw_user_meta_data->>'display_name', split_part(u.email, '@', 1), 'Learner'),
+  COALESCE(u.raw_user_meta_data->>'full_name', u.raw_user_meta_data->>'display_name', 'Learner'),
+  u.raw_user_meta_data->>'avatar_url',
+  true,
+  'user'
+FROM auth.users u
+LEFT JOIN public.profiles p ON u.id = p.id
+WHERE p.id IS NULL
+ON CONFLICT (id) DO NOTHING;

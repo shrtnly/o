@@ -23,6 +23,25 @@ export const AuthProvider = ({ children }) => {
                 .single();
             if (error) {
                 console.error('Error fetching profile:', error);
+                // Fallback to a temporary profile to avoid infinite loading screens or UI hangs
+                const { data: { session } } = await supabase.auth.getSession();
+                const currentUser = session?.user;
+                if (currentUser && currentUser.id === userId) {
+                    const tempProfile = {
+                        id: userId,
+                        xp: 250,
+                        gems: 120,
+                        hearts: 8,
+                        max_hearts: 10,
+                        display_name: currentUser.user_metadata?.full_name || currentUser.user_metadata?.name || currentUser.email?.split('@')[0] || 'Learner',
+                        full_name: currentUser.user_metadata?.full_name || currentUser.user_metadata?.name || 'Learner',
+                        avatar_url: currentUser.user_metadata?.avatar_url || null,
+                        role: 'user',
+                        battle_mode: true,
+                        is_temp: true
+                    };
+                    setProfile(tempProfile);
+                }
             } else {
                 setProfile(data);
             }
@@ -63,8 +82,8 @@ export const AuthProvider = ({ children }) => {
             }
 
             // SIGNED_IN after first load = Supabase re-fires this on tab return (PKCE flow behavior)
-            // We silently update user but do NOT trigger profile fetch or loading changes
-            if (event === 'SIGNED_IN' && isInitialisedRef.current) {
+            // We silently update user but do NOT trigger profile fetch if we already have the profile for this user
+            if (event === 'SIGNED_IN' && isInitialisedRef.current && user?.id === currentUser?.id && profile) {
                 setUser(currentUser);
                 return;
             }

@@ -330,7 +330,7 @@ const AuthPage = () => {
                             </span>
                         ) : (
                             <span key="signup-header">
-                                {t('auth_signup_title')} <span className={styles.highlight}>{t('auth_signup_highlight')}</span>
+                                {t('auth_signup_title')} <span className={styles.highlight}>{t('auth_signup_highlight')}</span> {t('auth_signup_suffix')}
                             </span>
                         )}
                     </h1>

@@ -1,6 +1,6 @@
 .footer {
     background-color: var(--color-bg-deep);
-    padding: 80px 24px 40px;
+    padding: 60px 24px 30px;
     border-top: 1px solid var(--color-border-muted);
 }
 
@@ -12,114 +12,181 @@
 .top {
     display: flex;
     justify-content: space-between;
-    gap: 60px;
-    margin-bottom: 60px;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 48px;
 }
 
 .brand {
-    max-width: 300px;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.logoWrapper {
+    display: inline-block;
+    align-self: flex-start;
 }
 
 .logo {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--color-primary);
-    margin-bottom: 20px;
-    font-family: 'Outfit', sans-serif;
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
 
 .brandDesc {
+    font-size: 0.9rem;
     color: var(--color-text-muted);
-    line-height: 1.6;
-    margin-bottom: 24px;
+    line-height: 1.5;
+    margin: 0;
 }
 
 .socials {
     display: flex;
-    gap: 16px;
+    gap: 12px;
 }
 
 .socialLink {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: var(--color-bg-alt);
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--color-text-muted);
-    transition: var(--transition);
+    transition: all 0.2s ease;
     border: 1px solid var(--color-border-muted);
 }
 
 .socialLink:hover {
     background: var(--color-primary);
-    color: #000;
-    transform: translateY(-3px);
+    color: var(--color-bg-deep);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
 }
 
 .linksGrid {
     display: flex;
-    gap: 80px;
+    gap: 60px;
 }
 
 .linkGroup {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
 }
 
 .groupTitle {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--color-text);
-    margin-bottom: 8px;
+    margin: 0 0 4px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .link {
     color: var(--color-text-muted);
-    transition: var(--transition);
-    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    font-size: 0.9rem;
+    text-decoration: none;
 }
 
 .link:hover {
     color: var(--color-primary);
-    padding-left: 4px;
 }
 
 .contactLink {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: var(--color-text-muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contactLink:hover {
+    color: var(--color-primary);
 }
 
 .bottom {
-    padding-top: 40px;
+    padding-top: 30px;
     border-top: 1px solid var(--color-border-muted);
     text-align: center;
 }
 
 .copyright {
     color: var(--color-text-muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    margin: 0;
 }
 
-@media (max-width: 992px) {
+/* Responsiveness */
+@media (max-width: 768px) {
     .top {
         flex-direction: column;
-        gap: 40px;
+        align-items: stretch;
+        gap: 36px;
+        margin-bottom: 40px;
     }
-    
+
+    .brand {
+        max-width: 100%;
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .logoWrapper {
+        align-self: flex-start;
+    }
+
     .linksGrid {
-        gap: 40px;
-        flex-wrap: wrap;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px 20px;
+    }
+
+    .linkGroup {
+        align-items: flex-start;
     }
 }
 
 @media (max-width: 480px) {
+    .footer {
+        padding: 48px 16px 24px;
+    }
+
+    .top {
+        gap: 32px;
+    }
+
+    .brandDesc {
+        font-size: 0.85rem;
+        max-width: 300px;
+    }
+
     .linksGrid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        gap: 24px 16px;
+    }
+
+    .groupTitle {
+        font-size: 0.9rem;
+    }
+
+    .link {
+        font-size: 0.85rem;
+    }
+
+    .contactLink {
+        font-size: 0.85rem;
+    }
+
+    .linkGroup:last-child {
+        grid-column: span 2;
     }
 }

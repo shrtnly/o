@@ -6,9 +6,6 @@ import BiteSizedSection from './BiteSizedSection';
 import GamifiedLearningSection from './GamifiedLearningSection';
 import BattleSection from './BattleSection';
 import CertificateSection from './CertificateSection';
-import FeaturesSection from './FeaturesSection';
-import HowItWorks from './HowItWorks';
-import MissionSection from './MissionSection';
 import Footer from '../../components/layout/Footer';
 import styles from './LandingPage.module.css';
 import { motion } from 'framer-motion';
@@ -28,11 +25,6 @@ const LandingPage = () => {
                 <GamifiedLearningSection />
                 <BattleSection />
                 <CertificateSection />
-                <div id="features">
-                    <FeaturesSection />
-                </div>
-                <HowItWorks />
-                <MissionSection />
                 <Footer />
 
             </motion.div>

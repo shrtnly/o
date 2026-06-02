@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [profileLoading, setProfileLoading] = useState(false);
 
-    const fetchProfile = async (userId) => {
+    const fetchProfile = async (userId, passedUser = null) => {
         if (!userId) {
             setProfile(null);
             return;
@@ -24,9 +24,8 @@ export const AuthProvider = ({ children }) => {
             if (error) {
                 console.error('Error fetching profile:', error);
                 // Fallback to a temporary profile to avoid infinite loading screens or UI hangs
-                const { data: { session } } = await supabase.auth.getSession();
-                const currentUser = session?.user;
-                if (currentUser && currentUser.id === userId) {
+                const currentUser = passedUser || user;
+                if (currentUser) {
                     const tempProfile = {
                         id: userId,
                         xp: 250,
@@ -61,7 +60,7 @@ export const AuthProvider = ({ children }) => {
                 const { data: { session } } = await supabase.auth.getSession();
                 const currentUser = session?.user ?? null;
                 setUser(currentUser);
-                if (currentUser) await fetchProfile(currentUser.id);
+                if (currentUser) await fetchProfile(currentUser.id, currentUser);
             } catch (err) {
                 console.error('AuthContext: getSession error', err);
             } finally {
@@ -92,7 +91,7 @@ export const AuthProvider = ({ children }) => {
             setUser(currentUser);
             if (currentUser) {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-                    await fetchProfile(currentUser.id);
+                    await fetchProfile(currentUser.id, currentUser);
                 }
             } else {
                 setProfile(null);

@@ -41,21 +41,45 @@ const CourseListPage = () => {
 
     useEffect(() => {
         let isMounted = true;
+        
+        const timeout = (ms, defaultValue = null) => 
+            new Promise(resolve => setTimeout(() => {
+                console.log(`CourseListPage: query timeout of ${ms}ms reached, returning fallback`);
+                resolve(defaultValue);
+            }, ms));
+
         const fetchData = async () => {
+            console.log("CourseListPage: fetchData started");
             setError(null);
             try {
                 // Fetch basic course data first to show something immediately if possible
-                const allCourses = await courseService.getAllCourses();
+                console.log("CourseListPage: calling getAllCourses...");
+                const allCourses = await Promise.race([
+                    courseService.getAllCourses(),
+                    timeout(3000, [])
+                ]);
+                console.log("CourseListPage: getAllCourses returned", allCourses?.length, "courses");
                 
-                if (!isMounted) return;
+                if (!isMounted) {
+                    console.log("CourseListPage: isMounted is false, aborting");
+                    return;
+                }
 
                 // Then fetch optional stats and enrollment
-                const [enrolledData, bulkStats] = await Promise.all([
-                    user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id).then(r => r).catch(() => null) : Promise.resolve({ data: [] }),
-                    courseService.getBulkCourseStats().catch(() => ({}))
+                console.log("CourseListPage: fetching enrollment and bulk stats...");
+                const [enrolledData, bulkStats] = await Promise.race([
+                    Promise.all([
+                        user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id).then(r => r).catch((e) => { console.error("user_courses fetch failed:", e); return null; }) : Promise.resolve({ data: [] }),
+                        courseService.getBulkCourseStats().catch((e) => { console.error("getBulkCourseStats failed:", e); return {}; })
+                    ]),
+                    timeout(3000, [{ data: [] }, {}])
                 ]);
+                console.log("CourseListPage: enrollment and bulk stats done", { enrolledCount: enrolledData?.data?.length, hasBulkStats: !!bulkStats });
 
-                if (!isMounted) return;
+                if (!isMounted) {
+                    console.log("CourseListPage: isMounted is false after Promise.all, aborting");
+                    return;
+                }
 
                 // Merge live stats into course data
                 const updatedCourses = (allCourses || []).map(course => ({
@@ -74,11 +98,12 @@ const CourseListPage = () => {
                 }
             } catch (err) {
                 if (isMounted) {
-                    console.error('Error fetching course data:', err);
+                    console.error('Error fetching course data in CourseListPage catch:', err);
                     setError(true);
                 }
             } finally {
                 if (isMounted) {
+                    console.log("CourseListPage: setting loading to false");
                     setLoading(false);
                 }
             }

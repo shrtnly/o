@@ -56,7 +56,7 @@ const CourseListPage = () => {
                 console.log("CourseListPage: calling getAllCourses...");
                 const allCourses = await Promise.race([
                     courseService.getAllCourses(),
-                    timeout(3000, [])
+                    timeout(6000, [])
                 ]);
                 console.log("CourseListPage: getAllCourses returned", allCourses?.length, "courses");
                 
@@ -72,7 +72,7 @@ const CourseListPage = () => {
                         user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id).then(r => r).catch((e) => { console.error("user_courses fetch failed:", e); return null; }) : Promise.resolve({ data: [] }),
                         courseService.getBulkCourseStats().catch((e) => { console.error("getBulkCourseStats failed:", e); return {}; })
                     ]),
-                    timeout(3000, [{ data: [] }, {}])
+                    timeout(6000, [{ data: [] }, {}])
                 ]);
                 console.log("CourseListPage: enrollment and bulk stats done", { enrolledCount: enrolledData?.data?.length, hasBulkStats: !!bulkStats });
 

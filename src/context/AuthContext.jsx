@@ -5,15 +5,29 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [profile, setProfile] = useState(null); // Added profile state
+    const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [profileLoading, setProfileLoading] = useState(false);
+
+    // Refs that always hold the LATEST state values.
+    // Fixes the stale closure bug in onAuthStateChange (created once, captures null values).
+    const userRef = useRef(null);
+    const profileRef = useRef(null);
+    useEffect(() => { userRef.current = user; }, [user]);
+    useEffect(() => { profileRef.current = profile; }, [profile]);
+
+    // Prevents two concurrent fetchProfile calls (e.g. getSession + onAuthStateChange racing)
+    const isFetchingProfileRef = useRef(false);
 
     const fetchProfile = async (userId, passedUser = null) => {
         if (!userId) {
             setProfile(null);
+            profileRef.current = null;
             return;
         }
+        // Guard: skip if another fetch is already in flight for this user
+        if (isFetchingProfileRef.current) return;
+        isFetchingProfileRef.current = true;
         setProfileLoading(true);
         try {
             const { data, error } = await supabase
@@ -23,8 +37,8 @@ export const AuthProvider = ({ children }) => {
                 .single();
             if (error) {
                 console.error('Error fetching profile:', error);
-                // Fallback to a temporary profile to avoid infinite loading screens or UI hangs
-                const currentUser = passedUser || user;
+                // Fallback to a temporary profile so the UI never hangs
+                const currentUser = passedUser || userRef.current;
                 if (currentUser) {
                     const tempProfile = {
                         id: userId,
@@ -40,18 +54,21 @@ export const AuthProvider = ({ children }) => {
                         is_temp: true
                     };
                     setProfile(tempProfile);
+                    profileRef.current = tempProfile;
                 }
             } else {
                 setProfile(data);
+                profileRef.current = data;
             }
         } catch (err) {
             console.error('Error fetching profile:', err);
         } finally {
+            isFetchingProfileRef.current = false;
             setProfileLoading(false);
         }
     };
 
-    // useRef so the flag persists across async callbacks without causing re-renders
+    // Persists across async callbacks without causing re-renders
     const isInitialisedRef = useRef(false);
 
     useEffect(() => {
@@ -60,6 +77,7 @@ export const AuthProvider = ({ children }) => {
                 const { data: { session } } = await supabase.auth.getSession();
                 const currentUser = session?.user ?? null;
                 setUser(currentUser);
+                userRef.current = currentUser;
                 if (currentUser) await fetchProfile(currentUser.id, currentUser);
             } catch (err) {
                 console.error('AuthContext: getSession error', err);
@@ -74,30 +92,41 @@ export const AuthProvider = ({ children }) => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             const currentUser = session?.user ?? null;
 
-            // TOKEN_REFRESHED — silent token refresh on tab return, just update user
+            // TOKEN_REFRESHED — silent token refresh, just sync the user object
             if (event === 'TOKEN_REFRESHED') {
                 setUser(currentUser);
+                userRef.current = currentUser;
                 return;
             }
 
-            // SIGNED_IN after first load = Supabase re-fires this on tab return (PKCE flow behavior)
-            // We silently update user but do NOT trigger profile fetch if we already have the profile for this user
-            if (event === 'SIGNED_IN' && isInitialisedRef.current && user?.id === currentUser?.id && profile) {
+            // SIGNED_IN fired after first load (PKCE tab-return behavior or duplicate after getSession).
+            // Use refs (not stale closure vars) to check if we already have this user's profile.
+            if (
+                event === 'SIGNED_IN' &&
+                isInitialisedRef.current &&
+                userRef.current?.id === currentUser?.id &&
+                profileRef.current
+            ) {
+                // Same user, profile already loaded — silently sync the access token only
                 setUser(currentUser);
+                userRef.current = currentUser;
                 return;
             }
 
             // First-time SIGNED_IN, SIGNED_OUT, USER_UPDATED, PASSWORD_RECOVERY
             setUser(currentUser);
+            userRef.current = currentUser;
             if (currentUser) {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
                     await fetchProfile(currentUser.id, currentUser);
                 }
             } else {
                 setProfile(null);
+                profileRef.current = null;
+                isFetchingProfileRef.current = false;
             }
 
-            // Only set loading=false once (on first auth resolution)
+            // Set loading=false on first auth resolution (if getSession didn't already)
             if (!isInitialisedRef.current) {
                 isInitialisedRef.current = true;
                 setLoading(false);
@@ -118,6 +147,7 @@ export const AuthProvider = ({ children }) => {
                 { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` },
                 (payload) => {
                     setProfile(payload.new);
+                    profileRef.current = payload.new;
                 }
             )
             .subscribe();
@@ -125,7 +155,7 @@ export const AuthProvider = ({ children }) => {
         return () => supabase.removeChannel(profileSub);
     }, [user?.id]);
 
-    // New effect for tracking user activity
+    // Track user activity (last_seen)
     useEffect(() => {
         if (!user?.id) return;
 
@@ -140,12 +170,8 @@ export const AuthProvider = ({ children }) => {
             }
         };
 
-        // Update immediately on mount/login
         updateLastSeen();
-
-        // Update every 2 minutes
         const intervalId = setInterval(updateLastSeen, 2 * 60 * 1000);
-
         return () => clearInterval(intervalId);
     }, [user?.id]);
 
@@ -162,7 +188,8 @@ export const AuthProvider = ({ children }) => {
                 .select()
                 .single();
             if (error) throw error;
-            setProfile(data); // Immediate update
+            setProfile(data);
+            profileRef.current = data;
             return data;
         },
         user,
@@ -173,9 +200,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider value={value}>
-            {/* Always render children — individual pages handle their own loading states.
-                Blocking render here caused infinite loading on tab switch because
-                TOKEN_REFRESHED event re-triggers auth state but never clears loading. */}
+            {/* Always render children — individual pages handle their own loading states */}
             {children}
         </AuthContext.Provider>
     );

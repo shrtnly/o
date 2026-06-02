@@ -41,6 +41,7 @@ const CourseListPage = () => {
 
     // Track how many auto-retries we've done (separate from manual retryCount)
     const autoRetryRef = useRef(0);
+    const retryTimerRef = useRef(null);
 
     useEffect(() => {
         // Don't start fetching while auth is still resolving (important for social login PKCE flow)
@@ -48,30 +49,39 @@ const CourseListPage = () => {
 
         let isMounted = true;
         autoRetryRef.current = 0;
+        if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
 
         const fetchData = async () => {
             setError(null);
+            // stopLoading = false prevents finally from hiding the skeleton during auto-retry
+            let stopLoading = true;
+
             try {
-                // getAllCourses never throws — returns stale cache or [] on error
-                const allCourses = await courseService.getAllCourses();
+                // Race against 10s hard timeout so we never hang forever
+                const allCourses = await Promise.race([
+                    courseService.getAllCourses(),
+                    new Promise(resolve => setTimeout(() => resolve([]), 10000))
+                ]);
 
-                if (!isMounted) return;
+                if (!isMounted) { stopLoading = false; return; }
 
-                // If 0 courses returned right after social login, the auth token may not
-                // have propagated to the Supabase REST client yet. Auto-retry once after delay.
+                // 0 courses right after social login = PKCE token not fully ready yet.
+                // Schedule a retry (up to 2x) and keep the skeleton visible.
                 if (allCourses.length === 0 && autoRetryRef.current < 2) {
                     autoRetryRef.current += 1;
-                    setTimeout(() => {
+                    stopLoading = false; // <-- key: prevents finally from stopping the skeleton
+                    const delay = 1500 * autoRetryRef.current;
+                    retryTimerRef.current = setTimeout(() => {
                         if (isMounted) {
-                            courseService.getAllCourses(true); // force-clear cache before retry
-                            setDataLoading(true);             // keep skeleton visible during retry
+                            courseService.getAllCourses(true); // bust cache
+                            setDataLoading(true);
                             setRetryCount(c => c + 1);
                         }
-                    }, 1500 * autoRetryRef.current);
-                    return; // don't call setDataLoading(false) — stay in loading skeleton
+                    }, delay);
+                    return;
                 }
 
-                // Fetch enrollment and stats in parallel (both are optional)
+                // Fetch enrollment + stats in parallel (both optional)
                 const [enrolledData, bulkStats] = await Promise.all([
                     user
                         ? supabase
@@ -84,9 +94,8 @@ const CourseListPage = () => {
                     courseService.getBulkCourseStats().catch(() => ({}))
                 ]);
 
-                if (!isMounted) return;
+                if (!isMounted) { stopLoading = false; return; }
 
-                // Merge stats into course data
                 const updatedCourses = allCourses.map(course => ({
                     ...course,
                     students_count: bulkStats[course.id]?.count || course.students_count || 0,
@@ -102,11 +111,12 @@ const CourseListPage = () => {
                 }
             } catch (err) {
                 if (isMounted) {
-                    console.error('CourseListPage: unexpected fetch error:', err);
+                    console.error('CourseListPage fetch error:', err);
                     setError(true);
                 }
             } finally {
-                if (isMounted) {
+                // Only stop the skeleton when NOT waiting for an auto-retry
+                if (isMounted && stopLoading) {
                     setDataLoading(false);
                 }
             }
@@ -115,8 +125,10 @@ const CourseListPage = () => {
         fetchData();
         return () => {
             isMounted = false;
+            if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
         };
     }, [user?.id, retryCount, authLoading]);
+
 
     // Compute filtered and sorted courses
     const filteredCourses = courses.filter(course => {

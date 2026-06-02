@@ -19,11 +19,11 @@ const getCategories = (t) => [
 ];
 
 const CourseListPage = () => {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const { t } = useLanguage();
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
-    const [loading, setLoading] = useState(true);
+    const [dataLoading, setDataLoading] = useState(true);
     const [error, setError] = useState(null);
     const [retryCount, setRetryCount] = useState(0);
     const [activeCategory, setActiveCategory] = useState(null);
@@ -39,50 +39,55 @@ const CourseListPage = () => {
         ...baseCategories.slice(1)
     ];
 
+    // Track how many auto-retries we've done (separate from manual retryCount)
+    const autoRetryRef = useRef(0);
+
     useEffect(() => {
+        // Don't start fetching while auth is still resolving (important for social login PKCE flow)
+        if (authLoading) return;
+
         let isMounted = true;
-        
-        const timeout = (ms, defaultValue = null) => 
-            new Promise(resolve => setTimeout(() => {
-                console.log(`CourseListPage: query timeout of ${ms}ms reached, returning fallback`);
-                resolve(defaultValue);
-            }, ms));
+        autoRetryRef.current = 0;
 
         const fetchData = async () => {
-            console.log("CourseListPage: fetchData started");
             setError(null);
             try {
-                // Fetch basic course data first to show something immediately if possible
-                console.log("CourseListPage: calling getAllCourses...");
-                const allCourses = await Promise.race([
-                    courseService.getAllCourses(),
-                    timeout(6000, [])
-                ]);
-                console.log("CourseListPage: getAllCourses returned", allCourses?.length, "courses");
-                
-                if (!isMounted) {
-                    console.log("CourseListPage: isMounted is false, aborting");
-                    return;
+                // getAllCourses never throws — returns stale cache or [] on error
+                const allCourses = await courseService.getAllCourses();
+
+                if (!isMounted) return;
+
+                // If 0 courses returned right after social login, the auth token may not
+                // have propagated to the Supabase REST client yet. Auto-retry once after delay.
+                if (allCourses.length === 0 && autoRetryRef.current < 2) {
+                    autoRetryRef.current += 1;
+                    setTimeout(() => {
+                        if (isMounted) {
+                            courseService.getAllCourses(true); // force-clear cache before retry
+                            setDataLoading(true);             // keep skeleton visible during retry
+                            setRetryCount(c => c + 1);
+                        }
+                    }, 1500 * autoRetryRef.current);
+                    return; // don't call setDataLoading(false) — stay in loading skeleton
                 }
 
-                // Then fetch optional stats and enrollment
-                console.log("CourseListPage: fetching enrollment and bulk stats...");
-                const [enrolledData, bulkStats] = await Promise.race([
-                    Promise.all([
-                        user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id).then(r => r).catch((e) => { console.error("user_courses fetch failed:", e); return null; }) : Promise.resolve({ data: [] }),
-                        courseService.getBulkCourseStats().catch((e) => { console.error("getBulkCourseStats failed:", e); return {}; })
-                    ]),
-                    timeout(6000, [{ data: [] }, {}])
+                // Fetch enrollment and stats in parallel (both are optional)
+                const [enrolledData, bulkStats] = await Promise.all([
+                    user
+                        ? supabase
+                            .from('user_courses')
+                            .select('course_id')
+                            .eq('user_id', user.id)
+                            .then(r => r)
+                            .catch(() => ({ data: [] }))
+                        : Promise.resolve({ data: [] }),
+                    courseService.getBulkCourseStats().catch(() => ({}))
                 ]);
-                console.log("CourseListPage: enrollment and bulk stats done", { enrolledCount: enrolledData?.data?.length, hasBulkStats: !!bulkStats });
 
-                if (!isMounted) {
-                    console.log("CourseListPage: isMounted is false after Promise.all, aborting");
-                    return;
-                }
+                if (!isMounted) return;
 
-                // Merge live stats into course data
-                const updatedCourses = (allCourses || []).map(course => ({
+                // Merge stats into course data
+                const updatedCourses = allCourses.map(course => ({
                     ...course,
                     students_count: bulkStats[course.id]?.count || course.students_count || 0,
                     rating: bulkStats[course.id]?.rating || course.rating || 0
@@ -90,29 +95,28 @@ const CourseListPage = () => {
 
                 setCourses(updatedCourses);
                 if (enrolledData?.data && enrolledData.data.length > 0) {
-                    const enrolledIds = new Set(enrolledData.data.map(d => d.course_id));
-                    setEnrolledCourseIds(enrolledIds);
+                    setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
                     setActiveCategory('My Courses');
                 } else {
                     setActiveCategory('All');
                 }
             } catch (err) {
                 if (isMounted) {
-                    console.error('Error fetching course data in CourseListPage catch:', err);
+                    console.error('CourseListPage: unexpected fetch error:', err);
                     setError(true);
                 }
             } finally {
                 if (isMounted) {
-                    console.log("CourseListPage: setting loading to false");
-                    setLoading(false);
+                    setDataLoading(false);
                 }
             }
         };
+
         fetchData();
         return () => {
             isMounted = false;
         };
-    }, [user?.id, retryCount]);
+    }, [user?.id, retryCount, authLoading]);
 
     // Compute filtered and sorted courses
     const filteredCourses = courses.filter(course => {
@@ -151,7 +155,7 @@ const CourseListPage = () => {
         <div className={styles.pageWrapper}>
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
-                    {loading ? (
+                    {(dataLoading || authLoading) ? (
                         <div className={styles.loadingState}>
                             <div className={styles.skeletonHeader} />
                             <div className={styles.grid}>
@@ -170,7 +174,8 @@ const CourseListPage = () => {
                             <button 
                                 className={styles.resetBtn}
                                 onClick={() => {
-                                    setLoading(true);
+                                    autoRetryRef.current = 0;
+                                    setDataLoading(true);
                                     setRetryCount(prev => prev + 1);
                                 }}
                             >

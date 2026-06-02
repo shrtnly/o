@@ -34,16 +34,23 @@ export const courseService = {
             return cache.courses;
         }
 
-        const { data, error } = await supabase
-            .from('courses')
-            .select(COURSE_COLUMNS)
-            .order('created_at', { ascending: false });
+        try {
+            const { data, error } = await supabase
+                .from('courses')
+                .select(COURSE_COLUMNS)
+                .order('created_at', { ascending: false });
 
-        if (error) throw error;
-        
-        cache.courses = data;
-        cache.lastFetched.courses = now;
-        return data;
+            if (error) throw error;
+            
+            cache.courses = data;
+            cache.lastFetched.courses = now;
+            return data || [];
+        } catch (err) {
+            console.error('getAllCourses error:', err);
+            // Return stale cache if available, otherwise empty array — never throw,
+            // so the caller’s timeout fallback is never needed for network errors.
+            return cache.courses || [];
+        }
     },
 
     async getCourseById(id) {

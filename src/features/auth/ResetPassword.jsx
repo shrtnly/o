@@ -16,8 +16,31 @@ const ResetPassword = () => {
     useEffect(() => {
         // Double check session to ensure user came from a valid link
         const checkSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
+            try {
+                // Support both PKCE (?code=) and Implicit (#access_token=) recovery flows
+                const params = new URLSearchParams(window.location.search);
+                const code = params.get('code');
+
+                if (code) {
+                    // Explicitly exchange the code for a session
+                    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+                    if (exchangeError) {
+                        console.error('Password reset code exchange error:', exchangeError);
+                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                        setTimeout(() => navigate('/auth'), 3000);
+                        return;
+                    }
+                    // Clean URL query parameters
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    setTimeout(() => navigate('/auth'), 3000);
+                }
+            } catch (err) {
+                console.error('Check session error:', err);
                 setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
                 setTimeout(() => navigate('/auth'), 3000);
             }
@@ -43,10 +66,12 @@ const ResetPassword = () => {
             if (updateError) throw updateError;
 
             setSuccess(true);
+            // Sign out the user after password update to force fresh login with new credentials
+            await supabase.auth.signOut().catch(() => {});
             setTimeout(() => navigate('/auth'), 3000);
         } catch (err) {
             console.error('Password reset error:', err);
-            setError('পাসওয়ার্ড আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            setError(err.message || 'পাসওয়ার্ড আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
         } finally {
             setLoading(false);
         }

@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
         const getSession = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
-                if (session && window.location.search.includes('code=')) {
+                if (session && window.location.search.includes('code=') && !window.location.pathname.includes('/reset-password')) {
                     window.location.replace('/courses');
                     return;
                 }
@@ -111,7 +111,7 @@ export const AuthProvider = ({ children }) => {
 
             // If we still have the OAuth ?code= in the URL, immediately redirect to a clean
             // /courses route. We do this at the very top before any early-return optimization guards.
-            if (event === 'SIGNED_IN' && window.location.search.includes('code=')) {
+            if (event === 'SIGNED_IN' && window.location.search.includes('code=') && !window.location.pathname.includes('/reset-password')) {
                 window.location.replace('/courses');
                 return;
             }

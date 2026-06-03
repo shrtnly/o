@@ -507,6 +507,7 @@ const AuthPage = () => {
                     </button>
                 </form>
 
+                {/* 
                 <div className={styles.divider}>
                     <span>{t('auth_or')}</span>
                 </div>
@@ -519,6 +520,7 @@ const AuthPage = () => {
                         <span>{t('auth_facebook_btn')}</span>
                     </button>
                 </div>
+                */}
 
                 <div className={styles.footer}>
                     {isForgotPassword ? (

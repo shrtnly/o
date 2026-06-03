@@ -14,38 +14,79 @@ const ResetPassword = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Double check session to ensure user came from a valid link
+        let isMounted = true;
+        let authSubscription = null;
+
         const checkSession = async () => {
             try {
                 // Support both PKCE (?code=) and Implicit (#access_token=) recovery flows
                 const params = new URLSearchParams(window.location.search);
                 const code = params.get('code');
+                const hasHashToken = window.location.hash.includes('access_token=');
 
                 if (code) {
                     // Explicitly exchange the code for a session
                     const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
                     if (exchangeError) {
                         console.error('Password reset code exchange error:', exchangeError);
-                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
-                        setTimeout(() => navigate('/auth'), 3000);
+                        if (isMounted) {
+                            setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                            setTimeout(() => navigate('/auth'), 3000);
+                        }
                         return;
                     }
                     // Clean URL query parameters
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
 
+                // Check session immediately
                 const { data: { session } } = await supabase.auth.getSession();
-                if (!session) {
-                    setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
-                    setTimeout(() => navigate('/auth'), 3000);
+                if (session) {
+                    return; // Session is ready!
+                }
+
+                // If no session, but we have a hash token, wait for Supabase to parse it
+                if (hasHashToken) {
+                    // Start a safety timer for 2.5 seconds
+                    const safetyTimeout = setTimeout(() => {
+                        if (isMounted) {
+                            setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                            setTimeout(() => navigate('/auth'), 3000);
+                        }
+                    }, 2500);
+
+                    // Listen for the session to be populated from hash
+                    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+                        if (session && isMounted) {
+                            clearTimeout(safetyTimeout);
+                            if (subscription) subscription.unsubscribe();
+                        }
+                    });
+                    authSubscription = subscription;
+                } else {
+                    // No code and no hash token - definitely invalid/expired
+                    if (isMounted) {
+                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                        setTimeout(() => navigate('/auth'), 3000);
+                    }
                 }
             } catch (err) {
                 console.error('Check session error:', err);
-                setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
-                setTimeout(() => navigate('/auth'), 3000);
+                if (isMounted) {
+                    setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    setTimeout(() => navigate('/auth'), 3000);
+                }
             }
         };
+
         checkSession();
+
+        return () => {
+            isMounted = false;
+            if (authSubscription) {
+                authSubscription.unsubscribe();
+            }
+        };
     }, [navigate]);
 
     const handleReset = async (e) => {

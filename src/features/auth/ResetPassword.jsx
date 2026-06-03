@@ -11,7 +11,7 @@ const ResetPassword = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
-    // sessionReady: null = still checking, true = valid session ready, false = invalid/expired
+    // sessionReady: null = still checking, true = session active, false = invalid/expired
     const [sessionReady, setSessionReady] = useState(null);
     const navigate = useNavigate();
     const initStarted = useRef(false);
@@ -24,13 +24,12 @@ const ResetPassword = () => {
 
         const initRecovery = async () => {
             try {
-                // Check for explicit error parameters in the URL first
-                // (e.g. Supabase sends ?error=access_denied&error_description=... for expired links)
                 const params = new URLSearchParams(window.location.search);
                 const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+                // ── Check for explicit error params (expired / already-used link) ──
                 const errorDescription =
                     hashParams.get('error_description') || params.get('error_description');
-
                 if (errorDescription) {
                     if (isMounted) {
                         setError('লিঙ্কটি ইতিমধ্যে ব্যবহার করা হয়েছে বা এর মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
@@ -40,28 +39,53 @@ const ResetPassword = () => {
                     return;
                 }
 
-                // IMPORTANT: Because detectSessionInUrl: true is set in supabaseClient.js,
-                // Supabase automatically exchanges the ?code= PKCE token when the client
-                // initialises. We must NOT call exchangeCodeForSession() ourselves —
-                // doing so would attempt to use an already-consumed code and fail.
-                //
-                // Strategy:
-                //   1. getSession() — if the exchange already completed, we get the session.
-                //   2. If not yet ready, listen for PASSWORD_RECOVERY via onAuthStateChange.
-                //   3. Safety timeout after 6 s to catch truly invalid links.
+                // ── Path A: PKCE flow — ?code= in the query string ───────────────
+                // detectSessionInUrl: true means Supabase exchanges this automatically.
+                // We do NOT call exchangeCodeForSession manually; just read getSession().
+                const pkceCode = params.get('code');
 
+                // ── Path B: Implicit flow — #access_token= in the hash ───────────
+                // Happens when Supabase project is set to implicit flow or when
+                // admin.generateLink sends an implicit-style recovery link.
+                // flowType:'pkce' on the JS client does NOT auto-parse hash tokens,
+                // so we must call setSession() ourselves.
+                const accessToken = hashParams.get('access_token');
+                const refreshToken = hashParams.get('refresh_token');
+                const tokenType = hashParams.get('type'); // 'recovery' for reset links
+
+                if (accessToken && tokenType === 'recovery') {
+                    // Implicit flow: restore the session from the hash tokens
+                    const { error: setErr } = await supabase.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken,
+                    });
+                    // Clean the hash so a refresh doesn't replay the tokens
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    if (setErr) {
+                        console.error('setSession error:', setErr);
+                        if (isMounted) {
+                            setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
+                            setSessionReady(false);
+                            setTimeout(() => navigate('/auth'), 4000);
+                        }
+                        return;
+                    }
+                    if (isMounted) setSessionReady(true);
+                    return;
+                }
+
+                // ── Check for an already-active session (PKCE auto-exchanged) ────
                 const { data: { session } } = await supabase.auth.getSession();
-
                 if (session) {
-                    // Clean the URL so a page-refresh doesn't cause issues
-                    if (params.get('code')) {
+                    if (pkceCode) {
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
                     if (isMounted) setSessionReady(true);
                     return;
                 }
 
-                // Session not ready yet — wait for the event
+                // ── No immediate session — wait for Supabase to fire the event ───
+                // This covers PKCE codes that are still being exchanged asynchronously.
                 const safetyTimeout = setTimeout(() => {
                     if (isMounted) {
                         setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
@@ -74,16 +98,13 @@ const ResetPassword = () => {
                     if ((event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') && session) {
                         clearTimeout(safetyTimeout);
                         subscription.unsubscribe();
-                        // Clean the URL
                         window.history.replaceState({}, document.title, window.location.pathname);
                         if (isMounted) setSessionReady(true);
                     }
                 });
 
-                // If there is no ?code= and no hash token at all, the URL is simply invalid
-                const hasCode = Boolean(params.get('code'));
-                const hasHashToken = window.location.hash.includes('access_token=');
-                if (!hasCode && !hasHashToken) {
+                // If there's nothing in the URL at all — truly invalid
+                if (!pkceCode && !accessToken) {
                     clearTimeout(safetyTimeout);
                     subscription.unsubscribe();
                     if (isMounted) {
@@ -123,7 +144,6 @@ const ResetPassword = () => {
             if (updateError) throw updateError;
 
             setSuccess(true);
-            // Sign out cleanly so they land on a fresh login page
             setTimeout(async () => {
                 try { await supabase.auth.signOut(); } catch (_) { /* ignore */ }
             }, 300);
@@ -186,7 +206,7 @@ const ResetPassword = () => {
         );
     }
 
-    // ── Session still loading screen ──────────────────────────────────────────
+    // ── Session loading screen ────────────────────────────────────────────────
     if (sessionReady === null) {
         return (
             <div className={styles.authWrapper}>
@@ -205,7 +225,7 @@ const ResetPassword = () => {
         );
     }
 
-    // ── Password entry form (sessionReady === true) ───────────────────────────
+    // ── Password form (sessionReady === true) ─────────────────────────────────
     return (
         <div className={styles.authWrapper}>
             <div className={styles.authContainer}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabaseClient';
 import { Loader2, Lock, Eye, EyeOff, CheckCircle2 } from 'lucide-react';
@@ -12,8 +12,12 @@ const ResetPassword = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
+    const checkStarted = useRef(false);
 
     useEffect(() => {
+        if (checkStarted.current) return;
+        checkStarted.current = true;
+
         let isMounted = true;
         let authSubscription = null;
 

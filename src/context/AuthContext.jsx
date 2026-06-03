@@ -131,6 +131,13 @@ export const AuthProvider = ({ children }) => {
             userRef.current = currentUser;
             if (currentUser) {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+                    // If we still have the OAuth ?code= in the URL it means getSession()
+                    // raced ahead and found null. Session is now established — do a clean
+                    // hard-navigate to /courses so the page reloads with the session in storage.
+                    if (event === 'SIGNED_IN' && window.location.search.includes('code=')) {
+                        window.location.replace('/courses');
+                        return;
+                    }
                     await fetchProfile(currentUser.id, currentUser);
                 }
             } else {

@@ -66,8 +66,14 @@ const ResetPassword = () => {
             if (updateError) throw updateError;
 
             setSuccess(true);
-            // Sign out the user after password update to force fresh login with new credentials
-            await supabase.auth.signOut().catch(() => {});
+            // Sign out the user asynchronously to prevent any auth client lock contention
+            setTimeout(async () => {
+                try {
+                    await supabase.auth.signOut();
+                } catch (err) {
+                    console.error('Signout error:', err);
+                }
+            }, 100);
             setTimeout(() => navigate('/auth'), 3000);
         } catch (err) {
             console.error('Password reset error:', err);

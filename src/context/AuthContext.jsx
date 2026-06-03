@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }) => {
             }
         }, 6000);
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
             const currentUser = session?.user ?? null;
 
             // If we still have the OAuth ?code= in the URL, immediately redirect to a clean
@@ -142,7 +142,10 @@ export const AuthProvider = ({ children }) => {
             userRef.current = currentUser;
             if (currentUser) {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-                    await fetchProfile(currentUser.id, currentUser);
+                    // Fetch profile asynchronously on the next tick to prevent locking deadlock
+                    setTimeout(() => {
+                        fetchProfile(currentUser.id, currentUser);
+                    }, 0);
                 }
             } else {
                 setProfile(null);

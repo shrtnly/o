@@ -27,6 +27,17 @@ const ResetPassword = () => {
                 const params = new URLSearchParams(window.location.search);
                 const code = params.get('code');
                 const hasHashToken = window.location.hash.includes('access_token=');
+                const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                const errorDescription = hashParams.get('error_description') || params.get('error_description');
+
+                if (errorDescription) {
+                    console.error('Password reset URL error:', errorDescription);
+                    if (isMounted) {
+                        setError('লিঙ্কটি ইতিমধ্যে ব্যবহার করা হয়েছে বা এর মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
+                        setTimeout(() => navigate('/auth'), 4000);
+                    }
+                    return;
+                }
 
                 if (code) {
                     // Explicitly exchange the code for a session

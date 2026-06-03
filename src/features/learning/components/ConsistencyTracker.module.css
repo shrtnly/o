@@ -312,6 +312,11 @@
     border-color: rgba(255, 255, 255, 0.1);
 }
 
+:global(.light) .dayFuture {
+    border-color: rgba(0, 0, 0, 0.06);
+    opacity: 0.5;
+}
+
 .dayFuture .dayNumber {
     color: var(--color-text-muted);
     opacity: 0.5;
@@ -441,10 +446,14 @@
     width: 12px;
     height: 12px;
     border-radius: 3px;
-    border: 1px solid #37464f;
+    border: 1px solid var(--color-border);
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+:global(.light) .legendBox {
+    border-color: #cbd5e1;
 }
 
 .legendBox.missed {
@@ -473,6 +482,11 @@
 
 .legendBox.paused {
     background-color: #233138;
+}
+
+:global(.light) .legendBox.paused {
+    background-color: #e2e8f0;
+    border-color: #cbd5e1;
 }
 
 .legendBox.paused::before {

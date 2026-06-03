@@ -20,7 +20,7 @@ const PrivacyPage = () => {
         <div className={styles.privacyPage}>
             <div className={styles.container}>
                 <button
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/settings?tab=legal')}
                     className={styles.backBtn}
                     aria-label="Go back"
                 >

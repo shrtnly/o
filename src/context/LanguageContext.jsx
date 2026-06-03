@@ -167,7 +167,7 @@ const translations = {
         tab_analyze: "এনালিটিক্স",
         tab_activity: "নটিফিকেশন",
         tab_certificates: "সার্টিফিকেট",
-        tab_connection: "সংযোগ",
+        tab_connection: "ব্যাটেল রুম",
         subtab_my: "কানেকশন",
         subtab_suggest: "শিক্ষার্থী খুঁজুন",
         subtab_inbox: "ইনবক্স",

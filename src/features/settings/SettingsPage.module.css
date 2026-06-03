@@ -220,6 +220,7 @@
 /* Tab Content Styling */
 .sectionHeader {
     margin-bottom: 16px;
+    text-align: left;
 }
 
 .sectionHeader h2 {
@@ -261,6 +262,7 @@
     gap: 0;
     /* No gap for null background strategy */
     width: 100%;
+    text-align: left;
 }
 
 .settingCard {
@@ -422,6 +424,10 @@
     align-items: center;
     justify-content: center;
     color: var(--color-text-muted);
+}
+
+.cardText {
+    text-align: left;
 }
 
 .cardText h3 {
@@ -998,6 +1004,10 @@ input:checked+.slider .knob {
         padding: 10px 14px;
         font-size: 0.9rem;
     }
+
+    .cardList {
+        text-align: left;
+    }
 }
 
 @media (max-width: 480px) {
@@ -1074,5 +1084,9 @@ input:checked+.slider .knob {
 
     .courseActions {
         align-self: center;
+    }
+
+    .cardList {
+        text-align: left;
     }
 }

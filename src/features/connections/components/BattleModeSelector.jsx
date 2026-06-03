@@ -67,7 +67,7 @@ const BattleModeSelector = ({ language, value, onChange }) => {
                     onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
                 >
-                    <HelpCircle size={14} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                    <HelpCircle size={14} style={{ color: 'var(--color-text-muted)' }} />
 
                     {/* Tooltip Box with Arrow pointing to the question icon */}
                     {showTooltip && (
@@ -77,11 +77,11 @@ const BattleModeSelector = ({ language, value, onChange }) => {
                             left: '50%',
                             transform: 'translateX(-50%)',
                             width: '260px',
-                            background: 'var(--color-bg-deep, #141419)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            background: 'var(--color-bg-alt, #141419)',
+                            border: '1px solid var(--color-border)',
                             borderRadius: '8px',
                             padding: '12px',
-                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.35)',
+                            boxShadow: 'var(--shadow-card)',
                             zIndex: 9999,
                             pointerEvents: 'none'
                         }}>
@@ -93,14 +93,14 @@ const BattleModeSelector = ({ language, value, onChange }) => {
                                 transform: 'translateX(-50%) rotate(45deg)',
                                 width: '8px',
                                 height: '8px',
-                                background: 'var(--color-bg-deep, #141419)',
-                                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-                                borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                                background: 'var(--color-bg-alt, #141419)',
+                                borderRight: '1px solid var(--color-border)',
+                                borderBottom: '1px solid var(--color-border)'
                             }} />
 
                             <div style={{
                                 fontSize: '0.74rem',
-                                color: '#ffffff',
+                                color: 'var(--color-text)',
                                 lineHeight: '1.4',
                                 fontWeight: '500'
                             }}>
@@ -153,8 +153,8 @@ const BattleModeSelector = ({ language, value, onChange }) => {
                         width: '16px',
                         height: '16px',
                         borderRadius: '4px',
-                        border: isLiveActive ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.25)',
-                        background: isLiveActive ? '#ffffff' : 'transparent',
+                        border: isLiveActive ? '1px solid var(--color-primary)' : '1px solid var(--color-text-muted)',
+                        background: isLiveActive ? 'var(--color-primary)' : 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -165,7 +165,7 @@ const BattleModeSelector = ({ language, value, onChange }) => {
 
                     {/* Label inside */}
                     <span style={{
-                        color: isLiveActive ? '#ffffff' : 'rgba(255, 255, 255, 0.4)',
+                        color: isLiveActive ? 'var(--color-text)' : 'var(--color-text-muted)',
                         fontSize: '0.74rem',
                         fontWeight: '700',
                         transition: 'all 0.2s ease',
@@ -199,8 +199,8 @@ const BattleModeSelector = ({ language, value, onChange }) => {
                         width: '16px',
                         height: '16px',
                         borderRadius: '4px',
-                        border: isAiActive ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.25)',
-                        background: isAiActive ? '#ffffff' : 'transparent',
+                        border: isAiActive ? '1px solid var(--color-primary)' : '1px solid var(--color-text-muted)',
+                        background: isAiActive ? 'var(--color-primary)' : 'transparent',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -211,7 +211,7 @@ const BattleModeSelector = ({ language, value, onChange }) => {
 
                     {/* Label inside */}
                     <span style={{
-                        color: isAiActive ? '#ffffff' : 'rgba(255, 255, 255, 0.4)',
+                        color: isAiActive ? 'var(--color-text)' : 'var(--color-text-muted)',
                         fontSize: '0.74rem',
                         fontWeight: '700',
                         transition: 'all 0.2s ease',

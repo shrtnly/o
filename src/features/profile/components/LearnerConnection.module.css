@@ -55,6 +55,10 @@
     overflow: hidden;
 }
 
+:global(.light) .subTabBtn {
+    color: #475569;
+}
+
 @media (max-width: 768px) {
     .subTabBtn {
         font-size: 0.64rem;
@@ -1671,14 +1675,14 @@
     align-items: center;
     gap: 14px;
     padding: 14px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid var(--color-border-muted);
 }
 
 .skeletonAvatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border);
     animation: skeleton-shimmer 1.5s infinite linear;
 }
 
@@ -1692,7 +1696,7 @@
 .skeletonName {
     height: 14px;
     width: 40%;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border);
     border-radius: 4px;
     animation: skeleton-shimmer 1.5s infinite linear;
 }
@@ -1700,7 +1704,7 @@
 .skeletonMsg {
     height: 10px;
     width: 70%;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-border-muted);
     border-radius: 4px;
     animation: skeleton-shimmer 1.5s infinite linear;
 }

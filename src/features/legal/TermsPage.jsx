@@ -20,7 +20,7 @@ const TermsPage = () => {
         <div className={styles.termsPage}>
             <div className={styles.container}>
                 <button
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/settings?tab=legal')}
                     className={styles.backBtn}
                     aria-label="Go back"
                 >

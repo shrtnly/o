@@ -9,6 +9,10 @@
     --color-warning: #f1c40f;
 }
 
+:global(.light) {
+    --color-primary-rgb: 255, 184, 0;
+}
+
 /* ── Shared layout wrappers ────────────────────────────────── */
 .lobbyWrap,
 .gameWrap,
@@ -73,7 +77,7 @@
     position: relative;
     box-sizing: border-box;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-card);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 }
@@ -129,7 +133,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1.25rem;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-card);
     backdrop-filter: blur(24px);
     text-align: center;
 }
@@ -677,11 +681,14 @@
     width: 100%;
     max-width: 580px;
     background: var(--color-bg-alt);
-    border: 1px solid var(--color-border-faint);
+    border: 1px solid var(--color-border-muted);
     border-radius: 28px;
     padding: 3rem 2rem;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
 .copyNotice {
@@ -755,11 +762,11 @@
 @keyframes avatarPulse {
     0%, 100% { 
         border-color: var(--color-primary-faded); 
-        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+        box-shadow: 0 0 0 0 rgba(var(--color-primary-rgb), 0);
     }
     50% { 
         border-color: var(--color-primary); 
-        box-shadow: 0 0 15px rgba(241, 196, 15, 0.2);
+        box-shadow: 0 0 15px rgba(var(--color-primary-rgb), 0.2);
     }
 }
 
@@ -772,7 +779,7 @@
 .playerLevel {
     font-size: 0.68rem;
     font-weight: 800;
-    color: var(--color-primary);
+    color: var(--color-primary-dark);
     background: var(--color-primary-faded);
     padding: 2px 10px;
     border-radius: 100px;
@@ -991,6 +998,7 @@
     flex-direction: column;
     gap: 1.5rem;
     align-items: center;
+    box-shadow: var(--shadow-card);
 }
 
 .splitScreen {
@@ -1022,7 +1030,7 @@
 .youBadge {
     font-size: 0.65rem;
     font-weight: 800;
-    color: var(--color-primary);
+    color: var(--color-primary-dark);
     background: var(--color-primary-faded);
     padding: 2px 8px;
     border-radius: 100px;
@@ -1148,6 +1156,32 @@
     background: rgba(255, 0, 0, 0.1);
     color: #ef4444;
     border-color: rgba(239, 68, 68, 0.2);
+}
+
+:global(.light) .inviteToast {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    box-shadow: var(--shadow-card);
+}
+
+:global(.light) .inviteTitle {
+    color: var(--color-text-muted);
+}
+
+:global(.light) .inviteCourse {
+    background: var(--color-bg-deep);
+    border-left: 3px solid var(--color-primary);
+}
+
+:global(.light) .declineBtn {
+    background: var(--color-bg-deep);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+:global(.light) .historyModal {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
 }
 
 .startingLabel {

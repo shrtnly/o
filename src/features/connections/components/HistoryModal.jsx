@@ -174,7 +174,7 @@ export const HistoryModal = ({ history, onClose, language, currentPage, totalCou
                                                     {acc !== null && (
                                                         <div style={{
                                                             fontSize: '10px',
-                                                            color: isLowAcc ? '#e74c3c' : '#afafaf',
+                                                            color: isLowAcc ? '#e74c3c' : 'var(--color-text-muted)',
                                                             fontWeight: isLowAcc ? '700' : '500',
                                                             marginTop: '2px'
                                                         }}>

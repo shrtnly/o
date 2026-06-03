@@ -67,7 +67,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                     onMouseEnter={() => setShowTooltip(true)}
                     onMouseLeave={() => setShowTooltip(false)}
                 >
-                    <HelpCircle size={14} style={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                    <HelpCircle size={14} style={{ color: 'var(--color-text-muted)' }} />
 
                     {/* Tooltip Box with Arrow pointing to the question icon */}
                     {showTooltip && (
@@ -77,11 +77,11 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                             left: '50%',
                             transform: 'translateX(-50%)',
                             width: '260px',
-                            background: 'var(--color-bg-deep, #141419)',
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            background: 'var(--color-bg-alt, #141419)',
+                            border: '1px solid var(--color-border)',
                             borderRadius: '8px',
                             padding: '12px',
-                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.35)',
+                            boxShadow: 'var(--shadow-card)',
                             zIndex: 9999,
                             pointerEvents: 'none'
                         }}>
@@ -93,14 +93,14 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                                 transform: 'translateX(-50%) rotate(45deg)',
                                 width: '8px',
                                 height: '8px',
-                                background: 'var(--color-bg-deep, #141419)',
-                                borderRight: '1px solid rgba(255, 255, 255, 0.1)',
-                                borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                                background: 'var(--color-bg-alt, #141419)',
+                                borderRight: '1px solid var(--color-border)',
+                                borderBottom: '1px solid var(--color-border)'
                             }} />
 
                             <div style={{
                                 fontSize: '0.74rem',
-                                color: '#ffffff',
+                                color: 'var(--color-text)',
                                 lineHeight: '1.4',
                                 fontWeight: '500'
                             }}>
@@ -134,8 +134,8 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                 {/* Switch Toggle (XP vs Pollen) */}
                 <div style={{
                     display: 'flex',
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    background: 'var(--color-bg-deep)',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '8px',
                     padding: '2px',
                     height: '34px',
@@ -146,7 +146,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                         onClick={() => handleToggleType('xp')}
                         style={{
                             padding: '4px 10px',
-                            background: betType === 'xp' ? '#ffffff' : 'transparent',
+                            background: betType === 'xp' ? 'var(--color-text)' : 'transparent',
                             borderRadius: '6px',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
@@ -157,7 +157,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                         }}
                     >
                         <span style={{
-                            color: betType === 'xp' ? 'var(--color-bg-deep, #141419)' : '#ffffff',
+                            color: betType === 'xp' ? 'var(--color-bg-alt)' : 'var(--color-text-muted)',
                             fontSize: '0.72rem',
                             fontWeight: '700'
                         }}>
@@ -169,7 +169,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                         onClick={() => handleToggleType('pollen')}
                         style={{
                             padding: '4px 10px',
-                            background: betType === 'pollen' ? '#ffffff' : 'transparent',
+                            background: betType === 'pollen' ? 'var(--color-text)' : 'transparent',
                             borderRadius: '6px',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
@@ -180,7 +180,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                             gap: '4px'
                         }}
                     >
-                        <PollenIcon size={14} />
+                        <PollenIcon size={14} active={betType === 'pollen'} />
                     </div>
                 </div>
 
@@ -199,8 +199,8 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                                 style={{
                                     padding: '6px 14px',
                                     height: '34px',
-                                    background: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.05)',
-                                    border: isActive ? '1px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.15)',
+                                    background: isActive ? 'var(--color-text)' : 'var(--color-bg-deep)',
+                                    border: isActive ? '1px solid var(--color-text)' : '1px solid var(--color-border)',
                                     borderRadius: '8px',
                                     cursor: 'pointer',
                                     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -212,7 +212,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                                 }}
                             >
                                 <span style={{
-                                    color: isActive ? 'var(--color-bg-deep, #141419)' : '#ffffff',
+                                    color: isActive ? 'var(--color-bg-alt)' : 'var(--color-text)',
                                     fontSize: '0.74rem',
                                     fontWeight: '700',
                                     transition: 'all 0.2s ease',
@@ -225,7 +225,7 @@ const BattleBetSelector = ({ language, value, onChange }) => {
                                     {betType === 'xp' ? (
                                         ' XP'
                                     ) : (
-                                        <PollenIcon size={12} />
+                                        <PollenIcon size={12} active={isActive} />
                                     )}
                                 </span>
                             </div>

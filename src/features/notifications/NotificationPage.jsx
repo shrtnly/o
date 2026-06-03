@@ -10,7 +10,8 @@ import {
     Award, 
     ChevronRight,
     User,
-    CheckCheck
+    CheckCheck,
+    Swords
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';

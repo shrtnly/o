@@ -71,7 +71,15 @@ const ResetPassword = () => {
             setTimeout(() => navigate('/auth'), 3000);
         } catch (err) {
             console.error('Password reset error:', err);
-            setError(err.message || 'পাসওয়ার্ড আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            let userFriendlyError = 'পাসওয়ার্ড আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+            if (err.message) {
+                if (err.message.toLowerCase().includes('different from the old') || err.message.toLowerCase().includes('different from old')) {
+                    userFriendlyError = 'নতুন পাসওয়ার্ডটি অবশ্যই পূর্বের পাসওয়ার্ড থেকে ভিন্ন হতে হবে।';
+                } else {
+                    userFriendlyError = err.message;
+                }
+            }
+            setError(userFriendlyError);
         } finally {
             setLoading(false);
         }

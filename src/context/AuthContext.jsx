@@ -78,6 +78,10 @@ export const AuthProvider = ({ children }) => {
         const getSession = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
+                if (session && window.location.search.includes('code=')) {
+                    window.location.replace('/courses');
+                    return;
+                }
                 const currentUser = session?.user ?? null;
                 setUser(currentUser);
                 userRef.current = currentUser;
@@ -105,6 +109,13 @@ export const AuthProvider = ({ children }) => {
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             const currentUser = session?.user ?? null;
 
+            // If we still have the OAuth ?code= in the URL, immediately redirect to a clean
+            // /courses route. We do this at the very top before any early-return optimization guards.
+            if (event === 'SIGNED_IN' && window.location.search.includes('code=')) {
+                window.location.replace('/courses');
+                return;
+            }
+
             // TOKEN_REFRESHED — silent token refresh, just sync the user object
             if (event === 'TOKEN_REFRESHED') {
                 setUser(currentUser);
@@ -131,13 +142,6 @@ export const AuthProvider = ({ children }) => {
             userRef.current = currentUser;
             if (currentUser) {
                 if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-                    // If we still have the OAuth ?code= in the URL it means getSession()
-                    // raced ahead and found null. Session is now established — do a clean
-                    // hard-navigate to /courses so the page reloads with the session in storage.
-                    if (event === 'SIGNED_IN' && window.location.search.includes('code=')) {
-                        window.location.replace('/courses');
-                        return;
-                    }
                     await fetchProfile(currentUser.id, currentUser);
                 }
             } else {

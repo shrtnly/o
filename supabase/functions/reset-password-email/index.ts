@@ -19,9 +19,31 @@ serve(async (req) => {
     const siteUrl = origin || 'https://o-sekha.vercel.app';
     const redirectUrl = `${siteUrl}/reset-password`;
 
-    // 1. Check if user exists
-    const { data: { users }, error: listError } = await supabaseAdmin.auth.admin.listUsers();
-    const user = users.find(u => u.email === email);
+    // 1. Search for user by email across all pages (handles listUsers pagination)
+    let user = null;
+    let page = 1;
+    const perPage = 1000;
+    
+    while (true) {
+      const { data: listData, error: listError } = await supabaseAdmin.auth.admin.listUsers({
+        page: page,
+        perPage: perPage
+      });
+      
+      if (listError) throw listError;
+      
+      const users = listData?.users || [];
+      if (users.length === 0) break;
+      
+      const found = users.find(u => u.email === email);
+      if (found) {
+        user = found;
+        break;
+      }
+      
+      if (users.length < perPage) break;
+      page++;
+    }
 
     if (!user) {
       return new Response(JSON.stringify({ error: 'EMAIL_NOT_FOUND', message: 'ইমেইল পাওয়া যায়নি' }), {

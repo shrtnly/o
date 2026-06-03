@@ -173,10 +173,31 @@ const AuthPage = () => {
                 });
 
                 if (resetError) {
-                    if (resetError.status === 404) {
+                    let errorMessage = 'পাসওয়ার্ড রিসেট ইমেল পাঠাতে ব্যর্থ হয়েছে।';
+                    
+                    // Parse detailed error message if available from Edge Function response body
+                    if (resetError.context) {
+                        try {
+                            const body = await resetError.context.json();
+                            if (body && body.message) {
+                                errorMessage = body.message;
+                            }
+                        } catch (e) {
+                            console.error('Failed to parse error context:', e);
+                        }
+                    }
+
+                    const isNotFoundError = 
+                        resetError.status === 404 || 
+                        errorMessage.includes('EMAIL_NOT_FOUND') ||
+                        errorMessage.includes('ইমেইল পাওয়া যায়নি');
+
+                    if (isNotFoundError) {
                         setError(t('auth_email_not_found'));
+                    } else if (errorMessage.toLowerCase().includes('rate limit exceeded')) {
+                        setError('অতিরিক্ত অনুরোধের কারণে ব্লক করা হয়েছে। অনুগ্রহ করে ১-২ মিনিট পর আবার চেষ্টা করুন।');
                     } else {
-                        throw resetError;
+                        setError(errorMessage);
                     }
                     setLoading(false);
                     return;

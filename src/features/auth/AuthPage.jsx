@@ -48,7 +48,7 @@ const AuthPage = () => {
     const [fieldErrors, setFieldErrors] = useState([]);
 
     const { user, signIn, signUp, signInWithOAuth } = useAuth();
-    const { language, t } = useLanguage();
+    const { language, toggleLanguage, t } = useLanguage();
     const navigate = useNavigate();
     const locationHook = useLocation();
 
@@ -322,9 +322,24 @@ const AuthPage = () => {
 
     return (
         <div className={styles.authWrapper}>
-            <button className={styles.closeBtn} onClick={() => navigate('/')} aria-label="Close">
-                <X size={24} />
-            </button>
+            <div className={styles.topActions}>
+                <button 
+                    type="button"
+                    className={styles.langBtn} 
+                    onClick={toggleLanguage} 
+                    aria-label="Switch Language"
+                >
+                    {language === 'bn' ? 'English' : 'বাংলা'}
+                </button>
+                <button 
+                    type="button"
+                    className={styles.closeBtn} 
+                    onClick={() => navigate('/')} 
+                    aria-label="Close"
+                >
+                    <X size={24} />
+                </button>
+            </div>
 
             <div className={styles.authContainer}>
                 <div className={styles.logoWrapper}>

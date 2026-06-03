@@ -297,11 +297,23 @@ const AuthPage = () => {
     };
 
     const handleSocialLogin = async (provider) => {
+        setLoading(true);
+        setError('');
         try {
-            const { error } = await signInWithOAuth({ provider });
+            const { error } = await signInWithOAuth({
+                provider,
+                options: {
+                    // After Google/Facebook redirect back, send user to /courses directly
+                    redirectTo: `${window.location.origin}/courses`,
+                    // Force account picker on every Google login so users can switch accounts
+                    queryParams: provider === 'google' ? { prompt: 'select_account' } : undefined,
+                }
+            });
             if (error) throw error;
+            // If no error, the browser will navigate to Google — don't reset loading
         } catch (err) {
             console.error(`${provider} login error:`, err);
+            setLoading(false);
             if (provider === 'google') setError(t('auth_google_failed'));
             else if (provider === 'facebook') setError(t('auth_facebook_failed'));
             else setError(t('auth_generic_error'));

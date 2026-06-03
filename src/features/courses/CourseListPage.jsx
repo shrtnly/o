@@ -42,13 +42,20 @@ const CourseListPage = () => {
     // Track how many auto-retries we've done (separate from manual retryCount)
     const autoRetryRef = useRef(0);
     const retryTimerRef = useRef(null);
+    // Reset the auto-retry counter only when the user changes (not on every retryCount tick)
+    const prevUserIdRef = useRef(null);
 
     useEffect(() => {
         // Don't start fetching while auth is still resolving (important for social login PKCE flow)
         if (authLoading) return;
 
+        // Reset auto-retry only when the user changes identity
+        if (prevUserIdRef.current !== (user?.id ?? null)) {
+            prevUserIdRef.current = user?.id ?? null;
+            autoRetryRef.current = 0;
+        }
+
         let isMounted = true;
-        autoRetryRef.current = 0;
         if (retryTimerRef.current) clearTimeout(retryTimerRef.current);
 
         const fetchData = async () => {
@@ -57,10 +64,10 @@ const CourseListPage = () => {
             let stopLoading = true;
 
             try {
-                // Race against 10s hard timeout so we never hang forever
+                // Race against 15s hard timeout so we never hang forever
                 const allCourses = await Promise.race([
                     courseService.getAllCourses(),
-                    new Promise(resolve => setTimeout(() => resolve([]), 10000))
+                    new Promise(resolve => setTimeout(() => resolve([]), 15000))
                 ]);
 
                 if (!isMounted) { stopLoading = false; return; }

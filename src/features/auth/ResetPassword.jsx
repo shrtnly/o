@@ -11,111 +11,100 @@ const ResetPassword = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
-    // sessionReady: null = checking, true = ready, false = invalid link
+    // sessionReady: null = still checking, true = valid session ready, false = invalid/expired
     const [sessionReady, setSessionReady] = useState(null);
     const navigate = useNavigate();
-    const checkStarted = useRef(false);
+    const initStarted = useRef(false);
 
     useEffect(() => {
-        if (checkStarted.current) return;
-        checkStarted.current = true;
+        if (initStarted.current) return;
+        initStarted.current = true;
 
         let isMounted = true;
 
         const initRecovery = async () => {
             try {
+                // Check for explicit error parameters in the URL first
+                // (e.g. Supabase sends ?error=access_denied&error_description=... for expired links)
                 const params = new URLSearchParams(window.location.search);
-                const code = params.get('code');
                 const hashParams = new URLSearchParams(window.location.hash.substring(1));
                 const errorDescription =
                     hashParams.get('error_description') || params.get('error_description');
 
-                // Handle explicit error params in the URL (e.g., expired/used link)
                 if (errorDescription) {
-                    console.error('Password reset URL error:', errorDescription);
                     if (isMounted) {
-                        setError(
-                            'লিঙ্কটি ইতিমধ্যে ব্যবহার করা হয়েছে বা এর মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।'
-                        );
+                        setError('লিঙ্কটি ইতিমধ্যে ব্যবহার করা হয়েছে বা এর মেয়াদ শেষ হয়ে গেছে। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
                         setSessionReady(false);
                         setTimeout(() => navigate('/auth'), 4000);
                     }
                     return;
                 }
 
-                if (code) {
-                    // PKCE flow: exchange the one-time code for a session
-                    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-                    if (exchangeError) {
-                        console.error('Code exchange error:', exchangeError);
-                        if (isMounted) {
-                            setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
-                            setSessionReady(false);
-                            setTimeout(() => navigate('/auth'), 3500);
-                        }
-                        return;
-                    }
-                    // Clean the code from the URL so a refresh doesn't re-exchange
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                }
+                // IMPORTANT: Because detectSessionInUrl: true is set in supabaseClient.js,
+                // Supabase automatically exchanges the ?code= PKCE token when the client
+                // initialises. We must NOT call exchangeCodeForSession() ourselves —
+                // doing so would attempt to use an already-consumed code and fail.
+                //
+                // Strategy:
+                //   1. getSession() — if the exchange already completed, we get the session.
+                //   2. If not yet ready, listen for PASSWORD_RECOVERY via onAuthStateChange.
+                //   3. Safety timeout after 6 s to catch truly invalid links.
 
-                // After exchangeCodeForSession (or if this is an implicit-flow hash token),
-                // Supabase will fire a PASSWORD_RECOVERY event via onAuthStateChange.
-                // We wait for that event (or an existing valid session) instead of proceeding
-                // immediately — this guarantees updateUser() will succeed.
-
-                // Check if a recovery session is already active (e.g., page refresh after exchange)
                 const { data: { session } } = await supabase.auth.getSession();
+
                 if (session) {
+                    // Clean the URL so a page-refresh doesn't cause issues
+                    if (params.get('code')) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
                     if (isMounted) setSessionReady(true);
                     return;
                 }
 
-                // No session yet — wait for the PASSWORD_RECOVERY event.
-                // This covers both PKCE (exchangeCodeForSession fires it) and
-                // legacy implicit flow (hash token parsed by Supabase automatically).
+                // Session not ready yet — wait for the event
                 const safetyTimeout = setTimeout(() => {
-                    if (isMounted && sessionReady === null) {
-                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    if (isMounted) {
+                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
                         setSessionReady(false);
-                        setTimeout(() => navigate('/auth'), 3500);
+                        setTimeout(() => navigate('/auth'), 4000);
                     }
-                }, 4000);
+                }, 6000);
 
                 const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
                     if ((event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN') && session) {
                         clearTimeout(safetyTimeout);
                         subscription.unsubscribe();
+                        // Clean the URL
+                        window.history.replaceState({}, document.title, window.location.pathname);
                         if (isMounted) setSessionReady(true);
                     }
                 });
 
-                // If there's no code and no hash token, the link is simply invalid
+                // If there is no ?code= and no hash token at all, the URL is simply invalid
+                const hasCode = Boolean(params.get('code'));
                 const hasHashToken = window.location.hash.includes('access_token=');
-                if (!code && !hasHashToken) {
+                if (!hasCode && !hasHashToken) {
                     clearTimeout(safetyTimeout);
                     subscription.unsubscribe();
                     if (isMounted) {
-                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                        setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।');
                         setSessionReady(false);
-                        setTimeout(() => navigate('/auth'), 3500);
+                        setTimeout(() => navigate('/auth'), 4000);
                     }
                 }
             } catch (err) {
                 console.error('Recovery init error:', err);
                 if (isMounted) {
-                    setError('অবৈধ বা মেয়াদোত্তীর্ণ লিঙ্ক। অনুগ্রহ করে আবার চেষ্টা করুন।');
+                    setError('একটি সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
                     setSessionReady(false);
-                    setTimeout(() => navigate('/auth'), 3500);
+                    setTimeout(() => navigate('/auth'), 4000);
                 }
             }
         };
 
         initRecovery();
 
-        return () => {
-            isMounted = false;
-        };
+        return () => { isMounted = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [navigate]);
 
@@ -134,18 +123,18 @@ const ResetPassword = () => {
             if (updateError) throw updateError;
 
             setSuccess(true);
-            // Sign out so they are taken back to a clean login state
+            // Sign out cleanly so they land on a fresh login page
             setTimeout(async () => {
                 try { await supabase.auth.signOut(); } catch (_) { /* ignore */ }
-            }, 200);
+            }, 300);
             setTimeout(() => navigate('/auth'), 3000);
         } catch (err) {
             console.error('Password update error:', err);
-            let msg = 'পাসওয়ার্ড আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
             const lower = (err.message || '').toLowerCase();
+            let msg = 'পাসওয়ার্ড আপডেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
             if (lower.includes('different from the old') || lower.includes('different from old')) {
                 msg = 'নতুন পাসওয়ার্ডটি অবশ্যই পূর্বের পাসওয়ার্ড থেকে ভিন্ন হতে হবে।';
-            } else if (lower.includes('session') || lower.includes('not authenticated') || lower.includes('auth')) {
+            } else if (lower.includes('session') || lower.includes('not authenticated') || lower.includes('jwt')) {
                 msg = 'সেশন মেয়াদোত্তীর্ণ। অনুগ্রহ করে রিসেট লিঙ্কটি আবার ব্যবহার করুন।';
             } else if (err.message) {
                 msg = err.message;
@@ -186,14 +175,18 @@ const ResetPassword = () => {
                         <ShieldAlert size={64} style={{ margin: '0 auto' }} />
                     </div>
                     <h2 style={{ marginBottom: '12px' }}>লিঙ্কটি অবৈধ বা মেয়াদোত্তীর্ণ</h2>
-                    <p style={{ color: 'var(--color-text-muted)' }}>{error || 'অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।'}</p>
-                    <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginTop: '8px' }}>আপনাকে লগইন পেজে নিয়ে যাওয়া হচ্ছে...</p>
+                    <p style={{ color: 'var(--color-text-muted)' }}>
+                        {error || 'অনুগ্রহ করে আবার পাসওয়ার্ড রিসেট করার অনুরোধ পাঠান।'}
+                    </p>
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginTop: '8px' }}>
+                        আপনাকে লগইন পেজে নিয়ে যাওয়া হচ্ছে...
+                    </p>
                 </div>
             </div>
         );
     }
 
-    // ── Checking / loading session screen ─────────────────────────────────────
+    // ── Session still loading screen ──────────────────────────────────────────
     if (sessionReady === null) {
         return (
             <div className={styles.authWrapper}>
@@ -203,7 +196,8 @@ const ResetPassword = () => {
                     </div>
                     <Loader2
                         size={40}
-                        style={{ margin: '24px auto', display: 'block', animation: 'spin 1s linear infinite', color: 'var(--color-primary)' }}
+                        className={styles.spinner}
+                        style={{ margin: '24px auto', display: 'block', color: 'var(--color-primary)' }}
                     />
                     <p style={{ color: 'var(--color-text-muted)' }}>লিঙ্ক যাচাই করা হচ্ছে...</p>
                 </div>

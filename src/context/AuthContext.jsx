@@ -123,6 +123,20 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
 
+            // PASSWORD_RECOVERY — user arrived via a reset link.
+            // Just sync the user object and release the loading state.
+            // Do NOT redirect to /courses and do NOT fetch the profile;
+            // ResetPassword.jsx owns this session and will call updateUser().
+            if (event === 'PASSWORD_RECOVERY') {
+                setUser(currentUser);
+                userRef.current = currentUser;
+                if (!isInitialisedRef.current) {
+                    isInitialisedRef.current = true;
+                    setLoading(false);
+                }
+                return;
+            }
+
             // SIGNED_IN fired after first load (PKCE tab-return or duplicate after getSession).
             // Use refs to check if we already have this user's profile.
             if (

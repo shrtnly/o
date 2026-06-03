@@ -72,14 +72,9 @@ export const AuthProvider = ({ children }) => {
     const isInitialisedRef = useRef(false);
 
     useEffect(() => {
-        // Detect if we are returning from a social OAuth flow (PKCE code in URL).
-        // In that case, Supabase will exchange the code and fire onAuthStateChange.
-        // We must NOT call setLoading(false) early from getSession() or the router
-        // will see user=null and redirect to /guest/courses before the session is ready.
-        const hasPKCECode =
-            window.location.search.includes('code=') ||
-            window.location.hash.includes('access_token=');
-
+        // Supabase v2: getSession() internally awaits the PKCE exchange promise,
+        // so it ALWAYS returns the correct session — even on a fresh social-login redirect.
+        // We can safely call setLoading(false) in the finally block every time.
         const getSession = async () => {
             try {
                 const { data: { session } } = await supabase.auth.getSession();
@@ -87,22 +82,25 @@ export const AuthProvider = ({ children }) => {
                 setUser(currentUser);
                 userRef.current = currentUser;
                 if (currentUser) await fetchProfile(currentUser.id, currentUser);
-
-                // If there's a PKCE code in the URL, a session might not exist yet
-                // (exchange still in flight). Let onAuthStateChange handle loading.
-                if (!hasPKCECode) {
-                    isInitialisedRef.current = true;
-                    setLoading(false);
-                }
             } catch (err) {
                 console.error('AuthContext: getSession error', err);
-                // Always unblock loading on error to avoid infinite spinner
+            } finally {
                 isInitialisedRef.current = true;
                 setLoading(false);
             }
         };
 
         getSession();
+
+        // Absolute safety net: if loading is still true after 6 s, force-unblock it.
+        // This prevents an infinite spinner in any unexpected edge case.
+        const safetyTimer = setTimeout(() => {
+            if (!isInitialisedRef.current) {
+                console.warn('AuthContext: safety timeout fired — forcing loading=false');
+                isInitialisedRef.current = true;
+                setLoading(false);
+            }
+        }, 6000);
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
             const currentUser = session?.user ?? null;
@@ -114,8 +112,8 @@ export const AuthProvider = ({ children }) => {
                 return;
             }
 
-            // SIGNED_IN fired after first load (PKCE tab-return behavior or duplicate after getSession).
-            // Use refs (not stale closure vars) to check if we already have this user's profile.
+            // SIGNED_IN fired after first load (PKCE tab-return or duplicate after getSession).
+            // Use refs to check if we already have this user's profile.
             if (
                 event === 'SIGNED_IN' &&
                 isInitialisedRef.current &&
@@ -141,15 +139,17 @@ export const AuthProvider = ({ children }) => {
                 isFetchingProfileRef.current = false;
             }
 
-            // Set loading=false on first auth resolution
-            // This is the primary path when returning from a social OAuth redirect.
+            // Set loading=false on first auth resolution (if getSession didn't already)
             if (!isInitialisedRef.current) {
                 isInitialisedRef.current = true;
                 setLoading(false);
             }
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            clearTimeout(safetyTimer);
+            subscription.unsubscribe();
+        };
     }, []);
 
     // Real-time profile updates

@@ -72,7 +72,7 @@ import ConnectionPage from './features/connections/ConnectionPage';
 import NotificationPage from './features/notifications/NotificationPage';
 
 const AppContent = () => {
-  const { user, loading: authLoading } = useAuth();
+  const { user } = useAuth();
   const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
@@ -108,11 +108,7 @@ const AppContent = () => {
 
           {/* All protected routes inside MainLayout to ensure Sidebar stays stable */}
           <Route element={<MainLayout />}>
-            <Route path="/courses" element={
-              authLoading
-                ? <LoadingScreen />
-                : user ? <CourseListPage /> : <Navigate to="/guest/courses" replace />
-            } />
+            <Route path="/courses" element={user ? <CourseListPage /> : <Navigate to="/guest/courses" replace />} />
             <Route path="/learn/:courseId" element={<LearningPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/leaderboard" element={<LeaderboardPage />} />

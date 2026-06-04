@@ -187,7 +187,7 @@ const CheckoutPage = () => {
                             <div className={styles.radioIndicator} />
                             <div className={styles.planInfo}>
                                 <span className={styles.planLabel}>{t('monthly') || 'Monthly'}</span>
-                                <span className={styles.planPrice}>৳99</span>
+                                <span className={styles.planPrice}>৳{formatNumber(99)}</span>
                             </div>
                         </div>
 
@@ -198,9 +198,9 @@ const CheckoutPage = () => {
                             <div className={styles.radioIndicator} />
                             <div className={styles.planInfo}>
                                 <span className={styles.planLabel}>{t('yearly') || 'Yearly'}</span>
-                                <span className={styles.planPrice}>৳999</span>
+                                <span className={styles.planPrice}>৳{formatNumber(999)}</span>
                             </div>
-                            <span className={styles.saveBadge}>{t('save_percentage_yearly') || 'Save 16%'}</span>
+                            <span className={styles.saveBadge}>{t('save_percentage_yearly')}</span>
                         </div>
                     </div>
                 )}

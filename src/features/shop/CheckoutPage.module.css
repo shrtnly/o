@@ -1,10 +1,10 @@
 .checkoutPage {
     width: 100%;
     min-height: 100vh;
-    background: #000; /* Deep black background like the image */
-    color: #fff;
+    background: var(--color-bg);
+    color: var(--color-text);
     padding: 24px 20px 100px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Hind Siliguri', 'Inter', sans-serif;
 }
 
 .container {
@@ -23,10 +23,10 @@
 }
 
 .backBtn {
-    background: none;
-    border: none;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     padding: 0;
-    color: #fff;
+    color: var(--color-text);
     width: 40px;
     height: 40px;
     border-radius: 12px;
@@ -35,6 +35,13 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.backBtn:hover {
+    background: var(--color-bg-deep);
+    border-color: var(--color-border);
+    transform: translateX(-2px);
 }
 
 .pageTitle {
@@ -45,12 +52,12 @@
 }
 
 .premiumTitle {
-    background: linear-gradient(135deg, #fff 0%, #fccd4d 100%);
+    background: linear-gradient(135deg, #f1c40f 0%, #e67e22 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     display: inline-block;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    /* no glow */
 }
 
 /* Plan Selector Cards */
@@ -63,7 +70,7 @@
 
 .planCard {
     background: transparent;
-    border: 2px solid #333;
+    border: 2px solid var(--color-border);
     border-radius: 12px;
     padding: 20px;
     cursor: pointer;
@@ -76,14 +83,14 @@
 }
 
 .planCard.active {
-    border-color: #3b82f6; /* Blue border for active like image */
-    background: rgba(29, 78, 216, 0.1);
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.08);
 }
 
 .radioIndicator {
     width: 24px;
     height: 24px;
-    border: 2px solid #555;
+    border: 2px solid var(--color-border);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -108,7 +115,7 @@
 
 .planPrice {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted);
     margin-top: 4px;
 }
 
@@ -118,16 +125,18 @@
     right: 20px;
     background: rgba(29, 78, 216, 0.3);
     color: #60a5fa;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     padding: 4px 10px;
     border-radius: 99px;
+    font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
+    letter-spacing: 0;
 }
 
 /* Section Cards Style */
 .sectionCard {
-    background: #121212;
-    border: 1px solid #333;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 24px;
 }
@@ -148,7 +157,7 @@
     display: flex;
     justify-content: space-between;
     padding: 16px 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .detailRow:last-child {
@@ -169,7 +178,7 @@
 
 .itemSub {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted);
 }
 
 .itemPrice {
@@ -179,27 +188,27 @@
 
 .totalRow {
     margin-top: 10px;
-    color: #fff;
+    color: var(--color-text);
     font-size: 1.1rem;
 }
 
 /* Info Box */
 .infoBox {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
     border-radius: 16px;
     padding: 24px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--color-text-muted);
     font-size: 0.95rem;
     line-height: 1.5;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .infoIcon {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-muted);
     flex-shrink: 0;
     margin-top: 2px;
 }
@@ -228,12 +237,12 @@
 .promoInput {
     width: 100%;
     height: 100%;
-    background: #111;
-    border: 1px solid #222;
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 0 16px;
-    padding-right: 40px; /* Space for the clear button */
-    color: #fff;
+    padding-right: 40px;
+    color: var(--color-text);
     font-size: 0.9rem;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -247,7 +256,7 @@
     transform: translateY(-50%);
     background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -258,19 +267,19 @@
 }
 
 .clearBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-deep);
     color: #ef4444;
 }
 
 .promoInput:focus {
     outline: none;
     border-color: #3b82f6;
-    background: #1a1a1a;
+    background: var(--color-bg-alt);
     box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
 }
 
 .promoInput::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+    color: var(--color-text-muted);
     font-weight: 400;
 }
 
@@ -302,11 +311,11 @@
 }
 
 .applyBtn:disabled {
-    background: #1a1a1a;
-    border: 1px solid #222;
-    color: rgba(255, 255, 255, 0.2);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     cursor: not-allowed;
-    opacity: 1; /* Reset opacity from previous version */
+    opacity: 1;
 }
 
 .promoMessage {
@@ -342,10 +351,11 @@
 
 .originalPrice {
     text-decoration: line-through;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
     font-size: 0.9rem;
     margin-right: 8px;
     font-weight: 400;
+    opacity: 0.6;
 }
 
 /* Payment Methods Grid */
@@ -356,27 +366,27 @@
 }
 
 .methodCard {
-    background: #0a0a0a;
-    border: 1px solid #1a1a1a;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 16px;
     padding: 16px 20px;
     display: flex;
     align-items: center;
-    gap: 20px; /* Increased gap for left-aligned radio */
+    gap: 20px;
     width: 100%;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .methodCard:hover:not(.active) {
-    border-color: #333;
-    background: #111;
+    border-color: #3b82f6;
+    background: var(--color-bg-deep);
 }
 
 .methodCard.active {
-    background: #111;
+    background: var(--color-bg-deep);
     border-color: #3b82f6;
-    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
 }
 
 .methodLogo {
@@ -416,7 +426,7 @@
 .methodCard .radioIndicator {
     width: 22px;
     height: 22px;
-    border: 2px solid #333;
+    border: 2px solid var(--color-border);
     border-radius: 50%;
     position: relative;
     transition: all 0.25s;
@@ -490,7 +500,7 @@
     align-items: center;
     gap: 8px;
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-muted);
 }
 
 .spinner {
@@ -501,9 +511,9 @@
 .skeleton {
     background: linear-gradient(
         90deg,
-        rgba(255, 255, 255, 0.05) 25%,
-        rgba(255, 255, 255, 0.1) 50%,
-        rgba(255, 255, 255, 0.05) 75%
+        var(--color-bg-alt) 25%,
+        var(--color-bg-deep) 50%,
+        var(--color-bg-alt) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite linear;
@@ -533,8 +543,8 @@
 }
 
 .skSectionCard {
-    background: #121212;
-    border: 1px solid #333;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 24px;
@@ -576,7 +586,7 @@
 
 .skDivider {
     height: 1px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border);
     margin: 16px 0;
 }
 
@@ -611,8 +621,186 @@
     to { transform: rotate(360deg); }
 }
 
+/* =============================================
+   RESPONSIVE — Tablet & Mobile
+   ============================================= */
+@media (max-width: 640px) {
+    .checkoutPage {
+        padding: 16px 16px 100px;
+    }
+    .container {
+        gap: 16px;
+    }
+    .header {
+        margin-bottom: 16px;
+    }
+    .sectionCard {
+        padding: 18px;
+    }
+    .infoBox {
+        padding: 16px;
+    }
+    .confirmBtn {
+        font-size: 1rem;
+        padding: 16px;
+    }
+}
+
 @media (max-width: 480px) {
     .planGrid {
         grid-template-columns: 1fr;
     }
+    .planCard {
+        padding: 16px;
+    }
+    .saveBadge {
+        position: static;
+        display: inline-block;
+        margin-top: 8px;
+        align-self: flex-start;
+    }
+    .methodCard {
+        padding: 14px 16px;
+        gap: 14px;
+    }
+    .promoInputWrapper {
+        height: 44px;
+    }
+    .pageTitle {
+        font-size: 1.1rem;
+    }
 }
+
+/* =========================================================================
+   LIGHT MODE OVERRIDES – CheckoutPage
+   All variables resolve correctly via :root (light = default)
+   These overrides handle edge cases where components need explicit values.
+   ========================================================================= */
+
+/* Page wrapper: light bg is clean slate */
+:global(.light) .checkoutPage {
+    background: var(--color-bg);
+}
+
+/* Back button: visible border in light */
+:global(.light) .backBtn {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+:global(.light) .backBtn:hover {
+    background: var(--color-bg-deep);
+}
+
+/* Plan cards: white bg with visible border */
+:global(.light) .planCard {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+:global(.light) .planCard.active {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.10);
+}
+:global(.light) .radioIndicator {
+    border-color: var(--color-border);
+}
+:global(.light) .saveBadge {
+    background: rgba(59, 130, 246, 0.10);
+    color: #1d4ed8;
+}
+
+/* Order details section */
+:global(.light) .sectionCard {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+:global(.light) .sectionHeading {
+    color: var(--color-text);
+}
+:global(.light) .detailRow {
+    border-bottom-color: var(--color-border);
+}
+:global(.light) .itemName {
+    color: var(--color-text);
+}
+:global(.light) .itemPrice {
+    color: var(--color-text);
+}
+:global(.light) .itemSub {
+    color: var(--color-text-muted);
+}
+:global(.light) .totalRow .itemName,
+:global(.light) .totalRow .itemPrice {
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+/* Promo / info box */
+:global(.light) .infoBox {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    color: var(--color-text-muted);
+}
+:global(.light) .promoInput {
+    background: var(--color-bg-deep);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+:global(.light) .promoInput:focus {
+    background: #fff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+:global(.light) .promoInput::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.7;
+}
+:global(.light) .applyBtn:disabled {
+    background: var(--color-bg-deep);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+}
+:global(.light) .clearBtn {
+    color: var(--color-text-muted);
+}
+:global(.light) .clearBtn:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+}
+
+/* Payment method cards: white cards in light */
+:global(.light) .methodCard {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+:global(.light) .methodCard:hover:not(.active) {
+    border-color: #3b82f6;
+    background: var(--color-bg-deep);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+}
+:global(.light) .methodCard.active {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+:global(.light) .methodCard .radioIndicator {
+    border-color: var(--color-border);
+}
+
+/* Confirm pay button: green 3D works on both themes */
+
+/* Skeleton loading states */
+:global(.light) .skSectionCard {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+:global(.light) .skDivider {
+    background: var(--color-border);
+}
+

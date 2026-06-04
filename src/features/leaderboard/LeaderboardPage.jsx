@@ -27,7 +27,7 @@ const UNLOCK_XP = 100;
 const LeaderboardPage = () => {
     const navigate = useNavigate();
     const { user } = useAuth();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const [activeTier,      setActiveTier]      = useState('SILVER');
     const [leaderboardData, setLeaderboardData] = useState([]);
@@ -423,10 +423,22 @@ const LeaderboardPage = () => {
                                 {/* Footer: rank + pagination */}
                                 <div className={styles.footerStatus}>
                                     {!loading && userRank && leaderboardData.length > 0 && (
-                                        <div className={styles.userRankStatus}>
+                                        <button
+                                            className={styles.userRankStatus}
+                                            onClick={() => {
+                                                const targetPage = Math.ceil(userRank / ITEMS_PER_PAGE);
+                                                setCurrentPage(targetPage);
+                                                // scroll to user row after render
+                                                setTimeout(() => {
+                                                    const el = document.querySelector(`.${styles.currentUserRow}`);
+                                                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                                }, 150);
+                                            }}
+                                            title={language === 'bn' ? 'আপনার অবস্থান দেখুন' : 'Jump to your rank'}
+                                        >
                                             <TrendingUp size={16} />
                                             <span>{t('your_rank')}: <strong>#{userRank}</strong></span>
-                                        </div>
+                                        </button>
                                     )}
 
                                     {!loading && totalUsers > ITEMS_PER_PAGE && (

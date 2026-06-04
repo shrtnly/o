@@ -515,6 +515,25 @@
     padding: 8px 16px;
     border-radius: 12px;
     border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    /* reset button default styles */
+    font-family: inherit;
+    outline: none;
+}
+
+.userRankStatus:hover {
+    border-color: var(--color-primary-light);
+    background: var(--color-primary-faint);
+    color: var(--color-text);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.userRankStatus:active {
+    transform: translateY(0);
+    box-shadow: none;
 }
 
 .userRankStatus strong { color: var(--color-primary); font-weight: 900; }

@@ -172,6 +172,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    /* light override applied via :global(.light) below */
 }
 
 .headerSub {
@@ -240,7 +241,7 @@
     font-size: 1.5rem;
     font-weight: 900;
     margin-bottom: 24px;
-    color: #fff;
+    color: var(--color-text);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -342,7 +343,7 @@
     font-size: 2.2rem;
     font-weight: 900;
     margin-bottom: 12px;
-    color: #fff;
+    color: var(--color-text);
     line-height: 1.1;
     display: flex;
     align-items: center;
@@ -365,7 +366,7 @@
     gap: 8px;
     font-size: 0.9rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
 }
 
 .featureIcon {
@@ -400,7 +401,7 @@
     padding: 10px;
     border: none;
     background: transparent;
-    color: #fff;
+    color: var(--color-text);
     font-weight: 800;
     cursor: pointer;
     border-radius: 8px;
@@ -524,7 +525,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: var(--color-text-muted);
     transition: all 0.3s ease;
 }
 
@@ -554,9 +555,9 @@
 }
 
 .stepBtn {
-    background: #233138;
-    border: 2px solid #37464f;
-    color: #fff;
+    background: var(--color-bg-deep);
+    border: 2px solid var(--color-border);
+    color: var(--color-text);
     width: 40px;
     height: 40px;
     border-radius: 10px;
@@ -579,7 +580,7 @@
 
 .gemInputDisplay {
     background: var(--color-bg-deep);
-    border: 2px solid #233138;
+    border: 2px solid var(--color-border);
     padding: 8px 20px;
     border-radius: 12px;
     display: flex;
@@ -595,7 +596,7 @@
 }
 
 .convertArrow {
-    color: #37464f;
+    color: var(--color-border);
 }
 
 .heartResultMinimal {
@@ -1206,7 +1207,7 @@
 .qbTitleHero {
     font-size: 1.45rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text);
     margin: 0 0 4px;
 }
 
@@ -1219,7 +1220,7 @@
 
 .qbFeaturePill {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-muted);
     font-weight: 400;
     display: flex;
     align-items: center;
@@ -1424,10 +1425,10 @@
 .miniStepBtn {
     width: 28px;
     height: 28px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
     border-radius: 8px;
-    color: #fff;
+    color: var(--color-text);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1436,8 +1437,8 @@
 }
 
 .miniStepBtn:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: var(--color-bg-hover);
+    border-color: var(--color-primary);
 }
 
 .miniStepBtn:disabled {
@@ -1446,14 +1447,15 @@
 }
 
 .miniDisplay {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--color-bg-deep);
     padding: 2px 6px;
     border-radius: 8px;
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--color-text);
     font-weight: 700;
     min-width: 54px;
     text-align: center;
+    border: 1px solid var(--color-border-muted);
 }
 
 /* Modal Toggle Wrapper */
@@ -1479,7 +1481,7 @@
     gap: 10px;
     font-size: 0.8rem;
     font-weight: 600;
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--color-text);
     line-height: 1.4;
 }
 
@@ -1677,42 +1679,44 @@
 /* =========================================================================
    LIGHT MODE OVERRIDES
    ========================================================================= */
+
+/* Header text gradient adapts for light mode */
 :global(.light) .shopText,
 :global(.light) .headerTitle {
-    background: linear-gradient(135deg, #333 0%, #666 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-:global(.light) .sectionTitle,
-:global(.light) .superTitle,
-:global(.light) .qbTitleHero {
-    color: var(--color-text);
+/* Super card: white base with subtle warmth */
+:global(.light) .superCard {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
 }
 
-:global(.light) .headerSub,
-:global(.light) .packName,
-:global(.light) .successDesc,
-:global(.light) .summaryRow,
-:global(.light) .checkoutHeader p {
-    color: var(--color-text-muted);
-}
-
-:global(.light) .convertCard {
-    border-bottom: 8px solid var(--color-border);
-}
-
+/* Premium card: warm white */
 :global(.light) .premiumCard {
     background: linear-gradient(135deg, #fff8ec 0%, #ffffff 100%);
     box-shadow: 0 20px 50px rgba(255, 162, 2, 0.1);
 }
 
+/* Plan toggle pill */
+:global(.light) .planToggle {
+    background: var(--color-bg-deep);
+    border-color: var(--color-border);
+}
+
+:global(.light) .toggleBtnActive {
+    color: #fff;
+}
+
+/* Gem pack cards */
 :global(.light) .packCard {
     background: linear-gradient(135deg, #ffffff 0%, #fffcf5 40%, #fff7eb 100%);
     border-color: rgba(255, 162, 2, 0.3);
     border-bottom-color: rgba(255, 162, 2, 0.5);
-    box-shadow: 0 8px 24px rgba(255, 162, 2, 0.08);
+    box-shadow: 0 8px 24px rgba(255, 162, 2, 0.08), inset 0 1px 0 rgba(255,255,255,0.8);
 }
 
 :global(.light) .packCard:hover {
@@ -1725,12 +1729,18 @@
     color: var(--color-text);
 }
 
+/* Membership features */
 :global(.light) .feature {
     color: var(--color-text);
 }
 
 :global(.light) .featureIcon {
-    background: rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.06);
+}
+
+/* Gem exchange card */
+:global(.light) .convertCard {
+    border-bottom: 8px solid var(--color-border);
 }
 
 :global(.light) .convertCenter {
@@ -1741,9 +1751,13 @@
     color: #ffa202;
 }
 
+:global(.light) .convertArrow {
+    color: var(--color-border);
+}
+
 :global(.light) .gemInputDisplay {
     background: var(--color-bg);
-    border: 2px solid var(--color-border);
+    border-color: var(--color-border);
     color: var(--color-text);
 }
 
@@ -1763,47 +1777,56 @@
     color: #fff;
 }
 
+:global(.light) .heartResultMinimal {
+    background: rgba(255, 75, 75, 0.06);
+    border-color: rgba(255, 75, 75, 0.15);
+}
+
+/* Queen Bee row */
 :global(.light) .queenBeeCardHorizontal {
     border-bottom-color: var(--color-border);
 }
 
 :global(.light) .qbIconBg {
-    background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0.02) 100%);
+    background: rgba(255, 184, 0, 0.08);
     border-color: rgba(255, 184, 0, 0.3);
     box-shadow: none;
-}
-
-:global(.light) .qbIconBg:hover {
-    box-shadow: none;
-    border-color: rgba(255, 184, 0, 0.5);
 }
 
 :global(.light) .qbFeaturePill {
     color: var(--color-text-muted);
 }
 
+:global(.light) .queenBeeFeatureItem {
+    color: var(--color-text);
+}
+
+/* Mini exchange controls */
 :global(.light) .miniStepBtn {
     background: var(--color-bg-alt);
     border-color: var(--color-border);
     color: var(--color-text);
 }
 
+:global(.light) .miniStepBtn:hover:not(:disabled) {
+    background: #ffa202;
+    border-color: #ffa202;
+    color: #fff;
+}
+
 :global(.light) .miniDisplay {
     background: var(--color-bg);
     color: var(--color-text);
-    border: 1px solid var(--color-border);
-}
-
-/* Modals */
-:global(.light) .checkoutModal,
-:global(.light) .exchangeModal {
-    background: var(--color-bg);
     border-color: var(--color-border);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
-:global(.light) .checkoutOverlay {
-    background: rgba(255, 255, 255, 0.6);
+/* Order summary border */
+:global(.light) .orderSummary {
+    border-bottom-color: var(--color-border);
+}
+
+:global(.light) .summaryTotal {
+    color: var(--color-text-muted);
 }
 
 :global(.light) .checkoutPriceLarge,
@@ -1812,14 +1835,28 @@
     color: var(--color-text);
 }
 
-:global(.light) .itemCircle {
-    background: linear-gradient(135deg, rgba(255, 184, 0, 0.1) 0%, rgba(255, 184, 0, 0.02) 100%);
-    border-color: rgba(255, 184, 0, 0.3);
-    box-shadow: none;
+:global(.light) .headerSub,
+:global(.light) .packName,
+:global(.light) .successDesc,
+:global(.light) .checkoutHeader p {
+    color: var(--color-text-muted);
 }
 
-:global(.light) .itemCircle:hover {
-    border-color: rgba(255, 184, 0, 0.6);
+/* Checkout / Exchange modals */
+:global(.light) .checkoutModal,
+:global(.light) .exchangeModal {
+    background: var(--color-bg-alt);
+    border-color: var(--color-border);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+:global(.light) .checkoutOverlay {
+    background: rgba(200, 210, 220, 0.6);
+}
+
+:global(.light) .itemCircle {
+    background: rgba(255, 184, 0, 0.08);
+    border-color: rgba(255, 184, 0, 0.3);
     box-shadow: none;
 }
 
@@ -1835,16 +1872,15 @@
 
 :global(.light) .methodBtnActive {
     border-color: #ffa202;
-    background: rgba(255, 162, 2, 0.05);
-    color: #ffa202;
+    background: rgba(255, 162, 2, 0.06);
+    color: #d97706;
 }
 
-:global(.light) .cancelBtn,
-:global(.light) .toggleBtn {
+:global(.light) .cancelBtn {
     color: var(--color-text-muted);
     border-color: var(--color-border);
 }
 
-:global(.light) .summaryTotal {
-    color: var(--color-text);
+:global(.light) .toggleBtn {
+    color: var(--color-text-muted);
 }

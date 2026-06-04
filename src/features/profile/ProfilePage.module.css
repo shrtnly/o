@@ -1202,6 +1202,15 @@
     opacity: 1 !important;
 }
 
+:global(.light) .tabActive {
+    color: var(--color-text) !important;
+}
+
+:global(.light) .tabActive svg {
+    color: var(--color-text) !important;
+    opacity: 1 !important;
+}
+
 .tabIconGroup {
     position: relative;
     display: inline-flex;
@@ -1641,6 +1650,10 @@
     margin: 12px;
 }
 
+:global(.light) .lockedAnalysis {
+    border-color: var(--color-border);
+}
+
 .lockContent {
     max-width: 320px;
     width: 100%;
@@ -1662,6 +1675,10 @@
     margin-bottom: 24px;
     border: 1px solid var(--color-border-muted);
     box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+:global(.light) .lockIconBox {
+    color: #d97706;
 }
 
 .lockTitle {
@@ -1704,6 +1721,10 @@
     color: var(--color-primary);
     text-transform: uppercase;
     letter-spacing: 0.8px;
+}
+
+:global(.light) .streakCountText {
+    color: #b45309;
 }
 
 .typingLoading::after {

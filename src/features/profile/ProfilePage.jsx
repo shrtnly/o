@@ -82,6 +82,7 @@ const ProfilePage = () => {
     const { t, language } = useLanguage();
     const { isDark } = useTheme();
     const brandColor = isDark ? '#F1C40F' : '#FFB800';
+    const textBrandColor = isDark ? '#F1C40F' : '#b45309';
     const [profile, setProfile] = useState(null);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -941,13 +942,13 @@ const ProfilePage = () => {
                                             <div className={styles.analysisStatsRow}>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('daily_xp')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: brandColor }}>
+                                                    <span className={styles.miniCardValue} style={{ color: textBrandColor }}>
                                                         {analysisData.summary.totalXp}
                                                     </span>
                                                 </div>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('total_time')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: brandColor }}>
+                                                    <span className={styles.miniCardValue} style={{ color: textBrandColor }}>
                                                         {analysisData.summary.totalMinutes} {t('minutes')}
                                                     </span>
                                                 </div>
@@ -1167,7 +1168,7 @@ const ProfilePage = () => {
                             <div className={styles.shareCardAvatar}>
                                 {profile?.avatar_url
                                     ? <img src={profile.avatar_url} alt="avatar" />
-                                    : <User size={32} color={brandColor} />}
+                                    : <User size={32} color={textBrandColor} />}
                             </div>
                             <h4 className={styles.shareCardName}>
                                 {profile?.full_name || profile?.display_name || (language === 'bn' ? 'শিক্ষার্থী' : 'Learner')}

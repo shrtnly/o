@@ -163,6 +163,16 @@
     border-color: var(--color-primary) !important;
 }
 
+:global(.light) .connectedBtn {
+    background: #fef3c7 !important;
+    border-color: #fde68a !important;
+    color: #b45309 !important;
+}
+:global(.light) .connectedBtn:hover:not(:disabled) {
+    background: #fde68a !important;
+    border-color: #f59e0b !important;
+}
+
 .disabledBtn {
     opacity: 0.45 !important;
     cursor: not-allowed !important;
@@ -189,6 +199,16 @@
     border-color: var(--color-primary);
 }
 
+:global(.light) .msgBtn {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #b45309;
+}
+:global(.light) .msgBtn:hover {
+    background: #fde68a;
+    border-color: #f59e0b;
+}
+
 /* Battle: subtle primary glass */
 .battleBtn {
     background: rgba(241, 196, 15, 0.03);
@@ -198,6 +218,16 @@
 .battleBtn:hover {
     background: rgba(241, 196, 15, 0.08);
     border-color: var(--color-primary);
+}
+
+:global(.light) .battleBtn {
+    background: #fef3c7;
+    border-color: #fde68a;
+    color: #b45309;
+}
+:global(.light) .battleBtn:hover {
+    background: #fde68a;
+    border-color: #f59e0b;
 }
 
 /* ── Bottom row: copy link + 3-dot ── */
@@ -332,6 +362,16 @@
 .statIconRank   { color: #eab308; }
 .statIconCourse { color: #38bdf8; }
 
+:global(.light) .statIconXp {
+    color: #d97706;
+}
+:global(.light) .statIconRank {
+    color: #ca8a04;
+}
+:global(.light) .statIconCourse {
+    color: #0284c7;
+}
+
 .statVal {
     font-size: 1rem;
     font-weight: 800;
@@ -371,6 +411,10 @@
 .privateIcon {
     color: var(--color-primary);
     opacity: 0.6;
+}
+
+:global(.light) .privateIcon {
+    color: #d97706;
 }
 
 /* ── Details list ── */

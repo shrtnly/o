@@ -185,17 +185,7 @@ const translations = {
         invite_share_cta: "শেয়ার করুন",
         invite_share_text: "হ্যালো! আমি BeeLesson-এর সাথে শেখা শুরু করেছি। এটি বাংলাদেশের প্রথম গেমিফাইড লার্নিং প্ল্যাটফর্ম, যা আপনাকে দেবে এক নতুন শেখার অভিজ্ঞতা। তাই আর দেরি না করে আজই যোগ দিন BeeLesson কমিউনিটিতে এবং উপভোগ করুন শেখার এক নতুন যাত্রা!",
         no_certificates: "আপনি এখনও কোনো সার্টিফিকেট অর্জন করেননি।",
-        save_percentage_yearly: "১৬% সাশ্রয়",
         super_bee_title: "সুপার বি প্রিমিয়াম",
-        order_details: "অর্ডারের বিবরণ",
-        payment_method: "পেমেন্ট পদ্ধতি",
-        tax: "ট্যাক্স",
-        total_due_today: "মোট পরিমাণ",
-        discount_label: "ডিসকাউন্ট",
-        promo_success_msg: "সফল",
-        enter_promo_code: "কুপন কোড",
-        apply: "প্রয়োগ",
-        remove: "মুছে ফেলুন",
 
 
 
@@ -536,7 +526,22 @@ const translations = {
         battle_share_code: "এই কোডটি শেয়ার করুন:",
         battle_room_code: "রুম কোড লিখুন...",
         battle_desc: "রিয়েল-টাইম কুইজ প্রতিযোগিতায় আপনার দক্ষতা প্রমাণ করুন!",
-        battle_disconnected: "প্রতিপক্ষ ডিসকানেক্ট হয়েছেন"
+        battle_disconnected: "প্রতিপক্ষ ডিসকানেক্ট হয়েছেন",
+
+        // Checkout
+        save_percentage_yearly: "১৬% সাশ্রয়",
+        order_details: "অর্ডারের বিবরণ",
+        payment_method: "পেমেন্ট পদ্ধতি",
+        tax: "ট্যাক্স",
+        total_due_today: "মোট পরিমাণ",
+        discount_label: "ছাড়",
+        promo_success_msg: "সফল",
+        enter_promo_code: "কুপন কোড",
+        apply: "প্রয়োগ করুন",
+        remove: "সরান",
+
+        // Leaderboard
+        your_rank: "আপনার অবস্থান"
     },
     en: {
         // Common
@@ -1054,6 +1059,7 @@ const translations = {
         apply: "Apply",
         remove: "Remove",
         re_practice: "Re-practice",
+        your_rank: "Your Rank",
 
         // Battle
         battle_create: "Start Battle",

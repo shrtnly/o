@@ -76,6 +76,8 @@ const NotificationPage = () => {
         return `${datePart}, ${timeStr}`;
     };
 
+    const hasUnread = notifications.some(notif => !notif.is_read);
+
     return (
         <motion.div 
             className={styles.notifPage}
@@ -90,9 +92,14 @@ const NotificationPage = () => {
                         <h1>{t('notifications')}</h1>
                     </div>
                     { !isLoading && notifications.length > 0 && (
-                        <button className={styles.markAllBtn} onClick={markAllAsRead}>
+                        <button 
+                            className={styles.markAllBtn} 
+                            onClick={markAllAsRead}
+                            disabled={!hasUnread}
+                            title={t('notif_mark_all')}
+                            aria-label={t('notif_mark_all')}
+                        >
                             <CheckCheck size={16} />
-                            <span>{t('notif_mark_all')}</span>
                         </button>
                     )}
                 </header>
@@ -166,146 +173,167 @@ const NotificationPage = () => {
                                         <div key={groupName} className={styles.notifGroup}>
                                             <h5 className={styles.groupHeading}>{groupName}</h5>
                                             <div className={styles.groupItems}>
-                                                {items.map((notif, idx) => {
-                                                    const isLastOverall = groupName === Object.keys(groups)[Object.keys(groups).length - 1] && idx === items.length - 1;
-                                                    return (
-                                                        <div
-                                                            key={notif.id}
-                                                            ref={isLastOverall ? lastNotifRef : null}
-                                                            className={`${styles.notifRow} ${!notif.is_read ? styles.notifRowUnread : ''}`}
-                                                            onClick={() => !notif.is_read && markAsRead(notif.id)}
-                                                        >
-                                                            {/* Unread dot */}
-                                                            <div className={styles.notifUnreadDot}>
-                                                                {!notif.is_read && <div className={styles.unreadDot} />}
-                                                            </div>
-
-                                                            {/* Icon */}
-                                                            <div className={styles.notifTypeIcon} style={{
-                                                                background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
-                                                                    notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
-                                                                        notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
-                                                                            notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
-                                                                                'rgba(52,152,219,0.08)'
-                                                            }}>
-                                                                {notif.actor?.avatar_url ? (
-                                                                    <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
-                                                                ) : (
-                                                                    <>
-                                                                        {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
-                                                                        {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
-                                                                        {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
-                                                                        {notif.type === 'unlock' && (
-                                                                            notif.data?.unlock_type === 'shield_gold' ? <Trophy size={15} color="#F1C40F" /> :
-                                                                            notif.data?.unlock_type === 'shield_platinum' ? <Award size={15} color="#9B59B6" /> :
-                                                                            notif.data?.unlock_type === 'shield_diamond' ? <Award size={15} color="#3498DB" /> :
-                                                                            <Award size={15} color="#9B59B6" />
-                                                                        )}
-                                                                        {notif.type === 'achievement' && <Award size={15} color="#9B59B6" />}
-                                                                        {notif.type === 'battle_invite' && <Swords size={15} color="var(--color-primary)" />}
-                                                                        {!['reward', 'streak', 'course', 'unlock', 'achievement', 'battle_invite'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
-                                                                    </>
-                                                                )}
-                                                            </div>
-
-                                                        {/* Text */}
-                                                        <div className={styles.notifRowText}>
-                                                            <span className={styles.nTitle}>
-                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
-                                                                    ? 'নতুন কানেকশন অনুরোধ!'
-                                                                    : notif.title}
-                                                            </span>
-                                                            <span className={styles.nMsg}>
-                                                                {notif.type === 'connection' && notif.data?.status === 'pending'
-                                                                    ? `${notif.actor?.full_name || 'কেউ একজন'} আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।`
-                                                                    : notif.message}
-                                                            </span>
-
-                                                            {/* Actions */}
-                                                            {notif.type === 'connection' && notif.data?.status === 'accepted' && (
-                                                                <div className={styles.respondedStatus}>
-                                                                    <Check size={12} strokeWidth={3} />
-                                                                    <span>সংযুক্ত হয়েছেন</span>
+                                                <AnimatePresence initial={false}>
+                                                    {items.map((notif, idx) => {
+                                                        const isLastOverall = groupName === Object.keys(groups)[Object.keys(groups).length - 1] && idx === items.length - 1;
+                                                        return (
+                                                            <motion.div
+                                                                key={notif.id}
+                                                                ref={isLastOverall ? lastNotifRef : null}
+                                                                className={`${styles.notifRow} ${!notif.is_read ? styles.notifRowUnread : ''}`}
+                                                                onClick={() => !notif.is_read && markAsRead(notif.id)}
+                                                                layout
+                                                                initial={{ opacity: 1, height: 'auto' }}
+                                                                exit={{
+                                                                    opacity: 0,
+                                                                    x: -80,
+                                                                    height: 0,
+                                                                    paddingTop: 0,
+                                                                    paddingBottom: 0,
+                                                                    borderBottomWidth: 0,
+                                                                    overflow: 'hidden'
+                                                                }}
+                                                                transition={{
+                                                                    type: 'spring',
+                                                                    stiffness: 400,
+                                                                    damping: 30,
+                                                                    mass: 0.8,
+                                                                    opacity: { duration: 0.15 },
+                                                                    height: { duration: 0.2 }
+                                                                }}
+                                                            >
+                                                                {/* Unread dot */}
+                                                                <div className={styles.notifUnreadDot}>
+                                                                    {!notif.is_read && <div className={styles.unreadDot} />}
                                                                 </div>
-                                                            )}
-                                                            {notif.type === 'reward' && (
-                                                                <button className={styles.actionLink} onClick={() => navigate('/shop')}>
-                                                                    শপ দেখুন <ChevronRight size={11} />
-                                                                </button>
-                                                            )}
 
-                                                            {notif.type === 'battle_invite' && notif.data?.status === 'accepted' && (
-                                                                <div className={styles.respondedStatus}>
-                                                                    <Check size={12} strokeWidth={3} />
-                                                                    <span>ব্যাটেল করেছেন</span>
+                                                                {/* Icon */}
+                                                                <div className={styles.notifTypeIcon} style={{
+                                                                    background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
+                                                                        notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
+                                                                            notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
+                                                                                notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
+                                                                                    'rgba(52,152,219,0.08)'
+                                                                }}>
+                                                                    {notif.actor?.avatar_url ? (
+                                                                        <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
+                                                                    ) : (
+                                                                        <>
+                                                                            {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
+                                                                            {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
+                                                                            {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
+                                                                            {notif.type === 'unlock' && (
+                                                                                notif.data?.unlock_type === 'shield_gold' ? <Trophy size={15} color="#F1C40F" /> :
+                                                                                notif.data?.unlock_type === 'shield_platinum' ? <Award size={15} color="#9B59B6" /> :
+                                                                                notif.data?.unlock_type === 'shield_diamond' ? <Award size={15} color="#3498DB" /> :
+                                                                                <Award size={15} color="#9B59B6" />
+                                                                            )}
+                                                                            {notif.type === 'achievement' && <Award size={15} color="#9B59B6" />}
+                                                                            {notif.type === 'battle_invite' && <Swords size={15} color="var(--color-primary)" />}
+                                                                            {!['reward', 'streak', 'course', 'unlock', 'achievement', 'battle_invite'].includes(notif.type) && <Bell size={15} color="#3498DB" />}
+                                                                        </>
+                                                                    )}
                                                                 </div>
-                                                            )}
 
-                                                            {notif.type === 'battle_invite' && notif.data?.status === 'finished' && (
-                                                                <div className={styles.respondedStatus} style={{ color: 'var(--color-primary)' }}>
-                                                                    <Trophy size={12} strokeWidth={3} />
-                                                                    <span>ফলাফল দেখুন</span>
-                                                                </div>
-                                                            )}
+                                                                {/* Text */}
+                                                                <div className={styles.notifRowText}>
+                                                                    <span className={styles.nTitle}>
+                                                                        {notif.type === 'connection' && notif.data?.status === 'pending'
+                                                                            ? 'নতুন কানেকশন অনুরোধ!'
+                                                                            : notif.title}
+                                                                    </span>
+                                                                    <span className={styles.nMsg}>
+                                                                        {notif.type === 'connection' && notif.data?.status === 'pending'
+                                                                            ? `${notif.actor?.full_name || 'কেউ একজন'} আপনাকে কানেকশন অনুরোধ পাঠিয়েছেন।`
+                                                                            : notif.message}
+                                                                    </span>
 
-                                                            {notif.type === 'battle_invite' && !notif.data?.status && (
-                                                                (() => {
-                                                                    const createdAt = new Date(notif.created_at).getTime();
-                                                                    const now = new Date().getTime();
-                                                                    const diffSeconds = (now - createdAt) / 1000;
-                                                                    const isExpired = diffSeconds > 20;
+                                                                    {/* Actions */}
+                                                                    {notif.type === 'connection' && notif.data?.status === 'accepted' && (
+                                                                        <div className={styles.respondedStatus}>
+                                                                            <Check size={12} strokeWidth={3} />
+                                                                            <span>সংযুক্ত হয়েছেন</span>
+                                                                        </div>
+                                                                    )}
+                                                                    {notif.type === 'reward' && (
+                                                                        <button className={styles.actionLink} onClick={() => navigate('/shop')}>
+                                                                            শপ দেখুন <ChevronRight size={11} />
+                                                                        </button>
+                                                                    )}
 
-                                                                    if (isExpired) {
-                                                                        return (
-                                                                            <div className={styles.respondedStatus} style={{ color: 'rgba(255,255,255,0.3)' }}>
-                                                                                <X size={12} strokeWidth={3} />
-                                                                                <span>গ্রহণ করা হয়নি</span>
-                                                                            </div>
-                                                                        );
-                                                                    }
+                                                                    {notif.type === 'battle_invite' && notif.data?.status === 'accepted' && (
+                                                                        <div className={styles.respondedStatus}>
+                                                                            <Check size={12} strokeWidth={3} />
+                                                                            <span>ব্যাটেল করেছেন</span>
+                                                                        </div>
+                                                                    )}
 
-                                                                    return (
+                                                                    {notif.type === 'battle_invite' && notif.data?.status === 'finished' && (
+                                                                        <div className={styles.respondedStatus} style={{ color: 'var(--color-primary)' }}>
+                                                                            <Trophy size={12} strokeWidth={3} />
+                                                                            <span>ফলাফল দেখুন</span>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {notif.type === 'battle_invite' && !notif.data?.status && (
+                                                                        (() => {
+                                                                            const createdAt = new Date(notif.created_at).getTime();
+                                                                            const now = new Date().getTime();
+                                                                            const diffSeconds = (now - createdAt) / 1000;
+                                                                            const isExpired = diffSeconds > 20;
+
+                                                                            if (isExpired) {
+                                                                                return (
+                                                                                    <div className={styles.respondedStatus} style={{ color: 'rgba(255,255,255,0.3)' }}>
+                                                                                        <X size={12} strokeWidth={3} />
+                                                                                        <span>গ্রহণ করা হয়নি</span>
+                                                                                    </div>
+                                                                                );
+                                                                            }
+
+                                                                            return (
+                                                                                <button
+                                                                                    className={styles.actionLink}
+                                                                                    onClick={(e) => {
+                                                                                        e.stopPropagation();
+                                                                                        window.location.href = `/connections?sub=battle&joinCode=${notif.data?.roomCode}`;
+                                                                                        if (!notif.is_read) markAsRead(notif.id);
+                                                                                    }}
+                                                                                >
+                                                                                    ব্যাটলে যোগ দিন <ChevronRight size={11} />
+                                                                                </button>
+                                                                            );
+                                                                        })()
+                                                                    )}
+
+                                                                    {notif.type === 'connection' && notif.data?.status === 'pending' && (
                                                                         <button
                                                                             className={styles.actionLink}
                                                                             onClick={(e) => {
                                                                                 e.stopPropagation();
-                                                                                window.location.href = `/connections?sub=battle&joinCode=${notif.data?.roomCode}`;
+                                                                                navigate('/connections?sub=received');
                                                                                 if (!notif.is_read) markAsRead(notif.id);
                                                                             }}
                                                                         >
-                                                                            ব্যাটলে যোগ দিন <ChevronRight size={11} />
+                                                                            দেখুন <ChevronRight size={11} />
                                                                         </button>
-                                                                    );
-                                                                })()
-                                                            )}
+                                                                    )}
 
-                                                            {notif.type === 'connection' && notif.data?.status === 'pending' && (
+                                                                    <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
+                                                                </div>
+
+                                                                {/* Delete */}
                                                                 <button
-                                                                    className={styles.actionLink}
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        navigate('/connections?sub=received');
-                                                                        if (!notif.is_read) markAsRead(notif.id);
-                                                                    }}
+                                                                    type="button"
+                                                                    className={styles.deleteNotif}
+                                                                    onClick={e => { e.preventDefault(); e.stopPropagation(); deleteNotification(notif.id); }}
                                                                 >
-                                                                    দেখুন <ChevronRight size={11} />
+                                                                    <X size={13} />
                                                                 </button>
-                                                            )}
-
-                                                            <span className={styles.nTime}>{formatNotifDate(notif.created_at)}</span>
-                                                        </div>
-
-                                                        {/* Delete */}
-                                                        <button
-                                                            type="button"
-                                                            className={styles.deleteNotif}
-                                                            onClick={e => { e.preventDefault(); e.stopPropagation(); deleteNotification(notif.id); }}
-                                                        >
-                                                            <X size={13} />
-                                                        </button>
-                                                    </div>
-                                                    );
-                                                })}
+                                                            </motion.div>
+                                                        );
+                                                    })}
+                                                </AnimatePresence>
                                             </div>
                                         </div>
                                     ));
@@ -313,11 +341,6 @@ const NotificationPage = () => {
                                 {isLoadingMore && (
                                     <div className={styles.loadMoreRow}>
                                         <InlineLoader size={20} />
-                                    </div>
-                                )}
-                                {!hasMore && notifications.length > 0 && (
-                                    <div className={styles.noMoreNotifs}>
-                                        {t('no_more_notifications') || 'সব নোটিফিকেশন লোড হয়েছে'}
                                     </div>
                                 )}
                             </motion.div>

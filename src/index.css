@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import './styles/variables.css';
 @import "tailwindcss";
 
 
 @theme {
-  --font-sans: "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Hind Siliguri", "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif;
 
   --color-slate-50: #f8fafc;
   --color-slate-100: #f1f5f9;

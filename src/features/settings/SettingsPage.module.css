@@ -1090,3 +1090,49 @@ input:checked+.slider .knob {
         text-align: left;
     }
 }
+
+/* Light Mode Overrides for Settings Page */
+
+:global(.light) .menuItemActive {
+    color: var(--color-text);
+}
+
+:global(.light) input:checked + .slider .knob {
+    color: var(--color-text);
+}
+
+:global(.light) .warningNote {
+    color: #b45309;
+    background-color: #fffbeb;
+    border-color: #fde68a;
+}
+
+:global(.light) .resetBtn {
+    background-color: #fffbeb;
+    color: #b45309;
+    border: 1px solid #fde68a;
+}
+
+:global(.light) .resetBtn:hover {
+    background-color: #fef3c7;
+}
+
+:global(.light) .dangerBtnMinimal {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.2);
+}
+
+:global(.light) .dangerBtnMinimal:hover {
+    background-color: rgba(220, 38, 38, 0.05);
+    border-color: #dc2626;
+}
+
+:global(.light) .dangerBtn {
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.2);
+}
+
+:global(.light) .dangerBtn:hover {
+    background-color: rgba(220, 38, 38, 0.05);
+    border-color: #dc2626;
+}

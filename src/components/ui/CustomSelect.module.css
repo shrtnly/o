@@ -98,10 +98,20 @@
     padding-left: 18px;
 }
 
+:global(.light) .option:hover {
+    background-color: var(--color-bg-deep);
+    color: var(--color-text);
+}
+
 .option.selected {
     background-color: var(--color-primary-faint);
     color: var(--color-primary);
     font-weight: 700;
+}
+
+:global(.light) .option.selected {
+    background-color: var(--color-bg-deep);
+    color: var(--color-text);
 }
 
 /* Scrollbar styling */

@@ -33,8 +33,12 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    padding: 16px 0 20px;
+    padding: 20px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 20px;
     position: relative;
+    margin-bottom: 24px;
     width: 100%;
 }
 
@@ -228,14 +232,18 @@
     display: flex;
     align-items: center;
     gap: 18px;
-    padding: 16px 0 10px;
+    padding: 20px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-muted);
+    border-radius: 20px;
     position: relative;
+    margin-bottom: 24px;
 }
 
 .headerSettingsBtn {
     position: absolute;
     top: 20px;
-    right: 0;
+    right: 20px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -289,7 +297,6 @@
 
 .online {
     background: #2ECC71;
-    box-shadow: 0 0 10px rgba(46, 204, 113, 0.4);
 }
 
 .offline {
@@ -319,7 +326,7 @@
 .avatar:hover {
     transform: scale(1.02);
     border-color: var(--color-primary-light);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    /* Removed box-shadow glowing effect */
 }
 
 .avatar:active {
@@ -372,7 +379,8 @@
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
+    /* Removed backdrop-filter to prevent glowing/blur */
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -503,8 +511,8 @@
 }
 
 .statIconCompass {
-    color: var(--color-primary);
-    opacity: 0.85;
+    color: #FFB800;
+    opacity: 0.9;
 }
 
 .statIconStreak {
@@ -512,12 +520,12 @@
 }
 
 .statIconRank {
-    color: #FFD700;
+    color: #FFB800;
     opacity: 0.9;
 }
 
 .statIconBattle {
-    color: #FF4757;
+    color: #FFB800;
     opacity: 0.9;
 }
 
@@ -1493,7 +1501,7 @@
 .miniCardValue {
     font-size: 0.95rem;
     font-weight: 800;
-    color: var(--color-text);
+    color: #FFB800;
 }
 
 .chartContainerFull {
@@ -2186,5 +2194,37 @@
     .inviteTooltip {
         width: 200px;
         font-size: 0.75rem;
+    }
+
+    /* Royal Header Mobile Adjustments */
+    .royalHeader {
+        padding: 16px;
+        gap: 14px;
+    }
+    
+    .userName {
+        font-size: 1.15rem;
+    }
+    
+    .headerSettingsBtn {
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .headerSettingsBtn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .avatar {
+        width: 70px;
+        height: 70px;
+    }
+
+    .avatarBadge {
+        width: 28px;
+        height: 28px;
     }
 }

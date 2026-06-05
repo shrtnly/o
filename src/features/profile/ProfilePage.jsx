@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabaseClient';
@@ -568,6 +568,35 @@ const ProfilePage = () => {
         return { ...badge, unlocked };
     });
 
+    const chartData = useMemo(() => {
+        if (!analysisData?.activity) return [];
+        let startDate, endDate;
+        
+        if (analysisDays === 'all') {
+            return analysisData.activity; // Show as is
+        } else if (analysisDays === 'month') {
+            startDate = new Date(viewingMonth.getFullYear(), viewingMonth.getMonth(), 1);
+            endDate = new Date(viewingMonth.getFullYear(), viewingMonth.getMonth() + 1, 0);
+        } else {
+            const days = parseInt(analysisDays, 10);
+            endDate = new Date();
+            startDate = new Date();
+            startDate.setDate(endDate.getDate() - days + 1);
+        }
+
+        const fullData = [];
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+            
+            const existing = analysisData.activity.find(item => item.activity_date && item.activity_date.startsWith(formattedDate));
+            fullData.push(existing || { activity_date: formattedDate, xp_earned: 0, time_spent_seconds: 0 });
+        }
+        return fullData;
+    }, [analysisData?.activity, analysisDays, viewingMonth]);
+
     const xp = profile?.xp || 0;
 
     return (
@@ -995,20 +1024,22 @@ const ProfilePage = () => {
                                             <div className={styles.analysisStatsRow}>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('daily_xp')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: textBrandColor }}>
+                                                    <span className={styles.miniCardValue}>
                                                         {analysisData.summary.totalXp}
                                                     </span>
                                                 </div>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('total_time')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: textBrandColor }}>
+                                                    <span className={styles.miniCardValue}>
                                                         {analysisData.summary.totalMinutes} {t('minutes')}
                                                     </span>
                                                 </div>
                                                 <div className={styles.analysisMiniCard}>
                                                     <span className={styles.miniCardLabel}>{t('accuracy')}</span>
-                                                    <span className={styles.miniCardValue} style={{ color: '#2ECC71' }}>
-                                                        {Math.round((analysisData.summary.totalCorrect / (analysisData.summary.totalCorrect + analysisData.summary.totalWrong)) * 100)}%
+                                                    <span className={styles.miniCardValue}>
+                                                        {analysisData.summary.totalCorrect + analysisData.summary.totalWrong > 0 
+                                                            ? Math.round((analysisData.summary.totalCorrect / (analysisData.summary.totalCorrect + analysisData.summary.totalWrong)) * 100)
+                                                            : 0}%
                                                     </span>
                                                 </div>
                                             </div>
@@ -1028,7 +1059,7 @@ const ProfilePage = () => {
                                                 </div>
                                                 <div style={{ width: '100%', height: 200 }}>
                                                     <ResponsiveContainer>
-                                                        <AreaChart data={analysisData.activity}>
+                                                        <AreaChart data={chartData}>
                                                             <defs>
                                                                 <linearGradient id="colorXp" x1="0" y1="0" x2="0" y2="1">
                                                                     <stop offset="5%" stopColor={brandColor} stopOpacity={0.3} />
@@ -1044,7 +1075,8 @@ const ProfilePage = () => {
                                                                 tick={{ fontSize: 10, fill: 'var(--color-text-muted)' }}
                                                                 axisLine={false}
                                                                 tickLine={false}
-                                                                minTickGap={10}
+                                                                minTickGap={5}
+                                                                interval="preserveStartEnd"
                                                             />
                                                             <YAxis hide />
                                                             <ChartTooltip

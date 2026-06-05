@@ -48,9 +48,7 @@ const PrivacyPage = () => {
                     })}
                 </div>
 
-                <div className={styles.contact}>
-                    <p>{t('p_contact_us')}</p>
-                </div>
+
             </div>
         </div>
     );

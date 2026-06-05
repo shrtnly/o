@@ -1901,11 +1901,6 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                 <h3 style={{ fontSize: '1.25rem', color: 'var(--color-text)', fontWeight: '800', lineHeight: '1.4', maxWidth: '340px' }}>
                     {language === 'bn' ? 'ওহ! এখানে কোনো শিক্ষার্থী নেই। কিছুক্ষণ পরে আবার দেখুন' : 'Oh! No learners found here. Please check back later.'}
                 </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', maxWidth: '300px', lineHeight: '1.5' }}>
-                    {language === 'bn' 
-                        ? 'লাইভ ব্যাটেল খেলার জন্য কোনো সক্রিয় লার্নার পাওয়া যায়নি। আপনি আবার চেষ্টা করতে পারেন অথবা এআই বটের সাথে খেলতে পারেন।' 
-                        : 'No active learners were found for the PvP match. You can try again or play against an AI bot.'}
-                </p>
 
                 <div style={{ display: 'flex', gap: '12px', marginTop: '12px', width: '100%', justifyContent: 'center' }}>
                     <motion.button
@@ -1919,15 +1914,15 @@ const BattleWar = ({ user, userProfile, onPhaseChange }) => {
                         <span style={{ whiteSpace: 'nowrap' }}>{language === 'bn' ? 'পুনরায় খুঁজুন' : 'Search Again'}</span>
                     </motion.button>
                     <motion.button
-                        className={styles.createBtn}
-                        style={{ padding: '10px 16px', flex: 1, minWidth: '130px', maxWidth: '160px', height: '70px', fontSize: '0.82rem', background: 'transparent', border: '1px solid #ffffff', color: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                        className={styles.createBtnSecondary}
+                        style={{ padding: '10px 16px', flex: 1, minWidth: '130px', maxWidth: '160px', height: '70px', fontSize: '0.82rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                         onClick={() => {
                             matchModeRef.current = 'bot';
                             setMatchMode('bot');
                             handleCreateRoom();
                         }}
-                        whileHover={{ scale: 1.05, background: 'rgba(255, 255, 255, 0.1)' }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
                     >
                         <Brain size={20} />
                         <span style={{ whiteSpace: 'nowrap' }}>{language === 'bn' ? 'এআই এজেন্ট' : 'AI Agent'}</span>

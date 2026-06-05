@@ -457,8 +457,14 @@
 
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+}
+
+@media (max-width: 600px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 .statCard {
@@ -507,6 +513,11 @@
 
 .statIconRank {
     color: #FFD700;
+    opacity: 0.9;
+}
+
+.statIconBattle {
+    color: #FF4757;
     opacity: 0.9;
 }
 

@@ -17,7 +17,7 @@ import {
     LogOut, BarChart3, Layout, Activity as ActivityIcon, Compass, Flame,
     Camera, X, Settings, Share2, User, Calendar, Zap, Gem, Trophy, Target, BookOpen,
     Search, UserPlus, Check, Mail, AtSign, Phone, GraduationCap, ChartNoAxesCombined, SquarePen, CircleHelp,
-    Twitter, Facebook, Linkedin, MessageCircle
+    Twitter, Facebook, Linkedin, MessageCircle, Swords
 } from 'lucide-react';
 import { formatLocalDate } from '../../lib/dateUtils';
 import ShieldIcon from '../../components/ShieldIcon';
@@ -89,6 +89,7 @@ const ProfilePage = () => {
     const [enrolledCourses, setEnrolledCourses] = useState([]);
     const [streak, setStreak] = useState(null);
     const [imgError, setImgError] = useState(false);
+    const [battleCount, setBattleCount] = useState(0);
 
     useEffect(() => {
         if (profile?.avatar_url) {
@@ -165,6 +166,36 @@ const ProfilePage = () => {
         }
     }, [user?.id, navigate, location.search]);
 
+    // Real-time battle count subscription
+    useEffect(() => {
+        if (!user?.id) return;
+
+        const battleHistorySub = supabase
+            .channel(`battle-history-user-${user.id}`)
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'battle_history', filter: `user_id=eq.${user.id}` },
+                async () => {
+                    try {
+                        const { count: newCount } = await supabase
+                            .from('battle_history')
+                            .select('id', { count: 'exact', head: true })
+                            .eq('user_id', user.id);
+                        if (newCount !== null) {
+                            setBattleCount(newCount);
+                        }
+                    } catch (err) {
+                        console.error('Error updating real-time battle count:', err);
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(battleHistorySub);
+        };
+    }, [user?.id]);
+
     const fetchProfileData = async () => {
         try {
             if (!profile) setLoading(true);
@@ -214,6 +245,19 @@ const ProfilePage = () => {
                 }
             } catch (rankErr) {
                 console.error('Error fetching global rank:', rankErr);
+            }
+
+            // Fetch battle count
+            try {
+                const { count: bCount, error: bError } = await supabase
+                    .from('battle_history')
+                    .select('id', { count: 'exact', head: true })
+                    .eq('user_id', user.id);
+                if (!bError) {
+                    setBattleCount(bCount || 0);
+                }
+            } catch (bErr) {
+                console.error('Error fetching battle count:', bErr);
             }
 
         } catch (error) {
@@ -647,6 +691,15 @@ const ProfilePage = () => {
                                         <div className={styles.statInfoStack}>
                                             <span className={styles.statCardValue}>{enrolledCourses.length}</span>
                                             <span className={styles.statCardLabel}>{language === 'bn' ? 'কোর্স' : 'Courses'}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIconBox}>
+                                            <Swords size={18} className={styles.statIconBattle} />
+                                        </div>
+                                        <div className={styles.statInfoStack}>
+                                            <span className={styles.statCardValue}>{battleCount}</span>
+                                            <span className={styles.statCardLabel}>{language === 'bn' ? 'চ্যালেঞ্জ' : 'Battle Challenge'}</span>
                                         </div>
                                     </div>
                                 </div>

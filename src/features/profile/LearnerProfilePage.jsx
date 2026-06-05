@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 import {
     ArrowLeft, UserPlus, MessageSquare, Check,
     Flame, Trophy, BookOpen, Zap, UserCheck,
-    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical, Shield, Swords
+    Hourglass, User, UserMinus, Ban, Link, CheckCheck, MoreVertical, Shield, Swords, Lock
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ConfirmModal from '../../components/ui/ConfirmModal';
@@ -28,6 +28,7 @@ const LearnerProfilePage = () => {
     const [streak, setStreak]               = useState(null);
     const [rank, setRank]                   = useState(null);
     const [certs, setCerts]                 = useState(0);
+    const [battleCount, setBattleCount]     = useState(0);
     const [loading, setLoading]             = useState(true);
     const [connStatus, setConnStatus]       = useState('none');
     const [connId, setConnId]               = useState(null);
@@ -78,14 +79,16 @@ const LearnerProfilePage = () => {
             setLearner(profile);
             setImgError(false);
 
-            const [statsData, streakData, certsData] = await Promise.all([
+            const [statsData, streakData, certsData, battleCountData] = await Promise.all([
                 rewardService.getUserStats(learnerId),
                 rewardService.getUserStreak(learnerId),
-                supabase.from('certificates').select('id', { count: 'exact', head: true }).eq('user_id', learnerId)
+                supabase.from('certificates').select('id', { count: 'exact', head: true }).eq('user_id', learnerId),
+                supabase.from('battle_history').select('id', { count: 'exact', head: true }).eq('user_id', learnerId)
             ]);
             setStats(statsData);
             setStreak(streakData);
             setCerts(certsData.count || 0);
+            setBattleCount(battleCountData.count || 0);
 
             if (profile.xp >= 100) {
                 try {
@@ -147,6 +150,36 @@ const LearnerProfilePage = () => {
 
     useEffect(() => { fetchLearner(); }, [fetchLearner]);
     useEffect(() => { fetchConnection(); }, [fetchConnection]);
+
+    // Real-time battle count subscription
+    useEffect(() => {
+        if (!learnerId) return;
+
+        const battleHistorySub = supabase
+            .channel(`battle-history-learner-${learnerId}`)
+            .on(
+                'postgres_changes',
+                { event: 'INSERT', schema: 'public', table: 'battle_history', filter: `user_id=eq.${learnerId}` },
+                async () => {
+                    try {
+                        const { count: newCount } = await supabase
+                            .from('battle_history')
+                            .select('id', { count: 'exact', head: true })
+                            .eq('user_id', learnerId);
+                        if (newCount !== null) {
+                            setBattleCount(newCount);
+                        }
+                    } catch (err) {
+                        console.error('Error updating real-time battle count:', err);
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(battleHistorySub);
+        };
+    }, [learnerId]);
 
     const handleConnect = async () => {
         if (!user) { navigate('/auth'); return; }
@@ -379,8 +412,6 @@ const LearnerProfilePage = () => {
                         }`}
                         onClick={handleConnect}
                         disabled={actionLoading}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                     >
                         <ConnectIcon />
                         <span>{connectLabel()}</span>
@@ -390,8 +421,6 @@ const LearnerProfilePage = () => {
                     <motion.button 
                         className={`${styles.actionBtn} ${styles.msgBtn}`} 
                         onClick={handleMessage}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
                     >
                         <MessageSquare size={15} />
                         <span>{language === 'bn' ? 'বার্তা' : 'Message'}</span>
@@ -403,12 +432,10 @@ const LearnerProfilePage = () => {
                         onClick={() => {
                             if (learner.battle_mode === false) {
                                 toast.error(language === 'bn' ? 'এই শিক্ষার্থী বর্তমানে ব্যাটেল মোড বন্ধ রেখেছেন' : 'This learner has disabled battle mode');
-                                return;
-                            }
-                            handleBattleRequest();
+                                    return;
+                                }
+                                handleBattleRequest();
                         }}
-                        whileHover={learner.battle_mode !== false ? { scale: 1.02 } : {}}
-                        whileTap={learner.battle_mode !== false ? { scale: 0.98 } : {}}
                         disabled={learner.battle_mode === false}
                         title={learner.battle_mode === false ? (language === 'bn' ? 'ব্যাটেল মোড বন্ধ' : 'Battle mode disabled') : ''}
                     >
@@ -437,9 +464,9 @@ const LearnerProfilePage = () => {
                             </div>
 
                             <div className={styles.statBox}>
-                                <Zap size={17} className={styles.statIconXp} strokeWidth={2} />
-                                <span className={styles.statVal}>{(learner.xp || 0).toLocaleString()}</span>
-                                <span className={styles.statLbl}>{language === 'bn' ? 'মধু (XP)' : 'XP'}</span>
+                                <Swords size={17} className={styles.statIconBattle} strokeWidth={2} />
+                                <span className={styles.statVal}>{battleCount}</span>
+                                <span className={styles.statLbl}>{language === 'bn' ? 'চ্যালেঞ্জ' : 'Battle Challenge'}</span>
                             </div>
 
                             <div className={styles.statBox}>
@@ -456,8 +483,11 @@ const LearnerProfilePage = () => {
                         </div>
                     ) : (
                         <div className={styles.privateInfoBox}>
-                            <Shield size={20} className={styles.privateIcon} />
-                            <span>{language === 'bn' ? 'এই প্রোফাইলটি বর্তমানে প্রাইভেট করা আছে' : 'This profile is currently private'}</span>
+                            <div className={styles.privacyIconWrapper}>
+                                <Shield size={36} className={styles.privateShieldIcon} />
+                                <Lock size={14} className={styles.privateLockIcon} />
+                            </div>
+                            <span>{language === 'bn' ? 'প্রাইভেট প্রোফাইল' : 'Private Profile'}</span>
                         </div>
                     )}
                 </motion.section>

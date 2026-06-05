@@ -48,10 +48,7 @@ const TermsPage = () => {
                     })}
                 </div>
 
-                <div className={styles.footer}>
-                    <p className={styles.copyright}>
-                        &copy; {new Date().getFullYear()} BeeLesson. সকল স্বত্ব সংরক্ষিত।</p>
-                </div>
+
             </div>
         </div>
     );

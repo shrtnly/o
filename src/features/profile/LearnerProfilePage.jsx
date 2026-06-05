@@ -313,7 +313,7 @@ const LearnerProfilePage = () => {
         <div style={{
             width: '100%', height: '100%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'rgba(241,196,15,0.06)', borderRadius: '50%'
+            background: 'rgba(255, 184, 0,0.06)', borderRadius: '50%'
         }}>
             <User size={30} color="var(--color-primary)" strokeWidth={1.5} />
         </div>

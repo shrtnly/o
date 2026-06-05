@@ -17,7 +17,7 @@ const PollenIcon = ({ size = 24, className = "" }) => {
             <defs>
                 <radialGradient id={gradientId} cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 12) rotate(90) scale(10)">
                     <stop stopColor="#FFEA00" />
-                    <stop offset="1" stopColor="#F1C40F" />
+                    <stop offset="1" stopColor="#FFB800" />
                 </radialGradient>
             </defs>
 

@@ -65,8 +65,8 @@ export const HistoryModal = ({ history, onClose, language, currentPage, totalCou
                         {/* total count badge */}
                         {(totalCount > 0) && (
                             <span style={{
-                                background: 'rgba(241, 196, 15, 0.15)',
-                                border: '1px solid rgba(241, 196, 15, 0.3)',
+                                background: 'rgba(255, 184, 0, 0.15)',
+                                border: '1px solid rgba(255, 184, 0, 0.3)',
                                 borderRadius: '20px',
                                 padding: '2px 8px',
                                 fontSize: '11px',

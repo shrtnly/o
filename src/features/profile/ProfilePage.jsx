@@ -58,7 +58,7 @@ const DiceBearAvatar = ({ seed, size = 84 }) => {
             <div style={{
                 width: '100%', height: '100%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: 'rgba(241,196,15,0.08)',
+                background: 'rgba(255, 184, 0,0.08)',
                 borderRadius: '50%'
             }}>
                 <User size={Math.floor(size * 0.5)} color="var(--color-primary)" />
@@ -81,8 +81,8 @@ const ProfilePage = () => {
     const location = useLocation();
     const { t, language } = useLanguage();
     const { isDark } = useTheme();
-    const brandColor = isDark ? '#F1C40F' : '#FFB800';
-    const textBrandColor = isDark ? '#F1C40F' : '#b45309';
+    const brandColor = isDark ? '#FFB800' : '#FFB800';
+    const textBrandColor = isDark ? '#FFB800' : '#b45309';
     const [profile, setProfile] = useState(null);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);

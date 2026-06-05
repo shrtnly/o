@@ -250,8 +250,8 @@
 }
 
 .headerSettingsBtn:hover {
-    background: rgba(241, 196, 15, 0.1);
-    border-color: rgba(241, 196, 15, 0.3);
+    background: rgba(255, 184, 0, 0.1);
+    border-color: rgba(255, 184, 0, 0.3);
     color: var(--color-primary);
     transform: rotate(45deg);
 }
@@ -571,14 +571,14 @@
 }
 
 .badgeUnlocked .badgeCircle {
-    background: rgba(241, 196, 15, 0.12);
+    background: rgba(255, 184, 0, 0.12);
     border: 2px solid var(--color-primary-light);
-    box-shadow: 0 4px 16px rgba(241, 196, 15, 0.2);
+    box-shadow: 0 4px 16px rgba(255, 184, 0, 0.2);
 }
 
 .badgeUnlocked:hover .badgeCircle {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(241, 196, 15, 0.35);
+    box-shadow: 0 6px 20px rgba(255, 184, 0, 0.35);
 }
 
 .badgeLocked .badgeCircle {
@@ -698,7 +698,7 @@
     justify-content: center;
     gap: 7px;
     padding: 11px 16px;
-    border: 1.5px solid rgba(241, 196, 15, 0.45);
+    border: 1.5px solid rgba(255, 184, 0, 0.45);
     border-radius: 12px;
     background: transparent;
     color: var(--color-primary);
@@ -710,8 +710,8 @@
 }
 
 .actionOutline:hover {
-    background: rgba(241, 196, 15, 0.08);
-    border-color: rgba(241, 196, 15, 0.7);
+    background: rgba(255, 184, 0, 0.08);
+    border-color: rgba(255, 184, 0, 0.7);
 }
 
 .actionSolid {
@@ -729,13 +729,13 @@
     font-size: 0.85rem;
     font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 4px 16px rgba(241, 196, 15, 0.3);
+    box-shadow: 0 4px 16px rgba(255, 184, 0, 0.3);
     transition: all 0.2s;
 }
 
 .actionSolid:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 22px rgba(241, 196, 15, 0.45);
+    box-shadow: 0 6px 22px rgba(255, 184, 0, 0.45);
 }
 
 .actionMinimal {
@@ -752,7 +752,7 @@
 .actionMinimal:hover {
     border-color: var(--color-primary-light);
     color: var(--color-primary);
-    background: rgba(241, 196, 15, 0.07);
+    background: rgba(255, 184, 0, 0.07);
 }
 
 /* ─────────────────────────────────────────────
@@ -772,14 +772,14 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 20px rgba(241, 196, 15, 0.45);
+    box-shadow: 0 4px 20px rgba(255, 184, 0, 0.45);
     transition: transform 0.2s, box-shadow 0.2s;
     z-index: 50;
 }
 
 .shareFab:hover {
     transform: scale(1.1) rotate(10deg);
-    box-shadow: 0 8px 28px rgba(241, 196, 15, 0.6);
+    box-shadow: 0 8px 28px rgba(255, 184, 0, 0.6);
 }
 
 /* ─────────────────────────────────────────────
@@ -916,8 +916,8 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    background: rgba(241, 196, 15, 0.12);
-    border: 1px solid rgba(241, 196, 15, 0.3);
+    background: rgba(255, 184, 0, 0.12);
+    border: 1px solid rgba(255, 184, 0, 0.3);
     border-radius: 20px;
     padding: 5px 14px;
     font-size: 0.72rem;
@@ -1073,11 +1073,11 @@
 }
 
 .genderBtn:hover {
-    border-color: rgba(241, 196, 15, 0.5);
+    border-color: rgba(255, 184, 0, 0.5);
 }
 
 .genderBtnActive {
-    background: rgba(241, 196, 15, 0.1) !important;
+    background: rgba(255, 184, 0, 0.1) !important;
     border-color: var(--color-primary) !important;
     color: var(--color-primary) !important;
 }
@@ -1441,7 +1441,7 @@
 }
 
 .optActive {
-    background: rgba(241, 196, 15, 0.1) !important;
+    background: rgba(255, 184, 0, 0.1) !important;
     color: var(--color-primary) !important;
 }
 
@@ -2052,7 +2052,7 @@
     gap: 12px;
     margin-top: 16px;
     padding: 16px; /* slightly larger padding */
-    background: #F1C40F; /* Use consistent brand gold */
+    background: #FFB800; /* Use consistent brand gold */
     color: #000;
     border: none;
     border-radius: 16px;
@@ -2077,7 +2077,7 @@
 }
 
 .inviteActionCopied {
-    background: #F1C40F; /* Keep original color */
+    background: #FFB800; /* Keep original color */
     box-shadow: 0 6px 0 #C9A80C;
 }
 

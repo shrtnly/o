@@ -41,6 +41,36 @@
     margin-bottom: 32px;
 }
 
+.mobileHeader {
+    display: none;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 16px;
+}
+
+.closeButton {
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.closeButton:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .closeButton:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
 .pageHeaderIcon {
     width: 42px;
     height: 42px;
@@ -182,7 +212,7 @@
 }
 
 .introCard:hover {
-    border-color: rgba(241, 196, 15, 0.2);
+    border-color: rgba(255, 184, 0, 0.2);
     transform: translateY(-3px);
 }
 
@@ -528,12 +558,10 @@
     background: var(--color-primary-faint);
     color: var(--color-text);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 .userRankStatus:active {
     transform: translateY(0);
-    box-shadow: none;
 }
 
 .userRankStatus strong { color: var(--color-primary); font-weight: 900; }
@@ -564,6 +592,7 @@
 
 /* ---------- Mobile ---------- */
 @media (max-width: 768px) {
+    .mobileHeader { display: flex; }
     .mainContent { padding: 24px 16px 80px; }
     .progressCol, .headerCol:nth-child(3) { display: none; }
     .row, .tableHeader { grid-template-columns: 40px 1fr 85px; padding: 12px 16px; }

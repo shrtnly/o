@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════
    Study Page — Minimal Bee Theme
-   Primary: #f1c40f  Shadow: #c9a80b
+   Primary: #FFB800  Shadow: #c9a80b
    Danger:  #e74c3c  Shadow: #c0392b
 ═══════════════════════════════════════ */
 
@@ -160,10 +160,9 @@
 }
 
 .selectedCard {
-    border-color: #f1c40f !important;
-    background: rgba(241, 196, 15, 0.05) !important;
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.1);
-    color: #f1c40f;
+    border-color: #FFB800 !important;
+    background: rgba(255, 184, 0, 0.05) !important;
+    color: #FFB800;
 }
 
 /* Brief green flash on correct match */
@@ -174,9 +173,9 @@
 }
 
 @keyframes matchGreenFlash {
-    0%   { background: rgba(46, 204, 113, 0.35); border-color: #2ecc71; color: #fff; box-shadow: 0 0 18px rgba(46,204,113,0.4); }
-    60%  { background: rgba(46, 204, 113, 0.2);  border-color: #2ecc71; color: #2ecc71; box-shadow: 0 0 8px rgba(46,204,113,0.2); }
-    100% { background: rgba(46, 204, 113, 0.06); border-color: rgba(46,204,113,0.3); color: rgba(255,255,255,0.3); box-shadow: none; }
+    0%   { background: rgba(46, 204, 113, 0.35); border-color: #2ecc71; color: #fff; }
+    60%  { background: rgba(46, 204, 113, 0.2);  border-color: #2ecc71; color: #2ecc71; }
+    100% { background: rgba(46, 204, 113, 0.06); border-color: rgba(46,204,113,0.3); color: rgba(255,255,255,0.3); }
 }
 
 /* Final settled state after flash — locked/disabled look (matches checkBtnDisabled style) */
@@ -206,21 +205,18 @@
 }
 
 @keyframes hintPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.3);
+    0%, 100% {
+        background: rgba(46, 204, 113, 0.06);
     }
-
     50% {
-        box-shadow: 0 0 0 6px rgba(46, 204, 113, 0);
+        background: rgba(46, 204, 113, 0.15);
     }
 }
 
 /* Subtle amber glow: left card that has been tried but is still unmatched */
 .hasFailed {
-    border-color: rgba(241, 196, 15, 0.5) !important;
-    background: rgba(241, 196, 15, 0.04) !important;
+    border-color: rgba(255, 184, 0, 0.5) !important;
+    background: rgba(255, 184, 0, 0.04) !important;
 }
 
 @keyframes shake {
@@ -283,7 +279,7 @@
 
 .progressFill {
     height: 100%;
-    background: linear-gradient(to bottom, #f1c40f 0%, #d4ac0d 100%);
+    background: linear-gradient(to bottom, #FFB800 0%, #d4ac0d 100%);
     border-radius: 99px;
     transition: width 0.5s cubic-bezier(0.65, 0, 0.35, 1);
     position: relative;
@@ -306,7 +302,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #f1c40f;
+    background: #FFB800;
     transform-origin: center;
 }
 
@@ -342,7 +338,7 @@
 .heartCount {
     font-size: 1.25rem;
     font-weight: 800;
-    color: #f1c40f;
+    color: #FFB800;
     line-height: 1;
 }
 
@@ -352,11 +348,11 @@
     gap: 4px;
     font-size: 0.8rem;
     font-weight: 700;
-    color: #f1c40f;
-    background: rgba(241, 196, 15, 0.08);
+    color: #FFB800;
+    background: rgba(255, 184, 0, 0.08);
     padding: 3px 8px;
     border-radius: 6px;
-    border: 1px solid rgba(241, 196, 15, 0.18);
+    border: 1px solid rgba(255, 184, 0, 0.18);
 }
 
 /* ── Main Content ── */
@@ -430,8 +426,8 @@
     gap: 8px;
     margin-bottom: 24px;
     padding: 12px 16px;
-    background: rgba(241, 196, 15, 0.04);
-    border-left: 2px solid rgba(241, 196, 15, 0.35);
+    background: rgba(255, 184, 0, 0.04);
+    border-left: 2px solid rgba(255, 184, 0, 0.35);
     border-radius: 0 8px 8px 0;
 }
 
@@ -477,17 +473,17 @@
 
 @keyframes speakingPulse {
     0% {
-        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4);
+        box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.4);
         transform: scale(1);
     }
 
     50% {
-        box-shadow: 0 0 0 12px rgba(241, 196, 15, 0);
+        box-shadow: 0 0 0 12px rgba(255, 184, 0, 0);
         transform: scale(1.02);
     }
 
     100% {
-        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+        box-shadow: 0 0 0 0 rgba(255, 184, 0, 0);
         transform: scale(1);
     }
 }
@@ -496,11 +492,11 @@
 
     0%,
     100% {
-        border-color: rgba(241, 196, 15, 0.2);
+        border-color: rgba(255, 184, 0, 0.2);
     }
 
     50% {
-        border-color: rgba(241, 196, 15, 0.5);
+        border-color: rgba(255, 184, 0, 0.5);
     }
 }
 
@@ -512,7 +508,7 @@
     justify-content: center;
     flex-shrink: 0;
     background: transparent !important;
-    border: 0.5px solid rgba(241, 196, 15, 0.15);
+    border: 0.5px solid rgba(255, 184, 0, 0.15);
     border-radius: 50%;
     box-shadow: none;
     transition: all 0.3s ease;
@@ -521,7 +517,7 @@
 
 .speakingAvatar {
     animation: speakingPulse 2s infinite ease-in-out;
-    border-color: rgba(241, 196, 15, 0.4);
+    border-color: rgba(255, 184, 0, 0.4);
 }
 
 .rakibAvatar,
@@ -628,8 +624,8 @@
 }
 
 .optionBtn:hover:not(:disabled) {
-    background: rgba(241, 196, 15, 0.03);
-    border-color: rgba(241, 196, 15, 0.3);
+    background: rgba(255, 184, 0, 0.03);
+    border-color: rgba(255, 184, 0, 0.3);
 }
 
 .optionBtn:active:not(:disabled) {
@@ -663,23 +659,31 @@
 
 /* ── Selected State ── */
 .selected {
-    border: 1px solid rgba(241, 196, 15, 0.35) !important;
-    border-bottom: 4px solid #c9a80b !important;
-    background: rgba(241, 196, 15, 0.008) !important;
+    border: 2px solid #FFB800 !important;
+    border-bottom: 4px solid #FFB800 !important;
+    background: rgba(255, 184, 0, 0.05) !important;
+}
+
+.selected .optionText {
+    color: #FFB800 !important;
 }
 
 .selected .optionIndex {
-    background: #f1c40f;
-    border-color: #f1c40f;
+    background: #FFB800;
+    border-color: #FFB800;
     color: #1a1400;
 }
 
 /* ── Correct State ── */
 .correct {
-    border: 1px solid rgba(241, 196, 15, 0.4) !important;
-    border-bottom: 4px solid #c9a80b !important;
-    background: rgba(241, 196, 15, 0.012) !important;
+    border: 2px solid #FFB800 !important;
+    border-bottom: 4px solid #FFB800 !important;
+    background: rgba(255, 184, 0, 0.05) !important;
     animation: correctPulse 0.5s ease;
+}
+
+.correct .optionText {
+    color: #FFB800 !important;
 }
 
 @keyframes correctPulse {
@@ -697,8 +701,8 @@
 }
 
 .correct .optionIndex {
-    background: #f1c40f !important;
-    border-color: #f1c40f !important;
+    background: #FFB800 !important;
+    border-color: #FFB800 !important;
     color: #1a1400 !important;
 }
 
@@ -725,7 +729,7 @@
 }
 
 .correctIcon {
-    color: #f1c40f;
+    color: #FFB800;
 }
 
 .incorrectIcon {
@@ -746,7 +750,7 @@
 }
 
 .footerCorrect {
-    border-top: 1px solid rgba(241, 196, 15, 0.4);
+    border-top: 1px solid rgba(255, 184, 0, 0.4);
     background: #0b0e11;
 }
 
@@ -787,7 +791,7 @@
 
 /* ── Check Button ── */
 .checkBtn {
-    background: #f1c40f;
+    background: #FFB800;
     border: none;
     border-radius: 12px;
     padding: 13px 36px;
@@ -859,7 +863,7 @@
 
 .footerCorrect .statusIcon,
 .footerCorrect .statusHeader h3 {
-    color: #f1c40f;
+    color: #FFB800;
 }
 
 .footerIncorrect .statusIcon,
@@ -902,7 +906,7 @@
 }
 
 .footerCorrect .continueBtn {
-    background: #f1c40f;
+    background: #FFB800;
     color: #1a1400;
     box-shadow: 0 4px 0 #c9a80b;
 }
@@ -1011,7 +1015,7 @@
     font-weight: 900;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: rgba(241, 196, 15, 0.45);
+    color: rgba(255, 184, 0, 0.45);
     margin-bottom: 5px;
 }
 
@@ -1063,7 +1067,7 @@
 }
 
 .reviewHintLabel {
-    color: rgba(241, 196, 15, 0.55);
+    color: rgba(255, 184, 0, 0.55);
     font-weight: 800;
     font-size: 0.72rem;
     letter-spacing: 0.02em;
@@ -1129,7 +1133,7 @@
 
 /* ── Footer: Results state (neutral, no color) ── */
 .footerResults {
-    border-top-color: rgba(241, 196, 15, 0.25);
+    border-top-color: rgba(255, 184, 0, 0.25);
     background: #0b0e11;
 }
 
@@ -1162,7 +1166,7 @@
     font-size: 1rem;
     border: none;
     cursor: pointer;
-    background: #f1c40f;
+    background: #FFB800;
     color: #1a1400;
     box-shadow: 0 4px 0 #c9a80b;
     transition: transform 0.1s, box-shadow 0.1s, background 0.15s;
@@ -1202,7 +1206,7 @@
 .resultDivider {
     width: 60%;
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba(241, 196, 15, 0.35), transparent);
+    background: linear-gradient(to right, transparent, rgba(255, 184, 0, 0.35), transparent);
     margin: 8px auto 10px;
     border: none;
 }
@@ -1259,7 +1263,7 @@
 }
 
 .meterFill {
-    stroke: #f1c40f;
+    stroke: #FFB800;
     stroke-linecap: round;
     /* Removed drop-shadow as per previous request */
 }
@@ -1300,7 +1304,7 @@
 }
 
 .accuracyFill {
-    stroke: #f1c40f;
+    stroke: #FFB800;
     /* Golden Bee Theme */
     stroke-linecap: round;
 }
@@ -1317,7 +1321,7 @@
 }
 
 .pollenSegment {
-    stroke: #f1c40f;
+    stroke: #FFB800;
     /* Golden for Pollen */
 }
 
@@ -1355,7 +1359,7 @@
 }
 
 .correctText {
-    color: #f1c40f;
+    color: #FFB800;
 }
 
 .wrongText {
@@ -1366,11 +1370,11 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(241, 196, 15, 0.1);
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    background: rgba(255, 184, 0, 0.1);
+    border: 1px solid rgba(255, 184, 0, 0.2);
     padding: 6px 14px;
     border-radius: 99px;
-    color: #f1c40f;
+    color: #FFB800;
 }
 
 .timeIconPulse {
@@ -1410,7 +1414,7 @@
 
 .finishBtnMinimal {
     min-width: 240px;
-    background: #f1c40f;
+    background: #FFB800;
     color: #1a1400;
     border: none;
     border-radius: 24px;
@@ -1498,7 +1502,7 @@
 /* ── Finish Button ── */
 .finishBtn {
     width: 100%;
-    background: #f1c40f;
+    background: #FFB800;
     color: #1a1400;
     border: none;
     border-radius: 14px;
@@ -1644,11 +1648,11 @@
     max-width: 400px !important;
     padding: 24px !important;
     background: #111519 !important;
-    border: 1px solid rgba(241, 196, 15, 0.18) !important;
+    border: 1px solid rgba(255, 184, 0, 0.18) !important;
     border-radius: 22px !important;
     position: relative;
     box-shadow:
-        0 6px 0 rgba(241, 196, 15, 0.12),
+        0 6px 0 rgba(255, 184, 0, 0.12),
         0 24px 60px rgba(0, 0, 0, 0.7) !important;
 }
 
@@ -1719,8 +1723,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    background: rgba(241, 196, 15, 0.06);
-    border: 1px solid rgba(241, 196, 15, 0.12);
+    background: rgba(255, 184, 0, 0.06);
+    border: 1px solid rgba(255, 184, 0, 0.12);
     border-radius: 9px;
     padding: 8px 8px 8px 12px;
     margin-bottom: 16px;
@@ -1730,7 +1734,7 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #f1c40f;
+    color: #FFB800;
     font-size: 0.82rem;
     font-weight: 700;
 }
@@ -1794,7 +1798,7 @@
 }
 
 .instantRefillBtn {
-    background: linear-gradient(160deg, #f1c40f 0%, #e8a000 100%);
+    background: linear-gradient(160deg, #FFB800 0%, #e8a000 100%);
     color: #1a1400;
     box-shadow: 0 4px 0 #9e7400;
     font-weight: 900;
@@ -1802,8 +1806,8 @@
 
 .premiumCardBtn {
     background: #1a1a1a;
-    color: #f1c40f;
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    color: #FFB800;
+    border: 1px solid rgba(255, 184, 0, 0.2);
     box-shadow: 0 4px 0 #000;
 }
 
@@ -1834,7 +1838,7 @@
 
 .checkoutCard {
     background: #111519;
-    border: 1px solid rgba(241, 196, 15, 0.15);
+    border: 1px solid rgba(255, 184, 0, 0.15);
     border-radius: 24px;
     width: 100%;
     max-width: 380px;
@@ -1886,7 +1890,7 @@
     border-top: 1px solid rgba(255, 255, 255, 0.07);
     margin-top: 9px;
     padding-top: 10px;
-    color: #f1c40f;
+    color: #FFB800;
     font-size: 1.05rem;
     font-weight: 900;
 }
@@ -1915,9 +1919,9 @@
 }
 
 .checkoutMethodActive {
-    border-color: rgba(241, 196, 15, 0.5);
-    color: #f1c40f;
-    background: rgba(241, 196, 15, 0.06);
+    border-color: rgba(255, 184, 0, 0.5);
+    color: #FFB800;
+    background: rgba(255, 184, 0, 0.06);
 }
 
 .checkoutCardActions {
@@ -1946,7 +1950,7 @@
 
 .checkoutConfirmBtn {
     flex: 2;
-    background: #f1c40f;
+    background: #FFB800;
     color: #1a1400;
     border: none;
     padding: 13px;
@@ -2062,7 +2066,7 @@
 }
 
 .stayBtn {
-    background: #f1c40f;
+    background: #FFB800;
     color: #1a1400;
     border: none;
     padding: 14px;
@@ -2124,7 +2128,7 @@
 .loadingText {
     font-size: 1.15rem;
     font-weight: 700;
-    color: #f1c40f;
+    color: #FFB800;
     margin-bottom: 24px;
     font-family: 'Hind Siliguri', sans-serif;
 }
@@ -2142,9 +2146,9 @@
 
 .loadingBarFill {
     height: 100%;
-    background: linear-gradient(90deg, #f1c40f, #f39c12);
+    background: linear-gradient(90deg, #FFB800, #f39c12);
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(241, 196, 15, 0.3);
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.3);
 }
 
 .loadingPercent {
@@ -2539,4 +2543,488 @@
     width: 100%;
     visibility: hidden;
     pointer-events: none;
+}
+
+/* ═══════════════════════════════════════
+   LIGHT MODE OVERRIDES
+═══════════════════════════════════════ */
+:global(.light) .studyPage,
+:global(.light) .studySkeleton {
+    background-color: #ffffff;
+    color: #1e293b;
+    --skeleton-bone-bg: rgba(0, 0, 0, 0.04);
+    --skeleton-shimmer-bg: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+}
+
+:global(.light) .header,
+:global(.light) .headerSkeleton {
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+:global(.light) .mascotMini {
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+:global(.light) .mascotMini::after {
+    border-top-color: rgba(0, 0, 0, 0.1);
+    border-right-color: rgba(0, 0, 0, 0.1);
+}
+
+:global(.light) .mascotMini::before {
+    background: #ffffff;
+}
+
+/* --- Results Summary & Review Light Mode --- */
+:global(.light) .reviewOverlay {
+    background: #f8fafc;
+}
+
+:global(.light) .reviewCloseBtn {
+    border-color: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.04);
+    color: #64748b;
+}
+
+:global(.light) .reviewCloseBtn:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}
+
+:global(.light) .reviewCard {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.08);
+    border-left-color: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+:global(.light) .reviewCardCorrect {
+    border-left-color: #2ecc71;
+}
+
+:global(.light) .reviewCardWrong {
+    border-left-color: #e74c3c;
+}
+
+:global(.light) .reviewQText {
+    color: #1e293b;
+}
+
+:global(.light) .reviewQNum {
+    color: #d97706;
+}
+
+:global(.light) .reviewCorrectHint {
+    color: #64748b;
+}
+
+:global(.light) .meterTrack {
+    stroke: rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .percentText {
+    color: #1e293b;
+}
+
+:global(.light) .successLabel {
+    color: #64748b;
+}
+
+:global(.light) .rewardValSmall {
+    color: #1e293b;
+}
+
+:global(.light) .wrongText {
+    color: #e74c3c;
+}
+
+:global(.light) .styledTimeIcon {
+    background: rgba(255, 184, 0, 0.1);
+    border-color: rgba(255, 184, 0, 0.3);
+    color: #d97706;
+}
+
+:global(.light) .footerResults {
+    background: #ffffff;
+    border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+:global(.light) .reviewBtn {
+    border-color: rgba(0, 0, 0, 0.15);
+    color: #475569;
+}
+
+:global(.light) .reviewBtn:hover {
+    border-color: rgba(0, 0, 0, 0.3);
+    color: #1e293b;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+/* --- Results Loading Overlay Light Mode --- */
+:global(.light) .resultsLoadingOverlay {
+    background: #ffffff;
+}
+
+:global(.light) .loadingBarContainer {
+    background: rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .loadingPercent {
+    color: #1e293b;
+}
+
+:global(.light) .loadingText {
+    color: #d97706;
+}
+
+:global(.light) .optionSkeleton {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+:global(.light) .footerSkeleton {
+    background: #ffffff;
+    border-top-color: rgba(0,0,0,0.08);
+}
+
+:global(.light) .progressBar {
+    background-color: #e2e8f0;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .questionTitle {
+    color: #1e293b;
+}
+
+:global(.light) .contextText {
+    background: rgba(255, 184, 0, 0.08);
+    color: #334155;
+}
+
+:global(.light) .optionBtn {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: rgba(0, 0, 0, 0.15);
+    color: #1e293b;
+}
+
+:global(.light) .optionBtn:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+:global(.light) .optionText {
+    color: #1e293b;
+}
+
+:global(.light) .optionIndex {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: rgba(0,0,0,0.05);
+}
+
+:global(.light) .rakibBubble,
+:global(.light) .lisaBubble,
+:global(.light) .assistantBubble,
+:global(.light) .andreaBubble {
+    color: #334155;
+    border-color: rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+}
+
+:global(.light) .selected {
+    background: rgba(255, 184, 0, 0.1) !important;
+    border-color: #FFB800 !important;
+    border-bottom-color: #FFB800 !important;
+}
+
+:global(.light) .selected .optionText {
+    color: #d97706 !important;
+}
+
+:global(.light) .selected .optionIndex,
+:global(.light) .correct .optionIndex {
+    background: #FFB800 !important;
+    border-color: #FFB800 !important;
+    color: #1a1400 !important;
+}
+
+:global(.light) .correct {
+    background: rgba(255, 184, 0, 0.1) !important;
+    border-color: #FFB800 !important;
+    border-bottom-color: #FFB800 !important;
+}
+
+:global(.light) .correct .optionText {
+    color: #d97706 !important;
+}
+
+:global(.light) .incorrect {
+    background: rgba(231, 76, 60, 0.08) !important;
+    border-color: rgba(231, 76, 60, 0.35) !important;
+    border-bottom-color: #c0392b !important;
+}
+
+:global(.light) .footer {
+    background: #ffffff;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+:global(.light) .footerCorrect {
+    background: #ffffff;
+    border-top-color: rgba(255, 184, 0, 0.4);
+}
+
+:global(.light) .footerIncorrect {
+    background: #ffffff;
+    border-top-color: rgba(231, 76, 60, 0.35);
+}
+
+:global(.light) .skipBtn {
+    color: #64748b;
+    border-color: #cbd5e1;
+}
+
+:global(.light) .skipBtn:hover {
+    color: #334155;
+    border-color: #94a3b8;
+    background: rgba(0,0,0,0.03);
+}
+
+:global(.light) .matchingCard {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: rgba(0, 0, 0, 0.15);
+    color: #1e293b;
+}
+
+:global(.light) .checkBtn {
+    background: #FFB800 !important;
+    color: #1a1400 !important;
+    box-shadow: 0 4px 0 #c9a80b !important;
+}
+
+:global(.light) .checkBtn:not(.checkBtnDisabled):hover {
+    background: #f5cc1f !important;
+    box-shadow: 0 5px 0 #c9a80b !important;
+}
+
+:global(.light) .checkBtn:not(.checkBtnDisabled):active {
+    box-shadow: 0 1px 0 #c9a80b !important;
+}
+
+:global(.light) .checkBtnDisabled {
+    background: #e2e8f0 !important;
+    color: #94a3b8 !important;
+    box-shadow: none !important;
+}
+
+:global(.light) .matchingCard:hover:not(.matched) {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+:global(.light) .matched {
+    background: #f1f5f9 !important;
+    border-color: rgba(0,0,0,0.05) !important;
+    color: #94a3b8;
+}
+
+:global(.light) .hasFailed {
+    background: rgba(255, 184, 0, 0.08) !important;
+    border-color: rgba(255, 184, 0, 0.5) !important;
+}
+
+:global(.light) .blankDropZone {
+    background: rgba(0,0,0,0.03);
+    border-color: rgba(0,0,0,0.1);
+}
+
+:global(.light) .dropPlaceholder {
+    background: #f8fafc;
+    border-color: rgba(0,0,0,0.1);
+    color: #94a3b8;
+}
+
+:global(.light) .draggablesContainer {
+    border-top-color: rgba(0,0,0,0.05);
+}
+
+:global(.light) .draggableItem,
+:global(.light) .draggableCard {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.1);
+    border-bottom-color: rgba(0,0,0,0.15);
+    color: #1e293b;
+}
+
+:global(.light) .targetZone {
+    background: rgba(0,0,0,0.02);
+    border-color: rgba(0,0,0,0.1);
+}
+
+:global(.light) .zoneEmptyText {
+    color: #94a3b8;
+}
+
+:global(.light) .resultOverlay {
+    /* removed background */
+}
+
+:global(.light) .resultCard {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+:global(.light) .resultTitle {
+    color: #1e293b;
+}
+
+:global(.light) .resultStatBox {
+    background: #f8fafc;
+    border-color: rgba(0,0,0,0.05);
+}
+
+:global(.light) .statLabel {
+    color: #64748b;
+}
+
+:global(.light) .statValue {
+    color: #1e293b;
+}
+
+:global(.light) .resultModal,
+:global(.light) .confirmModalOverlay,
+:global(.light) .checkoutOverlay {
+    background: rgba(255, 255, 255, 0.55);
+}
+
+:global(.light) .confirmCard {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+:global(.light) .confirmTitle {
+    color: #1e293b;
+}
+
+:global(.light) .confirmDesc {
+    color: #64748b;
+}
+
+:global(.light) .leaveBtn {
+    color: #dc2626;
+}
+
+:global(.light) .leaveBtn:hover {
+    background: rgba(220, 38, 38, 0.05);
+    border-radius: 8px;
+}
+
+:global(.light) .closeBtn {
+    color: #64748b;
+}
+
+:global(.light) .closeBtn:hover {
+    color: #334155;
+    background: rgba(0,0,0,0.05);
+}
+
+:global(.light) .correctAnswerBanner {
+    background: rgba(231, 76, 60, 0.08);
+    border-color: rgba(231, 76, 60, 0.35);
+}
+
+:global(.light) .correctAnswerText span:last-child {
+    color: #334155;
+}
+
+:global(.light) .footerCorrect .statusIcon,
+:global(.light) .footerCorrect .statusHeader h3 {
+    color: #FFB800;
+}
+
+:global(.light) .footerIncorrect .statusIcon,
+:global(.light) .footerIncorrect .statusHeader h3 {
+    color: #dc2626;
+}
+
+:global(.light) .statusHeader h3 {
+    color: #1e293b;
+}
+
+:global(.light) .explanationText {
+    color: #475569;
+}
+
+:global(.light) .feedbackSubtitle {
+    color: #64748b;
+}
+
+:global(.light) .feedbackText {
+    color: #1e293b;
+}
+
+:global(.light) .feedbackText span:first-child {
+    color: #64748b;
+}
+
+:global(.light) .noHeartsCard {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+:global(.light) .noHeartsTitle {
+    color: #1e293b;
+}
+
+:global(.light) .noHeartsSub {
+    color: #64748b;
+}
+
+:global(.light) .noHeartsCard .modalCloseBtn {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+:global(.light) .noHeartsCard .modalCloseBtn:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: #dc2626;
+}
+
+:global(.light) .noHeartsCard .refillTimerRow {
+    background: rgba(255, 184, 0, 0.08);
+    border-color: rgba(255, 184, 0, 0.2);
+}
+
+:global(.light) .refillTimerLeft {
+    color: #d97706;
+}
+
+:global(.light) .noHeartsCard .shopInlineBtn {
+    background: #ffffff;
+    border-color: rgba(0,0,0,0.1);
+    color: #475569;
+}
+
+:global(.light) .noHeartsCard .shopInlineBtn:hover {
+    background: #f8fafc;
+    color: #1e293b;
+}
+
+:global(.light) .noHeartsCard .noHeartsDivider {
+    background: rgba(0,0,0,0.06);
+}
+
+:global(.light) .noHeartsCard .premiumCardBtn {
+    background: #ffffff;
+    color: #d97706;
+    border-color: rgba(255, 184, 0, 0.4);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.08);
 }

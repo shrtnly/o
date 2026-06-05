@@ -14,7 +14,7 @@ const HelpPage = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const categories = [
-        { id: 'start', title: language === 'bn' ? 'শুরু করা' : 'Getting Started', icon: Zap, count: 6, color: '#f1c40f' },
+        { id: 'start', title: language === 'bn' ? 'শুরু করা' : 'Getting Started', icon: Zap, count: 6, color: '#FFB800' },
         { id: 'course', title: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership', icon: BookOpen, count: 4, color: '#3498db' },
         { id: 'payment', title: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing', icon: CreditCard, count: 3, color: '#2ecc71' },
         { id: 'tech', title: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues', icon: Wrench, count: 3, color: '#e74c3c' },

@@ -68,8 +68,8 @@ const CourseFeedbackCard = ({ courseId, userId, onDismiss }) => {
                                         >
                                             <Star 
                                                 size={28} 
-                                                fill={(hover || rating) >= star ? "#f1c40f" : "none"}
-                                                color={(hover || rating) >= star ? "#f1c40f" : "rgba(255,255,255,0.3)"}
+                                                fill={(hover || rating) >= star ? "#FFB800" : "none"}
+                                                color={(hover || rating) >= star ? "#FFB800" : "rgba(255,255,255,0.3)"}
                                                 strokeWidth={1.5}
                                             />
                                         </motion.button>

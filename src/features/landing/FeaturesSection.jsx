@@ -24,7 +24,7 @@ const FeaturesSection = () => {
             icon: <Zap size={32} />,
             title: language === 'bn' ? 'দৈনিক স্ট্রিক' : 'Daily Streak',
             desc: language === 'bn' ? 'প্রতিদিন শিখুন এবং নিজের ধারাবাহিকতা বজায় রাখুন।' : 'Learn every day and maintain your learning consistency.',
-            color: '#f1c40f'
+            color: '#FFB800'
         },
         {
             icon: <Award size={32} />,

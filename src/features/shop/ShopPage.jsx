@@ -344,7 +344,7 @@ const ShopPage = () => {
                             <div className={styles.queenBeeCardHorizontal}>
                                 <div className={styles.qbCardLeft}>
                                     <div className={styles.qbIconBg}>
-                                        <Zap size={32} color="#f1c40f" />
+                                        <Zap size={32} color="#FFB800" />
                                     </div>
                                 </div>
 
@@ -480,7 +480,7 @@ const ShopPage = () => {
                                 </div>
                             ) : processing === 'insufficient' ? (
                                 <div className={styles.exchangeSuccess}>
-                                    <div className={styles.successLottie} style={{ background: 'rgba(241,196,15,0.05)', borderRadius: '50%', padding: '20px' }}>
+                                    <div className={styles.successLottie} style={{ background: 'rgba(255, 184, 0,0.05)', borderRadius: '50%', padding: '20px' }}>
                                         <PollenIcon size={100} />
                                     </div>
                                     <h2 className={styles.successTitle} style={{ color: 'var(--color-text)', fontSize: '1.6rem' }}>{t('insufficient_pollen_title')}</h2>
@@ -540,10 +540,10 @@ const ShopPage = () => {
                                         </div>
 
                                         <div className={styles.transactionItem}>
-                                            <div className={styles.itemCircle} style={{ borderColor: '#f1c40f' }}>
+                                            <div className={styles.itemCircle} style={{ borderColor: '#FFB800' }}>
                                                 <HoneyDropIcon size={48} />
                                             </div>
-                                            <span className={styles.itemAmount} style={{ color: '#f1c40f' }}>+{calculatedHearts}</span>
+                                            <span className={styles.itemAmount} style={{ color: '#FFB800' }}>+{calculatedHearts}</span>
                                         </div>
                                     </div>
 

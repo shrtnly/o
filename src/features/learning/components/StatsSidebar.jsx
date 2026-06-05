@@ -199,7 +199,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                         onClick={() => handleCourseSwitch(course.id)}
                                     >
                                         <span className={styles.optionTitle}>{course.title}</span>
-                                        {course.id === currentCourseId && <Check size={16} color="#f1c40f" strokeWidth={3} />}
+                                        {course.id === currentCourseId && <Check size={16} color="#FFB800" strokeWidth={3} />}
                                     </div>
                                 ))}
                                 <div className={styles.courseDropdownDivider}></div>
@@ -236,7 +236,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                             <PollenIcon size={30} />
                             <span>{profile?.gems || 0}</span>
                         </div>
-                        <div className={styles.statItem} style={{ color: '#f1c40f', position: 'relative' }} title={t('honey_drop')}>
+                        <div className={styles.statItem} style={{ color: '#FFB800', position: 'relative' }} title={t('honey_drop')}>
                             <HoneyDropIcon
                                 size={30}
                                 isEmpty={(hearts == 0 || Number(hearts) === 0) && refillTime}
@@ -248,7 +248,7 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                             <svg width="0" height="0" style={{ position: 'absolute' }}>
                                                 <defs>
                                                     <linearGradient id="infinityGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                        <stop offset="0%" stopColor="#f1c40f" />
+                                                        <stop offset="0%" stopColor="#FFB800" />
                                                         <stop offset="100%" stopColor="#e67e22" />
                                                     </linearGradient>
                                                 </defs>
@@ -353,8 +353,8 @@ const StatsSidebar = ({ profile, refreshProfile, hearts, refillTime, courses = [
                                                     ) : (
                                                          <Flame
                                                             size={24}
-                                                            fill={isToday ? "rgba(241, 196, 15, 0.1)" : "none"}
-                                                            stroke={isToday ? "#f1c40f" : "var(--color-border)"}
+                                                            fill={isToday ? "rgba(255, 184, 0, 0.1)" : "none"}
+                                                            stroke={isToday ? "#FFB800" : "var(--color-border)"}
                                                         />
                                                     )}
                                                 </div>

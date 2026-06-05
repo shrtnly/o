@@ -82,7 +82,7 @@
     right: -8px;
     width: 16px;
     height: 16px;
-    color: #f1c40f;
+    color: #FFB800;
     animation: pulse 2s ease-in-out infinite;
 }
 
@@ -107,7 +107,7 @@
     50% {
         transform: scale(1.2);
         opacity: 1;
-        filter: drop-shadow(0 0 5px #f1c40f);
+        filter: drop-shadow(0 0 5px #FFB800);
     }
 }
 
@@ -708,13 +708,13 @@ input:checked+.slider .knob {
 
 .animationSelect:hover {
     border-color: var(--color-primary);
-    background-color: rgba(241, 196, 15, 0.05);
+    background-color: rgba(255, 184, 0, 0.05);
 }
 
 .animationSelect:focus {
     border-color: var(--color-primary);
-    background-color: rgba(241, 196, 15, 0.1);
-    box-shadow: 0 0 0 3px rgba(241, 196, 15, 0.1);
+    background-color: rgba(255, 184, 0, 0.1);
+    box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
 }
 
 .animationSelect option {
@@ -827,7 +827,7 @@ input:checked+.slider .knob {
     height: 100%;
     background-color: var(--color-primary);
     border-radius: 6px;
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+    box-shadow: 0 0 15px rgba(255, 184, 0, 0.4);
 }
 
 .courseActions {

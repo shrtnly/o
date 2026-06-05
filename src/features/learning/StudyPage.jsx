@@ -56,10 +56,10 @@ const SparkleBurst = ({ large = false }) => {
                 >
                     <el.Icon
                         size={el.size}
-                        color="#f1c40f"
+                        color="#FFB800"
                         fill="none"
                         strokeWidth={1.5}
-                        style={{ filter: `drop-shadow(0 0 ${large ? '5px' : '3px'} rgba(241,196,15,0.6))` }}
+                        style={{ filter: `drop-shadow(0 0 ${large ? '5px' : '3px'} rgba(255, 184, 0,0.6))` }}
                     />
                 </motion.div>
             ))}
@@ -1187,13 +1187,13 @@ const StudyPage = () => {
                                                                 gap: 8,
                                                                 padding: '7px 12px',
                                                                 borderRadius: 10,
-                                                                background: 'rgba(241,196,15,0.06)',
-                                                                border: '1px solid rgba(241,196,15,0.2)',
+                                                                background: 'rgba(255, 184, 0,0.06)',
+                                                                border: '1px solid rgba(255, 184, 0,0.2)',
                                                                 marginBottom: 4,
                                                             }}>
                                                                 <span style={{ fontSize: '1rem' }}>🔄</span>
                                                                 <div>
-                                                                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#f1c40f' }}>{t('re_practice')}</span>
+                                                                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#FFB800' }}>{t('re_practice')}</span>
                                                                 </div>
                                                             </div>
                                                         )}
@@ -1404,7 +1404,7 @@ const StudyPage = () => {
                                             setActiveDialogueIndex(prev => prev + 1);
                                         }}
                                     >
-                                        আগিয়ে যান
+                                        এগিয়ে যান
                                     </button>
                                 </div>
                             ) : (
@@ -1412,7 +1412,7 @@ const StudyPage = () => {
                                     <button className={styles.skipBtn} onClick={() => {
                                         setLastInteractionWasFooter(true);
                                         handleNext();
-                                    }}>এগিয়ে যান</button>
+                                    }}>এগিয়ে যান</button>
                                     {questions[currentIndex]?.question_type === 'matching' ? (
                                         <button
                                             className={`${styles.checkBtn} ${Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0) ? styles.checkBtnDisabled : ''}`}
@@ -1532,7 +1532,7 @@ const StudyPage = () => {
                                 <div className={styles.noHeartsButtons}>
                                     <button
                                         className={`${styles.btn3d} ${styles.instantRefillBtn}`}
-                                        onClick={() => handleNoHeartsCheckout('hearts')}
+                                        onClick={() => { setShowNoHeartsModal(false); navigate('/shop'); }}
                                     >
                                         <Zap size={18} fill="currentColor" strokeWidth={0} />
                                         <span>আনলিমিটেড 24 ঘন্টা - মাত্র 4 টাকা</span>

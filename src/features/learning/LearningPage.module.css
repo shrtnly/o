@@ -2409,7 +2409,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 0 10px var(--color-primary-faded);
     }
 
     .streakDayToday .streakDayName {
@@ -2420,11 +2419,34 @@
     .streakDayTodayUnfilled {
         border-color: var(--color-primary) !important;
         border-style: dashed !important;
-        background: rgba(241, 196, 15, 0.05) !important;
+        background: rgba(255, 184, 0, 0.05) !important;
     }
 
     .streakDayFuture {
         opacity: 0.5;
+    }
+
+    /* Light mode overrides for Streak Seven Days */
+    :global(.light) .streakSevenDaysRow {
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    :global(.light) .streakDayCircle {
+        background: #f8fafc;
+        border: 2px solid rgba(0, 0, 0, 0.08);
+    }
+
+    :global(.light) .streakDayCircleActive {
+        background: rgba(245, 158, 11, 0.1);
+        border: 2px solid var(--color-primary);
+    }
+    
+    :global(.light) .streakDayTodayUnfilled {
+        background: rgba(245, 158, 11, 0.05) !important;
+        border-color: var(--color-primary) !important;
     }
 
 .heartsTooltipBox {

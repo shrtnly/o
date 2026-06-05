@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, Trophy, ChevronLeft, CircleCheckBig, Lock } from 'lucide-react';
+import { Flame, Trophy, X, CircleCheckBig, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useLanguage } from '../../../context/LanguageContext';
@@ -40,13 +40,12 @@ const StreakPage = () => {
 
     return (
         <div className={styles.container}>
-            <div style={{ paddingBottom: '16px', display: 'flex', alignItems: 'center' }}>
+            <div style={{ paddingBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                 <button
-                    onClick={() => navigate(-1)}
-                    style={{ background: 'none', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '8px 0' }}
-                    className={loading ? styles.skeleton : ''}
+                    onClick={() => navigate('/')}
+                    className={`${styles.closeButton} ${loading ? styles.skeleton : ''}`}
                 >
-                    <ChevronLeft size={28} />
+                    <X size={24} strokeWidth={2} />
                 </button>
             </div>
 
@@ -59,7 +58,7 @@ const StreakPage = () => {
                     </div>
                     
                     {/* Main Card (ConsistencyTracker_replacement) */}
-                    <div style={{ background: 'var(--color-bg-alt)', borderRadius: '24px', padding: '24px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ background: 'var(--color-bg-alt)', borderRadius: '24px', padding: '24px', border: '1px solid var(--color-border)' }}>
                         {/* Stats Row */}
                         <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '32px', position: 'relative' }}>
                             <div style={{ textAlign: 'center' }}>
@@ -99,7 +98,7 @@ const StreakPage = () => {
                     {/* Milestone List Skeletons */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         {[1, 2, 3, 4].map(i => (
-                            <div key={i} className={styles.milestoneItem} style={{ background: 'rgba(255,255,255,0.02)' }}>
+                            <div key={i} className={styles.milestoneItem}>
                                 <div className={styles.skeleton} style={{ width: '44px', height: '44px', borderRadius: '12px' }} />
                                 <div className={styles.milestoneText}>
                                     <div className={styles.skeleton} style={{ width: '160px', height: '14px', marginBottom: '6px', borderRadius: '4px' }} />
@@ -137,20 +136,20 @@ const StreakPage = () => {
 
                                 return (
                                     <div key={m} className={`${styles.milestoneItem} ${isAchieved ? styles.milestoneAchieved : styles.milestoneLocked}`}>
-                                        <div className={styles.milestoneIcon} style={{ background: isAchieved ? 'rgba(241, 196, 15, 0.15)' : 'rgba(255, 255, 255, 0.03)' }}>
+                                        <div className={`${styles.milestoneIcon} ${isAchieved ? styles.iconAchieved : styles.iconLocked}`}>
                                             <Flame
                                                 size={20}
-                                                fill={isAchieved ? "#f1c40f" : "none"}
-                                                stroke={isAchieved ? "#f1c40f" : "#666"}
+                                                fill={isAchieved ? "#FFB800" : "none"}
+                                                stroke={isAchieved ? "#FFB800" : "#666"}
                                                 strokeWidth={2}
                                             />
                                         </div>
                                         <div className={styles.milestoneText}>
-                                            <h4 style={{ color: isAchieved ? '#f1c40f' : 'inherit' }}>{m} দিনের মাইলফলক</h4>
+                                            <h4 style={{ color: isAchieved ? '#FFB800' : 'inherit' }}>{m} দিনের মাইলফলক</h4>
                                             <p>{isAchieved ? 'অর্জিত!' : `${remaining} দিন বাকি`}</p>
                                         </div>
                                         {isAchieved ? (
-                                            <CircleCheckBig size={20} className={styles.chevron} style={{ color: '#f1c40f' }} />
+                                            <CircleCheckBig size={20} className={styles.chevron} style={{ color: '#FFB800' }} />
                                         ) : (
                                             <Lock size={18} className={styles.lockIcon} style={{ color: 'var(--color-text-muted)', opacity: 0.5 }} />
                                         )}

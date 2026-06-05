@@ -28,32 +28,44 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
         const year = currentMonth.getFullYear();
         const month = currentMonth.getMonth();
 
-        // Filter history for current month only
-        const monthlyHistory = history.filter(h => {
-            const date = new Date(h.activity_date);
-            return date.getMonth() === month &&
-                date.getFullYear() === year;
-        });
+        // Get unique days in the selected month where the user was active
+        const uniqueActiveDays = new Set(
+            history
+                .filter(h => {
+                    const date = new Date(h.activity_date);
+                    return date.getMonth() === month &&
+                           date.getFullYear() === year &&
+                           (h.xp_earned > 0 || h.lessons_completed > 0);
+                })
+                .map(h => h.activity_date)
+        );
 
-        const achievedDays = monthlyHistory.length;
+        const achievedDays = uniqueActiveDays.size;
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
         // Calculate days elapsed in current month (up to today)
         const today = new Date();
         const isCurrentMonth = today.getMonth() === month && today.getFullYear() === year;
-        const daysElapsed = isCurrentMonth ? today.getDate() : daysInMonth;
+        const isPastMonth = year < today.getFullYear() || (year === today.getFullYear() && month < today.getMonth());
+        
+        let daysElapsed = daysInMonth;
+        if (isCurrentMonth) {
+            daysElapsed = today.getDate();
+        } else if (!isPastMonth) {
+            daysElapsed = 0; // Future month
+        }
 
-        // Calculate progress percentage based on days elapsed (not total month)
-        const progressPercentage = daysElapsed > 0 ? Math.round((achievedDays / daysElapsed) * 100) : 0;
+        const monthlyScore = Math.round((achievedDays / daysInMonth) * 100) || 0;
+        const currentPaceScore = daysElapsed > 0 ? Math.round((achievedDays / daysElapsed) * 100) : 0;
 
         return {
             currentStreak: streak?.current_streak || 0,
             bestStreak: streak?.longest_streak || 0,
-            score: Math.round((achievedDays / daysInMonth) * 100) || 0,
+            score: monthlyScore,
             achievedDays,
             daysInMonth,
             daysElapsed,
-            progressPercentage
+            currentPaceScore
         };
     }, [history, streak, currentMonth]);
 
@@ -164,15 +176,14 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
     const monthDisplay = `${monthOnly} -${year2Digit}`;
 
     const getProgressStatus = (percent) => {
-        if (percent >= 90) return { key: 'perfect_progress', color: '#FFD700', bg: 'rgba(255, 215, 0, 0.12)', border: 'rgba(255, 215, 0, 0.25)', icon: Trophy };
-        if (percent >= 75) return { key: 'almost_perfect', color: '#4ADE80', bg: 'rgba(74, 222, 128, 0.12)', border: 'rgba(74, 222, 128, 0.25)', icon: Star };
-        if (percent >= 50) return { key: 'good_progress', color: '#22D3EE', bg: 'rgba(34, 211, 238, 0.12)', border: 'rgba(34, 211, 238, 0.25)', icon: TrendingUp };
-        if (percent >= 25) return { key: 'keep_going', color: '#FB923C', bg: 'rgba(251, 146, 60, 0.12)', border: 'rgba(251, 146, 60, 0.25)', icon: Target };
-        if (percent > 0) return { key: 'getting_started', color: '#F87171', bg: 'rgba(248, 113, 113, 0.12)', border: 'rgba(248, 113, 113, 0.25)', icon: Rocket };
-        return { key: 'no_practice_yet', color: '#94A3B8', bg: 'rgba(148, 163, 184, 0.12)', border: 'rgba(148, 163, 184, 0.25)', icon: Activity };
+        if (percent >= 90) return { label: language === 'bn' ? 'অসাধারণ ধারাবাহিকতা' : 'Exceptional Consistency', color: '#FFD700', bg: 'rgba(255, 215, 0, 0.12)', border: 'rgba(255, 215, 0, 0.25)', icon: Trophy };
+        if (percent >= 70) return { label: language === 'bn' ? 'দারুণ এগিয়ে যাচ্ছেন' : 'Doing Great', color: '#FFB800', bg: 'rgba(255, 184, 0, 0.12)', border: 'rgba(255, 184, 0, 0.25)', icon: Star };
+        if (percent >= 50) return { label: language === 'bn' ? 'ভালো অগ্রগতি' : 'Good Progress', color: '#F39C12', bg: 'rgba(243, 156, 18, 0.12)', border: 'rgba(243, 156, 18, 0.25)', icon: TrendingUp };
+        if (percent >= 30) return { label: language === 'bn' ? 'চালিয়ে যান' : 'Keep Going', color: '#E67E22', bg: 'rgba(230, 126, 34, 0.12)', border: 'rgba(230, 126, 34, 0.25)', icon: Target };
+        return { label: language === 'bn' ? 'প্রায় কাছাকাছি' : 'Almost There', color: '#D35400', bg: 'rgba(211, 84, 0, 0.12)', border: 'rgba(211, 84, 0, 0.25)', icon: Activity };
     };
 
-    const status = getProgressStatus(stats.progressPercentage);
+    const status = getProgressStatus(stats.currentPaceScore);
     const StatusIcon = status.icon;
 
     return (
@@ -185,7 +196,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                 <defs>
                     <linearGradient id="flameGradientTracker" x1="0%" y1="0%" x2="0%" y2="100%">
                         <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
-                        <stop offset="50%" style={{ stopColor: '#F1C40F', stopOpacity: 1 }} />
+                        <stop offset="50%" style={{ stopColor: '#FFB800', stopOpacity: 1 }} />
                         <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
                     </linearGradient>
                 </defs>
@@ -206,7 +217,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                     </div>
                     <div className={styles.statSub}>
                         <span className={styles.bestLabel}>{t('my_best')}</span>
-                        <Trophy size={14} color="#F1C40F" />
+                        <Trophy size={14} color="#FFB800" />
                         <span className={styles.bestValue}>{stats.bestStreak}</span>
                     </div>
                 </div>
@@ -233,7 +244,7 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                                 whiteSpace: 'nowrap'
                             }}
                         >
-                            {t(status.key)}
+                            {status.label}
                         </span>
                     </div>
                 </div>
@@ -296,16 +307,20 @@ const ConsistencyTracker = ({ profile, streak, history = [], calendarTopContent 
                                     `}
                                     title={day.date}
                                 >
-                                    {day.type === 'achieved' ? (
+                                    {day.isToday && day.type !== 'achieved' ? (
+                                        <div className={`${styles.dayNumber} ${styles.todayNumber}`}>
+                                            {day.day}
+                                        </div>
+                                    ) : day.type === 'achieved' ? (
                                         <div className={styles.flameContainer}>
                                             <Flame size={20} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" />
                                         </div>
-                                    ) : (day.type === 'missed' || (day.isToday && day.type !== 'achieved')) ? (
+                                    ) : day.type === 'missed' ? (
                                         <div className={styles.flameContainer}>
-                                            <Flame size={20} color="rgba(255, 255, 255, 0.15)" strokeWidth={2} />
+                                            <Flame size={20} className={styles.inactiveFlame} strokeWidth={2} />
                                         </div>
                                     ) : (
-                                        day.type === 'future' && day.day && <span className={styles.dayNumber}>{day.day}</span>
+                                        day.day && <span className={styles.dayNumber}>{day.day}</span>
                                     )}
                                 </div>
                             ))}

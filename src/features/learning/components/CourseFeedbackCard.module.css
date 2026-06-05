@@ -76,7 +76,7 @@
 }
 
 .textarea:focus {
-    border-color: rgba(241, 196, 15, 0.4);
+    border-color: rgba(255, 184, 0, 0.4);
     background: rgba(255, 255, 255, 0.08);
 }
 
@@ -94,7 +94,7 @@
 .submitBtn {
     width: 100%;
     padding: 10px;
-    background: #f1c40f;
+    background: #FFB800;
     color: #000;
     border: none;
     border-radius: 8px;
@@ -119,8 +119,8 @@
 .successIcon {
     width: 44px;
     height: 44px;
-    background: rgba(241, 196, 15, 0.1);
-    color: #f1c40f;
+    background: rgba(255, 184, 0, 0.1);
+    color: #FFB800;
     border-radius: 50%;
     display: flex;
     align-items: center;

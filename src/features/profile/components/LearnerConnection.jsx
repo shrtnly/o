@@ -908,7 +908,17 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                         />
                     )}
                     <span className={styles.btnContent}>
-                        <Users size={18} />
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                            <Users size={18} />
+                            {connections.pending.length > 0 && subTab !== 'my' && (
+                                <span 
+                                    className={`${styles.filterCount} ${styles.filterCountAlert}`}
+                                    style={{ position: 'absolute', top: '-6px', right: '-8px', zIndex: 10 }}
+                                >
+                                    {connections.pending.length}
+                                </span>
+                            )}
+                        </div>
                         {subTab === 'my' && <span>{t('subtab_my')}</span>}
                     </span>
                 </button>
@@ -940,11 +950,18 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                         />
                     )}
                     <span className={styles.btnContent}>
-                        <MessageSquare size={18} />
+                        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                            <MessageSquare size={18} />
+                            {subTab !== 'inbox' && unreadCount > 0 && (
+                                <span 
+                                    className={styles.subTabUnread}
+                                    style={{ position: 'absolute', top: '-6px', right: '-8px' }}
+                                >
+                                    {unreadCount > 9 ? '9+' : unreadCount}
+                                </span>
+                            )}
+                        </div>
                         {subTab === 'inbox' && <span>{t('subtab_inbox')}</span>}
-                        {subTab !== 'inbox' && unreadCount > 0 && (
-                            <span className={styles.subTabUnread}>{unreadCount > 9 ? '9+' : unreadCount}</span>
-                        )}
                     </span>
                 </button>
             </div>
@@ -1146,7 +1163,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                 <Search size={18} className={styles.searchIcon} />
                                                 <input 
                                                     type="text" 
-                                                    placeholder={t('search_learner') || 'শিক্ষার্থী খুঁজুন...'} 
+                                                    placeholder={t('search_learner') || 'খুঁজুন...'} 
                                                     value={searchQuery}
                                                     onChange={handleSearch}
                                                     onFocus={() => setIsSearchFocused(true)}
@@ -1181,7 +1198,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                 <div className={styles.learnerText}>
                                                                     <span className={styles.learnerName}>{learner.full_name || learner.display_name}</span>
                                                                     <div className={styles.learnerSub}>
-                                                                        <Zap size={10} color="#F1C40F" />
+                                                                        <Zap size={10} color="#FFB800" />
                                                                         {learner.xp} XP
                                                                     </div>
                                                                 </div>
@@ -1196,7 +1213,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                         <InlineLoader size={30} showText={false} />
                                                                     ) : (
                                                                         (learner.request_sent || connections.outgoing.some(o => o.receiver_id === learner.id)) ? 
-                                                                        <Check size={16} color="#F1C40F" /> : <UserPlus size={16} />
+                                                                        <Check size={16} color="#FFB800" /> : <UserPlus size={16} />
                                                                     )}
                                                                 </button>
                                                                 {(learner.request_sent || connections.outgoing.some(o => o.receiver_id === learner.id)) && (
@@ -1242,7 +1259,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                     <div className={styles.learnerText}>
                                                                         <span className={styles.learnerName}>{s.full_name || s.display_name}</span>
                                                                         <div className={styles.learnerSub}>
-                                                                            <Zap size={10} color="#F1C40F" />
+                                                                            <Zap size={10} color="#FFB800" />
                                                                             {s.xp} XP
                                                                         </div>
                                                                     </div>
@@ -1256,7 +1273,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                         {sendingId === s.id ? (
                                                                             <InlineLoader size={30} showText={false} />
                                                                         ) : (
-                                                                            s.request_sent ? <Check size={16} color="#F1C40F" /> : <UserPlus size={16} />
+                                                                            s.request_sent ? <Check size={16} color="#FFB800" /> : <UserPlus size={16} />
                                                                         )}
                                                                     </button>
                                                                     {s.request_sent && (
@@ -1390,7 +1407,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
                                                                                 {cardAction.success ? (
                                                                                     <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
-                                                                                        <Check color="#f1c40f" size={20} />
+                                                                                        <Check color="#FFB800" size={20} />
                                                                                     </motion.div>
                                                                                 ) : (
                                                                                     <InlineLoader size={120} showText={false} />
@@ -1399,7 +1416,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                                     <motion.span 
                                                                                         initial={{ opacity: 0, y: 5 }}
                                                                                         animate={{ opacity: 1, y: 0 }}
-                                                                                        style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
+                                                                                        style={{ fontSize: '11px', color: '#FFB800', fontWeight: '600' }}
                                                                                     >
                                                                                         {cardAction.msg}
                                                                                     </motion.span>
@@ -1446,7 +1463,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                                 <div className={styles.learnerText}>
                                                                                     <span className={styles.learnerName}>{s.full_name || s.display_name}</span>
                                                                                     <div className={styles.learnerSub}>
-                                                                                        <Zap size={10} color="#F1C40F" />
+                                                                                        <Zap size={10} color="#FFB800" />
                                                                                         {s.xp} XP
                                                                                     </div>
                                                                                 </div>
@@ -1512,7 +1529,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
                                                                             {cardAction.success ? (
                                                                                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
-                                                                                    <Check color="#f1c40f" size={20} />
+                                                                                    <Check color="#FFB800" size={20} />
                                                                                 </motion.div>
                                                                             ) : (
                                                                                 <InlineLoader size={120} showText={false} />
@@ -1521,7 +1538,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                                 <motion.span 
                                                                                     initial={{ opacity: 0, y: 5 }}
                                                                                     animate={{ opacity: 1, y: 0 }}
-                                                                                    style={{ fontSize: '11px', color: '#f1c40f', fontWeight: '600' }}
+                                                                                    style={{ fontSize: '11px', color: '#FFB800', fontWeight: '600' }}
                                                                                 >
                                                                                     {cardAction.msg}
                                                                                 </motion.span>
@@ -1578,7 +1595,7 @@ const LearnerConnection = ({ user, userXp, userProfile, onSelectLearner }) => {
                                                                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: '80px', gap: '4px' }}>
                                                                             {cardAction.success ? (
                                                                                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ marginBottom: '2px' }}>
-                                                                                    <Check color="#f1c40f" size={20} />
+                                                                                    <Check color="#FFB800" size={20} />
                                                                                 </motion.div>
                                                                             ) : (
                                                                                 <InlineLoader size={120} showText={false} />

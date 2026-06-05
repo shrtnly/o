@@ -870,7 +870,7 @@ const SettingsPage = () => {
                             <div className={styles.settingCard}>
                                 <div className={styles.cardHeaderArea}>
                                     <div className={styles.iconCircle}>
-                                        <Crown size={20} color={isPremium ? "#f1c40f" : "var(--color-text-muted)"} />
+                                        <Crown size={20} color={isPremium ? "#FFB800" : "var(--color-text-muted)"} />
                                     </div>
                                     <div className={styles.cardText}>
                                         <h3>{isPremium ? t('active_membership') : t('no_active_membership')}</h3>

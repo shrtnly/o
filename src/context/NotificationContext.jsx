@@ -286,18 +286,18 @@ export const NotificationProvider = ({ children }) => {
                         // Show Premium Custom Toast
                         toast.custom((t) => (
                             <div style={{
-                                background: 'rgba(12, 12, 12, 0.98)',
+                                background: '#ffffff',
                                 padding: '10px 14px',
                                 borderRadius: '16px',
-                                border: '1px solid rgba(245, 158, 11, 0.4)',
+                                border: '1px solid #e2e8f0',
                                 backdropFilter: 'blur(16px)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '12px',
                                 width: '320px',
                                 minWidth: '280px',
-                                color: 'rgb(255, 255, 255)',
-                                boxShadow: 'rgba(0, 0, 0, 0.5) 0px 12px 40px',
+                                color: '#1e293b',
+                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
                                 fontFamily: '"Hind Siliguri", sans-serif',
                                 position: 'relative',
                                 overflow: 'hidden'
@@ -308,9 +308,9 @@ export const NotificationProvider = ({ children }) => {
                                     height: '38px',
                                     borderRadius: '12px',
                                     overflow: 'hidden',
-                                    background: 'rgba(255, 255, 255, 0.03)',
+                                    background: '#f8fafc',
                                     flexShrink: 0,
-                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    border: '1px solid #e2e8f0',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -338,7 +338,7 @@ export const NotificationProvider = ({ children }) => {
                                             )}
                                             {newNotif.type === 'battle_result' && (
                                                 <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                    background: newNotif.data?.is_winner ? 'rgba(241, 196, 15, 0.15)' : 'rgba(231, 76, 60, 0.15)' }}>
+                                                    background: newNotif.data?.is_winner ? 'rgba(255, 184, 0, 0.15)' : 'rgba(231, 76, 60, 0.15)' }}>
                                                     <span style={{ fontSize: '18px' }}>{newNotif.data?.is_winner ? '🏆' : '⚔️'}</span>
                                                 </div>
                                             )}
@@ -355,10 +355,10 @@ export const NotificationProvider = ({ children }) => {
                                         gap: '4px',
                                         fontSize: '10px', 
                                         color: newNotif.type === 'battle_invite'
-                                            ? 'var(--color-primary)'
+                                            ? 'var(--color-primary-dark)'
                                             : newNotif.type === 'battle_result'
-                                                ? (newNotif.data?.is_winner ? '#f1c40f' : '#e74c3c')
-                                                : 'rgba(255,255,255,0.5)', 
+                                                ? (newNotif.data?.is_winner ? '#d97706' : '#dc2626')
+                                                : '#64748b', 
                                         fontWeight: '800', 
                                         textTransform: 'uppercase', 
                                         letterSpacing: '1px', 
@@ -369,7 +369,7 @@ export const NotificationProvider = ({ children }) => {
                                     <div style={{ 
                                         fontSize: '0.8rem', 
                                         fontWeight: '600', 
-                                        color: '#fff', 
+                                        color: '#0f172a', 
                                         lineHeight: '1.4',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
@@ -380,7 +380,7 @@ export const NotificationProvider = ({ children }) => {
                                     {newNotif.data?.course_name && (
                                         <div style={{ 
                                             fontSize: '10px', 
-                                            color: 'rgba(255,255,255,0.4)',
+                                            color: '#64748b',
                                             marginTop: '1px',
                                             fontWeight: '500',
                                             overflow: 'hidden',
@@ -393,7 +393,7 @@ export const NotificationProvider = ({ children }) => {
                                     {/* battle_result: show stake details */}
                                     {newNotif.type === 'battle_result' && (newNotif.data?.xp_stake > 0 || newNotif.data?.pollen_stake > 0) && (
                                         <div style={{ fontSize: '10px', fontWeight: '700', marginTop: '2px',
-                                            color: newNotif.data?.is_winner ? '#f1c40f' : '#e74c3c' }}>
+                                            color: newNotif.data?.is_winner ? '#d97706' : '#dc2626' }}>
                                             {newNotif.data?.is_winner
                                                 ? (newNotif.data?.xp_stake > 0 ? `+${newNotif.data.xp_stake} XP (Bet)` : `+${newNotif.data.pollen_stake} Pollen (Bet)`)
                                                 : (newNotif.data?.xp_stake > 0 ? `-${newNotif.data.xp_stake} XP (Bet)` : `-${newNotif.data.pollen_stake} Pollen (Bet)`)}
@@ -432,8 +432,8 @@ export const NotificationProvider = ({ children }) => {
                                                 toast.dismiss(t);
                                             }}
                                             style={{
-                                                background: 'rgba(255, 255, 255, 0.05)',
-                                                border: 'none',
+                                                background: '#f1f5f9',
+                                                border: '1px solid #e2e8f0',
                                                 borderRadius: '8px',
                                                 width: '28px',
                                                 height: '28px',
@@ -441,7 +441,15 @@ export const NotificationProvider = ({ children }) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                color: 'rgba(255, 255, 255, 0.4)'
+                                                color: '#64748b'
+                                            }}
+                                            onMouseEnter={(e) => {
+                                                e.currentTarget.style.background = '#e2e8f0';
+                                                e.currentTarget.style.color = '#0f172a';
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.background = '#f1f5f9';
+                                                e.currentTarget.style.color = '#64748b';
                                             }}
                                         >
                                             <X size={16} />
@@ -487,8 +495,8 @@ export const NotificationProvider = ({ children }) => {
                                                 toast.dismiss(t);
                                             }}
                                             style={{
-                                                background: 'rgba(255, 255, 255, 0.05)',
-                                                border: 'none',
+                                                background: '#f1f5f9',
+                                                border: '1px solid #e2e8f0',
                                                 borderRadius: '10px',
                                                 width: '34px',
                                                 height: '34px',
@@ -496,18 +504,20 @@ export const NotificationProvider = ({ children }) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                color: 'rgba(255, 255, 255, 0.4)',
+                                                color: '#64748b',
                                                 transition: 'all 0.2s',
                                                 position: 'relative',
                                                 zIndex: 1
                                             }}
                                             onMouseEnter={(e) => {
-                                                e.currentTarget.style.background = 'rgba(231, 76, 60, 0.1)';
-                                                e.currentTarget.style.color = '#E74C3C';
+                                                e.currentTarget.style.background = '#fee2e2';
+                                                e.currentTarget.style.color = '#ef4444';
+                                                e.currentTarget.style.borderColor = '#fca5a5';
                                             }}
                                             onMouseLeave={(e) => {
-                                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                                                e.currentTarget.style.color = 'rgba(255, 255, 255, 0.4)';
+                                                e.currentTarget.style.background = '#f1f5f9';
+                                                e.currentTarget.style.color = '#64748b';
+                                                e.currentTarget.style.borderColor = '#e2e8f0';
                                             }}
                                         >
                                             <X size={16} />
@@ -518,8 +528,8 @@ export const NotificationProvider = ({ children }) => {
                                     <button
                                         onClick={() => toast.dismiss(t)}
                                         style={{
-                                            background: newNotif.data?.is_winner ? 'rgba(241,196,15,0.15)' : 'rgba(231,76,60,0.15)',
-                                            border: `1px solid ${newNotif.data?.is_winner ? 'rgba(241,196,15,0.3)' : 'rgba(231,76,60,0.3)'}`,
+                                            background: newNotif.data?.is_winner ? 'rgba(255, 184, 0,0.15)' : 'rgba(231,76,60,0.15)',
+                                            border: `1px solid ${newNotif.data?.is_winner ? 'rgba(255, 184, 0,0.3)' : 'rgba(231,76,60,0.3)'}`,
                                             borderRadius: '10px',
                                             width: '34px',
                                             height: '34px',
@@ -527,7 +537,7 @@ export const NotificationProvider = ({ children }) => {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             cursor: 'pointer',
-                                            color: newNotif.data?.is_winner ? '#f1c40f' : '#e74c3c',
+                                            color: newNotif.data?.is_winner ? '#d97706' : '#dc2626',
                                             flexShrink: 0
                                         }}
                                     >
@@ -537,9 +547,9 @@ export const NotificationProvider = ({ children }) => {
                                     <button 
                                         onClick={() => toast.dismiss(t)} 
                                         style={{ 
-                                            background: 'rgba(255, 255, 255, 0.05)', 
-                                            border: 'none', 
-                                            color: 'rgba(255, 255, 255, 0.3)', 
+                                            background: '#f1f5f9', 
+                                            border: '1px solid #e2e8f0', 
+                                            color: '#64748b', 
                                             cursor: 'pointer', 
                                             padding: '4px',
                                             borderRadius: '6px',
@@ -551,12 +561,12 @@ export const NotificationProvider = ({ children }) => {
                                             zIndex: 1
                                         }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                                            e.currentTarget.style.color = '#fff';
+                                            e.currentTarget.style.background = '#e2e8f0';
+                                            e.currentTarget.style.color = '#0f172a';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-                                            e.currentTarget.style.color = 'rgba(255, 255, 255, 0.3)';
+                                            e.currentTarget.style.background = '#f1f5f9';
+                                            e.currentTarget.style.color = '#64748b';
                                         }}
                                     >
                                         <X size={14} />
@@ -565,7 +575,7 @@ export const NotificationProvider = ({ children }) => {
                             </div>
                         ), { 
                             id: newNotif.id,
-                            duration: 5000 
+                            duration: newNotif.type === 'battle_invite' ? 3000 : 5000 
                         });
                     } else if (eventType === 'UPDATE') {
                         setNotifications(prev => prev.map(n => n.id === newNotif.id ? { ...n, ...newNotif } : n));

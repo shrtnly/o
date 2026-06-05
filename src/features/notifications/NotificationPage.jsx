@@ -209,7 +209,7 @@ const NotificationPage = () => {
 
                                                                 {/* Icon */}
                                                                 <div className={styles.notifTypeIcon} style={{
-                                                                    background: notif.type === 'reward' ? 'rgba(241,196,15,0.08)' :
+                                                                    background: notif.type === 'reward' ? 'rgba(255, 184, 0,0.08)' :
                                                                         notif.type === 'streak' ? 'rgba(230,126,34,0.08)' :
                                                                             notif.type === 'course' ? 'rgba(46,204,113,0.08)' :
                                                                                 notif.type === 'unlock' || notif.type === 'achievement' ? 'rgba(155,89,182,0.08)' :
@@ -219,11 +219,11 @@ const NotificationPage = () => {
                                                                         <img src={notif.actor.avatar_url} alt="" className={styles.notifActorImg} />
                                                                     ) : (
                                                                         <>
-                                                                            {notif.type === 'reward' && <Trophy size={15} color="#F1C40F" />}
+                                                                            {notif.type === 'reward' && <Trophy size={15} color="#FFB800" />}
                                                                             {notif.type === 'streak' && <Flame size={15} color="#E67E22" />}
                                                                             {notif.type === 'course' && <BookOpen size={15} color="#2ECC71" />}
                                                                             {notif.type === 'unlock' && (
-                                                                                notif.data?.unlock_type === 'shield_gold' ? <Trophy size={15} color="#F1C40F" /> :
+                                                                                notif.data?.unlock_type === 'shield_gold' ? <Trophy size={15} color="#FFB800" /> :
                                                                                 notif.data?.unlock_type === 'shield_platinum' ? <Award size={15} color="#9B59B6" /> :
                                                                                 notif.data?.unlock_type === 'shield_diamond' ? <Award size={15} color="#3498DB" /> :
                                                                                 <Award size={15} color="#9B59B6" />
@@ -269,7 +269,7 @@ const NotificationPage = () => {
                                                                     )}
 
                                                                     {notif.type === 'battle_invite' && notif.data?.status === 'finished' && (
-                                                                        <div className={styles.respondedStatus} style={{ color: 'var(--color-primary)' }}>
+                                                                        <div className={styles.respondedStatus} style={{ color: 'var(--color-primary)', background: 'var(--color-primary-soft)' }}>
                                                                             <Trophy size={12} strokeWidth={3} />
                                                                             <span>ফলাফল দেখুন</span>
                                                                         </div>
@@ -284,7 +284,7 @@ const NotificationPage = () => {
 
                                                                             if (isExpired) {
                                                                                 return (
-                                                                                    <div className={styles.respondedStatus} style={{ color: 'rgba(255,255,255,0.3)' }}>
+                                                                                    <div className={styles.respondedStatus} style={{ color: 'var(--color-text-muted)', background: 'var(--color-bg-hover)' }}>
                                                                                         <X size={12} strokeWidth={3} />
                                                                                         <span>গ্রহণ করা হয়নি</span>
                                                                                     </div>

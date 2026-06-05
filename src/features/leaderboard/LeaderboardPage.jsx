@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
     Trophy, Medal, ChevronLeft, ChevronRight,
-    Lock, Zap, TrendingUp, Share2
+    Lock, Zap, TrendingUp, Share2, X
 } from 'lucide-react';
 import Skeleton from '../../components/ui/Skeleton';
 import { useNavigate } from 'react-router-dom';
@@ -120,6 +120,16 @@ const LeaderboardPage = () => {
     return (
         <div className={styles.container}>
             <main className={styles.mainContent}>
+                
+                {/* Mobile Header with minimal cross button */}
+                <div className={styles.mobileHeader}>
+                    <button
+                        onClick={() => navigate('/')}
+                        className={styles.closeButton}
+                    >
+                        <X size={24} strokeWidth={2} />
+                    </button>
+                </div>
 
                 {/* Global loading */}
                 {loading && !leaderboardData.length && !isLocked ? (

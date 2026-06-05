@@ -3,10 +3,10 @@
    ───────────────────────────────────────────────────────────── */
 
 :local {
-    --color-primary-rgb: 241, 196, 15;
-    --color-success: #f1c40f;
+    --color-primary-rgb: 255, 184, 0;
+    --color-success: #FFB800;
     --color-danger: #e74c3c;
-    --color-warning: #f1c40f;
+    --color-warning: #FFB800;
 }
 
 :global(.light) {
@@ -208,7 +208,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: rgba(241, 196, 15, 0.08);
+    background: rgba(255, 184, 0, 0.08);
     border: 1px dashed var(--color-primary);
     padding: 6px 12px;
     border-radius: 10px;
@@ -245,9 +245,9 @@
 }
 
 @keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(241, 196, 15, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(241, 196, 15, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 184, 0, 0.4); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(255, 184, 0, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 184, 0, 0); }
 }
 
 .lobbyHero {
@@ -862,10 +862,7 @@
     background: linear-gradient(135deg, var(--color-primary) 0%, #E67E22 100%);
     border-radius: 14px;
     transform: rotate(-10deg) skewX(-5deg);
-    box-shadow: 
-        0 10px 20px -5px rgba(var(--color-primary-rgb), 0.4),
-        0 0 15px rgba(var(--color-primary-rgb), 0.2),
-        inset 0 2px 10px rgba(255, 255, 255, 0.5);
+    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.5);
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -1106,9 +1103,7 @@
     background: linear-gradient(135deg, var(--color-primary) 0%, #E67E22 100%);
     border-radius: 12px;
     transform: rotate(-10deg) skewX(-5deg);
-    box-shadow: 
-        0 8px 20px -5px rgba(var(--color-primary-rgb), 0.4),
-        inset 0 2px 10px rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.4);
     border: 2px solid rgba(255, 255, 255, 0.3);
     flex-shrink: 0;
 }
@@ -1644,7 +1639,7 @@
 }
 
 .trophyGold {
-    color: #F1C40F;
+    color: #FFB800;
 }
 
 .trophySilver {

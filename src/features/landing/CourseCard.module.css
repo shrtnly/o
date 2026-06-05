@@ -59,8 +59,8 @@
 
 .enrolledBadge {
     position: absolute;
-    top: -2px;
-    right: -2px;
+    top: 8px;
+    right: 8px;
     background: var(--color-primary);
     color: var(--color-on-primary);
     width: 20px;

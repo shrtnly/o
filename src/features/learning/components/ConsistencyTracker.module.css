@@ -106,13 +106,13 @@
 }
 
 .bestLabel {
-    color: #F1C40F;
+    color: #FFB800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .bestValue {
-    color: #F1C40F;
+    color: #FFB800;
 }
 
 .tagline {
@@ -299,12 +299,31 @@
 
 :global(.light) .dayAchieved {
     background-color: transparent;
-    border-color: rgba(241, 196, 15, 0.15);
+    border-color: rgba(255, 184, 0, 0.15);
 }
 
 .dayToday {
-    border-color: #f1c40f;
+    border-color: #FFB800;
+    background-color: rgba(255, 184, 0, 0.05);
 }
+
+:global(.light) .dayToday {
+    background-color: rgba(255, 184, 0, 0.1);
+}
+
+.todayNumber {
+    color: #FFB800 !important;
+    font-weight: 900;
+}
+
+.inactiveFlame {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+:global(.light) .inactiveFlame {
+    color: rgba(0, 0, 0, 0.1);
+}
+
 
 .dayFuture {
     opacity: 0.7;

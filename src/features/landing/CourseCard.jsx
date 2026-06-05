@@ -25,13 +25,13 @@ const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
 
     return (
         <div className={`${styles.card} ${viewType === 'list' ? styles.listCard : ''}`} onClick={handleClick}>
+            {isEnrolled && (
+                <div className={styles.enrolledBadge}>
+                    <CheckCircle2 size={12} />
+                </div>
+            )}
             <div className={styles.imageWrapper}>
                 <img src={course.image_url} alt={displayTitle} className={styles.image} />
-                {isEnrolled && (
-                    <div className={styles.enrolledBadge}>
-                        <CheckCircle2 size={12} />
-                    </div>
-                )}
             </div>
             <div className={styles.content}>
                 <h3 className={styles.title}>{displayTitle}</h3>

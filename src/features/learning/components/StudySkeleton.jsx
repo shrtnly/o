@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from '../StudyPage.module.css';
 
 /* ── Shimmer keyframe injected once ──────────────────────────── */
 const SHIMMER_CSS = `
@@ -27,7 +28,7 @@ const injectStyle = (() => {
 const bone = (extra = {}) => ({
     position: 'relative',
     overflow: 'hidden',
-    background: 'rgba(255,255,255,0.06)',
+    background: 'var(--skeleton-bone-bg, rgba(255,255,255,0.06))',
     borderRadius: 8,
     flexShrink: 0,
     ...extra,
@@ -36,7 +37,7 @@ const bone = (extra = {}) => ({
 const shimmerLayer = {
     position: 'absolute',
     inset: 0,
-    background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)',
+    background: 'var(--skeleton-shimmer-bg, linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%))',
     animation: '_sk_shimmer 1.6s infinite linear',
 };
 
@@ -51,29 +52,22 @@ const StudySkeleton = () => {
     injectStyle();
 
     return (
-        <div style={{
+        <div className={styles.studySkeleton} style={{
             display: 'flex',
             flexDirection: 'column',
             height: '100dvh',
-            background: 'var(--color-bg-deep, #0f1923)',
             overflow: 'hidden',
         }}>
 
             {/* ── Header (matches real: 64px, padding 0 24px) ── */}
-            <div style={{
-                height: 64,
-                display: 'flex',
-                alignItems: 'center',
+            <div className={styles.headerSkeleton} style={{
                 justifyContent: 'center',
-                background: '#0b0e11',
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
                 flexShrink: 0,
             }}>
                 <div style={{
                     maxWidth: 1100,
                     width: '100%',
                     height: '100%',
-                    padding: '0 24px',
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
@@ -83,7 +77,7 @@ const StudySkeleton = () => {
                         width: 32,
                         height: 32,
                         borderRadius: 10,
-                        background: 'rgba(255,255,255,0.04)',
+                        background: 'var(--skeleton-bone-bg, rgba(255,255,255,0.04))',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -95,19 +89,17 @@ const StudySkeleton = () => {
                     </div>
 
                     {/* Progress bar — exactly matches real .progressBar */}
-                    <div style={{
+                    <div className={styles.progressBar} style={{
                         flex: 1,
                         height: 18,
                         borderRadius: 99,
-                        background: '#1a2226',
-                        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.4)',
                         position: 'relative',
                         overflow: 'hidden',
                     }}>
                         {/* Shimmer over full track */}
                         <div style={{
                             ...shimmerLayer,
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%)',
+                            background: 'var(--skeleton-shimmer-bg, linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%))',
                         }} />
                     </div>
 
@@ -142,8 +134,8 @@ const StudySkeleton = () => {
 
                 {/* Narrative hint card */}
                 <div style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'var(--skeleton-bone-bg, rgba(255,255,255,0.03))',
+                    border: '1px solid var(--skeleton-bone-bg, rgba(255,255,255,0.06))',
                     borderRadius: 14,
                     padding: '14px 16px',
                     display: 'flex',
@@ -164,18 +156,9 @@ const StudySkeleton = () => {
                 </div>
 
                 {/* Answer options */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div className={styles.optionsGridSkeleton}>
                     {[1, 0.9, 0.85, 0.7].map((opacity, i) => (
-                        <div key={i} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 12,
-                            background: 'rgba(255,255,255,0.04)',
-                            border: '2px solid rgba(255,255,255,0.06)',
-                            borderRadius: 14,
-                            padding: '14px 16px',
-                            opacity,
-                        }}>
+                        <div key={i} className={styles.optionSkeleton} style={{ opacity }}>
                             {/* Label badge */}
                             <Bone w={36} h={36} r={10} />
                             {/* Option text */}
@@ -188,17 +171,15 @@ const StudySkeleton = () => {
             </div>
 
             {/* ── Footer / Check button ── */}
-            <div style={{
+            <div className={styles.footerSkeleton} style={{
                 position: 'fixed',
                 bottom: 0, left: 0, right: 0,
                 padding: '16px 16px calc(16px + env(safe-area-inset-bottom))',
-                background: 'var(--color-bg-deep, #0f1923)',
-                borderTop: '1px solid rgba(255,255,255,0.06)',
-                backdropFilter: 'blur(10px)',
             }}>
                 <div style={{
                     maxWidth: 680,
                     margin: '0 auto',
+                    width: '100%',
                 }}>
                     <Bone w="100%" h={54} r={14} />
                 </div>

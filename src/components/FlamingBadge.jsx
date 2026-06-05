@@ -27,7 +27,7 @@ const FlamingBadge = ({ size = 20, className }) => {
                     <defs>
                         <linearGradient id="beeFlameGradient" x1="12" y1="2" x2="12" y2="23" gradientUnits="userSpaceOnUse">
                             <stop offset="0%" stopColor="#FFD700" />
-                            <stop offset="50%" stopColor="#F1C40F" />
+                            <stop offset="50%" stopColor="#FFB800" />
                             <stop offset="100%" stopColor="#E67E22" />
                         </linearGradient>
                     </defs>

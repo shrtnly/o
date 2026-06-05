@@ -584,10 +584,10 @@ const LearningPage = () => {
     };
 
     const UNIT_COLORS = [
-        { bg: '#f1c40f', border: '#d4ac0d' }, // Honey Golden (Bee Theme)
+        { bg: '#FFB800', border: '#d4ac0d' }, // Honey Golden (Bee Theme)
         { bg: '#3498db', border: '#2980b9' }, // Blue
         { bg: '#9b59b6', border: '#8e44ad' }, // Purple
-        { bg: '#f1c40f', border: '#f39c12' }, // Yellow
+        { bg: '#FFB800', border: '#f39c12' }, // Yellow
         { bg: '#e67e22', border: '#d35400' }, // Orange
         { bg: '#e74c3c', border: '#c0392b' }, // Red
     ];
@@ -723,6 +723,15 @@ const LearningPage = () => {
 
         <div className={styles.learningPage}>
             <main className={styles.mainContent} ref={mainContentRef} onScroll={handleScroll}>
+                <svg width="0" height="0" style={{ position: 'absolute' }}>
+                    <defs>
+                        <linearGradient id="flameGradientTracker" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style={{ stopColor: '#FFD700', stopOpacity: 1 }} />
+                            <stop offset="50%" style={{ stopColor: '#FFB800', stopOpacity: 1 }} />
+                            <stop offset="100%" style={{ stopColor: '#E67E22', stopOpacity: 1 }} />
+                        </linearGradient>
+                    </defs>
+                </svg>
                 {/* Robust Mobile Header Toggle Bar */}
                 {!loading && unitsWithChapters.length > 0 && (
                     <div
@@ -744,7 +753,7 @@ const LearningPage = () => {
                                     <div className={styles.mobileHeaderStatWrapper}>
                                         <div className={cn(styles.mobileHeaderStat, (!streak?.current_streak || streak?.current_streak === 0) && styles.statZero)} onClick={() => setShowStreakTooltip(true)} style={{ cursor: 'pointer' }}>
                                             {streak?.is_today_completed ? (
-                                                <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                                <Flame size={24} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" />
                                             ) : (
                                                 <Flame 
                                                     size={24} 
@@ -761,7 +770,7 @@ const LearningPage = () => {
                                                 <div className={styles.streakTooltipOverlay} onClick={() => setShowStreakTooltip(false)} />
                                                 <div className={styles.streakTooltipBox}>
                                                     <div className={styles.streakTooltipHeader}>
-                                                        <Flame size={24} color="#f1c40f" fill="#f1c40f" />
+                                                        <Flame size={24} color="#FFB800" fill="#FFB800" />
                                                         <div className={styles.streakInfoLeft}>
                                                             <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{streak?.current_streak || 0} দিনের ধারাবাহিকতা</h4>
                                                         </div>
@@ -779,7 +788,7 @@ const LearningPage = () => {
                                                                     day.completed ? styles.streakDayCircleActive : styles.streakDayCircle,
                                                                     day.isToday && !day.completed && styles.streakDayTodayUnfilled
                                                                 )}>
-                                                                    {day.completed ? <Check size={14} strokeWidth={4} color="#f1c40f" /> : null}
+                                                                    {day.completed ? <Flame size={15} color="url(#flameGradientTracker)" fill="url(#flameGradientTracker)" /> : null}
                                                                 </div>
                                                             </div>
                                                         ))}
@@ -860,7 +869,7 @@ const LearningPage = () => {
                                             <HoneyDropIcon size={24} isEmpty={refillHearts === 0 && refillTimeDisplay} />
                                             <span>
                                                 {(profile?.is_premium || profile?.is_1day_premium) ? (
-                                                    <InfinityIcon size={24} strokeWidth={3} stroke="#f1c40f" />
+                                                    <InfinityIcon size={24} strokeWidth={3} stroke="#FFB800" />
                                                 ) : refillHearts}
                                             </span>
                                         </div>
@@ -874,7 +883,7 @@ const LearningPage = () => {
                                                             <div className={styles.streakTooltipHeader}>
                                                                 <div className={styles.streakInfoLeft}>
                                                                     <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                                        <Crown size={24} color="#f1c40f" />
+                                                                        <Crown size={24} color="#FFB800" />
                                                                         {(profile?.gender === 'female' || profile?.gender === 'নারী') ? 'কুইন বী সক্রিয় আছে' : 'কিং বী সক্রিয় আছে'}
                                                                     </h4>
                                                                     {profile?.is_1day_premium ? (

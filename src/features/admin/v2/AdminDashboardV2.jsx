@@ -37,7 +37,7 @@ const AdminDashboardV2 = () => {
 
     return (
         <div className="flex h-screen bg-white dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 overflow-hidden">
-            <Toaster position="top-right" richColors theme={isDark ? 'dark' : 'light'} />
+            <Toaster position="top-right" richColors theme="light" duration={3000} />
 
             {/* Simple Sidebar */}
             <aside className={cn(

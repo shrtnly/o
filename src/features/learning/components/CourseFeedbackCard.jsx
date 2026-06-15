@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { courseService } from '../../../services/courseService';
 import styles from './CourseFeedbackCard.module.css';
 
-const CourseFeedbackCard = ({ courseId, userId, onDismiss }) => {
+const CourseFeedbackCard = ({ courseId, userId, onDismiss, onRated }) => {
     const [rating, setRating] = useState(0);
     const [hover, setHover] = useState(0);
     const [feedback, setFeedback] = useState('');
@@ -26,8 +26,10 @@ const CourseFeedbackCard = ({ courseId, userId, onDismiss }) => {
             await courseService.submitReview(userId, courseId, rating, feedback);
             setIsSubmitted(true);
             setTimeout(() => {
-                onDismiss();
-            }, 3000);
+                // Call onRated if provided (marks as permanently rated), else just dismiss
+                if (onRated) onRated();
+                else onDismiss();
+            }, 2000);
         } catch (error) {
             console.error('Error submitting feedback:', error);
         } finally {

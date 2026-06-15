@@ -330,6 +330,23 @@ export const courseService = {
         return true;
     },
 
+    async checkUserRating(userId, courseId) {
+        try {
+            const { data, error } = await supabase
+                .from('course_reviews')
+                .select('id')
+                .eq('user_id', userId)
+                .eq('course_id', courseId)
+                .maybeSingle();
+
+            if (error) return false;
+            return !!data;
+        } catch (err) {
+            console.error('Error checking user rating:', err);
+            return false;
+        }
+    },
+
     async submitReview(userId, courseId, rating, feedback = '') {
         const { data, error } = await supabase
             .from('course_reviews')

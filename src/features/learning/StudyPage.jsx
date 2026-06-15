@@ -224,6 +224,7 @@ const StudyPage = () => {
     // Feedback System States
     const [showFeedbackCard, setShowFeedbackCard] = useState(false);
     const [alreadyRated, setAlreadyRated] = useState(false);
+    const ratingTimerFired = React.useRef(false); // ensures timer fires only once per session
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth <= 768);
@@ -486,27 +487,41 @@ const StudyPage = () => {
         if (chapterId && user?.id) fetchContent();
     }, [chapterId, user?.id]);
 
-    // Check if user has already rated this course
+    // Check if user has already rated this course (DB check + localStorage fallback)
     useEffect(() => {
         const checkRating = async () => {
-            if (user?.id && courseId) {
-                const rated = await courseService.checkUserRating(user.id, courseId);
-                setAlreadyRated(rated);
+            if (!user?.id || !courseId) return;
+
+            // Fast local check first
+            const localKey = `rated_${courseId}_${user.id}`;
+            if (localStorage.getItem(localKey) === 'true') {
+                setAlreadyRated(true);
+                return;
+            }
+
+            // DB check
+            const rated = await courseService.checkUserRating(user.id, courseId);
+            if (rated) {
+                localStorage.setItem(localKey, 'true');
+                setAlreadyRated(true);
             }
         };
         checkRating();
     }, [user?.id, courseId]);
 
-    // Trigger feedback card after 2 minutes (120 seconds)
+    // Trigger feedback card after 2 minutes — fires ONCE per course session
     useEffect(() => {
-        if (alreadyRated || !user?.id || loading || resultsActive) return;
+        // Guard: skip if already rated, not logged in, still loading, or timer already fired
+        if (alreadyRated || !user?.id || loading || ratingTimerFired.current) return;
 
         const timer = setTimeout(() => {
+            ratingTimerFired.current = true; // prevent any future re-trigger
             setShowFeedbackCard(true);
         }, 2 * 60 * 1000); // 2 minutes
 
         return () => clearTimeout(timer);
-    }, [alreadyRated, user?.id, loading, resultsActive]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [alreadyRated, user?.id, loading]); // intentionally omit resultsActive to avoid re-trigger
 
     // Initialize Shuffled Right for Matching
     useEffect(() => {
@@ -1720,6 +1735,13 @@ const StudyPage = () => {
                     courseId={courseId}
                     userId={user.id}
                     onDismiss={() => setShowFeedbackCard(false)}
+                    onRated={() => {
+                        // Mark as rated permanently so it never shows again for this course
+                        const localKey = `rated_${courseId}_${user.id}`;
+                        localStorage.setItem(localKey, 'true');
+                        setAlreadyRated(true);
+                        setShowFeedbackCard(false);
+                    }}
                 />
             )}
         </div >

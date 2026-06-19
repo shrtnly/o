@@ -436,6 +436,60 @@
     margin-top: 2px;
 }
 
+/* Animated lightbulb on hint expansion */
+@keyframes bulbGlow {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: drop-shadow(0 0 0px rgba(255, 184, 0, 0));
+    }
+    30% {
+        transform: scale(1.25) rotate(-15deg);
+        filter: drop-shadow(0 0 10px rgba(255, 184, 0, 0.8));
+    }
+    50% {
+        transform: scale(1.25) rotate(15deg);
+        filter: drop-shadow(0 0 15px rgba(255, 184, 0, 1));
+    }
+    70% {
+        transform: scale(1.1) rotate(-5deg);
+        filter: drop-shadow(0 0 8px rgba(255, 184, 0, 0.6));
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        filter: drop-shadow(0 0 3px rgba(255, 184, 0, 0.3));
+    }
+}
+
+.bulbAnimated {
+    animation: bulbGlow 0.8s ease-in-out forwards;
+}
+
+.contextTextClickable {
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+    align-items: center !important;
+}
+
+.contextTextClickable:hover {
+    background: rgba(255, 184, 0, 0.08);
+    border-left-color: rgba(255, 184, 0, 0.6);
+}
+
+.hintToggleIcon {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+
+.contextTextClickable:hover .hintToggleIcon {
+    color: #FFB800;
+}
+
 /* ── Storytelling Dialogue ── */
 .dialogueContainer {
     width: 100%;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, CheckSquare, User, Share2 } from 'lucide-react';
+import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, CheckSquare, User, Share2, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -197,6 +197,7 @@ const StudyPage = () => {
 
     const [activeDialogueIndex, setActiveDialogueIndex] = useState(0);
     const [answersHistory, setAnswersHistory] = useState({}); // { [index]: { selectedOption, isCorrect } }
+    const [visibleHints, setVisibleHints] = useState({}); // { [questionId]: boolean }
     const resultsActive = showResults || showReview;
     const scrollRef = React.useRef(null);
     const activeQuestionRef = React.useRef(null);
@@ -1214,12 +1215,31 @@ const StudyPage = () => {
                                                         )}
 
                                                         {!isStory && (q.narrative || q.explanation) && (
-
-                                                            <div className={styles.contextText}>
-                                                                <span className={styles.lightbulb}><Lightbulb size={20} color="#ffa202" /></span>
-                                                                {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
-                                                            </div>
-                                                        )}
+                                                             <div
+                                                                 className={`${styles.contextText} ${styles.contextTextClickable}`}
+                                                                 onClick={() => setVisibleHints(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
+                                                             >
+                                                                 {visibleHints[q.id] ? (
+                                                                     <>
+                                                                         <span className={`${styles.lightbulb} ${styles.bulbAnimated}`}>
+                                                                             <Lightbulb size={20} color="#ffa202" />
+                                                                         </span>
+                                                                         <span style={{ flex: 1 }}>
+                                                                             {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
+                                                                         </span>
+                                                                     </>
+                                                                 ) : (
+                                                                     <>
+                                                                         <span className={styles.lightbulb}>
+                                                                             <EyeOff size={20} color="#5a6e7f" />
+                                                                         </span>
+                                                                         <span style={{ flex: 1 }}>
+                                                                             সহায়তা নিন
+                                                                         </span>
+                                                                     </>
+                                                                 )}
+                                                             </div>
+                                                         )}
 
                                                         <h2 className={styles.questionTitle}>
                                                             {isLatest && selectedAnimation !== 'none' && (
@@ -1246,77 +1266,66 @@ const StudyPage = () => {
 
                                                         <div className={cn(styles.optionsList, q.question_type === 'boolean' && styles.booleanRow)}>
                                                             {q.question_type === 'matching' ? (
-                                                                <div className={styles.matchingContainer}>
-                                                                    <div className={styles.matchingColumn}>
-                                                                        {(q.metadata?.pairs || []).map((pair, pIdx) => {
-                                                                            const isMatched = matches[pIdx] !== undefined;
-                                                                            const rIdx = matches[pIdx];
-                                                                            const showResult = isLatest ? isAnswered : true;
-                                                                            // A match exists right now for this left card
-                                                                            const isMatchCorrect = isMatched && (q.metadata.pairs[pIdx].right === shuffledRight[rIdx]?.text);
-                                                                            // Red: currently matched but WRONG (temp flash before 800ms clear)
-                                                                            const isMatchWrong = (isLatest && isMatched && !isMatchCorrect) ||
-                                                                                (showResult && !isLatest && isMatched && !isMatchCorrect);
-                                                                            // After a failure, this left card has been tried before
-                                                                            const hasFailed = isLatest && failedOptions.some(f => f.left === pIdx);
-                                                                            // Green flash: newly correct match (first 550ms)
-                                                                            const isFlashing = isLatest && flashingMatches.has(pIdx);
+                                                                 <div className={styles.matchingContainer}>
+                                                                     {(q.metadata?.pairs || []).map((pair, pIdx) => {
+                                                                         const isMatched = matches[pIdx] !== undefined;
+                                                                         const rIdx = matches[pIdx];
+                                                                         const showResult = isLatest ? isAnswered : true;
+                                                                         const isMatchCorrect = isMatched && (q.metadata.pairs[pIdx].right === shuffledRight[rIdx]?.text);
+                                                                         const isMatchWrong = (isLatest && isMatched && !isMatchCorrect) ||
+                                                                             (showResult && !isLatest && isMatched && !isMatchCorrect);
+                                                                         const hasFailed = isLatest && failedOptions.some(f => f.left === pIdx);
+                                                                         const isFlashing = isLatest && flashingMatches.has(pIdx);
 
-                                                                            if (!pair.left || pair.left.trim() === '') return null;
+                                                                         if (!pair.left || pair.left.trim() === '') return null;
 
-                                                                            return (
-                                                                                <div
-                                                                                    key={`l-${pIdx}`}
-                                                                                    className={cn(
-                                                                                        styles.matchingCard,
-                                                                                        selectedLeft === pIdx && styles.selectedCard,
-                                                                                        isFlashing && styles.matchFlash,
-                                                                                        !isFlashing && isMatchCorrect && styles.matched,
-                                                                                        isMatchWrong && styles.mismatch,
-                                                                                        hasFailed && !isMatched && styles.hasFailed
-                                                                                    )}
-                                                                                    onClick={() => isLatest && !isMatchCorrect && handleMatchSelect('left', pIdx)}
-                                                                                >
-                                                                                    {pair.left}
-                                                                                </div>
-                                                                            );
-                                                                        })}
-                                                                    </div>
-                                                                    <div className={styles.matchingColumn}>
-                                                                        {shuffledRight.map((opt, rIdx) => {
-                                                                            const lIdx = Object.keys(matches).find(k => matches[k] === parseInt(rIdx) || matches[k] === rIdx);
-                                                                            const isMatched = lIdx !== undefined;
-                                                                            const isMatchCorrect = isMatched && (q.metadata.pairs[lIdx]?.right === opt.text);
-                                                                            const showResult = isLatest ? isAnswered : true;
-                                                                            const isFlashingRight = isLatest && isMatchCorrect && flashingMatches.has(parseInt(lIdx));
+                                                                         return (
+                                                                             <div
+                                                                                 key={`l-${pIdx}`}
+                                                                                 style={{ gridRow: pIdx + 1, gridColumn: 1 }}
+                                                                                 className={cn(
+                                                                                     styles.matchingCard,
+                                                                                     selectedLeft === pIdx && styles.selectedCard,
+                                                                                     isFlashing && styles.matchFlash,
+                                                                                     !isFlashing && isMatchCorrect && styles.matched,
+                                                                                     isMatchWrong && styles.mismatch,
+                                                                                     hasFailed && !isMatched && styles.hasFailed
+                                                                                 )}
+                                                                                 onClick={() => isLatest && !isMatchCorrect && handleMatchSelect('left', pIdx)}
+                                                                             >
+                                                                                 {pair.left}
+                                                                             </div>
+                                                                         );
+                                                                     })}
+                                                                     {shuffledRight.map((opt, rIdx) => {
+                                                                         const lIdx = Object.keys(matches).find(k => matches[k] === parseInt(rIdx) || matches[k] === rIdx);
+                                                                         const isMatched = lIdx !== undefined;
+                                                                         const isMatchCorrect = isMatched && (q.metadata.pairs[lIdx]?.right === opt.text);
+                                                                         const showResult = isLatest ? isAnswered : true;
+                                                                         const isFlashingRight = isLatest && isMatchCorrect && flashingMatches.has(parseInt(lIdx));
+                                                                         const isHint = isLatest && !isMatchCorrect && !isMatched &&
+                                                                             failedOptions.some(f => q.metadata.pairs[f.left]?.right === opt.text);
+                                                                         const isMatchWrong = isLatest && isMatched && !isMatchCorrect;
 
-                                                                            // GREEN HINT: This right card is the correct answer for any left card that has failed
-                                                                            // Persists after failure so learner knows where to click next
-                                                                            const isHint = isLatest && !isMatchCorrect && !isMatched &&
-                                                                                failedOptions.some(f => q.metadata.pairs[f.left]?.right === opt.text);
-
-                                                                            // RED: currently matched wrong (temp - clears after 800ms)
-                                                                            const isMatchWrong = isLatest && isMatched && !isMatchCorrect;
-
-                                                                            return (
-                                                                                <div
-                                                                                    key={`r-${rIdx}`}
-                                                                                    className={cn(
-                                                                                        styles.matchingCard,
-                                                                                        isFlashingRight && styles.matchFlash,
-                                                                                        !isFlashingRight && isMatchCorrect && styles.matched,
-                                                                                        isMatchWrong && styles.mismatch,
-                                                                                        isHint && styles.hintCard
-                                                                                    )}
-                                                                                    onClick={() => isLatest && handleMatchSelect('right', rIdx)}
-                                                                                >
-                                                                                    {opt.text}
-                                                                                </div>
-                                                                            );
-                                                                        })}
-                                                                    </div>
-                                                                </div>
-                                                            ) : (
+                                                                         return (
+                                                                             <div
+                                                                                 key={`r-${rIdx}`}
+                                                                                 style={{ gridRow: rIdx + 1, gridColumn: 2 }}
+                                                                                 className={cn(
+                                                                                     styles.matchingCard,
+                                                                                     isFlashingRight && styles.matchFlash,
+                                                                                     !isFlashingRight && isMatchCorrect && styles.matched,
+                                                                                     isMatchWrong && styles.mismatch,
+                                                                                     isHint && styles.hintCard
+                                                                                 )}
+                                                                                 onClick={() => isLatest && handleMatchSelect('right', rIdx)}
+                                                                             >
+                                                                                 {opt.text}
+                                                                             </div>
+                                                                         );
+                                                                     })}
+                                                                 </div>
+                                                             ) : (
                                                                 (q.mcq_options || []).map((option, optIdx) => {
                                                                     const isCheckmark = q.question_type === 'checkmark';
                                                                     // For checkmark: use selectedOptions Set; for others: single selectedOption
@@ -1477,7 +1486,7 @@ const StudyPage = () => {
                                         {isCorrect
                                             ? "আপনার উত্তরটি সঠিক হয়েছে।"
                                             : currentQuestion.explanation
-                                                ? `সঠিক উত্তর : ${currentQuestion.explanation}`
+                                                ? currentQuestion.explanation
                                                 : `ভুল থেকে শেখাই আসল শেখা। আপনার কাছে আর মাত্র ${hearts}টি ${t('honey_drop')} আছে।`
                                         }
                                     </p>

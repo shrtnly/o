@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "course:export": "node scripts/export_course.js",
+    "course:sync": "node scripts/sync_course.js"
   },
   "dependencies": {
     "@dicebear/collection": "^9.3.1",

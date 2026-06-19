@@ -2274,7 +2274,7 @@
         {
           "id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
           "unit_id": "a29d0a26-85be-4491-8246-efbd10112392",
-          "title": "স্বাস্থ্য ও দুর্ঘটনা সংক্রান্ত",
+          "title": "স্বাস্থ্য ও দুর্ঘটনা সংক্রান্ত সংজ্ঞা",
           "order_index": 7,
           "created_at": "2026-06-19T17:14:09.489Z",
           "is_trophy": false,
@@ -2285,14 +2285,354 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "41cc7bdc-f43e-4dab-b1e1-6e4b1078bb49",
+              "id": "a7c11268-86b2-4b92-b6db-6ccc12117b73",
               "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
-              "title": "বিষয়ের সারসংক্ষেপ",
-              "content": "এই অধ্যায়ে \"স্বাস্থ্য ও দুর্ঘটনা সংক্রান্ত\" সম্পর্কে বিস্তারিত আলোচনা করা হয়েছে।",
+              "title": "পেশাগত ব্যাধি",
+              "content": "কাজের কারণে সৃষ্ট রোগই হলো পেশাগত ব্যাধি।",
               "order_index": 1,
-              "created_at": "2026-06-19T17:14:09.489Z",
+              "created_at": "2026-06-19T20:56:47.179Z",
               "type": "standard",
-              "mcq_questions": []
+              "mcq_questions": [
+                {
+                  "id": "311ae038-f126-40ea-8b92-4c5c0029d15e",
+                  "learning_point_id": "a7c11268-86b2-4b92-b6db-6ccc12117b73",
+                  "question_text": "কর্মস্থলের পরিবেশের কারণে সৃষ্ট দীর্ঘমেয়াদী রোগ কি 'পেশাগত ব্যাধি' হিসেবে গণ্য?",
+                  "explanation": "সুনির্দিষ্ট কাজের পরিবেশ থেকে সৃষ্ট রোগই হলো পেশাগত ব্যাধি।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.179Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কাজের কারণে সৃষ্ট রোগই হলো পেশাগত ব্যাধি।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6f19965a-4324-4d60-992a-aa2d7fe9d32c",
+                      "question_id": "311ae038-f126-40ea-8b92-4c5c0029d15e",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.177Z"
+                    },
+                    {
+                      "id": "a4c204d0-0d48-4b08-9392-791f72050254",
+                      "question_id": "311ae038-f126-40ea-8b92-4c5c0029d15e",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.179Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "39044aa3-0dad-4ece-adc7-1f46da2c7632",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "আংশিক অক্ষমতা",
+              "content": "সাময়িক উপার্জনের ক্ষমতা কমা আংশিক অক্ষমতা।",
+              "order_index": 2,
+              "created_at": "2026-06-19T20:56:47.179Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "94f0f110-f397-4b11-b721-85c9361d1527",
+                  "learning_point_id": "39044aa3-0dad-4ece-adc7-1f46da2c7632",
+                  "question_text": "দুর্ঘটনায় শ্রমিকের উপার্জনের ক্ষমতা সাময়িকভাবে হ্রাস পেলে তাকে আইনি ভাষায় কী বলে?",
+                  "explanation": "উপার্জনের ক্ষমতা সাময়িকভাবে কমে যাওয়াকে আংশিক অক্ষমতা বলে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.179Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: সাময়িক উপার্জনের ক্ষমতা কমা আংশিক অক্ষমতা।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "01d67849-2600-47b8-9785-afcab7a6005c",
+                      "question_id": "94f0f110-f397-4b11-b721-85c9361d1527",
+                      "option_text": "আংশিক অক্ষমতা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.179Z"
+                    },
+                    {
+                      "id": "7c01d8af-bf62-4cf6-aa63-6f5aaa1ebf88",
+                      "question_id": "94f0f110-f397-4b11-b721-85c9361d1527",
+                      "option_text": "মোট অক্ষমতা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.179Z"
+                    },
+                    {
+                      "id": "c611d1cd-d9fb-4f2d-ac20-b40813c91806",
+                      "question_id": "94f0f110-f397-4b11-b721-85c9361d1527",
+                      "option_text": "পেশাগত ব্যাধি",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:56:47.179Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "16400979-ec65-4b89-b089-0cdd7438ee57",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "জখম ও দুর্ঘটনার পরিভাষা",
+              "content": "জখম ও দুর্ঘটনার বিভিন্ন আইনি পরিভাষা চেনার নিয়ম।",
+              "order_index": 3,
+              "created_at": "2026-06-19T20:56:47.180Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "1f5c9235-6671-4635-b7d1-cd569c1f0879",
+                  "learning_point_id": "16400979-ec65-4b89-b089-0cdd7438ee57",
+                  "question_text": "বাম পাশের পরিভাষার সাথে ডান পাশের সঠিক আইনি অর্থটি মেলাও।",
+                  "explanation": "শতভাগ অক্ষমতায় মোট অক্ষমতা এবং ঝুঁকিপূর্ণ পরিস্থিতিতে বিপজ্জনক ঘটনা হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.180Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: জখম ও দুর্ঘটনার বিভিন্ন আইনি পরিভাষা চেনার নিয়ম।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "মোট অক্ষমতা",
+                        "right": "উপার্জনের ক্ষমতা স্থায়ীভাবে শতভাগ হারিয়ে ফেলা"
+                      },
+                      {
+                        "left": "বিপজ্জনক ঘটনা",
+                        "right": "বড় ক্ষতি না হলেও কারখানায় দুর্ঘটনার ঝুঁকি তৈরি হওয়া"
+                      },
+                      {
+                        "left": "পেশাগত ব্যাধি",
+                        "right": "কর্মস্থলের বিষাক্ত কেমিক্যালের কারণে সৃষ্ট রোগ"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "ba8cbc36-f9f5-4312-b359-fddbb60f255f",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "বিপজ্জনক ঘটনা",
+              "content": "কেউ জখম না হলেও আইনিভাবে একে বিপজ্জনক ঘটনা বলে।",
+              "order_index": 4,
+              "created_at": "2026-06-19T20:56:47.180Z",
+              "type": "narrative",
+              "mcq_questions": [
+                {
+                  "id": "b6fe7005-a864-4cbb-927f-07dfb8827458",
+                  "learning_point_id": "ba8cbc36-f9f5-4312-b359-fddbb60f255f",
+                  "question_text": "তানিয়ার কথা অনুযায়ী, কেউ জখম না হলেও বয়লার বিস্ফোরণ কি একটি বিপজ্জনক ঘটনা?",
+                  "explanation": "জীবন বা মালের বড় আইনি ঝুঁকি তৈরি করা পরিস্থিতিই বিপজ্জনক ঘটনা।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.180Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: তানিয়া, কারখানায় আজ একটা বয়লার বিস্ফোরিত হয়েছে, ভাগ্যিস কেউ জখম হয়নি। এটা কি কোনো আইনি বিষয়ের মধ্যে পড়ে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: হ্যাঁ আরিফ, কেউ জখম না হলেও আইনের দৃষ্টিতে একে 'বিপজ্জনক ঘটনা' (Dangerous Occurrence) বলে। এটি কর্তৃপক্ষকে জানাতে হয়।\"}]",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "50a798f1-9dfc-4e6a-90d9-4e1ace722382",
+                      "question_id": "b6fe7005-a864-4cbb-927f-07dfb8827458",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "c0320bc9-8fa8-479a-a97f-b6bb173f076c",
+                      "question_id": "b6fe7005-a864-4cbb-927f-07dfb8827458",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "07911246-2cc9-4405-8b81-cd0e4132054d",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "মোট অক্ষমতার ধরন",
+              "content": "স্থায়ীভাবে সব কাজের ক্ষমতা হারানো মোট অক্ষমতা।",
+              "order_index": 5,
+              "created_at": "2026-06-19T20:56:47.180Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "cd198db9-150f-4029-be40-bbb782483064",
+                  "learning_point_id": "07911246-2cc9-4405-8b81-cd0e4132054d",
+                  "question_text": "শ্রম আইন অনুযায়ী কোন পরিস্থিতিগুলো 'মোট অক্ষমতা' (Total Disablement) নির্দেশ করে? (টিক দিন)",
+                  "explanation": "স্থায়ীভাবে কর্মক্ষমতা বা দৃষ্টিশক্তি হারানো মোট অক্ষমতার উদাহরণ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.180Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: স্থায়ীভাবে সব কাজের ক্ষমতা হারানো মোট অক্ষমতা।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "85b57f93-a458-4073-ac28-8897b54f175c",
+                      "question_id": "cd198db9-150f-4029-be40-bbb782483064",
+                      "option_text": "দুর্ঘটনার পর শ্রমিক সব ধরনের কাজ করার ক্ষমতা হারালে।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "21dfa1a3-f531-4a2b-a84e-f3308dfdc00f",
+                      "question_id": "cd198db9-150f-4029-be40-bbb782483064",
+                      "option_text": "উভয় চোখের দৃষ্টিশক্তি স্থায়ীভাবে সম্পূর্ণ হারালে।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "f3113d81-7a41-4dd8-a14e-a6b4ffe89f38",
+                      "question_id": "cd198db9-150f-4029-be40-bbb782483064",
+                      "option_text": "সামান্য অসুস্থতার কারণে দুই দিন কারখানায় অনুপস্থিত থাকলে।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "e37ba96c-11fa-4e4a-b781-41918cb243f2",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "দুর্ঘটনার নোটিশ",
+              "content": "দুর্ঘটনা ঘটার পর মালিকের আইনি নোটিশ দেওয়ার বাধ্যবাধকতা।",
+              "order_index": 6,
+              "created_at": "2026-06-19T20:56:47.180Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "1f9dfe60-ef2b-4ce3-98ba-67e0ff36e6a6",
+                  "learning_point_id": "e37ba96c-11fa-4e4a-b781-41918cb243f2",
+                  "question_text": "কারখানায় কোনো গুরুতর দুর্ঘটনা বা বিস্ফোরণ ঘটলে মালিককে কার কাছে নোটিশ পাঠাতে হয়?",
+                  "explanation": "যেকোনো গুরুতর দুর্ঘটনা ঘটলে আইন অনুযায়ী প্রধান পরিদর্শককে জানাতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.180Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: দুর্ঘটনা ঘটার পর মালিকের আইনি নোটিশ দেওয়ার বাধ্যবাধকতা।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c543c611-3a17-4da1-9cc4-3cdf89ddef32",
+                      "question_id": "1f9dfe60-ef2b-4ce3-98ba-67e0ff36e6a6",
+                      "option_text": "প্রধান পরিদর্শক (Chief Inspector)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "af3befaf-18a6-4eac-84ff-bf283f11f021",
+                      "question_id": "1f9dfe60-ef2b-4ce3-98ba-67e0ff36e6a6",
+                      "option_text": "বাণিজ্যিক ব্যাংক",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "c4c3b26c-fe14-40aa-a85b-19a6bfd384e6",
+                      "question_id": "1f9dfe60-ef2b-4ce3-98ba-67e0ff36e6a6",
+                      "option_text": "সালিশনকারী",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "0eecec40-03be-4b28-a2be-fdb751a00c06",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "রাসায়নিক বিষক্রিয়া",
+              "content": "রাসায়নিকের বিষক্রিয়া পেশাগত ব্যাধির একটি বড় উদাহরণ।",
+              "order_index": 7,
+              "created_at": "2026-06-19T20:56:47.180Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "c5672350-89a7-49a9-b9b3-9f4a8ee714c8",
+                  "learning_point_id": "0eecec40-03be-4b28-a2be-fdb751a00c06",
+                  "question_text": "কোনো কেমিক্যাল ফ্যাক্টরির বিষাক্ত গ্যাসে শ্রমিকের ফুসফুস চিরতরে ক্ষতিগ্রস্ত হলে তা কি পেশাগত ব্যাধি হবে?",
+                  "explanation": "কাজের পরিবেশের কারণে ফুসফুসের দীর্ঘমেয়াদী ক্ষতি একটি পেশাগত ব্যাধি।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.180Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: রাসায়নিকের বিষক্রিয়া পেশাগত ব্যাধির একটি বড় উদাহরণ।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c5bb9d68-0121-49df-9d84-1cec4893a541",
+                      "question_id": "c5672350-89a7-49a9-b9b3-9f4a8ee714c8",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "430502ba-76c9-40a6-9ca9-f597cabac6cf",
+                      "question_id": "c5672350-89a7-49a9-b9b3-9f4a8ee714c8",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "1441b648-f375-4ef8-bacb-69e915056b6f",
+              "chapter_id": "7bba9cb8-b8c3-493f-a573-cc47b3dad45f",
+              "title": "দুর্ঘটনা সংক্রান্ত আইনি অধিকার",
+              "content": "দুর্ঘটনা সংক্রান্ত আইনি অধিকারের মূল পরিধি।",
+              "order_index": 8,
+              "created_at": "2026-06-19T20:56:47.180Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "37aafa1c-69d1-4185-ab5a-3b98cb25f1c3",
+                  "learning_point_id": "1441b648-f375-4ef8-bacb-69e915056b6f",
+                  "question_text": "শ্রম আইন অনুযায়ী কর্মক্ষেত্রে দুর্ঘটনার শিকার জখমপ্রাপ্ত শ্রমিকের কোন কোন আইনি অধিকার রয়েছে? (টিক দিন)",
+                  "explanation": "জখমপ্রাপ্ত শ্রমিক আইন অনুযায়ী চিকিৎসা, ছুটি এবং আর্থিক ক্ষতিপূরণ পাওয়ার যোগ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:56:47.180Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: দুর্ঘটনা সংক্রান্ত আইনি অধিকারের মূল পরিধি।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "397db9c7-5d0a-4c6b-bb4b-a6c48a280081",
+                      "question_id": "37aafa1c-69d1-4185-ab5a-3b98cb25f1c3",
+                      "option_text": "মালিকের কাছ থেকে চিকিৎসার খরচ ও ক্ষতিপূরণ পাওয়ার অধিকার।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "177bce44-e5a3-4b2a-b3e7-5cb9f3cd4761",
+                      "question_id": "37aafa1c-69d1-4185-ab5a-3b98cb25f1c3",
+                      "option_text": "সুস্থ না হওয়া পর্যন্ত আইনানুগ ছুটি ও চাকরির সুরক্ষার অধিকার।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    },
+                    {
+                      "id": "dd2f0e03-f679-46ef-81b5-0dfb5410252b",
+                      "question_id": "37aafa1c-69d1-4185-ab5a-3b98cb25f1c3",
+                      "option_text": "কারখানার মোট বাৎসরিক লভ্যাংশের অর্ধেক মালিকানা পাওয়ার অধিকার।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:56:47.180Z"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

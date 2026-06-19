@@ -1555,14 +1555,354 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "6c881deb-ffa2-4e78-8fdc-9c216d9f0205",
+              "id": "97b22168-4feb-4023-95f9-b57d2dbaf190",
               "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
-              "title": "বিষয়ের সারসংক্ষেপ",
-              "content": "এই অধ্যায়ে \"শ্রমিক ও মালিক\" সম্পর্কে বিস্তারিত আলোচনা করা হয়েছে।",
+              "title": "মালিকের দায়িত্বপ্রাপ্ত প্রতিনিধি",
+              "content": "ধারা ২ (উপ-ধারা ৪৯) অনুযায়ী মালিকের দায়িত্বপ্রাপ্ত প্রতিনিধি চেনার নিয়ম।",
               "order_index": 1,
-              "created_at": "2026-06-19T17:14:09.489Z",
+              "created_at": "2026-06-19T20:49:26.738Z",
               "type": "standard",
-              "mcq_questions": []
+              "mcq_questions": [
+                {
+                  "id": "9436be1e-95da-4c2d-b12a-9f2c9ffd5f1d",
+                  "learning_point_id": "97b22168-4feb-4023-95f9-b57d2dbaf190",
+                  "question_text": "বাম পাশের পদের সাথে ডান পাশের সঠিক আইনি দায়বদ্ধতা মেলাও।",
+                  "explanation": "ব্যবস্থাপক ও উত্তরাধিকারী মালিকের পক্ষে দায়বদ্ধ হলেও ঠিকাদার কেবল লোকবল জোগান দেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.736Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৪৯) অনুযায়ী মালিকের দায়িত্বপ্রাপ্ত প্রতিনিধি চেনার নিয়ম।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "কারখানার ব্যবস্থাপক",
+                        "right": "মালিকের পক্ষে প্রশাসনিক নিয়ন্ত্রণকারী"
+                      },
+                      {
+                        "left": "আইনি উত্তরাধিকারী",
+                        "right": "মালিকের মৃত্যুর পর স্থলাভিষিক্ত ব্যক্তি"
+                      },
+                      {
+                        "left": "সরবরাহকারী ঠিকাদার",
+                        "right": "কেবল নির্দিষ্ট কাজের জন্য লোকবল দাতা"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "0ecb7723-c4a0-4cf3-98ad-34fa63219c08",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "শিক্ষাধীন ব্যক্তিদের আইনি মর্যাদা",
+              "content": "ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী শিক্ষাধীন ব্যক্তিদের আইনি মর্যাদা।",
+              "order_index": 2,
+              "created_at": "2026-06-19T20:49:26.738Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "539f3a69-47f3-44a2-aba8-219783067dbc",
+                  "learning_point_id": "0ecb7723-c4a0-4cf3-98ad-34fa63219c08",
+                  "question_text": "কোনো প্রতিষ্ঠানে নির্দিষ্ট মেয়াদে কাজ শেখার জন্য নিযুক্ত 'শিক্ষাধীন' (Apprentice) ব্যক্তি কি শ্রমিকের সংজ্ঞায় অন্তর্ভুক্ত?",
+                  "explanation": "কাজ শেখার জন্য প্রশিক্ষণরত ব্যক্তিরাও শ্রম আইনের সুরক্ষার আওতাভুক্ত।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.738Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী শিক্ষাধীন ব্যক্তিদের আইনি মর্যাদা।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "87172031-18e6-4ac3-9b25-e72800ee11d9",
+                      "question_id": "539f3a69-47f3-44a2-aba8-219783067dbc",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.738Z"
+                    },
+                    {
+                      "id": "b2e25511-30ad-41bf-97b0-df4277ffbe2f",
+                      "question_id": "539f3a69-47f3-44a2-aba8-219783067dbc",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.738Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "c2154ca3-02a3-4200-b922-5dff6ef7208b",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "প্রশাসনিক পদের ব্যতিক্রমী নিয়ম",
+              "content": "ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী প্রশাসনিক পদের ব্যতিক্রমী নিয়ম।",
+              "order_index": 3,
+              "created_at": "2026-06-19T20:49:26.739Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "592f84a2-17c6-46f7-a079-d84dfc96ead0",
+                  "learning_point_id": "c2154ca3-02a3-4200-b922-5dff6ef7208b",
+                  "question_text": "প্রধানত প্রশাসনিক বা ব্যবস্থাপনার (Managerial) দায়িত্বে নিয়োজিত ব্যক্তিরা আইনিভাবে কী হিসেবে গণ্য হন?",
+                  "explanation": "ব্যবস্থাপনা বা প্রশাসনিক কর্মকর্তারা শ্রমিকের সংজ্ঞার বাইরে থাকেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.739Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী প্রশাসনিক পদের ব্যতিক্রমী নিয়ম।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "107acc8f-ccb1-4f5e-b1aa-6961f1ba9919",
+                      "question_id": "592f84a2-17c6-46f7-a079-d84dfc96ead0",
+                      "option_text": "সাধারণ শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "82a8395f-8689-4243-8881-e0779e5c457d",
+                      "question_id": "592f84a2-17c6-46f7-a079-d84dfc96ead0",
+                      "option_text": "মালিকের প্রতিনিধি",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "6e10cd4c-ae8b-4cc7-b58a-7424ef79f22b",
+                      "question_id": "592f84a2-17c6-46f7-a079-d84dfc96ead0",
+                      "option_text": "বহিরাগত পরিদর্শক",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "dd48feeb-e0c0-48bf-b70e-4a3605fecc25",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "ঠিকাদারের মাধ্যমে নিয়োজিত শ্রমিক",
+              "content": "ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী সরাসরি বা ঠিকাদারের মাধ্যমে নিয়োজিত ব্যক্তিও শ্রমিক হিসেবে গণ্য।",
+              "order_index": 4,
+              "created_at": "2026-06-19T20:49:26.739Z",
+              "type": "narrative",
+              "mcq_questions": [
+                {
+                  "id": "09c2cd5b-1c53-46d6-95bd-6ea8438ce940",
+                  "learning_point_id": "dd48feeb-e0c0-48bf-b70e-4a3605fecc25",
+                  "question_text": "তানিয়ার কথা অনুযায়ী, ঠিকাদারের মাধ্যমে পরোক্ষভাবে নিযুক্ত ব্যক্তিরা কি শ্রমিকের আইনি অধিকার পান?",
+                  "explanation": "সরাসরি বা পরোক্ষ—যেভাবেই নিযুক্ত হোক না কেন, মজুরির বিনিময়ে কাজ করলে তিনি শ্রমিক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.739Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: তানিয়া, আমাদের ফ্যাক্টরিতে ঠিকাদারের মাধ্যমে যে কর্মীরা কাজ করে, তারা কি আমাদের এখানে কোনো অধিকার পাবে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: হ্যাঁ আরিফ, ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী সরাসরি বা ঠিকাদারের মাধ্যমে নিয়োজিত ব্যক্তিও শ্রমিক হিসেবে গণ্য।\"}]",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b7c548ad-6fe6-47e4-a726-90a10a946b79",
+                      "question_id": "09c2cd5b-1c53-46d6-95bd-6ea8438ce940",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "7df0d5c1-c64e-4657-bcad-64131f68d61b",
+                      "question_id": "09c2cd5b-1c53-46d6-95bd-6ea8438ce940",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "f27d1b86-ae6a-44bd-9cd6-a94205fac338",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "শ্রমিকের কাজের আইনি ধরণ",
+              "content": "ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী শ্রমিকের কাজের আইনি ধরণসমূহ।",
+              "order_index": 5,
+              "created_at": "2026-06-19T20:49:26.739Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "d6c0c1b9-54f6-4be3-82f6-2a35a5775347",
+                  "learning_point_id": "f27d1b86-ae6a-44bd-9cd6-a94205fac338",
+                  "question_text": "শ্রম আইন অনুযায়ী কোন কোন কাজের জন্য নিযুক্ত ব্যক্তিরা 'শ্রমিক' হিসেবে আইনি স্বীকৃতি পাবেন? (টিক দিন)",
+                  "explanation": "কায়িক, কারিগরি বা ক্লারিক্যাল কাজের ব্যক্তিরা সরাসরি শ্রমিকের অন্তর্ভুক্ত।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.739Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী শ্রমিকের কাজের আইনি ধরণসমূহ।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "08ddcbfa-2776-4456-9536-ac00b881c28d",
+                      "question_id": "d6c0c1b9-54f6-4be3-82f6-2a35a5775347",
+                      "option_text": "ক্লারিক্যাল বা কেরানির দাপ্তরিক কাজ করা ব্যক্তি।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "54ff9a74-e50d-40ce-9624-f817db37e1eb",
+                      "question_id": "d6c0c1b9-54f6-4be3-82f6-2a35a5775347",
+                      "option_text": "কায়িক বা শারীরিক পরিশ্রমের কাজ করা ব্যক্তি।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "d2a4df32-6973-486b-969c-d7d6fe809d32",
+                      "question_id": "d6c0c1b9-54f6-4be3-82f6-2a35a5775347",
+                      "option_text": "কোম্পানির শীর্ষ নীতি নির্ধারণী প্রধান নির্বাহী (CEO)।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "f725e486-5eed-44e0-8a23-17432d9ecce6",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "প্রতিষ্ঠানের চূড়ান্ত নিয়ন্ত্রণকারী",
+              "content": "ধারা ২ (উপ-ধারা ৪৯) অনুযায়ী প্রতিষ্ঠানের চূড়ান্ত নিয়ন্ত্রণকারীর সংজ্ঞা।",
+              "order_index": 6,
+              "created_at": "2026-06-19T20:49:26.739Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "2282181f-4e17-4596-923f-a94787d88f3f",
+                  "learning_point_id": "f725e486-5eed-44e0-8a23-17432d9ecce6",
+                  "question_text": "যিনি কোনো প্রতিষ্ঠানে শ্রমিক নিয়োগ করেন এবং যার অধীনে প্রতিষ্ঠানের চূড়ান্ত নিয়ন্ত্রণ থাকে, তাকে কী বলা হয়?",
+                  "explanation": "নিয়োগকর্তা বা প্রতিষ্ঠানের সার্বিক নিয়ন্ত্রণকারী ব্যক্তিই আইনিভাবে মালিক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.739Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৪৯) অনুযায়ী প্রতিষ্ঠানের চূড়ান্ত নিয়ন্ত্রণকারীর সংজ্ঞা।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "2d51a60c-9850-4730-954d-77b8d2c72346",
+                      "question_id": "2282181f-4e17-4596-923f-a94787d88f3f",
+                      "option_text": "মালিক",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "15bf2718-5614-4f9f-927b-424d292a2103",
+                      "question_id": "2282181f-4e17-4596-923f-a94787d88f3f",
+                      "option_text": "ঠিকাদার",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "c4c59f16-71e6-4886-8795-b3256b7e8858",
+                      "question_id": "2282181f-4e17-4596-923f-a94787d88f3f",
+                      "option_text": "পরিদর্শক",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "8b4fcd78-7e64-4e38-8d96-ec7831bbb183",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "বাণিজ্যিক প্রচার কর্মীদের অবস্থান",
+              "content": "ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী বাণিজ্যিক প্রচার কর্মীদের অবস্থান।",
+              "order_index": 7,
+              "created_at": "2026-06-19T20:49:26.739Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "61c9edd4-0293-4476-a32d-5ed015bfd5e2",
+                  "learning_point_id": "8b4fcd78-7e64-4e38-8d96-ec7831bbb183",
+                  "question_text": "কোনো বাণিজ্যিক কোম্পানির পণ্য বিক্রয় বৃদ্ধি বা ট্রেড প্রমোশনাল (Trade Promotional) কাজে নিয়োজিত ব্যক্তিরা কি শ্রমিকের আওতাভুক্ত?",
+                  "explanation": "বাণিজ্যিক প্রচার বা বিপণন কর্মীরাও শ্রম আইন অনুযায়ী শ্রমিক হিসেবে গণ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.739Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী বাণিজ্যিক প্রচার কর্মীদের অবস্থান।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e3ae6527-5edc-425a-bcdf-bd46e878325e",
+                      "question_id": "61c9edd4-0293-4476-a32d-5ed015bfd5e2",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "f78d1c9c-e7f5-4343-bb02-3c687a132998",
+                      "question_id": "61c9edd4-0293-4476-a32d-5ed015bfd5e2",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ac08124f-5baa-481d-90b9-5ebb3a79780b",
+              "chapter_id": "360d5407-783c-42ac-b611-2be9db425d3a",
+              "title": "মালিকের অনুপস্থিতিতে দায়বদ্ধ ব্যক্তি",
+              "content": "ধারা ২ (উপ-ধারা ৪৯) অনুযায়ী মালিকের অনুপস্থিতিতে দায়বদ্ধ ব্যক্তিরা।",
+              "order_index": 8,
+              "created_at": "2026-06-19T20:49:26.739Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "47595cdd-e96c-483e-8a19-3094cf20ab0a",
+                  "learning_point_id": "ac08124f-5baa-481d-90b9-5ebb3a79780b",
+                  "question_text": "মূল মালিকের অনুপস্থিতিতে নিচের কোন কোন ব্যক্তি 'মালিক' হিসেবে আইনি দায়িত্ব ও দায় বহন করবেন? (টিক দিন)",
+                  "explanation": "উত্তরাধিকারী ও ব্যবস্থাপক মালিকের পক্ষে আইনি দায় বহন করার ক্ষমতা রাখেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:49:26.739Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৪৯) অনুযায়ী মালিকের অনুপস্থিতিতে দায়বদ্ধ ব্যক্তিরা।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "fdab5188-8570-4d13-8bfc-aab9299d19c0",
+                      "question_id": "47595cdd-e96c-483e-8a19-3094cf20ab0a",
+                      "option_text": "মালিকের মৃত্যুর পর তার আইনি উত্তরাধিকারী বা স্থলাভিষিক্ত ব্যক্তি।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "250e1f89-6d5c-41dc-8c29-d6c7d6e3b109",
+                      "question_id": "47595cdd-e96c-483e-8a19-3094cf20ab0a",
+                      "option_text": "প্রতিষ্ঠানের সার্বিক দায়িত্বে নিয়োজিত ম্যানেজার বা ব্যবস্থাপক।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    },
+                    {
+                      "id": "47d168ff-19a0-4634-b993-c9fa18528ca1",
+                      "question_id": "47595cdd-e96c-483e-8a19-3094cf20ab0a",
+                      "option_text": "কারখানার সাধারণ পিয়ন বা আদেশ পালনকারী মেসেঞ্জার।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:49:26.739Z"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },

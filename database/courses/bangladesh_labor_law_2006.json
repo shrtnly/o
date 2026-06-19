@@ -903,7 +903,7 @@
               "content": "বিদ্যুৎ বা যন্ত্রের ত্রুটিতে সাময়িক কাজ বন্ধ রাখাই লে-অফ।",
               "order_index": 4,
               "created_at": "2026-06-19T20:30:45.801Z",
-              "type": "narrative",
+              "type": "storytelling",
               "mcq_questions": [
                 {
                   "id": "76743431-7dc4-48ea-a65e-d61514c0b408",
@@ -1324,7 +1324,7 @@
               "content": "পরিবহন ও কুরিয়ার সার্ভিসকে শ্রম আইনে শিল্প স্থাপনা বলা হয়েছে।",
               "order_index": 5,
               "created_at": "2026-06-19T20:47:21.301Z",
-              "type": "narrative",
+              "type": "storytelling",
               "mcq_questions": [
                 {
                   "id": "7d947bcc-54e4-440b-94a8-8d75dbb82a01",
@@ -1687,7 +1687,7 @@
               "content": "ধারা ২ (উপ-ধারা ৬৫) অনুযায়ী সরাসরি বা ঠিকাদারের মাধ্যমে নিয়োজিত ব্যক্তিও শ্রমিক হিসেবে গণ্য।",
               "order_index": 4,
               "created_at": "2026-06-19T20:49:26.739Z",
-              "type": "narrative",
+              "type": "storytelling",
               "mcq_questions": [
                 {
                   "id": "09c2cd5b-1c53-46d6-95bd-6ea8438ce940",
@@ -2052,7 +2052,7 @@
               "content": "ভ্রমণ বা যাতায়াত ভাতা আইনিভাবে মজুরীর সংজ্ঞার বাইরে থাকে।",
               "order_index": 4,
               "created_at": "2026-06-19T20:53:03.185Z",
-              "type": "narrative",
+              "type": "storytelling",
               "mcq_questions": [
                 {
                   "id": "61c49d3a-00c0-4d32-ae72-b36e2e673200",
@@ -2417,7 +2417,7 @@
               "content": "কেউ জখম না হলেও আইনিভাবে একে বিপজ্জনক ঘটনা বলে।",
               "order_index": 4,
               "created_at": "2026-06-19T20:56:47.180Z",
-              "type": "narrative",
+              "type": "storytelling",
               "mcq_questions": [
                 {
                   "id": "b6fe7005-a864-4cbb-927f-07dfb8827458",
@@ -2795,7 +2795,7 @@
               "content": "কোনো প্রতিষ্ঠানে নতুন কাজে যোগ দিয়ে কাজ শেখার কালীন পর্যায়কে শিক্ষানবিশ বলে।",
               "order_index": 4,
               "created_at": "2026-06-19T21:12:30.858Z",
-              "type": "narrative",
+              "type": "storytelling",
               "mcq_questions": [
                 {
                   "id": "55dca379-ffcf-4dca-a441-e2b214965b2c",

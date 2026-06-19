@@ -1909,7 +1909,7 @@
         {
           "id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
           "unit_id": "a29d0a26-85be-4491-8246-efbd10112392",
-          "title": "মজুরী ও আর্থিক সংক্রান্ত",
+          "title": "মজুরী ও আর্থিক সংক্রান্ত সংজ্ঞা",
           "order_index": 6,
           "created_at": "2026-06-19T17:14:09.489Z",
           "is_trophy": false,
@@ -1920,14 +1920,354 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "88f1cceb-4619-4d1c-a94a-d270ccdbdeae",
+              "id": "a12a591f-bb9c-4baa-a8d6-60deff2b8bc8",
               "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
-              "title": "বিষয়ের সারসংক্ষেপ",
-              "content": "এই অধ্যায়ে \"মজুরী ও আর্থিক সংক্রান্ত\" সম্পর্কে বিস্তারিত আলোচনা করা হয়েছে।",
+              "title": "বোনাস মজুরীর অংশ",
+              "content": "ধারা ২ (উপ-ধারা ৪৫) অনুযায়ী বোনাস মজুরীর অংশ।",
               "order_index": 1,
-              "created_at": "2026-06-19T17:14:09.489Z",
+              "created_at": "2026-06-19T20:53:03.184Z",
               "type": "standard",
-              "mcq_questions": []
+              "mcq_questions": [
+                {
+                  "id": "70edf636-c0b7-4a27-b18a-0886c91a3ae7",
+                  "learning_point_id": "a12a591f-bb9c-4baa-a8d6-60deff2b8bc8",
+                  "question_text": "শ্রম আইন অনুযায়ী, নিচের কোনটি সরাসরি 'মজুরী' (Wages) এর আইনি অন্তর্ভুক্ত হবে?",
+                  "explanation": "ধারা ২(৪৫) মতে বোনাস বা অতিরিক্ত পারিশ্রমিক মজুরীর অন্তর্ভুক্ত।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.184Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৪৫) অনুযায়ী বোনাস মজুরীর অংশ।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "177bdd2d-7dc0-4765-9adb-99686d16b765",
+                      "question_id": "70edf636-c0b7-4a27-b18a-0886c91a3ae7",
+                      "option_text": "উৎসব বোনাস",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.179Z"
+                    },
+                    {
+                      "id": "6497d81b-b647-4263-9ed4-7b58ee2a6d2c",
+                      "question_id": "70edf636-c0b7-4a27-b18a-0886c91a3ae7",
+                      "option_text": "বাড়ি ভাড়া ভাতা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.184Z"
+                    },
+                    {
+                      "id": "42b9cdc1-eaa9-4b5e-b5bf-572be0724149",
+                      "question_id": "70edf636-c0b7-4a27-b18a-0886c91a3ae7",
+                      "option_text": "গ্র্যাচুইটি",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:53:03.184Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "30e45f0b-5682-44b5-8a34-ab0c3f373ca9",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "প্রোভাইডেন্ট ফান্ড মজুরী নয়",
+              "content": "ভবিষ্যৎ তহবিল বা প্রোভাইডেন্ট ফান্ড মজুরীর বাইরে থাকে।",
+              "order_index": 2,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "c02456d3-ada5-479e-b886-3fb653d13ac0",
+                  "learning_point_id": "30e45f0b-5682-44b5-8a34-ab0c3f373ca9",
+                  "question_text": "মালিক কর্তৃক ভবিষ্যৎ তহবিলে (Provident Fund) প্রদত্ত চাঁদা কি শ্রমিকের সাধারণ মজুরীর অংশ?",
+                  "explanation": "ধারা ২(৪৫) অনুযায়ী প্রোভাইডেন্ট ফান্ডের চাঁদা মজুরী নয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ভবিষ্যৎ তহবিল বা প্রোভাইডেন্ট ফান্ড মজুরীর বাইরে থাকে।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b0b8a77b-c5ec-49a2-95e3-e7a17c9f0fcb",
+                      "question_id": "c02456d3-ada5-479e-b886-3fb653d13ac0",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.184Z"
+                    },
+                    {
+                      "id": "4735f456-7f37-46bd-8ae2-0ffe1c7ed6de",
+                      "question_id": "c02456d3-ada5-479e-b886-3fb653d13ac0",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "1bc64610-4484-4ed2-88a6-b30a9f0c2d3c",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "মজুরীভুক্ত ও বহির্ভূত উপাদান",
+              "content": "মজুরীভুক্ত উপাদান এবং মজুরী বহির্ভূত আর্থিক সুবিধা চেনার নিয়ম।",
+              "order_index": 3,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "5a77f8b5-f17f-4f27-a604-20284f0fec33",
+                  "learning_point_id": "1bc64610-4484-4ed2-88a6-b30a9f0c2d3c",
+                  "question_text": "বাম পাশের আর্থিক সুবিধার সাথে ডান পাশের সঠিক আইনি অবস্থানটি মেলাও।",
+                  "explanation": "চিকিৎসা ভাতা ও গ্র্যাচুইটি মজুরীর বাইরে থাকলেও ওভারটাইম মজুরীর অংশ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: মজুরীভুক্ত উপাদান এবং মজুরী বহির্ভূত আর্থিক সুবিধা চেনার নিয়ম।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "চিকিৎসা বা ভ্রমণ ভাতা",
+                        "right": "ধারা ২(৪৫) অনুযায়ী মজুরী বহির্ভূত উপাদান"
+                      },
+                      {
+                        "left": "গ্র্যাচুইটি বা পিএফ",
+                        "right": "চাকুরীর অবসানজনিত কারণে প্রদেয় অর্থ"
+                      },
+                      {
+                        "left": "ওভারটাইম বা বোনাস",
+                        "right": "ধারা ২(৪৫) অনুযায়ী মজুরীর অংশ"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "a5d68562-cff7-4791-86e7-bf7df99d583c",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "যাতায়াত ভাতা মজুরী নয়",
+              "content": "ভ্রমণ বা যাতায়াত ভাতা আইনিভাবে মজুরীর সংজ্ঞার বাইরে থাকে।",
+              "order_index": 4,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "narrative",
+              "mcq_questions": [
+                {
+                  "id": "61c49d3a-00c0-4d32-ae72-b36e2e673200",
+                  "learning_point_id": "a5d68562-cff7-4791-86e7-bf7df99d583c",
+                  "question_text": "তানিয়ার কথা অনুযায়ী, ভ্রমণ বা যাতায়াত ভাতা কি শ্রমিকের নিয়মিত মজুরীর অন্তর্ভুক্ত?",
+                  "explanation": "ভ্রমণ বা যাতায়াত ভাতা আইনিভাবে মজুরীর সংজ্ঞার বাইরে থাকে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: তানিয়া, আমাদের এক কর্মী অফিসের কাজে বাইরে গিয়ে যাতায়াত খরচ (Travelling Allowance) দাবি করেছেন। এটা কি তার নিয়মিত মজুরীর অংশ হবে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: না আরিফ, ধারা ২ (উপ-ধারা ৪৫) অনুযায়ী যাতায়াত বা ভ্রমণ ভাতা আইনিভাবে মজুরীর অংশ হিসেবে গণ্য হয় না।\"}]",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "9e6b34cf-04f6-4e0c-86ee-0e372ff83316",
+                      "question_id": "61c49d3a-00c0-4d32-ae72-b36e2e673200",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "4b7a89ce-df56-4ec9-8501-4830d803a10f",
+                      "question_id": "61c49d3a-00c0-4d32-ae72-b36e2e673200",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "9eeded02-0d43-4b3a-9641-0c2f516359b1",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "মজুরী বহির্ভূত উপাদানসমূহ",
+              "content": "ধারা ২ (উপ-ধারা ৪৫) এর মজুরী বহির্ভূত উপাদানসমূহ।",
+              "order_index": 5,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "17175e07-23b9-4422-b7c1-f7ac9c2c5ae8",
+                  "learning_point_id": "9eeded02-0d43-4b3a-9641-0c2f516359b1",
+                  "question_text": "শ্রম আইন অনুযায়ী, নিচের কোন কোন আর্থিক সুবিধা 'মজুরী' শব্দের আওতাভুক্ত নয়? (টিক দিন)",
+                  "explanation": "আবাসন সুবিধা ও গ্র্যাচুইটি আইনিভাবে মজুরীর সংজ্ঞার বাইরে থাকে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৪৫) এর মজুরী বহির্ভূত উপাদানসমূহ।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "3cb50c6c-d633-4e98-bcdb-80f5e6fad1ae",
+                      "question_id": "17175e07-23b9-4422-b7c1-f7ac9c2c5ae8",
+                      "option_text": "মালিক কর্তৃক প্রদত্ত আবাসন, আলো বা পানির মূল্য।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "b12a383b-3093-4dae-8735-12360c961e5a",
+                      "question_id": "17175e07-23b9-4422-b7c1-f7ac9c2c5ae8",
+                      "option_text": "চাকরি শেষে প্রদেয় গ্র্যাচুইটি বা অবসরকালীন অর্থ।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "9fdf5f75-75bb-4547-a8e1-f747234c3a7e",
+                      "question_id": "17175e07-23b9-4422-b7c1-f7ac9c2c5ae8",
+                      "option_text": "অতিরিক্ত কাজের জন্য প্রাপ্য ওভারটাইম বা অধিকাল ভাতা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "f251fd0b-a8ea-4d70-8ecb-4240fe19b6dd",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "মজুরীর প্রকাশযোগ্য মাধ্যম",
+              "content": "মজুরীকে অবশ্যই টাকা বা আর্থিক মূল্যে প্রকাশযোগ্য হতে হবে।",
+              "order_index": 6,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "144ce8d6-baab-40fe-a00c-44bcb74fc130",
+                  "learning_point_id": "f251fd0b-a8ea-4d70-8ecb-4240fe19b6dd",
+                  "question_text": "ধারা ২ (উপ-ধারা ৪৫) অনুযায়ী, মজুরীকে আইনিভাবে কোন মাধ্যমে প্রকাশযোগ্য হতে হবে?",
+                  "explanation": "মজুরীকে চাকুরীর চুক্তি অনুযায়ী অবশ্যই টাকা বা অর্থে প্রকাশযোগ্য হতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: মজুরীকে অবশ্যই টাকা বা আর্থিক মূল্যে প্রকাশযোগ্য হতে হবে।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f2da33eb-befd-43ea-9200-2c2b81894a02",
+                      "question_id": "144ce8d6-baab-40fe-a00c-44bcb74fc130",
+                      "option_text": "অর্থ বা টাকা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "3b86f475-0fe3-4d99-8b01-42115519dc70",
+                      "question_id": "144ce8d6-baab-40fe-a00c-44bcb74fc130",
+                      "option_text": "কেবল প্রশংসাপত্র",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "c10d7cb9-06b4-4ec6-acde-6787682b789a",
+                      "question_id": "144ce8d6-baab-40fe-a00c-44bcb74fc130",
+                      "option_text": "স্থায়ী শেয়ার",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "62a4729c-497f-4939-ab32-da3ed680e125",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "ওভারটাইম মজুরীর অংশ",
+              "content": "অতিরিক্ত কাজের পারিশ্রমিক বা ওভারটাইম মজুরীর অংশ।",
+              "order_index": 7,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "55f9c75e-9f03-457d-9e34-2dcc6820d01d",
+                  "learning_point_id": "62a4729c-497f-4939-ab32-da3ed680e125",
+                  "question_text": "কোনো শ্রমিক নির্ধারিত সময়ের চেয়ে বেশি কাজ করলে প্রাপ্য অতিরিক্ত কর্মঘণ্টার ভাতা (Overtime) কি মজুরীর অন্তর্ভুক্ত হবে?",
+                  "explanation": "ওভারটাইম বা অতিরিক্ত কাজের জন্য দেওয়া ভাতা মজুরীর আইনি অংশ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অতিরিক্ত কাজের পারিশ্রমিক বা ওভারটাইম মজুরীর অংশ।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "31f854ca-a951-4c5d-b0bc-8da81c4a546e",
+                      "question_id": "55f9c75e-9f03-457d-9e34-2dcc6820d01d",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "81dd3a6a-473a-4dd8-babe-c18c40ba4e92",
+                      "question_id": "55f9c75e-9f03-457d-9e34-2dcc6820d01d",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "08173709-8000-4166-aa5f-81262647e0fb",
+              "chapter_id": "edf5aa4a-6c78-409e-94eb-84435d4e1227",
+              "title": "মজুরীর সামগ্রিক আর্থিক পরিধি",
+              "content": "ধারা ২ (উপ-ধারা ৪৫) এর সামগ্রিক আর্থিক পরিধি।",
+              "order_index": 8,
+              "created_at": "2026-06-19T20:53:03.185Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "aecea6d8-23f3-4fea-a5e8-08fbb611ca24",
+                  "learning_point_id": "08173709-8000-4166-aa5f-81262647e0fb",
+                  "question_text": "শ্রম আইন অনুযায়ী মজুরী (Wages) সংক্রান্ত কোন কোন তথ্য আইনগতভাবে সত্য? (টিক দিন)",
+                  "explanation": "মজুরী হলো চুক্তির অধীনে অর্থ দ্বারা প্রকাশযোগ্য পারিশ্রমিক ও ক্ষতিপূরণ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-19T20:53:03.185Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ২ (উপ-ধারা ৪৫) এর সামগ্রিক আর্থিক পরিধি।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "06ec2c83-674a-473e-89f6-c660b5bc1e1b",
+                      "question_id": "aecea6d8-23f3-4fea-a5e8-08fbb611ca24",
+                      "option_text": "চাকুরীর চুক্তি অনুযায়ী এটি অর্থ দ্বারা পরিশোধযোগ্য পারিশ্রমিক।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "39e1c106-3d8d-44b7-8455-3d060a005c91",
+                      "question_id": "aecea6d8-23f3-4fea-a5e8-08fbb611ca24",
+                      "option_text": "এতে ট্রাইব্যুনাল বা আদালতের আদেশে প্রদেয় কোনো ক্ষতিপূরণও অন্তর্ভুক্ত হতে পারে।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    },
+                    {
+                      "id": "1208eaab-52d8-4b4a-a166-87996dcccd73",
+                      "question_id": "aecea6d8-23f3-4fea-a5e8-08fbb611ca24",
+                      "option_text": "এতে বাধ্যতামূলকভাবে কোম্পানির বার্ষিক নিট লভ্যাংশ অন্তর্ভুক্ত থাকে।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-19T20:53:03.185Z"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },

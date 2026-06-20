@@ -14307,7 +14307,7 @@
         {
           "id": "fa53ada2-7ce9-451f-8895-1301569723a7",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "পরিস্কার পরিচ্ছন্নতা",
+          "title": "পরিচ্ছন্নতা ও বর্জ্য অপসারণ",
           "order_index": 1,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14332,7 +14332,7 @@
         {
           "id": "968df063-bcf1-414a-b082-23c557795e84",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "বায়ু চলাচল ও তাপমাত্রা",
+          "title": "বায়ু চলাচল ও তাপমাত্রা",
           "order_index": 2,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14357,7 +14357,7 @@
         {
           "id": "e484d974-9e5d-4f50-b37e-f5b587e0e94e",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "ধূলা-বালি ও ধোঁয়া",
+          "title": "ধূলিকণা ও ধোঁয়া নিয়ন্ত্রণ",
           "order_index": 3,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14382,7 +14382,7 @@
         {
           "id": "19bd0cbe-41f1-440e-a08a-cea7553eda37",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "বর্জ্য পদার্থ অপসারন",
+          "title": "কৃত্রিম আর্দ্রতা ও বিধিমালা",
           "order_index": 4,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14407,7 +14407,7 @@
         {
           "id": "81351dd3-1ac7-4069-9432-780c15467105",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "কৃত্রিম আর্দ্রকরণ",
+          "title": "অতিরিক্ত ভিড় ও লফ্ট",
           "order_index": 5,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14432,7 +14432,7 @@
         {
           "id": "99c050a9-f55d-4c6b-b5a7-7f5b7d37328c",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "অতিরিক্ত ভীড়",
+          "title": "পর্যাপ্ত আলোর আইনি ব্যবস্থা",
           "order_index": 6,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14457,7 +14457,7 @@
         {
           "id": "17ee5f62-b7c0-485d-b1f8-9d89680d45cf",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "আলোর ব্যবস্থা",
+          "title": "বিশুদ্ধ খাবার পানির ব্যবস্থা",
           "order_index": 7,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14482,7 +14482,7 @@
         {
           "id": "878b1f39-ccbc-466e-8254-1f8c6dd6f998",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "পান করার পানি",
+          "title": "শৌচাগার ও মূত্রাগার স্থাপন",
           "order_index": 8,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14507,7 +14507,7 @@
         {
           "id": "27e41b4f-0c7c-46f5-8ea9-53de8c9494ed",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "শৌচাগার ও প্রক্ষালন কক্ষ",
+          "title": "আবর্জনা ও থুতু ফেলার পাত্র",
           "order_index": 9,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14532,7 +14532,7 @@
         {
           "id": "f934bda3-a208-4914-a0fe-a630d9db1416",
           "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
-          "title": "আবর্জনা বাক্স ও পিকদানী",
+          "title": "আলো ও বাতাসের পরিমাপ",
           "order_index": 10,
           "created_at": "2026-02-18T13:52:28.495895+00:00",
           "is_trophy": false,
@@ -14553,6 +14553,34 @@
               "mcq_questions": []
             }
           ]
+        },
+        {
+          "id": "22c64e7f-afc9-4c8d-8456-a46a0528a41a",
+          "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
+          "title": "স্বাস্থ্য সুরক্ষায় পরিদর্শকের ভূমিকা",
+          "order_index": 11,
+          "created_at": "2026-06-20T07:22:59.280Z",
+          "learning_points": [],
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট"
+        },
+        {
+          "id": "aa0265bb-7062-4100-87c3-592cb56cc8d9",
+          "unit_id": "b4a8cdc9-b722-450f-b4f9-5c8e68199bf8",
+          "title": "আইন লঙ্ঘন ও জরিমানা",
+          "order_index": 12,
+          "created_at": "2026-06-20T07:22:59.287Z",
+          "learning_points": [],
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট"
         }
       ]
     },

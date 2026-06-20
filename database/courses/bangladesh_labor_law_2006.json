@@ -6489,7 +6489,366 @@
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "ebd3d883-3c0e-4bf0-9aed-23247aab7c1f",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "কিশোরের বয়সসীমা",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:42:30.861Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "1ca149e6-36e8-4c41-b6aa-018bb20ba05d",
+                  "learning_point_id": "ebd3d883-3c0e-4bf0-9aed-23247aab7c1f",
+                  "question_text": "বাংলাদেশ শ্রম আইন অনুযায়ী, কত বছর বয়স পূর্ণ হলে এবং কত বছর বয়সের কম হলে কোনো ব্যক্তিকে 'কিশোর' হিসেবে গণ্য করা হবে?",
+                  "explanation": "শ্রম আইনের ধারা ২(৮) অনুযায়ী, 'কিশোর' বলতে এমন ব্যক্তিকে বোঝায় যিনি চৌদ্দ বছর বয়স পূর্ণ করেছেন কিন্তু আঠারো বছর বয়স পূর্ণ করেননি।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.861Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বাংলাদেশ শ্রম আইনে বয়সভেদে মানবসম্পদকে শিশু, কিশোর ও প্রাপ্তবয়স্ক—এই তিন ভাগে ভাগ করা হয়েছে। আইনি সুরক্ষার স্বার্থে কিশোরদের বয়সের একটি সুনির্দিষ্ট নিম্নসীমা ও উচ্চসীমা নির্ধারণ করা আছে।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d12c30ef-65cf-4b16-81ed-8b22299a9b30",
+                      "question_id": "1ca149e6-36e8-4c41-b6aa-018bb20ba05d",
+                      "option_text": "১৪ বছর পূর্ণ হলে কিন্তু ১৮ বছর কম হলে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.842Z"
+                    },
+                    {
+                      "id": "a1d69406-ac86-43ff-b9e5-ca8f6e234133",
+                      "question_id": "1ca149e6-36e8-4c41-b6aa-018bb20ba05d",
+                      "option_text": "১২ বছর পূর্ণ হলে কিন্তু ১৬ বছর কম হলে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    },
+                    {
+                      "id": "86ed0a09-a235-487a-a836-d2fb0792ead6",
+                      "question_id": "1ca149e6-36e8-4c41-b6aa-018bb20ba05d",
+                      "option_text": "১৫ বছর পূর্ণ হলে কিন্তু ২০ বছর কম হলে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "863cbebf-e5f2-4b7a-b586-42cecfa49fba",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "কিশোর হিসেবে সংজ্ঞায়নের প্রাথমিক বয়স",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:42:30.861Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "afa54e41-87be-46cb-b459-5b63c0a65e60",
+                  "learning_point_id": "863cbebf-e5f2-4b7a-b586-42cecfa49fba",
+                  "question_text": "কোনো ব্যক্তির বয়স ১৩ বছর হলে তাকে কি শ্রম আইন অনুযায়ী 'কিশোর' শ্রমিক হিসেবে সংজ্ঞায়িত করা যাবে?",
+                  "explanation": "১৩ বছর বয়সী ব্যক্তি আইনের দৃষ্টিতে 'শিশু' হিসেবে গণ্য হবে, কারণ কিশোর হওয়ার প্রাথমিক বয়সসীমা হলো ন্যূনতম ১৪ বছর।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.861Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: আইনের পরিভাষায় 'শিশু' এবং 'কিশোর' শব্দ দুটির বয়সগত সংজ্ঞা সম্পূর্ণ আলাদা। চাকুরীতে নিয়োগের ক্ষেত্রে এই দুটি বয়সের আইনি প্রভাবও ভিন্ন।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "37120fc9-e37d-4957-97a8-6d72d8f9ec5c",
+                      "question_id": "afa54e41-87be-46cb-b459-5b63c0a65e60",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    },
+                    {
+                      "id": "377ea18f-b7e4-4cb0-aa39-c26bdf082a1a",
+                      "question_id": "afa54e41-87be-46cb-b459-5b63c0a65e60",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "84ce16c3-ba04-40bf-adeb-231c22855665",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "কিশোর শ্রমিকের শ্রেণিভুক্তকরণ",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"কামরুল: আমার কারখানায় একজন ১৭ বছর বয়সী ছেলে কাজ করতে এসেছে। সে কি প্রাপ্তবয়স্কদের মতো সব সুবিধা পাবে?\"},{\"avatar\":\"lisa\",\"text\":\"সুফিয়া: না কামরুল, সে এখনও ১৮ বছর পূর্ণ করেনি। তাই আইনি পরিভাষায় সে একজন কিশোর এবং তার জন্য বিশেষ সুরক্ষামূলক নিয়ম প্রযোজ্য হবে।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:42:30.862Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "fa124f7a-3db4-4475-95aa-0ea54d95d555",
+                  "learning_point_id": "84ce16c3-ba04-40bf-adeb-231c22855665",
+                  "question_text": "১৭ বছর বয়সী ওই কর্মীকে কারখানায় কোন শ্রেণিতে অন্তর্ভুক্ত করতে হবে?",
+                  "explanation": "যেহেতু কর্মীটির বয়স ১৪ বছরের বেশি কিন্তু ১৮ বছরের কম, তাই তিনি সরাসরি কিশোর শ্রমিকের আওতাভুক্ত হবেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.862Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"কামরুল: আমার কারখানায় একজন ১৭ বছর বয়সী ছেলে কাজ করতে এসেছে। সে কি প্রাপ্তবয়স্কদের মতো সব সুবিধা পাবে?\"},{\"avatar\":\"lisa\",\"text\":\"সুফিয়া: না কামরুল, সে এখনও ১৮ বছর পূর্ণ করেনি। তাই আইনি পরিভাষায় সে একজন কিশোর এবং তার জন্য বিশেষ সুরক্ষামূলক নিয়ম প্রযোজ্য হবে।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "101f192a-75c5-4ff3-89d2-c6410ba1b56c",
+                      "question_id": "fa124f7a-3db4-4475-95aa-0ea54d95d555",
+                      "option_text": "কিশোর শ্রমিক",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    },
+                    {
+                      "id": "aad6c0b1-69af-4491-91d9-dd4c8d5a19eb",
+                      "question_id": "fa124f7a-3db4-4475-95aa-0ea54d95d555",
+                      "option_text": "শিক্ষাধীন শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    },
+                    {
+                      "id": "053575ed-417d-4997-8efe-e0bfc4176a9d",
+                      "question_id": "fa124f7a-3db4-4475-95aa-0ea54d95d555",
+                      "option_text": "প্রাপ্তবয়স্ক শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:42:30.861Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "50a86dca-36fa-4fd2-ad94-89d416e0e526",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "বয়স প্রমাণের গ্রহণযোগ্য নথি",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:42:30.862Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "029ea80b-c8d6-4b10-b9fc-ee8d36ed350a",
+                  "learning_point_id": "50a86dca-36fa-4fd2-ad94-89d416e0e526",
+                  "question_text": "একজন কিশোরের সঠিক বয়স নির্ধারণের জন্য কোন কোন নথি আইনি প্রমাণ হিসেবে গ্রহণযোগ্য হতে পারে? (টিক দিন)",
+                  "explanation": "আইনি ক্ষেত্রে সরকারি জন্ম সনদ বা রেজিস্টার্ড ডাক্তারের মেডিকেল সার্টিফিকেটই বয়স প্রমাণের মূল ভিত্তি।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.862Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: চাকুরীতে নিয়োগের যোগ্যতা অর্জনের জন্য বয়স নির্ধারণের আইনি সার্টিফিকেট অত্যন্ত গুরুত্বপূর্ণ, যা শ্রমিকের প্রকৃত বয়স নিশ্চিত করে।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "de8ecef1-3bdd-4eea-aa6d-d64fe832b7ed",
+                      "question_id": "029ea80b-c8d6-4b10-b9fc-ee8d36ed350a",
+                      "option_text": "জন্ম নিবন্ধন সনদ বা জাতীয় পরিচয়পত্র।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "19b11a01-b4a1-4a14-b9c4-96586a3f546d",
+                      "question_id": "029ea80b-c8d6-4b10-b9fc-ee8d36ed350a",
+                      "option_text": "নিবন্ধিত চিকিৎসকের দেওয়া বয়স নির্ধারণী সার্টিফিকেট।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "3f72920f-cbb3-4a15-948d-b75efff10657",
+                      "question_id": "029ea80b-c8d6-4b10-b9fc-ee8d36ed350a",
+                      "option_text": "স্কুলের খেলার মাঠের সদস্যপদ কার্ড।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "1c9a75e1-4b85-4db7-8546-504c5bb929c1",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "বয়স ও আইনি সংজ্ঞা মিলকরণ",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:42:30.862Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "55a5175f-eac5-4ec5-90b7-8ab8328a5f24",
+                  "learning_point_id": "1c9a75e1-4b85-4db7-8546-504c5bb929c1",
+                  "question_text": "বাম পাশের বয়সের সাথে ডান পাশের আইনি সংজ্ঞার মিল কর।",
+                  "explanation": "১৪ বছরের কম বয়সীরা শিশু, ১৪ থেকে ১৮ বছরের কম বয়সীরা কিশোর এবং ১৮ বা তার বেশি বয়সীরা প্রাপ্তবয়স্ক কর্মী।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.862Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন অনুযায়ী বিভিন্ন বয়সসীমার ওপর ভিত্তি করে নাগরিকদের যে আইনি মর্যাদা দেওয়া হয়েছে, তা কর্মসংস্থানের অধিকারকে সরাসরি প্রভাবিত করে।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "১৪ বছরের কম",
+                        "right": "শিশু"
+                      },
+                      {
+                        "left": "১৪ থেকে ১৮ বছরের কম",
+                        "right": "কিশোর"
+                      },
+                      {
+                        "left": "১৮ বছর বা তার বেশি",
+                        "right": "প্রাপ্তবয়স্ক"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "7e8b6a37-20b8-49ad-a046-a7227c729c64",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "কিশোরদের পৃথক সংজ্ঞায়নের উদ্দেশ্য",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:42:30.862Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "0cf4b355-5d4a-42d4-94ea-680cdb72aa48",
+                  "learning_point_id": "7e8b6a37-20b8-49ad-a046-a7227c729c64",
+                  "question_text": "শ্রম আইনে কিশোরদের আলাদাভাবে সংজ্ঞায়িত করার মূল উদ্দেশ্য কী?",
+                  "explanation": "কিশোরদের বিকাশ ও সুরক্ষার কথা মাথায় রেখেই আইনে তাদের জন্য বিশেষ সুযোগ-সুবিধা ও আলাদা সংজ্ঞা দেওয়া হয়েছে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.862Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কিশোরদের শারীরিক ও মানসিক গঠনের কথা বিবেচনা করে আন্তর্জাতিক শ্রম সংস্থা (ILO) এবং দেশীয় আইনে তাদের প্রাপ্তবয়স্কদের কাতার থেকে আলাদা রাখা হয়েছে।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "eb532ac3-d9d6-4c14-9e5e-74abe0691575",
+                      "question_id": "0cf4b355-5d4a-42d4-94ea-680cdb72aa48",
+                      "option_text": "তাদের বিশেষ আইনি সুরক্ষা ও সীমিত কর্মঘণ্টা নিশ্চিত করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "ca078ea7-7e1c-4c2c-a498-6919827232f9",
+                      "question_id": "0cf4b355-5d4a-42d4-94ea-680cdb72aa48",
+                      "option_text": "তাদের কম মজুরী দিয়ে বেশি খাটানো",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "e35507c6-6f35-4313-889d-1a81f554088d",
+                      "question_id": "0cf4b355-5d4a-42d4-94ea-680cdb72aa48",
+                      "option_text": "প্রাপ্তবয়স্কদের চাকরি থেকে বাদ দেওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "8be4c65e-20cf-4ce0-82f9-014ce88b817a",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "প্রাপ্তবয়স্ক হওয়ার আইনি বয়স",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:42:30.862Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "5657301c-ad2e-4a67-bd27-37f34014481d",
+                  "learning_point_id": "8be4c65e-20cf-4ce0-82f9-014ce88b817a",
+                  "question_text": "একজন কর্মীর বয়স ১৮ বছর পূর্ণ হলে কি তাকে আর 'কিশোর শ্রমিক' হিসেবে গণ্য করা হবে?",
+                  "explanation": "১৮ বছর পূর্ণ হওয়ার সাথে সাথেই ব্যক্তি আইনের দৃষ্টিতে প্রাপ্তবয়স্ক (Adult) হিসেবে বিবেচিত হন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.862Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কোনো ব্যক্তির বয়স ঠিক ১৮ বছর পূর্ণ হয়ে গেলে তার ওপর থেকে কিশোরদের জন্য প্রযোজ্য বিশেষ আইনি বিধিনিষেধগুলো তুলে নেওয়া হয়।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e4011258-bf51-4322-8303-b21a257c46f8",
+                      "question_id": "5657301c-ad2e-4a67-bd27-37f34014481d",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "8f8a6d05-0986-4507-9e9b-d5ca194f88af",
+                      "question_id": "5657301c-ad2e-4a67-bd27-37f34014481d",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "e4c73459-b33e-4dce-b17c-d2451407415b",
+              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+              "title": "কিশোর শ্রমিকের আইনের ক্ষেত্র",
+              "content": "কিশোর শ্রমিকের সংজ্ঞা",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:42:30.862Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "e61cea82-540d-406f-bdef-e7e7807e4af0",
+                  "learning_point_id": "e4c73459-b33e-4dce-b17c-d2451407415b",
+                  "question_text": "কিশোর শ্রমিকের এই আইনি সংজ্ঞাটি নিচের কোন কোন প্রতিষ্ঠানের ক্ষেত্রে প্রযোজ্য? (টিক দিন)",
+                  "explanation": "শ্রম আইনের আওতাভুক্ত সকল বাণিজ্যিক, শিল্প ও প্রাতিষ্ঠানিক কর্মক্ষেত্রে কিশোর শ্রমিকের এই সংজ্ঞা ও আইন কঠোরভাবে প্রযোজ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:42:30.862Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কিশোর শ্রমিকের সংজ্ঞা ও বিধিমালাটি বাংলাদেশের নির্দিষ্ট কিছু খাত বা প্রতিষ্ঠানের জন্য নয়, বরং আইনের আওতাভুক্ত সকল কর্মক্ষেত্রের জন্য প্রযোজ্য।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ceeeaf47-6717-44b4-80ca-2bec5e6155e4",
+                      "question_id": "e61cea82-540d-406f-bdef-e7e7807e4af0",
+                      "option_text": "নিবন্ধিত বাণিজ্যিক ও শিল্প কারখানা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "ed0639d0-5242-471c-a543-098a61fe901e",
+                      "question_id": "e61cea82-540d-406f-bdef-e7e7807e4af0",
+                      "option_text": "দোকান ও বাণিজ্যিক প্রতিষ্ঠান।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    },
+                    {
+                      "id": "4e888d44-3f18-47f2-bd3d-0e16c5af19e1",
+                      "question_id": "e61cea82-540d-406f-bdef-e7e7807e4af0",
+                      "option_text": "পারিবারিক ঘরোয়া বিনোদনমূলক অনুষ্ঠান।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:42:30.862Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "869ff5a0-65a2-4c19-83a9-593226fe3904",

@@ -22464,7 +22464,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "অতিরিক্ত ওজন বহনের সীমা",
           "order_index": 11,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "a3c21b92-e200-4242-a435-8fbe0ec9dabc",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "e6501514-a23a-4716-9820-f42ba38e8a0d",
+                  "learning_point_id": "a3c21b92-e200-4242-a435-8fbe0ec9dabc",
+                  "question_text": "শ্রম আইন ও বিধিমালা অনুযায়ী, একজন প্রাপ্তবয়স্ক পুরুষ শ্রমিক সর্বোচ্চ কত ওজন তুলতে বা বহন করতে পারেন?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম বিধিমালা অনুযায়ী, একজন প্রাপ্তবয়স্ক পুরুষ শ্রমিকের জন্য এককভাবে সর্বোচ্চ ৫০ কেজি ওজন বহনের আইনি সীমা নির্ধারিত রয়েছে।",
+                  "narrative": "💡 হিন্ট: অতিরিক্ত ওজন বহন করলে শ্রমিকদের মেরুদণ্ড ও হাড়ের স্থায়ী ক্ষতি হতে পারে। তাই আইনে পুরুষ, নারী ও কিশোরদের জন্য সর্বোচ্চ ওজনের সীমা সুনির্দিষ্ট করা আছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b2561a6c-63c6-41b5-b655-ba0ded54b207",
+                      "question_id": "e6501514-a23a-4716-9820-f42ba38e8a0d",
+                      "option_text": "৫০ কেজি",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.995Z"
+                    },
+                    {
+                      "id": "92af3b3c-5026-4265-98ce-72b46bd21df1",
+                      "question_id": "e6501514-a23a-4716-9820-f42ba38e8a0d",
+                      "option_text": "৮০ কেজি",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.996Z"
+                    },
+                    {
+                      "id": "7e40dfe4-34d6-44af-ae6c-1eb93a5a0354",
+                      "question_id": "e6501514-a23a-4716-9820-f42ba38e8a0d",
+                      "option_text": "১০০ কেজি",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.996Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "b8f5257b-93c2-4162-ba5b-7dd02e2ba90f",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "c7755add-b297-42ec-89eb-b0fb2c780e77",
+                  "learning_point_id": "b8f5257b-93c2-4162-ba5b-7dd02e2ba90f",
+                  "question_text": "প্রাপ্তবয়স্ক নারী শ্রমিকের জন্য কি সর্বোচ্চ ৩০ কেজি ওজন বহনের আইনি সীমা সুনির্দিষ্ট করা আছে?",
+                  "question_type": "boolean",
+                  "explanation": "আইনি স্ট্যান্ডার্ড অনুযায়ী, একজন প্রাপ্তবয়স্ক নারী শ্রমিক এককভাবে সর্বোচ্চ ৩০ কেজি পর্যন্ত ওজন উত্তোলন বা বহন করতে পারেন।",
+                  "narrative": "💡 হিন্ট: নারী শ্রমিকদের শারীরিক গঠন বিবেচনায় তাদের জন্য নির্ধারিত সর্বোচ্চ ওজনের সীমাটি পুরুষ শ্রমিকদের তুলনায় অনেক কম।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d6675756-f680-4c5d-acb4-af26e028284d",
+                      "question_id": "c7755add-b297-42ec-89eb-b0fb2c780e77",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "8089b223-1707-4dfe-898a-8db287cc6fc0",
+                      "question_id": "c7755add-b297-42ec-89eb-b0fb2c780e77",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "52306bb1-db5a-43d8-8ab9-c8616e4ec39b",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "92bcfbe7-3f35-4701-bb5d-b94a339b0c6c",
+                  "learning_point_id": "52306bb1-db5a-43d8-8ab9-c8616e4ec39b",
+                  "question_text": "কিশোর শ্রমিকদের (১৪-১৮ বছর) ওজন বহনের ক্ষেত্রে আইনি নিয়মগুলো কী কী? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "কিশোরদের শারীরিক সুরক্ষায় পুরুষ কিশোর ২০ কেজি এবং নারী কিশোর ১৫ কেজির বেশি ওজন বহন করা আইনত নিষিদ্ধ।",
+                  "narrative": "💡 হিন্ট: কিশোর শ্রমিকরা যেহেতু বাড়ন্ত বয়সের, তাই তাদের ভারী ওজন বহনে দিলে স্থায়ী পঙ্গুত্বের ঝুঁকি থাকে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "27a66213-a578-4060-822d-779df24431d4",
+                      "question_id": "92bcfbe7-3f35-4701-bb5d-b94a339b0c6c",
+                      "option_text": "পুরুষ কিশোরদের জন্য সর্বোচ্চ ওজন সীমা ২০ কেজি।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "836dd61a-7954-4e4b-9f03-41d9de874efe",
+                      "question_id": "92bcfbe7-3f35-4701-bb5d-b94a339b0c6c",
+                      "option_text": "নারী কিশোরদের জন্য সর্বোচ্চ ওজন সীমা ১৫ কেজি।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "28e364e0-79d1-435c-b301-b293d7b91a90",
+                      "question_id": "92bcfbe7-3f35-4701-bb5d-b94a339b0c6c",
+                      "option_text": "প্রাপ্তবয়স্কদের মতোই ৫০ কেজি ওজন বহনের অনুমতি দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "005c60c5-885f-445c-8f6a-5e1a7b7ddd93",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "8fbe2cc2-ed79-4d8d-81cc-26a31179cd35",
+                  "learning_point_id": "005c60c5-885f-445c-8f6a-5e1a7b7ddd93",
+                  "question_text": "নাসরিনের আইনি আপত্তি অনুযায়ী, কিশোর শ্রমিক রানা এককভাবে সর্বোচ্চ কত কেজি ওজন তুলতে পারে?",
+                  "question_type": "storytelling",
+                  "explanation": "ধারা ৭১ এবং সংশ্লিষ্ট বিধি অনুযায়ী, কোনো কিশোর শ্রমিককে তার নির্ধারিত আইনি সীমার (২০ কেজি) অতিরিক্ত ওজন তুলতে দেওয়া সরাসরি আইন লঙ্ঘন।",
+                  "narrative": "💬 দৃশ্য ১:\nজহির: আমাদের গুদামে সিমেন্টের বস্তা (প্রতিটি ৫০ কেজি) লোড করতে হবে। ১৮ বছরের কম বয়সী হেলপার রানা একা একটি বস্তা তুলছে।\nনাসরিন: জহির সাহেব, রানাকে থামান! ও কিশোর শ্রমিক, ও সর্বোচ্চ ২০ কেজি তুলতে পারে। ৫০ কেজি দিলে ওর মেরুদণ্ড ভেঙে যাবে এবং ফ্যাক্টরি আইনি শাস্তির মুখে পড়বে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "9d8a8826-7f4e-47e4-8d50-39709d3d31c6",
+                      "question_id": "8fbe2cc2-ed79-4d8d-81cc-26a31179cd35",
+                      "option_text": "২০ কেজি",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "40a256e3-ed08-4797-aaa2-b7059e262f8d",
+                      "question_id": "8fbe2cc2-ed79-4d8d-81cc-26a31179cd35",
+                      "option_text": "৩০ কেজি",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "9c73a705-dbc5-41b5-bd93-1e85faeb4bdb",
+                      "question_id": "8fbe2cc2-ed79-4d8d-81cc-26a31179cd35",
+                      "option_text": "৫০ কেজি",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "9f2b9b6e-7825-4197-95fa-a9dc5d1837e9",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "e5c7039f-257f-4fac-8c6c-c3123e82fe09",
+                  "learning_point_id": "9f2b9b6e-7825-4197-95fa-a9dc5d1837e9",
+                  "question_text": "বাম পাশের শ্রেণীর সাথে ডান পাশের সর্বোচ্চ আইনি ওজনের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "পুরুষের জন্য ৫০ কেজি, নারীর জন্য ৩০ কেজি এবং পুরুষ কিশোরের জন্য ২০ কেজি সর্বোচ্চ আইনি সীমা।",
+                  "narrative": "💡 হিন্ট: শ্রমিকের শ্রেণী এবং তাদের জন্য নির্ধারিত সর্বোচ্চ আইনি ওজন সীমার সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "প্রাপ্তবয়স্ক পুরুষ",
+                        "right": "সর্বোচ্চ ৫০ কেজি"
+                      },
+                      {
+                        "left": "প্রাপ্তবয়স্ক নারী",
+                        "right": "সর্বোচ্চ ৩০ কেজি"
+                      },
+                      {
+                        "left": "পুরুষ কিশোর কর্মী",
+                        "right": "সর্বোচ্চ ২০ কেজি"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "75f24be3-7caf-4dc8-88e0-d819cc22a3c9",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "1bd40536-d664-4207-8196-4f973d6d8bc3",
+                  "learning_point_id": "75f24be3-7caf-4dc8-88e0-d819cc22a3c9",
+                  "question_text": "ওজনের পরিমাণ আইনি সীমা পার হলে কি ট্রলি বা মেকানিক্যাল লিফটার ব্যবহার করা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "মানুষের শারীরিক সীমার অতিরিক্ত ওজনের মালামাল স্থানান্তরের জন্য যান্ত্রিক ট্রলি, ফর্কলিফট বা ক্রেন ব্যবহার করা কমপ্লায়েন্সের অংশ।",
+                  "narrative": "💡 হিন্ট: বেশি ওজনের মালামাল এক স্থান থেকে অন্য স্থানে নেওয়ার জন্য মাথায় বা পিঠে না নিয়ে মেকানিক্যাল ট্রলি বা ক্রেন ব্যবহার করা উচিত।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ee3d9610-0e54-4d04-873b-03aa5d8e2d5d",
+                      "question_id": "1bd40536-d664-4207-8196-4f973d6d8bc3",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "7c778c11-59e2-44fe-b114-fad79c42ec82",
+                      "question_id": "1bd40536-d664-4207-8196-4f973d6d8bc3",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "5d0990de-2df6-4850-9dce-61882409429d",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "12fc780d-fbc2-4f96-bed1-f0071be700c5",
+                  "learning_point_id": "5d0990de-2df6-4850-9dce-61882409429d",
+                  "question_text": "অতিরিক্ত ওজন বহনের আইনি সীমা (ধারা ৭১) অমান্য করলে সর্বোচ্চ কত টাকা জরিমানা হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের সাধারণ দণ্ড (ধারা ২৮৪) অনুযায়ী, সেফটি ও সুরক্ষার এই নিয়মটি প্রথমবার লঙ্ঘন করলে অনধিক ৫,০০০ টাকা অর্থদণ্ড হবে।",
+                  "narrative": "💡 হিন্ট: জোরপূর্বক অতিরিক্ত ওজন বহনে বাধ্য করার কারণে কোনো শ্রমিকের হার্নিয়া বা মেরুদণ্ডের ক্ষতি হলে মালিকের বিরুদ্ধে মামলা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e5866cd3-c055-423b-a222-241443e9e511",
+                      "question_id": "12fc780d-fbc2-4f96-bed1-f0071be700c5",
+                      "option_text": "৫,০০০ টাকা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "a5d88d49-4cde-4e64-865d-d3d58c904021",
+                      "question_id": "12fc780d-fbc2-4f96-bed1-f0071be700c5",
+                      "option_text": "৫০,০০০ টাকা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "7019953b-42b2-47c5-875a-ee0613f5122e",
+                      "question_id": "12fc780d-fbc2-4f96-bed1-f0071be700c5",
+                      "option_text": "১,০০,০০০ টাকা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "18793270-75ee-4ac5-a937-5e2d01a19ff7",
+              "chapter_id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "7b3c6c46-512d-4787-a001-b82442178b7d",
+                  "learning_point_id": "18793270-75ee-4ac5-a937-5e2d01a19ff7",
+                  "question_text": "ওজন বহন সংক্রান্ত আইনি কমপ্লায়েন্স ঠিক রাখতে স্টোর বিভাগের করণীয় কী? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "একসাথে ৩টি বস্তা দেওয়া চরম বিপজ্জনক ও বেআইনি; সঠিক মার্কিং ও ট্রলি ব্যবহার করাই আইনসম্মত পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট কারখানায় কার্টন বা বস্তা প্যাক করার সময়ই ওজনের লট চেক করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6ad2c94a-7561-42e7-ac6b-2e6767221f48",
+                      "question_id": "7b3c6c46-512d-4787-a001-b82442178b7d",
+                      "option_text": "ভারী মালামালের প্যাকেটের গায়ে ওজনের পরিমাণ স্পষ্ট লিখে রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "93eed6c9-7d79-4f5f-ae25-9f4d6806aa89",
+                      "question_id": "7b3c6c46-512d-4787-a001-b82442178b7d",
+                      "option_text": "ভারী ওজনের লট সরানোর জন্য ফ্লোরে হ্যান্ড ট্রলি বা প্যালেট জ্যাক রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "9d671447-900e-41a6-808e-deab0353aee1",
+                      "question_id": "7b3c6c46-512d-4787-a001-b82442178b7d",
+                      "option_text": "দ্রুত গাড়ি লোড করতে ৩টি বস্তা একসাথে বেঁধে পিঠে তুলে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -22472,7 +22831,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "চোখের সুরক্ষায় বিশেষ গিয়ার",
           "order_index": 12,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "abca92ac-9db9-43a0-b5b0-59a89051a1e7",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "d0f77071-6b7d-41b7-b8c7-da536e54ed6e",
+                  "learning_point_id": "abca92ac-9db9-43a0-b5b0-59a89051a1e7",
+                  "question_text": "ওয়েল্ডিং, গ্যাস কাটিং বা তীব্র আলো উৎপন্নকারী কাজে কি শ্রমিকের জন্য সেফটি গগলস বা চশমা পরা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৭২ অনুযায়ী, যেসব প্রক্রিয়ায় চোখের ক্ষতির আশঙ্কা থাকে, সেখানে উপযুক্ত চশমা বা চোখের পর্দা (Screens) সরবরাহ করা মালিকের আইনি দায়িত্ব।",
+                  "narrative": "💡 হিন্ট: ওয়েল্ডিং বা মেটাল গ্রাইন্ডিংয়ের সময় তীব্র আলো বা উড়ন্ত উড্ডীয়মান কণা চোখের স্থায়ী অন্ধত্ব তৈরি করতে পারে। তাই প্রোটেক্টিভ চশমা পরা বাধ্যতামূলক।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "79142ede-dee3-430f-9d44-a025653c1e04",
+                      "question_id": "d0f77071-6b7d-41b7-b8c7-da536e54ed6e",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "cf1543a6-c6db-4af4-b0bf-893377c6b71c",
+                      "question_id": "d0f77071-6b7d-41b7-b8c7-da536e54ed6e",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "9f754365-7b21-44db-b086-5cc71243fcd9",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "672012fe-0fd3-4573-b796-2964d5bc0892",
+                  "learning_point_id": "9f754365-7b21-44db-b086-5cc71243fcd9",
+                  "question_text": "চোখের সুরক্ষার জন্য প্রয়োজনীয় ব্যক্তিগত সুরক্ষা সামগ্রী (PPE) কে সরবরাহ করবে?",
+                  "question_type": "mcq",
+                  "explanation": "আইন অনুযায়ী, কর্মক্ষেত্রে সুরক্ষার জন্য প্রয়োজনীয় সকল পিপিই (PPE) বা সেফটি গগলস মালিক নিজ খরচে শ্রমিকদের সরবরাহ করতে বাধ্য।",
+                  "narrative": "💡 হিন্ট: সেফটি চশমা বা গিয়ারগুলো কারখানার স্টোরে রাখা থাকলে হবে না, তা কাজের সময় সরাসরি শ্রমিকের চোখে থাকতে হবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c20efc61-6ee1-44c2-a354-097eb08af4d9",
+                      "question_id": "672012fe-0fd3-4573-b796-2964d5bc0892",
+                      "option_text": "কারখানার মালিক (সম্পূর্ণ বিনামূল্যে)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "8dedd693-0268-48cd-b919-d1c0d3222c97",
+                      "question_id": "672012fe-0fd3-4573-b796-2964d5bc0892",
+                      "option_text": "শ্রমিককে নিজের খরচে কিনতে হবে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "6049028d-544a-4e63-8487-e0e15cbd015b",
+                      "question_id": "672012fe-0fd3-4573-b796-2964d5bc0892",
+                      "option_text": "পরিদর্শক দল সরবরাহ করবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "7fc66a87-46ba-41ad-b630-e8c634173a4d",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "375794a1-83c5-48e5-93cf-52b9c40c4373",
+                  "learning_point_id": "7fc66a87-46ba-41ad-b630-e8c634173a4d",
+                  "question_text": "নিচের কোন কোন কাজের ক্ষেত্রে চোখের বিশেষ সুরক্ষা গিয়ার ব্যবহার করা বাধ্যতামূলক? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "তীব্র আলো ও ক্ষতিকারক কেমিক্যালের কাজে ধারা ৭২ অনুযায়ী সেফটি চশমা বা গগলস ব্যবহার করা অলঙ্ঘনীয় নিয়ম।",
+                  "narrative": "💡 হিন্ট: কেবল ওয়েল্ডিংই নয়, ক্ষতিকারক তরল কেমিক্যাল বা এসিড হ্যান্ডলিংয়ের সময়ও চোখকে ছিটকে আসা তরল থেকে রক্ষা করতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "602f954f-6a33-4e5a-843b-58b569190724",
+                      "question_id": "375794a1-83c5-48e5-93cf-52b9c40c4373",
+                      "option_text": "বৈদ্যুতিক আর্ক ওয়েল্ডিং ও লোহা কাটার কাজ।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "8ee26063-1ffd-4186-a508-f3e651bbdbee",
+                      "question_id": "375794a1-83c5-48e5-93cf-52b9c40c4373",
+                      "option_text": "ডাইং ল্যাবে এসিড ও ক্ষতিকারক তরল কেমিক্যাল মিক্সিংয়ের কাজ।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "7b257147-99a4-4aa2-8016-409926a480a9",
+                      "question_id": "375794a1-83c5-48e5-93cf-52b9c40c4373",
+                      "option_text": "অফিসের ডেস্কে বসে কম্পিউটারে টাইপিংয়ের কাজ।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "086f3042-5c7f-40e1-b233-878401e3c089",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "5b28dcbf-79c0-4f03-a7d7-fbc72d158a06",
+                  "learning_point_id": "086f3042-5c7f-40e1-b233-878401e3c089",
+                  "question_text": "তানিয়ার আইনি ও সেফটি তাগিদ অনুযায়ী, আরিফকে গ্রাইন্ডিং করার সময় কোন গিয়ারটি পরানো বাধ্যতামূলক?",
+                  "question_type": "storytelling",
+                  "explanation": "উড্ডীয়মান কণা ও আগুনের ফুলকি থেকে চোখ রক্ষা করতে মেকানিক্যাল সেফটি গগলস বা ফেস শিল্ড ব্যবহার করা বাধ্যতামূলক।",
+                  "narrative": "💬 দৃশ্য ১:\nরনি: আমাদের মেটাল সেকশনে আরিফ চশমা ছাড়াই গ্রাইন্ডিং মেশিন দিয়ে লোহা কাটছে, চোখে আগুনের ফুলকি ছিটকে আসছে।\nতানিয়া: রনি ভাই, আরিফকে এখনই থামান! চশমা ছাড়া এই কাজ করা ধারা ৭২-এর সরাসরি লঙ্ঘন। চোখের ভেতরে লোহার কণা ঢুকলে ও চিরতরে অন্ধ হয়ে যেতে পারে। ওনাকে গগলস পরান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "75c9e27c-f2da-4779-bac3-0612ddf017ab",
+                      "question_id": "5b28dcbf-79c0-4f03-a7d7-fbc72d158a06",
+                      "option_text": "সেফটি গগলস বা চশমা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "d3eb908f-f795-4173-be9e-b7d151ee80b5",
+                      "question_id": "5b28dcbf-79c0-4f03-a7d7-fbc72d158a06",
+                      "option_text": "সাধারণ সুতির রুমাল",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "323f10aa-ea57-4bed-b6d7-b01cb1639598",
+                      "question_id": "5b28dcbf-79c0-4f03-a7d7-fbc72d158a06",
+                      "option_text": "কানের মাফ বা ইয়ার প্লাগ",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "f0e883ea-d943-4057-b6f2-1290a2428a5b",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "b14a6b95-e122-4d6b-ba46-1d089bc359ab",
+                  "learning_point_id": "f0e883ea-d943-4057-b6f2-1290a2428a5b",
+                  "question_text": "বাম পাশের কাজের সাথে ডান পাশের সুরক্ষা গিয়ারের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "ওয়েল্ডিংয়ে ফেস শিল্ড, কাটিংয়ে ইমপ্যাক্ট-প্রুফ চশমা এবং কেমিক্যালে এসিড-প্রুফ গগলস ব্যবহার করা আইনি স্ট্যান্ডার্ড।",
+                  "narrative": "💡 হিন্ট: কাজের ধরণ এবং তার জন্য উপযুক্ত চোখের সুরক্ষা গিয়ারের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "ইলেকট্রিক আর্ক ওয়েল্ডিং",
+                        "right": "ডার্ক বা অন্ধকার গ্লাসসহ ফেস শিল্ড"
+                      },
+                      {
+                        "left": "লোহা বা কাঠ কাটিং",
+                        "right": "স্বচ্ছ ইমপ্যাক্ট-প্রুফ চশমা"
+                      },
+                      {
+                        "left": "কেমিক্যাল ল্যাবরেটরি",
+                        "right": "সাধারণ এসিড-প্রুফ গগলস"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "72b3bb66-4fc8-4049-b227-e63897caff6c",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "2eb4f5a4-518e-41a4-a88f-249192b16658",
+                  "learning_point_id": "72b3bb66-4fc8-4049-b227-e63897caff6c",
+                  "question_text": "শ্রমিক চশমা পরতে অস্বীকৃতি জানালে কি মালিক তাকে ওই ঝুঁকিপূর্ণ কাজ থেকে সাময়িকভাবে সরিয়ে দেওয়ার অধিকার রাখেন?",
+                  "question_type": "boolean",
+                  "explanation": "নিজের এবং প্রতিষ্ঠানের নিরাপত্তার স্বার্থে মালিক বা কর্তৃপক্ষ শ্রমিককে সেফটি গিয়ার পরতে বাধ্য করতে পারেন এবং না পরলে আইনি ব্যবস্থা নিতে পারেন।",
+                  "narrative": "💡 হিন্ট: চশমা দেওয়া সত্ত্বেও যদি কোনো শ্রমিক তা না পরে কাজ করেন, তবে সুপারভাইজারের দায়িত্ব হলো তাকে কাজ থেকে বিরত রাখা।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d069d922-4076-4df6-9786-f673fae1f3a7",
+                      "question_id": "2eb4f5a4-518e-41a4-a88f-249192b16658",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "316bc727-9865-4c7f-8225-62d43cbd4df7",
+                      "question_id": "2eb4f5a4-518e-41a4-a88f-249192b16658",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "698ecbb4-f67a-4e13-a266-d9ab23949b3e",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "47942146-f2b9-4229-bbd3-6bf7766c461a",
+                  "learning_point_id": "698ecbb4-f67a-4e13-a266-d9ab23949b3e",
+                  "question_text": "চোখের সুরক্ষা সংক্রান্ত ধারা ৭২ লঙ্ঘন করলে মালিকের বিরুদ্ধে কোন আইনি ব্যবস্থা নেওয়া যায়?",
+                  "question_type": "mcq",
+                  "explanation": "পিপিই (PPE) বা চোখের গিয়ার না দেওয়া একটি দণ্ডনীয় ফৌজদারি অপরাধ, যার বিচার শ্রম আদালতে সম্পন্ন হয়।",
+                  "narrative": "💡 হিন্ট: বায়ার বা সরকারি অডিটের সময় যদি কোনো কর্মী সেফটি গগলস ছাড়া ওয়েল্ডিং করতে ধরা পড়েন, তবে ফ্যাক্টরি সরাসরি জরিমানার সম্মুখীন হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5577d813-0565-42ff-ab09-5ff0c2be4004",
+                      "question_id": "47942146-f2b9-4229-bbd3-6bf7766c461a",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি মামলা ও অর্থদণ্ড",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "36cfa499-e054-4658-b9c1-3fea35be4ca2",
+                      "question_id": "47942146-f2b9-4229-bbd3-6bf7766c461a",
+                      "option_text": "কারখানার প্রধান গেটের রঙ পরিবর্তন করা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "e935f71a-9482-4924-a887-645a37bfab87",
+                      "question_id": "47942146-f2b9-4229-bbd3-6bf7766c461a",
+                      "option_text": "কোনো শাস্তি হবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "620a13e9-2c22-410a-8770-6091a7e35288",
+              "chapter_id": "521ab352-cc36-41f1-9c36-b7299974a5df",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "59928105-d1ce-4077-b211-cd2adbe0cc8a",
+                  "learning_point_id": "620a13e9-2c22-410a-8770-6091a7e35288",
+                  "question_text": "চোখের সুরক্ষায় সঠিক সেফটি কমপ্লায়েন্স বজায় রাখতে কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "১টি চশমা শেয়ার করা অস্বাস্থ্যকর ও বেআইনি; স্ক্রিন ব্যবহার ও নষ্ট গগলস পরিবর্তন করাই সঠিক আইনি পথ।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় সেফটি চশমাগুলো স্ক্র্যাচ বা দাগমুক্ত আছে কিনা তা নিয়মিত অডিট করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "08977279-d75b-4e22-8894-e23e6bbfeb6f",
+                      "question_id": "59928105-d1ce-4077-b211-cd2adbe0cc8a",
+                      "option_text": "নষ্ট বা ঝাপসা হয়ে যাওয়া গগলসগুলো তাৎক্ষণিকভাবে পরিবর্তন করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "1eca72a9-7385-4b78-835b-9850dd84a6a2",
+                      "question_id": "59928105-d1ce-4077-b211-cd2adbe0cc8a",
+                      "option_text": "ওয়েল্ডিং জোনের চারপাশে প্রোটেক্টিভ স্ক্রিন বা পর্দা দেওয়া যাতে অন্যদের চোখ বেঁচে যায়।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "913e97d2-fd0b-44a6-99b4-e241b4c6034b",
+                      "question_id": "59928105-d1ce-4077-b211-cd2adbe0cc8a",
+                      "option_text": "খরচ বাঁচাতে ১০ জন শ্রমিকের জন্য মাত্র ১টি চশমা রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -22480,7 +23198,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "ক্ষতিকারক ও বিষাক্ত গ্যাস",
           "order_index": 13,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "467a27f5-a897-411d-811f-2ddd0ad10ebf",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "91403aac-969c-4e86-b881-24aaee5b49f9",
+                  "learning_point_id": "467a27f5-a897-411d-811f-2ddd0ad10ebf",
+                  "question_text": "কোনো আবদ্ধ প্রকোষ্ঠ (Confined Space) বা ট্যাংকের ভেতরে শ্রমিক প্রবেশের পূর্বে মালিকের প্রথম আইনি দায়িত্ব কোনটি?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৭৩ অনুযায়ী, কোনো সুড়ঙ্গ, চেম্বার বা ট্যাংকে ক্ষতিকারক গ্যাস থাকার সম্ভাবনা থাকলে, সেখানে গ্যাস মুক্ত না করে কাউকে প্রবেশের অনুমতি দেওয়া যাবে না।",
+                  "narrative": "💡 হিন্ট: কারখানার বদ্ধ চেম্বার, ট্যাংক বা ম্যানহোলের ভেতরে বিষাক্ত গ্যাস জমলে মানুষ দম আটকে তাৎক্ষণিক মারা যেতে পারে। তাই ভেতরে ঢোকার আগে গ্যাস পরীক্ষা করা জরুরি।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "0bafd9ff-2c9f-4cd3-a850-54a665b4024c",
+                      "question_id": "91403aac-969c-4e86-b881-24aaee5b49f9",
+                      "option_text": "ভেতরের বিষাক্ত গ্যাস বা ধোঁয়া সম্পূর্ণ বের করে বিশুদ্ধ বাতাস নিশ্চিত করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "a6a249d6-4542-400c-8dde-77fed9b12d04",
+                      "question_id": "91403aac-969c-4e86-b881-24aaee5b49f9",
+                      "option_text": "শ্রমিককে সরাসরি ভেতরে লাফ দিতে বলা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "67dae159-b9a1-4587-a592-bf557d184200",
+                      "question_id": "91403aac-969c-4e86-b881-24aaee5b49f9",
+                      "option_text": "কোনো পরীক্ষা ছাড়াই কাজ শুরু করা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "cbd00ff0-0729-47f7-8fe0-3e5910d57d9f",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "0aaa8ecb-253f-4b35-a3eb-6f2275bcba66",
+                  "learning_point_id": "cbd00ff0-0729-47f7-8fe0-3e5910d57d9f",
+                  "question_text": "বদ্ধ ট্যাংকে কাজ করার সময় কি শ্রমিকের শরীরে 'লাইফ-লাইন' (Life-line) বা সেফটি বেল্ট ও দড়ি বাঁধা থাকা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৭৩-এর স্পিরিট অনুযায়ী, ইমার্জেন্সি রেসকিউ বা উদ্ধারের সুবিধার্থে বদ্ধ জায়গায় কর্মরত শ্রমিকের শরীরে সেফটি বেল্ট ও লাইফ-লাইন দড়ি থাকা বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: বদ্ধ জায়গায় কাজ করার সময় আকস্মিক বিপদের ক্ষেত্রে শ্রমিককে টেনে ওপরে তোলার জন্য তার শরীরে একটি বিশেষ দড়ি বা বেল্ট বাঁধা থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c1ead5a9-127f-4bb0-8955-2f35362c6254",
+                      "question_id": "0aaa8ecb-253f-4b35-a3eb-6f2275bcba66",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "ca0baee1-ea7c-4f19-aa1b-22b898ce0f44",
+                      "question_id": "0aaa8ecb-253f-4b35-a3eb-6f2275bcba66",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "bc7c1d75-74fa-4257-8be3-560d538fb755",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "f5642ec7-c521-47a1-b26a-0da95555c450",
+                  "learning_point_id": "bc7c1d75-74fa-4257-8be3-560d538fb755",
+                  "question_text": "ক্ষতিকারক গ্যাস সংবলিত স্থানে কাজ করার ক্ষেত্রে কোন কোন আইনি শর্ত মানতে হবে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "খোলা মোমবাতি ব্যবহার করলে বিস্ফোরণ ঘটতে পারে যা বেআইনি; অক্সিজেন মাস্ক ও বাইরে স্ট্যান্ডবাই উদ্ধারকারী রাখাই আইনি নিয়ম।",
+                  "narrative": "💡 হিন্ট: বদ্ধ কক্ষের ভেতরে অক্সিজেনের মাত্রা কম থাকলে শ্রমিক অজ্ঞান হয়ে যেতে পারেন, তাই কৃত্রিম অক্সিজেনের ব্যবস্থা রাখতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "8091efad-86ad-42c0-9b50-a5d66ddae8a7",
+                      "question_id": "f5642ec7-c521-47a1-b26a-0da95555c450",
+                      "option_text": "শ্রমিককে শ্বাস-প্রশ্বাসের জন্য সেলফ-কন্টেইন্ড অক্সিজেন মাস্ক (SCBA) প্রদান করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "f9bb552e-b981-442a-bcd6-42f242d1ba53",
+                      "question_id": "f5642ec7-c521-47a1-b26a-0da95555c450",
+                      "option_text": "ট্যাংকের বাইরে সার্বক্ষণিক একজন উদ্ধারকারী বা সাহায্যকারী কর্মী প্রস্তুত রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "b4177e26-b3de-4757-926a-bffd316f4546",
+                      "question_id": "f5642ec7-c521-47a1-b26a-0da95555c450",
+                      "option_text": "আলো জ্বালানোর জন্য বদ্ধ ট্যাংকের ভেতর খোলা মোমবাতি বা দেশলাই ব্যবহার করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "ddd6cd0f-37ad-42e0-b440-6bf68abf06de",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "df83bc03-61f7-4041-8721-d813f7b40e65",
+                  "learning_point_id": "ddd6cd0f-37ad-42e0-b440-6bf68abf06de",
+                  "question_text": "নাসিমার সেফটি তাগিদ অনুযায়ী, ইটিপি ট্যাংকে নামার আগে কোন যন্ত্রটি দিয়ে পরীক্ষা করা উচিত?",
+                  "question_type": "storytelling",
+                  "explanation": "বদ্ধ জায়গায় বিষাক্ত গ্যাসের উপস্থিতি ও অক্সিজেনের মাত্রা নিখুঁতভাবে পরীক্ষা করার জন্য গ্যাস ডিটেক্টর ব্যবহার করা একটি আইনি বাধ্যবাধকতা।",
+                  "narrative": "💬 দৃশ্য ১:\nকামাল: আমাদের ইটিপি (ETP) প্ল্যান্টের গভীর স্লাজ ট্যাংকটি পরিষ্কার করতে হবে। হেলপার করিমকে সরাসরি নিচে নামিয়ে দিচ্ছি।\nনাসিমা: কামাল ভাই, এই ভুল করবেন না! ট্যাংকের ভেতর কার্বন মনোক্সাইড বা মিথেন গ্যাস থাকতে পারে। আগে গ্যাস ডিটেক্টর দিয়ে পরীক্ষা করুন এবং করিমকে ব্রিদিং অ্যাপারেটাস ও সেফটি রোপ পরিয়ে নামান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f0f7dcb9-ec12-4010-8ebb-e8c73eb28494",
+                      "question_id": "df83bc03-61f7-4041-8721-d813f7b40e65",
+                      "option_text": "গ্যাস ডিটেক্টর (Gas Detector)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "ca5696ed-f6bd-4d44-ad42-6fc51b38cb84",
+                      "question_id": "df83bc03-61f7-4041-8721-d813f7b40e65",
+                      "option_text": "সাধারণ থার্মোমিটার",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "f5a27fb9-39f9-4d95-b2d3-ca4e1a58129b",
+                      "question_id": "df83bc03-61f7-4041-8721-d813f7b40e65",
+                      "option_text": "লাক্স মিটার",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "9cdd2d00-aaa9-41c1-a8d0-65cb87f8bef8",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "ff7d2051-9104-4712-9c87-799cd531906d",
+                  "learning_point_id": "9cdd2d00-aaa9-41c1-a8d0-65cb87f8bef8",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি সুরক্ষার মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "আবদ্ধ ট্যাংক হলো ধারা ৭৩ এর ডেঞ্জার জোন, বাতাস পরীক্ষা করা হয় ডিটেক্টর দিয়ে এবং উদ্ধারের জন্য লাইফ-লাইন দড়ি ব্যবহার করা হয়।",
+                  "narrative": "💡 হিন্ট: বিষাক্ত গ্যাস জোনের উপাদান এবং তাদের সুরক্ষামূলক আইনি ব্যবস্থার সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "আবদ্ধ প্রকোষ্ঠ বা ট্যাংক",
+                        "right": "ধারা ৭৩ অনুযায়ী ডেঞ্জার জোন"
+                      },
+                      {
+                        "left": "ট্যাংকের ভেতরের বাতাস",
+                        "right": "গ্যাস ডিটেক্টর দ্বারা পরীক্ষা"
+                      },
+                      {
+                        "left": "জরুরি উদ্ধার ব্যবস্থা",
+                        "right": "সেফটি বেল্ট ও লাইফ-লাইন দড়ি"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "380b054a-ebc5-445b-b218-4750545006ea",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "1c3117b7-042b-48e2-8146-9e30cef2885d",
+                  "learning_point_id": "380b054a-ebc5-445b-b218-4750545006ea",
+                  "question_text": "উদ্ধারকারী ব্যক্তি কি কোনো সুরক্ষা সামগ্রী ছাড়াই অজ্ঞান কর্মীকে বাঁচাতে সরাসরি ট্যাংকে নামতে পারেন?",
+                  "question_type": "boolean",
+                  "explanation": "উদ্ধারকারীকেও অবশ্যই সেফটি গিয়ার ও অক্সিজেন মাস্ক পরে ভেতরে প্রবেশ করতে হবে, অন্যথায় তিনিও বিষাক্ত গ্যাসে আক্রান্ত হতে পারেন।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কর্মী বদ্ধ চেম্বারের ভেতরে অজ্ঞান হয়ে যান, তবে বাইরে থাকা সাহায্যকারী ব্যক্তি নিজে অক্সিজেন মাস্ক না পরে সরাসরি ভেতরে ঢুকতে পারবেন না।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d9d227a6-8c32-47dc-98e0-b6fba2f97df5",
+                      "question_id": "1c3117b7-042b-48e2-8146-9e30cef2885d",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "d710dc41-b6cd-4fc1-bc81-c305ccbaded2",
+                      "question_id": "1c3117b7-042b-48e2-8146-9e30cef2885d",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "986a3db0-6430-4d1d-a5a9-93928643a302",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "c1af18c8-70c0-4781-ba03-95c98ad285e0",
+                  "learning_point_id": "986a3db0-6430-4d1d-a5a9-93928643a302",
+                  "question_text": "বিষাক্ত গ্যাস সংক্রান্ত ধারা ৭৩ লঙ্ঘন করলে কারখানার বিরুদ্ধে কোন সুনির্দিষ্ট আইনি ব্যবস্থা নেওয়া যায়?",
+                  "question_type": "mcq",
+                  "explanation": "গ্যাস সেফটি কমপ্লায়েন্স অমান্য করা একটি সর্বোচ্চ স্তরের দণ্ডনীয় অপরাধ, কারণ এতে তাৎক্ষণিক মৃত্যুর ঝুঁকি থাকে।",
+                  "narrative": "💡 হিন্ট: গ্যাস পরীক্ষা না করে ট্যাংকে নামানোর কারণে কোনো শ্রমিকের মৃত্যু হলে মালিক ও ম্যানেজমেন্টের বিরুদ্ধে সরাসরি অবহেলাজনিত নরহত্যার মামলা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c19e0a55-d7fa-4d53-9daa-da3a81e55d93",
+                      "question_id": "c1af18c8-70c0-4781-ba03-95c98ad285e0",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি ফৌজদারি মামলা, ভারী জরিমানা বা কারাদণ্ড",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "3d4a6ca2-552b-4ebe-9ebf-bfd6e321cdf1",
+                      "question_id": "c1af18c8-70c0-4781-ba03-95c98ad285e0",
+                      "option_text": "কারখানার নাম পরিবর্তন করার নোটিশ",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "0730b753-85e5-4530-8aac-bb01d86cfd44",
+                      "question_id": "c1af18c8-70c0-4781-ba03-95c98ad285e0",
+                      "option_text": "কোনো ব্যবস্থা নেওয়া যাবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "eecb5cda-4bac-4cdf-a769-5156df94debf",
+              "chapter_id": "89e2f77b-1a86-4695-994b-4191b842ea26",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "9475fcc3-0c01-403a-acf4-5c0f2098799b",
+                  "learning_point_id": "eecb5cda-4bac-4cdf-a769-5156df94debf",
+                  "question_text": "গ্যাস ও বদ্ধ জায়গার সঠিক কমপ্লায়েন্স বজায় রাখতে সেফটি কমিটির কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "ডিটেক্টর বন্ধ রাখা বেআইনি; ওয়ার্ক পারমিট ও রেসকিউ ট্রেইনিং নিশ্চিত করাই আইনসম্মত সঠিক কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট কারখানায় আবদ্ধ জায়গায় কাজের জন্য একটি বিশেষ 'কনফাইন্ড স্পেস ওয়ার্ক পারমিট' (Work Permit) ইস্যু করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "12aab10b-edd9-43b8-abcc-fa849788e7fd",
+                      "question_id": "9475fcc3-0c01-403a-acf4-5c0f2098799b",
+                      "option_text": "'কনফাইন্ড স্পেস পারমিট' ইস্যু ও সাইন করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "8ed9e66e-dd3a-4fe7-bbec-b286a606e6fd",
+                      "question_id": "9475fcc3-0c01-403a-acf4-5c0f2098799b",
+                      "option_text": "উদ্ধারকারীদের প্রতি ৬ মাসে একবার মক ড্রিল বা ট্রেইনিং দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "f82b6f51-9500-4711-819c-945b84a8fec4",
+                      "question_id": "9475fcc3-0c01-403a-acf4-5c0f2098799b",
+                      "option_text": "খরচ কমাতে গ্যাস ডিটেক্টরের ব্যাটারি খুলে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -22488,7 +23565,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "ভবন ও কাঠামোর নিরাপত্তা",
           "order_index": 14,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "985aea97-949f-447d-80bc-b2d5b475d23c",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "4ed3a409-91a8-4dbf-bfde-cb37db930c11",
+                  "learning_point_id": "985aea97-949f-447d-80bc-b2d5b475d23c",
+                  "question_text": "কারখানার ভবন ও ফ্লোরগুলো কি ভারী যন্ত্রপাতি এবং শ্রমিকদের লোড বা ওজন সহ্য করার মতো সম্পূর্ণ নিরাপদ ও মজবুত হওয়া বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৭৪-৭৮ এর স্পিরিট এবং বিল্ডিং কোড অনুযায়ী, কারখানার প্রতিটি ভবন ও কাঠামো বুয়েট (BUET) বা অনুমোদিত ইঞ্জিনিয়ার দ্বারা স্ট্রাকচারালি সেফ বা নিরাপদ প্রমাণিত হতে হবে।",
+                  "narrative": "💡 হিন্ট: কারখানার ভবন যদি জরাজীর্ণ বা দুর্বল হয়, তবে ছাদ ধসে বড় ধরনের ট্র্যাজেডি ঘটতে পারে। তাই ভবনের কাঠামোগত উপযুক্ততার সার্টিফিকেট থাকা জরুরি।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "20a4b442-b4ac-4d8b-b071-c07c0ed7dae3",
+                      "question_id": "4ed3a409-91a8-4dbf-bfde-cb37db930c11",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "333742d0-ee31-4137-b72f-8e2aef6a1c72",
+                      "question_id": "4ed3a409-91a8-4dbf-bfde-cb37db930c11",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "e4a0c601-e555-48ab-9876-075e8aeeb899",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "0311fd99-df59-44f1-9cdd-e244de6de3da",
+                  "learning_point_id": "e4a0c601-e555-48ab-9876-075e8aeeb899",
+                  "question_text": "কারখানার কোনো ভবন বা কাঠামো বিপজ্জনক প্রমাণিত হলে, কারখানা পরিদর্শকের প্রধান আইনি ক্ষমতা কোনটি?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৭৫ অনুযায়ী, পরিদর্শক যদি মনে করেন কোনো ভবন বা যন্ত্রপাতির অংশ মানুষের জীবনের জন্য বিপজ্জনক, তবে তিনি তা সংস্কার বা ব্যবহার বন্ধের লিখিত আদেশ জারি করতে পারেন।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানা পরিদর্শক তদন্তের সময় দেখেন যে ভবনের দেয়ালে বড় ফাটল ধরেছে বা ছাদ দুর্বল, তবে তার একটি বিশেষ আইনি ক্ষমতা রয়েছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "00d35c61-5cb8-4f01-a5de-8eb393572415",
+                      "question_id": "0311fd99-df59-44f1-9cdd-e244de6de3da",
+                      "option_text": "ত্রুটি না শুধরানো পর্যন্ত ওই ভবন বা নির্দিষ্ট অংশ ব্যবহার নিষিদ্ধ করার আদেশ দেওয়া",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "dbf7a654-3765-422a-a8e0-d29108c3f41d",
+                      "question_id": "0311fd99-df59-44f1-9cdd-e244de6de3da",
+                      "option_text": "ভবনটি নিজের নামে লিখে নেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "21d40e49-c4f6-4aac-97e9-126b0c5c0f6c",
+                      "question_id": "0311fd99-df59-44f1-9cdd-e244de6de3da",
+                      "option_text": "শ্রমিকদের ছাদের ওপর গিয়ে কাজ করার আদেশ দেওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "0489118c-4a18-4b59-b79b-6a04bbdc7eb6",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "24cc90ba-fa3c-4b61-b3b1-fee664365fd1",
+                  "learning_point_id": "0489118c-4a18-4b59-b79b-6a04bbdc7eb6",
+                  "question_text": "ভবন ও কাঠামোর নিরাপত্তা নিশ্চিত করতে মালিকের কোন কোন আইনি দায়িত্ব রয়েছে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "পিলার কাটা সম্পূর্ণ বেআইনি ও দণ্ডনীয়; অনুমোদিত নকশা ও লোড প্ল্যান মেনে চলাই হলো সঠিক আইনি নিয়ম।",
+                  "narrative": "💡 হিন্ট: ভবনের ফ্লোর বা মেঝের ওপর অতিরিক্ত মালামাল স্তূপ করে রাখলে ফ্লোর ধসে পড়তে পারে, তাই ফ্লোর লোড ক্যাপাসিটি মেনে চলতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "7c682e83-2c36-4c6c-a677-e793c990110c",
+                      "question_id": "24cc90ba-fa3c-4b61-b3b1-fee664365fd1",
+                      "option_text": "অনুমোদিত নকশা বা প্ল্যান (Approved Layout) বহির্ভূত কোনো অবৈধ এক্সটেনশন বা ভবন বৃদ্ধি না করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "d622584e-5fed-426c-a8d6-a5d1bbc713f3",
+                      "question_id": "24cc90ba-fa3c-4b61-b3b1-fee664365fd1",
+                      "option_text": "প্রতিটি ফ্লোরের সর্বোচ্চ ওজন ধারণ ক্ষমতা বা লোড প্ল্যান (Floor Load Plan) মেনে চলা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "3a4c6527-78d4-4e78-8cb7-fb193b0b7e35",
+                      "question_id": "24cc90ba-fa3c-4b61-b3b1-fee664365fd1",
+                      "option_text": "ফ্লোরের জায়গা বাঁচাতে পিলার বা বিম কেটে কেবিন তৈরি করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "4f519fd9-7942-4de4-9caf-f4f21484abd3",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "5b7477d1-bea1-4ea7-baa0-319b1fb3e132",
+                  "learning_point_id": "4f519fd9-7942-4de4-9caf-f4f21484abd3",
+                  "question_text": "লিপিকার আইনি ও কারিগরি তাগিদ অনুযায়ী, ভবনে ফাটল দেখা দিলে কর্তৃপক্ষের দ্রুততম আইনি পদক্ষেপ কোনটি?",
+                  "question_type": "storytelling",
+                  "explanation": "ভবনের কাঠামোগত দুর্বলতা অবহেলা করা হাজার হাজার শ্রমিকের জীবন বিপন্ন করে, যা শ্রম আইনের ধারা ৭৪-৭৮ অনুযায়ী একটি গুরুতর শাস্তিযোগ্য অপরাধ।",
+                  "narrative": "💬 দৃশ্য ১:\nআসিম: আমাদের তৈরি পোশাক কারখানার ৩য় তলার ফ্লোরের এক কোণায় ফাটল দেখা গেছে, তবে কাজ চললে সমস্যা নেই।\nলিপিকা: আসিম সাহেব, রানা প্লাজা ট্র্যাজেডির কথা ভুলে যাবেন না! ফাটল দেখা দিলে অবিলম্বে কাজ বন্ধ করে স্ট্রাকচারাল ইঞ্জিনিয়ার দিয়ে পরীক্ষা করাতে হবে। পরিদর্শক এটি দেখলে ফ্যাক্টরি সিলগালা করে দেবেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "2217e174-18e7-4a4a-80d0-a514b159a1fe",
+                      "question_id": "5b7477d1-bea1-4ea7-baa0-319b1fb3e132",
+                      "option_text": "ওই অংশের কাজ সাময়িকভাবে বন্ধ করে বুয়েট বা সার্টিফাইড ইঞ্জিনিয়ার দ্বারা স্ট্রাকচারাল অডিট করানো",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "ba612121-ba4e-44e0-b7b0-da9e88d6e89a",
+                      "question_id": "5b7477d1-bea1-4ea7-baa0-319b1fb3e132",
+                      "option_text": "ফাটলের ওপর সাধারণ চুনকাম বা রং করে ঢেকে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "77508449-02b6-40fa-aa5e-0c020e736085",
+                      "question_id": "5b7477d1-bea1-4ea7-baa0-319b1fb3e132",
+                      "option_text": "ফ্লোরে আরও ভারী যন্ত্রপাতি স্থাপন করা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "d8288959-8160-4632-94d8-7be7d893b72a",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "a24b5d0d-84d6-4512-9865-2027e7814cf8",
+                  "learning_point_id": "d8288959-8160-4632-94d8-7be7d893b72a",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি নথির মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "কাঠামোগত শক্তির জন্য স্ট্রাকচারাল সার্টিফিকেট লাগে, ফ্লোর প্ল্যানের জন্য অনুমোদিত নকশা এবং বিপজ্জনক ভবনে পরিদর্শকের নিষেধাজ্ঞা জারি হয়।",
+                  "narrative": "💡 হিন্ট: ভবনের নিরাপত্তা উপাদান এবং তাদের আইনি সার্টিফিকেটের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "ভবনের কাঠামোগত শক্তি",
+                        "right": "স্ট্রাকচারাল সেফটি সার্টিফিকেট (Structural Certificate)"
+                      },
+                      {
+                        "left": "কারখানার ফ্লোর প্ল্যান",
+                        "right": "রাজউক বা অনুমোদিত নকশা ও লে-আউট"
+                      },
+                      {
+                        "left": "বিপজ্জনক জরাজীর্ণ ভবন",
+                        "right": "প্রধান পরিদর্শকের বিশেষ নিষেধাজ্ঞা নোটিশ"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "f77046c0-2d5f-4382-9127-3ea8e7e13df1",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "a64a97c8-fef0-43f6-93a6-d3a0aea995cd",
+                  "learning_point_id": "f77046c0-2d5f-4382-9127-3ea8e7e13df1",
+                  "question_text": "মূল নকশার বাইরে ছাদের ওপর কোনো ভারী মেকানিক্যাল টাওয়ার বা জেনারেটর বসানো কি আইনসম্মত?",
+                  "question_type": "boolean",
+                  "explanation": "রাজউক, ডিআইএফই (DIFE) এবং স্ট্রাকচারাল ইঞ্জিনিয়ারের লিখিত পূর্বানুমতি ও নকশা সংশোধন ছাড়া ভবনের ওপর অতিরিক্ত ভারী লোড চাপানো সম্পূর্ণ বেআইনি।",
+                  "narrative": "💡 হিন্ট: কারখানার ছাদ বা মেঝের ওপর কোনো পানির বড় ট্যাংক বা ভারী জেনারেটর বসাতে হলে অবশ্যই তার জন্য স্ট্রাকচারাল রি-ডিজাইনের অনুমোদন নিতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "50a58791-bb6f-43e2-8c14-f9fec06a2088",
+                      "question_id": "a64a97c8-fef0-43f6-93a6-d3a0aea995cd",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "89bff90b-fcaf-4c2e-b552-de9fda8b5299",
+                      "question_id": "a64a97c8-fef0-43f6-93a6-d3a0aea995cd",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "4f03f7bc-8ae6-4fb4-8898-900aa9cb8c9e",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "4e52c523-8ace-4049-bcd5-b19e676776a0",
+                  "learning_point_id": "4f03f7bc-8ae6-4fb4-8898-900aa9cb8c9e",
+                  "question_text": "ভবন ও কাঠামোর নিরাপত্তা বিধি অমান্য করলে শ্রম আদালতের মাধ্যমে সর্বোচ্চ কী শাস্তি হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "ভবনের স্ট্রাকচারাল সেফটি লঙ্ঘন করা একটি সর্বোচ্চ স্তরের আইনি অপরাধ, যা সরাসরি দণ্ডবিধি ও শ্রম আইনের কঠোর ধারায় শাস্তিযোগ্য।",
+                  "narrative": "💡 হিন্ট: পরিদর্শকের দেওয়া ভবনের সংস্কার নোটিশ অমান্য করে জরাজীর্ণ ভবনে কাজ চালানো অব্যাহত রাখলে প্রতিষ্ঠানের লাইসেন্স স্থায়ীভাবে বাতিল করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "78652076-672f-48be-9837-1beb55cc839d",
+                      "question_id": "4e52c523-8ace-4049-bcd5-b19e676776a0",
+                      "option_text": "সরাসরি ফৌজদারি মামলা, ভারী জরিমানা এবং ফ্যাক্টরি সিলগালাকরণ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "20423184-b71e-4680-80c9-434ade2e887e",
+                      "question_id": "4e52c523-8ace-4049-bcd5-b19e676776a0",
+                      "option_text": "কারখানার গেটের সিকিউরিটি গার্ড পরিবর্তন করা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "097815c6-fe3a-4adf-b9e0-72e77da97500",
+                      "question_id": "4e52c523-8ace-4049-bcd5-b19e676776a0",
+                      "option_text": "কোনো শাস্তি হবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "8fd0d552-678a-427e-9bd6-e7bfcc5e979b",
+              "chapter_id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "7ba477e9-1ac6-443f-a680-accf202a3f08",
+                  "learning_point_id": "8fd0d552-678a-427e-9bd6-e7bfcc5e979b",
+                  "question_text": "ভবনের দীর্ঘমেয়াদী আইনি কমপ্লায়েন্স ধরে রাখতে এডমিন বিভাগের কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "অনুমোদন ছাড়া তলা বাড়ানো একটি মারাত্মক দণ্ডনীয় অপরাধ; বাৎসরিক স্ট্যাবিলিটি টেস্ট ও লোড মার্কিং করাই হলো আইনসম্মত সঠিক কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট কারখানায় প্রতি বছর ভবনের সয়েল টেস্ট, বিম বা পিলারের আল্ট্রাসনিক টেস্টের রেকর্ড ফাইল মেইনটেইন করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f1450fef-d10f-4374-8e5b-e4680e792bd9",
+                      "question_id": "7ba477e9-1ac6-443f-a680-accf202a3f08",
+                      "option_text": "প্রতি বছর সার্টিফাইড আর্কিটেক্ট বা ইঞ্জিনিয়ার দিয়ে ভবনের স্ট্যাবিলিটি টেস্ট করানো।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "43c69ee2-8573-4c40-b688-efa116bfef25",
+                      "question_id": "7ba477e9-1ac6-443f-a680-accf202a3f08",
+                      "option_text": "ফ্লোরগুলোতে মালামাল রাখার জন্য নির্দিষ্ট ওজন মেপে 'লোড জোন' পেইন্ট করে মার্কিং করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "1b1ddc67-f5b0-4fc8-b3dc-5eb5e387e818",
+                      "question_id": "7ba477e9-1ac6-443f-a680-accf202a3f08",
+                      "option_text": "খরচ বাঁচাতে ভবনের প্ল্যান বা নকশার অনুমোদন ছাড়াই আরেকটি নতুন তলা বা ফ্লোর ঢালাই দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -22496,7 +23932,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "অগ্নি নির্বাপণ ও জরুরি পথ",
           "order_index": 15,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "e1c7eca0-6187-4ee2-bc3d-50861a98c875",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "c99f7f16-82f7-4b49-bdec-514647b04e8f",
+                  "learning_point_id": "e1c7eca0-6187-4ee2-bc3d-50861a98c875",
+                  "question_text": "বাংলাদেশ শ্রম আইন অনুযায়ী, কারখানার কাজের চলাকালীন সময়ে জরুরি বহির্গমন পথ বা ফায়ার এক্সিট ডোর (Fire Exit Door) কোন অবস্থায় থাকতে হবে?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৬২ (ফায়ার সেফটি বিধি) অনুযায়ী, কারখানায় কাজ চলাকালীন জরুরি বহির্গমন দরজাগুলো কোনোভাবেই তালাবদ্ধ বা অবরুদ্ধ করা যাবে না; এগুলো যেন ভেতর থেকে এক ধাক্কায় খোলা যায় (Push bar) এমন হতে হবে।",
+                  "narrative": "💡 হিন্ট: কারখানায় আগুন লাগলে শ্রমিকরা যেন দ্রুত ও নিরাপদে বের হতে পারেন, সেজন্য জরুরি বহির্গমন পথ বা সিঁড়ি থাকতে হয়। এই পথটি কোনো অবস্থাতেই লক বা বন্ধ রাখা যাবে না।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "18778c34-ed2c-4dca-a6f0-e2563bd5f8da",
+                      "question_id": "c99f7f16-82f7-4b49-bdec-514647b04e8f",
+                      "option_text": "এটি কোনো অবস্থাতেই বাইরে থেকে তালাবদ্ধ (Lock) রাখা যাবে না, সবসময় উন্মুক্ত থাকতে হবে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "6d045d4a-8c59-4f4e-b929-5b513bc46c97",
+                      "question_id": "c99f7f16-82f7-4b49-bdec-514647b04e8f",
+                      "option_text": "চুরির ভয়ে সবসময় বাইরে থেকে বড় তালা মেরে রাখতে হবে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "22f3c1e5-4455-4f38-a150-83f7b246bdd7",
+                      "question_id": "c99f7f16-82f7-4b49-bdec-514647b04e8f",
+                      "option_text": "কেবল ম্যানেজার সাহেবের চাবি দিয়ে লক করে রাখতে হবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "9c64a35c-a2ea-4a0a-b509-929f6a7ec597",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "0a25b8b8-9176-4496-aa08-c7ddf0397b5a",
+                  "learning_point_id": "9c64a35c-a2ea-4a0a-b509-929f6a7ec597",
+                  "question_text": "কারখানার প্রতিটি জরুরি নিকাশ পথ বা ফায়ার এক্সিট সাইন কি স্পষ্ট বাংলায় লাল বা সবুজ রঙে চিহ্নিত থাকা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "আইন অনুযায়ী, প্রতিটি জরুরি বহির্গমন পথ বা সিঁড়ির ওপরে স্পষ্ট বাংলায় এবং সহজে চেনা যায় এমন ভিজ্যুয়াল কালার কোড বা নোটিশ সাইন বোর্ড থাকা বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: আগুন লাগলে ধোঁয়ার ভেতর অন্ধকারেও যেন শ্রমিকরা বের হওয়ার পথ খুঁজে পান, সেজন্য জরুরি এক্সিট সাইনগুলোর জন্য বিশেষ রঙের নিয়ম রয়েছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "04b1d05b-4e61-4c62-939e-c628dbacd69d",
+                      "question_id": "0a25b8b8-9176-4496-aa08-c7ddf0397b5a",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "ceefbe24-a484-4abf-9af3-cf5fa51b8d6b",
+                      "question_id": "0a25b8b8-9176-4496-aa08-c7ddf0397b5a",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "d532ef02-5fc0-416c-ad46-1f44dc368581",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "a6f07967-6053-4441-ad69-77088813a0eb",
+                  "learning_point_id": "d532ef02-5fc0-416c-ad46-1f44dc368581",
+                  "question_text": "কারখানায় ফায়ার সেফটি বা অগ্নি নির্বাপণ কমপ্লায়েন্সের ক্ষেত্রে কোন কোন আইনি নিয়ম মানতে হয়? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "সিঁড়িতে কার্টন রাখা মারাত্মক দণ্ডনীয় অপরাধ; প্রতি ৬ মাসে মক ড্রিল এবং সচল সিলিন্ডার রাখাই আইনের মূল শর্ত (ধারা ৬২)।",
+                  "narrative": "💡 হিন্ট: আগুন লাগলে কারখানার শ্রমিকরা যেন প্যানিক বা আতঙ্কিত না হয়ে শান্তভাবে ফায়ার এক্সিট ব্যবহার করতে পারেন, সেজন্য নিয়মিত মহড়া বা প্র্যাকটিস করাতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "aa08dadd-6e95-43da-a76d-8da0f408cdcf",
+                      "question_id": "a6f07967-6053-4441-ad69-77088813a0eb",
+                      "option_text": "প্রতি ৬ মাসে অন্তত একবার 'অগ্নি নির্বাপণ মহড়া' বা ফায়ার মক ড্রিল (Fire Mock Drill) করানো।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "ecea873c-9e45-497b-a5d4-f2fe7fc8043a",
+                      "question_id": "a6f07967-6053-4441-ad69-77088813a0eb",
+                      "option_text": "পর্যাপ্ত সংখ্যক সচল ফায়ার এক্সটিঙ্গুইশার বা অগ্নি নির্বাপক সিলিন্ডার রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "28e91870-b46d-4e14-a415-cc6366ef77cc",
+                      "question_id": "a6f07967-6053-4441-ad69-77088813a0eb",
+                      "option_text": "ফায়ার এক্সিট সিঁড়ির চাতালে বা ধাপে সুতা বা কাপড়ের কার্টন স্তূপ করে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "3079f017-c2c3-47db-9ea6-091e64ccde8b",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "792ce33c-b64a-40f8-b593-21c09b7daf62",
+                  "learning_point_id": "3079f017-c2c3-47db-9ea6-091e64ccde8b",
+                  "question_text": "ফারহানার আইনি ও সেফটি তাগিদ অনুযায়ী, ফায়ার এক্সিট দরজার সামনের মালামাল কেন তাৎক্ষণিকভাবে সরানো উচিত?",
+                  "question_type": "storytelling",
+                  "explanation": "ফায়ার সেফটি বিধির প্রধান লক্ষ্য হলো জরুরি পরিস্থিতিতে সেকেন্ডের মধ্যে যেন কারখানার শেষ শ্রমিকটিও সম্পূর্ণ বাধামুক্তভাবে ভবনের বাইরে নিরাপদ অ্যাসেম্বলি পয়েন্টে পৌঁছাতে পারেন।",
+                  "narrative": "💬 দৃশ্য ১:\nতারেক: আমাদের ২য় তলার ফায়ার এক্সিট দরজার সামনে কিছু কাপড়ের বেল বা কার্টন রাখা হয়েছে, তবে সাইড দিয়ে মানুষ যেতে পারে।\nফারহানা: তারেক ভাই, এটি মারাত্মক আইনি অপরাধ! ফায়ার এক্সিট প্যাসেজ বা সিঁড়ির ওপরে এক ইঞ্চির কোনো মালামালও রাখা যাবে না। আগুন লাগলে এই কার্টনে হোঁচট খেয়ে শ্রমিকরা মারা যেতে পারেন। অবিলম্বে পথটি সম্পূর্ণ ক্লিয়ার করুন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6263b645-27f0-4018-bd78-c9019ba34703",
+                      "question_id": "792ce33c-b64a-40f8-b593-21c09b7daf62",
+                      "option_text": "জরুরি মুহূর্তে শ্রমিকদের দ্রুত ও বাধাহীন পালানোর পথ (Clear Exit Path) নিশ্চিত করতে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "4722a321-545c-4712-840b-01ef6c8e05ff",
+                      "question_id": "792ce33c-b64a-40f8-b593-21c09b7daf62",
+                      "option_text": "মালামালগুলো দেখতে নোংরা লাগছে তাই",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "6774ff2c-87ea-4af7-a3ea-4483db1355bb",
+                      "question_id": "792ce33c-b64a-40f8-b593-21c09b7daf62",
+                      "option_text": "কারখানার ওভারটাইম হিসাব সহজ করার জন্য",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "0b178e6a-def8-404c-9991-c893a4edb8a6",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "607289a2-4777-483b-ae3b-e11db1762937",
+                  "learning_point_id": "0b178e6a-def8-404c-9991-c893a4edb8a6",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি নিয়মের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "মক ড্রিল ৬ মাসে একবার, এক্সটিঙ্গুইশার প্রতি বছর রিফিল বা প্রেসার চেক এবং ফায়ার বাকেট সবসময় বালু-পানিতে প্রস্তুত রাখতে হয়।",
+                  "narrative": "💡 হিন্ট: ফায়ার সেফটি উপাদান এবং তাদের আইনি কমপ্লায়েন্স ডেডলাইনের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "ফায়ার মক ড্রিল (মহড়া)",
+                        "right": "প্রতি ৬ মাসে অন্তত একবার করা বাধ্যতামূলক"
+                      },
+                      {
+                        "left": "ফায়ার এক্সটিঙ্গুইশার",
+                        "right": "প্রতি বছর গ্যাস রিফিল ও প্রেশার চেক"
+                      },
+                      {
+                        "left": "ফায়ার বাকেট বা বালতি",
+                        "right": "লাল রঙের গোল বৃত্তে বালু ও পানি ভর্তি"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "d6dec8df-8be2-4486-b851-bd539588374d",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "913da501-b742-430a-a098-ecf54d3d46c7",
+                  "learning_point_id": "d6dec8df-8be2-4486-b851-bd539588374d",
+                  "question_text": "প্রতিষ্ঠানের মোট শ্রমিকের একটি অংশকে কি ফায়ার ফাইটিং বা আগুন নেভানোর বিষয়ে সার্টিফাইড প্রশিক্ষণ দেওয়ানো আইনি বাধ্যবাধকতা?",
+                  "question_type": "boolean",
+                  "explanation": "ফায়ার সেফটি রুলস অনুযায়ী, প্রতিষ্ঠানের নিজস্ব ফায়ার ফাইটিং টিম, রেসকিউ টিম এবং ফার্স্ট এইড টিম থাকা এবং তাদের নিয়মিত প্রশিক্ষণ সার্টিফাইড রাখা বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: কারখানায় যদি ৫০ জনের বেশি শ্রমিক কাজ করেন, তবে তাদের মধ্যে একটি নির্দিষ্ট অংশকে ফায়ার সার্ভিসের মাধ্যমে অগ্নি নির্বাপণের বিশেষ প্রশিক্ষণ (Fire Fighter Training) দেওয়ানো মালিকের দায়িত্ব।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "4299e48c-5eeb-41b3-98b9-12b8040b9ce9",
+                      "question_id": "913da501-b742-430a-a098-ecf54d3d46c7",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "ded923af-23b7-4131-9394-25b5a3f0a697",
+                      "question_id": "913da501-b742-430a-a098-ecf54d3d46c7",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "e90166b8-8224-4117-ad3f-97cd5e4f2c9f",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "ce60bc2f-880d-4f62-b9d7-cc336dd46352",
+                  "learning_point_id": "e90166b8-8224-4117-ad3f-97cd5e4f2c9f",
+                  "question_text": "ফয়ার সেফটি ও অগ্নি নির্বাপণ বিধি (ধারা ৬২) অমান্য করলে কারখানার বিরুদ্ধে কী আইনি ব্যবস্থা নেওয়া হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "ফায়ার সেফটি অবহেলা করা দেশের প্রচলিত আইন ও আন্তর্জাতিক বায়ার কমপ্লায়েন্সের দৃষ্টিতে একটি সর্বোচ্চ অপরাধ হিসেবে গণ্য হয়।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানায় ফায়ার লাইসেন্স না থাকে বা ফায়ার এক্সিট লক রাখার কারণে অগ্নিকাণ্ডে কোনো শ্রমিকের মৃত্যু হয়, তবে মালিকের লাইসেন্স বাতিলসহ অনাপত্তিমূলক কঠোর ফৌজদারি মামলা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "3d0c9825-9c56-4169-8b4e-694fdd6532a3",
+                      "question_id": "ce60bc2f-880d-4f62-b9d7-cc336dd46352",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি ফৌজদারি মামলা, ভারী জরিমানা এবং ফ্যাক্টরি লাইসেন্স বাতিল",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "01bb0d49-d57e-49ee-a746-23f99d90b701",
+                      "question_id": "ce60bc2f-880d-4f62-b9d7-cc336dd46352",
+                      "option_text": "কারখানার কাজের শিফটের সময় বাড়িয়ে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "43a07796-47fe-482a-9fa2-be81edeef0ab",
+                      "question_id": "ce60bc2f-880d-4f62-b9d7-cc336dd46352",
+                      "option_text": "কোনো ব্যবস্থা নেওয়া যাবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            },
+            {
+              "id": "ba76687b-6e2b-4f00-8d02-bad43214fa63",
+              "chapter_id": "93951652-6fc9-476d-81a5-4d62985d91ed",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:14:59.997Z",
+              "mcq_questions": [
+                {
+                  "id": "3f3eb740-a1c1-4d47-8439-86584987cc03",
+                  "learning_point_id": "ba76687b-6e2b-4f00-8d02-bad43214fa63",
+                  "question_text": "কারখানায় শতভাগ ফায়ার সেফটি কমপ্লায়েন্স বজায় রাখতে সেফটি কমিটির কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "চাবি দূরে রাখা বেআইনি ও চরম বিপজ্জনক; স্মোক ডিটেক্টর ও অ্যাসেম্বলি পয়েন্ট সচল রাখাই হলো আইনসম্মত সঠিক কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি অনুগত ও কমপ্লায়েন্ট কারখানায় ফায়ার অ্যালার্ম বা সাইরেন সিস্টেমটি প্রতি সপ্তাহে টেস্ট করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c088c1b0-afaf-48ef-9839-7bc8555d449c",
+                      "question_id": "3f3eb740-a1c1-4d47-8439-86584987cc03",
+                      "option_text": "কেন্দ্রীয় ফায়ার অ্যালার্ম ও ধোঁয়া সনাক্তকারী স্মোক ডিটেক্টর (Smoke Detector) সচল রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "11815403-0d2b-4cc2-b5c1-92f0574cdf60",
+                      "question_id": "3f3eb740-a1c1-4d47-8439-86584987cc03",
+                      "option_text": "কারখানার বাইরে একটি নির্দিষ্ট খালি জায়গায় 'নিরাপদ সমাবেশ স্থল' বা অ্যাসেম্বলি পয়েন্ট (Assembly Point) মার্ক করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    },
+                    {
+                      "id": "1c3b396e-5c34-4527-8d27-8d8e746bc630",
+                      "question_id": "3f3eb740-a1c1-4d47-8439-86584987cc03",
+                      "option_text": "ফায়ার এক্সিটের চাবি কেবল ফ্যাক্টরি থেকে ২ কিলোমিটার দূরের সিকিউরিটি অফিসে তালাবদ্ধ রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:14:59.997Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:14:59.997Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         }
       ]

@@ -18790,504 +18790,124 @@
       "created_at": "2026-02-18T13:52:46.34517+00:00",
       "chapters": [
         {
-          "id": "f2d024cc-4bdc-4663-a24d-a2e5efd3dccb",
+          "id": "77eb1573-a65c-418a-8430-37c96284bda1",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "ভবন ও যন্ত্রপাতির নিরাপত্তা",
+          "title": "যন্ত্রপাতির চারপাশের বেষ্টনী",
           "order_index": 1,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "4fd98737-9a20-411e-a69e-e655bcda2f68",
-              "chapter_id": "f2d024cc-4bdc-4663-a24d-a2e5efd3dccb",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ভবন ও যন্ত্রপাতির নিরাপত্তা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.797Z"
         },
         {
-          "id": "84495a19-a179-4891-90c8-6ad97a5e795f",
+          "id": "66ba4f3e-0a93-4304-b649-7ee7c5204882",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "কাজের পদ্ধতি",
+          "title": "চলন্ত যন্ত্রপাতির কাছাকাছি কাজ",
           "order_index": 2,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "4ee8719d-f24a-4a60-b08c-3c9001befebe",
-              "chapter_id": "84495a19-a179-4891-90c8-6ad97a5e795f",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কাজের পদ্ধতি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "d1b9f0cb-45d3-44a1-99d6-78da58db680c",
+          "id": "0baaaf67-15f5-4e9a-88d0-6f5521276cfc",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "অগ্নিকান্ড সম্পর্কে সতর্কতা অবলম্বন",
+          "title": "বিপজ্জনক যন্ত্রপাতিতে নতুন শ্রমিক",
           "order_index": 3,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "4e53b706-23c7-4ae6-827d-64764dc18a84",
-              "chapter_id": "d1b9f0cb-45d3-44a1-99d6-78da58db680c",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে অগ্নিকান্ড সম্পর্কে সতর্কতা অবলম্বন নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "e57774eb-53c5-4399-975f-3745bb6e4170",
+          "id": "49e773c1-f0b4-44f3-9b2b-c683c8815185",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "যন্ত্রপাতির ঘিরিয়া রাখা",
+          "title": "স্বয়ংক্রিয় মেশিনের নিরাপত্তা দূরত্ব",
           "order_index": 4,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "9429feda-3fb4-4eec-97df-58124ff8b627",
-              "chapter_id": "e57774eb-53c5-4399-975f-3745bb6e4170",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে যন্ত্রপাতির ঘিরিয়া রাখা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "6bf9034a-c223-4bc7-b191-9678fe976857",
+          "id": "0e825d88-7c17-41ed-bf9d-728627dbf852",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "চলমান যন্ত্রপাতির উপরে বা নিকটে কাজ",
+          "title": "নতুন যন্ত্রপাতির আইনি কভার",
           "order_index": 5,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "f7308565-e28c-447c-82fb-e4547f410bcb",
-              "chapter_id": "6bf9034a-c223-4bc7-b191-9678fe976857",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে চলমান যন্ত্রপাতির উপরে বা নিকটে কাজ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "3f41aa41-054e-4ba5-9716-2fb08d361e25",
+          "id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "স্ট্রাইকিং গিয়ার এবং শক্তি সরবরাহ বিচ্ছিন্ন করার পন্থা",
+          "title": "কটন ওপেনারের নারী শ্রমিক",
           "order_index": 6,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "ada52a0b-274c-4f37-98ff-bf6fde5664ed",
-              "chapter_id": "3f41aa41-054e-4ba5-9716-2fb08d361e25",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে স্ট্রাইকিং গিয়ার এবং শক্তি সরবরাহ বিচ্ছিন্ন করার পন্থা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "c3714070-004f-4970-a7eb-7b7968b206ff",
+          "id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "স্বয়ংক্রিয় যন্ত্রপাতি",
+          "title": "ক্রেন ও উত্তোলক যন্ত্রপাতি",
           "order_index": 7,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "db0b13ba-07c2-4883-a1c5-4946d2db3917",
-              "chapter_id": "c3714070-004f-4970-a7eb-7b7968b206ff",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে স্বয়ংক্রিয় যন্ত্রপাতি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "783f6cd6-483d-4044-968d-f6db11fae68b",
+          "id": "6a435070-2227-4408-a5b1-6dfa9d640760",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "নতুন যন্ত্রপাতি আবৃত করা",
+          "title": "ঘূর্ণায়মান যন্ত্রপাতির সর্বোচ্চ গতি",
           "order_index": 8,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "0a50bee6-2099-4810-8c99-ad6aa2159c39",
-              "chapter_id": "783f6cd6-483d-4044-968d-f6db11fae68b",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে নতুন যন্ত্রপাতি আবৃত করা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "b83a9db9-605e-436d-a309-19d55e115e93",
+          "id": "62329e24-4725-48d9-b156-c3eb555d8986",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "ক্রেন এবং অন্যান্য উত্তোলন যন্ত্রপাতি",
+          "title": "চাপযুক্ত প্ল্যান্টের নিরাপত্তা অডিট",
           "order_index": 9,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "f352f3b9-ac4e-4762-951d-4932560f1267",
-              "chapter_id": "b83a9db9-605e-436d-a309-19d55e115e93",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ক্রেন এবং অন্যান্য উত্তোলন যন্ত্রপাতি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "d3f17491-3eb3-47df-aa66-63a4178c3e72",
+          "id": "6df14109-4779-41b9-ab69-327c07efecd7",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "হয়েস্ট এবং লিফ্ট",
+          "title": "মেঝের গর্ত ও সিঁড়ি",
           "order_index": 10,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "bd1155b8-dbbc-4af4-aa65-9ebfff55a60d",
-              "chapter_id": "d3f17491-3eb3-47df-aa66-63a4178c3e72",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে হয়েস্ট এবং লিফ্ট নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "c04f03b6-2992-4c3c-bc1f-d7e691e6cf87",
+          "id": "65b38bc6-98c4-4b97-9209-34ab7a5865a5",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "ঘূর্ণায়মান যন্ত্রপাতি",
+          "title": "অতিরিক্ত ওজন বহনের সীমা",
           "order_index": 11,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "3459d22f-d9dc-4139-9bfb-12b9a8094317",
-              "chapter_id": "c04f03b6-2992-4c3c-bc1f-d7e691e6cf87",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ঘূর্ণায়মান যন্ত্রপাতি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "47cd0052-e381-4a6a-928b-84a245eaced9",
+          "id": "521ab352-cc36-41f1-9c36-b7299974a5df",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "প্রেসার প্ল্যান্ট",
+          "title": "চোখের সুরক্ষায় বিশেষ গিয়ার",
           "order_index": 12,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "9608e9f2-d40b-458a-8766-c8c972e41ca3",
-              "chapter_id": "47cd0052-e381-4a6a-928b-84a245eaced9",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে প্রেসার প্ল্যান্ট নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "c6fba8cf-6a42-4515-ad49-350b0285723d",
+          "id": "89e2f77b-1a86-4695-994b-4191b842ea26",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "মেঝে, সিঁড়ি এবং যাতায়াত পথ",
+          "title": "ক্ষতিকারক ও বিষাক্ত গ্যাস",
           "order_index": 13,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "235bc943-aa38-40ca-b117-d8ee4b796535",
-              "chapter_id": "c6fba8cf-6a42-4515-ad49-350b0285723d",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে মেঝে, সিঁড়ি এবং যাতায়াত পথ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "d8bcb6bb-a927-4db2-a9e3-8d168819bddd",
+          "id": "9a3e8104-ce8d-41ca-a53f-41230b8b433b",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "পিট, সাম্প, সুড়ঙ্গ মুখ ইত্যাদি",
+          "title": "ভবন ও কাঠামোর নিরাপত্তা",
           "order_index": 14,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "f04deb5b-848a-4460-8415-97b883f8e556",
-              "chapter_id": "d8bcb6bb-a927-4db2-a9e3-8d168819bddd",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে পিট, সাম্প, সুড়ঙ্গ মুখ ইত্যাদি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
-          "id": "26c6c7f1-701f-4b2c-bfa1-5e38f3c050ed",
+          "id": "93951652-6fc9-476d-81a5-4d62985d91ed",
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "অতিরিক্ত ওজন",
+          "title": "অগ্নি নির্বাপণ ও জরুরি পথ",
           "order_index": 15,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "3671ac87-80ff-4444-81fe-2fd8bfff0a0e",
-              "chapter_id": "26c6c7f1-701f-4b2c-bfa1-5e38f3c050ed",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে অতিরিক্ত ওজন নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "836ac2cd-d5c7-4012-9ef6-29f372fa47e9",
-          "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "চোখের নিরাপত্তা",
-          "order_index": 16,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "5e0a4baf-9a41-43ee-80e5-e526b8150ac0",
-              "chapter_id": "836ac2cd-d5c7-4012-9ef6-29f372fa47e9",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে চোখের নিরাপত্তা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "6030ed53-1ecd-4c6f-ae80-515b55a88690",
-          "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "ত্রুটিপূর্ণ যন্ত্রাংশ নির্ণয় অথবা উহার স্থায়িত্ব পরীক্ষার ক্ষমতা",
-          "order_index": 17,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "d76665ac-ab67-4d14-a324-f9ba026dfedf",
-              "chapter_id": "6030ed53-1ecd-4c6f-ae80-515b55a88690",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ত্রুটিপূর্ণ যন্ত্রাংশ নির্ণয় অথবা উহার স্থায়িত্ব পরীক্ষার ক্ষমতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "1f30d438-d2fa-468c-9ba9-992cc7210181",
-          "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "বিপজ্জনক ধোঁয়ার বিরুদ্ধে সতর্কতামূলক ব্যবস্থা",
-          "order_index": 18,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "443f953c-d243-446f-a031-72a6f852480a",
-              "chapter_id": "1f30d438-d2fa-468c-9ba9-992cc7210181",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে বিপজ্জনক ধোঁয়ার বিরুদ্ধে সতর্কতামূলক ব্যবস্থা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "527a964c-2cb1-49c8-bc5c-e5051b2ed45a",
-          "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "বিষ্ফোরক বা দাহ্য গ্যাস, ধুলা ইত্যাদি",
-          "order_index": 19,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "1c0fbe27-8f35-4e34-a772-b6e9502a27bb",
-              "chapter_id": "527a964c-2cb1-49c8-bc5c-e5051b2ed45a",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে বিষ্ফোরক বা দাহ্য গ্যাস, ধুলা ইত্যাদি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "c503f428-53e3-4227-943b-62a6ccd8a522",
-          "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
-          "title": "ব্যক্তিগত সুরক্ষা যন্ত্রপাতি ব্যবহারের বাধ্যবাধকতা",
-          "order_index": 20,
-          "created_at": "2026-02-18T13:52:46.34517+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "cc1439fb-7f97-4a97-b75a-617f0f1d9b25",
-              "chapter_id": "c503f428-53e3-4227-943b-62a6ccd8a522",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ব্যক্তিগত সুরক্ষা যন্ত্রপাতি ব্যবহারের বাধ্যবাধকতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:52:46.34517+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": [],
+          "created_at": "2026-06-20T07:56:25.799Z"
         }
       ]
     },

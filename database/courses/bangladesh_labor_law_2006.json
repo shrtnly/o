@@ -6473,284 +6473,261 @@
     {
       "id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
       "course_id": "44e1ef24-5092-419a-a734-daa9340e2056",
-      "title": "কিশোর শ্রমিক নিয়োগের নিয়মাবলী",
+      "title": "মজুরী ও আর্থিক পাওনা",
       "order_index": 3,
       "created_at": "2026-02-18T13:51:27.36776+00:00",
       "chapters": [
         {
-          "id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
+          "id": "bdbdf495-b957-46ff-938f-3889db17a177",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "শিশু ও কিশোর নিয়োগে বাধা-নিষেধ",
+          "title": "মজুরীর আইনি সংজ্ঞা",
           "order_index": 1,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.978Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "6aa65aba-1bdf-402d-af56-2ff41faffee5",
-              "chapter_id": "0855767d-dc8a-4f96-834d-84f7ebed0568",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে শিশু ও কিশোর নিয়োগে বাধা-নিষেধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "869ff5a0-65a2-4c19-83a9-593226fe3904",
+          "id": "a0903e16-970e-4bd5-8b60-1ae1a8979773",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "শিশু সংক্রান্ত কতিপয় চুক্তির ব্যাপারে বাধা-নিষেধ",
+          "title": "মজুরী পরিশোধের সময়সীমা",
           "order_index": 2,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "2dfdb99c-c004-4c86-8545-e762ee366217",
-              "chapter_id": "869ff5a0-65a2-4c19-83a9-593226fe3904",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে শিশু সংক্রান্ত কতিপয় চুক্তির ব্যাপারে বাধা-নিষেধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "d413f6b1-4ae2-478d-a132-36ceaa8e9b40",
+          "id": "047ed232-87a4-4d11-9159-22f811551e2d",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "বয়স সম্পর্কে বিরোধ",
+          "title": "অবৈধ মজুরী কর্তন",
           "order_index": 3,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "04c40292-4ae9-4a50-8f99-5db209cc103f",
-              "chapter_id": "d413f6b1-4ae2-478d-a132-36ceaa8e9b40",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে বয়স সম্পর্কে বিরোধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "87c5f5d2-9d5b-4d4b-b59f-b78ae19728b7",
+          "id": "ae90e65f-eb65-4124-925a-cbb35e465295",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "সক্ষমতা প্রত্যয়নপত্র",
+          "title": "নূন্যতম মজুরী বোর্ড",
           "order_index": 4,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "08713a83-ec0b-4fe3-b394-8b7516a8ea23",
-              "chapter_id": "87c5f5d2-9d5b-4d4b-b59f-b78ae19728b7",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে সক্ষমতা প্রত্যয়নপত্র নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "9802c19a-2502-4a17-9a53-1796ec3b875e",
+          "id": "4c03abb0-f4e3-4918-ad09-01dea8883582",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "ডাক্তারী পরীক্ষার জন্য আদেশ প্রদানের ক্ষমতা",
+          "title": "ওভারটাইম মজুরীর হিসাব",
           "order_index": 5,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "d8b68888-c304-47e9-9591-48320b800470",
-              "chapter_id": "9802c19a-2502-4a17-9a53-1796ec3b875e",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ডাক্তারী পরীক্ষার জন্য আদেশ প্রদানের ক্ষমতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "7f79f917-1f13-4cef-937a-1c4a85990fda",
+          "id": "56ffd803-b210-4dca-bc29-373d6f919ef8",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "ঝুঁকিপূর্ণ কাজের তালিকা ঘোষণা ও কতিপয় কাজে কিশোর নিয়োগে বাধা",
+          "title": "উৎসব ভাতা ও বোনাস",
           "order_index": 6,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "e6208ad4-d5a4-4fee-bf3c-6b9d376f6c7a",
-              "chapter_id": "7f79f917-1f13-4cef-937a-1c4a85990fda",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ঝুঁকিপূর্ণ কাজের তালিকা ঘোষণা ও কতিপয় কাজে কিশোর নিয়োগে বাধা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "1ed69b2a-f655-4729-aaf5-5bc985fe530c",
+          "id": "d3faf820-6f96-4340-a427-a207a4093be1",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "বিপজ্জনক যন্ত্রপাতির কাজে [অথবা ঝুঁকিপূর্ণ কাজে] কিশোর নিয়োগ",
+          "title": "লে-অফকালীন ক্ষতিপূরণ",
           "order_index": 7,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "ddc3f09b-a7e7-4b4d-9091-ad29b21ff5cf",
-              "chapter_id": "1ed69b2a-f655-4729-aaf5-5bc985fe530c",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে বিপজ্জনক যন্ত্রপাতির কাজে [অথবা ঝুঁকিপূর্ণ কাজে] কিশোর নিয়োগ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "49a00cda-e360-40c6-83a1-eaaa45f22bc5",
+          "id": "fb740c0a-0214-472f-9496-f7f51f766182",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "কিশোরের কর্ম-ঘন্টা",
+          "title": "ছাঁটাইকালীন আর্থিক পাওনা",
           "order_index": 8,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "fd784c9c-e15d-4831-a5a4-ca2197e738cb",
-              "chapter_id": "49a00cda-e360-40c6-83a1-eaaa45f22bc5",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কিশোরের কর্ম-ঘন্টা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "b924d4e1-5a6e-49c0-a7b3-06681134fffe",
+          "id": "0a28b74a-9cb4-4738-9112-978f2b740aab",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "ভূগর্ভে ও পানির নীচে কিশোরের নিয়োগ নিষেধ",
+          "title": "ডিসচার্জকালীন আর্থিক সুবিধা",
           "order_index": 9,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "6349b887-a88c-4755-ace0-86b85ca8afdb",
-              "chapter_id": "b924d4e1-5a6e-49c0-a7b3-06681134fffe",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ভূগর্ভে ও পানির নীচে কিশোরের নিয়োগ নিষেধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "dd0026f4-123a-4cb7-b724-28aa3492b233",
+          "id": "57913a7b-af3e-4a28-bf59-22d98c72f98f",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "কিশোরের কাজের সময়ের নোটিশ",
+          "title": "সাধারণ অবসানের পাওনা",
           "order_index": 10,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "0f7fa40c-7082-4281-8545-27d18e81926b",
-              "chapter_id": "dd0026f4-123a-4cb7-b724-28aa3492b233",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কিশোরের কাজের সময়ের নোটিশ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
         },
         {
-          "id": "c013d275-1b3e-4550-900e-6ee5516de899",
+          "id": "5a35bb85-eeb5-406a-b039-807b5fe86fc5",
           "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
-          "title": "কতিপয় ক্ষেত্রে প্রতিবন্ধী শ্রমিক নিয়োগে বিধি-নিষেধ",
+          "title": "বাধ্যতামূলক অবসরের গ্র্যাচুইটি",
           "order_index": 11,
-          "created_at": "2026-02-18T13:51:27.36776+00:00",
+          "created_at": "2026-06-20T05:35:04.992Z",
           "is_trophy": false,
           "type": "lesson",
           "is_claimed": false,
           "reward_hearts": 5,
           "reward_gems": 20,
           "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "e801cf64-200a-43a1-a309-578a9f34c3f0",
-              "chapter_id": "c013d275-1b3e-4550-900e-6ee5516de899",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কতিপয় ক্ষেত্রে প্রতিবন্ধী শ্রমিক নিয়োগে বিধি-নিষেধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:51:27.36776+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "learning_points": []
+        },
+        {
+          "id": "b98a1509-eb51-40d7-9d9c-8e75c2d80eac",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "দুর্ঘটনাজনিত ক্ষতিপূরণের নিয়ম",
+          "order_index": 12,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
+        },
+        {
+          "id": "19d7cd96-7236-4953-8323-eb628debbf51",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "কর্মকালীন মৃত্যুতে ক্ষতিপূরণ",
+          "order_index": 13,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
+        },
+        {
+          "id": "07636c8a-1910-419f-8008-b37d2fe166c1",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "শ্রম আদালতের এখতিয়ার",
+          "order_index": 14,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
+        },
+        {
+          "id": "5f3e6023-657a-4b48-9696-6f698dd51a1e",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "প্রভিডেন্ট ফান্ডের নিয়মাবলী",
+          "order_index": 15,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
+        },
+        {
+          "id": "6f561086-4135-4676-adfc-af823e7e20ab",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "মুনাফায় শ্রমিকের অংশীদারিত্ব",
+          "order_index": 16,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
+        },
+        {
+          "id": "db91c910-bf8f-4cd3-bdc3-59bf460af225",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "প্রসূতি কল্যাণ সুবিধা",
+          "order_index": 17,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
+        },
+        {
+          "id": "0120a9f8-692b-4f1d-af0f-749722c51008",
+          "unit_id": "227f9fa1-9f7d-4666-8fe3-e235f3524cca",
+          "title": "বকেয়া পাওনা আদায়",
+          "order_index": 18,
+          "created_at": "2026-06-20T05:35:04.992Z",
+          "is_trophy": false,
+          "type": "lesson",
+          "is_claimed": false,
+          "reward_hearts": 5,
+          "reward_gems": 20,
+          "estimated_time": "10 মিনিট",
+          "learning_points": []
         }
       ]
     },

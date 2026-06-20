@@ -2653,216 +2653,432 @@
           "created_at": "2026-06-19T21:07:01.304Z",
           "learning_points": [
             {
-              "id": "36fde736-f21e-463d-95cd-d6981cae423a",
+              "id": "22cc7bf6-bb72-42ae-a9fb-2ec428a3a3a0",
               "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "শ্রমিকের প্রধান আইনি শ্রেণীবিভাগ",
-              "content": "ধারা ৪ অনুযায়ী শ্রমিকের প্রধান আইনি শ্রেণীবিভাগ।",
+              "title": "স্থায়ী পদমর্যাদা অর্জন",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
               "order_index": 1,
-              "created_at": "2026-06-19T21:12:30.858Z",
+              "created_at": "2026-06-20T04:51:56.422Z",
               "type": "standard",
               "mcq_questions": [
                 {
-                  "id": "1e258dbe-8ba7-4d47-b243-19f76222a38b",
-                  "learning_point_id": "36fde736-f21e-463d-95cd-d6981cae423a",
-                  "question_text": "শ্রম আইন অনুযায়ী, নিচের কোন শ্রেণিটি শ্রমিকের একটি আইনি শ্রেণিবিন্যাস নয়?",
-                  "explanation": "আইন অনুযায়ী শ্রমিক প্রধানত স্থায়ী, অস্থায়ী, শিক্ষানবিশ, বদলি বা শিক্ষাধীন হিসেবে গণ্য।",
+                  "id": "9b71a8d6-253a-4668-8b99-33f2245d6486",
+                  "learning_point_id": "22cc7bf6-bb72-42ae-a9fb-2ec428a3a3a0",
+                  "question_text": "শ্রম আইন অনুযায়ী, শিক্ষানবিশকাল সফলভাবে শেষ করার পর একজন শ্রমিক কোন পদমর্যাদায় উন্নীত হন?",
+                  "explanation": "শিক্ষানবিশকাল সফলভাবে সম্পন্ন করার পর একজন শ্রমিক স্থায়ী শ্রমিক হিসেবে নিযুক্ত হন।",
                   "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ৪ অনুযায়ী শ্রমিকের প্রধান আইনি শ্রেণীবিভাগ।",
+                  "created_at": "2026-06-20T04:51:56.422Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কর্মজীবনে একজন শ্রমিকের স্থায়ী পদমর্যাদা অর্জনের পূর্বশর্ত হলো নির্দিষ্ট সময়কাল পর্যন্ত তার কর্মদক্ষতা প্রমাণ করা।",
                   "question_type": "mcq",
                   "metadata": {},
                   "mcq_options": [
                     {
-                      "id": "14ecc835-c8f6-423b-90fb-57784feef9ee",
-                      "question_id": "1e258dbe-8ba7-4d47-b243-19f76222a38b",
+                      "id": "4b0bf652-431e-41f5-946e-79d4985125d5",
+                      "question_id": "9b71a8d6-253a-4668-8b99-33f2245d6486",
                       "option_text": "স্থায়ী শ্রমিক",
-                      "is_correct": false,
+                      "is_correct": true,
                       "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.854Z"
+                      "created_at": "2026-06-20T04:51:56.417Z"
                     },
                     {
-                      "id": "b35717be-089e-4e81-9784-210152e8c1c7",
-                      "question_id": "1e258dbe-8ba7-4d47-b243-19f76222a38b",
-                      "option_text": "শিক্ষানবিশ",
+                      "id": "2d530bfa-b3a1-4219-97df-ecc5cd69f3f8",
+                      "question_id": "9b71a8d6-253a-4668-8b99-33f2245d6486",
+                      "option_text": "অস্থায়ী শ্রমিক",
                       "is_correct": false,
                       "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.422Z"
                     },
                     {
-                      "id": "4fde5d5a-8573-403a-b0ce-ae08b56eeba8",
-                      "question_id": "1e258dbe-8ba7-4d47-b243-19f76222a38b",
-                      "option_text": "পরামর্শক",
-                      "is_correct": true,
+                      "id": "f72a456c-0289-446c-ac82-a50a90db2102",
+                      "question_id": "9b71a8d6-253a-4668-8b99-33f2245d6486",
+                      "option_text": "বদলি শ্রমিক",
+                      "is_correct": false,
                       "order_index": 3,
-                      "created_at": "2026-06-19T21:12:30.858Z"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "f788e65c-2897-4d4e-b94b-b17dee63cbbb",
-              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "বদলি শ্রমিক",
-              "content": "অন্য শ্রমিকের অনুপস্থিতিতে সাময়িকভাবে নিযুক্ত শ্রমিকই বদলি।",
-              "order_index": 2,
-              "created_at": "2026-06-19T21:12:30.858Z",
-              "type": "standard",
-              "mcq_questions": [
-                {
-                  "id": "be9abe01-c92b-4252-8cfb-7543789bfe37",
-                  "learning_point_id": "f788e65c-2897-4d4e-b94b-b17dee63cbbb",
-                  "question_text": "কোনো স্থায়ী শ্রমিকের অনুপস্থিতিতে সাময়িকভাবে নিযুক্ত ব্যক্তি কি 'বদলি' শ্রমিক হিসেবে গণ্য?",
-                  "explanation": "স্থায়ী শ্রমিকের শূন্যস্থানে সাময়িক দায়িত্ব পালনকারীই বদলি।",
-                  "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অন্য শ্রমিকের অনুপস্থিতিতে সাময়িকভাবে নিযুক্ত শ্রমিকই বদলি।",
-                  "question_type": "boolean",
-                  "metadata": {},
-                  "mcq_options": [
-                    {
-                      "id": "cef5773f-fc03-4ee0-b2a0-65d4ee5dd3ab",
-                      "question_id": "be9abe01-c92b-4252-8cfb-7543789bfe37",
-                      "option_text": "হ্যাঁ",
-                      "is_correct": true,
-                      "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.422Z"
                     },
                     {
-                      "id": "66deb0e5-2ecc-438a-850c-003d217d4e36",
-                      "question_id": "be9abe01-c92b-4252-8cfb-7543789bfe37",
-                      "option_text": "না",
+                      "id": "e4d865fc-7a81-4fb0-8f35-700d72e753e6",
+                      "question_id": "9b71a8d6-253a-4668-8b99-33f2245d6486",
+                      "option_text": "শিক্ষাধীন শ্রমিক",
                       "is_correct": false,
-                      "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:51:56.422Z"
                     }
                   ]
                 }
               ]
             },
             {
-              "id": "89dc7c41-674d-483f-9616-d93a1152ac28",
+              "id": "ea8ae5f2-9a7f-4097-b905-d76048a4018a",
               "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
               "title": "স্থায়ী শ্রমিকের বৈশিষ্ট্য",
-              "content": "স্থায়ী শ্রমিকের বৈশিষ্ট্যসমূহ ধারা ৪-এ বর্ণিত।",
-              "order_index": 3,
-              "created_at": "2026-06-19T21:12:30.858Z",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 2,
+              "created_at": "2026-06-20T04:51:56.423Z",
               "type": "standard",
               "mcq_questions": [
                 {
-                  "id": "2ae75d67-82df-4b0a-92d8-7ea5d7602a0b",
-                  "learning_point_id": "89dc7c41-674d-483f-9616-d93a1152ac28",
+                  "id": "e834354c-954c-4286-8a43-b6a53690f636",
+                  "learning_point_id": "ea8ae5f2-9a7f-4097-b905-d76048a4018a",
                   "question_text": "নিচের কোন বৈশিষ্ট্যগুলো একজন 'স্থায়ী' শ্রমিকের ক্ষেত্রে প্রযোজ্য? (টিক দিন)",
-                  "explanation": "শিক্ষানবিশকাল শেষে স্থায়ী পদমর্যাদা প্রাপ্ত ব্যক্তিই স্থায়ী শ্রমিক।",
+                  "explanation": "স্থায়ী শ্রমিকরা দীর্ঘমেয়াদী চাকুরীর শর্তে নিয়োজিত হন এবং শিক্ষানবিশকাল সফলভাবে সম্পন্ন করেন।",
                   "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: স্থায়ী শ্রমিকের বৈশিষ্ট্যসমূহ ধারা ৪-এ বর্ণিত।",
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইনের ধারা ৪ অনুযায়ী স্থায়িত্বের সংজ্ঞায় এমন কিছু শর্তের কথা বলা হয়েছে যা দীর্ঘমেয়াদী কর্মসংস্থানকে নিশ্চিত করে।",
                   "question_type": "checkmark",
                   "metadata": {},
                   "mcq_options": [
                     {
-                      "id": "6178bfac-6592-484e-a909-7e44efa39278",
-                      "question_id": "2ae75d67-82df-4b0a-92d8-7ea5d7602a0b",
+                      "id": "ec180b03-b8b7-4c5e-8e2a-56319c6f3faf",
+                      "question_id": "e834354c-954c-4286-8a43-b6a53690f636",
                       "option_text": "দীর্ঘমেয়াদী চাকুরীর শর্তে নিয়োজিত।",
                       "is_correct": true,
                       "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.423Z"
                     },
                     {
-                      "id": "8222b8d1-431b-4943-82a5-6305481a1203",
-                      "question_id": "2ae75d67-82df-4b0a-92d8-7ea5d7602a0b",
+                      "id": "ba874483-59dc-435e-a055-739d94512288",
+                      "question_id": "e834354c-954c-4286-8a43-b6a53690f636",
                       "option_text": "শিক্ষানবিশকাল সফলভাবে সম্পন্ন করেছেন।",
                       "is_correct": true,
                       "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.423Z"
                     },
                     {
-                      "id": "378f8ca8-9fa1-41d1-a282-30c40dd41422",
-                      "question_id": "2ae75d67-82df-4b0a-92d8-7ea5d7602a0b",
+                      "id": "03c5ec8c-e676-442a-975f-6f106290abf0",
+                      "question_id": "e834354c-954c-4286-8a43-b6a53690f636",
                       "option_text": "কেবল নির্দিষ্ট মৌসুমি কাজের জন্য নিযুক্ত।",
                       "is_correct": false,
                       "order_index": 3,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.423Z"
                     }
                   ]
                 }
               ]
             },
             {
-              "id": "cff21cbf-605a-4ecc-a5df-6ac378c908a8",
+              "id": "730669ae-a1e5-460e-9b26-df2e0a251bf8",
               "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "শিক্ষানবিশ পর্যায়",
-              "content": "কোনো প্রতিষ্ঠানে নতুন কাজে যোগ দিয়ে কাজ শেখার কালীন পর্যায়কে শিক্ষানবিশ বলে।",
-              "order_index": 4,
-              "created_at": "2026-06-19T21:12:30.858Z",
+              "title": "শিক্ষানবিশ শ্রমিক",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: ফ্যাক্টরিতে নতুন একজন কর্মী যোগ দিয়েছেন, তিনি মাত্র ৩ মাস ধরে কাজ শিখছেন। তাকে কী বলা হবে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: প্রতিষ্ঠানের নীতিমালা অনুযায়ী তাকে শিক্ষানবিশ বলা হয়, যতক্ষণ না তার মূল্যায়ন শেষ করে স্থায়ী করা হচ্ছে।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T04:51:56.423Z",
               "type": "storytelling",
               "mcq_questions": [
                 {
-                  "id": "55dca379-ffcf-4dca-a441-e2b214965b2c",
-                  "learning_point_id": "cff21cbf-605a-4ecc-a5df-6ac378c908a8",
-                  "question_text": "তানিয়ার কথা অনুযায়ী, কোনো প্রতিষ্ঠানে নতুন কাজে যোগ দিয়ে কাজ শেখার কালীন পর্যায়কে কী বলে?",
-                  "explanation": "কাজ শেখার প্রাথমিক সময়কালই হলো শিক্ষানবিশকাল।",
+                  "id": "bd5fa8aa-b553-4a6f-8ae9-08f18b5f0f7f",
+                  "learning_point_id": "730669ae-a1e5-460e-9b26-df2e0a251bf8",
+                  "question_text": "কোনো প্রতিষ্ঠানে নতুন কাজে যোগ দিয়ে কাজ শেখার প্রাথমিক সময়কালকে আইনি ভাষায় কী বলে?",
+                  "explanation": "নতুন কাজে যোগ দিয়ে কাজ শেখার প্রাথমিক সময়কালকে শিক্ষানবিশকাল বলা হয়।",
                   "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: তানিয়া, আমাদের ফ্যাক্টরিতে নতুন একজন কর্মী যোগ দিয়েছেন, তিনি মাত্র ৩ মাস ধরে কাজ শিখছেন। একে কী বলে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: আরিফ, তিনি এখনো শিক্ষানবিশ পর্যায়ে আছেন, যতক্ষণ না তাকে স্থায়ী করা হচ্ছে।\"}]",
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: ফ্যাক্টরিতে নতুন একজন কর্মী যোগ দিয়েছেন, তিনি মাত্র ৩ মাস ধরে কাজ শিখছেন। তাকে কী বলা হবে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: প্রতিষ্ঠানের নীতিমালা অনুযায়ী তাকে শিক্ষানবিশ বলা হয়, যতক্ষণ না তার মূল্যায়ন শেষ করে স্থায়ী করা হচ্ছে।\"}]",
                   "question_type": "mcq",
                   "metadata": {},
                   "mcq_options": [
                     {
-                      "id": "13c8c310-10f5-4340-b4cb-608aca534861",
-                      "question_id": "55dca379-ffcf-4dca-a441-e2b214965b2c",
-                      "option_text": "শিক্ষানবিশ",
+                      "id": "abe3ef2c-f61f-46cd-8fbd-1d962d519314",
+                      "question_id": "bd5fa8aa-b553-4a6f-8ae9-08f18b5f0f7f",
+                      "option_text": "শিক্ষানবিশকাল",
                       "is_correct": true,
                       "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.423Z"
                     },
                     {
-                      "id": "9e497c37-25fc-4e72-ae51-820e3e08e6c9",
-                      "question_id": "55dca379-ffcf-4dca-a441-e2b214965b2c",
-                      "option_text": "বদলি",
+                      "id": "252c0dd3-fd09-4205-a987-ba210e4927e5",
+                      "question_id": "bd5fa8aa-b553-4a6f-8ae9-08f18b5f0f7f",
+                      "option_text": "বদলি সময়কাল",
                       "is_correct": false,
                       "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.423Z"
                     },
                     {
-                      "id": "ef611187-0255-4471-88c8-2810db5b2e18",
-                      "question_id": "55dca379-ffcf-4dca-a441-e2b214965b2c",
-                      "option_text": "মৌসুমি",
+                      "id": "edbd1799-f05e-48b8-91a0-4eacebcd686b",
+                      "question_id": "bd5fa8aa-b553-4a6f-8ae9-08f18b5f0f7f",
+                      "option_text": "মৌসুমি সময়কাল",
                       "is_correct": false,
                       "order_index": 3,
-                      "created_at": "2026-06-19T21:12:30.858Z"
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "21358480-f517-4195-83ab-730d733e3798",
+                      "question_id": "bd5fa8aa-b553-4a6f-8ae9-08f18b5f0f7f",
+                      "option_text": "অস্থায়ী সময়কাল",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:51:56.423Z"
                     }
                   ]
                 }
               ]
             },
             {
-              "id": "69a8b222-fe75-4ea9-ad00-b5205f3da568",
+              "id": "25ad31d6-34fc-428c-9679-b9c8f8fdd42a",
               "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "শ্রমিকের প্রকারভেদ ও কাজ",
-              "content": "শ্রমিকের বিভিন্ন প্রকারভেদ ও তাদের কাজের ধরণ।",
-              "order_index": 5,
-              "created_at": "2026-06-19T21:12:30.858Z",
+              "title": "বদলি শ্রমিকের সংজ্ঞা",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 4,
+              "created_at": "2026-06-20T04:51:56.423Z",
               "type": "standard",
               "mcq_questions": [
                 {
-                  "id": "078c74f8-f57e-4cf1-92bb-7b32f6ef4207",
-                  "learning_point_id": "69a8b222-fe75-4ea9-ad00-b5205f3da568",
-                  "question_text": "বাম পাশের শ্রমিকের ধরনের সাথে ডান পাশের মূল বৈশিষ্ট্যের সঠিক জোড়া মেলাও।",
-                  "explanation": "মৌসুমে মৌসুমি, শিক্ষানবিশ বা শিক্ষাধীন প্রশিক্ষণার্থী এবং সাময়িক কাজে অস্থায়ী শ্রমিক।",
+                  "id": "658129ca-65e1-4bb7-a437-8432750e26d5",
+                  "learning_point_id": "25ad31d6-34fc-428c-9679-b9c8f8fdd42a",
+                  "question_text": "কোনো স্থায়ী শ্রমিকের অনুপস্থিতিতে সাময়িকভাবে নিযুক্ত ব্যক্তি কি 'বদলি' শ্রমিক হিসেবে গণ্য হবেন?",
+                  "explanation": "স্থায়ী বা নিয়মিত শ্রমিকের অনুপস্থিতিতে সাময়িকভাবে নিযুক্ত ব্যক্তিকে বদলি শ্রমিক বলা হয়।",
                   "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিকের বিভিন্ন প্রকারভেদ ও তাদের কাজের ধরণ।",
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কর্মক্ষেত্রে নিয়মিত উপস্থিত শ্রমিক ছুটিতে থাকলে তার কর্মঘণ্টা পূরণ করার জন্য বিকল্প জনবলের প্রয়োজন পড়ে, যা নিয়মিত শ্রমিক নয়।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f0582e35-ebb5-4073-bf42-a40ab11e9670",
+                      "question_id": "658129ca-65e1-4bb7-a437-8432750e26d5",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "07966e71-239e-4fec-9e4c-5284aad9b003",
+                      "question_id": "658129ca-65e1-4bb7-a437-8432750e26d5",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "2cd4e055-dff4-4484-8fe2-3c77e919cb08",
+              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
+              "title": "মৌসুমি শ্রমিকের সংজ্ঞা",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 5,
+              "created_at": "2026-06-20T04:51:56.423Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "dd066582-7fc8-497a-ac0b-869635e2c0c7",
+                  "learning_point_id": "2cd4e055-dff4-4484-8fe2-3c77e919cb08",
+                  "question_text": "যে শ্রমিক কারখানার নির্দিষ্ট ঋতু বা মৌসুমে কাজের জন্য নিযুক্ত হন, তাকে কী বলে?",
+                  "explanation": "নির্দিষ্ট ঋতু বা মৌসুমে কাজের জন্য নিযুক্ত শ্রমিককে মৌসুমি শ্রমিক বলে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শিল্প প্রতিষ্ঠানের ধরণ বা প্রকৃতির ওপর ভিত্তি করে কিছু শ্রমিককে বছরের একটি নির্দিষ্ট সময়ে কাজের জন্য নিয়োগ দেওয়া হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6411b576-01e5-467c-ad4f-7ad1007b557e",
+                      "question_id": "dd066582-7fc8-497a-ac0b-869635e2c0c7",
+                      "option_text": "মৌসুমি শ্রমিক",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "034a83c4-5a1f-4ea1-b284-e33265ce632e",
+                      "question_id": "dd066582-7fc8-497a-ac0b-869635e2c0c7",
+                      "option_text": "বদলি শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "a1fcc004-bb7c-4fdc-ad8f-587c9a8e40c5",
+                      "question_id": "dd066582-7fc8-497a-ac0b-869635e2c0c7",
+                      "option_text": "স্থায়ী শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "a64b5fea-03d4-45f2-a9f2-b4dcc0184f45",
+                      "question_id": "dd066582-7fc8-497a-ac0b-869635e2c0c7",
+                      "option_text": "শিক্ষাধীন শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "86baed80-3179-48e3-9528-5e4688da8efc",
+              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
+              "title": "অস্থায়ী নিয়োগের বৈধতা",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 6,
+              "created_at": "2026-06-20T04:51:56.423Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "18b5c80d-0ca9-43d8-bf25-fc1e289a80d8",
+                  "learning_point_id": "86baed80-3179-48e3-9528-5e4688da8efc",
+                  "question_text": "কোনো স্থায়ী পদ শূন্য না থাকলেও কি একজন শ্রমিককে 'অস্থায়ী' হিসেবে নিয়োগ দেওয়া আইনত সম্ভব?",
+                  "explanation": "সাময়িক বা অল্পমেয়াদী কাজ সম্পাদনের জন্য কোনো স্থায়ী পদ শূন্য না থাকলেও অস্থায়ী কর্মী নিয়োগ দেওয়া সম্ভব।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: প্রতিষ্ঠানের কর্মপরিকল্পনায় এমন কিছু কাজ থাকে যা স্থায়ী পদের অংশ নয়, কিন্তু প্রতিষ্ঠানের স্বাভাবিক কার্যক্রমে তা অপরিহার্য।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "eab241ae-e90c-4f58-b999-85a06ff7ec23",
+                      "question_id": "18b5c80d-0ca9-43d8-bf25-fc1e289a80d8",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "d61732f9-bc51-486e-88a0-9bbf021c009c",
+                      "question_id": "18b5c80d-0ca9-43d8-bf25-fc1e289a80d8",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "acfe46c8-7d2e-419a-8198-fb2d265b6eec",
+              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
+              "title": "বদলি শ্রমিক নিয়োগের পরিস্থিতি",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 7,
+              "created_at": "2026-06-20T04:51:56.423Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "fee8cd88-1cce-4ee6-b01f-16caa7719912",
+                  "learning_point_id": "acfe46c8-7d2e-419a-8198-fb2d265b6eec",
+                  "question_text": "কোন কোন পরিস্থিতিতে একজন 'বদলি' শ্রমিক নিয়োগ দেওয়া বৈধ? (টিক দিন)",
+                  "explanation": "স্থায়ী শ্রমিক ছুটিতে থাকলে বা তাদের পদ সাময়িকভাবে খালি থাকলে বদলি শ্রমিক নিয়োগ করা যায়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বদলি শ্রমিক নিয়োগের বিষয়টি মূলত উৎপাদন প্রক্রিয়ার ধারাবাহিকতা রক্ষা করার সাথে সম্পর্কিত।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "48986ff9-f641-4d9c-b98e-65d8e0015b00",
+                      "question_id": "fee8cd88-1cce-4ee6-b01f-16caa7719912",
+                      "option_text": "স্থায়ী শ্রমিক ছুটিতে থাকলে।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "23250298-d180-42c0-a09a-714e48179602",
+                      "question_id": "fee8cd88-1cce-4ee6-b01f-16caa7719912",
+                      "option_text": "স্থায়ী শ্রমিকের পদ সাময়িকভাবে খালি থাকলে।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "165121d0-79c4-42d5-b18c-97741cdaffd7",
+                      "question_id": "fee8cd88-1cce-4ee6-b01f-16caa7719912",
+                      "option_text": "নতুন পণ্য বাজারজাত করার সময়।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "0c1c4b91-1566-480f-b97e-adaf34599398",
+              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
+              "title": "শ্রমিকের আইনি শ্রেণিবিন্যাস",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 8,
+              "created_at": "2026-06-20T04:51:56.423Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "7878d610-7ced-4f2b-b50d-b7e2c8eddf94",
+                  "learning_point_id": "0c1c4b91-1566-480f-b97e-adaf34599398",
+                  "question_text": "নিচের কোন শ্রেণিটি শ্রমিকের একটি আইনি শ্রেণিবিন্যাস নয়?",
+                  "explanation": "পরামর্শক (Consultant) কোনো শ্রমিকের আইনি শ্রেণিবিন্যাস নয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন ২০০৬-এ শ্রমিকের মোট ৫টি শ্রেণি উল্লেখ করা হয়েছে, যার বাইরে কোনো ব্যক্তির নিয়োগ পদ্ধতি অন্য নিয়মে পরিচালিত হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "383957f2-3101-4295-9bda-36e43919a07e",
+                      "question_id": "7878d610-7ced-4f2b-b50d-b7e2c8eddf94",
+                      "option_text": "স্থায়ী শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "3d58a5a6-2483-4fb0-bde2-560de4bc0d4d",
+                      "question_id": "7878d610-7ced-4f2b-b50d-b7e2c8eddf94",
+                      "option_text": "শিক্ষানবিশ",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "266909c8-d8e1-41d4-89fa-84eb60fa4c6e",
+                      "question_id": "7878d610-7ced-4f2b-b50d-b7e2c8eddf94",
+                      "option_text": "পরামর্শক",
+                      "is_correct": true,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    },
+                    {
+                      "id": "7a20dc52-4b58-4009-b7c3-af593dfc1ecd",
+                      "question_id": "7878d610-7ced-4f2b-b50d-b7e2c8eddf94",
+                      "option_text": "বদলি শ্রমিক",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:51:56.423Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "12378c93-7c9a-42e9-9e81-8d20384dab5e",
+              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
+              "title": "শ্রেণী ও বৈশিষ্ট্যের মিলকরণ",
+              "content": "শ্রমিক শ্রেণীবিভাগ",
+              "order_index": 9,
+              "created_at": "2026-06-20T04:51:56.423Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "a18511ec-4ad1-4e39-b0df-1037fec42be4",
+                  "learning_point_id": "12378c93-7c9a-42e9-9e81-8d20384dab5e",
+                  "question_text": "বাম পাশের শ্রমিকের ধরনের সাথে ডান পাশের মূল বৈশিষ্ট্যের সঠিক জোড়া মেলাও।",
+                  "explanation": "মৌসুমি শ্রমিক ঋতুভিত্তিক কাজে নিযুক্ত হন, শিক্ষাধীন কাজ শেখার জন্য এবং অস্থায়ী শ্রমিক অল্পমেয়াদী কাজে নিযুক্ত হন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:51:56.423Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিকের কাজের প্রকৃতি ও নিয়োগের মেয়াদের ওপর ভিত্তি করে তাদের আইনি পরিচয় নির্ধারণ করা হয়, যা প্রতিষ্ঠানের ব্যবস্থাপনাগত কাঠামোর সাথে সম্পর্কিত।",
                   "question_type": "matching",
                   "metadata": {
                     "pairs": [
                       {
                         "left": "মৌসুমি শ্রমিক",
-                        "right": "কারখানার নির্দিষ্ট মৌসুমে কাজে নিয়োজিত"
+                        "right": "কারখানার নির্দিষ্ট ঋতুভিত্তিক কাজে নিয়োজিত"
                       },
                       {
                         "left": "শিক্ষাধীন",
-                        "right": "নির্দিষ্ট মেয়াদের কাজ শেখার জন্য নিযুক্ত"
+                        "right": "নির্ধারিত মেয়াদে কাজ শেখার জন্য নিযুক্ত"
                       },
                       {
                         "left": "অস্থায়ী শ্রমিক",
@@ -2871,190 +3087,6 @@
                     ]
                   },
                   "mcq_options": []
-                }
-              ]
-            },
-            {
-              "id": "ed518301-d9d6-40c7-ae0f-7a78646caadd",
-              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "অস্থায়ী নিয়োগের বৈধতা",
-              "content": "অস্থায়ী শ্রমিক কেবল নির্দিষ্ট অল্প সময়ের জন্য নিয়োজিত।",
-              "order_index": 6,
-              "created_at": "2026-06-19T21:12:30.858Z",
-              "type": "standard",
-              "mcq_questions": [
-                {
-                  "id": "037f8126-6231-4960-951e-7d63c75b8f69",
-                  "learning_point_id": "ed518301-d9d6-40c7-ae0f-7a78646caadd",
-                  "question_text": "কোনো স্থায়ী পদ শূন্য না থাকলেও কি একজন শ্রমিককে 'অস্থায়ী' হিসেবে নিয়োগ দেওয়া সম্ভব?",
-                  "explanation": "স্থায়ী পদ না থাকলেও কাজের প্রয়োজনে অস্থায়ী নিয়োগ বৈধ।",
-                  "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অস্থায়ী শ্রমিক কেবল নির্দিষ্ট অল্প সময়ের জন্য নিয়োজিত।",
-                  "question_type": "boolean",
-                  "metadata": {},
-                  "mcq_options": [
-                    {
-                      "id": "08d9e122-2de8-486b-be24-f4878cba918c",
-                      "question_id": "037f8126-6231-4960-951e-7d63c75b8f69",
-                      "option_text": "হ্যাঁ",
-                      "is_correct": true,
-                      "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.858Z"
-                    },
-                    {
-                      "id": "1c252a5c-0cfe-4048-9c81-e8ed93ae6de2",
-                      "question_id": "037f8126-6231-4960-951e-7d63c75b8f69",
-                      "option_text": "না",
-                      "is_correct": false,
-                      "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.858Z"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "fa47e3a5-1098-4bd8-8edd-eb048c4bfbbc",
-              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "শিক্ষানবিশকাল অতিক্রান্ত হলে স্থায়ীকরণ",
-              "content": "ধারা ৪ অনুযায়ী শিক্ষানবিশকাল অতিক্রান্ত হলে স্থায়ীকরণ।",
-              "order_index": 7,
-              "created_at": "2026-06-19T21:12:30.859Z",
-              "type": "standard",
-              "mcq_questions": [
-                {
-                  "id": "c065238f-9cf8-4e54-8da2-fcbfaef6e047",
-                  "learning_point_id": "fa47e3a5-1098-4bd8-8edd-eb048c4bfbbc",
-                  "question_text": "একজন শিক্ষানবিশ শ্রমিকের শিক্ষানবিশকাল সফলভাবে শেষ হওয়ার পর তিনি আইনিভাবে কী পদে উন্নীত হন?",
-                  "explanation": "শিক্ষানবিশকাল শেষে সফলভাবে উত্তীর্ণ হলে তিনি স্থায়ী হন।",
-                  "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.858Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ধারা ৪ অনুযায়ী শিক্ষানবিশকাল অতিক্রান্ত হলে স্থায়ীকরণ।",
-                  "question_type": "mcq",
-                  "metadata": {},
-                  "mcq_options": [
-                    {
-                      "id": "9fd47c9c-3edd-4689-9233-04e409c55329",
-                      "question_id": "c065238f-9cf8-4e54-8da2-fcbfaef6e047",
-                      "option_text": "স্থায়ী শ্রমিক",
-                      "is_correct": true,
-                      "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.858Z"
-                    },
-                    {
-                      "id": "fa485a66-7f83-4d7b-8faf-1dacae02ff2b",
-                      "question_id": "c065238f-9cf8-4e54-8da2-fcbfaef6e047",
-                      "option_text": "অস্থায়ী শ্রমিক",
-                      "is_correct": false,
-                      "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.858Z"
-                    },
-                    {
-                      "id": "d4416e31-43dd-430f-a268-239a902bc4e0",
-                      "question_id": "c065238f-9cf8-4e54-8da2-fcbfaef6e047",
-                      "option_text": "বদলি শ্রমিক",
-                      "is_correct": false,
-                      "order_index": 3,
-                      "created_at": "2026-06-19T21:12:30.858Z"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "9a7546b7-bc44-4350-9d54-bad5338db16a",
-              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "বদলি শ্রমিকের ক্ষেত্র",
-              "content": "বদলি শ্রমিকের কাজের ক্ষেত্রসমূহ।",
-              "order_index": 8,
-              "created_at": "2026-06-19T21:12:30.859Z",
-              "type": "standard",
-              "mcq_questions": [
-                {
-                  "id": "16b26830-5d2a-455a-9028-5010c94119b7",
-                  "learning_point_id": "9a7546b7-bc44-4350-9d54-bad5338db16a",
-                  "question_text": "কোন কোন পরিস্থিতিতে একজন 'বদলি' শ্রমিক নিয়োগ দেওয়া হয়? (টিক দিন)",
-                  "explanation": "স্থায়ী শ্রমিকের অনুপস্থিতি বা শূন্যতা পূরণে বদলি নিয়োগ হয়।",
-                  "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.859Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বদলি শ্রমিকের কাজের ক্ষেত্রসমূহ।",
-                  "question_type": "checkmark",
-                  "metadata": {},
-                  "mcq_options": [
-                    {
-                      "id": "cf151d9b-d5c8-4a2f-b2ed-b8f071da4fda",
-                      "question_id": "16b26830-5d2a-455a-9028-5010c94119b7",
-                      "option_text": "স্থায়ী শ্রমিক ছুটিতে থাকলে।",
-                      "is_correct": true,
-                      "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.859Z"
-                    },
-                    {
-                      "id": "86f2dd82-4bbe-482c-a30d-4111ca77e08f",
-                      "question_id": "16b26830-5d2a-455a-9028-5010c94119b7",
-                      "option_text": "স্থায়ী শ্রমিকের পদ সাময়িকভাবে খালি থাকলে।",
-                      "is_correct": true,
-                      "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.859Z"
-                    },
-                    {
-                      "id": "98c03eee-6da9-47ec-9b4a-d0651f1f75ff",
-                      "question_id": "16b26830-5d2a-455a-9028-5010c94119b7",
-                      "option_text": "নতুন পণ্য বাজারজাত করার সময়।",
-                      "is_correct": false,
-                      "order_index": 3,
-                      "created_at": "2026-06-19T21:12:30.859Z"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "id": "1495dbb8-e4a3-4d35-96db-dd19cee20555",
-              "chapter_id": "0d13dca0-0a0d-4e62-8e37-1367667a5d40",
-              "title": "মৌসুমি শ্রমিক",
-              "content": "মেয়াদের ভিত্তিতে শ্রমিকের আইনি স্বীকৃতি।",
-              "order_index": 9,
-              "created_at": "2026-06-19T21:12:30.859Z",
-              "type": "standard",
-              "mcq_questions": [
-                {
-                  "id": "f101b598-5df9-4a61-89bf-f92d5d861d63",
-                  "learning_point_id": "1495dbb8-e4a3-4d35-96db-dd19cee20555",
-                  "question_text": "যে শ্রমিক কারখানার নির্দিষ্ট ঋতু বা মৌসুমে কাজের জন্য নিযুক্ত হন, তাকে কী বলে?",
-                  "explanation": "ঋতু বা মৌসুম ভিত্তিক কাজে নিয়োজিত ব্যক্তিই মৌসুমি শ্রমিক।",
-                  "order_index": 1,
-                  "created_at": "2026-06-19T21:12:30.859Z",
-                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: মেয়াদের ভিত্তিতে শ্রমিকের আইনি স্বীকৃতি।",
-                  "question_type": "mcq",
-                  "metadata": {},
-                  "mcq_options": [
-                    {
-                      "id": "406f1b0a-1241-4828-a4ee-de0b47f08bf8",
-                      "question_id": "f101b598-5df9-4a61-89bf-f92d5d861d63",
-                      "option_text": "মৌসুমি শ্রমিক",
-                      "is_correct": true,
-                      "order_index": 1,
-                      "created_at": "2026-06-19T21:12:30.859Z"
-                    },
-                    {
-                      "id": "2fa0d270-ef1a-47eb-835b-f3a2944ea689",
-                      "question_id": "f101b598-5df9-4a61-89bf-f92d5d861d63",
-                      "option_text": "বদলি শ্রমিক",
-                      "is_correct": false,
-                      "order_index": 2,
-                      "created_at": "2026-06-19T21:12:30.859Z"
-                    },
-                    {
-                      "id": "7437e3c2-85af-44b0-86b1-87bc87ea5c97",
-                      "question_id": "f101b598-5df9-4a61-89bf-f92d5d861d63",
-                      "option_text": "স্থায়ী শ্রমিক",
-                      "is_correct": false,
-                      "order_index": 3,
-                      "created_at": "2026-06-19T21:12:30.859Z"
-                    }
-                  ]
                 }
               ]
             }

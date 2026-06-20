@@ -3896,7 +3896,366 @@
           "title": "শিক্ষানবিশ ও স্থায়ীকরণ",
           "order_index": 4,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "e92612c3-418a-4aaf-9524-b44cd58378b4",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "c9aef0b6-7e1e-461d-a98b-0d06baf109c1",
+                  "learning_point_id": "e92612c3-418a-4aaf-9524-b44cd58378b4",
+                  "question_text": "বাংলাদেশ শ্রম আইন অনুযায়ী, একজন সাধারণ বা কেরানি ছাড়া অন্য পদের শ্রমিকের জন্য সাধারণ শিক্ষানবিশকাল কত মাস?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৪(৮) অনুযায়ী, সাধারণ পদের শ্রমিকের ক্ষেত্রে শিক্ষানবিশকাল হবে ৩ মাস।",
+                  "narrative": "💡 হিন্ট: কারখানায় কোনো সাধারণ স্থায়ী পদে নিয়োগের পর একজন শ্রমিককে নির্দিষ্ট সময় কাজ শিখে দক্ষতা প্রমাণ করতে হয়। এই সময়কালকে শিক্ষানবিশকাল (Probation Period) বলে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e7f68b22-8580-44b3-9ed2-fe78793fb19c",
+                      "question_id": "c9aef0b6-7e1e-461d-a98b-0d06baf109c1",
+                      "option_text": "৩ মাস",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.069Z"
+                    },
+                    {
+                      "id": "6365192d-3b8a-43af-a392-68e64f4989c2",
+                      "question_id": "c9aef0b6-7e1e-461d-a98b-0d06baf109c1",
+                      "option_text": "৬ মাস",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "1e55f9d0-55a2-4985-a8a1-ae7e5be528a6",
+                      "question_id": "c9aef0b6-7e1e-461d-a98b-0d06baf109c1",
+                      "option_text": "১ বছর",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "e08e6e4c-bece-4b38-9458-ff24558f2c32",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "9ee8bebb-f238-4c2e-9dc5-386d98a76197",
+                  "learning_point_id": "e08e6e4c-bece-4b38-9458-ff24558f2c32",
+                  "question_text": "কেরানি বা ক্লারিক্যাল (Clerical) পদের শ্রমিকের জন্য কি শিক্ষানবিশকাল সর্বমোট ৬ মাস নির্ধারিত থাকে?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৪(৮) অনুযায়ী, কেরানি পদের শ্রমিকের ক্ষেত্রে শিক্ষানবিশকাল হবে ৬ Genes বা মাস।",
+                  "narrative": "💡 হিন্ট: কেরানি বা ক্লারিক্যাল পদের কাজের ধরণ ভিন্ন হওয়ায় তাদের দক্ষতা মূল্যায়নের জন্য আইনে সাধারণ শ্রমিকের চেয়ে বেশি সময় নির্ধারণ করা হয়েছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "db569c63-9c6e-445b-af78-afb28bac0f36",
+                      "question_id": "9ee8bebb-f238-4c2e-9dc5-386d98a76197",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "7d8dd43d-3b9c-452c-9dd9-6cd8b749e0b5",
+                      "question_id": "9ee8bebb-f238-4c2e-9dc5-386d98a76197",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "47626319-6eab-4203-8279-31f1e7ebedda",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "52f3d0c2-7345-4ee4-972f-e0c76ce6143f",
+                  "learning_point_id": "47626319-6eab-4203-8279-31f1e7ebedda",
+                  "question_text": "প্রথম দফার শিক্ষানবিশকাল শেষে দক্ষতা অপর্যাপ্ত হলে মালিকের আইনি সুযোগ কোনগুলো? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "দক্ষতা কম হলে মালিক সর্বোচ্চ ৩ মাস পর্যন্ত প্রবেশন পিরিয়ড বাড়াতে পারেন অথবা স্থায়ীকরণ না করে বিদায় দিতে পারেন।",
+                  "narrative": "💡 হিন্ট: যদি কোনো শ্রমিকের ৩ মাসের শিক্ষানবিশকাল শেষ হওয়ার পরও তার কাজের মান সন্তোষজনক না হয়, তবে মালিকের একটি বিশেষ আইনি অধিকার থাকে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "08c73bcb-6772-4cf1-8b23-507329700ece",
+                      "question_id": "52f3d0c2-7345-4ee4-972f-e0c76ce6143f",
+                      "option_text": "শিক্ষানবিশকাল আরও সর্বোচ্চ ৩ মাস পর্যন্ত বর্ধিত (Extend) করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "a16be4ab-1c41-4567-a0a1-436d207d26a7",
+                      "question_id": "52f3d0c2-7345-4ee4-972f-e0c76ce6143f",
+                      "option_text": "স্থায়ী পদে স্থায়ীকরণ না করে শিক্ষানবিশ হিসেবেই চাকরি অবসান করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "8338399b-a11c-48a7-b2ad-50a1605f1b23",
+                      "question_id": "52f3d0c2-7345-4ee4-972f-e0c76ce6143f",
+                      "option_text": "কোনো নোটিশ ছাড়াই তাকে স্থায়ী শ্রমিক হিসেবে ঘোষণা করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "2f04eb1e-51b8-4230-b05c-49e7db0bdbca",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "317c615c-c4aa-48f4-96fd-89fd84b7a080",
+                  "learning_point_id": "2f04eb1e-51b8-4230-b05c-49e7db0bdbca",
+                  "question_text": "নাসরিনের আইনি পরামর্শ অনুযায়ী, সুমি বেগমের ৩ মাস সফলভাবে শেষ হওয়ার পর তার আইনি মর্যাদা কী হবে?",
+                  "question_type": "storytelling",
+                  "explanation": "ধারা ৪ অনুযায়ী, শিক্ষানবিশকাল সফলভাবে সমাপ্ত করার পর শ্রমিক সংশ্লিষ্ট পদে স্থায়ী চাকুরীর অধিকার লাভ করেন।",
+                  "narrative": "💬 দৃশ্য ১:\nকামাল: সুমি বেগম আমাদের কারখানায় ৩ মাস ধরে শিক্ষানবিশ অপারেটর হিসেবে আছেন। আজ ওনার ৩ মাস পূর্ণ হলো এবং ওনার কাজের রেকর্ড খুব ভালো।\nনাসরিন: কামাল সাহেব, ওনার যেহেতু ৩ মাস পূর্ণ হয়েছে এবং কোনো বর্ধিতকরণের নোটিশ দেওয়া হয়নি, তাই আইন অনুযায়ী ওনাকে অবিলম্বে \"স্থায়ীকরণ পত্র\" (Confirmation Letter) দিতে হবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b338f65d-0bb2-41dd-b9ae-d42f10c07213",
+                      "question_id": "317c615c-c4aa-48f4-96fd-89fd84b7a080",
+                      "option_text": "তিনি কারখানার একজন \"স্থায়ী শ্রমিক\" (Permanent Worker) হিসেবে গণ্য হবেন",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "be54a908-57b9-4485-9c66-2107dfdf51f0",
+                      "question_id": "317c615c-c4aa-48f4-96fd-89fd84b7a080",
+                      "option_text": "তিনি দৈনিক ভিত্তিক শ্রমিক হবেন",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "f7b353e3-6e42-4823-82b3-cfade591d5c2",
+                      "question_id": "317c615c-c4aa-48f4-96fd-89fd84b7a080",
+                      "option_text": "ওনার শিক্ষানবিশকাল স্বয়ংক্রিয়ভাবে ২ বছর বেড়ে যাবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "ba5a43a7-bd7d-4b6d-b08f-99348ba3c152",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "ed485d80-dbab-45cb-87de-820c5ebaab69",
+                  "learning_point_id": "ba5a43a7-bd7d-4b6d-b08f-99348ba3c152",
+                  "question_text": "বাম পাশের পদের সাথে ডান পাশের আইনি প্রবেশন মেয়াদের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "সাধারণ শ্রমিকের ৩ মাস, কেরানির ৬ মাস এবং বিশেষ ক্ষেত্রে সর্বোচ্চ অতিরিক্ত ৩ মাস পর্যন্ত বৃদ্ধির আইনি সুযোগ রয়েছে।",
+                  "narrative": "💡 হিন্ট: শ্রমিকের পদের ধরণ এবং তাদের জন্য নির্ধারিত আইনি শিক্ষানবিশকালের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "সাধারণ উৎপাদন শ্রমিক",
+                        "right": "৩ মাস (বা সাধারণ স্ট্যান্ডার্ড)"
+                      },
+                      {
+                        "left": "কেরানি বা অফিস স্টাফ",
+                        "right": "৬ মাস (বা ক্লারিক্যাল স্ট্যান্ডার্ড)"
+                      },
+                      {
+                        "left": "অদক্ষ বা বিশেষ পরিস্থিতি",
+                        "right": "সর্বোচ্চ ৩ মাস পর্যন্ত বর্ধিতকরণ"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "1d08a519-6bbd-486c-b9fd-6e3953631710",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "9f722ad6-52f1-4e6f-b6b9-36e0eb94da00",
+                  "learning_point_id": "1d08a519-6bbd-486c-b9fd-6e3953631710",
+                  "question_text": "শিক্ষানবিশকালে কি একজন শ্রমিককে কারখানার আইনসম্মত মূল মজুরী বা স্টাইপেন্ড প্রদান করা মালিকের জন্য বাধ্যতামুলক?",
+                  "question_type": "boolean",
+                  "explanation": "শিক্ষানবিশ শ্রমিকও শ্রম আইনের আওতাভুক্ত এবং তিনি কাজ করার বিনিময়ে নির্ধারিত আইনি মজুরী বা ভাতা পাওয়ার পূর্ণ অধিকারী।",
+                  "narrative": "💡 হিন্ট: শিক্ষানবিশ অবস্থায় একজন শ্রমিককে সম্পূর্ণ বিনা বেতনে খাটানো যাবে না। তাকে ওই পদের জন্য নির্ধারিত ন্যূনতম বা চুক্তিভিত্তিক মজুরী দিতে হবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f0d966c1-9d99-44ed-b46d-897d1f6b2a0e",
+                      "question_id": "9f722ad6-52f1-4e6f-b6b9-36e0eb94da00",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "1ccf871b-71ca-4e6e-ab32-b26bae7d88a9",
+                      "question_id": "9f722ad6-52f1-4e6f-b6b9-36e0eb94da00",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "5a99f6d5-ff45-45ca-8682-9f17aef9f06e",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "3ec90f91-9fc7-4a64-b8b7-c2673366264f",
+                  "learning_point_id": "5a99f6d5-ff45-45ca-8682-9f17aef9f06e",
+                  "question_text": "স্থায়ীকরণ ও শিক্ষানবিশ সংক্রান্ত বিধি অমান্য করলে মালিকের বিরুদ্ধে কোন সুনির্দিষ্ট শাস্তি হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ২৮৪-এর সাধারণ দণ্ড অনুযায়ী, চাকুরীর শর্তাবলী বা স্থায়ীকরণের নিয়ম প্রথমবার লঙ্ঘন করলে অনধিক ৫,০০০ টাকা পর্যন্ত অর্থদণ্ড হতে পারে।",
+                  "narrative": "💡 হিন্ট: যদি কোনো মালিক কোনো নোটিশ বা বৈধ কারণ ছাড়াই ৩ মাস সফলভাবে কাজ করা শ্রমিককে স্থায়ী করতে অস্বীকৃতি জানান, তবে তা আইনের লঙ্ঘন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "318efd31-d849-4163-a20b-84644ac79347",
+                      "question_id": "3ec90f91-9fc7-4a64-b8b7-c2673366264f",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি মামলা ও অনধিক ৫,০০০ টাকা জরিমানা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "a04dc8e4-221a-4bb7-b39f-5f5ee04bcc91",
+                      "question_id": "3ec90f91-9fc7-4a64-b8b7-c2673366264f",
+                      "option_text": "কারখানার ট্রেড লাইসেন্স আজীবনের জন্য ফ্রি হওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "928e0a8a-a25c-42cc-9826-10729c67df94",
+                      "question_id": "3ec90f91-9fc7-4a64-b8b7-c2673366264f",
+                      "option_text": "কোনো শাস্তি হবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            },
+            {
+              "id": "e813897c-b49b-47b4-a5c2-ac816f555fb3",
+              "chapter_id": "9d6f3937-b17b-4004-afda-f9291d7b311c",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:43:01.071Z",
+              "mcq_questions": [
+                {
+                  "id": "ad55543e-732f-4dee-88cd-414c48c5eab0",
+                  "learning_point_id": "e813897c-b49b-47b4-a5c2-ac816f555fb3",
+                  "question_text": "শিক্ষানবিশ ও স্থায়ীকরণের সঠিক আইনি কমপ্লায়েন্স বজায় রাখতে এইচআর বিভাগের কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "বছরের পর বছর শিক্ষানবিশ রাখা সম্পূর্ণ বেআইনি; সঠিক সময়ে মূল্যায়ন ও স্থায়ীকরণ পত্র দেওয়াই হলো আইনসম্মত কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট কারখানার এইচআর বিভাগকে প্রবেশন পিরিয়ড শেষ হওয়ার অন্তত ৭ দিন আগে রিভিউ সম্পন্ন করতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "30f46c75-d555-4467-9e76-3232e90a9adf",
+                      "question_id": "ad55543e-732f-4dee-88cd-414c48c5eab0",
+                      "option_text": "৩ মাস পূর্ণ হওয়ার আগেই শ্রমিকের পারফরম্যান্স মূল্যায়ন করে লিখিত রেকর্ড রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "12e0dfc8-cd0b-4a07-acdd-ccebe8e26cec",
+                      "question_id": "ad55543e-732f-4dee-88cd-414c48c5eab0",
+                      "option_text": "স্থায়ীকরণ নিশ্চিত হলে শ্রমিককে আনুষ্ঠানিক \"স্থায়ীকরণ পত্র\" বা কনফার্মেশন লেটার ইস্যু করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    },
+                    {
+                      "id": "06c7c80b-b83e-462a-b355-07aa26ad04a5",
+                      "question_id": "ad55543e-732f-4dee-88cd-414c48c5eab0",
+                      "option_text": "গ্র্যাচুইটি বা অন্যান্য সুবিধা ফাঁকি দিতে বছরের পর বছর শ্রমিককে ভুয়া শিক্ষানবিশ হিসেবে রেখে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:43:01.071Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:43:01.071Z"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "ba83a04a-a495-4a78-9b23-54e2e477988f",

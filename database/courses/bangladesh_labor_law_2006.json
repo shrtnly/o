@@ -30280,14 +30280,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "d656cd3e-3183-4f67-a1dd-377bc87f149b",
+              "id": "cdf68f6b-0763-490c-a8e3-8ef713d7f97e",
               "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে খাবার কক্ষ, ইত্যাদি নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:22.846931+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:45:53.934Z",
+              "mcq_questions": [
+                {
+                  "id": "279799e1-18c6-4fd5-bf56-3054004c085c",
+                  "learning_point_id": "cdf68f6b-0763-490c-a8e3-8ef713d7f97e",
+                  "question_text": "শ্রম বিধিমালা অনুযায়ী, ডে-কেয়ার রুমে প্রতি শিশুর জন্য ন্যূনতম কত বর্গফুট মেঝের স্থান (Floor Space) থাকা বাধ্যতামূলক?",
+                  "question_type": "mcq",
+                  "explanation": "আইনি স্ট্যান্ডার্ড অনুযায়ী, ডে-কেয়ার রুমে শিশুদের স্বাচ্ছন্দ্যে চলাফেরা ও বিশ্রামের জন্য প্রতি শিশুর জন্য ন্যূনতম ২০ বর্গফুট মেঝের ক্ষেত্রফল বরাদ্দ রাখতে হয়।",
+                  "narrative": "💡 হিন্ট: শিশু কক্ষ বা ডে-কেয়ার রুমটি যেন সংকীর্ণ না হয়, সেজন্য আইনে প্রতি শিশুর জন্য ন্যূনতম মেঝের ক্ষেত্রফল বা স্পেস সুনির্দিষ্ট করা আছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b5d635db-2fbc-4fa7-bc86-0c5796f2b9c0",
+                      "question_id": "279799e1-18c6-4fd5-bf56-3054004c085c",
+                      "option_text": "৫ বর্গফুট",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.923Z"
+                    },
+                    {
+                      "id": "c347ceed-d403-42cc-a0a9-661b4640726d",
+                      "question_id": "279799e1-18c6-4fd5-bf56-3054004c085c",
+                      "option_text": "২০ বর্গফুট",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    },
+                    {
+                      "id": "ead3e9ed-85ca-4ff5-99f1-fe8ea6878619",
+                      "question_id": "279799e1-18c6-4fd5-bf56-3054004c085c",
+                      "option_text": "৫০ বর্গফুট",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.934Z"
+                }
+              ]
+            },
+            {
+              "id": "3c437c7f-6ced-405e-9142-8da8ce957c86",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.934Z",
+              "mcq_questions": [
+                {
+                  "id": "98a2500d-6509-4f37-a5d0-ff9874e67e34",
+                  "learning_point_id": "3c437c7f-6ced-405e-9142-8da8ce957c86",
+                  "question_text": "শিশু কক্ষের ছাদ কি মেঝে থেকে ন্যূনতম ১০ ফুট উঁচু এবং রুমটি সম্পূর্ণ স্যাঁতসেঁতে মুক্ত হওয়া আইনি বাধ্যবাধকতা?",
+                  "question_type": "boolean",
+                  "explanation": "শিশুদের স্বাস্থ্য সুরক্ষায় ডে-কেয়ার রুমের উচ্চতা, পর্যাপ্ত আলো-বাতাস এবং শুষ্ক মেঝে থাকা অলঙ্ঘনীয় আইনি কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: ডে-কেয়ার রুমের উচ্চতা এবং সেখানে আলো-বাতাসের জন্য পর্যাপ্ত জানালা ও ভেন্টিলেশন থাকা স্বাস্থ্যগতভাবে আবশ্যিক।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ba8b407d-dbd7-40e1-af0b-e1cbb7e15ac5",
+                      "question_id": "98a2500d-6509-4f37-a5d0-ff9874e67e34",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    },
+                    {
+                      "id": "651468f7-8c28-4303-a6c2-d15783542d86",
+                      "question_id": "98a2500d-6509-4f37-a5d0-ff9874e67e34",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.934Z"
+                }
+              ]
+            },
+            {
+              "id": "289f434b-ce8f-491b-98f2-0e984e8ba37c",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.934Z",
+              "mcq_questions": [
+                {
+                  "id": "583ec8f6-7b7d-4342-941b-d275cd176047",
+                  "learning_point_id": "289f434b-ce8f-491b-98f2-0e984e8ba37c",
+                  "question_text": "ডে-কেয়ার রুমের অভ্যন্তরীণ সজ্জার ক্ষেত্রে কোন কোন আইনি নিয়ম প্রযোজ্য? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "লোহার টুল রাখা শিশুদের জন্য চরম বিপজ্জনক ও বেআইনি; শিশুদের উপযোগী আসবাব ও সুরক্ষামূলক ম্যাট রাখাই কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: ডে-কেয়ার রুমের ফার্নিচার বা আসবাবপত্র এমন হতে হবে যা শিশুদের জন্য নিরাপদ এবং ধারালো কোণবিহীন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f4fda91a-11a6-4cc1-a8d9-faef1739cc00",
+                      "question_id": "583ec8f6-7b7d-4342-941b-d275cd176047",
+                      "option_text": "শিশুদের ঘুমানোর জন্য নিরাপদ দোলনা বা বিছানার ব্যবস্থা রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    },
+                    {
+                      "id": "1ab27e17-adf9-4928-baab-e5c1d0e491f6",
+                      "question_id": "583ec8f6-7b7d-4342-941b-d275cd176047",
+                      "option_text": "মেঝেতে পরিষ্কার ও জীবাণুমুক্ত ম্যাট বা মাদুর রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    },
+                    {
+                      "id": "fdadacf9-55ba-44c6-9cf6-fdc7cc267b6d",
+                      "question_id": "583ec8f6-7b7d-4342-941b-d275cd176047",
+                      "option_text": "জায়গা বাঁচাতে রুমের কোণায় কারখানার ভারী লোহার টুল জমিয়ে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.934Z"
+                }
+              ]
+            },
+            {
+              "id": "8771436d-5ead-4eaa-95e5-aa35ce9a27a7",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "88cb0d93-0f54-45d8-a9db-d96d3e3fa280",
+                  "learning_point_id": "8771436d-5ead-4eaa-95e5-aa35ce9a27a7",
+                  "question_text": "নাদিয়ার আইনি তাগিদ অনুযায়ী, ১৫ জন শিশুর জন্য ডে-কেয়ার রুমের ন্যূনতম আয়তন কত বর্গফুট হওয়া উচিত?",
+                  "question_type": "storytelling",
+                  "explanation": "প্রতি শিশুর জন্য ২০ বর্গফুট হিসেবে ১৫ জন শিশুর জন্য ন্যূনতম (১৫ x ২০) = ৩০০ বর্গফুট মেঝের স্থান নিশ্চিত করা আইনি নিয়ম।",
+                  "narrative": "💬 দৃশ্য ১:\nআসলাম: আমাদের ডে-কেয়ার রুমে ১৫ জন শিশু থাকে। রুমটি ছোট হওয়ায় বাচ্চারা গাদাগাদি করে থাকে এবং কোনো জানালা নেই।\nনাদিয়া: আসলাম সাহেব, এটি আইন ও কমপ্লায়েন্সের বড় লঙ্ঘন! ১৫ জন শিশুর জন্য ন্যূনতম ৩০০ বর্গফুট জায়গা এবং পর্যাপ্ত আলো-বাতাসের জানালা থাকা আইনি বাধ্যবাধকতা। অবিলম্বে রুম পরিবর্তন করুন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "425b1be1-ff2a-40fe-b191-57f19abab9ee",
+                      "question_id": "88cb0d93-0f54-45d8-a9db-d96d3e3fa280",
+                      "option_text": "১০০ বর্গফুট",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    },
+                    {
+                      "id": "741a1fe8-4bfc-4466-a139-ff1a460989b2",
+                      "question_id": "88cb0d93-0f54-45d8-a9db-d96d3e3fa280",
+                      "option_text": "৩০৯ বর্গফুট",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.934Z"
+                    },
+                    {
+                      "id": "ba11ef13-f510-4769-9627-119e335a66b6",
+                      "question_id": "88cb0d93-0f54-45d8-a9db-d96d3e3fa280",
+                      "option_text": "৩০০ বর্গফুট",
+                      "is_correct": true,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "1435e944-e399-4726-a68a-07973bdc6421",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "9dba7bc6-ef46-4aad-b7b3-4e29077a236c",
+                  "learning_point_id": "1435e944-e399-4726-a68a-07973bdc6421",
+                  "question_text": "বাম পাশের বিষয়ের সাথে ডান পাশের আইনি স্ট্যান্ডার্ডের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "মেঝের জায়গা ২০ বর্গফুট, ছাদের উচ্চতা ১০ ফুট এবং দেয়াল ও পরিবেশ সর্বদা চুনকামসহ পরিচ্ছন্ন ও স্বাস্থ্যসম্মত রাখা বাধ্যতামুলক।",
+                  "narrative": "💡 হিন্ট: ডে-কেয়ার রুমের পরিমাপ এবং তার আইনি স্ট্যান্ডার্ডের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "প্রতি শিশুর জন্য মেঝের জায়গা",
+                        "right": "২০ বর্গফুট"
+                      },
+                      {
+                        "left": "শিশু কক্ষের ছাদের উচ্চতা",
+                        "right": "ন্যূনতম ১০ ফুট বা স্ট্যান্ডার্ড উচ্চতা"
+                      },
+                      {
+                        "left": "রুমের পরিবেশ ও দেয়াল",
+                        "right": "চুনকাম করা, পরিষ্কার ও মশা-মাছি মুক্ত"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "b603dbd2-1a60-4813-8f00-c471f51b02f7",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "7801c82c-60b6-4dc3-b1b2-9bd143fa971f",
+                  "learning_point_id": "b603dbd2-1a60-4813-8f00-c471f51b02f7",
+                  "question_text": "ডে-কেয়ার রুমের সাথে কি শিশুদের ব্যবহারের জন্য একটি ডেডিকেটেড ও নিরাপদ ওয়াশ-রুম বা বাথরুম সংযুক্ত থাকা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "শিশুদের পরিচ্ছন্নতা বজায় রাখতে ডে-কেয়ার জোনের ভেতরে বা একদম সাথে নিরাপদ পানির কল ও ওয়াশ-রুম সুবিধা থাকা অলঙ্ঘনীয় নিয়ম।",
+                  "narrative": "💡 হিন্ট: শিশুদের ডে-কেয়ার রুমের ঠিক পাশেই তাদের হাত-মুখ ধোয়া এবং ফিডার বা পাত্র পরিষ্কারের জন্য পানির সুনির্দিষ্ট আইনি ব্যবস্থা থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "41942184-a8f6-42f9-a46e-500ac20f5746",
+                      "question_id": "7801c82c-60b6-4dc3-b1b2-9bd143fa971f",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "75af940c-1d0e-4d78-bc60-d47737cbd66c",
+                      "question_id": "7801c82c-60b6-4dc3-b1b2-9bd143fa971f",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "2442e22e-01c0-48de-98f2-16509e23548e",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "73de6d78-1145-4601-bbce-c6fe5ccfcee9",
+                  "learning_point_id": "2442e22e-01c0-48de-98f2-16509e23548e",
+                  "question_text": "ডে-কেয়ার রুমের আইনি পরিমাপ ও পরিবেশের নিয়ম অমান্য করলে সর্বোচ্চ কী শাস্তি হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৯২ ও সংশ্লিষ্ট বিধিমালা অনুযায়ী শিশু কক্ষের নির্ধারিত পরিমাপ ও সুবিধা না দেওয়া সরাসরি আইনি কমপ্লায়েন্সের লঙ্ঘন।",
+                  "narrative": "💡 হিন্ট: বায়ার বা সরকারি অডিটের সময় যদি দেখা যায় ডে-কেয়ার রুমটি অত্যন্ত সংকীর্ণ ও অস্বাস্থ্যকর, তবে তারা ফ্যাক্টরিকে বড় পেনাল্টি দিতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "4e8723b6-4694-4916-8b8c-ea6db4313291",
+                      "question_id": "73de6d78-1145-4601-bbce-c6fe5ccfcee9",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি মামলা ও অনধিক ৫,০০০ টাকা জরিমানা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "77391d74-6e06-4238-8be2-b42872c6d475",
+                      "question_id": "73de6d78-1145-4601-bbce-c6fe5ccfcee9",
+                      "option_text": "কারখানার প্রধান এডমিন অফিস বন্ধ করে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "4d19ad48-a7d3-4f49-b9af-703f0af77409",
+                      "question_id": "73de6d78-1145-4601-bbce-c6fe5ccfcee9",
+                      "option_text": "কোনো শাস্তি হবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "23bf63f8-fcfc-4e30-a867-00773d97cc99",
+              "chapter_id": "e3e5d164-c189-4ea8-a581-9d740f35fa3c",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "0645c802-3266-47c1-bf6a-2c37ae566f4d",
+                  "learning_point_id": "23bf63f8-fcfc-4e30-a867-00773d97cc99",
+                  "question_text": "ডে-কেয়ার রুমের কমপ্লায়েন্স ঠিক রাখতে সেফটি অফিসারের কোন কোন বিষয় চেক করা উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "খোলা কীটনাশক রাখা চরম বিপজ্জনক ও বেআইনি; তাপমাত্রা নিয়ন্ত্রণ এবং শিশুদের ফার্স্ট-এইড বক্স রাখাই হলো আইনসম্মত কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় শিশুদের রুমে কোনো ধারালো বা বিষাক্ত খেলনা রাখা সম্পূর্ণ নিষিদ্ধ।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e7a7bfcd-c11d-4da6-910d-e36e9e2a12e8",
+                      "question_id": "0645c802-3266-47c1-bf6a-2c37ae566f4d",
+                      "option_text": "রুমে প্রাথমিক চিকিৎসার জন্য বেবি-ফ্রেন্ডলি ফার্স্ট-এইড কিট বা ওষুধ রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "6d09ddee-8dcb-4d89-96ba-d7d0ee747f40",
+                      "question_id": "0645c802-3266-47c1-bf6a-2c37ae566f4d",
+                      "option_text": "রুমের তাপমাত্রা শিশুদের অনুকূলে রাখতে পর্যাপ্ত ফ্যান বা কুলিংয়ের ব্যবস্থা রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "2e5a906a-4e04-4060-b811-ddb718f4bb05",
+                      "question_id": "0645c802-3266-47c1-bf6a-2c37ae566f4d",
+                      "option_text": "বাচ্চাদের শান্ত রাখতে রুমে মশার ওষুধ বা বিষাক্ত কীটনাশক স্প্রে খোলা অবস্থায় রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
             }
           ]
         },
@@ -30305,14 +30653,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "30e475a7-4f49-484b-a9a9-2b66b5c6b9d8",
+              "id": "94a264ec-5bab-405e-bc3d-f57e5d5f0e06",
               "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে শিশু কক্ষ নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:22.846931+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "09bf7062-ae1b-4768-918e-c9069f9737b4",
+                  "learning_point_id": "94a264ec-5bab-405e-bc3d-f57e5d5f0e06",
+                  "question_text": "শ্রম বিধিমালা অনুযায়ী, ডে-কেয়ার রুমে অবস্থানরত শিশুদের জন্য কি প্রতিদিন বিনামূল্যে বিশুদ্ধ দুধ বা পুষ্টিকর টিফিন সরবরাহ করা মালিকের আইনি বাধ্যবাধকতা?",
+                  "question_type": "boolean",
+                  "explanation": "আইন অনুযায়ী, ডে-কেয়ারের শিশুদের সুস্থতা ও পুষ্টি নিশ্চিত করতে মালিককে নির্দিষ্ট নিয়মে বিনামূল্যে খাটি দুধ বা পুষ্টিকর হালকা খাবারের ব্যবস্থা করতে হয়।",
+                  "narrative": "💡 হিন্ট: ডে-কেয়ারে থাকা শিশুদের পুষ্টির ঘাটতি মেটাতে এবং মায়েদের সহায়তা করতে আইনে মালিকের পক্ষ থেকে বিনামূল্যে খাদ্য সরবরাহের নিয়ম রয়েছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6b3d7119-1b4a-4e7c-9c49-08dbbad4753c",
+                      "question_id": "09bf7062-ae1b-4768-918e-c9069f9737b4",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "340c9f55-8914-4138-8c6b-d6ba9cda9547",
+                      "question_id": "09bf7062-ae1b-4768-918e-c9069f9737b4",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "128e96f7-73c4-4ccc-915f-80024e6cfbb7",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "68c5ec9c-179f-4a3f-854e-92c3147d1513",
+                  "learning_point_id": "128e96f7-73c4-4ccc-915f-80024e6cfbb7",
+                  "question_text": "নূন্যতম কোন যোগ্যতার ব্যক্তিকে ডে-কেয়ার রুমে শিশুদের সার্বক্ষণিক তত্ত্বাবধানের জন্য নিযুক্ত করা বাধ্যতামূলক?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৯২ অনুযায়ী, শিশুদের নিরাপদ যত্ন, ফিডিং ও জরুরি প্রাথমিক চিকিৎসার জন্য যোগ্য ও ট্রেন্ড মহিলা আয়া বা নার্স নিয়োগ করা বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: শিশুদের দেখাশোনা করার জন্য মায়েদের অনুপস্থিতিতে একজন সার্বক্ষণিক বেতনভুক্ত যোগ্য স্টাফ নিয়োগ করতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5ed291a4-7fc4-4390-96be-77d1e82c0a93",
+                      "question_id": "68c5ec9c-179f-4a3f-854e-92c3147d1513",
+                      "option_text": "একজন প্রশিক্ষণপ্রাপ্ত সার্টিফাইড আয়া বা নার্স (Creche Attendant)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "29c83d6b-f42e-45d4-82ef-28510c8865d1",
+                      "question_id": "68c5ec9c-179f-4a3f-854e-92c3147d1513",
+                      "option_text": "কারখানার যেকোনো একজন সাধারণ পুরুষ নিরাপত্তা প্রহরী",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "347cbd3e-2a47-41d6-9928-7763a2bad0c8",
+                      "question_id": "68c5ec9c-179f-4a3f-854e-92c3147d1513",
+                      "option_text": "বাইরের কোনো পার্ট-টাইম পরিচ্ছন্নতা কর্মী",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "a08c6dc2-0c3b-4868-8139-e2107de5b179",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "0b7f63c6-2a8c-44db-a860-87a6eb551d18",
+                  "learning_point_id": "a08c6dc2-0c3b-4868-8139-e2107de5b179",
+                  "question_text": "বিনামূল্যে দুধ ও টিফিন অধ্যায়ের অধীনে ডে-কেয়ার ব্যবস্থাপনায় কোন কোন আইনি সুবিধা অন্তর্ভুক্ত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "মায়েদের বেতন থেকে টাকা কাটা সম্পূর্ণ বেআইনি; এটি একটি সম্পূর্ণ বিনামূল্যে প্রদেয় কল্যাণমূলক সুবিধা।",
+                  "narrative": "💡 হিন্ট: বিনামূল্যে দুধ বা খাবার দেওয়ার পাশাপাশি শিশুদের পোশাক ও বিছানার পরিচ্ছন্নতার খরচও কোম্পানিকে বহন করতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "9db3cefa-2530-4840-b448-79c2fddf2aa3",
+                      "question_id": "0b7f63c6-2a8c-44db-a860-87a6eb551d18",
+                      "option_text": "শিশুদের ব্যবহারের জন্য প্রতি বছর নির্দিষ্ট সেট পরিষ্কার পোশাক (Uniform/Apron) ও তোয়ালে দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "024ac8f9-31fa-4704-81a2-d67d43dfe720",
+                      "question_id": "0b7f63c6-2a8c-44db-a860-87a6eb551d18",
+                      "option_text": "প্রতিদিন শিশুদের জন্য সরবরাহকৃত দুধের গুণগত মান ও বিশুদ্ধতা নিশ্চিত করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "a1a881ca-a1f0-4011-a59f-9ed80332093a",
+                      "question_id": "0b7f63c6-2a8c-44db-a860-87a6eb551d18",
+                      "option_text": "শিশুদের দুপুরের খাবারের জন্য মায়েদের বেতন থেকে টাকা কেটে নেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "a0945d19-e609-4d5a-89ff-639407ae3c1d",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "240c9e24-f6f1-45fe-9b16-5421bdefeba2",
+                  "learning_point_id": "a0945d19-e609-4d5a-89ff-639407ae3c1d",
+                  "question_text": "তানিয়ার আইনি সতর্কতা অনুযায়ী, ডে-কেয়ারে বিকল্প আয়া না রাখার পরিণতি কী?",
+                  "question_type": "storytelling",
+                  "explanation": "ডে-কেয়ারের আয়া বা নার্স পদের ধারাবাহিকতা রক্ষা করা মালিকের আইনি দায়িত্ব; কোনো অবস্থাতেই শিশুদের কেয়ারগিভার ছাড়া রাখা যাবে না।",
+                  "narrative": "💬 দৃশ্য ১:\nরনি: আমাদের ডে-কেয়ারের আয়া আপা আজ ছুটিতে গেছেন। ম্যানেজার সাহেব বলেছেন আজ মায়েদেরই কাজ বন্ধ করে বাচ্চাদের সামলাতে হবে।\nতানিয়া: রনি ভাই, এটি মারাত্মক ভুল। আয়া ছুটিতে থাকলে বিকল্প বা সাবস্টিটিউট আয়া প্রস্তুত রাখা এডমিনের দায়িত্ব। মায়েদের কাজ বন্ধ করানো বা বাচ্চাদের একা রাখা আইনের স্পষ্ট লঙ্ঘন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "91520447-4a43-4fb0-bfa1-fea6374766b6",
+                      "question_id": "240c9e24-f6f1-45fe-9b16-5421bdefeba2",
+                      "option_text": "এটি কল্যাণমূলক বিধিমালা লঙ্ঘনের দায়ে সরাসরি দণ্ডনীয় অপরাধ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "5cdd3956-e2a2-4aa6-adf6-a3547b14c017",
+                      "question_id": "240c9e24-f6f1-45fe-9b16-5421bdefeba2",
+                      "option_text": "কারখানার বাৎসরিক ট্যাক্স মওকুফ হওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "397081e3-4bb7-468b-9ea6-3ec62a56a304",
+                      "question_id": "240c9e24-f6f1-45fe-9b16-5421bdefeba2",
+                      "option_text": "বায়াররা কারখানাকে পুরস্কৃত করবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "9262aaa3-31fc-4fbb-ad68-df6f1f86c826",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "b2622ee3-e3b0-4a2e-aca3-d309e1bfcc25",
+                  "learning_point_id": "9262aaa3-31fc-4fbb-ad68-df6f1f86c826",
+                  "question_text": "বাম পাশের সুবিধার সাথে ডান পাশের আইনি খরচের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "দুধ সম্পূর্ণ বিনামূল্যে দিতে হয়, আয়ার বেতন কোম্পানি বহন করে এবং খেলনা সামগ্রী রাখা শিশুদের বিকাশের আইনি শর্ত।",
+                  "narrative": "💡 হিন্ট: ডে-কেয়ারের সুবিধা এবং তার প্রদেয় আইনি খরচের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "শিশুদের দৈনিক খাঁটি দুধ",
+                        "right": "মালিক কর্তৃক সম্পূর্ণ বিনামূল্যে প্রদেয়"
+                      },
+                      {
+                        "left": "আয়া বা নার্সের মাসিক বেতন",
+                        "right": "ফ্যাক্টরির নিজস্ব কল্যাণ তহবিল বা কোম্পানির ব্যয়"
+                      },
+                      {
+                        "left": "খেলনা ও বিনোদন সামগ্রী",
+                        "right": "শিশুদের মানসিক বিকাশে বাধ্যতামূলক সরঞ্জাম"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "f5fe3c95-b0a5-4ca7-bde1-a7fe50daf260",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "8787228a-d6f4-432f-bfe3-b3c19627d8c4",
+                  "learning_point_id": "f5fe3c95-b0a5-4ca7-bde1-a7fe50daf260",
+                  "question_text": "শিশুদের খাবার পাত্র ও ফিডার কি প্রতিদিন স্টেরিলাইজ বা ফুটন্ত গরম পানি দিয়ে শতভাগ জীবাণুমুক্ত করা আইনি বাধ্যবাধকতা?",
+                  "question_type": "boolean",
+                  "explanation": "শিশু স্বাস্থ্যের সুরক্ষায় ফিডিং সরঞ্জাম ও কিচেন হাইজিন বজায় রাখা ডে-কেয়ার মেইনটেন্যান্স লগবুকের একটি প্রধান শর্ত।",
+                  "narrative": "💡 হিন্ট: শিশুদের দুধ বা টিফিন দেওয়ার সময় যে পাত্র বা ফিডার ব্যবহার করা হয়, তা ফুটন্ত পানিতে ফুটিয়ে জীবাণুমুক্ত করা কমপ্লায়েন্সের অংশ।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "aaff3074-a45f-41b6-a24d-cd4e62ca2cda",
+                      "question_id": "8787228a-d6f4-432f-bfe3-b3c19627d8c4",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "64a37d2c-d226-45f9-bd75-732ac2fa6752",
+                      "question_id": "8787228a-d6f4-432f-bfe3-b3c19627d8c4",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "2327d92f-bd7f-4514-915c-03b4aa65b8b2",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "d41cae58-7a81-414d-bbf3-263e9679af93",
+                  "learning_point_id": "2327d92f-bd7f-4514-915c-03b4aa65b8b2",
+                  "question_text": "ডে-কেয়ারের শিশুদের বিনামূল্যে পুষ্টিকর খাদ্য ও আয়া সংক্রান্ত বিধি লঙ্ঘন করলে কোন আদালতে বিচার হয়?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের অধ্যায় ৮-এর অধীন যেকোনো কল্যাণমূলক সুবিধা (যেমন ডে-কেয়ারের খাদ্য ও স্টাফ) লঙ্ঘনের বিচার একমাত্র শ্রম আদালতেই সম্পন্ন হয়।",
+                  "narrative": "💡 হিন্ট: যদি কোনো পরিদর্শক তদন্তে পান যে ডে-কেয়ারের বাচ্চাদের নিম্নমানের বা বাসি দুধ দেওয়া হচ্ছে, তবে তিনি কঠোর আইনি ব্যবস্থা নেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1bfab304-b84f-4ac0-923b-724729889207",
+                      "question_id": "d41cae58-7a81-414d-bbf3-263e9679af93",
+                      "option_text": "দেশের সংশ্লিষ্ট শ্রম আদালতে (Labor Court)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "6458cc49-1684-47a5-8b58-7d1b39af495f",
+                      "question_id": "d41cae58-7a81-414d-bbf3-263e9679af93",
+                      "option_text": "সাধারণ বাণিজ্যিক সালিশি বোর্ডে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "5131ff8f-f9fd-4251-808b-42b6b15a7942",
+                      "question_id": "d41cae58-7a81-414d-bbf3-263e9679af93",
+                      "option_text": "স্থানীয় ইউনিয়ন পরিষদ দপ্তরে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "3aadb93c-5c5d-4a45-9dc8-2948eb8907a1",
+              "chapter_id": "567c3b05-a0d3-4db8-8876-6da107ce7c18",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "e2c27254-8fc8-4bc9-b53c-f2b552f9f9b5",
+                  "learning_point_id": "3aadb93c-5c5d-4a45-9dc8-2948eb8907a1",
+                  "question_text": "বিনামূল্যে দুধ ও টিফিন বিতরণের সঠিক কমপ্লায়েন্স ডাটা বজায় রাখতে এডমিন বিভাগের কী করণীয়? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "বাচ্চাদের লুকিয়ে রাখা গুরুতর মানবাধিকার ও আইন লঙ্ঘন; স্বচ্ছ রেকর্ড এবং স্টাফদের মেডিকেল চেকআপ বজায় রাখাই হলো সঠিক আইনি পথ।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট ফ্যাক্টরির ডে-কেয়ারে শিশুদের দৈনিক ওজন ও স্বাস্থ্য পরীক্ষার একটি মেডিকেল খাতা বা লগবুক রাখা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "a48ee52a-879f-45d8-ac44-9f16b8f5c52d",
+                      "question_id": "e2c27254-8fc8-4bc9-b53c-f2b552f9f9b5",
+                      "option_text": "দৈনিক দুধ ও খাবার বিতরণের পরিমাণ ও গুণগত মান সুনির্দিষ্ট রেজিস্টার খাতায় লিখে রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "89ea9701-024b-4a64-8308-5e260a6d5df0",
+                      "question_id": "e2c27254-8fc8-4bc9-b53c-f2b552f9f9b5",
+                      "option_text": "শিশুদের জন্য নিয়োজিত আয়ার বাৎসরিক স্বাস্থ্য পরীক্ষা বা মেডিকেল ফিটনেস সার্টিফিকেট ফাইলে রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "52d8eea8-ff7c-47fc-ac54-eb1acb92851e",
+                      "question_id": "e2c27254-8fc8-4bc9-b53c-f2b552f9f9b5",
+                      "option_text": "বায়ার অডিটের সময় ডে-কেয়ারের বাচ্চাদের লক করে অন্য রুমে লুকিয়ে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
             }
           ]
         },
@@ -30330,14 +31026,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "aa1a4e88-ee7a-4b04-ae96-bb85a074989d",
+              "id": "d4d650d5-d47f-4942-81b2-2e8d3a890757",
               "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে প্রতিবন্ধী শ্রমিকদের আবাসন সুবিধা নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:22.846931+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "e1dd0e1a-8fdd-4229-b901-bdd5f6c70c49",
+                  "learning_point_id": "d4d650d5-d47f-4942-81b2-2e8d3a890757",
+                  "question_text": "বাংলাদেশ শ্রম আইন অনুযায়ী, সাধারণত কতজন শ্রমিক নিযুক্ত থাকলে কারখানায় 'কল্যাণ কর্মকর্তা' (Welfare Officer) নিয়োগ করা বাধ্যতামুলক?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৯৪(১) এর স্পষ্ট বিধান অনুযায়ী, যে সমস্ত কারখানা বা প্রতিষ্ঠানে সাধারণত পাঁচশত (৫০০) বা ততোধিক শ্রমিক নিযুক্ত থাকেন, সেখানে একজন যোগ্য কল্যাণ কর্মকর্তা বা ওয়েলফেয়ার অফিসার নিয়োগ করতে হবে।",
+                  "narrative": "💡 হিন্ট: কারখানায় মালিক ও শ্রমিকদের মধ্যে সুসম্পর্ক বজায় রাখা এবং কল্যাণমূলক সুবিধাগুলো তদারকি করতে একজন ডেডিকেটেড কর্মকর্তা নিয়োগ করতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f7b1afc6-d6e9-4e8b-a96f-d04b5f6175eb",
+                      "question_id": "e1dd0e1a-8fdd-4229-b901-bdd5f6c70c49",
+                      "option_text": "১০০ জন শ্রমিক থাকলে",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "f61bbbf7-af76-4303-a904-c0d9de4b654b",
+                      "question_id": "e1dd0e1a-8fdd-4229-b901-bdd5f6c70c49",
+                      "option_text": "২৫০ জন বা তার বেশি শ্রমিক থাকলে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "d02a5eff-dbe6-4094-b9bd-606aeaf73ee7",
+                      "question_id": "e1dd0e1a-8fdd-4229-b901-bdd5f6c70c49",
+                      "option_text": "৫০০ বা ততোধিক শ্রমিক থাকলে",
+                      "is_correct": true,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "8d974123-9a92-4671-8a61-3f4f3f178f62",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "b9de6c66-af5b-4dce-91e5-13ae139f2144",
+                  "learning_point_id": "8d974123-9a92-4671-8a61-3f4f3f178f62",
+                  "question_text": "সরকারের নির্ধারিত বিধি অনুযায়ী কি কল্যাণ কর্মকর্তার জন্য একটি নির্দিষ্ট শিক্ষাগত যোগ্যতা ও প্রশিক্ষণ থাকা আইনত বাধ্যতামুলক?",
+                  "question_type": "boolean",
+                  "explanation": "শ্রম বিধিমালা অনুযায়ী, ওয়েলফেয়ার অফিসারের জন্য বিশ্ববিদ্যালয় থেকে ডিগ্রি এবং বিশেষ করে শ্রম আইন, সমাজকল্যাণ বা মানবসম্পদ (HRM) বিষয়ে বিশেষায়িত জ্ঞান থাকা আবশ্যিক যোগ্যতা।",
+                  "narrative": "💡 হিন্ট: কল্যাণ কর্মকর্তার পদটি অত্যন্ত সংবেদনশীল। যেকোনো ব্যক্তিকেই এই পদে বসানো যায় না; তার সমাজবিজ্ঞান বা মানবসম্পদ ব্যবস্থাপনায় সুনির্দিষ্ট আইনি যোগ্যতা থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "7467a6de-5337-4328-b57c-f39be15d53ae",
+                      "question_id": "b9de6c66-af5b-4dce-91e5-13ae139f2144",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "a896c3c3-120d-41c3-8783-e986c9ed7332",
+                      "question_id": "b9de6c66-af5b-4dce-91e5-13ae139f2144",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "88172aa2-ae8d-487e-bfb1-550b7587a66f",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "554cb433-b036-4adb-9892-93e0c37f4bdd",
+                  "learning_point_id": "88172aa2-ae8d-487e-bfb1-550b7587a66f",
+                  "question_text": "একজন আইনি কল্যাণ কর্মকর্তার (Welfare Officer) প্রধান দায়িত্বগুলোর মধ্যে কোন কোন বিষয় পড়ে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "কল্যাণ কর্মকর্তার কাজের এক্তিয়ার সম্পূর্ণ কল্যাণ ও কমপ্লায়েন্স কেন্দ্রিক; বাণিজ্যিক দরাদরি তার কাজের অংশ নয় (ধারা ৯৪)।",
+                  "narrative": "💡 হিন্ট: কল্যাণ কর্মকর্তা কারখানার বাণিজ্যিক উৎপাদন বা সেলস দেখেন না, তার মূল কাজ শ্রমিকদের সুযোগ-সুবিধা ও কমপ্লায়েন্স নিশ্চিত করা।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d24117a2-3566-4fc5-86ac-7a9633c2bcd1",
+                      "question_id": "554cb433-b036-4adb-9892-93e0c37f4bdd",
+                      "option_text": "কারখানার ক্যান্টিন, ডে-কেয়ার, ফার্স্ট-এইড এবং বিশ্রামাগারের সুবিধাগুলো সঠিকভাবে চলছে কিনা তা তদারকি করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "7eaa3863-278c-4030-b631-ebfc4273cb10",
+                      "question_id": "554cb433-b036-4adb-9892-93e0c37f4bdd",
+                      "option_text": "শ্রমিকদের ব্যক্তিগত বা দলগত যেকোনো আইনি অসন্তোষ বা অভিযোগ (Grievance) শুনানির মাধ্যমে মেটাতে মালিককে সহায়তা করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "9ca1733d-7829-43f9-a475-c93c25a66f41",
+                      "question_id": "554cb433-b036-4adb-9892-93e0c37f4bdd",
+                      "option_text": "বায়ারদের কাছ থেকে নতুন অর্ডারের প্রাইস বা মূল্য নিয়ে দরাদরি করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "3c57fc41-58b7-4b96-aef1-c0335231808b",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "c924b5c0-144f-4bdb-a38c-050933e6a359",
+                  "learning_point_id": "3c57fc41-58b7-4b96-aef1-c0335231808b",
+                  "question_text": "নাসরিনের আইনি গাইডলাইন অনুযায়ী, কামালদের কারখানায় কেন কল্যাণ কর্মকর্তা নিয়োগ করা অলঙ্ঘনীয় দায়িত্ব?",
+                  "question_type": "storytelling",
+                  "explanation": "৫০০ জন শ্রমিক হলো কল্যাণ কর্মকর্তা নিয়োগের আইনি কাট-অফ বা সীমা। এই সংখ্যা স্পর্শ করলেই স্বতন্ত্র ওয়েলফেয়ার অফিসার নিয়োগ দেওয়া বাধ্যতামূলক।",
+                  "narrative": "💬 দৃশ্য ১:\nকামাল: আমাদের টেক্সটাইল মিলে এখন মোট ৬০০ জন শ্রমিক কাজ করছেন। কিন্তু আমাদের কোনো ওয়েলফেয়ার অফিসার নেই, এইচআর ম্যানেজারই সব একাই দেখেন।\nনাসরিন: কামাল সাহেব, এটি আইনি কমপ্লায়েন্সের সরাসরি বিচ্যুতি! যেহেতু শ্রমিক সংখ্যা ৫০০ পার হয়েছে, তাই ধারা ৯৪ অনুযায়ী অবিলম্বে একজন স্বতন্ত্র ও সার্টিফাইড কল্যাণ কর্মকর্তা নিয়োগ দেওয়া মালিকের আইনি বাধ্যবাধকতা।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1e809668-6070-4116-af0a-1c7e8fbde4be",
+                      "question_id": "c924b5c0-144f-4bdb-a38c-050933e6a359",
+                      "option_text": "কারণ কারখানার মোট শ্রমিক সংখ্যা ৫০০ বা তার বেশি",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "697e1c1c-2f25-4841-ad92-1cf2496d46ba",
+                      "question_id": "c924b5c0-144f-4bdb-a38c-050933e6a359",
+                      "option_text": "কারণ কারখানার ফ্যাক্টরি লাইসেন্স নবায়ন ফি কমবে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "a5565fb0-0e16-4b80-9fcc-b513366c65e2",
+                      "question_id": "c924b5c0-144f-4bdb-a38c-050933e6a359",
+                      "option_text": "কারণ বায়াররা তাকে পছন্দ করেন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "6dc719bd-499b-4ff8-9ebd-f2c4f48b4070",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "df1d621c-3db3-429a-98de-701fed23fe22",
+                  "learning_point_id": "6dc719bd-499b-4ff8-9ebd-f2c4f48b4070",
+                  "question_text": "বাম পাশের শ্রমিক সংখ্যার সাথে ডান পাশের আইনি বাধ্যবাধকতার মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "৫০০ জনের কম হলে বাধ্যতামূলক নয়, ৫০০-২০০০ এর জন্য ১ জন এবং প্রতি অতিরিক্ত ২,০০০ শ্রমিকের জন্য অতিরিক্ত ওয়েলফেয়ার অফিসার নিয়োগের আইনি নিয়ম রয়েছে।",
+                  "narrative": "💡 হিন্ট: কারখানার শ্রমিক সংখ্যা এবং তার বিপরীতে কল্যাণ কর্মকর্তার আইনি পদের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "৫০০ জনের কম শ্রমিক",
+                        "right": "কল্যাণ কর্মকর্তা নিয়োগ আইনত বাধ্যতামূলক নয়"
+                      },
+                      {
+                        "left": "৫০০ থেকে ২,০০০ শ্রমিক",
+                        "right": "ন্যূনতম ১ জন স্বতন্ত্র কল্যাণ কর্মকর্তা বাধ্যতামূলক"
+                      },
+                      {
+                        "left": "২,০০০ জনের অধিক শ্রমিক",
+                        "right": "প্রতি অতিরিক্ত ২,০০০ বা অংশের জন্য অতিরিক্ত কর্মকর্তা"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "f9f487f8-5d56-4dc5-8161-996aec0a6c5c",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "5c4eb63a-dcfd-44c2-bb44-a840f2a3c070",
+                  "learning_point_id": "f9f487f8-5d56-4dc5-8161-996aec0a6c5c",
+                  "question_text": "কল্যাণ কর্মকর্তা কি কারখানার অভ্যন্তরীণ পার্টিসিপেশন কমিটির (Participation Committee) সভার সমন্বয়ক বা লিয়াজোঁ অফিসার হিসেবে কাজ করার আইনি এক্তিয়ার রাখেন?",
+                  "question_type": "boolean",
+                  "explanation": "মালিক ও শ্রমিকের মধ্যস্থতাকারী হিসেবে কল্যাণ কর্মকর্তা অত্যন্ত গুরুত্বপূর্ণ ভূমিকা পালন করেন এবং সেফটি বা পার্টিসিপেশন মিটিংয়ে তিনি লিয়াজোঁ হিসেবে কাজ করেন।",
+                  "narrative": "💡 হিন্ট: কল্যাণ কর্মকর্তাকে মালিক পক্ষ যেন অন্যায়ভাবে চাপ দিয়ে শ্রমিক স্বার্থ বিরোধী কাজ করাতে না পারেন, সেজন্য তার চাকরির সুরক্ষার কিছু আইনি গাইডলাইন থাকে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c8ddb75d-e0d3-4c34-8ce4-fe0d2619ee73",
+                      "question_id": "5c4eb63a-dcfd-44c2-bb44-a840f2a3c070",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "d95b1551-d63b-4a83-956d-51ff716991d1",
+                      "question_id": "5c4eb63a-dcfd-44c2-bb44-a840f2a3c070",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "7b70ae77-e2a4-489a-b46d-f593f2145159",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "400d4de0-f414-432c-83a1-5058bf2a668d",
+                  "learning_point_id": "7b70ae77-e2a4-489a-b46d-f593f2145159",
+                  "question_text": "কল্যাণ কর্মকর্তা নিয়োগ না করলে কারখানার মালিকের বিরুদ্ধে কোন আইনের অধীনে মামলা দায়ের করা হয়?",
+                  "question_type": "mcq",
+                  "explanation": "ওয়েলফেয়ার অফিসার নিয়োগে অবহেলা করা শ্রম আইনের সরাসরি লঙ্ঘন এবং এটি শ্রম আদালতের মাধ্যমে দণ্ডনীয় অপরাধ।",
+                  "narrative": "💡 হিন্ট: অডিটের সময় যদি দেখা যায় ৫০০-এর বেশি শ্রমিক থাকা সত্ত্বেও কোনো ওয়েলফেয়ার অফিসার নেই, তবে প্রধান পরিদর্শক দল জরিমানা চার্জ করেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "44b3bc82-c035-4d4b-9b88-28a780432590",
+                      "question_id": "400d4de0-f414-432c-83a1-5058bf2a668d",
+                      "option_text": "বাংলাদেশ শ্রম আইন, ২০০৬ (ধারা ৯৪ ও ২৮৪)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "5716b2b3-835e-4223-b622-a82f13fb8821",
+                      "question_id": "400d4de0-f414-432c-83a1-5058bf2a668d",
+                      "option_text": "সাধারণ দেওয়ানি কন্ট্রাক্ট অ্যাক্ট",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "bc968253-8d52-4e6e-9809-45070bc41e19",
+                      "question_id": "400d4de0-f414-432c-83a1-5058bf2a668d",
+                      "option_text": "ব্যাংকিং কোম্পানি অধ্যাদেশ",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "4bc5bbdb-1210-4578-9835-98e14f047862",
+              "chapter_id": "f9877d5b-92a3-480a-b6ce-f21ccdbb98d8",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "baf52c45-9470-4bad-a81d-3721ebedecee",
+                  "learning_point_id": "4bc5bbdb-1210-4578-9835-98e14f047862",
+                  "question_text": "কল্যাণ কর্মকর্তার আইনি কার্যকারিতা অক্ষত রাখতে এডমিন বিভাগের কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "ভুনা চিঠি লেখানো বেআইনি ও পদের অবমাননা; স্বাধীন অফিস স্পেস এবং আইনি রিপোর্টে সহযোগিতা করাই হলো সঠিক কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় কল্যাণ কর্মকর্তার বসার জন্য এমন একটি অফিস রুম দেওয়া হয় যেখানে সাধারণ শ্রমিকরা এসে গোপনে তাদের সমস্যার কথা বলতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1d75e128-5e99-446d-ae63-318b76e58edd",
+                      "question_id": "baf52c45-9470-4bad-a81d-3721ebedecee",
+                      "option_text": "কল্যাণ কর্মকর্তার জন্য কারখানার ভেতরে একটি নির্দিষ্ট ও সহজলভ্য অফিস কক্ষের ব্যবস্থা করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "16dc6d77-8863-451a-9e5b-3ad81da86a3d",
+                      "question_id": "baf52c45-9470-4bad-a81d-3721ebedecee",
+                      "option_text": "শ্রমিকদের কল্যাণমূলক সুযোগ-সুবিধার মাসিক বা বাৎসরিক রিপোর্ট প্রধান পরিদর্শকের কাছে প্রেরণে তাকে সহায়তা করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "7c2bb1b6-8703-4269-96d8-63871c3b97fa",
+                      "question_id": "baf52c45-9470-4bad-a81d-3721ebedecee",
+                      "option_text": "কল্যাণ কর্মকর্তাকে দিয়ে শ্রমিকদের বেআইনিভাবে চাকরি থেকে বরখাস্ত করার ভুয়া চিঠি লেখানো।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
             }
           ]
         },
@@ -30355,14 +31399,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "ece75783-7bf9-401a-83ee-6310375c0ed9",
+              "id": "2c41c74c-71a0-422d-8016-a07537ce9751",
               "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে চা-বাগানে বিনোদন ও শিক্ষার সুবিধা নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:22.846931+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "d501b1c1-eea6-46e7-8d24-9a1d4dfe4768",
+                  "learning_point_id": "2c41c74c-71a0-422d-8016-a07537ce9751",
+                  "question_text": "বাংলাদেশ শ্রম আইন অনুযায়ী, প্রতিটি কারখানায় শ্রমিকদের হাত-মুখ ধোয়া এবং পরিষ্কার হওয়ার জন্য কি আলাদা 'ধৌতকরণ সুবিধা' (Washing Facilities) রাখা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৮৮(১) অনুযায়ী, প্রত্যেক কারখানায় বা প্রতিষ্ঠানে শ্রমিকদের ব্যবহারের জন্য উপযুক্ত এবং পর্যাপ্ত ধৌতকরণ বা হাত-মুখ ধোয়ার বিশেষ ব্যবস্থা রাখা মালিকের অলঙ্ঘনীয় আইনি দায়িত্ব।",
+                  "narrative": "💡 হিন্ট: কাজ শেষে বা বিরতির সময় শ্রমিকদের হাত-মুখ ধোয়া এবং গোসলের জন্য কারখানার ভেতরে উপযুক্ত পরিকাঠামো থাকা একটি মৌলিক কল্যাণমূলক অধিকার।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e0970a7b-5bb9-4a68-bef2-48de384df2c8",
+                      "question_id": "d501b1c1-eea6-46e7-8d24-9a1d4dfe4768",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "9c48f16d-7b20-4a8f-ad72-f93a4566fff8",
+                      "question_id": "d501b1c1-eea6-46e7-8d24-9a1d4dfe4768",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "e85f180b-37db-47f7-9f83-940b37238d59",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "89daa2fd-50fb-407e-ae79-d754b388a6f0",
+                  "learning_point_id": "e85f180b-37db-47f7-9f83-940b37238d59",
+                  "question_text": "ধৌতকরণ ও হাত-মুখ ধোয়ার সুনির্দিষ্ট আইনি পরিকাঠামো কেমন হওয়া বাধ্যতামূলক?",
+                  "question_type": "mcq",
+                  "explanation": "আইন অনুযায়ী, মহিলা শ্রমিকদের ধৌতকরণ বা চেঞ্জিং রুমের স্থানটি পুরুষদের চোখ থেকে সম্পূর্ণ আড়ালে এবং সম্পূর্ণ আলাদা প্রবেশদ্বার বিশিষ্ট হতে হবে।",
+                  "narrative": "💡 হিন্ট: কারখানায় পুরুষ ও নারী শ্রমিকদের গোপনীয়তা ও শালীনতা বজায় রাখতে ধৌতকরণ স্থান বা গোসলখানা সম্পূর্ণ আলাদা হতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d0dc260c-8e1c-48f0-b219-e69b34cb8ec1",
+                      "question_id": "89daa2fd-50fb-407e-ae79-d754b388a6f0",
+                      "option_text": "পুরুষ ও মহিলা শ্রমিকদের জন্য সম্পূর্ণ পৃথক (Separated) ও পর্দার ব্যবস্থা সম্বলিত হওয়া",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "f785b3ca-a370-4ce8-af46-f095e2060212",
+                      "question_id": "89daa2fd-50fb-407e-ae79-d754b388a6f0",
+                      "option_text": "নারী ও পুরুষের জন্য একই সাধারণ উন্মুক্ত বেসিন রাখা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "b9c8e76c-56e2-4ac1-8120-23769f9fbeae",
+                      "question_id": "89daa2fd-50fb-407e-ae79-d754b388a6f0",
+                      "option_text": "কোনো বাউন্ডারি বা দেয়াল ছাড়া রাস্তার পাশে খোলা কল রাখা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "00a10423-8a55-4aef-8fcd-2667ea5ed4b7",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "e3b134fb-c036-4372-b4f5-178618478f20",
+                  "learning_point_id": "00a10423-8a55-4aef-8fcd-2667ea5ed4b7",
+                  "question_text": "ধৌতকরণ ও কাপড়ের ব্যবস্থা অধ্যায়ের অধীনে কোন কোন আইনি কমপ্লায়েন্স নিশ্চিত করতে হয়? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "লন্ড্রি চার্জের নামে বেতন কাটা বেআইনি; পরিষ্কার পানি, সাবান এবং কাজের কাপড় শুকানোর জায়গা দেওয়া মালিকের নিজস্ব আইনি দায়।",
+                  "narrative": "💡 হিন্ট: যেসব কারখানায় ক্ষতিকারক বা নোংরা রাসায়নিক (যেমন ডাইং বা ওয়াশিং মিলে) কাজ করতে হয়, সেখানে কাজের পোশাক পরিবর্তনের বিশেষ আইনি নিয়ম রয়েছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b2a36130-28a7-4e73-a29e-acfe46293d0d",
+                      "question_id": "e3b134fb-c036-4372-b4f5-178618478f20",
+                      "option_text": "শ্রমিকদের কাজের ভেজা বা নোংরা পোশাক কারখানার ভেতরেই শুকাতে দেওয়ার জন্য উপযুক্ত আলাদা সুনির্দিষ্ট জায়গা (Drying Space) রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "7f11e0fd-7ff7-4c99-a3da-7475d512f49c",
+                      "question_id": "e3b134fb-c036-4372-b4f5-178618478f20",
+                      "option_text": "ধৌতকরণের স্থানে সার্বক্ষণিক পরিষ্কার পানি এবং পর্যাপ্ত সাবান বা ডিটারজেন্টের ব্যবস্থা রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "56be54a4-073f-41cd-b917-c8d2b67e0e01",
+                      "question_id": "e3b134fb-c036-4372-b4f5-178618478f20",
+                      "option_text": "শ্রমিকদের ইউনিফর্ম ধোয়ার জন্য তাদের বেতন থেকে লন্ড্রি চার্জ কেটে নেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "a7f425c5-4951-47ee-b00c-0f663ff78d37",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "9c10f48e-a9f3-48b3-8f37-b41cf017f2ff",
+                  "learning_point_id": "a7f425c5-4951-47ee-b00c-0f663ff78d37",
+                  "question_text": "মনিরার আইনি ও সেফটি তাগিদ অনুযায়ী, আসিফদের ডাইং মিলে আলাদা ধৌতকরণ ব্যবস্থা না রাখার আইনি পরিণতি কী?",
+                  "question_type": "storytelling",
+                  "explanation": "শ্রমিকদের হাত ধোয়া ও পরিচ্ছন্নতার সঠিক উপাদান (পানি ও সাবান) না দেওয়া কারখানার কমপ্লায়েন্স রেটিং সরাসরি জিরো করে দেয় এবং এটি দণ্ডনীয় অপরাধ।",
+                  "narrative": "💬 দৃশ্য ১:\nআসিফ: আমাদের ডাইং সেকশনের শ্রমিকরা কেমিক্যালের কাজ শেষ করে সাধারণ খাবার পানির কল দিয়ে হাত ধুয়ে লাঞ্চ করতে যান। আলাদা কোনো সাবান বা বেসিন নেই।\nমনিরা: আসিফ সাহেব, এটি ধারা ৮৮-এর তীব্র লঙ্ঘন এবং স্বাস্থ্যের জন্য মারাত্মক ঝুঁকি! কেমিক্যাল বা ধুলোবালির কাজের পর শ্রমিকদের জন্য আলাদা ওয়াশিং জোন, পরিষ্কার পানি ও জীবাণুমুক্ত সাবান রাখা বাধ্যতামূলক। অবিলম্বে ব্যবস্থা নিন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "358b19e9-8ade-4b06-9e25-1f9910684ec1",
+                      "question_id": "9c10f48e-a9f3-48b3-8f37-b41cf017f2ff",
+                      "option_text": "এটি শ্রম আইনের ধারা ৮৮ লঙ্ঘনের দায়ে সরাসরি মামলা ও অর্থদণ্ডযোগ্য অপরাধ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "9012f9a5-9ac7-4ed7-904e-08b244056acd",
+                      "question_id": "9c10f48e-a9f3-48b3-8f37-b41cf017f2ff",
+                      "option_text": "কারখানার বিদ্যুৎ বিল অর্ধেক হয়ে যাওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "dc48189e-b496-4d49-be79-f60bbd98ce72",
+                      "question_id": "9c10f48e-a9f3-48b3-8f37-b41cf017f2ff",
+                      "option_text": "বায়াররা এই কারখানাকে বেশি দামের অর্ডার দেবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "cf81fc4a-44ad-447a-8216-5dcdffac7d4a",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "31d76184-be26-41b1-8860-9943082595a6",
+                  "learning_point_id": "cf81fc4a-44ad-447a-8216-5dcdffac7d4a",
+                  "question_text": "বাম পাশের বিষয়ের সাথে ডান পাশের আইনি কমপ্লায়েন্স স্ট্যান্ডার্ডের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "নারীদের স্থান সম্পূর্ণ আড়াল ও পৃথক হবে, পুরুষদের জন্য আলাদা কল থাকবে এবং মেঝের হাইজিন সর্বদা পরিষ্কার রাখতে হবে।",
+                  "narrative": "💡 হিন্ট: ধৌতকরণ সুবিধা এবং তাদের আইনি কমপ্লায়েন্স স্ট্যান্ডার্ডের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "মহিলা শ্রমিকদের ধৌতকরণ স্থান",
+                        "right": "সম্পূর্ণ পৃথক, নিরাপদ ও আড়াল করা প্রবেশদ্বার"
+                      },
+                      {
+                        "left": "পুরুষ শ্রমিকদের ধৌতকরণ স্থান",
+                        "right": "পুরুষদের জন্য সুনির্দিষ্ট ও পর্যাপ্ত পানির কল"
+                      },
+                      {
+                        "left": "ধৌতকরণ মেঝের পরিচ্ছন্নতা",
+                        "right": "ধুলোবালি মুক্ত ও দৈনিক দুইবার পরিষ্কার করা"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "f638ce9e-0531-4e37-a803-3314f9480094",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "2270a08b-dceb-4fda-a86a-9342aa043755",
+                  "learning_point_id": "f638ce9e-0531-4e37-a803-3314f9480094",
+                  "question_text": "বিপজ্জনক বা তীব্র নোংরা প্রক্রিয়ার কারখানায় কি সাধারণ বেসিনের পাশাপাশি শ্রমিকদের জন্য আইনি 'গোসলখানা' (Bathing Facilities) রাখা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৮৮ এবং সংশ্লিষ্ট তফসিল অনুযায়ী, কাজের ধরণ বিপজ্জনক বা অতিরিক্ত নোংরা হলে গোসলখানা এবং শাওয়ারের সুবিধা রাখা অলঙ্ঘনীয় কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: কিছু বিশেষ কারখানায় (যেমন সিসা বা বিষাক্ত গ্যাস চেম্বার) কাজ শেষে শ্রমিকদের সম্পূর্ণ গোসল করে বাড়ি যাওয়া বাধ্যতামূলক, তাই সেখানে শাওয়ার বা ঝরনা থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b210b6d1-0e6e-40fe-bfcc-643fcf915338",
+                      "question_id": "2270a08b-dceb-4fda-a86a-9342aa043755",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "35169514-ddf1-41a5-85be-c72ba544fb2f",
+                      "question_id": "2270a08b-dceb-4fda-a86a-9342aa043755",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "5f1e909b-249e-45a6-8de6-2a307cabdb5a",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "2487ffdb-da09-4c6b-b9b8-3a07beefcd37",
+                  "learning_point_id": "5f1e909b-249e-45a6-8de6-2a307cabdb5a",
+                  "question_text": "ধৌতকরণ ও কাপড়ের সুনির্দিষ্ট ব্যবস্থা রাখতে ব্যর্থ হলে প্রতিষ্ঠানের বিরুদ্ধে কোন আদালতে মামলা দায়ের করা হয়?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের অধ্যায় ৮-এর অধীন যেকোনো কল্যাণমূলক সুবিধা (যেমন ওয়াশিং ফ্যাসিলিটি) না দেওয়া সরাসরি শ্রম আদালতের এক্তিয়ারভুক্ত ফৌজদারি অপরাধ।",
+                  "narrative": "💡 হিন্ট: বায়ার অডিটের সময় যদি দেখা যায় হাত ধোয়ার বেসিনে কোনো সাবান নেই বা পানি ব্লক হয়ে দুর্গন্ধ ছড়াচ্ছে, তবে তারা ফ্যাক্টরিকে ব্ল্যাকলিস্ট করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "0e46631d-d391-4f98-a5a4-64f00c787cbb",
+                      "question_id": "2487ffdb-da09-4c6b-b9b8-3a07beefcd37",
+                      "option_text": "সংশ্লিষ্ট শ্রম আদালতে (Labor Court)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "3d2f96d1-5c47-486d-a55c-3e8b63f863fe",
+                      "question_id": "2487ffdb-da09-4c6b-b9b8-3a07beefcd37",
+                      "option_text": "সাধারণ পারিবারিক দেওয়ানি আদালতে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "660ff750-ad83-4748-8e9c-8d8466497237",
+                      "question_id": "2487ffdb-da09-4c6b-b9b8-3a07beefcd37",
+                      "option_text": "কাস্টমস বা ভ্যাট ট্রাইব্যুনালে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "0ef34388-7de9-4bc2-8ae1-bc60e3a83d06",
+              "chapter_id": "738ed889-f1a3-4cb6-9fb0-e903f4822668",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "16022a2c-3be2-4e47-8ca0-8329e7fbf984",
+                  "learning_point_id": "0ef34388-7de9-4bc2-8ae1-bc60e3a83d06",
+                  "question_text": "ধৌতকরণ ব্যবস্থার সঠিক আইনি কমপ্লায়েন্স বজায় রাখতে এডমিন বিভাগের কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "পানির কল বন্ধ রাখা বেআইনি; সচল ড্রেনেজ এবং নিরাপদ লকার বা কাপড় শুকানোর স্পেস রাখাই হলো আইনসম্মত সঠিক কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় ধৌতকরণ জোনের পানি নিষ্কাশনের ড্রেনগুলো সর্বদা সচল রাখা হয় যাতে ফ্লোরে পানি জমে পিছল না হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "998300ff-32c5-45e1-981b-a30e3e6a9b26",
+                      "question_id": "16022a2c-3be2-4e47-8ca0-8329e7fbf984",
+                      "option_text": "ওয়াশিং জোনের ড্রেনেজ লাইন সচল রাখা যাতে কোনো নোংরা পানি জমে মশা না জন্মায়।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "c419807c-a5b5-4a77-8ba2-2b9d029a0e73",
+                      "question_id": "16022a2c-3be2-4e47-8ca0-8329e7fbf984",
+                      "option_text": "শ্রমিকদের কাজের ব্যক্তিগত লকার বা কাপড় রাখার আলমারি নিরাপদ ও লকযোগ্য রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "741a084d-def8-42da-96ba-1bd99d09899d",
+                      "question_id": "16022a2c-3be2-4e47-8ca0-8329e7fbf984",
+                      "option_text": "খরচ বাঁচাতে ওয়াশিং জোনের পানির মেইন ভালভ বা কল কাজের সময় বন্ধ রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
             }
           ]
         },
@@ -30380,14 +31772,370 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "baee5599-7e24-4414-b716-d7cf74d5da13",
+              "id": "5fe72709-4be6-471a-841c-129edf8b64f3",
               "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে চা-বাগানে গৃহায়ন সুবিধা নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:22.846931+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "bd2fc580-ed34-471a-8bea-a4d71645cf9a",
+                  "learning_point_id": "5fe72709-4be6-471a-841c-129edf8b64f3",
+                  "question_text": "কোনো মালিক যদি এই অধ্যায়ের অধীন কোনো কল্যাণমূলক আইনি বিধান প্রথমবার লঙ্ঘন বা অমান্য করেন, তবে সর্বোচ্চ কত টাকা অর্থদণ্ডের বিধান রয়েছে?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের ধারা ২৮৪-এর সাধারণ দণ্ড অনুযায়ী, এই আইনের অধীনে কল্যাণ ও নিরাপত্তা সংক্রান্ত কোনো বিধান প্রথমবার অমান্য বা লঙ্ঘন করলে অনধিক ৫,০০০ টাকা পর্যন্ত অর্থদণ্ডের আইনি বিধান রয়েছে।",
+                  "narrative": "💡 হিন্ট: মডিউল ৮-এর যেকোনো কল্যাণমূলক বিধান (যেমন ফার্স্ট-এইড বক্স না রাখা, ক্যান্টিন বা ডে-কেয়ার না করা, ওয়েলফেয়ার অফিসার নিয়োগ না করা) অমান্য করলে শ্রম আইনে সুনির্দিষ্ট আর্থিক জরিমানার পরিমাণ নির্ধারিত আছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "13d39536-69a9-44e9-b36f-4e8cb51a1ead",
+                      "question_id": "bd2fc580-ed34-471a-8bea-a4d71645cf9a",
+                      "option_text": "অনধিক ৫,০০০ টাকা পর্যন্ত",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "c1a92c61-3ce7-4c00-9f9f-0b58d2991294",
+                      "question_id": "bd2fc580-ed34-471a-8bea-a4d71645cf9a",
+                      "option_text": "৫০,০০০ টাকা পর্যন্ত",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "121a9c03-cc18-4f13-b6bb-b86706dd10f9",
+                      "question_id": "bd2fc580-ed34-471a-8bea-a4d71645cf9a",
+                      "option_text": "চাকুরীর লাইসেন্স আজীবনের জন্য ফ্রি করা হবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "9178d6e0-b6b3-4780-b968-aea710610061",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "bed4f429-d275-4b26-ad8a-de521ea09281",
+                  "learning_point_id": "9178d6e0-b6b3-4780-b968-aea710610061",
+                  "question_text": "প্রথমবার অপরাধের দণ্ড পাওয়ার পরও যদি আইন লঙ্ঘন বা ত্রুটি সংশোধন না করে তা অব্যাহত রাখা হয়, তবে কি প্রতিদিনের জন্য অতিরিক্ত দৈনিক জরিমানা (Daily fine) হবে?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৩০৭ এবং সংশ্লিষ্ট আইনি বিধি অনুযায়ী, চলমান বা ধারাবাহিক অপরাধের ক্ষেত্রে প্রথম দিনের দণ্ডের পর প্রতি অতিরিক্ত দিনের জন্য সুনির্দিষ্ট হারে দৈনিক জরিমানার কঠোর নিয়ম রয়েছে।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানায় পরিদর্শকের নোটিশ বা কোর্টের ফাইন পাওয়ার পরও ক্যান্টিন বা ডে-কেয়ার রুম স্থাপন না করে আইন লঙ্ঘন অব্যাহত রাখা হয়, তবে প্রতিদিনের জন্য আলাদা পেনাল্টি চার্জ হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "907da0d9-602c-45fe-aeee-4cc64957a6e8",
+                      "question_id": "bed4f429-d275-4b26-ad8a-de521ea09281",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "f7f64b1f-5824-4790-bf30-754d623ed26b",
+                      "question_id": "bed4f429-d275-4b26-ad8a-de521ea09281",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "95990f8a-55cf-4b56-ab1f-87a92a8a180a",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "b7ed2629-74aa-4a23-9e64-abbea949ae21",
+                  "learning_point_id": "95990f8a-55cf-4b56-ab1f-87a92a8a180a",
+                  "question_text": "কল্যাণমূলক আইনের বিধানসমূহ বারবার বা দ্বিতীয়বার লঙ্ঘন করলে কী কী আইনি শাস্তি হতে পারে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "অপরাধের পুনরাবৃত্তি ঘটলে শ্রম আইনের ধারা ৩০৭ এবং সাধারণ দণ্ডবিধি অনুযায়ী শাস্তির মাত্রা বহুগুণ বাড়িয়ে দেওয়া হয় এবং বাণিজ্যিক লাইসেন্স বাতিলের ঝুঁকি থাকে।",
+                  "narrative": "💡 হিন্ট: একই কারখানা যদি ডে-কেয়ার না দেওয়ার অপরাধ বা ফার্স্ট-এইড বক্স খালি রাখার অপরাধ বারবার করতে থাকে, তবে আইনগত শাস্তি বহুগুণ বৃদ্ধি পায়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "dcdae342-739d-408f-98e3-08dba8f17b80",
+                      "question_id": "b7ed2629-74aa-4a23-9e64-abbea949ae21",
+                      "option_text": "দ্বিগুণ জরিমানা বা সরাসরি অনধিক তিন মাস পর্যন্ত কারাদণ্ডের ব্যবস্থা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "62255dd9-3bfb-4f8f-8116-b4e8e167a887",
+                      "question_id": "b7ed2629-74aa-4a23-9e64-abbea949ae21",
+                      "option_text": "দ্বিতীয় বা পরবর্তী অপরাধের জন্য দ্বিগুণ জরিমানা বা সরাসরি অনধিক তিন মাস পর্যন্ত কারাদণ্ডের ব্যবস্থা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "c158954b-fb2a-405f-9b2e-728494338487",
+                      "question_id": "b7ed2629-74aa-4a23-9e64-abbea949ae21",
+                      "option_text": "প্রতিষ্ঠানের কারখানা লাইসেন্স ও বাণিজ্যিক নিবন্ধন সাময়িক বা স্থায়ীভাবে বাতিলকরণ।",
+                      "is_correct": true,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "5092a655-7a35-4429-998f-715e43135a58",
+                      "question_id": "b7ed2629-74aa-4a23-9e64-abbea949ae21",
+                      "option_text": "পরিদর্শক তাকে সরকারি তহবিল থেকে অনুদান দেওয়ার সুপারিশ করবেন।",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "cfe102bb-2671-4d18-8a01-3b80bd47c8e3",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "09698c38-ea5a-437f-b0b8-64dda1233c95",
+                  "learning_point_id": "cfe102bb-2671-4d18-8a01-3b80bd47c8e3",
+                  "question_text": "নাদিয়ার বক্তব্য অনুযায়ী, কারখানার কল্যাণমূলক বিধিমালা ভঙ্গ করে সিক রুম না রাখার মামলা কোন বিশেষ আদালতে দায়ের করা হবে?",
+                  "question_type": "storytelling",
+                  "explanation": "কারখানার অভ্যন্তরে যেকোনো কল্যাণমূলক আইনি সুবিধা অমান্য বা গোপন রাখা শ্রম আইনের দৃষ্টিতে একটি গুরুতর ও দণ্ডনীয় ফৌজদারি অপরাধ, যা কেবল শ্রম আদালতে বিচারযোগ্য।",
+                  "narrative": "💬 দৃশ্য ১:\nআসলাম: আমাদের কারখানায় ৪০০ জন শ্রমিক থাকা সত্ত্বেও কোনো প্রাথমিক চিকিৎসা কক্ষ (Sick Room) করা হয়নি। পরিদর্শক দল আজ এটি ধরে ফেলেছেন।\nনাদিয়া: আসলাম ভাই, ওনারা বড় বিপদে পড়বেন। ৩০০-এর বেশি শ্রমিক থাকলে সিক রুম না করা ধারা ৮৯-এর গুরুতর লঙ্ঘন। এবার শ্রম আদালতে সরাসরি ভারী জরিমানা ও মালিকের বিরুদ্ধে মামলা হবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "4132280f-91d0-427a-97a5-49e9145288f5",
+                      "question_id": "09698c38-ea5a-437f-b0b8-64dda1233c95",
+                      "option_text": "সংশ্লিষ্ট শ্রম আদালতে (Labor Court)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "709122f4-ab68-4a6e-a8b7-1587ec6e8956",
+                      "question_id": "09698c38-ea5a-437f-b0b8-64dda1233c95",
+                      "option_text": "সাধারণ পারিবারিক দেওয়ানি ট্রাইব্যুনালে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "2821a584-8dce-4e96-a5d6-31e14fcb4cb5",
+                      "question_id": "09698c38-ea5a-437f-b0b8-64dda1233c95",
+                      "option_text": "ট্যাক্স কমিশনারের দপ্তরে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "cd47d47b-a764-44fb-84b8-6c58ed14e710",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "2bd935b1-3cee-4335-ab52-bf9a04851fdb",
+                  "learning_point_id": "cd47d47b-a764-44fb-84b8-6c58ed14e710",
+                  "question_text": "বাম পাশের অপরাধের সাথে ডান পাশের আইনি ফলাফলের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "ক্যান্টিন না রাখলে ধারা ৯০ ভঙ্গের মামলা হয়, অপরাধের পুনরাবৃত্তি ঘটলে দ্বিগুণ জরিমানা ও লাইসেন্স বাতিলের ঝুঁকি থাকে এবং পরিদর্শকের আদেশ অমান্য বা বাধা দিলে ধারা ২৮৪ ও সংশ্লিষ্ট দণ্ড প্রযোজ্য হয়।",
+                  "narrative": "💡 হিন্ট: আইন লঙ্ঘন এবং তার জন্য নির্ধারিত আইনি ফলাফলের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "প্রথমবার ক্যান্টিন না রাখা",
+                        "right": "ধারা ৯০ এর সুনির্দিষ্ট লঙ্ঘন ও শ্রম আদালতে মামলা"
+                      },
+                      {
+                        "left": "অপরাধের ধারাবাহিক পুনরাবৃত্তি",
+                        "right": "দ্বিগুণ জরিমানা বা সরাসরি কঠোর কারাদণ্ড ও লাইসেন্স বাতিল"
+                      },
+                      {
+                        "left": "পরিদর্শকের কাজে বাধা দেওয়া",
+                        "right": "অনধিক ৫,০০০ টাকা অর্থদণ্ড (ধারা ২৮৪)"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "8500efa8-18fd-4914-93c6-59a6622c9e20",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "d8d06d24-ddaf-4757-8125-0c6533b911ad",
+                  "learning_point_id": "8500efa8-18fd-4914-93c6-59a6622c9e20",
+                  "question_text": "পরিদর্শক দলকে কারখানার কল্যাণমূলক জোন (যেমন ক্যান্টিন বা শিশু কক্ষ) পরিদর্শনে বাধা দেওয়া বা তথ্য গোপন করা কি সরাসরি একটি দণ্ডনীয় ফৌজদারি অপরাধ?",
+                  "question_type": "boolean",
+                  "explanation": "সরকারি পরিদর্শককে আইনি দায়িত্ব পালনে বাধা দেওয়া বা ভুল তথ্য পেশ করা শ্রম আইনের অধীনে সরাসরি গ্রেপ্তার ও জরিমানাযোগ্য গুরুতর অপরাধ।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানার এডমিন ম্যানেজার বা মালিক পরিদর্শক দলকে ক্যান্টিন বা ডে-কেয়ার পরিদর্শনে বাধা দিতে গেটে তালা মারেন, তবে তা আলাদা একটি গুরুতর অপরাধ।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "a3e60fb7-246f-4983-973c-096496a75d6a",
+                      "question_id": "d8d06d24-ddaf-4757-8125-0c6533b911ad",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "705aef16-fc26-47ce-8c69-f41a6fae9417",
+                      "question_id": "d8d06d24-ddaf-4757-8125-0c6533b911ad",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "a77947d5-b6c0-4402-9567-9ae388dc9c3e",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "6f0a1779-5c98-4fd2-a8f3-60cef2ea53c6",
+                  "learning_point_id": "a77947d5-b6c0-4402-9567-9ae388dc9c3e",
+                  "question_text": "মডিউল ৮-এর এই বিশেষ কল্যাণমূলক আইনি লঙ্ঘনের মামলাগুলো দায়ের করার আইনগত অধিকার কার রয়েছে?",
+                  "question_type": "mcq",
+                  "explanation": "কলকারখানা ও প্রতিষ্ঠান পরিদর্শন অধিদপ্তর (DIFE)-এর অনুমোদিত পরিদর্শকগণই কেবল শ্রম আইনের নিয়ম লঙ্ঘনের জন্য শ্রম আদালতে মামলা দায়েরের আইনি ক্ষমতা রাখেন।",
+                  "narrative": "💡 হিন্ট: মডিউল ৮-এর এই বিশেষ কল্যাণমূলক আইনি লঙ্ঘনের মামলাগুলো দায়ের করার আইনগত অধিকার কার রয়েছে?",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "70d2249a-a687-47b1-9d26-fc929365d96a",
+                      "question_id": "6f0a1779-5c98-4fd2-a8f3-60cef2ea53c6",
+                      "option_text": "সংশ্লিষ্ট অঞ্চলের সরকারি কারখানা পরিদর্শক (Factory Inspector / DIFE)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "a979740f-efba-416b-a8a3-8642d8659d79",
+                      "question_id": "6f0a1779-5c98-4fd2-a8f3-60cef2ea53c6",
+                      "option_text": "কারখানার যেকোনো সাধারণ কাঁচামাল সরবরাহকারী ঠিকাদার",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "293d5d9c-298b-43d1-b738-7bd6a27b3531",
+                      "question_id": "6f0a1779-5c98-4fd2-a8f3-60cef2ea53c6",
+                      "option_text": "কুরিয়ার সার্ভিসের ডেলিভারি ম্যান",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
+            },
+            {
+              "id": "4733dc9e-2d24-4373-a674-edd52cf5af1d",
+              "chapter_id": "70fba033-d107-42af-8239-448be8326f8f",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:45:53.935Z",
+              "mcq_questions": [
+                {
+                  "id": "9dfb9f01-f9d1-433e-9633-e73f17c9df2f",
+                  "learning_point_id": "4733dc9e-2d24-4373-a674-edd52cf5af1d",
+                  "question_text": "কল্যাণমূলক আইনের মামলা ও বড় জরিমানা থেকে বাঁচতে মালিক পক্ষের কোন কোন সঠিক পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "রুমে তালা মারা আলামত গোপন ও আইন প্রদায়ে বাধা দেওয়ার শামিল যা দণ্ডনীয় অপরাধ; সঠিক কল্যাণমূলক সুবিধা চালু রাখাই হলো শাস্তি থেকে বাঁচার একমাত্র আইনসম্মত উপায়।",
+                  "narrative": "💡 হিন্ট: একটি দূরদর্শী প্রতিষ্ঠানের কমপ্লায়েন্স ও এইচআর টিম বড় মামলা বা আইনি শাস্তি থেকে বাঁচতে সর্বদা প্রতিরোধমূলক অডিট সম্পন্ন করে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "7018ffb6-a5fc-4a5e-8568-46a4e6053d5e",
+                      "question_id": "9dfb9f01-f9d1-433e-9633-e73f17c9df2f",
+                      "option_text": "কারখানায় শ্রমিক সংখ্যা ১৫০ পার হলেই অবিলম্বে আদর্শ ক্যান্টিন ও ফার্স্ট-এইড বক্সের কমপ্লায়েন্স নিশ্চিত করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "3ee9b1df-3970-43ca-a911-fee7a4686d3a",
+                      "question_id": "9dfb9f01-f9d1-433e-9633-e73f17c9df2f",
+                      "option_text": "কল্যাণ কর্মকর্তা (Welfare Officer) নিয়োগের আইনি রেজিস্টার ও নথিপত্র সর্বদা আপডেট ও প্রস্তুত রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    },
+                    {
+                      "id": "d8845076-88f2-47cb-9e95-d72c2b17ba0a",
+                      "question_id": "9dfb9f01-f9d1-433e-9633-e73f17c9df2f",
+                      "option_text": "পরিদর্শনের সময় জরিমানার টাকা বাঁচাতে ফ্যাক্টরির ডে-কেয়ার রুমে তালা মেরে বাইরে থেকে \"রুম খালি\" লিখে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:45:53.935Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:45:53.935Z"
+                }
+              ]
             }
           ]
         }

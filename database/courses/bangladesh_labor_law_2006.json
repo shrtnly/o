@@ -3417,7 +3417,446 @@
           "title": "নিয়োগপত্র ও ছবি",
           "order_index": 3,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "c71788d6-9ecb-419b-ab21-e8f8f1b96646",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগপত্র ও ছবির বাধ্যবাধকতা",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 1,
+              "created_at": "2026-06-20T04:50:59.537Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "6937695b-4ed8-4554-b8e6-8fb1e570dc39",
+                  "learning_point_id": "c71788d6-9ecb-419b-ab21-e8f8f1b96646",
+                  "question_text": "শ্রম আইন অনুযায়ী, প্রত্যেক শ্রমিককে নিয়োগের সময় মালিকের কাছ থেকে কোন নথিটি গ্রহণ করা বাধ্যতামূলক?",
+                  "explanation": "শ্রম আইন অনুযায়ী প্রত্যেক শ্রমিককে নিয়োগের সময় নিয়োগপত্র ও ছবি প্রদান বাধ্যতামূলক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.537Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: চাকুরীর শর্তাবলী লিখিত আকারে থাকার প্রয়োজনীয়তা কেবল শ্রমিকের জন্যই নয়, বরং মালিকের আইনি দায়বদ্ধতার একটি বড় অংশ হিসেবে বিবেচিত হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "fb2ee40e-ee56-4d96-95e0-44536a4c4d67",
+                      "question_id": "6937695b-4ed8-4554-b8e6-8fb1e570dc39",
+                      "option_text": "নিয়োগপত্র ও ছবি",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.526Z"
+                    },
+                    {
+                      "id": "aa3edad3-7011-498d-b064-ef4d20893498",
+                      "question_id": "6937695b-4ed8-4554-b8e6-8fb1e570dc39",
+                      "option_text": "কেবল মৌখিক নির্দেশ",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "f98857e3-240c-441b-9713-d7cb1754e936",
+                      "question_id": "6937695b-4ed8-4554-b8e6-8fb1e570dc39",
+                      "option_text": "বেতন ভাউচার",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "00d12f31-df59-49c1-84f1-69a33ffe1715",
+                      "question_id": "6937695b-4ed8-4554-b8e6-8fb1e570dc39",
+                      "option_text": "চাকুরীর বিজ্ঞাপন পত্র",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fff62fd1-dd28-4051-851c-1868a3bbac1f",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "ছবির আইনি শর্ত",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 2,
+              "created_at": "2026-06-20T04:50:59.537Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "056edfad-5e42-43cb-b7db-0e69bafaf53c",
+                  "learning_point_id": "fff62fd1-dd28-4051-851c-1868a3bbac1f",
+                  "question_text": "নিয়োগপত্রের সাথে কি শ্রমিকের পাসপোর্ট সাইজের সত্যায়িত ছবি জমা দেওয়া একটি আইনি শর্ত?",
+                  "explanation": "নিয়োগের সময় নিয়োগপত্রের সাথে পাসপোর্ট সাইজের ছবি জমা দেওয়া আইনগতভাবে আবশ্যক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.537Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিকের ব্যক্তিগত তথ্যের সঠিকতা ও আইনি নথিপত্রের পূর্ণতা নিশ্চিত করতে এটি নিয়োগ প্রক্রিয়ার একটি অখণ্ড অংশ।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ef2b4a1a-7a14-4b23-b2a2-66ad8681d9bd",
+                      "question_id": "056edfad-5e42-43cb-b7db-0e69bafaf53c",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "045c1302-4688-4076-a0a1-f6acf00da82d",
+                      "question_id": "056edfad-5e42-43cb-b7db-0e69bafaf53c",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "d6220bbe-1197-4f36-82c8-911933ff4eb5",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগপত্রের উপাদানসমূহ",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 3,
+              "created_at": "2026-06-20T04:50:59.537Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "5a925e78-30ae-4e2a-8863-a41874101336",
+                  "learning_point_id": "d6220bbe-1197-4f36-82c8-911933ff4eb5",
+                  "question_text": "নিয়োগপত্রে সাধারণত কোন বিষয়টির উল্লেখ থাকা অপরিহার্য?",
+                  "explanation": "নিয়োগপত্রে বেতন স্কেল ও কর্মঘণ্টার মতো গুরুত্বপূর্ণ শর্তাবলী থাকা অপরিহার্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.537Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: নিয়োগপত্রের উদ্দেশ্য হলো চাকুরীর শর্তগুলো এমনভাবে সংজ্ঞায়িত করা যাতে পরবর্তীতে কোনো বিষয়ে মতপার্থক্য না ঘটে।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "93b43815-64e0-4469-bb99-469f46a2e2f1",
+                      "question_id": "5a925e78-30ae-4e2a-8863-a41874101336",
+                      "option_text": "বেতন স্কেল ও কর্মঘণ্টা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "bdaf32c1-35e9-478c-af1f-4f511d52d29b",
+                      "question_id": "5a925e78-30ae-4e2a-8863-a41874101336",
+                      "option_text": "শ্রমিকের ব্যক্তিগত শখ",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "498b181c-91d7-4459-b47d-dbb16ca9d113",
+                      "question_id": "5a925e78-30ae-4e2a-8863-a41874101336",
+                      "option_text": "মালিকের ব্যক্তিগত ইতিহাস",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "b188ce2a-f4e1-4832-a1bf-216a3432d4c5",
+                      "question_id": "5a925e78-30ae-4e2a-8863-a41874101336",
+                      "option_text": "অফিসের ইনভেন্টরি লিস্ট",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "843e9bda-1b69-4834-ad6b-602cb5a2e6c2",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগপত্রের আবশ্যকীয় শর্ত",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: নিয়োগপত্রে তো শুধু আমার বেতন লেখা আছে, কিন্তু কর্মঘণ্টার কথা নেই। এটা কি ঠিক?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: শ্রম আইন অনুযায়ী, নিয়োগপত্রে বেতন, কর্মঘণ্টা এবং ছুটির শর্ত স্পষ্টভাবে উল্লেখ থাকতে হয়। এটি না থাকলে ভবিষ্যতে আইনি চ্যালেঞ্জে পড়া সহজ।\"}]",
+              "order_index": 4,
+              "created_at": "2026-06-20T04:50:59.537Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "292e816c-da8e-4dc7-8e2b-c2d383bf4cf7",
+                  "learning_point_id": "843e9bda-1b69-4834-ad6b-602cb5a2e6c2",
+                  "question_text": "তানিয়ার আলোচনার প্রেক্ষিতে, নিয়োগপত্রে কোন শর্তগুলো স্পষ্টভাবে থাকা উচিত?",
+                  "explanation": "শ্রম আইন অনুযায়ী নিয়োগপত্রে বেতন, কর্মঘণ্টা এবং ছুটির মতো শর্তসমূহ স্পষ্টভাবে উল্লেখ থাকতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.537Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: নিয়োগপত্রে তো শুধু আমার বেতন লেখা আছে, কিন্তু কর্মঘণ্টার কথা নেই। এটা কি ঠিক?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: শ্রম আইন অনুযায়ী, নিয়োগপত্রে বেতন, কর্মঘণ্টা এবং ছুটির শর্ত স্পষ্টভাবে উল্লেখ থাকতে হয়। এটি না থাকলে ভবিষ্যতে আইনি চ্যালেঞ্জে পড়া সহজ।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "196a3c20-7b04-4a32-be58-f8a674d52eaf",
+                      "question_id": "292e816c-da8e-4dc7-8e2b-c2d383bf4cf7",
+                      "option_text": "বেতন ও কর্মঘণ্টা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "39bc8110-04a7-44e9-90c0-fa011273c063",
+                      "question_id": "292e816c-da8e-4dc7-8e2b-c2d383bf4cf7",
+                      "option_text": "শুধুমাত্র শ্রমিকের পদবী",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "9752b45d-67f3-43a6-bfb6-b04998f47093",
+                      "question_id": "292e816c-da8e-4dc7-8e2b-c2d383bf4cf7",
+                      "option_text": "মালিকের ঠিকানার বিবরণ",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "1e1786df-7e73-4ff6-9ea3-39b2ae9fd037",
+                      "question_id": "292e816c-da8e-4dc7-8e2b-c2d383bf4cf7",
+                      "option_text": "অফিসের আসবাবপত্রের তালিকা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "5409f5fd-a347-4cbb-9cb1-82d5ba0ccfb7",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগের ক্ষেত্রে মালিকের দায়িত্ব",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 5,
+              "created_at": "2026-06-20T04:50:59.537Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "fee1538c-b693-43e7-8dbf-6ccddefab645",
+                  "learning_point_id": "5409f5fd-a347-4cbb-9cb1-82d5ba0ccfb7",
+                  "question_text": "নিয়োগপত্র দেওয়ার ক্ষেত্রে মালিকের দায়িত্বসমূহ কী কী? (টিক দিন)",
+                  "explanation": "মালিকের দায়িত্ব হলো নিয়োগপত্র ও ছবি গ্রহণ নিশ্চিত করা এবং নিয়োগপত্রে উভয় পক্ষের স্বাক্ষর থাকা নিশ্চিত করা।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.537Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: নিয়োগের সময় নথিপত্র প্রদান ও স্বাক্ষর গ্রহণ মালিকের জন্য একটি আইনি প্রক্রিয়া, যা চুক্তির বৈধতা প্রমাণ করে।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ff489715-3a42-4c63-b77d-f304028111be",
+                      "question_id": "fee1538c-b693-43e7-8dbf-6ccddefab645",
+                      "option_text": "নিয়োগপত্র ও ছবি গ্রহণ নিশ্চিত করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "b672377f-6b05-48bf-825d-65ff78ebfd9a",
+                      "question_id": "fee1538c-b693-43e7-8dbf-6ccddefab645",
+                      "option_text": "নিয়োগপত্রে উভয় পক্ষের স্বাক্ষর থাকা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "10e3f478-31cb-4786-a608-a7e095fd244e",
+                      "question_id": "fee1538c-b693-43e7-8dbf-6ccddefab645",
+                      "option_text": "নিয়োগপত্র মৌখিকভাবে পড়ে শোনানো।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "3ce7c10f-932e-44c0-a6ce-c9b98c4a43c9",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগের নথিপত্রের মিলকরণ",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 6,
+              "created_at": "2026-06-20T04:50:59.537Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "362da7a8-aee0-46f9-9371-3a8bc7a83d15",
+                  "learning_point_id": "3ce7c10f-932e-44c0-a6ce-c9b98c4a43c9",
+                  "question_text": "বাম পাশের বিষয়ের সাথে ডান পাশের আইনি প্রয়োজনীয়তা মেলাও।",
+                  "explanation": "নিয়োগপত্র হলো লিখিত দলিল, ছবি পরিচয় শনাক্ত করে, এবং স্বাক্ষর বৈধতা নিশ্চিত করে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.537Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: নিয়োগপত্র চাকুরীর নিয়মাবলী নির্ধারণ করে, ছবি শ্রমিকের পরিচয় নিশ্চিত করে এবং স্বাক্ষর চুক্তির আইনি নিশ্চয়তা দেয়।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "নিয়োগপত্র",
+                        "right": "চাকুরীর শর্তাবলীর লিখিত দলিল"
+                      },
+                      {
+                        "left": "সত্যায়িত ছবি",
+                        "right": "পরিচয় শনাক্তকরণের জন্য"
+                      },
+                      {
+                        "left": "স্বাক্ষর",
+                        "right": "চুক্তির আইনি বৈধতা নিশ্চিতকরণ"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "86b9712b-4505-4807-90af-8f1a4d8d188b",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগপত্র না দেওয়ার পরিণতি",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 7,
+              "created_at": "2026-06-20T04:50:59.538Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "1cf1ce60-2d5f-47d5-a844-c554142c7ca7",
+                  "learning_point_id": "86b9712b-4505-4807-90af-8f1a4d8d188b",
+                  "question_text": "মালিক যদি কোনো শ্রমিককে নিয়োগপত্র না দিয়ে কাজে নিয়োগ করেন, তবে কি তা শ্রম আইন লঙ্ঘন বলে গণ্য হবে?",
+                  "explanation": "নিয়োগপত্র না দিয়ে কাজে নিয়োগ করা শ্রম আইনের একটি স্পষ্ট লঙ্ঘন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.538Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন একটি নিয়ন্ত্রিত কাঠামো, যেখানে লিখিত চুক্তি ব্যতীত নিয়োগ প্রদান করলে মালিককে আইনি জটিলতার মুখোমুখি হতে হয়।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "653d8e39-8a5c-4280-b7fc-ee8257f0aac4",
+                      "question_id": "1cf1ce60-2d5f-47d5-a844-c554142c7ca7",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    },
+                    {
+                      "id": "cb4f5307-704b-4005-a9f4-f6c9b655a88b",
+                      "question_id": "1cf1ce60-2d5f-47d5-a844-c554142c7ca7",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.537Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "7d1628df-ea2a-4142-b741-70417ff0b1a3",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "আইনি সুরক্ষার নথি",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 8,
+              "created_at": "2026-06-20T04:50:59.538Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "0c4ba78f-7ebe-4de6-b403-b48b870b4cc9",
+                  "learning_point_id": "7d1628df-ea2a-4142-b741-70417ff0b1a3",
+                  "question_text": "শ্রমিকের পরিচয় নিশ্চিত করতে এবং ভবিষ্যতে আইনি সুরক্ষার জন্য সবচেয়ে গুরুত্বপূর্ণ নথি কোনটি?",
+                  "explanation": "নিয়োগপত্র ও ছবি শ্রমিকের পরিচয় নিশ্চিত করতে এবং আইনি সুরক্ষায় সবচেয়ে গুরুত্বপূর্ণ দলিল।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.538Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: নিয়োগের পর আইনি জটিলতা বা বিরোধের ক্ষেত্রে যে দলিলটি সবচেয়ে জোরালো প্রমাণ হিসেবে আদালতে উপস্থাপিত হতে পারে।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "a8937152-d085-4882-b0b0-178c8a067e0b",
+                      "question_id": "0c4ba78f-7ebe-4de6-b403-b48b870b4cc9",
+                      "option_text": "নিয়োগপত্র ও ছবি",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    },
+                    {
+                      "id": "fbfc869a-00b5-4d7a-b512-09bf84d11798",
+                      "question_id": "0c4ba78f-7ebe-4de6-b403-b48b870b4cc9",
+                      "option_text": "কাজ শুরুর মৌখিক অনুমতি",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    },
+                    {
+                      "id": "13e68db9-8f98-4eaa-a93d-286a0b28c50d",
+                      "question_id": "0c4ba78f-7ebe-4de6-b403-b48b870b4cc9",
+                      "option_text": "কেবল আইডি কার্ড",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    },
+                    {
+                      "id": "af00a91d-6198-41f2-ade1-3a1b7c5a7936",
+                      "question_id": "0c4ba78f-7ebe-4de6-b403-b48b870b4cc9",
+                      "option_text": "কাজের তালিকা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "02fe6f6e-d500-4fd1-af7d-478187f36226",
+              "chapter_id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",
+              "title": "নিয়োগের জন্য প্রয়োজনীয় নথিপত্র",
+              "content": "নিয়োগপত্র ও ছবি",
+              "order_index": 9,
+              "created_at": "2026-06-20T04:50:59.538Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "fc28bc68-e22b-469c-823f-18569decb093",
+                  "learning_point_id": "02fe6f6e-d500-4fd1-af7d-478187f36226",
+                  "question_text": "নিয়োগের সময় একজন শ্রমিককে সাধারণত কী কী নথি জমা দিতে হয়? (টিক দিন)",
+                  "explanation": "নিয়োগ প্রক্রিয়ায় ছবি এবং শিক্ষাগত যোগ্যতার সনদ (প্রযোজ্য ক্ষেত্রে) জমা নেওয়া হয়ে থাকে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T04:50:59.538Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: নিয়োগ প্রক্রিয়া সম্পন্ন করতে মালিক পক্ষ শ্রমিকের কাছ থেকে যে নথিপত্রগুলো সংগ্রহ করেন যা ভবিষ্যতে তার ফাইল তৈরির জন্য প্রয়োজন।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "2f2121d5-9320-4445-9521-4cc7d629242a",
+                      "question_id": "fc28bc68-e22b-469c-823f-18569decb093",
+                      "option_text": "ছবি।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    },
+                    {
+                      "id": "f246442f-7c26-46bd-821d-1048559e0aac",
+                      "question_id": "fc28bc68-e22b-469c-823f-18569decb093",
+                      "option_text": "শিক্ষাগত যোগ্যতার সনদ (যদি থাকে)।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    },
+                    {
+                      "id": "098fa147-813f-4510-b811-26f75ff4365e",
+                      "question_id": "fc28bc68-e22b-469c-823f-18569decb093",
+                      "option_text": "ব্যক্তিগত শখের তালিকা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T04:50:59.538Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "9d6f3937-b17b-4004-afda-f9291d7b311c",

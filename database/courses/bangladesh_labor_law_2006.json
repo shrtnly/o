@@ -3904,7 +3904,446 @@
           "title": "কর্মবিরতি ও বন্ধ",
           "order_index": 5,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "448352d7-c6ec-499a-a766-d3addb4be273",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "কর্মবিরতির অধিকার",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:08:30.057Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "90412e24-7217-4103-8318-38d398839a90",
+                  "learning_point_id": "448352d7-c6ec-499a-a766-d3addb4be273",
+                  "question_text": "শ্রম আইন অনুযায়ী, একজন শ্রমিকের কি দীর্ঘ কর্মঘণ্টার মাঝে বিশ্রাম বা কর্মবিরতি পাওয়ার আইনি অধিকার আছে?",
+                  "explanation": "শ্রম আইন অনুযায়ী প্রতিটি কর্মদিবসে শ্রমিকের নির্দিষ্ট কর্মবিরতি পাওয়ার অধিকার সংরক্ষিত।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.057Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিকের কাজের চাপ কমানোর জন্য এবং শারীরিকভাবে সুস্থ থাকার জন্য আইন অনুযায়ী প্রতিদিন কাজের ফাঁকে ফাঁকে কিছুটা সময়ের বিরতি দেওয়া মালিকের আইনি দায়িত্ব।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "caed4183-c771-4afa-aec3-0769f9309840",
+                      "question_id": "90412e24-7217-4103-8318-38d398839a90",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.052Z"
+                    },
+                    {
+                      "id": "6b70ddba-ecf5-4f82-8e5c-23472754ca52",
+                      "question_id": "90412e24-7217-4103-8318-38d398839a90",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "b8a92f32-cfed-4f8a-b6d3-8a61ec4fdc72",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "সাপ্তাহিক ছুটির বাধ্যবাধকতা",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:08:30.057Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "0060bd7a-de56-44e0-96ea-a1d15419ef5e",
+                  "learning_point_id": "b8a92f32-cfed-4f8a-b6d3-8a61ec4fdc72",
+                  "question_text": "বাংলাদেশে সাধারণত শিল্প কারখানায় সপ্তাহে কতদিন বা কত ঘণ্টা কাজের পর সাপ্তাহিক ছুটি ভোগ করা বাধ্যতামূলক?",
+                  "explanation": "আইনানুসারে সাধারণত ৪৮ ঘণ্টা কর্মসপ্তাহের পর সাপ্তাহিক ছুটি প্রাপ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.057Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: সাপ্তাহিক ছুটি এমন একটি সময় যা শ্রমিককে মানসিকভাবে সতেজ করতে এবং পরিবারের সাথে সময় কাটানোর সুযোগ দেয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "a18bec42-ca92-4af5-9d89-0f1aa7c147bb",
+                      "question_id": "0060bd7a-de56-44e0-96ea-a1d15419ef5e",
+                      "option_text": "৪৮ ঘণ্টা কাজ বা ৬ দিন",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    },
+                    {
+                      "id": "73d951af-fdc8-47a4-be52-6cd57bfc538c",
+                      "question_id": "0060bd7a-de56-44e0-96ea-a1d15419ef5e",
+                      "option_text": "৬০ ঘণ্টা কাজ বা ৭ দিন",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    },
+                    {
+                      "id": "0ed5feac-2002-404f-a12e-0c714e960493",
+                      "question_id": "0060bd7a-de56-44e0-96ea-a1d15419ef5e",
+                      "option_text": "২৪ ঘণ্টা কাজ বা ৩ দিন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    },
+                    {
+                      "id": "8a8985f9-0551-44dd-b987-33f424b4b56a",
+                      "question_id": "0060bd7a-de56-44e0-96ea-a1d15419ef5e",
+                      "option_text": "কোনো নির্দিষ্ট সীমা নেই",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "e772bb2c-cee8-4d78-9c0d-30dc49bcc29d",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "কাজের মাঝে বিরতির উদ্দেশ্য",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"রফিক: আমি টানা ৫ ঘণ্টা ধরে মেশিনে কাজ করছি, এখন কি একটু বিরতি নিতে পারি?\"},{\"avatar\":\"lisa\",\"text\":\"জেসমিন: আইন অনুযায়ী, একটানা দীর্ঘ সময় কাজ করা স্বাস্থ্যের জন্য ক্ষতিকর, তাই মালিক পক্ষ থেকে তোমাকে নির্দিষ্ট সময় বিরতি দেওয়ার কথা।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "a63d808a-1727-4098-bdd3-8b47e8601851",
+                  "learning_point_id": "e772bb2c-cee8-4d78-9c0d-30dc49bcc29d",
+                  "question_text": "জেসমিনের কথা অনুযায়ী, একটানা দীর্ঘ কর্মঘণ্টা শেষে বিরতি পাওয়ার প্রধান উদ্দেশ্য কী?",
+                  "explanation": "কাজের মাঝে বিরতির প্রধান উদ্দেশ্য হলো শ্রমিকের ক্লান্তি দূর করে শারীরিক সুস্থতা বজায় রাখা।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"রফিক: আমি টানা ৫ ঘণ্টা ধরে মেশিনে কাজ করছি, এখন কি একটু বিরতি নিতে পারি?\"},{\"avatar\":\"lisa\",\"text\":\"জেসমিন: আইন অনুযায়ী, একটানা দীর্ঘ সময় কাজ করা স্বাস্থ্যের জন্য ক্ষতিকর, তাই মালিক পক্ষ থেকে তোমাকে নির্দিষ্ট সময় বিরতি দেওয়ার কথা।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "42f1dc89-c066-41ab-a516-c290633963f9",
+                      "question_id": "a63d808a-1727-4098-bdd3-8b47e8601851",
+                      "option_text": "শ্রমিকের শারীরিক সুস্থতা নিশ্চিত করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    },
+                    {
+                      "id": "1fc531c8-24d8-4b80-81a3-7308e1cd357d",
+                      "question_id": "a63d808a-1727-4098-bdd3-8b47e8601851",
+                      "option_text": "ফ্যাক্টরির বিদ্যুৎ সাশ্রয় করা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    },
+                    {
+                      "id": "c4584bbb-b4f5-4ca1-a241-6da95c9f621e",
+                      "question_id": "a63d808a-1727-4098-bdd3-8b47e8601851",
+                      "option_text": "উৎপাদনের হার বাড়ানো",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:08:30.057Z"
+                    },
+                    {
+                      "id": "0b3ae626-84dc-4ffb-996f-416a8e800a38",
+                      "question_id": "a63d808a-1727-4098-bdd3-8b47e8601851",
+                      "option_text": "মেশিনের রক্ষণাবেক্ষণ করা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "5ea1aa06-32d0-467f-aefd-cce76df947db",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "ছুটির অধিকারের পরিধি",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "bafc7266-4503-4725-a774-c3d537cb5a33",
+                  "learning_point_id": "5ea1aa06-32d0-467f-aefd-cce76df947db",
+                  "question_text": "শ্রমিকের ছুটির অধিকারের আওতায় সাধারণত কোন ছুটিগুলো পড়ে? (টিক দিন)",
+                  "explanation": "সাপ্তাহিক ও উৎসবের ছুটি শ্রম আইনের আওতায় স্বীকৃত, ব্যক্তিগত শখের ছুটি আইনি বাধ্যবাধকতার অংশ নয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: উৎসবের ছুটি এবং বার্ষিক ছুটির মতো বিষয়গুলো শ্রমিকের ব্যক্তিগত ও সামাজিক জীবনের অবিচ্ছেদ্য অংশ, যা আইন দ্বারা স্বীকৃত।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "8c99a2b6-d8e0-4aa7-b193-d3dfebde9a5d",
+                      "question_id": "bafc7266-4503-4725-a774-c3d537cb5a33",
+                      "option_text": "সাপ্তাহিক ছুটি।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "89677307-d35f-46dd-b7bc-f90ff72655c4",
+                      "question_id": "bafc7266-4503-4725-a774-c3d537cb5a33",
+                      "option_text": "উৎসবের ছুটি।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "26503e2a-1d32-4f1f-99cb-b0cef200c69c",
+                      "question_id": "bafc7266-4503-4725-a774-c3d537cb5a33",
+                      "option_text": "ব্যক্তিগত শখের জন্য ছুটি।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "c3045919-7c75-4f41-b375-1e9f1486fe07",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "ছুটির ধরণ ও ব্যাখ্যার মিলকরণ",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "a235f121-daf2-49d4-bc1b-75da36f661d0",
+                  "learning_point_id": "c3045919-7c75-4f41-b375-1e9f1486fe07",
+                  "question_text": "বাম পাশের ছুটির ধরণের সাথে ডান পাশের আইনি ব্যাখ্যার মিল কর।",
+                  "explanation": "সাপ্তাহিক ছুটি সপ্তাহে একদিন বিশ্রাম, কর্মবিরতি কাজের মাঝে বিশ্রাম এবং উৎসবের ছুটি ধর্মীয় অনুষ্ঠানের জন্য প্রযোজ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বিভিন্ন ধরণের ছুটির সময়সীমা ও তার উদ্দেশ্য অনুযায়ী মালিক ও শ্রমিকের দায়িত্ব ও অধিকারগুলো এখানে স্পষ্টভাবে সংজ্ঞায়িত।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "সাপ্তাহিক ছুটি",
+                        "right": "সপ্তাহে একদিন বিশ্রাম"
+                      },
+                      {
+                        "left": "কর্মবিরতি",
+                        "right": "কাজের মাঝে সাময়িক বিশ্রাম"
+                      },
+                      {
+                        "left": "উৎসবের ছুটি",
+                        "right": "বছরের নির্দিষ্ট ধর্মীয় অনুষ্ঠান"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "5e364ad5-aee9-4499-ac1a-d8c78f9df03a",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "সাপ্তাহিক ছুটিতে কাজের নিয়ম",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "e8de5d42-85b1-4909-9029-e2d8706605c6",
+                  "learning_point_id": "5e364ad5-aee9-4499-ac1a-d8c78f9df03a",
+                  "question_text": "মালিক কি কোনো বিশেষ পরিস্থিতিতে সাপ্তাহিক ছুটির দিনে শ্রমিককে কাজে তলব করতে পারেন?",
+                  "explanation": "বিশেষ পরিস্থিতিতে মালিক ডাকতে পারেন, তবে তার বিনিময়ে বিকল্প ছুটি বা ক্ষতিপূরণ প্রদান করতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: যদি কোনো জরুরি প্রয়োজনে মালিক পক্ষ শ্রমিককে সাপ্তাহিক ছুটির দিনে কাজ করতে বলেন, তবে তার বদলে বিকল্প কোনো ব্যবস্থার সংস্থান রাখা আইনের দাবি।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c1594421-ea61-479e-842b-4992e9aef11c",
+                      "question_id": "e8de5d42-85b1-4909-9029-e2d8706605c6",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "c2332179-5062-44eb-b688-566e9b24f688",
+                      "question_id": "e8de5d42-85b1-4909-9029-e2d8706605c6",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fec89394-05aa-46fd-b443-4aaed5771b53",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "বার্ষিক ছুটি অর্জনের শর্ত",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "47a48992-4b1a-414c-aaa8-1406d4c27317",
+                  "learning_point_id": "fec89394-05aa-46fd-b443-4aaed5771b53",
+                  "question_text": "বার্ষিক ছুটি অর্জনের জন্য শ্রমিকের প্রতিষ্ঠানে ন্যূনতম কতদিন কাজ করা আবশ্যক?",
+                  "explanation": "শ্রম আইন অনুযায়ী, এক বছর একটানা কাজ করলে শ্রমিক বার্ষিক ছুটি পাওয়ার যোগ্য হন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বার্ষিক ছুটির হিসাব করা হয় শ্রমিকের কাজের মেয়াদের ওপর ভিত্তি করে, যা শ্রমিককে তার দীর্ঘমেয়াদী ক্লান্তির পর বিশ্রামের সুযোগ করে দেয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e365e0a5-ebb1-4ebf-a9c9-09ccdb947311",
+                      "question_id": "47a48992-4b1a-414c-aaa8-1406d4c27317",
+                      "option_text": "১২ মাস বা এক বছর",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "03b7fa60-291e-47e7-b406-bfb5e3b70738",
+                      "question_id": "47a48992-4b1a-414c-aaa8-1406d4c27317",
+                      "option_text": "৩ মাস",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "8c0e0663-0d36-4cdf-9461-46b5be28a343",
+                      "question_id": "47a48992-4b1a-414c-aaa8-1406d4c27317",
+                      "option_text": "৬ মাস",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "eaf0181d-5e3c-45d0-bf6e-a9ef543af581",
+                      "question_id": "47a48992-4b1a-414c-aaa8-1406d4c27317",
+                      "option_text": "কোনো নির্দিষ্ট সময় নেই",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ca5dc598-9293-4191-9ea3-b8c151010d7c",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "ছুটি সংক্রান্ত শ্রমিকের অধিকার",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "b88044f7-d1a0-4db5-a09e-94491aeaf792",
+                  "learning_point_id": "ca5dc598-9293-4191-9ea3-b8c151010d7c",
+                  "question_text": "ছুটি সংক্রান্ত বিষয়ে শ্রমিকের অধিকারগুলো কী কী? (টিক দিন)",
+                  "explanation": "শ্রমিক আইনসম্মত ছুটি পেতে পারেন এবং ছুটির সময় মজুরী পাওয়ার আইনগত অধিকার রাখেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অনেক সময় মালিক পক্ষ কাজের চাপে ছুটির বিষয়টি উপেক্ষা করতে চান, কিন্তু আইন অনুযায়ী ছুটি শ্রমিকের মৌলিক অধিকার।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c6e34d32-ee54-48dd-980e-de2a778686ad",
+                      "question_id": "b88044f7-d1a0-4db5-a09e-94491aeaf792",
+                      "option_text": "আইন অনুযায়ী ছুটি ভোগ করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "39cfb081-c2e8-4207-ae2f-d08cc5018f40",
+                      "question_id": "b88044f7-d1a0-4db5-a09e-94491aeaf792",
+                      "option_text": "ছুটির সময় মজুরী পাওয়ার অধিকার (প্রযোজ্য ক্ষেত্রে)।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "2076f5d2-2036-4a34-b675-9fcada425fed",
+                      "question_id": "b88044f7-d1a0-4db5-a09e-94491aeaf792",
+                      "option_text": "মালিকের অনুমতি ছাড়া অনির্দিষ্টকাল ছুটি কাটানো।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "21d9700e-5865-41ce-ba8f-59ce63096c7d",
+              "chapter_id": "ba83a04a-a495-4a78-9b23-54e2e477988f",
+              "title": "ছুটি সংক্রান্ত বিরোধ নিষ্পত্তি",
+              "content": "কর্মবিরতি ও বন্ধ",
+              "order_index": 9,
+              "created_at": "2026-06-20T05:08:30.058Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "f85b6dd5-830b-45bc-813a-adb8124f0b5d",
+                  "learning_point_id": "21d9700e-5865-41ce-ba8f-59ce63096c7d",
+                  "question_text": "শ্রমিকের ছুটি সংক্রান্ত বিরোধ দেখা দিলে চূড়ান্ত সিদ্ধান্ত নেওয়ার জন্য কোন নথিটি সবচেয়ে গুরুত্বপূর্ণ?",
+                  "explanation": "শ্রম আইনই হলো শ্রমিক-মালিক বিরোধ নিষ্পত্তির একমাত্র আইনি দলিল।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:08:30.058Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: যে আইনগত কাঠামোর অধীনে শ্রমিক ও মালিকের মধ্যকার ছুটির সংক্রান্ত বিরোধ নিষ্পত্তি করা হয়, তা শ্রম আইনের মূল ভিত্তি।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5fc08dfa-692b-42d1-a0be-d0dc562db138",
+                      "question_id": "f85b6dd5-830b-45bc-813a-adb8124f0b5d",
+                      "option_text": "শ্রম আইন ২০০৬",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "4d556df6-bf38-4870-87c0-e50e178e83d4",
+                      "question_id": "f85b6dd5-830b-45bc-813a-adb8124f0b5d",
+                      "option_text": "মালিকের মৌখিক সিদ্ধান্ত",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "967a1f27-d4b3-48a3-acaa-c0461d043fe8",
+                      "question_id": "f85b6dd5-830b-45bc-813a-adb8124f0b5d",
+                      "option_text": "সহকর্মীদের মতামত",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    },
+                    {
+                      "id": "35b43b8a-60b5-4b10-bce2-2a099dc0c96e",
+                      "question_id": "f85b6dd5-830b-45bc-813a-adb8124f0b5d",
+                      "option_text": "অফিসের অভ্যন্তরীণ মেমো",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:08:30.058Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",

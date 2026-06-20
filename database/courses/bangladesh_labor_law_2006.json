@@ -6083,7 +6083,390 @@
           "title": "অভিযোগ নিষ্পত্তি পদ্ধতি",
           "order_index": 10,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "fb71bba0-b5f1-4a88-9de1-1105bbd74c78",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "অভিযোগের প্রথম পদক্ষেপ",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"সালাম: আমার সুপারভাইজার আমার ওপর ব্যক্তিগত আক্রোশে আমার কাজে অকারণে ত্রুটি ধরছেন। আমি এই বিষয়টি কোথায় জানাব?\"},{\"avatar\":\"lisa\",\"text\":\"ম্যানেজার: আইন অনুযায়ী, যেকোনো শ্রমিক তার অভিযোগের প্রতিকার পাওয়ার জন্য নির্দিষ্ট পদ্ধতিতে আবেদন করতে পারেন। প্রথমে বিষয়টি সরাসরি তোমার নিকটস্থ সুপারভাইজার বা নিয়োগকর্তার কাছে লিখিতভাবে জানাতে হবে।\"}]",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:22:18.841Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "c5d2306e-2bf0-438d-9ebb-f7116bc5f4f4",
+                  "learning_point_id": "fb71bba0-b5f1-4a88-9de1-1105bbd74c78",
+                  "question_text": "অভিযোগ নিষ্পত্তির ক্ষেত্রে প্রথম পদক্ষেপ কোনটি?",
+                  "explanation": "অভিযোগ নিষ্পত্তির আইনি প্রক্রিয়া শুরু হয় সরাসরি কর্তৃপক্ষকে লিখিতভাবে জানানোর মাধ্যমে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.840Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"সালাম: আমার সুপারভাইজার আমার ওপর ব্যক্তিগত আক্রোশে আমার কাজে অকারণে ত্রুটি ধরছেন। আমি এই বিষয়টি কোথায় জানাব?\"},{\"avatar\":\"lisa\",\"text\":\"ম্যানেজার: আইন অনুযায়ী, যেকোনো শ্রমিক তার অভিযোগের প্রতিকার পাওয়ার জন্য নির্দিষ্ট পদ্ধতিতে আবেদন করতে পারেন। প্রথমে বিষয়টি সরাসরি তোমার নিকটস্থ সুপারভাইজার বা নিয়োগকর্তার কাছে লিখিতভাবে জানাতে হবে।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "66c4d49d-546f-4c25-8a83-1ec353423463",
+                      "question_id": "c5d2306e-2bf0-438d-9ebb-f7116bc5f4f4",
+                      "option_text": "ঊর্ধ্বতন কর্তৃপক্ষের কাছে লিখিত আবেদন",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.837Z"
+                    },
+                    {
+                      "id": "ff5b9ae2-8963-45b4-a4ac-e18f93b7aa9c",
+                      "question_id": "c5d2306e-2bf0-438d-9ebb-f7116bc5f4f4",
+                      "option_text": "সরাসরি ধর্মঘট ডাকা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.840Z"
+                    },
+                    {
+                      "id": "1b23a50f-d7c8-43fa-978a-8e4cecd0884d",
+                      "question_id": "c5d2306e-2bf0-438d-9ebb-f7116bc5f4f4",
+                      "option_text": "চাকরি ছেড়ে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:22:18.840Z"
+                    },
+                    {
+                      "id": "8e5013f2-690a-4824-bc10-5239f00d9275",
+                      "question_id": "c5d2306e-2bf0-438d-9ebb-f7116bc5f4f4",
+                      "option_text": "সহকর্মীদের সাথে ঝগড়া করা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:22:18.840Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "05efdfa9-18e6-4836-bdd3-c32d097443a2",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "মালিকের নিষ্পত্তির সময়সীমা",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:22:18.842Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "55ce96d5-cb4a-44a1-a38e-9d8d3dad1c92",
+                  "learning_point_id": "05efdfa9-18e6-4836-bdd3-c32d097443a2",
+                  "question_text": "শ্রমিকের অভিযোগ পাওয়ার পর নিয়োগকর্তা বা মালিককে কত দিনের মধ্যে বিষয়টি নিষ্পত্তি করতে হয়?",
+                  "explanation": "শ্রম আইন অনুযায়ী, অভিযোগ পাওয়ার ৩০ দিনের মধ্যে মালিককে অভিযোগটি নিষ্পত্তির পদক্ষেপ নিতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.842Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অভিযোগ দায়ের করার পর মালিকের জন্য একটি নির্দিষ্ট সময়সীমা থাকে যাতে তিনি বিষয়টি তদন্ত করে শ্রমিকের সমস্যার সমাধান করতে পারেন।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5943e7c8-a84c-4315-aeca-733217fddce1",
+                      "question_id": "55ce96d5-cb4a-44a1-a38e-9d8d3dad1c92",
+                      "option_text": "৩০ দিন",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.841Z"
+                    },
+                    {
+                      "id": "dc6c9271-11fb-4eae-8bcf-35b60fb88c67",
+                      "question_id": "55ce96d5-cb4a-44a1-a38e-9d8d3dad1c92",
+                      "option_text": "১৫ দিন",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.841Z"
+                    },
+                    {
+                      "id": "ea3e43c6-eb4b-490f-b450-f39c7ce95b61",
+                      "question_id": "55ce96d5-cb4a-44a1-a38e-9d8d3dad1c92",
+                      "option_text": "৭ দিন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:22:18.841Z"
+                    },
+                    {
+                      "id": "efef30f1-517d-49fd-ba7c-a01f987d736e",
+                      "question_id": "55ce96d5-cb4a-44a1-a38e-9d8d3dad1c92",
+                      "option_text": "৬০ দিন",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:22:18.841Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ff357cc8-e8ab-405d-9baf-93acf3d7bc08",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "শ্রম আদালতে প্রতিকার",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:22:18.842Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "3dac902c-fd7d-48ea-abfd-f7b796b36a03",
+                  "learning_point_id": "ff357cc8-e8ab-405d-9baf-93acf3d7bc08",
+                  "question_text": "মালিকের দেওয়া সমাধানে সন্তুষ্ট না হলে শ্রমিক কি বিষয়টি শ্রম আদালতে পেশ করতে পারেন?",
+                  "explanation": "মালিকের সিদ্ধান্তে সমাধান না হলে শ্রমিক পরবর্তী আইনি প্রতিকারের জন্য শ্রম আদালতে যেতে পারেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.842Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিক যদি মালিকের দেওয়া সমাধানে সন্তুষ্ট না হন, তবে তার বিষয়টি পরবর্তী ধাপে বা আদালতে নিয়ে যাওয়ার আইনি সুযোগ থাকে।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "78c76e9a-a167-4b5d-8cdb-77e5a27ae80f",
+                      "question_id": "3dac902c-fd7d-48ea-abfd-f7b796b36a03",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    },
+                    {
+                      "id": "a735e286-9563-45d3-96b3-59963c6af5ea",
+                      "question_id": "3dac902c-fd7d-48ea-abfd-f7b796b36a03",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "b4ad8fec-8f14-4201-ba71-16bcd5fff1d5",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "অভিযোগ আবেদনের বিষয়বস্তু",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:22:18.842Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "5f7ff5b0-b5f5-4e8c-8452-728011f2ea3b",
+                  "learning_point_id": "b4ad8fec-8f14-4201-ba71-16bcd5fff1d5",
+                  "question_text": "অভিযোগের আবেদনে সাধারণত কী কী থাকা প্রয়োজন? (টিক দিন)",
+                  "explanation": "অহেতুক মন্তব্য নয়, বরং অভিযোগের সত্যতা প্রমাণে সুনির্দিষ্ট তথ্য ও সাক্ষী গুরুত্বপূর্ণ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.842Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অভিযোগ দায়েরের সময় শ্রমিককে এমন সব প্রমাণ ও তথ্যাদি সংযুক্ত করতে হয় যা তার অভিযোগের সত্যতা নিশ্চিত করে।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "baff8bd8-87f4-46c5-9b40-7a7864f802c3",
+                      "question_id": "5f7ff5b0-b5f5-4e8c-8452-728011f2ea3b",
+                      "option_text": "অভিযোগের সুনির্দিষ্ট বিবরণ।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    },
+                    {
+                      "id": "134ca78a-828b-4734-8a79-4cb0b1a653ea",
+                      "question_id": "5f7ff5b0-b5f5-4e8c-8452-728011f2ea3b",
+                      "option_text": "কোনো সাক্ষীর নাম (যদি থাকে)।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    },
+                    {
+                      "id": "97ecf95e-6e74-499a-8d12-059651b2b670",
+                      "question_id": "5f7ff5b0-b5f5-4e8c-8452-728011f2ea3b",
+                      "option_text": "মালিকের ব্যক্তিগত জীবন নিয়ে মন্তব্য।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "b153ea99-8b22-48f7-bcd4-ff23acac223b",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "অভিযোগের ধাপ মিলকরণ",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:22:18.842Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "9282120f-1171-41cf-9f06-475daadda7ba",
+                  "learning_point_id": "b153ea99-8b22-48f7-bcd4-ff23acac223b",
+                  "question_text": "বাম পাশের ধাপের সাথে ডান পাশের আইনি অবস্থার মিল কর।",
+                  "explanation": "প্রথম ধাপে মালিকের নিকট আবেদন, ৩০ দিন সময়সীমা এবং চূড়ান্ত প্রতিকার আদালতে পাওয়া যায়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.842Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অভিযোগ নিষ্পত্তির প্রতিটি ধাপ শ্রমিককে তার অধিকার আদায়ে সুরক্ষা দেয়।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "প্রথম আবেদন",
+                        "right": "মালিকের নিকট লিখিত অভিযোগ"
+                      },
+                      {
+                        "left": "সময়সীমা",
+                        "right": "৩০ কার্যদিবস"
+                      },
+                      {
+                        "left": "প্রতিকার",
+                        "right": "শ্রম আদালত বা ট্রাইব্যুনাল"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "389449a2-a702-40af-bc66-0b6cbcaae04b",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "অভিযোগ দায়ের ও নিরাপত্তা",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:22:18.842Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "75b87f74-7ea5-487f-af1b-01e8f39db600",
+                  "learning_point_id": "389449a2-a702-40af-bc66-0b6cbcaae04b",
+                  "question_text": "অভিযোগ করার কারণে কি মালিক শ্রমিককে চাকরি থেকে ছাঁটাই করতে পারেন?",
+                  "explanation": "অভিযোগ করার কারণে কোনো শ্রমিককে অন্যায়ভাবে ছাঁটাই করা আইনের দৃষ্টিতে দণ্ডনীয় অপরাধ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.842Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: একজন শ্রমিক যখন অভিযোগ দায়ের করেন, তখন তিনি ভয়ভীতিমুক্ত পরিবেশ আশা করেন, যা আইন দ্বারা সংরক্ষিত।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "03cca9d4-c1a3-4fec-97ec-8fb29548b768",
+                      "question_id": "75b87f74-7ea5-487f-af1b-01e8f39db600",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    },
+                    {
+                      "id": "b3f130b3-6f74-4948-9a7e-f061e457c596",
+                      "question_id": "75b87f74-7ea5-487f-af1b-01e8f39db600",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.842Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "54988172-843e-4916-82ed-c6577cf146a9",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "অভিযোগ নিষ্পত্তির মূল লক্ষ্য",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:22:18.843Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "b5534235-153f-426f-b06a-3d44666163dd",
+                  "learning_point_id": "54988172-843e-4916-82ed-c6577cf146a9",
+                  "question_text": "অভিযোগ নিষ্পত্তির মূল লক্ষ্য কী?",
+                  "explanation": "সুষ্ঠু অভিযোগ নিষ্পত্তি পদ্ধতি কর্মক্ষেত্রে সুস্থ সম্পর্ক বজায় রাখে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.843Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অভিযোগ নিষ্পত্তি পদ্ধতি একটি গণতান্ত্রিক প্রক্রিয়া যা কর্মক্ষেত্রে শ্রমিক ও মালিকের সম্পর্কের ভারসাম্য বজায় রাখে।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1d268137-d261-4f7f-9af4-b11f53964d26",
+                      "question_id": "b5534235-153f-426f-b06a-3d44666163dd",
+                      "option_text": "কর্মক্ষেত্রে শান্তিশৃঙ্খলা ও ন্যায়বিচার নিশ্চিত করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    },
+                    {
+                      "id": "957512d0-41b4-44b1-9d92-6e6f4afd97d5",
+                      "question_id": "b5534235-153f-426f-b06a-3d44666163dd",
+                      "option_text": "মালিকের ব্যয় বাড়ানো",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    },
+                    {
+                      "id": "170ca5db-4908-41da-974e-5abf770297fc",
+                      "question_id": "b5534235-153f-426f-b06a-3d44666163dd",
+                      "option_text": "ফ্যাক্টরি বন্ধ রাখা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    },
+                    {
+                      "id": "cb3ae501-3414-48ce-bfb3-7fb11bce8509",
+                      "question_id": "b5534235-153f-426f-b06a-3d44666163dd",
+                      "option_text": "শ্রমিকদের বেতন কমিয়ে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "36b708a7-dbe7-4568-81cf-a21756ba6936",
+              "chapter_id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",
+              "title": "সচেতন শ্রমিকের ভূমিকা",
+              "content": "অভিযোগ নিষ্পত্তি পদ্ধতি",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:22:18.843Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "7f07f32b-2ce8-4c4a-8cc2-6a3b7c53434d",
+                  "learning_point_id": "36b708a7-dbe7-4568-81cf-a21756ba6936",
+                  "question_text": "একজন সচেতন শ্রমিকের কী কী করণীয়? (টিক দিন)",
+                  "explanation": "সচেতনতাই হলো আইনি প্রতিকার পাওয়ার প্রথম শর্ত।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:22:18.843Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিক অভিযোগ নিষ্পত্তির পদ্ধতি সম্পর্কে সচেতন থাকলে তিনি যেকোনো ধরনের শোষণের বিরুদ্ধে আইনি সুরক্ষা চাইতে পারেন।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "19e6d327-604b-4b06-92d0-1578de3a677b",
+                      "question_id": "7f07f32b-2ce8-4c4a-8cc2-6a3b7c53434d",
+                      "option_text": "শ্রম আইন সম্পর্কে ধারণা রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    },
+                    {
+                      "id": "bc54bf49-3cd6-4fdc-b7f7-05e654e86cfb",
+                      "question_id": "7f07f32b-2ce8-4c4a-8cc2-6a3b7c53434d",
+                      "option_text": "নিজের অধিকার সম্পর্কে সচেতন থাকা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    },
+                    {
+                      "id": "2456c3ed-358b-4404-8916-f6f88ecbb17f",
+                      "question_id": "7f07f32b-2ce8-4c4a-8cc2-6a3b7c53434d",
+                      "option_text": "সব সময় চুপচাপ অবিচার সহ্য করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:22:18.843Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     },

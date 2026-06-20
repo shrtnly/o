@@ -20629,7 +20629,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "কটন ওপেনারের নারী শ্রমিক",
           "order_index": 6,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "f9f9cf48-6457-48c5-8f6f-da7db3c52c5b",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "94e4ac5c-f84d-45d2-9bc8-4fb4c79d2598",
+                  "learning_point_id": "f9f9cf48-6457-48c5-8f6f-da7db3c52c5b",
+                  "question_text": "কটন ওপেনারের কোন অংশে নারী শ্রমিক নিয়োগ করা আইনত সম্পূর্ণ নিষিদ্ধ?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৬৫ অনুযায়ী, কটন ওপেনারের যে অংশ দিয়ে তুলা মেশিনের ভেতর প্রবেশ করানো হয় (ফিডিং সাইড), সেখানে কোনো নারী শ্রমিককে নিযুক্ত করা যাবে না।",
+                  "narrative": "💡 হিন্ট: কটন ওপেনার (തുলা ধুনার মেশিন) অত্যন্ত ঝুঁকিপূর্ণ। এর ভেতরের ঘূর্ণায়মান ড্রাম বা দাঁতগুলো শ্রমিককে টেনে নিতে পারে। তাই এর একটি নির্দিষ্ট অংশে নারী শ্রমিক নিয়োগ নিষিদ্ধ।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6a4a2d5e-9f91-456a-a105-bf56d842773a",
+                      "question_id": "94e4ac5c-f84d-45d2-9bc8-4fb4c79d2598",
+                      "option_text": "ফিডিং সাইড (যেদিক দিয়ে তুলা দেওয়া হয়)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.719Z"
+                    },
+                    {
+                      "id": "864461d6-bce1-4f2f-8bf0-848df2794d51",
+                      "question_id": "94e4ac5c-f84d-45d2-9bc8-4fb4c79d2598",
+                      "option_text": "ডেলিভারি সাইড (যেদিক দিয়ে তুলা বের হয়)",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.721Z"
+                    },
+                    {
+                      "id": "cf442541-42a1-4956-aeb9-71ed3bb0b067",
+                      "question_id": "94e4ac5c-f84d-45d2-9bc8-4fb4c79d2598",
+                      "option_text": "প্যাকেজিং সাইড",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "cd693dfa-144b-45c4-90f6-ce89a4334d3e",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "3b68d130-5ca5-4dea-afce-207d719b2360",
+                  "learning_point_id": "cd693dfa-144b-45c4-90f6-ce89a4334d3e",
+                  "question_text": "ফিডিং সাইডটি স্থায়ী বিভাজক দিয়ে পুরোপুরি আলাদা ও নিরাপদ করা থাকলে কি নারী শ্রমিকরা অপর পাশে কাজ করতে পারবেন?",
+                  "question_type": "boolean",
+                  "explanation": "যদি পরিদর্শকের সন্তুষ্টি অনুযায়ী মেশিনের বিপজ্জনক অংশটি দেয়াল দিয়ে সম্পূর্ণ পৃথক করা থাকে, তবে অপর নিরাপদ প্রান্তে নারী শ্রমিক নিয়োগ করা বৈধ।",
+                  "narrative": "💡 হিন্ট: যদি কটন ওপেনার মেশিনের ফিডিং সাইডটি একটি স্থায়ী দেয়াল বা বিভাজক দিয়ে সম্পূর্ণ আলাদা করা থাকে, তবে অপর পাশের নিরাপদ অংশে নারীরা কাজ করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "67a911bd-b80c-4c96-99c8-b55564b318fd",
+                      "question_id": "3b68d130-5ca5-4dea-afce-207d719b2360",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "0c969ba8-6b74-4ad6-82bb-60383ebe93df",
+                      "question_id": "3b68d130-5ca5-4dea-afce-207d719b2360",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "52b64983-62d2-45d5-8352-2d2c47bfbdc4",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "28f0280e-5740-45fe-95ba-3c4951737a4b",
+                  "learning_point_id": "52b64983-62d2-45d5-8352-2d2c47bfbdc4",
+                  "question_text": "কটন ওপেনারে নারী শ্রমিক নিয়োগের ক্ষেত্রে কোন কোন আইনি কমপ্লায়েন্স নিশ্চিত করতে হবে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "পার্টিশন ভেঙে ফেলা বেআইনি; সুরক্ষামূলক দেয়াল বজায় রাখা এবং ফিডিং জোনে নারীদের নিষিদ্ধ রাখাই আইনি নিয়ম।",
+                  "narrative": "💡 হিন্ট: এই আইনের মূল উদ্দেশ্য হলো অসাবধানতাবশত নারী শ্রমিকের পোশাক, চুল বা শাড়ির আঁচল যেন চলন্ত কটন ওপেনারের সিলিন্ডারে আটকে না যায়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "49b821d8-1215-457e-99e9-6cc7d522fce8",
+                      "question_id": "28f0280e-5740-45fe-95ba-3c4951737a4b",
+                      "option_text": "ফিডিং জোনে নারী শ্রমিকদের প্রবেশ সম্পূর্ণ বন্ধ রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "2401c44e-aa3e-4acf-8ac0-b3a193a850f4",
+                      "question_id": "28f0280e-5740-45fe-95ba-3c4951737a4b",
+                      "option_text": "মেশিনের সুরক্ষামূলক পার্টিশন বা দেয়ালটি মজবুত রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "71c969b5-ad8b-438b-b4a7-e5dbe8645b2f",
+                      "question_id": "28f0280e-5740-45fe-95ba-3c4951737a4b",
+                      "option_text": "কাজের গতি বাড়াতে সেফটি পার্টিশনটি ভেঙে ফেলা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "c063aabd-d454-40e1-9832-a23fad7e962f",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "b65b0915-fd20-40be-aa26-ac8aa696d593",
+                  "learning_point_id": "c063aabd-d454-40e1-9832-a23fad7e962f",
+                  "question_text": "নাসরিনের আইনি আপত্তি অনুযায়ী, রহিমাকে কোন অংশ থেকে দ্রুত সরিয়ে নিতে হবে?",
+                  "question_type": "storytelling",
+                  "explanation": "কটন ওপেনারের ফিডিং সাইডে হাত বা কাপড় আটকে মারাত্মক অঙ্গহানির ঝুঁকি থাকায় নারীদের জন্য এই জোনটি কঠোরভাবে নিষিদ্ধ।",
+                  "narrative": "💬 দৃশ্য ১:\nতারেক: আমাদের জিন্স ফ্যাক্টরির কটন ওপেনার লাইনে তুলা ঢোকানোর জন্য রহিমা খাতুনকে ডিউটি দিয়েছি।\nনাসরিন: তারেক ভাই, এটা ধারা ৬৫-এর সরাসরি লঙ্ঘন! ফিডিং সাইডে নারীদের কাজ দেওয়া দণ্ডনীয় অপরাধ। ওনাকে অবিলম্বে ডেলিভারি বা প্যাকিং সেকশনে পাঠান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5cde5def-f671-4097-84d8-90dc7f2a112b",
+                      "question_id": "b65b0915-fd20-40be-aa26-ac8aa696d593",
+                      "option_text": "মেশিনের ফিডিং সাইড",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "067f60e3-d397-4e75-86b3-15fe124fa288",
+                      "question_id": "b65b0915-fd20-40be-aa26-ac8aa696d593",
+                      "option_text": "প্যাকিং টেবিল",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "68ba838c-8257-47f7-8912-ae94e335d761",
+                      "question_id": "b65b0915-fd20-40be-aa26-ac8aa696d593",
+                      "option_text": "গুদাম ঘর",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "bc095aee-292e-48da-b2d0-c91288381c9a",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "6afafeb3-b835-445f-ae97-01ed6c057475",
+                  "learning_point_id": "bc095aee-292e-48da-b2d0-c91288381c9a",
+                  "question_text": "বাম পাশের অংশের সাথে ডান পাশের আইনি অনুমোদনের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "ফিডিং সাইড সম্পূর্ণ নিষিদ্ধ, স্থায়ী বিভাজক থাকলে শর্তসাপেক্ষে অনুমোদিত এবং সাধারণ প্যাকিংয়ে কোনো আইনি বাধা নেই।",
+                  "narrative": "💡 হিন্ট: মেশিনের অংশ এবং সেখানে নারী শ্রমিকদের আইনি অনুমোদনের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "কটন ওপেনার ফিডিং সাইড",
+                        "right": "সম্পূর্ণ নিষিদ্ধ"
+                      },
+                      {
+                        "left": "সম্পূর্ণ পৃথকীকৃত নিরাপদ অংশ",
+                        "right": "শর্তসাপেক্ষে অনুমোদিত"
+                      },
+                      {
+                        "left": "সাধারণ টেক্সটাইল প্যাকিং",
+                        "right": "সাধারণ অনুমোদন"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "81f448d4-7d26-4d82-a67d-fb0d4648884d",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "00b778e6-362a-4afe-b129-81c95a0627e8",
+                  "learning_point_id": "81f448d4-7d26-4d82-a67d-fb0d4648884d",
+                  "question_text": "সুপারভাইজারের মৌখিক আদেশে কোনো নারী ফিডিং সাইডে কাজ করলে, দুর্ঘটনার আইনি দায় কি ফ্লোর ইন-চার্জের ওপর বর্তাবে?",
+                  "question_type": "boolean",
+                  "explanation": "নিষিদ্ধ জোনে নারী শ্রমিককে কাজ করার অনুমতি বা নির্দেশ দেওয়া সরাসরি আইনি অপরাধ, তাই এর দায় ফ্লোর ইন-চার্জ ও মালিকের ওপর আসবে।",
+                  "narrative": "💡 হিন্ট: এই নিয়মটি অমান্য করলে কারখানার ম্যানেজার বা সুপারভাইজার দায় এড়াতে পারেন না।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "24df1c6a-f26f-4ca6-ba4c-f41225b4b94b",
+                      "question_id": "00b778e6-362a-4afe-b129-81c95a0627e8",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "1247072f-5176-46ca-bbf4-2d2da2029e30",
+                      "question_id": "00b778e6-362a-4afe-b129-81c95a0627e8",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "2f189dfe-960e-44b9-8ad0-c309f6f347e4",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "5826622b-2733-4cbd-9bd9-4814ebc8d361",
+                  "learning_point_id": "2f189dfe-960e-44b9-8ad0-c309f6f347e4",
+                  "question_text": "কটন ওপেনারের বিশেষ সুরক্ষামূলক ধারা ৬৫ অমান্য করলে সর্বোচ্চ কত টাকা অর্থদণ্ড হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের সাধারণ দণ্ড (ধারা ২৮৪) অনুযায়ী, সেফটি ও সুরক্ষা বিধি প্রথমবার লঙ্ঘন করলে অনধিক ৫,০০০ টাকা পর্যন্ত জরিমানার বিধান রয়েছে।",
+                  "narrative": "💡 হিন্ট: যদি কোনো টেক্সটাইল মিলে কটন ওপেনারের ফিডিং সাইডে নারী শ্রমিক কর্মরত অবস্থায় পাওয়া যায়, তবে পরিদর্শক দল সরাসরি মামলা করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1870df7c-9b98-424f-8379-366f04bb0c80",
+                      "question_id": "5826622b-2733-4cbd-9bd9-4814ebc8d361",
+                      "option_text": "৫,০০০ টাকা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "15027fdd-ccdd-4629-a34a-df733f53face",
+                      "question_id": "5826622b-2733-4cbd-9bd9-4814ebc8d361",
+                      "option_text": "৫০,০০০ টাকা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "284ec215-f709-4e3e-b52c-c34272ab030a",
+                      "question_id": "5826622b-2733-4cbd-9bd9-4814ebc8d361",
+                      "option_text": "১,০০,০০০ টাকা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "2830fbac-3107-472e-a99c-a538eae79e5d",
+              "chapter_id": "ed57f0b2-ec35-48e7-a28d-c37654393a9b",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "ea4110f3-9d41-4d4c-aded-8f637f92b4e9",
+                  "learning_point_id": "2830fbac-3107-472e-a99c-a538eae79e5d",
+                  "question_text": "কটন ওপেনার জোনে আইনি কমপ্লায়েন্স ঠিক রাখতে সেফটি অফিসারের করণীয় কী? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "সেন্সর বন্ধ রাখা বেআইনি; সতর্কতামূলক সাইন এবং দেয়ালের স্থায়িত্ব নিশ্চিত করাই আইনসম্মত সঠিক পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট কারখানায় কটন ওপেনার মেশিনের ঠিক ওপরে সতর্কবার্তা লেখা থাকে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "603ebb51-0c4c-4df2-803d-0f42cbbe1e8a",
+                      "question_id": "ea4110f3-9d41-4d4c-aded-8f637f92b4e9",
+                      "option_text": "ফিডিং মুখের কাছে স্পষ্ট বাংলায় \"নারীদের প্রবেশ নিষেধ\" সাইন লাগানো।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "3b35926e-0428-46cd-bd91-e99d7d30b6bf",
+                      "question_id": "ea4110f3-9d41-4d4c-aded-8f637f92b4e9",
+                      "option_text": "মেশিনের সেফটি পার্টিশন বা দেয়ালটি প্রতি মাসে অডিট করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "51d45363-08df-4c7b-90b5-975533d6e50e",
+                      "question_id": "ea4110f3-9d41-4d4c-aded-8f637f92b4e9",
+                      "option_text": "খরচ বাঁচাতে মেশিনের মূল সেফটি সেন্সরগুলো বন্ধ রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -20637,7 +20996,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "ক্রেন ও উত্তোলক যন্ত্রপাতি",
           "order_index": 7,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "765eba2c-0410-402c-9e21-21721e621f68",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "6ed67d33-bc14-432f-b2ef-1604d41105c5",
+                  "learning_point_id": "765eba2c-0410-402c-9e21-21721e621f68",
+                  "question_text": "প্রতিটি ক্রেন বা লিফটের গায়ে কি তার নিরাপদ কর্মক্ষমতার সর্বোচ্চ ওজন (Safe Working Load) স্পষ্ট অক্ষরে লেখা থাকা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৬৬-৬৭ অনুযায়ী, প্রতিটি উত্তোলক যন্ত্রপাতি, ক্রেন বা চেইনের গায়ে তার সর্বোচ্চ নিরাপদ বহন ক্ষমতা (SWL) স্পষ্টভাবে চিহ্নিত করে রাখতে হবে।",
+                  "narrative": "💡 হিন্ট: ক্রেন, লিফট বা চেইন হোলিস্টের মতো উত্তোলক যন্ত্রপাতি ছিঁড়ে পড়লে বড় ধরনের জীবনহানি ঘটতে পারে। তাই এগুলোর একটি নির্দিষ্ট সর্বোচ্চ ওজন বহনের সীমা (Safe Working Load) থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6047f569-aaa8-4f5b-9ab8-31bd56668b7f",
+                      "question_id": "6ed67d33-bc14-432f-b2ef-1604d41105c5",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "9948b6b4-6716-4eaa-a3a3-2a380afc6f4d",
+                      "question_id": "6ed67d33-bc14-432f-b2ef-1604d41105c5",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "aa2adf12-368f-46d3-9fb3-971798d10f11",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "99c51512-5908-48d0-bb86-0b7502af3494",
+                  "learning_point_id": "aa2adf12-368f-46d3-9fb3-971798d10f11",
+                  "question_text": "শ্রম আইন অনুযায়ী, কারখানার ক্রেন, চেইন ও উত্তোলক রোপগুলো অন্তত কতদিন পরপর পরীক্ষা করা বাধ্যতামূলক?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৬৬(১)(ক) এর স্পিরিট অনুযায়ী, প্রতিটি ক্রেন ও উত্তোলক গিয়ার অন্তত প্রতি ১২ মাসে (১ বছর) একবার একজন দক্ষ ব্যক্তি বা সার্টিফাইড ইঞ্জিনিয়ার দ্বারা পুঙ্খানুপুঙ্খভাবে পরীক্ষা করাতে হবে।",
+                  "narrative": "💡 হিন্ট: ক্রেনের দড়ি, চেইন বা হুকগুলো ক্ষয়ে যাচ্ছে কিনা তা নিশ্চিত করতে একটি নির্দিষ্ট সময় পরপর থার্ড-পার্টি ইঞ্জিনিয়ার দিয়ে পরীক্ষা করাতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "39350359-65fc-427f-8f9c-21f09cff18dd",
+                      "question_id": "99c51512-5908-48d0-bb86-0b7502af3494",
+                      "option_text": "প্রতি ১২ মাসে অন্তত একবার",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "784c8265-6fd3-420c-a8e7-b5b8e606e37e",
+                      "question_id": "99c51512-5908-48d0-bb86-0b7502af3494",
+                      "option_text": "প্রতি ৫ বছরে একবার",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "f516d450-1e3d-4511-aad5-34059159e62d",
+                      "question_id": "99c51512-5908-48d0-bb86-0b7502af3494",
+                      "option_text": "কেবল নষ্ট হলে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "e863ef31-61a9-4ad9-98ab-b50d3811ab48",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "933646c0-3fc6-412c-8cae-cfe756b295ae",
+                  "learning_point_id": "e863ef31-61a9-4ad9-98ab-b50d3811ab48",
+                  "question_text": "ক্রেন ও উত্তোলক যন্ত্রপাতি পরিচালনার আইনি শর্তগুলো কী কী? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "ক্রেনের নিচে মানুষের যাতায়াত চরম বিপজ্জনক ও নিষিদ্ধ; লাইসেন্সধারী অপারেটর ও ওভারলোড না করাই আইনি কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: ক্রেনের নিরাপত্তা কেবল তার মেকানিক্যাল অংশেই নয়, যিনি ক্রেনটি চালাচ্ছেন তার যোগ্যতার ওপরও নির্ভর করে। অনভিজ্ঞ লোক দিয়ে ক্রেন চালানো দণ্ডনীয় অপরাধ।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "579ca5a4-dc95-432f-aca0-d6ad488e609e",
+                      "question_id": "933646c0-3fc6-412c-8cae-cfe756b295ae",
+                      "option_text": "ক্রেন অপারেটরের বৈধ লাইসেন্স ও ভারী মেশিন চালনার সার্টিফিকেট থাকা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "f4f178f1-7ae3-4aad-a50a-57a3e1f613d0",
+                      "question_id": "933646c0-3fc6-412c-8cae-cfe756b295ae",
+                      "option_text": "নির্ধারিত ওজনের চেয়ে বেশি ভারী বস্তু কখনো উত্তোলন না করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "57fb72f7-66d4-46cc-8841-a2e1f0e05740",
+                      "question_id": "933646c0-3fc6-412c-8cae-cfe756b295ae",
+                      "option_text": "ক্রেন সচল থাকা অবস্থায় তার নিচ দিয়ে সাধারণ শ্রমিকদের যাতায়াত করতে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "224161aa-edeb-4e9d-be19-8e857340ab19",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "b909b679-d864-4082-9cbf-efa7c0a24d2e",
+                  "learning_point_id": "224161aa-edeb-4e9d-be19-8e857340ab19",
+                  "question_text": "সোহেলের আইনি আপত্তি অনুযায়ী, ৩ টনের ক্রেনে ৪ টন ওজন তোলা কেন বেআইনি?",
+                  "question_type": "storytelling",
+                  "explanation": "কোনো অবস্থাতেই কোনো উত্তোলক যন্ত্রপাতিকে তার গায়ে লেখা সর্বোচ্চ নিরাপদ আইনি সীমার (SWL) চেয়ে অতিরিক্ত ওজনে ব্যবহার করা যাবে না।",
+                  "narrative": "💬 দৃশ্য ১:\nকামাল: আমাদের ৩ টনের ক্রেন দিয়ে আজ ৪ টনের একটি জেনারেটর ওপরে তুলতে হবে। দড়িটা বেশ শক্ত আছে, ছিঁড়বে না।\nসোহেল: কামাল ভাই, এই ভুল করবেন না! ক্রেনের গায়ে ৩ টন লেখা থাকলে ৩ টনের এক কেজি বেশিও তোলা আইনের পরিপন্থী এবং চরম বিপজ্জনক। দড়ি ছিঁড়লে বড় দুর্ঘটনা ঘটবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "225d1388-1055-48f4-978f-74f3542d240d",
+                      "question_id": "b909b679-d864-4082-9cbf-efa7c0a24d2e",
+                      "option_text": "এটি ক্রেনের নির্ধারিত নিরাপদ কর্মক্ষমতা (Safe Working Load) লঙ্ঘনের অপরাধ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "34dff670-ce96-4391-8a11-435654df8416",
+                      "question_id": "b909b679-d864-4082-9cbf-efa7c0a24d2e",
+                      "option_text": "৪ টন ওজন তুললে ক্রেনের তেল বেশি খরচ হয়",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "b00e1bec-530f-479f-82de-716aaf718f5e",
+                      "question_id": "b909b679-d864-4082-9cbf-efa7c0a24d2e",
+                      "option_text": "ক্রেনের বাৎসরিক ট্যাক্স দেওয়া নেই",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "db4ad93c-da47-4f5f-b72f-727a243d7b86",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "f684be30-683e-4fe4-b19f-c8b35df6b247",
+                  "learning_point_id": "db4ad93c-da47-4f5f-b72f-727a243d7b86",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি মেয়াদের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "ক্রেন অডিট ১২ মাসে একবার করতে হয়, SWL ক্রেনের গায়ে স্পষ্ট লেখা থাকতে হয় এবং তারের দড়ি ব্যবহারের আগে প্রতিদিন চেক করতে হয়।",
+                  "narrative": "💡 হিন্ট: উত্তোলক উপাদান এবং তাদের আইনি কমপ্লায়েন্স রিপোর্টের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "ক্রেন ও লিফট অডিট",
+                        "right": "প্রতি ১২ মাসে অন্তত একবার"
+                      },
+                      {
+                        "left": "সর্বোচ্চ নিরাপদ লোড (SWL)",
+                        "right": "ক্রেনের গায়ে স্থায়ীভাবে খোদাই করা"
+                      },
+                      {
+                        "left": "তারের দড়ি ও হুক",
+                        "right": "ব্যবহারের আগে তাৎক্ষণিক চেক"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "5a04bcb7-649e-4e8f-b848-5a3a91b58cd0",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "63cbe852-7f53-4d53-829f-45ff7a848040",
+                  "learning_point_id": "5a04bcb7-649e-4e8f-b848-5a3a91b58cd0",
+                  "question_text": "ক্রেন বা উত্তোলক যন্ত্রপাতির বাৎসরিক পরীক্ষার সার্টিফিকেট বা টেস্ট রিপোর্ট কি ফ্যাক্টরির সেফটি ফাইলে রাখা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "পরিদর্শনের সময় প্রমাণ দেখানোর জন্য সার্টিফাইড মেকানিক্যাল বা থার্ড-পার্টি ল্যাব টেস্টের রিপোর্ট ফ্যাক্টরি ফাইলে রাখা বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: ক্রেন বা লিফটের পরীক্ষার এই রিপোর্টটি একটি নির্দিষ্ট আইনি ফরমে লিখে রাখতে হয় যা বায়ার বা সরকারি অডিটে বাধ্যতামূলকভাবে দেখাতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "4134f403-6b06-411d-9070-8a8056e59570",
+                      "question_id": "63cbe852-7f53-4d53-829f-45ff7a848040",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "6a072d40-486b-42e2-a8dd-b8b286a08d10",
+                      "question_id": "63cbe852-7f53-4d53-829f-45ff7a848040",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "d0ec4f00-bb2c-424b-88a1-833ced945dd5",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "90d73ee4-39a1-415b-a19b-dfce8358ff69",
+                  "learning_point_id": "d0ec4f00-bb2c-424b-88a1-833ced945dd5",
+                  "question_text": "ক্রেন ও উত্তোলক যন্ত্রের সেফটি বিধি লঙ্ঘন করলে তা কোন ধরনের অপরাধ?",
+                  "question_type": "mcq",
+                  "explanation": "ক্রেনের নিরাপত্তা অবহেলা করা মানুষের জীবন ঝুঁকির মধ্যে ফেলে, যা শ্রম আইনের অধ্যায় ৬ অনুযায়ী কঠোরভাবে শাস্তিযোগ্য অপরাধ।",
+                  "narrative": "💡 হিন্ট: ওভারলোডের কারণে ক্রেন ভেঙে যদি কোনো শ্রমিকের মৃত্যু ঘটে, তবে প্রতিষ্ঠানের বিরুদ্ধে দণ্ডবিধির গুরুতর ধারায় মামলা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6a595b32-2952-4723-aea1-909a88a9a735",
+                      "question_id": "90d73ee4-39a1-415b-a19b-dfce8358ff69",
+                      "option_text": "শ্রম আইনের অধীনে একটি গুরুতর ও দণ্ডনীয় ফৌজদারি অপরাধ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "c5a8fdaf-97ae-4565-82f0-0e0161bb6dda",
+                      "question_id": "90d73ee4-39a1-415b-a19b-dfce8358ff69",
+                      "option_text": "প্রতিষ্ঠানের অভ্যন্তরীণ সাধারণ হিসাব সংক্রান্ত ত্রুটি",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "b903fa5e-c018-44e2-8faa-3d9546c87ed8",
+                      "question_id": "90d73ee4-39a1-415b-a19b-dfce8358ff69",
+                      "option_text": "কোনো অপরাধ নয়",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "6c910a94-2850-472f-9cfd-8c2f9b2e62d7",
+              "chapter_id": "a4aa401f-9c08-426c-bb70-9c1328cb889b",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "444843e5-d88e-47cb-8e57-4c2400da6184",
+                  "learning_point_id": "6c910a94-2850-472f-9cfd-8c2f9b2e62d7",
+                  "question_text": "ক্রেন অপারেশনের সময় কর্মক্ষেত্রের নিরাপত্তা নিশ্চিত করতে কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "হাওয়াতে মাল ঝুলিয়ে রাখা বিপজ্জনক; ব্যারিকেড দেওয়া এবং নিয়মিত রক্ষণাবেক্ষণ করাই হলো সঠিক আইনি কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: ক্রেন অপারেশনের সময় আশেপাশের এরিয়া সুরক্ষিত রাখতে ফ্লোর টিমকে কিছু প্রিভেন্টিভ মেজার নিতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "7794f2c4-847e-4a31-8d4f-f3dac37777d9",
+                      "question_id": "444843e5-d88e-47cb-8e57-4c2400da6184",
+                      "option_text": "ক্রেন চলাচলের নিচের অংশে \"বিপদ: ওপরে কাজ চলছে\" সাইন দিয়ে ব্যারিকেড দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "514b8ba9-6132-4b85-8a02-1df91e0dcdc6",
+                      "question_id": "444843e5-d88e-47cb-8e57-4c2400da6184",
+                      "option_text": "ক্রেনের তার ও হুকগুলোতে নিয়মিত গ্রীজিং ও মেইনটেন্যান্স করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "6c653624-e7df-4bab-bb98-bd454a3352e3",
+                      "question_id": "444843e5-d88e-47cb-8e57-4c2400da6184",
+                      "option_text": "ক্রেন দিয়ে মালামাল ঝুলিয়ে দীর্ঘক্ষণ ফ্লোরের ওপরে হাওয়াতে রেখে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -20645,7 +21363,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "ঘূর্ণায়মান যন্ত্রপাতির সর্বোচ্চ গতি",
           "order_index": 8,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "ec1af34d-37df-4969-8e32-e5b56c5f5af4",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "cf1133b7-cc55-4069-b853-f19247eaa408",
+                  "learning_point_id": "ec1af34d-37df-4969-8e32-e5b56c5f5af4",
+                  "question_text": "ঘূর্ণায়মান যন্ত্রপাতি (Revolving Machinery) বা গ্রাইন্ডিং হুইলের পাশে মালিকের প্রধান আইনি দায়িত্ব কোনটি?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৬৮(১) অনুযায়ী, প্রত্যেক ঘূর্ণায়মান যন্ত্রের বা গ্রাইন্ডিং পাথরের ঠিক কাছাকাছি তার নিরাপদ ঘূর্ণন গতি বা আরপিএম (RPM) সংবলিত নোটিশ স্পষ্ট অক্ষরে টাঙিয়ে রাখতে হবে।",
+                  "narrative": "💡 হিন্ট: গ্রাইন্ডিং হুইল বা ঘূর্ণায়মান কাটিং ডিস্কের মতো যন্ত্রপাতি যদি তার নির্ধারিত গতির চেয়ে বেশি জোরে ঘোরে, তবে তা ফেটে টুকরো টুকরো হয়ে শ্রমিকের শরীরে বিঁধতে পারে। তাই গতিসীমা নোটিশে লেখা থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1af414f9-db7b-411c-ba02-b3de1f33a336",
+                      "question_id": "cf1133b7-cc55-4069-b853-f19247eaa408",
+                      "option_text": "মেশিনের সর্বোচ্চ নিরাপদ গতিবেগ (Maximum Safe Working Speed) নোটিশে প্রদর্শন করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "36212c7b-0fb5-437f-9e37-0c850e484f0c",
+                      "question_id": "cf1133b7-cc55-4069-b853-f19247eaa408",
+                      "option_text": "মেশিনের গতিবেগ সবসময় গোপন রাখা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "6236b394-8a6a-4ad7-becb-229eff743a95",
+                      "question_id": "cf1133b7-cc55-4069-b853-f19247eaa408",
+                      "option_text": "মেশিনের গতি পরিমাপের যন্ত্রটি খুলে ফেলা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "8b7f72dc-0696-4b3f-94eb-957c22cb9dca",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "7d96c4a1-af7a-4d6b-a1be-06d0ee67db0e",
+                  "learning_point_id": "8b7f72dc-0696-4b3f-94eb-957c22cb9dca",
+                  "question_text": "উৎপাদন বাড়ানোর জন্য কি নোটিশে নির্ধারিত সর্বোচ্চ নিরাপদ গতির চেয়ে বেশি গতিতে কোনো ঘূর্ণায়মান চাকতি বা হুইল চালানো বৈধ?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৬৮(২) এর স্পিরিট অনুযায়ী, নোটিশে উল্লিখিত সর্বোচ্চ নিরাপদ গতির চেয়ে বেশি গতিতে মেশিন চালানো আইনের সরাসরি লঙ্ঘন এবং চরম বিপজ্জনক।",
+                  "narrative": "💡 হিন্ট: মেশিনের গায়ে বা নোটিশে যে সর্বোচ্চ আরপিএম (RPM) লেখা থাকবে, অপারেটর কোনো অবস্থাতেই মেশিনটিকে তার চেয়ে বেশি স্পিডে চালাতে পারবেন না।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f8ab936c-ec52-431e-9115-6c65c37a579b",
+                      "question_id": "7d96c4a1-af7a-4d6b-a1be-06d0ee67db0e",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "4acfadbb-4d3f-44de-840c-5bbf91c74ec3",
+                      "question_id": "7d96c4a1-af7a-4d6b-a1be-06d0ee67db0e",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "11442e7c-981b-4afb-920c-0b0636b3095f",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "d3cf2e4d-9de5-43ad-8ebc-4a7d31c93049",
+                  "learning_point_id": "11442e7c-981b-4afb-920c-0b0636b3095f",
+                  "question_text": "ঘূর্ণায়মান যন্ত্রপাতির নিরাপত্তা নিশ্চিত করতে কোন কোন বিষয় মেনে চলতে হবে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "ভাঙা ডিস্ক ব্যবহার মারাত্মক দুর্ঘটনার কারণ; মেটাল কভার এবং গতির নিয়মিত তদারকিই হলো আইনসম্মত সঠিক পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: ঘূর্ণায়মান মেশিনের গতির পাশাপাশি তার চারপাশের মেটাল গার্ড বা কভারটি অত্যন্ত মজবুত হতে হয় যাতে কোনো অংশ ভাঙলেও তা বাইরে ছিটকে না আসে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "304a97d1-dfd9-4aac-81fc-3e9be7c2d192",
+                      "question_id": "d3cf2e4d-9de5-43ad-8ebc-4a7d31c93049",
+                      "option_text": "প্রতিটি গ্রাইন্ডিং হুইলের ওপর একটি মজবুত ইস্পাতের সেফটি হুড বা কভার (Safety Hood) রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "a3c62afe-939a-438e-a0ad-e15d44fb1095",
+                      "question_id": "d3cf2e4d-9de5-43ad-8ebc-4a7d31c93049",
+                      "option_text": "মেশিনের আরপিএম (RPM) বা গতি নিয়মিত স্পিডোমিটার দিয়ে চেক করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "4112faeb-3a3a-4992-9bce-041ac3ed7b5a",
+                      "question_id": "d3cf2e4d-9de5-43ad-8ebc-4a7d31c93049",
+                      "option_text": "মেশিনে যেকোনো সাইজের বা ভাঙা কাটিং ডিস্ক জোরপূর্বক ফিট করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "7399bb96-bc25-4586-8637-fedae6159302",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "e377081b-8902-49f1-91de-cb5d899338ef",
+                  "learning_point_id": "7399bb96-bc25-4586-8637-fedae6159302",
+                  "question_text": "তানিয়ার আইনি ও টেকনিক্যাল সতর্কতা অনুযায়ী, কাটিং ডিস্কের গতিসীমা না মানার প্রধান ঝুঁকি কোনটি?",
+                  "question_type": "storytelling",
+                  "explanation": "ধারা ৬৮-এর মূল লক্ষ্য হলো ঘূর্ণায়মান যন্ত্রের গতিকে নিরাপদ সীমার মধ্যে রাখা, যাতে মেকানিক্যাল ব্লাস্ট বা ব্রেকিংয়ের হাত থেকে শ্রমিকের জীবন রক্ষা পায়।",
+                  "narrative": "💬 দৃশ্য ১:\nরনি: আমাদের মেটাল কাটিং ডিস্কের সর্বোচ্চ গতি লেখা আছে ৩০০০ আরপিএম। কিন্তু স্পিড বাড়ানোর জন্য ওটাকে ৫০০০ আরপিএম-এ সেট করেছি।\nতানিয়া: রনি ভাই, এটা আত্মঘাতী কাজ! ধারণক্ষমতার বেশি গতিতে ঘুরলে ওই পাথরের চাকতিটা ব্লাস্ট করে অপারেটরের বুকে বা চোখে বিঁধতে পারে। অবিলম্বে ওটা ৩০০০ আরপিএম-এ নামিয়ে আনুন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f8dcfe5e-4a88-412a-8fa8-d2978a521372",
+                      "question_id": "e377081b-8902-49f1-91de-cb5d899338ef",
+                      "option_text": "অতিরিক্ত গতিতে ঘূর্ণায়মান চাকতিটি ফেটে বা ব্লাস্ট করে বড় দুর্ঘটনা ঘটা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "91038434-18f7-41c7-8366-28dcb54fb730",
+                      "question_id": "e377081b-8902-49f1-91de-cb5d899338ef",
+                      "option_text": "মেশিনের রঙ নষ্ট হয়ে যাওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "38a618cb-56bf-42ca-b995-610192eff127",
+                      "question_id": "e377081b-8902-49f1-91de-cb5d899338ef",
+                      "option_text": "কারখানার বিদ্যুৎ বিল অর্ধেক কমে যাওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "5a153984-de63-40cc-883f-acad5f653aa3",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "cbaa0ba9-e2fa-4625-a4b6-53ed791df4ba",
+                  "learning_point_id": "5a153984-de63-40cc-883f-acad5f653aa3",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি কমপ্লায়েন্সের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "নোটিশ মেশিনের পাশে প্রদর্শন করতে হবে, গতির একক আরপিএম এবং ব্লাস্ট প্রোটেকশনের জন্য ইস্পাতের সেফটি হুড থাকা বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: ঘূর্ণায়মান যন্ত্রের উপাদান এবং তাদের আইনি কমপ্লায়েন্সের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "গতিসীমার নোটিশ",
+                        "right": "মেশিনের ঠিক পাশে স্পষ্ট প্রদর্শন"
+                      },
+                      {
+                        "left": "গতির পরিমাপক একক",
+                        "right": "আরপিএম (RPM) বা ঘূর্ণন প্রতি মিনিট"
+                      },
+                      {
+                        "left": "ব্লাস্ট প্রোটেকশন",
+                        "right": "ইস্পাতের মজবুত সেফটি হুড"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "62294d22-5091-4836-83b7-cbd72a397bf2",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "195cef26-6c49-4fdd-87f4-b54051193c96",
+                  "learning_point_id": "62294d22-5091-4836-83b7-cbd72a397bf2",
+                  "question_text": "মেশিনের নিজস্ব স্পিড প্লেটটি মুছে গেলে কি নতুন নোটিশ বোর্ডে গতি লিখে টাঙানো মালিকের আইনি দায়িত্ব?",
+                  "question_type": "boolean",
+                  "explanation": "আইন অনুযায়ী নোটিশটি সবসময় পরিষ্কার ও দৃশ্যমান থাকতে হবে; ফ্যাক্টরির তৈরি করা নোটিশও এর জন্য বৈধ কমপ্লায়েন্স হিসেবে গণ্য হবে।",
+                  "narrative": "💡 হিন্ট: যদি কোনো মেশিনের আরপিএম রেটিং প্লেটটি মরিচা পড়ে নষ্ট বা মুছে যায়, তবে মালিককে নিজ দায়িত্বে নতুন নোটিশ বা স্টিকার লাগাতে হবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "64c4926d-e124-4fdb-a5e4-03a7cee2fb09",
+                      "question_id": "195cef26-6c49-4fdd-87f4-b54051193c96",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "95ade9f5-3916-43e9-a495-63bf0e87d44b",
+                      "question_id": "195cef26-6c49-4fdd-87f4-b54051193c96",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "c0fdbfed-4453-48f6-9863-12bb6cf443c1",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "aba870dd-9ef0-40c7-aaba-47d9987ed0a1",
+                  "learning_point_id": "c0fdbfed-4453-48f6-9863-12bb6cf443c1",
+                  "question_text": "ঘূর্ণায়মান যন্ত্রের গতিসীমা সংক্রান্ত ধারা ৬৮ অমান্য করলে কী আইনি শাস্তি হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "গতিসীমা অমান্য করা কারখানার অভ্যন্তরে বড় মেকানিক্যাল সেফটি ভায়োলেশন, যা সরাসরি শ্রম আদালতের মাধ্যমে দণ্ডনীয় অপরাধ।",
+                  "narrative": "💡 হিন্ট: যদি পরিদর্শক দল কোনো কারখানায় কভার ছাড়া বা নোটিশ ছাড়া অতিরিক্ত গতিতে গ্রাইন্ডিং মেশিন চলতে দেখেন, তবে তারা লাইনে সরাসরি পেনাল্টি চার্জ করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1682dcc9-34c8-4363-967b-9f5c68b0a095",
+                      "question_id": "aba870dd-9ef0-40c7-aaba-47d9987ed0a1",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি ফৌজদারি মামলা ও অর্থদণ্ড",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "6fd369ec-1d62-47f2-ae7e-1ab8d56550a1",
+                      "question_id": "aba870dd-9ef0-40c7-aaba-47d9987ed0a1",
+                      "option_text": "কারখানার প্রধান গেট স্থায়ীভাবে সিলগালা করা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "35a45ab3-6c06-49ea-b166-841612feb975",
+                      "question_id": "aba870dd-9ef0-40c7-aaba-47d9987ed0a1",
+                      "option_text": "কোনো শাস্তি হবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "b751dbc4-6106-4363-bee0-6fb9e2f15240",
+              "chapter_id": "6a435070-2227-4408-a5b1-6dfa9d640760",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "dc4aa366-0f9e-46eb-8202-bcbadb3eed43",
+                  "learning_point_id": "b751dbc4-6106-4363-bee0-6fb9e2f15240",
+                  "question_text": "ঘূর্ণায়মান মেশিনের সঠিক সেফটি কমপ্লায়েন্স বজায় রাখতে কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "চলন্ত ব্লেডে হাত দেওয়া আত্মঘাতী ও বেআইনি; স্পিড ম্যাচিং ও ফেস শিল্ড পরাই হলো আইনসম্মত প্রিভেন্টিভ কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় মেইনটেন্যান্স টিম নতুন ডিস্ক লাগানোর আগে তার স্পিড রেটিং ও মেশিনের স্পিড মিলিয়ে দেখে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "9b290767-776b-4dea-9415-d18c9f4f6019",
+                      "question_id": "dc4aa366-0f9e-46eb-8202-bcbadb3eed43",
+                      "option_text": "মেশিনের সর্বোচ্চ গতির সাথে কাটিং ব্লেড বা ডিস্কের স্পিড রেটিং ম্যাচ করানো।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "e314066e-9bda-4076-bc94-dc3f29a1d3aa",
+                      "question_id": "dc4aa366-0f9e-46eb-8202-bcbadb3eed43",
+                      "option_text": "অপারেটরদের জন্য ফেস শিল্ড (Face Shield) ও সেফটি গগলস ব্যবহার বাধ্যতামূলক করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "92345083-0ccd-4a04-b779-9b09117357bc",
+                      "question_id": "dc4aa366-0f9e-46eb-8202-bcbadb3eed43",
+                      "option_text": "মেশিন চালু থাকা অবস্থাতেই হাত দিয়ে ব্লেডের ধার পরীক্ষা করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -20653,7 +21730,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "চাপযুক্ত প্ল্যান্টের নিরাপত্তা অডিট",
           "order_index": 9,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "031ce56e-f314-4cc8-b3f2-f80b33b4bb76",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "ae2188e6-f16e-4955-b046-6357eab38b4b",
+                  "learning_point_id": "031ce56e-f314-4cc8-b3f2-f80b33b4bb76",
+                  "question_text": "কারখানার প্রতিটি প্রেসার প্ল্যান্ট বা বয়লারে কি অতিরিক্ত চাপ স্বয়ংক্রিয়ভাবে বের করে দেওয়ার জন্য 'সেফটি ভালভ' (Safety Valve) থাকা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৬৯ অনুযায়ী, বায়ুমণ্ডলীয় চাপের চেয়ে অধিক চাপে পরিচালিত প্রতিটি প্ল্যান্ট বা পাত্রে নিরাপদ চাপ বজায় রাখার জন্য প্রেসার গেজ ও সেফটি ভালভ থাকা অলঙ্ঘনীয় আইনি বাধ্যবাধকতা।",
+                  "narrative": "💡 হিন্ট: বয়লার, স্টিম পাইপলাইন বা গ্যাস সিলিন্ডারের মতো চাপযুক্ত পাত্র (Pressure Plant) যদি বাতাসে অতিরিক্ত চাপের কারণে ফেটে যায়, তবে পুরো কারখানা ধসে পড়তে পারে। তাই এগুলোতে সেফটি ভালভ থাকা জরুরি।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "3db72784-463a-48a3-86dd-240596763bff",
+                      "question_id": "ae2188e6-f16e-4955-b046-6357eab38b4b",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "d99ddcbd-f2c8-4d82-b314-a6d49bdc3fe1",
+                      "question_id": "ae2188e6-f16e-4955-b046-6357eab38b4b",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "009c231e-c9e3-4ece-92a9-28d7ca40b849",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "0378de9f-8c79-4e2c-95f3-0da0e44e3949",
+                  "learning_point_id": "009c231e-c9e3-4ece-92a9-28d7ca40b849",
+                  "question_text": "প্রেসার প্ল্যান্ট বা বয়লারের ভেতরের চাপ নিখুঁতভাবে প্রদর্শনের জন্য কোন আইনি যন্ত্রটি থাকা বাধ্যতামূলক?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৬৯-এর স্পিরিট অনুযায়ী, প্রতিটি চাপযুক্ত পাত্রে একটি সচল ও নির্ভুল প্রেসার গেজ থাকতে হবে যা ভেতরের নিরাপদ কাজের চাপকে নির্দেশ করে।",
+                  "narrative": "💡 হিন্ট: চাপযুক্ত পাত্রের ভেতরের বাস্তব প্রেসার বা চাপ কত আছে, তা দূর থেকে অপারেটর যেন স্পষ্টভাবে দেখতে পারেন, সেজন্য একটি নির্দিষ্ট পরিমাপক মিটার প্যানেলে থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "290abae0-0025-4353-aca6-60d088704f94",
+                      "question_id": "0378de9f-8c79-4e2c-95f3-0da0e44e3949",
+                      "option_text": "প্রেসার গেজ বা চাপ পরিমাপক মিটার (Pressure Gauge)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "8db6dde1-770f-4e4f-8a61-6fc4126986dd",
+                      "question_id": "0378de9f-8c79-4e2c-95f3-0da0e44e3949",
+                      "option_text": "সাধারণ থার্মোমিটার",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "6c0e50d4-f9f2-4f60-805d-4b1c5718dd6c",
+                      "question_id": "0378de9f-8c79-4e2c-95f3-0da0e44e3949",
+                      "option_text": "স্পিডোমিটার",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "af8d3bdc-a7e7-480c-9d0b-4b93b876dc70",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "f0cbd69d-9e52-45b6-a6be-313bc2913f8c",
+                  "learning_point_id": "af8d3bdc-a7e7-480c-9d0b-4b93b876dc70",
+                  "question_text": "চাপযুক্ত প্ল্যান্ট বা বয়লার পরিচালনার ক্ষেত্রে কারখানার কোন কোন আইনি নিয়ম মানতে হয়? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "সেফটি ভালভ লক করা একটি মারাত্মক দণ্ডনীয় অপরাধ ও বয়লার বিস্ফোরণের কারণ; লাইসেন্স রাখা ও বাৎসরিক টেস্ট করানোই আইনসম্মত সঠিক পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: বয়লারের মতো বড় প্রেসার প্ল্যান্টের বাৎসরিক হাইড্রোস্ট্যাটিক টেস্ট বা সেফটি অডিট করার জন্য সরকারের একটি আলাদা ডেডিকেটেড অধিদপ্তর ও সার্টিফাইড ইন্সপেক্টর রয়েছেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6177ad94-03f8-4af2-ae71-fff9cad6f543",
+                      "question_id": "f0cbd69d-9e52-45b6-a6be-313bc2913f8c",
+                      "option_text": "প্রধান বয়লার পরিদর্শকের (Chief Boiler Inspector) দেওয়া বৈধ লাইসেন্স ও সার্টিফিকেট রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "6fdaa9dd-d94a-472b-ade0-bd1906d59037",
+                      "question_id": "f0cbd69d-9e52-45b6-a6be-313bc2913f8c",
+                      "option_text": "প্রতি বছর অন্তত একবার প্ল্যান্টের সর্বোচ্চ চাপ সহনশীলতা পরীক্ষা (Hydrostatic Test) করানো।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "983a2e26-7ac0-478c-ac59-0da355202772",
+                      "question_id": "f0cbd69d-9e52-45b6-a6be-313bc2913f8c",
+                      "option_text": "সেফটি ভালভের মুখটি কোনো লোহার রড বা তার দিয়ে স্থায়ীভাবে লক করে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "ab3bce04-a07a-433f-863c-109f4c21b615",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "426e5b3f-ced2-470c-a734-593714cb4710",
+                  "learning_point_id": "ab3bce04-a07a-433f-863c-109f4c21b615",
+                  "question_text": "লিপিকার আইনি ও সেফটি সতর্কতা অনুযায়ী, নষ্ট প্রেসার গেজ নিয়ে বয়লার চালানো কেন চরম বিপজ্জনক?",
+                  "question_type": "storytelling",
+                  "explanation": "চাপযুক্ত প্ল্যান্টের সেফটি ডিভাইস নষ্ট থাকলে তা কারখানার শত শত শ্রমিকের জীবনকে চরম ঝুঁকিতে ফেলে, যা আইনের চোখে একটি গুরুতর ফৌজদারি অপরাধ।",
+                  "narrative": "💬 দৃশ্য ১:\nআসিম: আমাদের টেক্সটাইল ডাইংয়ের স্টিম বয়লারের প্রেসার গেজের সুইটা জ্যাম হয়ে আটকে আছে। তবে সাউন্ড শুনে মনে হচ্ছে চাপ ঠিকই আছে।\nলিপিকা: আসিম সাহেব, এই অবহেলা করবেন না! বয়লারের প্রেসার গেজ নষ্ট থাকা ধারা ৬৯-এর সরাসরি লঙ্ঘন। যেকোনো মুহূর্তে বয়লার ব্লাস্ট করে পুরো বিল্ডিং উড়ে যেতে পারে। অবিলম্বে বয়লার বন্ধ করে নতুন প্রেসার গেজ লাগান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "0810d6ef-e1ae-4de0-abc7-b3fd8bb289d2",
+                      "question_id": "426e5b3f-ced2-470c-a734-593714cb4710",
+                      "option_text": "ভেতরের সঠিক চাপ না জানায় যেকোনো মুহূর্তে বয়লার বিস্ফোরণ (Boiler Explosion) ঘটতে পারে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "785532bd-1d78-4718-9802-b472bba9f3f8",
+                      "question_id": "426e5b3f-ced2-470c-a734-593714cb4710",
+                      "option_text": "বয়লারের রঙ চটে যেতে পারে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    },
+                    {
+                      "id": "a1d90d3c-5eb6-4c7f-be70-111d28c0ffd9",
+                      "question_id": "426e5b3f-ced2-470c-a734-593714cb4710",
+                      "option_text": "কারখানার উৎপাদন লক্ষ্যমাত্রা ব্যাহত হবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.722Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "47624aa3-fe36-4fd6-85f9-0c468da5dd18",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.722Z",
+              "mcq_questions": [
+                {
+                  "id": "ad6ed84d-e885-482a-971f-1ab080f46cfd",
+                  "learning_point_id": "47624aa3-fe36-4fd6-85f9-0c468da5dd18",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি কাজের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "সেফটি ভালভ অতিরিক্ত চাপ বের করে, প্রেসার গেজ চাপ প্রদর্শন করে এবং হাইড্রো-টেস্ট বাৎসরিক অডিট নিশ্চিত করে।",
+                  "narrative": "💡 হিন্ট: চাপযুক্ত প্ল্যান্টের উপাদান এবং তাদের আইনি সুরক্ষার সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "সেফটি ভালভ",
+                        "right": "অতিরিক্ত চাপ স্বয়ংক্রিয়ভাবে বের করা"
+                      },
+                      {
+                        "left": "প্রেসার গেজ",
+                        "right": "ভেতরের সঠিক চাপ বা প্রেসার প্রদর্শন"
+                      },
+                      {
+                        "left": "হাইড্রো-টেস্ট",
+                        "right": "বাৎসরিক চাপ সহনশীলতা অডিট"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.722Z"
+                }
+              ]
+            },
+            {
+              "id": "5e8102c2-52af-4a6d-8261-45a5377009b9",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "6566bb70-748d-45e6-a256-5bb9933f98fe",
+                  "learning_point_id": "5e8102c2-52af-4a6d-8261-45a5377009b9",
+                  "question_text": "কোনো সার্টিফাইড সার্টিফিকেট বা ট্রেনিং ছাড়া কি কারখানার যেকোনো সাধারণ হেলপারকে বয়লার রুমের মেইন ভালভ অপারেট করতে দেওয়া বৈধ?",
+                  "question_type": "boolean",
+                  "explanation": "প্রেসার প্ল্যান্ট পরিচালনার জন্য কেবল সরকারের অনুমোদিত বা সার্টিফাইড বয়লার অপারেটর বা টেকনিশিয়ানকে নিয়োগ দেওয়া বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: বয়লার বা প্রেসার প্ল্যান্টের অপারেটিং এরিয়াতে সাধারণ বা অপ্রাসঙ্গিক কোনো ব্যক্তির প্রবেশ সম্পূর্ণ নিষিদ্ধ করা উচিত।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "48e34fe3-59bd-4714-9830-b87cd86e958b",
+                      "question_id": "6566bb70-748d-45e6-a256-5bb9933f98fe",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "67fa1b19-a133-4348-a8ce-618d06ac58b2",
+                      "question_id": "6566bb70-748d-45e6-a256-5bb9933f98fe",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "6c2f99af-e65d-47af-8667-969c87aa794e",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "7480638a-402e-4207-8838-610f725b122f",
+                  "learning_point_id": "6c2f99af-e65d-47af-8667-969c87aa794e",
+                  "question_text": "চাপযুক্ত প্ল্যান্টের নিরাপত্তা বিধি (ধারা ৬৯) অমান্য করলে মালিকের বিরুদ্ধে কোন সুনির্দিষ্ট আইনি ব্যবস্থা নেওয়া যায়?",
+                  "question_type": "mcq",
+                  "explanation": "বয়লার বা প্রেসার সেফটি কমপ্লায়েন্স অমান্য করা একটি সর্বোচ্চ ক্যাটাগরির দণ্ডনীয় অপরাধ, যার জন্য কারাদণ্ড ও বড় অংকের আর্থিক জরিমানার বিধান রয়েছে।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানায় লাইসেন্স ছাড়া বা নষ্ট সেফটি ডিভাইস নিয়ে বয়লার চালানো হয়, তবে প্রধান পরিদর্শক কারখানাটি তাৎক্ষণিকভাবে সিলগালা করার নির্দেশ দিতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e85afc75-7ae0-4766-b25d-0ac0ed74fbe5",
+                      "question_id": "7480638a-402e-4207-8838-610f725b122f",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি ফৌজদারি মামলা, জরিমানা এবং লাইসেন্স বাতিল হতে পারে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "5ebc09b5-a94b-4f82-a232-684b6483c3a9",
+                      "question_id": "7480638a-402e-4207-8838-610f725b122f",
+                      "option_text": "বয়লারের পুরো স্টিম বা বাষ্প বাতাসে উড়িয়ে দেওয়া হবে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "86870b11-b7ce-40a7-8b72-34e02ab5f44c",
+                      "question_id": "7480638a-402e-4207-8838-610f725b122f",
+                      "option_text": "কোনো ব্যবস্থা নেওয়া যাবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "04e598ac-8f51-440c-a66e-9451fe4bc269",
+              "chapter_id": "62329e24-4725-48d9-b156-c3eb555d8986",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "387d3241-a748-4ce9-82a1-c9b1d2bfdd1a",
+                  "learning_point_id": "04e598ac-8f51-440c-a66e-9451fe4bc269",
+                  "question_text": "প্রেসার প্ল্যান্টের সঠিক কমপ্লায়েন্স ট্র্যাকিং নিশ্চিত করতে সেফটি কমিটির কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "মিটারে টেপ মারা বেআইনি জালিয়াতি; দৈনিক পরীক্ষা ও বাৎসরিক সার্টিফিকেট প্রদর্শন করাই হলো সঠিক কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় বয়লারের সেফটি অডিট লগবুক প্রতিদিন মেইনটেইন করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "212393c4-ee41-492d-b825-e92407f5affc",
+                      "question_id": "387d3241-a748-4ce9-82a1-c9b1d2bfdd1a",
+                      "option_text": "প্রতিদিন শিফট শুরুর আগে সেফটি ভালভের কার্যকারিতা ম্যানুয়ালি টেস্ট করে খাতায় নোট করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "c8491507-c1db-42fd-9cf4-6761c0f49aab",
+                      "question_id": "387d3241-a748-4ce9-82a1-c9b1d2bfdd1a",
+                      "option_text": "বয়লারের বাৎসরিক ইন্সপেকশন সার্টিফিকেটের কপি বয়লার রুমের ওয়ালে ফ্রেম করে টাঙিয়ে রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "3333f66c-62a2-4d96-89b0-9e43f0f2040e",
+                      "question_id": "387d3241-a748-4ce9-82a1-c9b1d2bfdd1a",
+                      "option_text": "বয়লারের তাপমাত্রা ও চাপ লুকাতে মিটারের ওপর কালো টেপ মেরে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {
@@ -20661,7 +22097,366 @@
           "unit_id": "e9431ef4-0e1e-4fd0-9c65-e3b94df53783",
           "title": "মেঝের গর্ত ও সিঁড়ি",
           "order_index": 10,
-          "learning_points": [],
+          "learning_points": [
+            {
+              "id": "0f1c9ae5-8381-4705-bb01-fd2936d7fa55",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 1,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "8031e84b-60e4-448d-8a88-ce2d69fdb6b1",
+                  "learning_point_id": "0f1c9ae5-8381-4705-bb01-fd2936d7fa55",
+                  "question_text": "কারখানার মেঝের প্রতিটি খোলা কুয়া, গর্ত, সস্প (Sump) বা ট্যাংক কি শক্ত রেলিং বা কভার দিয়ে সম্পূর্ণ সুরক্ষিত রাখা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৭০(১) অনুযায়ী, প্রত্যেক কারখানার মেঝের প্রতিটি খোলা গর্ত, কুয়া, জলাধার বা ট্যাংক যা গভীরতার কারণে বিপজ্জনক হতে পারে, তা উপযুক্ত কভার বা মজবুত রেলিং দ্বারা সুরক্ষিত রাখতে হবে।",
+                  "narrative": "💡 হিন্ট: কারখানার মেঝেতে যদি কোনো খোলা কুয়া, ড্রেন বা গভীর ট্যাংক থাকে, তবে অন্ধকারে বা অসাবধানতাবশত কোনো শ্রমিক তার ভেতরে পড়ে গিয়ে মারা যেতে পারেন। তাই এর চারপাশে রেলিং থাকা বাধ্যতামূলক।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "800b6fd6-ed61-456a-9872-6f891fd666de",
+                      "question_id": "8031e84b-60e4-448d-8a88-ce2d69fdb6b1",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "4b813968-1b70-462e-8305-dd31bb0a4a00",
+                      "question_id": "8031e84b-60e4-448d-8a88-ce2d69fdb6b1",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "f90b165e-b6e9-4330-b520-b2c5d41745e6",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "687c43e3-2771-4279-9079-82702c83f53c",
+                  "learning_point_id": "f90b165e-b6e9-4330-b520-b2c5d41745e6",
+                  "question_text": "শ্রম আইন অনুযায়ী, কারখানার ভেতরে যাতায়াতের প্রতিটি সাধারণ ও জরুরি সিঁড়ির পাশে কোন সুরক্ষামূলক উপাদানটি থাকা আবশ্যিক?",
+                  "question_type": "mcq",
+                  "explanation": "সিঁড়ি দিয়ে ওটার এবং নামার সময় শ্রমিকদের ভারসাম্য রক্ষা ও পতন রোধে দুই পাশে বা অন্তত এক পাশে মজবুত হ্যান্ডরেইল বা রেলিং দেওয়া আইনের স্পষ্ট শর্ত।",
+                  "narrative": "💡 হিন্ট: ফ্লোরের সমতল থেকে ওপরে ওঠার জন্য যেসব সিঁড়ি (Staircase) ব্যবহার করা হয়, সেখান থেকে পা পিছলে পড়া রোধে পাশে হাতের হাতল বা রেলিং থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "9f8be01a-fff7-45de-a82f-edae39bdcd26",
+                      "question_id": "687c43e3-2771-4279-9079-82702c83f53c",
+                      "option_text": "মজবুত হ্যান্ডরেইল বা সুরক্ষামূলক হাতল রেলিং (Handrails)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "7eaf8bb8-4c6b-451d-89a3-1b0c0be72ad0",
+                      "question_id": "687c43e3-2771-4279-9079-82702c83f53c",
+                      "option_text": "কেবল একটি প্লাস্টিকের দড়ি টাঙানো",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "570789c6-3612-4f0c-91e6-09af424d21fa",
+                      "question_id": "687c43e3-2771-4279-9079-82702c83f53c",
+                      "option_text": "কোনো রেলিংয়ের প্রয়োজন নেই, দেয়াল ধরে নামতে হবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "0aaefee8-cf7a-4318-bfc3-c8aa6953fb2d",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "26b64b78-90f0-4bae-9fcf-be78aed3470c",
+                  "learning_point_id": "0aaefee8-cf7a-4318-bfc3-c8aa6953fb2d",
+                  "question_text": "মেঝে ও সিঁড়ির নিরাপত্তা কমপ্লায়েন্স বজায় রাখতে কর্তৃপক্ষের কোন কোন আইনি দায়িত্ব রয়েছে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "সিঁড়িতে মালামাল রাখা দণ্ডনীয় অপরাধ; পরিষ্কার পথ ও ভাঙা মেঝে মেরামত করাই হলো সঠিক আইনি নিয়ম (ধারা ৭০)।",
+                  "narrative": "💡 হিন্ট: সিঁড়ি এবং মেঝের প্যাসেজগুলোর ওপর মালামাল বা কার্টন স্তূপ করে রাখলে জরুরি মুহূর্তে শ্রমিকরা হোঁচট খেয়ে পড়তে পারেন, যা নিরাপত্তা বিধির পরিপন্থী।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b0a0caa2-9e98-4407-ab24-91096c490a90",
+                      "question_id": "26b64b78-90f0-4bae-9fcf-be78aed3470c",
+                      "option_text": "সিঁড়ি ও করিডোরগুলো সবসময় সম্পূর্ণ বাধামুক্ত ও মালামালমুক্ত (Clear space) রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "a36a8b3f-685b-4d61-83f5-82b2786bac8a",
+                      "question_id": "26b64b78-90f0-4bae-9fcf-be78aed3470c",
+                      "option_text": "মেঝের কোনো অংশ ভাঙা বা পিচ্ছিল থাকলে তা তাৎক্ষণিকভাবে সংস্কার করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "6a1d3ec5-999a-4363-8c1f-49358b3f6861",
+                      "question_id": "26b64b78-90f0-4bae-9fcf-be78aed3470c",
+                      "option_text": "সিঁড়ির ধাপে জায়গা বাঁচানোর জন্য বাড়তি ওয়েস্টেজ ফেব্রিক্স বা সুতা জমিয়ে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "46a9cd2b-e217-40fc-8315-5b791f9b9457",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "7a366d46-6e95-458c-985f-72b20799219b",
+                  "learning_point_id": "46a9cd2b-e217-40fc-8315-5b791f9b9457",
+                  "question_text": "সাবিনার আইনি তাগিদ অনুযায়ী, মেঝের খোলা কেমিক্যাল ট্যাংকের বিষয়ে কর্তৃপক্ষের দ্রুততম পদক্ষেপ কোনটি?",
+                  "question_type": "storytelling",
+                  "explanation": "ধারা ৭০-এর প্রধান উদ্দেশ্য হলো কারখানার মেঝের স্লাব ওপেনিং বা গর্তের কারণে যেন কোনো কর্মীর পতনজনিত বড় দুর্ঘটনা বা মৃত্যু না ঘটে, তা নিশ্চিত করা।",
+                  "narrative": "💬 দৃশ্য ১:\nজাহিদ: আমাদের ওয়াশিং সেকশনের মেঝের কেমিক্যাল ট্যাংকের ঢাকনাটা ভেঙে গেছে। ওভাবেই ওটা খোলা রাখা হয়েছে, তবে সবাই সাবধানে চলে।\nসাবিনা: জাহিদ সাহেব, এটি চরম অবহেলা! সাবধানে চললেও যেকোনো দিন রাতে পা পিছলে কেউ এসিড বা গরম পানির ট্যাংকে পড়ে যেতে পারেন। অবিলম্বে ওটার চারপাশে লোহার রেলিং দিন এবং নতুন কভার লাগান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "14fa3a04-3944-4658-818f-7e2cf3dc1829",
+                      "question_id": "7a366d46-6e95-458c-985f-72b20799219b",
+                      "option_text": "মজবুত কভার বা চারপাশ লোহার সেফটি রেলিং দিয়ে ঘেরাও করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "c7a1db66-2df6-42fc-b77f-74e31c038f85",
+                      "question_id": "7a366d46-6e95-458c-985f-72b20799219b",
+                      "option_text": "ট্যাংকটি ওভাবেই খোলা রাখা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "fcc18653-e614-4bb7-a64c-0ecd58c60897",
+                      "question_id": "7a366d46-6e95-458c-985f-72b20799219b",
+                      "option_text": "ট্যাংকের পাশে একটি লাল মোমবাতি জ্বালিয়ে রাখা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "f3c7cc9e-f7da-438a-ae16-f33b758a6714",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "691c2e02-824b-4760-8ddf-3e3a0a80aa8f",
+                  "learning_point_id": "f3c7cc9e-f7da-438a-ae16-f33b758a6714",
+                  "question_text": "বাম পাশের কাঠামোর সাথে ডান পাশের আইনি সুরক্ষার মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "খোলা কুয়ায় অবিলম্বে কভার বা রেলিং লাগবে, সিঁড়িতে হ্যান্ডরেইল লাগবে এবং করিডোর বা প্যাসেজ সবসময় বাধামুক্ত ও পিচ্ছিলতা মুক্ত রাখতে হবে।",
+                  "narrative": "💡 হিন্ট: মেঝের কাঠামো এবং তাদের জন্য নির্ধারিত আইনি সুরক্ষার সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "মেঝের গভীর খোলা কুয়া",
+                        "right": "ব্যবহারের পর অবিলম্বে কভার বা স্থায়ী রেলিং"
+                      },
+                      {
+                        "left": "ওপরে ওঠার পাকা সিঁড়ি",
+                        "right": "দুই পাশে বা এক পাশে মজবুত হ্যান্ডরেইল"
+                      },
+                      {
+                        "left": "যাতায়াতের প্রধান করিডোর",
+                        "right": "পিচ্ছিলতা মুক্ত ও সম্পূর্ণ বাধামুক্ত পথ"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "efd1527a-67eb-40ae-a81f-624cd7261352",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "f184a7c3-fbd7-4442-bd88-2e1635be204e",
+                  "learning_point_id": "efd1527a-67eb-40ae-a81f-624cd7261352",
+                  "question_text": "মেঝের সাময়িক খননকৃত বা কাটা অংশের চারপাশে কি লাল-সাদা সেফটি টেপ বা ব্যারিকেড দেওয়া আইনি বাধ্যবাধকতা?",
+                  "question_type": "boolean",
+                  "explanation": "সাময়িক কাজ হলেও ফ্লোরে যেকোনো উন্মুক্ত গর্তের চারপাশে পর্যাপ্ত ভিজ্যুয়াল ব্যারিকেড ও সতর্কবার্তা না রাখা শ্রম আইনের সরাসরি লঙ্ঘন।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানায় নতুন পাইপলাইন বসানোর জন্য মেঝে সাময়িকভাবে খনন বা গর্ত করা হয়, তবে কাজ চলাকালীন পুরো সময় ওই গর্তের চারপাশে সতর্কতামূলক ফিতা বা ব্যারিকেড দেওয়া বাধ্যতামূলক।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "a8d53c89-118b-4e9e-ba56-5154da92fdad",
+                      "question_id": "f184a7c3-fbd7-4442-bd88-2e1635be204e",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "333f4bf8-5426-45d3-8bbf-00b0a6176e44",
+                      "question_id": "f184a7c3-fbd7-4442-bd88-2e1635be204e",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "20fe5214-4fcd-4a30-8d87-df12592ab18d",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "226388c5-1460-4666-8dc3-2730bc08cc0a",
+                  "learning_point_id": "20fe5214-4fcd-4a30-8d87-df12592ab18d",
+                  "question_text": "মেঝের গর্ত ও সিঁড়ির সেফটি সংক্রান্ত ধারা ৭০ অমান্য করলে কারখানার বিরুদ্ধে কী ব্যবস্থা নেওয়া হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "ফ্লোর ও সিঁড়ির নিরাপত্তা অবহেলা করা একটি গুরুতর শাস্তিযোগ্য ফৌজদারি অপরাধ, যার জন্য মালিক আর্থিক জরিমানা ও মামলার মুখোমুখি হন।",
+                  "narrative": "💡 হিন্ট: যদি কোনো ফ্যাক্টরির সিঁড়িতে রেলিং না থাকার কারণে কোনো শ্রমিক উপর থেকে পড়ে গিয়ে পঙ্গুত্ব বরণ করেন, তবে পরিদর্শক দল মালিকের বিরুদ্ধে কঠোর আইনি ব্যবস্থা নেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "db6ef95c-ae40-4821-a16a-96f036bf2258",
+                      "question_id": "226388c5-1460-4666-8dc3-2730bc08cc0a",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি মামলা, আর্থিক জরিমানা এবং নোটিশ জারি হতে পারে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "9a18094e-dcc7-4523-abce-9880b2581756",
+                      "question_id": "226388c5-1460-4666-8dc3-2730bc08cc0a",
+                      "option_text": "সিঁড়িটি সম্পূর্ণ ভেঙে ফেলার নির্দেশ দেওয়া হবে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "30a6a466-ce69-4dd0-a5bd-afffc058d7ac",
+                      "question_id": "226388c5-1460-4666-8dc3-2730bc08cc0a",
+                      "option_text": "কোনো ব্যবস্থা নেওয়া যাবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            },
+            {
+              "id": "39d070be-df37-47a4-b338-4dd9e8f02183",
+              "chapter_id": "6df14109-4779-41b9-ab69-327c07efecd7",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:11:03.723Z",
+              "mcq_questions": [
+                {
+                  "id": "874bac8d-c54c-4655-94a1-0a0f556bc025",
+                  "learning_point_id": "39d070be-df37-47a4-b338-4dd9e8f02183",
+                  "question_text": "মেঝে ও সিঁড়ির সঠিক কমপ্লায়েন্স বজায় রাখতে এডমিন বিভাগের কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "ল্যান্ডিংয়ে মালামাল স্তূপ করা বেআইনি; আলো নিশ্চিত করা এবং রেলিংয়ের মজবুতি ধরে রাখাই হলো আইনসম্মত সঠিক কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় সেফটি ওয়াক বা ফ্লোর ইন্সপেকশনের সময় সিঁড়ির অ্যান্টি-স্কিড (Anti-skid) বা পা পিছলে যাওয়া প্রতিরোধী রাবার স্ট্রিপ চেক করা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b6f1cf70-c2f1-44b3-bf97-e939679a69b6",
+                      "question_id": "874bac8d-c54c-4655-94a1-0a0f556bc025",
+                      "option_text": "সিঁড়ির প্রতিটি ধাপে পর্যাপ্ত আলোর তীব্রতা নিশ্চিত করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "a49eaaed-557c-42b0-9198-4c0c3c709c57",
+                      "question_id": "874bac8d-c54c-4655-94a1-0a0f556bc025",
+                      "option_text": "সিঁড়ির হাতল বা রেলিংগুলো মজবুত আছে কিনা তা সাপ্তাহিক পরীক্ষা করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    },
+                    {
+                      "id": "63db8914-2b60-4d60-96ac-7dd80bc2ee56",
+                      "question_id": "874bac8d-c54c-4655-94a1-0a0f556bc025",
+                      "option_text": "ফ্লোরের জায়গা বাঁচাতে সিঁড়ির ল্যান্ডিং বা চাতালে মালামালের কার্টন স্তূপ করে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:11:03.723Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:11:03.723Z"
+                }
+              ]
+            }
+          ],
           "created_at": "2026-06-20T07:56:25.799Z"
         },
         {

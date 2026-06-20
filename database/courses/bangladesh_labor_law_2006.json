@@ -4351,7 +4351,446 @@
           "title": "সাধারণ চাকরি অবসান",
           "order_index": 6,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "35cde65b-e5f3-4699-a732-c3c6fff7f697",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "অব্যাহতির সময় নোটিশের বাধ্যবাধকতা",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:10:23.431Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "b7e69e14-c099-48cf-951c-73b7e4e42993",
+                  "learning_point_id": "35cde65b-e5f3-4699-a732-c3c6fff7f697",
+                  "question_text": "স্থায়ী শ্রমিককে চাকরি থেকে অব্যাহতি দেওয়ার সময় কি মালিকের পক্ষ থেকে নোটিশ প্রদান বা নোটিশের পরিবর্তে বেতন প্রদান করা বাধ্যতামূলক?",
+                  "explanation": "আইন অনুযায়ী, স্থায়ী শ্রমিককে অব্যাহতি দেওয়ার ক্ষেত্রে যথাযথ নোটিশ প্রদান বা তার পরিবর্তে বেতন প্রদান করা বাধ্যতামূলক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.431Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন অনুযায়ী, নিয়োগপত্র বা চুক্তিপত্রে উল্লেখ থাকা নোটিশ পিরিয়ড বা নোটিশ বেতনের ভিত্তিতে চাকুরীর সম্পর্ক আইনিভাবে শেষ করা যায়।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ec3a43af-c185-4615-a0d0-4fe8b937333e",
+                      "question_id": "b7e69e14-c099-48cf-951c-73b7e4e42993",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.428Z"
+                    },
+                    {
+                      "id": "7f218809-105d-4b45-83cc-c4618fb91bd8",
+                      "question_id": "b7e69e14-c099-48cf-951c-73b7e4e42993",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "73725d33-023f-42e4-842d-341de04ac6f9",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "স্বেচ্ছায় ইস্তফার নোটিশ সময়কাল",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:10:23.431Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "13892fd5-1941-4c96-85ba-fdeaaa8c983a",
+                  "learning_point_id": "73725d33-023f-42e4-842d-341de04ac6f9",
+                  "question_text": "স্থায়ী শ্রমিক যদি স্বেচ্ছায় চাকরি ত্যাগ করতে চান, তবে তাকে মালিককে কতদিন আগে লিখিত নোটিশ দিতে হয়?",
+                  "explanation": "শ্রম আইন অনুযায়ী, কোনো স্থায়ী শ্রমিক ইস্তফা দিতে চাইলে তাকে ৩০ দিন পূর্বে লিখিত নোটিশ দিতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.431Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: যখন কোনো শ্রমিক স্বেচ্ছায় তার দায়িত্ব থেকে সরে আসতে চান, তখন তাকে আইন অনুযায়ী লিখিতভাবে মালিককে অবহিত করতে হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "dbda48ab-910e-47c0-bb56-d7cabc32812f",
+                      "question_id": "13892fd5-1941-4c96-85ba-fdeaaa8c983a",
+                      "option_text": "৪৫ দিন",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "7db803cb-e398-4aa6-9bfe-3408011aa6a6",
+                      "question_id": "13892fd5-1941-4c96-85ba-fdeaaa8c983a",
+                      "option_text": "৩০ দিন",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "7a467840-896a-446c-be53-db3ed579e7ab",
+                      "question_id": "13892fd5-1941-4c96-85ba-fdeaaa8c983a",
+                      "option_text": "১৫ দিন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "45bc61d0-bd8c-4d2d-ab93-7d93d751233e",
+                      "question_id": "13892fd5-1941-4c96-85ba-fdeaaa8c983a",
+                      "option_text": "কোনো নির্দিষ্ট সময় নেই",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "9574eec5-698f-4d2c-a9c6-d50c9feef0a3",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "নোটিশবিহীন ইস্তফার প্রভাব",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"ফারুক: আমি আগামী মাস থেকে আর এই কোম্পানিতে কাজ করতে চাই না, আজই আমি চলে যাব।\"},{\"avatar\":\"lisa\",\"text\":\"শাহানা: ফারুক, তুমি যদি আজই চলে যাও তবে আইন অনুযায়ী তুমি তোমার নোটিশ পিরিয়ডের বেতন ফেরত পাবে না, বরং উল্টো তোমাকে নোটিশের পরিবর্তে বেতন দিতে হতে পারে।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:10:23.431Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "909aa998-b781-4e7b-917b-4213b7ba1ce7",
+                  "learning_point_id": "9574eec5-698f-4d2c-a9c6-d50c9feef0a3",
+                  "question_text": "শাহানার কথা অনুযায়ী, নোটিশ না দিয়ে হঠাৎ চাকরি ছেড়ে দিলে শ্রমিকের উপর কী আইনি প্রভাব পড়তে পারে?",
+                  "explanation": "নোটিশ ছাড়া ইস্তফা দিলে আইনের শর্ত অনুযায়ী শ্রমিককে ক্ষতিপূরণ বা নোটিশ পিরিয়ডের বেতন প্রদান করতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.431Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"ফারুক: আমি আগামী মাস থেকে আর এই কোম্পানিতে কাজ করতে চাই না, আজই আমি চলে যাব।\"},{\"avatar\":\"lisa\",\"text\":\"শাহানা: ফারুক, তুমি যদি আজই চলে যাও তবে আইন অনুযায়ী তুমি তোমার নোটিশ পিরিয়ডের বেতন ফেরত পাবে না, বরং উল্টো তোমাকে নোটিশের পরিবর্তে বেতন দিতে হতে পারে।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "2b2ee718-3789-47b8-a719-ad7f2a9060ad",
+                      "question_id": "909aa998-b781-4e7b-917b-4213b7ba1ce7",
+                      "option_text": "নোটিশের পরিবর্তে বেতন প্রদান করতে হতে পারে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "8286541b-dc01-41e4-bfe0-9140679e7145",
+                      "question_id": "909aa998-b781-4e7b-917b-4213b7ba1ce7",
+                      "option_text": "তাকে সারাজীবন আর কাজ করতে দেওয়া হবে না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "674a0c13-53e7-427e-9cfd-7dbe4db24872",
+                      "question_id": "909aa998-b781-4e7b-917b-4213b7ba1ce7",
+                      "option_text": "কোম্পানির বিরুদ্ধে মামলা হবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "e2e286c6-f3ea-440d-b435-049dd8d70c90",
+                      "question_id": "909aa998-b781-4e7b-917b-4213b7ba1ce7",
+                      "option_text": "কোনো প্রভাব পড়বে না",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cd7b66a3-4686-484e-b4bd-13ab824bdd50",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "অবসানের পাওনা সুবিধা",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:10:23.432Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "2a3570ee-962c-4015-8b91-e6610e882767",
+                  "learning_point_id": "cd7b66a3-4686-484e-b4bd-13ab824bdd50",
+                  "question_text": "চাকরি অবসানের পর শ্রমিক মালিকের কাছ থেকে কোন পাওনাগুলো পাওয়ার অধিকারী? (টিক দিন)",
+                  "explanation": "চাকরি অবসানের সময় বকেয়া মজুরী ও ছুটির পাওনা পরিশোধ করা মালিকের আইনি দায়িত্ব।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.432Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: চাকরি অবসানের পর মালিকের পক্ষ থেকে কিছু পাওনা পরিশোধ করার আইনি বাধ্যবাধকতা থাকে যাতে শ্রমিক বঞ্চনার শিকার না হন।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "bad70362-095f-41db-833e-7b365a53d97e",
+                      "question_id": "2a3570ee-962c-4015-8b91-e6610e882767",
+                      "option_text": "বকেয়া মজুরী।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.431Z"
+                    },
+                    {
+                      "id": "4231dea5-0fee-45c4-ac86-354a215373b2",
+                      "question_id": "2a3570ee-962c-4015-8b91-e6610e882767",
+                      "option_text": "অর্জিত ছুটির অর্থের মূল্য।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "7571cefe-b131-4f5d-94f9-39e9cc023049",
+                      "question_id": "2a3570ee-962c-4015-8b91-e6610e882767",
+                      "option_text": "অফিসের আসবাবপত্র।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "f4ce866a-0df7-418d-ab0c-6445181872ee",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "অবসান প্রক্রিয়ার ধরণ মিলকরণ",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:10:23.432Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "3a80add2-bbda-4ac9-ac2f-9d833c248519",
+                  "learning_point_id": "f4ce866a-0df7-418d-ab0c-6445181872ee",
+                  "question_text": "বাম পাশের পরিস্থিতির সাথে ডান পাশের আইনি অবস্থার মিল কর।",
+                  "explanation": "স্বেচ্ছায় বিদায় ইস্তফা, নোটিশ ছাড়া বেতন প্রদান সাপেক্ষে বিদায়, এবং অপরাধে বরখাস্ত হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.432Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: সাধারণ অবসান, ইস্তফা এবং বরখাস্ত—এই তিনটি প্রক্রিয়ার আইনি ভিত্তি ও ফলাফল ভিন্ন।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "স্থায়ী শ্রমিকের স্বেচ্ছায় বিদায়",
+                        "right": "ইস্তফা"
+                      },
+                      {
+                        "left": "নোটিশ ছাড়াই বিদায়",
+                        "right": "নোটিশের পরিবর্তে বেতন প্রদান"
+                      },
+                      {
+                        "left": "গুরুতর অপরাধে বিদায়",
+                        "right": "বরখাস্ত"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "a0e28c3e-6dd3-449a-b7b2-13281b155086",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "অবসানে পাওনা সুরক্ষার অধিকার",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:10:23.432Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "6de3036d-8631-4d80-a6a3-e5f9bbf7192a",
+                  "learning_point_id": "a0e28c3e-6dd3-449a-b7b2-13281b155086",
+                  "question_text": "সাধারণ চাকরি অবসান প্রক্রিয়ায় কি শ্রমিক তার পাওনা থেকে বঞ্চিত হতে পারেন?",
+                  "explanation": "সাধারণ অবসানে শ্রমিক তার যাবতীয় আইনি পাওনা পাওয়ার পূর্ণ অধিকার রাখেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.432Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: যদি কোনো শ্রমিক তার চাকুরীর মেয়াদে কোনো গুরুতর অপরাধ না করেন, তবে সাধারণ অবসান প্রক্রিয়ায় তাকে কোনোভাবেই কোনো প্রাপ্য সুবিধা থেকে বঞ্চিত করা যাবে না।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "cc333507-c4de-4112-b22f-f55eda94bb5f",
+                      "question_id": "6de3036d-8631-4d80-a6a3-e5f9bbf7192a",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": false,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "05bff1c0-f548-4daf-8d73-00e6a42810a2",
+                      "question_id": "6de3036d-8631-4d80-a6a3-e5f9bbf7192a",
+                      "option_text": "না",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "854fcc25-d69b-481b-b63a-3f22d7b12e5c",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "পাওনা পরিশোধের চূড়ান্ত সময়সীমা",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:10:23.432Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "eb737ea0-00b5-433e-be66-b1c7051d0f7d",
+                  "learning_point_id": "854fcc25-d69b-481b-b63a-3f22d7b12e5c",
+                  "question_text": "চাকরি অবসানের পর বকেয়া পাওনা পরিশোধের জন্য মালিক কতদিন সময় পান?",
+                  "explanation": "শ্রম আইন অনুযায়ী, চাকরি অবসানের ৩০ কার্যদিবসের মধ্যে যাবতীয় পাওনা পরিশোধ করতে হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.432Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: চাকরি শেষ হওয়ার পর একটি নির্দিষ্ট সময়ের মধ্যে মালিককে সকল পাওনা পরিশোধ করে ফাইল ক্লোজ করতে হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f89b1cce-455c-4eff-9740-cceee8bfef7d",
+                      "question_id": "eb737ea0-00b5-433e-be66-b1c7051d0f7d",
+                      "option_text": "৩০ দিন",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "951584cf-f221-4349-87ae-1de1d0df696e",
+                      "question_id": "eb737ea0-00b5-433e-be66-b1c7051d0f7d",
+                      "option_text": "১৫ দিন",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "6dec1b8a-d1ed-436a-abbc-11d490eec734",
+                      "question_id": "eb737ea0-00b5-433e-be66-b1c7051d0f7d",
+                      "option_text": "৪৩ দিন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "3b22fdbf-cedc-4b93-82fc-a51ab0fd2a76",
+                      "question_id": "eb737ea0-00b5-433e-be66-b1c7051d0f7d",
+                      "option_text": "৬ মাস",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "60ccb219-f844-42f1-b519-cd25681c3f1e",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "অব্যাহতির প্রয়োজনীয় নথিপত্র",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:10:23.432Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "b7a17adf-8afc-4f3b-889d-826e6eb3fd39",
+                  "learning_point_id": "60ccb219-f844-42f1-b519-cd25681c3f1e",
+                  "question_text": "চাকরি থেকে অব্যাহতি দেওয়ার সময় মালিককে কী কী নথি তৈরি করতে হয়? (টিক দিন)",
+                  "explanation": "অব্যাহতি ও পাওনা সংক্রান্ত যাবতীয় হিসাব লিখিত আকারে রাখা মালিকের দায়িত্ব।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.432Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: মালিক পক্ষ যখন কোনো শ্রমিককে অব্যাহতি দেন, তখন অব্যাহতির কারণটি স্পষ্টভাবে উল্লেখ করা বাঞ্ছনীয় যাতে ভবিষ্যতে কোনো আইনি বিরোধ না হয়।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "89c7a1ec-348c-4ed3-b83d-4f5eca8a0a18",
+                      "question_id": "b7a17adf-8afc-4f3b-889d-826e6eb3fd39",
+                      "option_text": "অব্যাহতির লিখিত নোটিশ।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "204af7e2-fe1f-4625-bed2-5636d37e2114",
+                      "question_id": "b7a17adf-8afc-4f3b-889d-826e6eb3fd39",
+                      "option_text": "পাওনার হিসাব বিবরণী।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "2b1e0bac-3d57-4cf5-ab7c-1fa7af94e58b",
+                      "question_id": "b7a17adf-8afc-4f3b-889d-826e6eb3fd39",
+                      "option_text": "শ্রমিকের ব্যক্তিগত গোপন ডায়েরি।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "500aad0b-2f4b-43d8-82be-e9f6e13c70a9",
+              "chapter_id": "3a14f9fd-2a2b-4400-b8db-dd8c8694033a",
+              "title": "চূড়ান্ত নিষ্পত্তিতে সার্ভিস বুকের ভূমিকা",
+              "content": "সাধারণ চাকরি অবসান",
+              "order_index": 9,
+              "created_at": "2026-06-20T05:10:23.432Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "511f32d5-b433-494a-ad62-7adf34ad93e1",
+                  "learning_point_id": "500aad0b-2f4b-43d8-82be-e9f6e13c70a9",
+                  "question_text": "চূড়ান্ত নিষ্পত্তি (Final Settlement)-এর সময় সার্ভিস বুক কেন গুরুত্বপূর্ণ?",
+                  "explanation": "সার্ভিস বুক চাকুরীর মেয়াদের ভিত্তিতে পাওনা হিসাব করার চূড়ান্ত আইনি ভিত্তি।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:10:23.432Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন অনুযায়ী সার্ভিস বুক এমন একটি দলিল যা চূড়ান্ত নিষ্পত্তির সময় মালিক ও শ্রমিক উভয়ের পাওনা ও দায়িত্বের হিসাব মেলায়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "7100aaab-9311-4e82-9dbb-51594ef909f8",
+                      "question_id": "511f32d5-b433-494a-ad62-7adf34ad93e1",
+                      "option_text": "এটি পাওনা ও চাকুরীর মেয়াদ প্রমাণ করে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "586d8e8c-0d4b-4aa0-9f67-4cefa5a86d9c",
+                      "question_id": "511f32d5-b433-494a-ad62-7adf34ad93e1",
+                      "option_text": "এটি দিয়ে বেতন বাড়ানো যায়",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "f9c4d37e-4d8d-4164-add4-df83ef608427",
+                      "question_id": "511f32d5-b433-494a-ad62-7adf34ad93e1",
+                      "option_text": "এটি অফিসের সাজসজ্জার জন্য",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    },
+                    {
+                      "id": "f50388ec-c590-4df7-aaab-14900e759843",
+                      "question_id": "511f32d5-b433-494a-ad62-7adf34ad93e1",
+                      "option_text": "এটি দিয়ে পদোন্নতি পাওয়া যায়",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:10:23.432Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",

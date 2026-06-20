@@ -3066,7 +3066,350 @@
           "title": "সার্ভিস বই সংরক্ষণ",
           "order_index": 2,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "40a06c40-0627-4aae-aaa0-abc2cb9fcfeb",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "সার্ভিস বইয়ের আবশ্যকীয় তথ্য",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 1,
+              "type": "checkmark",
+              "mcq_questions": [
+                {
+                  "id": "ceea5f8a-464c-43cb-a08d-d8fc2e193d16",
+                  "question_text": "সার্ভিস বইয়ে সাধারণত কোন তথ্যগুলো থাকা আবশ্যক? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: সার্ভিস বইয়ে শ্রমিকের পরিচয় ও পেশাগত তথ্য থাকা বাধ্যতামূলক, যেখানে ব্যক্তিগত আর্থিক গোপন লেনদেনের রেকর্ড যুক্ত করার সুযোগ নেই।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "136e3a9f-3524-442f-b373-4fd72e384585",
+                      "option_text": "শ্রমিকের নাম, ঠিকানা ও জন্ম তারিখ।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "ceea5f8a-464c-43cb-a08d-d8fc2e193d16"
+                    },
+                    {
+                      "id": "77419df5-4fac-4c3e-8dad-af9059b98090",
+                      "option_text": "চাকুরীর যোগদানের তারিখ ও পদের নাম।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "question_id": "ceea5f8a-464c-43cb-a08d-d8fc2e193d16"
+                    },
+                    {
+                      "id": "bff55a08-d256-4c0b-865d-c14bdc1eb1d8",
+                      "option_text": "শ্রমিকের ব্যক্তিগত গোপন আর্থিক লেনদেনের রেকর্ড।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "question_id": "ceea5f8a-464c-43cb-a08d-d8fc2e193d16"
+                    }
+                  ],
+                  "learning_point_id": "40a06c40-0627-4aae-aaa0-abc2cb9fcfeb"
+                }
+              ]
+            },
+            {
+              "id": "60fd6e94-cbb6-42cf-941e-b3ae308bbe1a",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "সার্ভিস বইয়ের সংজ্ঞা",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 2,
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "5ad82d10-95e2-4c2f-a04b-da06f0800a5e",
+                  "question_text": "শ্রমিকের চাকুরীর সকল তথ্য (যেমন: পদের নাম, মজুরী, ছুটির হিসাব) যে নথিতে সংরক্ষিত থাকে, তাকে কী বলে?",
+                  "question_type": "standard",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: এটি একটি আইনি নথিপত্র যা চাকুরীর শুরু থেকে শেষ পর্যন্ত শ্রমিকের সকল পেশাগত রেকর্ডের প্রমাণ বহন করে।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "503018ec-787c-4943-8fb8-96516ef50a4a",
+                      "option_text": "সার্ভিস বুক",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "5ad82d10-95e2-4c2f-a04b-da06f0800a5e"
+                    },
+                    {
+                      "id": "26380279-58fa-473f-a841-d5967b9dc9db",
+                      "option_text": "ভিজিটর বুক",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "question_id": "5ad82d10-95e2-4c2f-a04b-da06f0800a5e"
+                    },
+                    {
+                      "id": "7badba49-ee11-4554-917b-d3d444135d59",
+                      "option_text": "ইনভেন্টরি রেজিস্টার",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "question_id": "5ad82d10-95e2-4c2f-a04b-da06f0800a5e"
+                    }
+                  ],
+                  "learning_point_id": "60fd6e94-cbb6-42cf-941e-b3ae308bbe1a"
+                }
+              ]
+            },
+            {
+              "id": "32aee525-d5d5-4c35-bd82-3347f0bbdd6b",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "সার্ভিস বই সংক্রান্ত আইনি দায়িত্ব",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 3,
+              "type": "matching",
+              "mcq_questions": [
+                {
+                  "id": "9aa28d27-2ec5-46a1-b9b8-ed26bff2765f",
+                  "question_text": "বাম পাশের বিষয়ের সাথে ডান পাশের আইনি তথ্যের মিল কর।",
+                  "question_type": "matching",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: সার্ভিস বই সংক্রান্ত আইনি দায়িত্বগুলো মেলাও: বই সরবরাহ করা মালিকের কর্তব্য, তথ্য সঠিক রাখা মালিক-শ্রমিক উভয়ের দায়িত্ব, এবং বইটি চাকরি শেষে নিজের কাছে ফেরত পাওয়া শ্রমিকের অধিকার।",
+                  "order_index": 1,
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "সার্ভিস বই প্রদান",
+                        "right": "মালিকের প্রাথমিক আইনি দায়বদ্ধতা"
+                      },
+                      {
+                        "left": "বই সংরক্ষণ",
+                        "right": "নিয়োগকর্তার নিকট গচ্ছিত রাখা"
+                      },
+                      {
+                        "left": "তথ্য সংশোধন",
+                        "right": "তথ্য নিয়মিত হালনাগাদ করা"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "learning_point_id": "32aee525-d5d5-4c35-bd82-3347f0bbdd6b"
+                }
+              ]
+            },
+            {
+              "id": "90b65f45-ea6c-4ac6-b675-a9ac537443f3",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "সার্ভিস বই ফেরত পাওয়ার অধিকার",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 4,
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "bb80c45c-ffff-4c3b-96d9-7c660538fafe",
+                  "question_text": "তানিয়ার কথা অনুযায়ী, শ্রমিক চাকরি ছাড়লে কি তিনি তার সার্ভিস বুকটি মালিকের কাছ থেকে ফেরত পাওয়ার অধিকারী?",
+                  "question_type": "boolean",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আরিফ: আমার সার্ভিস বুকে আগের চাকুরীর রেকর্ডও কি রাখা যাবে?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: হ্যাঁ আরিফ, সার্ভিস বুক শ্রমিকের চাকুরীর ধারাবাহিক ইতিহাসের রেকর্ড হিসেবে কাজ করে।\"},{\"avatar\":\"rakib\",\"text\":\"আরিফ: তাহলে আমি কি এটি চাকরি ছাড়ার পর সাথে নিয়ে যেতে পারব?\"},{\"avatar\":\"lisa\",\"text\":\"তানিয়া: অবশ্যই, এটি তোমার ব্যক্তিগত নথিপত্র।\"}]",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "ec1f3bdf-a4dc-4a24-9181-71d80ae1a13f",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "bb80c45c-ffff-4c3b-96d9-7c660538fafe"
+                    },
+                    {
+                      "id": "982e0492-aa24-4ccc-b3b0-c89c88a2e393",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "question_id": "bb80c45c-ffff-4c3b-96d9-7c660538fafe"
+                    }
+                  ],
+                  "learning_point_id": "90b65f45-ea6c-4ac6-b675-a9ac537443f3"
+                }
+              ]
+            },
+            {
+              "id": "eb65c226-00ec-4158-bf49-e52637c23e07",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "এন্ট্রির সত্যতা যাচাই",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 5,
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "b9cea3b3-1efa-402d-ac1f-5b3f124c7be9",
+                  "question_text": "সার্ভিস বইয়ের এন্ট্রিগুলো নির্ভুল ও আইনসিদ্ধ কি না তা নিশ্চিত করতে কার স্বাক্ষরের প্রয়োজন?",
+                  "question_type": "standard",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: এন্ট্রির তথ্যের সত্যতা যাচাই করার দায়িত্ব ওই ব্যক্তির ওপর বর্তায় যিনি প্রতিষ্ঠানের প্রশাসনিক ক্ষমতা বা মালিকের প্রতিনিধিত্ব করেন।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "f5aba025-4aa8-4f89-97c3-4abef40d48bc",
+                      "option_text": "মালিক বা তার প্রতিনিধি",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "b9cea3b3-1efa-402d-ac1f-5b3f124c7be9"
+                    },
+                    {
+                      "id": "6ba5f603-9c2c-4b14-b703-9474a49659b2",
+                      "option_text": "কেবল শ্রমিকের নিজের",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "question_id": "b9cea3b3-1efa-402d-ac1f-5b3f124c7be9"
+                    },
+                    {
+                      "id": "e93d8e07-c3b8-42ef-82b4-7db760e68286",
+                      "option_text": "সহকর্মীর",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "question_id": "b9cea3b3-1efa-402d-ac1f-5b3f124c7be9"
+                    }
+                  ],
+                  "learning_point_id": "eb65c226-00ec-4158-bf49-e52637c23e07"
+                }
+              ]
+            },
+            {
+              "id": "70b5f22a-d468-4466-8b96-1c651d019d07",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "বই সরবরাহ বাধ্যতামূলক",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 6,
+              "type": "boolean",
+              "mcq_questions": [
+                {
+                  "id": "2fc063d4-81e8-4a47-8566-1e695cb496f8",
+                  "question_text": "প্রত্যেক শ্রমিকের জন্য একটি সার্ভিস বুক সরবরাহ করা কি নিয়োগকর্তার জন্য আইনত বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন অনুযায়ী মালিকের জন্য এটি কোনো ঐচ্ছিক বিষয় নয়, বরং কর্মী নিয়োগের শর্ত হিসেবে এটি প্রদান করা বাধ্যতামূলক।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "c0b81fe9-ed96-4402-bab9-75645a1a4752",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "2fc063d4-81e8-4a47-8566-1e695cb496f8"
+                    },
+                    {
+                      "id": "61561293-5d34-473f-94f0-ecb715e2cdee",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "question_id": "2fc063d4-81e8-4a47-8566-1e695cb496f8"
+                    }
+                  ],
+                  "learning_point_id": "70b5f22a-d468-4466-8b96-1c651d019d07"
+                }
+              ]
+            },
+            {
+              "id": "9c246174-8497-4a1d-8d48-07bc10ef3bb4",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "সার্ভিস বই হারিয়ে গেলে করণীয়",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 7,
+              "type": "checkmark",
+              "mcq_questions": [
+                {
+                  "id": "1fcbb873-2a5c-4f69-aa14-3717c9740610",
+                  "question_text": "সার্ভিস বই হারিয়ে গেলে শ্রমিককে আইনিভাবে কী করতে হবে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: যখন কোনো আইনি নথিপত্র হারিয়ে যায়, তখন মালিককে অবহিত করে প্রমাণসাপেক্ষে নতুন করে তা ইস্যু করার প্রক্রিয়াটি অনুসরণ করতে হয়।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "de3d3973-41fc-467e-8dd9-ef8548cc03b9",
+                      "option_text": "দ্রুত নিয়োগকর্তাকে লিখিতভাবে জানানো।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "1fcbb873-2a5c-4f69-aa14-3717c9740610"
+                    },
+                    {
+                      "id": "b26dbb3a-67ed-463d-8d70-93d4b9d105e0",
+                      "option_text": "নতুন করে সার্ভিস বই ইস্যু করার আবেদন করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "question_id": "1fcbb873-2a5c-4f69-aa14-3717c9740610"
+                    },
+                    {
+                      "id": "8e9ab7a7-2752-4af2-bfeb-e04fe29842fa",
+                      "option_text": "বিষয়টি চিরতরে গোপন রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "question_id": "1fcbb873-2a5c-4f69-aa14-3717c9740610"
+                    }
+                  ],
+                  "learning_point_id": "9c246174-8497-4a1d-8d48-07bc10ef3bb4"
+                }
+              ]
+            },
+            {
+              "id": "7474dd81-8c82-4d2e-9ead-ed4e26c60d6d",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "আইনি প্রমাণ হিসেবে সার্ভিস বুক",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 8,
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "13ef2434-fb16-4c78-8366-d207e4c6edf1",
+                  "question_text": "চাকুরীর মেয়াদ বা মজুরী নিয়ে বিরোধ তৈরি হলে কোন নথিটি সবচেয়ে নির্ভরযোগ্য আইনি প্রমাণ হিসেবে গণ্য হয়?",
+                  "question_type": "standard",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: আদালত বা ট্রাইব্যুনাল যখন কোনো শ্রমিকের চাকুরীর মেয়াদ বা বকেয়া মজুরী নিয়ে বিরোধ নিষ্পত্তি করে, তখন তারা স্বাক্ষরিত ও সিলমোহরযুক্ত এই নথিটিকে পরম সত্য বলে গণ্য করে।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "5d76f87c-e30c-4ac1-93da-5160843723aa",
+                      "option_text": "সার্ভিস বুক",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "13ef2434-fb16-4c78-8366-d207e4c6edf1"
+                    },
+                    {
+                      "id": "f93f9d63-23a1-4bcf-833d-2a1dffe5b208",
+                      "option_text": "মৌখিক চুক্তি",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "question_id": "13ef2434-fb16-4c78-8366-d207e4c6edf1"
+                    },
+                    {
+                      "id": "8ee46fa0-0978-4e55-b5da-ac4531cddefb",
+                      "option_text": "সহকর্মীর সাক্ষী",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "question_id": "13ef2434-fb16-4c78-8366-d207e4c6edf1"
+                    }
+                  ],
+                  "learning_point_id": "7474dd81-8c82-4d2e-9ead-ed4e26c60d6d"
+                }
+              ]
+            },
+            {
+              "id": "a87a5573-d3ca-4026-85f8-b8b461af02d7",
+              "chapter_id": "7ce5f62b-e8eb-4ab4-b741-c2343d561a3c",
+              "title": "তথ্য হালনাগাদ",
+              "content": "সার্ভিস বই সংরক্ষণ",
+              "order_index": 9,
+              "type": "boolean",
+              "mcq_questions": [
+                {
+                  "id": "ead3f2ab-6d74-4937-bb4a-df740412d18b",
+                  "question_text": "সার্ভিস বইয়ের তথ্য কি নিয়মিত বিরতিতে হালনাগাদ (Update) করা প্রয়োজন?",
+                  "question_type": "boolean",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: পদোন্নতি বা মজুরী বৃদ্ধির মতো ঘটনা ঘটলে সেগুলো নির্দিষ্ট সময় অন্তর সার্ভিস বইতে লিখে রাখতে হয় যাতে রেকর্ডটি অসম্পূর্ণ না থাকে।",
+                  "order_index": 1,
+                  "mcq_options": [
+                    {
+                      "id": "21ee12b3-ef19-4b0c-82bb-18c68e0cba16",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "question_id": "ead3f2ab-6d74-4937-bb4a-df740412d18b"
+                    },
+                    {
+                      "id": "a2d828cc-0a6d-4140-9834-ddd06b16cfb9",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "question_id": "ead3f2ab-6d74-4937-bb4a-df740412d18b"
+                    }
+                  ],
+                  "learning_point_id": "a87a5573-d3ca-4026-85f8-b8b461af02d7"
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "4b4cdaa3-ebc0-457e-9742-c5ebe1160f57",

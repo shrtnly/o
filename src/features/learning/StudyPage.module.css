@@ -436,6 +436,26 @@
     margin-top: 2px;
 }
 
+.hintEyeBtn {
+    background: transparent;
+    border: none;
+    padding: 2px;
+    margin-right: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.2s, transform 0.2s;
+    border-radius: 4px;
+}
+
+.hintEyeBtn:hover {
+    color: #fff;
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.1);
+}
+
 /* Animated lightbulb on hint expansion */
 @keyframes bulbGlow {
     0% {

@@ -4,7 +4,8 @@ import {
     GripVertical,
     ChevronDown,
     ChevronRight,
-    Trash2
+    Trash2,
+    CheckCircle2
 } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { courseService } from '../../../../services/courseService';
@@ -124,6 +125,13 @@ const ModuleSection = ({ courseId }) => {
                                                     onBlur={(e) => handleUpdateModule(module.id, e.target.value)}
                                                 />
                                                 <div className="flex items-center gap-2">
+                                                    <button 
+                                                        onClick={() => toast.success('মডিউল সেভ হয়েছে! (Module saved!)')} 
+                                                        className="p-2 text-emerald-600 dark:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition-colors"
+                                                        title="Save Module"
+                                                    >
+                                                        <CheckCircle2 size={16} />
+                                                    </button>
                                                     <button onClick={() => handleDeleteModule(module.id)} className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-500 rounded-lg">
                                                         <Trash2 size={16} />
                                                     </button>

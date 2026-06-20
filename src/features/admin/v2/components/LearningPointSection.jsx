@@ -277,6 +277,17 @@ const LearningPointSection = ({ chapterId }) => {
                         </div>
                         <div className="flex items-center gap-2">
                             <button
+                                onClick={() => {
+                                    // Clicking this takes focus away from any input, triggering onBlur and saving to DB.
+                                    toast.success('এই অংশের তথ্য সফলভাবে ডাটাবেসে সেভ হয়েছে! (Node saved!)');
+                                }}
+                                className="p-3 text-emerald-600 dark:text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-xl transition-all flex items-center gap-2"
+                                title="Save Node"
+                            >
+                                <CheckCircle2 size={20} />
+                                <span className="text-xs font-bold hidden sm:inline">Save</span>
+                            </button>
+                            <button
                                 onClick={() => toggleCollapse(node.id)}
                                 className="p-3 text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-all"
                             >

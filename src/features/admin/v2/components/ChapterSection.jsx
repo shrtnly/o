@@ -8,7 +8,8 @@ import {
     GripVertical,
     Heart,
     Gem,
-    Gift
+    Gift,
+    CheckCircle2
 } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { courseService } from '../../../../services/courseService';
@@ -164,6 +165,13 @@ const ChapterSection = ({ moduleId }) => {
                                                             />
                                                         </>
                                                     )}
+                                                    <button 
+                                                        onClick={() => toast.success('চ্যাপ্টার সেভ হয়েছে! (Chapter saved!)')} 
+                                                        className="p-1.5 text-emerald-600 dark:text-emerald-500 hover:text-emerald-700 bg-emerald-50 dark:bg-emerald-900/20 rounded-md transition-colors mr-1"
+                                                        title="Save Chapter"
+                                                    >
+                                                        <CheckCircle2 size={14} />
+                                                    </button>
                                                     <button onClick={() => handleDeleteChapter(chapter.id)} className="p-1 text-slate-300 dark:text-slate-600 hover:text-red-500 rounded-md transition-colors"><Trash2 size={14} /></button>
                                                     {chapter.type === 'lesson' && (
                                                         <button

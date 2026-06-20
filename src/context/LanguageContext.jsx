@@ -86,6 +86,7 @@ const translations = {
         sound_effects_desc: "শেখার সময় শব্দ সংকেত চালু বা বন্ধ রাখুন",
         sparkle_effects: "স্পার্কল ইফেক্টস",
         sparkle_desc: "সঠিক উত্তরের সময় ঝলমলে আবহ তৈরি করুন",
+        hint_settings: "সহায়তা",
 
         profile_settings: "প্রোফাইল সেটিংস",
         profile_desc: "আপনার ব্যক্তিগত তথ্য এবং প্রোফাইল দৃশ্যমানতা পরিচালনা করুন",
@@ -628,6 +629,7 @@ const translations = {
         sound_effects_desc: "Turn sound signals on or off during learning",
         sparkle_effects: "Sparkle Effects",
         sparkle_desc: "Create a sparkling atmosphere on correct answers",
+        hint_settings: "Assistance",
 
         profile_settings: "Profile Settings",
         profile_desc: "Manage your personal information and profile visibility",

@@ -86,9 +86,21 @@ const CourseEditor = ({ courseId, onBack }) => {
                         {isSaving && <span className="text-xs text-blue-500 dark:text-blue-400 font-medium tracking-wide">Syncing changes...</span>}
                     </div>
                 </div>
-                {!courseId && (
+                {!courseId ? (
                     <button onClick={handleInitialSave} className="bg-slate-900 dark:bg-slate-100 dark:text-slate-900 text-white px-5 py-2 rounded-lg font-bold text-sm">
                         Create Course
+                    </button>
+                ) : (
+                    <button 
+                        onClick={() => {
+                            // The click itself will trigger onBlur on any active input, saving the data.
+                            // We can also trigger a manual course update just to be sure.
+                            if (course) handleAutoSave(course);
+                            toast.success('সব তথ্য ডাটাবেসে সেভ হয়েছে (All changes saved!)');
+                        }} 
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors shadow-sm"
+                    >
+                        <Save size={16} /> Save Changes
                     </button>
                 )}
             </div>

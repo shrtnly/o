@@ -176,6 +176,7 @@ const StudyPage = () => {
 
     // Animation states
     const [dotLottie, setDotLottie] = useState(null);
+    const [hintEnabled, setHintEnabled] = useState(false);
     const [selectedAnimation, setSelectedAnimation] = useState(() => {
         if (authProfile?.study_page_animation) return authProfile.study_page_animation;
         const saved = localStorage.getItem('studyPageAnimation');
@@ -1215,28 +1216,28 @@ const StudyPage = () => {
                                                         )}
 
                                                         {!isStory && (q.narrative || q.explanation) && (
-                                                             <div
-                                                                 className={`${styles.contextText} ${styles.contextTextClickable}`}
-                                                                 onClick={() => setVisibleHints(prev => ({ ...prev, [q.id]: !prev[q.id] }))}
-                                                             >
-                                                                 {visibleHints[q.id] ? (
-                                                                     <>
-                                                                         <span className={`${styles.lightbulb} ${styles.bulbAnimated}`}>
-                                                                             <Lightbulb size={20} color="#ffa202" />
-                                                                         </span>
-                                                                         <span style={{ flex: 1 }}>
-                                                                             {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
-                                                                         </span>
-                                                                     </>
+                                                             <div className={styles.contextText}>
+                                                                 <button
+                                                                     className={`${styles.hintEyeBtn} ${hintEnabled ? styles.bulbAnimated : ''}`}
+                                                                     onClick={() => {
+                                                                         setHintEnabled(!hintEnabled);
+                                                                     }}
+                                                                     title="Toggle Hint"
+                                                                 >
+                                                                     {hintEnabled ? (
+                                                                         <Eye size={20} color="#ffa202" />
+                                                                     ) : (
+                                                                         <EyeOff size={20} color="#5a6e7f" />
+                                                                     )}
+                                                                 </button>
+                                                                 {hintEnabled ? (
+                                                                     <span style={{ flex: 1 }}>
+                                                                         {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
+                                                                     </span>
                                                                  ) : (
-                                                                     <>
-                                                                         <span className={styles.lightbulb}>
-                                                                             <EyeOff size={20} color="#5a6e7f" />
-                                                                         </span>
-                                                                         <span style={{ flex: 1 }}>
-                                                                             সহায়তা নিন
-                                                                         </span>
-                                                                     </>
+                                                                     <span style={{ flex: 1, opacity: 0.8 }}>
+                                                                         সহায়তা নিন...
+                                                                     </span>
                                                                  )}
                                                              </div>
                                                          )}

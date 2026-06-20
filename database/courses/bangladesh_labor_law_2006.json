@@ -4798,7 +4798,446 @@
           "title": "ছাঁটাই ও লে-অফ",
           "order_index": 7,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "77a09864-02a5-4969-a50c-2c78f748c9d5",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "উদ্বৃত্ত শ্রমিক ছাঁটাইয়ের বৈধতা",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:15:17.657Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "9a901d1e-10b8-4c53-bf3e-697c9ae23912",
+                  "learning_point_id": "77a09864-02a5-4969-a50c-2c78f748c9d5",
+                  "question_text": "প্রতিষ্ঠানের প্রয়োজনের তুলনায় শ্রমিকের সংখ্যা অতিরিক্ত হয়ে গেলে (উদ্বৃত্ত বা Surplus) মালিক কি তাদের 'ছাঁটাই' করতে পারেন?",
+                  "explanation": "শ্রমিক উদ্বৃত্ত হলে আইনসম্মতভাবে ছাঁটাই করার অধিকার মালিকের রয়েছে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.657Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: প্রতিষ্ঠানে শ্রমিকের সংখ্যা প্রয়োজনের চেয়ে বেশি হলে বা ব্যবসায়িক সংকটে মালিক পক্ষ আইন মেনে কর্মী কমাতে পারেন, এটি শ্রমিকের কোনো ব্যক্তিগত ব্যর্থতা নয়।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "55e3c840-5b9f-4690-a5a1-eebee36792cd",
+                      "question_id": "9a901d1e-10b8-4c53-bf3e-697c9ae23912",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.655Z"
+                    },
+                    {
+                      "id": "bd4368da-80a2-4a15-b62c-685f4a6b22b8",
+                      "question_id": "9a901d1e-10b8-4c53-bf3e-697c9ae23912",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.657Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "924ebda2-db85-4bfc-a07b-f42c660f1bf4",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "লে-অফের সংজ্ঞা",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "972c0dc2-3406-44a7-ad6b-cd0c914d88ad",
+                  "learning_point_id": "924ebda2-db85-4bfc-a07b-f42c660f1bf4",
+                  "question_text": "বিদ্যুৎ, কয়লা, কাঁচামালের অভাব বা কারখানার যন্ত্র বিকল হওয়ার কারণে সাময়িক কাজ বন্ধ রাখাকে কী বলে?",
+                  "explanation": "সাময়িক সংকটের কারণে কাজ বন্ধ রাখাই হলো লে-অফ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: লে-অফ হলো এমন একটি পরিস্থিতি যেখানে মালিক সাময়িকভাবে শ্রমিকদের কাজ দিতে অক্ষম হন, কিন্তু কর্মসংস্থান বাতিল করেন না।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5d1ad39a-ab88-4f2a-920a-e43edb46b9d6",
+                      "question_id": "972c0dc2-3406-44a7-ad6b-cd0c914d88ad",
+                      "option_text": "লে-অফ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.657Z"
+                    },
+                    {
+                      "id": "f5645814-9549-426e-9574-34cb30e7cda9",
+                      "question_id": "972c0dc2-3406-44a7-ad6b-cd0c914d88ad",
+                      "option_text": "ছাঁটাই",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.657Z"
+                    },
+                    {
+                      "id": "54166dd0-55ab-4233-a185-35a10b37c40e",
+                      "question_id": "972c0dc2-3406-44a7-ad6b-cd0c914d88ad",
+                      "option_text": "বরখাস্ত",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "3aeeaf59-89db-4a85-a03b-f573cd812ec0",
+                      "question_id": "972c0dc2-3406-44a7-ad6b-cd0c914d88ad",
+                      "option_text": "ইস্তফা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "28f56410-c550-4632-b1e7-81dc2fe4a51c",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "লে-অফ ও অবসানের পার্থক্য",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"আসলাম: ফ্যাক্টরিতে তো এখন অনেক অর্ডার নেই, তাই মালিক বলছেন আগামী কয়েকদিন আমাদের কাজ নেই। এটাকে কি চাকরি থেকে বাদ দেওয়া বলে?\"},{\"avatar\":\"lisa\",\"text\":\"হালিমা: এটা হচ্ছে 'লে-অফ'। মালিক আমাদের কাজ দিতে পারছেন না বলে সাময়িক ছুটি দিয়েছেন, চাকরি কিন্তু চলে যায়নি।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "0f0fdfe1-721f-4f7f-ab06-86f748f1f15a",
+                  "learning_point_id": "28f56410-c550-4632-b1e7-81dc2fe4a51c",
+                  "question_text": "লে-অফ এবং স্থায়ী চাকরি অবসানের মূল পার্থক্য কী?",
+                  "explanation": "লে-অফ হলো সাময়িক কর্মবিরতি, যার উদ্দেশ্য পরিস্থিতি স্বাভাবিক হলে আবার কাজ শুরু করা।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"আসলাম: ফ্যাক্টরিতে তো এখন অনেক অর্ডার নেই, তাই মালিক বলছেন আগামী কয়েকদিন আমাদের কাজ নেই। এটাকে কি চাকরি থেকে বাদ দেওয়া বলে?\"},{\"avatar\":\"lisa\",\"text\":\"হালিমা: এটা হচ্ছে 'লে-অফ'। মালিক আমাদের কাজ দিতে পারছেন না বলে সাময়িক ছুটি দিয়েছেন, চাকরি কিন্তু চলে যায়নি।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "058fd15e-9feb-4cf2-adb3-3c915bb5f717",
+                      "question_id": "0f0fdfe1-721f-4f7f-ab06-86f748f1f15a",
+                      "option_text": "লে-অফ সাময়িক, কিন্তু চাকরি অবসান স্থায়ী",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "16410b1e-9feb-46e4-a0b4-fc424dc5d5d4",
+                      "question_id": "0f0fdfe1-721f-4f7f-ab06-86f748f1f15a",
+                      "option_text": "দুটি একই বিষয়",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "041bf6aa-c85b-4474-a35a-d89de8630041",
+                      "question_id": "0f0fdfe1-721f-4f7f-ab06-86f748f1f15a",
+                      "option_text": "লে-অফ স্থায়ী, কিন্তু চাকরি অবসান সাময়িক",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "0a9667a9-c019-41ed-99dc-f28e31905b65",
+                      "question_id": "0f0fdfe1-721f-4f7f-ab06-86f748f1f15a",
+                      "option_text": "লে-অফ কেবল অফিসের কাজের জন্য",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "749ae36b-6604-488c-ac16-871a0778cd71",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "ছাঁটাই প্রক্রিয়ায় মালিকের দায়",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "c65f6a8a-8dbb-4d22-8f1a-9907c205ee35",
+                  "learning_point_id": "749ae36b-6604-488c-ac16-871a0778cd71",
+                  "question_text": "ছাঁটাই প্রক্রিয়ায় মালিকের প্রধান দায়বদ্ধতাগুলো কী কী? (টিক দিন)",
+                  "explanation": "ছাঁটাই প্রক্রিয়ায় শ্রমিককে আইন অনুযায়ী ক্ষতিপূরণ ও কারণ জানানো বাধ্যতামূলক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ছাঁটাই করার সময় মালিককে শ্রমিকের কর্মকাল বা সিনিয়রটি (Seniority) বিবেচনায় নিতে হয়, যাতে তারা তাদের প্রাপ্য সুবিধা থেকে বঞ্চিত না হন।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "4d9d5480-f749-4346-8c87-3919a10426ef",
+                      "question_id": "c65f6a8a-8dbb-4d22-8f1a-9907c205ee35",
+                      "option_text": "শ্রমিকের পাওনা বা ক্ষতিপূরণ প্রদান করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "620b0962-759f-4fab-99d2-7aa62dbb0f38",
+                      "question_id": "c65f6a8a-8dbb-4d22-8f1a-9907c205ee35",
+                      "option_text": "ছাঁটাইয়ের কারণ লিখিতভাবে জানানো।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "f748f74d-a336-48da-9585-e7ead347a007",
+                      "question_id": "c65f6a8a-8dbb-4d22-8f1a-9907c205ee35",
+                      "option_text": "ছাঁটাইকৃত শ্রমিককে সারাজীবন বেতন দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "90f20cae-964d-4753-ac72-3b90907a4a75",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "ছাঁটাই ও লে-অফ মিলকরণ",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "32567694-5ef2-4e6a-9c00-d52a26991bef",
+                  "learning_point_id": "90f20cae-964d-4753-ac72-3b90907a4a75",
+                  "question_text": "বাম পাশের অবস্থার সাথে ডান পাশের আইনি ব্যাখ্যার মিল কর।",
+                  "explanation": "ছাঁটাই স্থায়ী অবসান, লে-অফ সাময়িক, এবং রিট্রেঞ্চমেন্ট হলো ছাঁটাইয়ের ইংরেজি নাম।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ছাঁটাই এবং লে-অফ—উভয় ক্ষেত্রেই শ্রমিকের অধিকার রয়েছে, তবে তাদের আইনি মর্যাদা ও পাওনার ধরনে পার্থক্য রয়েছে।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "ছাঁটাই",
+                        "right": "স্থায়ী চাকুরীর অবসান"
+                      },
+                      {
+                        "left": "লে-অফ",
+                        "right": "সাময়িক কর্মবিরতি (মালিক দায়ী নয়)"
+                      },
+                      {
+                        "left": "রিট্রেঞ্চমেন্ট",
+                        "right": "ছাঁটাইয়ের ইংরেজি প্রতিশব্দ"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "1b49b908-5d27-4f3c-8024-350a661b5442",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "লে-অফ ক্ষতিপূরণের অধিকার",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "80ff2152-6f73-4a95-b5c7-1ab9c2d2164b",
+                  "learning_point_id": "1b49b908-5d27-4f3c-8024-350a661b5442",
+                  "question_text": "লে-অফকালীন সময়ে কি শ্রমিক নির্দিষ্ট হারে ক্ষতিপূরণ পাওয়ার অধিকারী?",
+                  "explanation": "আইন অনুযায়ী লে-অফকালীন সময়ে মালিক শ্রমিককে লে-অফ ভাতা প্রদান করতে বাধ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: লে-অফের সময় শ্রমিককে নির্দিষ্ট হারে লে-অফ ক্ষতিপূরণ প্রদান করতে হয়, যদি শ্রমিক পূর্ববর্তী এক বছরে নির্দিষ্ট সময় কাজ করে থাকেন।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "51caab1d-4bca-4c98-8279-78d1db341b47",
+                      "question_id": "80ff2152-6f73-4a95-b5c7-1ab9c2d2164b",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "8171a841-914e-40de-8bf9-eca23e3056ae",
+                      "question_id": "80ff2152-6f73-4a95-b5c7-1ab9c2d2164b",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "2da115b1-b00e-4d9c-ac39-4a1795d822c6",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "ছাঁটাই করার LIFO পদ্ধতি",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "6ba374b3-dbd9-41e6-a7e8-bce707be3bea",
+                  "learning_point_id": "2da115b1-b00e-4d9c-ac39-4a1795d822c6",
+                  "question_text": "শ্রমিকের কর্মকাল এবং দক্ষতার ভিত্তিতে ছাঁটাই করার পদ্ধতিকে কী বলা হয়?",
+                  "explanation": "সাধারণত নতুন কর্মী আগে ছাঁটাইয়ের সম্মুখীন হন, একেই LIFO পদ্ধতি বলে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: যে নীতিমালার ভিত্তিতে মালিক ছাঁটাই বা লে-অফ ঘোষণা করেন তা শ্রম আইন দ্বারা নিয়ন্ত্রিত, ব্যক্তিগত খেয়ালখুশি দ্বারা নয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "0a4b3068-3e6e-4727-aa1f-05a72c60bb3b",
+                      "question_id": "6ba374b3-dbd9-41e6-a7e8-bce707be3bea",
+                      "option_text": "লাস্ট ইন ফার্স্ট আউট (LIFO)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "b2163f31-ca3d-451b-8fde-d80dc4dc8a7b",
+                      "question_id": "6ba374b3-dbd9-41e6-a7e8-bce707be3bea",
+                      "option_text": "ফার্স্ট ইন ফার্স্ট আউট (FIFO)",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "56d45aa6-0b74-4fe2-b5cd-09d271c4a514",
+                      "question_id": "6ba374b3-dbd9-41e6-a7e8-bce707be3bea",
+                      "option_text": "যেকোনোভাবে করা যায়",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "d4598a2b-02e2-44c7-92e5-b93ee16f9f7b",
+                      "question_id": "6ba374b3-dbd9-41e6-a7e8-bce707be3bea",
+                      "option_text": "কোনো নির্দিষ্ট নিয়ম নেই",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "7787ede2-760a-4b51-96c2-ace7b4192de3",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "লে-অফের প্রধান কারণসমূহ",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "b49f0e80-fa91-49ad-995a-958fff1af01e",
+                  "learning_point_id": "7787ede2-760a-4b51-96c2-ace7b4192de3",
+                  "question_text": "লে-অফের কারণগুলো সাধারণত কী কী হতে পারে? (টিক দিন)",
+                  "explanation": "মালিকের নিয়ন্ত্রণের বাইরের কারণ যেমন বিদ্যুৎ বা কাঁচামালের অভাব লে-অফের প্রধান কারণ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: লে-অফ দীর্ঘস্থায়ী হলে বা পরিস্থিতির উন্নতি না হলে মালিক পরবর্তী আইনি পদক্ষেপে যেতে পারেন।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f4ae1d19-556e-44aa-a4d6-444e27cd30bf",
+                      "question_id": "b49f0e80-fa91-49ad-995a-958fff1af01e",
+                      "option_text": "কাঁচামালের অভাব।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "175a108f-7e45-4de2-8054-664572705fb7",
+                      "question_id": "b49f0e80-fa91-49ad-995a-958fff1af01e",
+                      "option_text": "বিদ্যুৎ ও জ্বালানির সংকট।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "cb7897a7-bcbc-4de3-a6fe-aba2ed1dc2e2",
+                      "question_id": "b49f0e80-fa91-49ad-995a-958fff1af01e",
+                      "option_text": "শ্রমিকদের নিয়মিত কাজে অনুপস্থিতি।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "a7363ef3-fa1c-4c24-a483-97daf91ffdef",
+              "chapter_id": "935eae2b-cce5-4873-930c-b8c51b2a6bde",
+              "title": "লে-অফের সময়সীমা",
+              "content": "ছাঁটাই ও লে-অফ",
+              "order_index": 9,
+              "created_at": "2026-06-20T05:15:17.658Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "4543839e-2e2b-499d-bf2c-69cbf0ba85ee",
+                  "learning_point_id": "a7363ef3-fa1c-4c24-a483-97daf91ffdef",
+                  "question_text": "শ্রম আইনের অধীনে লে-অফ ঘোষণার জন্য মালিকের সর্বোচ্চ কতদিন পর্যন্ত শ্রমিককে কাজ থেকে সাময়িক অব্যাহতি দেওয়ার সুযোগ থাকে?",
+                  "explanation": "আইন অনুযায়ী লে-অফের সময়সীমা ও ভাতা সুনির্দিষ্ট করা আছে।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:15:17.658Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: সব ধরনের পরিস্থিতিই লে-অফ হিসেবে গণ্য হয় না, কারণ এটি মালিকের নিয়ন্ত্রণের বাইরের কোনো সংকটের সাথে সম্পর্কিত হতে হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5642bf86-cf65-4760-94ea-28247a723055",
+                      "question_id": "4543839e-2e2b-499d-bf2c-69cbf0ba85ee",
+                      "option_text": "নির্দিষ্ট সময়সীমা আইন অনুযায়ী নির্ধারিত",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "a682263f-1477-442f-9288-798f9fbe47a9",
+                      "question_id": "4543839e-2e2b-499d-bf2c-69cbf0ba85ee",
+                      "option_text": "অনির্দিষ্টকাল",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "d3fb042d-f3ac-4033-ac26-188c7a33d049",
+                      "question_id": "4543839e-2e2b-499d-bf2c-69cbf0ba85ee",
+                      "option_text": "১ দিন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    },
+                    {
+                      "id": "36cb10a3-2046-4263-be57-0c9ce41d9814",
+                      "question_id": "4543839e-2e2b-499d-bf2c-69cbf0ba85ee",
+                      "option_text": "১০ বছর",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:15:17.658Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",

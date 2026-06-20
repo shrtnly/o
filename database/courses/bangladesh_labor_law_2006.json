@@ -32149,504 +32149,116 @@
       "created_at": "2026-02-18T13:53:39.062146+00:00",
       "chapters": [
         {
-          "id": "f62a79f5-5c71-4a2a-b1d0-6287b1280786",
+          "id": "b38f079b-8005-4eeb-897d-7fe20341319b",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "দৈনিক কর্মঘণ্টা",
+          "title": "দৈনিক ও সাপ্তাহিক কর্মঘণ্টা",
           "order_index": 1,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "11bd4671-89c4-4945-ad2d-64f99412dc19",
-              "chapter_id": "f62a79f5-5c71-4a2a-b1d0-6287b1280786",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে দৈনিক কর্মঘণ্টা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.046Z",
+          "learning_points": []
         },
         {
-          "id": "003c8e3b-9711-42b7-80f0-7d1483a970c5",
+          "id": "d3b4f7b4-b9ce-46b3-8e07-0d07986818dc",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "বিশ্রাম বা আহারের জন্য বিরতি",
+          "title": "বিশ্রাম ও আহারের বিরতি",
           "order_index": 2,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "a434e410-3db1-4339-b72f-59c0ee180e1b",
-              "chapter_id": "003c8e3b-9711-42b7-80f0-7d1483a970c5",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে বিশ্রাম বা আহারের জন্য বিরতি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "07fe62f2-0245-4ace-bf65-21c00addc526",
+          "id": "23930cd3-8c0d-447c-ae88-f30b6b310bd7",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "সাপ্তাহিক কর্মঘণ্টা",
+          "title": "ওভারটাইম কাজের আইনি সীমা",
           "order_index": 3,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "c418258d-67d4-4e6b-b9e0-89e085639bae",
-              "chapter_id": "07fe62f2-0245-4ace-bf65-21c00addc526",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে সাপ্তাহিক কর্মঘণ্টা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "3ced5c8a-7251-4250-b695-8aaa5eb38457",
+          "id": "09a67459-b823-42be-8d28-3a2a101092a1",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "সাপ্তাহিক ছুটি",
+          "title": "ওভারটাইম মজুরী হিসাবের সূত্র",
           "order_index": 4,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "7abcbc90-0c18-4ba4-9663-8f7ae726cbba",
-              "chapter_id": "3ced5c8a-7251-4250-b695-8aaa5eb38457",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে সাপ্তাহিক ছুটি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "fdb2f4e9-de9f-4822-b12a-ecaf953ca280",
+          "id": "7f0a81dd-5b2f-4d45-bae1-ecab03df0d00",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "ক্ষতিপূরণমূলক সাপ্তাহিক ছুটি",
+          "title": "সাপ্তাহিক ছুটির আইনি বিধান",
           "order_index": 5,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "9d0d8704-e9ed-474b-9fc9-0087a06ee954",
-              "chapter_id": "fdb2f4e9-de9f-4822-b12a-ecaf953ca280",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ক্ষতিপূরণমূলক সাপ্তাহিক ছুটি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "7100ffab-e6a0-4d18-9d96-e72be7efc5a8",
+          "id": "8cd8cbf1-f806-4b22-b559-f53204046a8c",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "কর্ম সময়ের সমপ্রসারণ",
+          "title": "বিকল্প ছুটির বিশেষ নিয়ম",
           "order_index": 6,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "88ac7240-ebfe-49c7-96e0-0053ffdace9a",
-              "chapter_id": "7100ffab-e6a0-4d18-9d96-e72be7efc5a8",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কর্ম সময়ের সমপ্রসারণ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "1a3780d4-07b5-4288-9d30-61d6d389d04d",
+          "id": "f3d107ff-2ba2-4021-a686-d487ba7ceed9",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "নৈশ-পালা",
+          "title": "নৈমিত্তিক ও অসুস্থতার ছুটি",
           "order_index": 7,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "13f3a37c-d782-4d4f-9989-f53a0a1f651b",
-              "chapter_id": "1a3780d4-07b5-4288-9d30-61d6d389d04d",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে নৈশ-পালা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "e959ec05-df0d-43cb-9870-1d5ec530a1b5",
+          "id": "e864a22c-905d-40d6-af15-bab80a267bb0",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "যানবাহনে ক্রমপুঞ্জিত কর্ম ঘন্টার উপর বাধা",
+          "title": "বাৎসরিক বা অর্জিত ছুটি",
           "order_index": 8,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "13e0a07f-19c2-4603-ba88-13f46ce6ac78",
-              "chapter_id": "e959ec05-df0d-43cb-9870-1d5ec530a1b5",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে যানবাহনে ক্রমপুঞ্জিত কর্ম ঘন্টার উপর বাধা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.050Z",
+          "learning_points": []
         },
         {
-          "id": "2040a425-bf6b-4f98-9a2a-6d3374c4163f",
+          "id": "24b8d080-ccfb-4918-b0e5-dc37aa9ff14a",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "অধিকাল কর্মের জন্য অতিরিক্ত ভাতা",
+          "title": "উৎসব ছুটি ও ক্ষতিপূরণ",
           "order_index": 9,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "f7f006f4-9806-4fe8-b862-687fa660f0b0",
-              "chapter_id": "2040a425-bf6b-4f98-9a2a-6d3374c4163f",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে অধিকাল কর্মের জন্য অতিরিক্ত ভাতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.051Z",
+          "learning_points": []
         },
         {
-          "id": "1e3b9d68-6c4e-41c9-8a6c-5f83014f1729",
+          "id": "04052117-d07c-4761-ba17-35e0984a2150",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "নারী শ্রমিকের জন্য সীমিত কর্মঘণ্টা",
+          "title": "নৈশ শিফট ও ব্যবধান",
           "order_index": 10,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "a4f4a35c-f338-4f88-9299-e6f3c0df5897",
-              "chapter_id": "1e3b9d68-6c4e-41c9-8a6c-5f83014f1729",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে নারী শ্রমিকের জন্য সীমিত কর্মঘণ্টা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.051Z",
+          "learning_points": []
         },
         {
-          "id": "acc7cea9-6292-4253-9c84-6bca2f26985d",
+          "id": "d363dd8f-30a1-4e1f-853f-ae25a532fad9",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "দ্বৈত চাকুরীর উপর বাধা",
+          "title": "দ্বৈত কর্মসংস্থানে আইনি নিষেধাজ্ঞা",
           "order_index": 11,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "10df44fa-d403-4fb5-8a85-3554f76d1054",
-              "chapter_id": "acc7cea9-6292-4253-9c84-6bca2f26985d",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে দ্বৈত চাকুরীর উপর বাধা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.051Z",
+          "learning_points": []
         },
         {
-          "id": "92368732-cf79-444f-bcd0-5bc14ca00c6f",
+          "id": "6274cfe5-0d2b-4ecd-82c6-d2911ff6a5ee",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "প্রাপ্তবয়স্ক শ্রমিকের কাজের সময়ের নোটিশ এবং উহার প্রস্তুতি",
+          "title": "ছুটি মঞ্জুর ও পদ্ধতি",
           "order_index": 12,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "e79a14af-4955-4562-841b-91559b5d1ace",
-              "chapter_id": "92368732-cf79-444f-bcd0-5bc14ca00c6f",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে প্রাপ্তবয়স্ক শ্রমিকের কাজের সময়ের নোটিশ এবং উহার প্রস্তুতি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.051Z",
+          "learning_points": []
         },
         {
-          "id": "2dc46d02-c001-4099-aa6f-0362317ba5ba",
+          "id": "8da52347-7a8e-4306-a55e-ab692c1c9f34",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "সড়ক পরিবহন শ্রমিকের জন্য বিশেষ বয়সসীমা",
+          "title": "কর্মঘণ্টার নোটিশ ও রেজিস্টার",
           "order_index": 13,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "69894426-b566-438e-8d12-551d38658a0b",
-              "chapter_id": "2dc46d02-c001-4099-aa6f-0362317ba5ba",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে সড়ক পরিবহন শ্রমিকের জন্য বিশেষ বয়সসীমা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.051Z",
+          "learning_points": []
         },
         {
-          "id": "37513067-f34c-4c52-99ae-9c0bef2b7025",
+          "id": "ae66bf9d-e967-4ce7-8d97-6d6f0ed3675e",
           "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "নোটিশ এবং রেজিস্টারের সহিত কর্মঘণ্টার মিল থাকা",
+          "title": "আইন লঙ্ঘন ও জরিমানা",
           "order_index": 14,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "1a689a56-7f35-4c09-8f07-9232b948f6fb",
-              "chapter_id": "37513067-f34c-4c52-99ae-9c0bef2b7025",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে নোটিশ এবং রেজিস্টারের সহিত কর্মঘণ্টার মিল থাকা নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "5841c5f7-0e0e-4389-b0ba-84580951607a",
-          "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "দোকান, ইত্যাদি বন্ধ",
-          "order_index": 15,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "051ad9ff-6725-4d82-bb70-5beef40890f5",
-              "chapter_id": "5841c5f7-0e0e-4389-b0ba-84580951607a",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে দোকান, ইত্যাদি বন্ধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "d5a17567-4aba-4c16-85ab-d27f439f8020",
-          "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "নৈমিত্তিক ছুটি",
-          "order_index": 16,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "58e96ef9-0ce0-46e4-8223-b8f05e06f9bd",
-              "chapter_id": "d5a17567-4aba-4c16-85ab-d27f439f8020",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে নৈমিত্তিক ছুটি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "95bb9e62-1d59-432d-92eb-137cdd58546f",
-          "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "পীড়া-ছুটি",
-          "order_index": 17,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "d3f3c750-55d9-4c2d-ac69-36d1875f28d0",
-              "chapter_id": "95bb9e62-1d59-432d-92eb-137cdd58546f",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে পীড়া-ছুটি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "e45e9798-4ff4-4c02-a98e-34342ef3b88c",
-          "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "মজুরীসহ বাৎসরিক ছুটি",
-          "order_index": 18,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "beb2bc46-1c32-47a5-aa06-c2dcabe7071b",
-              "chapter_id": "e45e9798-4ff4-4c02-a98e-34342ef3b88c",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে মজুরীসহ বাৎসরিক ছুটি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "474a8989-4bb2-4ea7-a457-e4be6ec1f414",
-          "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "উৎসব ছুটি",
-          "order_index": 19,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "73f3fb1e-40a0-4af5-917a-d73745a0685b",
-              "chapter_id": "474a8989-4bb2-4ea7-a457-e4be6ec1f414",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে উৎসব ছুটি নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
-        },
-        {
-          "id": "9188d395-6f21-404c-8284-8618f9fd1fb6",
-          "unit_id": "1bac291f-93fb-4b33-97dd-64ad8981e5e1",
-          "title": "ছুটি অথবা বন্ধের সময়ের মজুরী হিসাব ও প্রদান",
-          "order_index": 20,
-          "created_at": "2026-02-18T13:53:39.062146+00:00",
-          "is_trophy": false,
-          "type": "lesson",
-          "is_claimed": false,
-          "reward_hearts": 5,
-          "reward_gems": 20,
-          "estimated_time": "10 মিনিট",
-          "learning_points": [
-            {
-              "id": "d9fb4eca-9312-45de-b969-5c2156577d12",
-              "chapter_id": "9188d395-6f21-404c-8284-8618f9fd1fb6",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে ছুটি অথবা বন্ধের সময়ের মজুরী হিসাব ও প্রদান নিয়ে বিস্তারিত আলোচনা করা হবে।",
-              "order_index": 1,
-              "created_at": "2026-02-18T13:53:39.062146+00:00",
-              "type": "standard",
-              "mcq_questions": []
-            }
-          ]
+          "created_at": "2026-06-20T08:50:15.051Z",
+          "learning_points": []
         }
       ]
     },

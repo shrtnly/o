@@ -5692,7 +5692,390 @@
           "title": "বরখাস্তের আইনি প্রক্রিয়া",
           "order_index": 9,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "6647e945-4799-4480-b2fa-ae3ed6e46d05",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "বরখাস্তের আগে তদন্ত কমিটির ভূমিকা",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:19:55.047Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "6be9fec3-8f00-4d81-95ba-558f5c6a9446",
+                  "learning_point_id": "6647e945-4799-4480-b2fa-ae3ed6e46d05",
+                  "question_text": "গুরুতর অসদাচরণের দায়ে বরখাস্ত করার আগে কি মালিকের জন্য তদন্ত কমিটি গঠন করা বাধ্যতামূলক?",
+                  "explanation": "প্রাকৃতিক ন্যায়ের স্বার্থে বরখাস্তের আগে তদন্ত কমিটি গঠন ও অভিযুক্তকে আত্মপক্ষ সমর্থনের সুযোগ দেওয়া আইনি বাধ্যবাধকতা।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.047Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রমিকের বিরুদ্ধে আনীত অভিযোগের সত্যতা যাচাই করার জন্য এবং শ্রমিককে তার আত্মপক্ষ সমর্থনের সুযোগ দেওয়ার জন্য আইন অনুযায়ী একটি আনুষ্ঠানিক তদন্ত প্রক্রিয়া অনুসরণ করা অপরিহার্য।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b1125637-551f-4d02-9fe1-c23c639a64f2",
+                      "question_id": "6be9fec3-8f00-4d81-95ba-558f5c6a9446",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.044Z"
+                    },
+                    {
+                      "id": "aa3680bd-69c6-4797-9e7f-da126c8b527b",
+                      "question_id": "6be9fec3-8f00-4d81-95ba-558f5c6a9446",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.047Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "445c79d7-d91b-4a53-9468-8b6000df3e8b",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "তদন্ত কমিটির মূল কাজ",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "da91a89f-7f6d-4084-bf8a-5443cedced05",
+                  "learning_point_id": "445c79d7-d91b-4a53-9468-8b6000df3e8b",
+                  "question_text": "তদন্ত কমিটির প্রধান কাজ কী?",
+                  "explanation": "তদন্ত কমিটির কাজ হলো সংগৃহীত তথ্য ও প্রমাণের ভিত্তিতে অভিযোগের সত্যতা নিরপেক্ষভাবে মূল্যায়ন করা।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বরখাস্তের মতো কঠোর শাস্তির ক্ষেত্রে অভিযোগকারী এবং অভিযুক্তের মধ্যকার নিরপেক্ষতা নিশ্চিত করতে তদন্ত কমিটির সদস্যদের ভূমিকা অত্যন্ত গুরুত্বপূর্ণ।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d2af004a-3e5a-4ade-891b-c1e13ec9ab45",
+                      "question_id": "da91a89f-7f6d-4084-bf8a-5443cedced05",
+                      "option_text": "অভিযোগের সত্যতা নিরপেক্ষভাবে যাচাই করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.047Z"
+                    },
+                    {
+                      "id": "cc84b53a-0d44-4540-95d4-3f3c5eab2d66",
+                      "question_id": "da91a89f-7f6d-4084-bf8a-5443cedced05",
+                      "option_text": "শ্রমিককে তাৎক্ষণিক কারাদণ্ড দেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.047Z"
+                    },
+                    {
+                      "id": "185f0cea-3756-4da5-8da9-f255c1c038ed",
+                      "question_id": "da91a89f-7f6d-4084-bf8a-5443cedced05",
+                      "option_text": "শ্রমিকের বেতন বৃদ্ধি করা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:19:55.047Z"
+                    },
+                    {
+                      "id": "c0522866-880d-4aac-931c-eb3ba288df9b",
+                      "question_id": "da91a89f-7f6d-4084-bf8a-5443cedced05",
+                      "option_text": "শ্রমিককে নতুন পদবি দেওয়া",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "a1f333bf-f818-40c7-8e36-187d0a0c6149",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "বরখাস্তে আত্মপক্ষ সমর্থন",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"সালাউদ্দিন: ম্যানেজার সাহেব, আমি কোনো চুরি করিনি, অথচ আমাকে চুরির অপবাদ দিয়ে আজই কাজে আসতে মানা করেছেন।\"},{\"avatar\":\"lisa\",\"text\":\"বজলুর রহমান: সালাউদ্দিন, আইন অনুযায়ী তোমাকে আত্মপক্ষ সমর্থনের সুযোগ না দিয়ে এবং তদন্ত ছাড়া বরখাস্ত করা মালিকের জন্য বেআইনি।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "af563b0d-029c-4caa-975a-624f3b4eebaa",
+                  "learning_point_id": "a1f333bf-f818-40c7-8e36-187d0a0c6149",
+                  "question_text": "বজলুর রহমানের বক্তব্য অনুযায়ী, বরখাস্তের ক্ষেত্রে কোন বিষয়টি নিশ্চিত করা জরুরি?",
+                  "explanation": "আত্মপক্ষ সমর্থনের সুযোগ ছাড়া বরখাস্ত প্রক্রিয়া আইনসিদ্ধ নয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"সালাউদ্দিন: ম্যানেজার সাহেব, আমি কোনো চুরি করিনি, অথচ আমাকে চুরির অপবাদ দিয়ে আজই কাজে আসতে মানা করেছেন।\"},{\"avatar\":\"lisa\",\"text\":\"বজলুর রহমান: সালাউদ্দিন, আইন অনুযায়ী তোমাকে আত্মপক্ষ সমর্থনের সুযোগ না দিয়ে এবং তদন্ত ছাড়া বরখাস্ত করা মালিকের জন্য বেআইনি।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "3823fa36-adbe-4b46-9260-b04d929b2f4e",
+                      "question_id": "af563b0d-029c-4caa-975a-624f3b4eebaa",
+                      "option_text": "আত্মপক্ষ সমর্থনের সুযোগ প্রদান",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "7768a6ae-6ce2-43a7-a693-4a4416607c25",
+                      "question_id": "af563b0d-029c-4caa-975a-624f3b4eebaa",
+                      "option_text": "শ্রমিককে ভয় দেখানো",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "5ec5993b-c26d-4cf5-a1c0-1a4c89b89348",
+                      "question_id": "af563b0d-029c-4caa-975a-624f3b4eebaa",
+                      "option_text": "বিনা নোটিশে কারখানা থেকে বের করে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "ca4b3935-2ae5-4e22-b7e1-b52c4a7cead6",
+                      "question_id": "af563b0d-029c-4caa-975a-624f3b4eebaa",
+                      "option_text": "পুলিশে সোপর্দ করা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "d105e5bf-d206-4a62-b951-b8e0d5ffa09f",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "বরখাস্তে মালিকের কর্তব্য",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "47ecaff9-f89b-48e6-bf32-8f949bb8dee6",
+                  "learning_point_id": "d105e5bf-d206-4a62-b951-b8e0d5ffa09f",
+                  "question_text": "বরখাস্তের প্রক্রিয়ায় মালিকের প্রধান কর্তব্যগুলো কী কী? (টিক দিন)",
+                  "explanation": "লিখিত অভিযোগ ও সুযোগ প্রদান বরখাস্ত প্রক্রিয়ার মূল ভিত্তি।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: গুরুতর অসদাচরণের ক্ষেত্রে শ্রমিককে বরখাস্ত করার সময় মালিককে নির্দিষ্ট কিছু প্রক্রিয়া সম্পন্ন করতে হয় যাতে আইনি জটিলতা সৃষ্টি না হয়।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "3e3bc57c-faf8-42e8-9927-1dfa9abd0998",
+                      "question_id": "47ecaff9-f89b-48e6-bf32-8f949bb8dee6",
+                      "option_text": "লিখিত অভিযোগ গঠন করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "a83105fb-8f2c-4940-9a6c-05978c6e3cab",
+                      "question_id": "47ecaff9-f89b-48e6-bf32-8f949bb8dee6",
+                      "option_text": "আত্মপক্ষ সমর্থনের সুযোগ দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "f90e020b-8823-4e89-8afd-eebed9296d83",
+                      "question_id": "47ecaff9-f89b-48e6-bf32-8f949bb8dee6",
+                      "option_text": "মৌখিকভাবে বহিষ্কারাদেশ দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "bb8bfe29-39f2-4b9f-837b-35cdc39f6860",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "বরখাস্ত আদেশের বিরুদ্ধে আপিল",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "0acb9bc6-f499-4023-872f-681d6e2bf41d",
+                  "learning_point_id": "bb8bfe29-39f2-4b9f-837b-35cdc39f6860",
+                  "question_text": "মালিকের দেওয়া বরখাস্তের আদেশের বিরুদ্ধে শ্রমিক কি শ্রম আদালতে প্রতিকার চাইতে পারেন?",
+                  "explanation": "বরখাস্ত আদেশ অন্যায্য মনে হলে শ্রমিক শ্রম আদালতে আপিল করার অধিকারী।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বরখাস্তের আদেশের বিরুদ্ধে শ্রমিকের আপিল করার আইনি অধিকার রয়েছে, যা তিনি শ্রম আদালতে প্রয়োগ করতে পারেন।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f9e7a151-204a-4222-b942-af42f96b3c0c",
+                      "question_id": "0acb9bc6-f499-4023-872f-681d6e2bf41d",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "78cbc816-07ce-4c72-a2a1-379d66bfe934",
+                      "question_id": "0acb9bc6-f499-4023-872f-681d6e2bf41d",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "448ca06d-9cd0-438b-9555-7fc2e2790fb1",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "বরখাস্ত আদেশের বিষয়বস্তু",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "c27786fc-13f9-4fc8-ba98-9e6d31089858",
+                  "learning_point_id": "448ca06d-9cd0-438b-9555-7fc2e2790fb1",
+                  "question_text": "বরখাস্তের লিখিত আদেশে কী থাকা আবশ্যক?",
+                  "explanation": "বরখাস্তের কারণ ও সিদ্ধান্তের বিষয়টি লিখিত আদেশে স্পষ্টভাবে উল্লেখ থাকা আইনি শর্ত।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বরখাস্তের আদেশে অভিযোগের বিস্তারিত বিবরণ এবং শ্রমিকের সেই অভিযোগের ভিত্তিতে যে শাস্তি দেওয়া হচ্ছে তার উল্লেখ থাকা প্রয়োজন।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "800b4765-06f9-40c6-b360-bf0e07c85fd8",
+                      "question_id": "c27786fc-13f9-4fc8-ba98-9e6d31089858",
+                      "option_text": "অভিযোগের স্পষ্ট বিবরণ ও শাস্তির সিদ্ধান্ত",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "db2d3262-a2fb-4d8f-beac-120d94ce4529",
+                      "question_id": "c27786fc-13f9-4fc8-ba98-9e6d31089858",
+                      "option_text": "মালিকের ব্যক্তিগত মতামত",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "2c824354-293b-457a-a68f-ba09017a80ce",
+                      "question_id": "c27786fc-13f9-4fc8-ba98-9e6d31089858",
+                      "option_text": "কারখানার সাজসজ্জার বর্ণনা",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "e44c35e0-70ab-4e39-a9dd-0bbc8628be81",
+                      "question_id": "c27786fc-13f9-4fc8-ba98-9e6d31089858",
+                      "option_text": "কোনোটিই নয়",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "7c512437-dda1-4a8c-82e4-d970672f12b5",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "তদন্তকালীন শ্রমিকের অবস্থা",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "31a56fd9-29d8-4f62-955d-49a332880340",
+                  "learning_point_id": "7c512437-dda1-4a8c-82e4-d970672f12b5",
+                  "question_text": "তদন্ত চলাকালীন অবস্থায় শ্রমিককে কী করা যেতে পারে? (টিক দিন)",
+                  "explanation": "তদন্ত চলাকালীন সময়ে অনেক সময় শ্রমিককে সাময়িক বহিষ্কার বা সাসপেনশন করে রাখা হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: তদন্ত চলাকালীন সময়ে শ্রমিককে সাময়িকভাবে দায়িত্ব থেকে সরিয়ে রাখা হতে পারে, যাতে তিনি প্রমাণ নষ্ট করতে না পারেন।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "dd5d37fa-eeb2-4ff4-8f75-5c44a5f676b4",
+                      "question_id": "31a56fd9-29d8-4f62-955d-49a332880340",
+                      "option_text": "সাময়িকভাবে বরখাস্ত (Suspension) রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "d691da3d-c906-4443-9f48-6dec7e9947b5",
+                      "question_id": "31a56fd9-29d8-4f62-955d-49a332880340",
+                      "option_text": "বিনা বেতনে আজীবন কারখানা থেকে বের করে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    },
+                    {
+                      "id": "c9c682aa-67ce-4a80-914f-b3a9502d4980",
+                      "question_id": "31a56fd9-29d8-4f62-955d-49a332880340",
+                      "option_text": "মজুরি বহাল রেখে কাজ থেকে দূরে রাখা।",
+                      "is_correct": true,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:19:55.048Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "71fd4952-811e-440b-96bf-846345959c0a",
+              "chapter_id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",
+              "title": "শাস্তি ও আইনি ধাপ মিলকরণ",
+              "content": "বরখাস্তের আইনি প্রক্রিয়া",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:19:55.048Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "4ec17dcf-02c5-4467-ba28-f1ab4baca83d",
+                  "learning_point_id": "71fd4952-811e-440b-96bf-846345959c0a",
+                  "question_text": "বাম পাশের বিষয়ের সাথে ডান পাশের আইনি অবস্থার মিল কর।",
+                  "explanation": "অসদাচরণ অপরাধের শ্রেণি, কমিটি নিরপেক্ষতা নিশ্চিত করে এবং শুনানি আত্মপক্ষ সমর্থনের পর্যায়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:19:55.048Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অপরাধের ধরণ অনুযায়ী শাস্তি ও প্রক্রিয়ার আইনি ধাপগুলোর মধ্যে যোগসূত্র স্থাপন করা।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "অসদাচরণ",
+                        "right": "অপরাধের শ্রেণী"
+                      },
+                      {
+                        "left": "তদন্ত কমিটি",
+                        "right": "নিরপেক্ষতা নিশ্চিতকরণ"
+                      },
+                      {
+                        "left": "শুনানি",
+                        "right": "আত্মপক্ষ সমর্থন"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "ec094c6a-44cf-4e69-bb98-ebd53f7620e4",

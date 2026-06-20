@@ -26182,14 +26182,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "915f7bab-0e93-4998-ab0b-a9cd4d05f20d",
+              "id": "5be713f5-4bee-4636-8d3f-1d7007f169c7",
               "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে নমুনা সংগ্রহের ক্ষমতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:00.182136+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:31:19.472Z",
+              "mcq_questions": [
+                {
+                  "id": "c51f7ed8-e9ae-4d91-80c0-efed321484e5",
+                  "learning_point_id": "5be713f5-4bee-4636-8d3f-1d7007f169c7",
+                  "question_text": "নিচের কোন ঘটনাটি ঘটলে কোনো শ্রমিক আহত না হলেও সরকারকে নোটিশ দেওয়া আইনি বাধ্যবাধকতা?",
+                  "question_type": "mcq",
+                  "explanation": "ধারা ৮১ অনুযায়ী, স্ট্রাকচারাল ধস, ক্রেন বা উত্তোলক দড়ি ছিঁড়ে যাওয়া বা বয়লারে আগুন লাগার মতো ঘটনা ঘটলে কোনো ব্যক্তি আহত না হলেও নোটিশ দেওয়া বাধ্যতামূলক।",
+                  "narrative": "💡 হিন্ট: কারখানায় কোনো শ্রমিক আহত না হলেও যদি এমন কোনো বড় দুর্ঘটনা ঘটে যা পুরো কারখানাকে ঝুঁকিতে ফেলে, তবে তাকে 'মারাত্মক নোটিফিকেশনযোগ্য ঘটনা' বলে। এটিও সরকারকে জানাতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f54dd5d4-3ad0-436f-ad67-6d2d8158db6a",
+                      "question_id": "c51f7ed8-e9ae-4d91-80c0-efed321484e5",
+                      "option_text": "কারখানার মেইন ওভারহেড ক্রেন বা লিফট ভেঙে নিচে পড়ে যাওয়া",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.469Z"
+                    },
+                    {
+                      "id": "210e6457-ab59-44e7-b470-39c79c857b18",
+                      "question_id": "c51f7ed8-e9ae-4d91-80c0-efed321484e5",
+                      "option_text": "কারখানার একটি সাধারণ পানির কল নষ্ট হওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.472Z"
+                    },
+                    {
+                      "id": "21e04939-2cae-406b-ad4d-3cc3c23988cb",
+                      "question_id": "c51f7ed8-e9ae-4d91-80c0-efed321484e5",
+                      "option_text": "ম্যানেজারের কক্ষের এসি বন্ধ হওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.472Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.472Z"
+                }
+              ]
+            },
+            {
+              "id": "610954ea-0ad7-4db0-b1fc-38ed7ecef929",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "414e6cfc-0cf5-4115-8d19-2f42ad5c28d6",
+                  "learning_point_id": "610954ea-0ad7-4db0-b1fc-38ed7ecef929",
+                  "question_text": "কোনো গ্যাসরুম বা রাসায়নিকের গুদামে বড় বিস্ফোরণ ঘটলে, কেউ আহত না হলেও কি ২ ঘণ্টার মধ্যে নোটিশ দেওয়া বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "বিস্ফোরণ বা অগ্নিকাণ্ড একটি মারাত্মক নোটিফিকেশনযোগ্য ঘটনা। জানমালের বড় ক্ষতি না হলেও এর তীব্রতা ও ঝুঁকির কারণে তাৎক্ষণিক সরকারি নোটিশ দিতে হয়।",
+                  "narrative": "💡 হিন্ট: কেমিক্যাল বা গ্যাস সিলিন্ডারের গুদামে যদি হঠাৎ বড় কোনো বিস্ফোরণ ঘটে কিন্তু অলৌকিকভাবে কেউ মারা না যান, তবুও নোটিশ দিতে হবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1cdbb256-156f-4fb9-892a-e4f95f26b1a3",
+                      "question_id": "414e6cfc-0cf5-4115-8d19-2f42ad5c28d6",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "0c0c2792-70e4-48c6-ba0e-9ce1cfa267cb",
+                      "question_id": "414e6cfc-0cf5-4115-8d19-2f42ad5c28d6",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "466e4647-8a2e-40c5-95e2-448f50f9c578",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "cf0a3e09-fb32-48fe-835b-a2704cc1429a",
+                  "learning_point_id": "466e4647-8a2e-40c5-95e2-448f50f9c578",
+                  "question_text": "শ্রম আইন অনুযায়ী, নিচের কোন কোন ঘটনা মারাত্মক নোটিফিকেশনযোগ্য ঘটনার তালিকাভুক্ত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "কাঠামো ও বিদ্যুতের বড় বিপর্যয় যা বড় ট্র্যাজেডি ঘটাতে পারত, সেগুলোকে ধারা ৮১-এর অধীনে নোটিফিকেশনযোগ্য তালিকায় রাখা হয়েছে।",
+                  "narrative": "💡 হিন্ট: এই বিশেষ তালিকার মূল উদ্দেশ্য হলো কারখানার মেকানিক্যাল বা স্ট্রাকচারাল সেফটি বড় ধরনের ফেইলিউর হয়েছে কিনা, তা সরকারকে অবহিত করা।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "c14f56af-c6cf-466e-b482-aa68868596a4",
+                      "question_id": "cf0a3e09-fb32-48fe-835b-a2704cc1429a",
+                      "option_text": "কারখানার মূল ভবনের কোনো দেয়াল, বিম বা ছাদের আংশিক ধস।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "9426dfb1-af4e-4deb-954b-e040ec1e2bc4",
+                      "question_id": "cf0a3e09-fb32-48fe-835b-a2704cc1429a",
+                      "option_text": "কারখানার বৈদ্যুতিক সাব-স্টেশন বা জেনারেটরে ভয়াবহ শর্ট সার্কিট ও ব্লাস্ট।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "779a1cf6-9fde-4d88-bc10-26eb6da9a4f6",
+                      "question_id": "cf0a3e09-fb32-48fe-835b-a2704cc1429a",
+                      "option_text": "ইন্টারনেটের গতি সাময়িকভাবে ধীর হওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "c7eb5aef-55e9-4ebf-8925-e0ce3e2d961c",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "6092a3cf-e41a-49b8-9b40-ad86bbcd821f",
+                  "learning_point_id": "c7eb5aef-55e9-4ebf-8925-e0ce3e2d961c",
+                  "question_text": "নাজমিনের আইনি তাগিদ অনুযায়ী, ক্রেন ভেঙে পড়ার ঘটনাটি কেন সরকারকে জানাতে হবে?",
+                  "question_type": "storytelling",
+                  "explanation": "কোনো মেকানিক্যাল বা স্ট্রাকচারাল ফেইলিউর যা জীবনের জন্য মারাত্মক হুমকি তৈরি করতে পারত, তা কোনো ইনজুরি বা আঘাত ছাড়াই নোটিশ করা বাধ্যতামূলক।",
+                  "narrative": "💬 দৃশ্য ১:\nআজাদ: কাল রাতে আমাদের মেটাল ইয়ার্ডের ৫ টনের ক্রেনের তার ছিঁড়ে মালামাল নিচে পড়েছে। ভাগ্যিস রাত ছিল, আশেপাশে কেউ ছিল না।\nনাজমিন: আজাদ ভাই, কেউ ছিল না বা কেউ আহত হয়নি—এই ভেবে বসে থাকবেন না। ক্রেন বা চেইন ভেঙে পড়া একটি মারাত্মক নোটিফিকেশনযোগ্য ঘটনা। ধারা ৮১ অনুযায়ী অবিলম্বে পরিদর্শককে নোটিশ দিন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "145a402a-bb5e-4966-af91-1b426948fffc",
+                      "question_id": "6092a3cf-e41a-49b8-9b40-ad86bbcd821f",
+                      "option_text": "এটি শ্রম আইনে নির্ধারিত একটি \"মারাত্মক নোটিফিকেশনযোগ্য ঘটনা\"",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "30969559-32cb-4190-9b47-8e7df03fc427",
+                      "question_id": "6092a3cf-e41a-49b8-9b40-ad86bbcd821f",
+                      "option_text": "এই ক্রেনটি ইম্পোর্টেড বা বিদেশী ছিল",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "a73267bf-11e8-49e3-877b-8339ab1c3f10",
+                      "question_id": "6092a3cf-e41a-49b8-9b40-ad86bbcd821f",
+                      "option_text": "ক্রেন ভাঙলে কারখানার লাইসেন্স ফি বেড়ে যায়",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "e0240807-5278-4513-aa4b-d44dd80f0d71",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "0c4cd5c0-3302-4474-8c15-81bb8c337464",
+                  "learning_point_id": "e0240807-5278-4513-aa4b-d44dd80f0d71",
+                  "question_text": "বাম পাশের ঘটনার সাথে ডান পাশের আইনি নোটিশের আবশ্যিকতার মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "বয়লার বিস্ফোরণ এবং ছাদ ধস—উভয়ই মারাত্মক নোটিফিকেশনযোগ্য ঘটনা, যেখানে মেঝের সাধারণ পিচ্ছিলতা প্রতিষ্ঠানের অভ্যন্তরীণ পরিচ্ছন্নতা বিধির অংশ।",
+                  "narrative": "💡 হিন্ট: ঘটনার ধরণ এবং তার জন্য প্রদেয় আইনি নোটিশের আবশ্যিকতার সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "বয়লার বা প্রেসার পাইপ ব্লাস্ট",
+                        "right": "ধারা ৮১ অনুযায়ী বাধ্যতামূলক নোটিশ"
+                      },
+                      {
+                        "left": "ফ্লোরে লুব্রিকেন্ট ওয়েল পড়ে পিছল হওয়া",
+                        "right": "সাধারণ অভ্যন্তরীণ পরিচ্ছন্নতা বিধি"
+                      },
+                      {
+                        "left": "ভবনের ছাদের একাংশ ধসে পড়া",
+                        "right": "কাঠামোগত মারাত্মক নোটিফিকেশনযোগ্য ঘটনা"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "b1692f7b-39c1-4024-9acc-d28ff02ee233",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "7237ecb5-66bb-4fde-bbae-8a34c14abd01",
+                  "learning_point_id": "b1692f7b-39c1-4024-9acc-d28ff02ee233",
+                  "question_text": "কেউ আহত হয়নি—এই অজুহাতে ক্রেন বা চেইন ছিঁড়ে পড়ার ঘটনা গোপন করা কি শ্রম আইনের অধীনে শাস্তিযোগ্য অপরাধ?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৮১-এর অধীনে নির্ধারিত ঘটনাগুলো গোপন করা সরাসরি আইনি কমপ্লায়েন্সের বিচ্যুতি এবং এটি শাস্তিযোগ্য ফৌজদারি অপরাধ।",
+                  "narrative": "💡 হিন্ট: এই ধরনের বড় মেকানিক্যাল বা স্ট্রাকচারাল ফেইলিউরের ঘটনাগুলো যদি মালিক অডিটের ভয়ে লুকিয়ে রাখেন, তবে তা গুরুতর আইন লঙ্ঘন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5addc9c7-23a4-448f-acee-22f8dfe73de2",
+                      "question_id": "7237ecb5-66bb-4fde-bbae-8a34c14abd01",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "9ad0e902-0df7-4090-ada6-77bb3848e8c1",
+                      "question_id": "7237ecb5-66bb-4fde-bbae-8a34c14abd01",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "9e572848-4ca6-4db8-bc1a-2ef82d33e056",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "6c236172-06ad-4a8b-8305-66097cab85bd",
+                  "learning_point_id": "9e572848-4ca6-4db8-bc1a-2ef82d33e056",
+                  "question_text": "মারাত্মক নোটিফিকেশনযোগ্য ঘটনার নোটিশ কার দপ্তরে প্রেরণ করতে হয়?",
+                  "question_type": "mcq",
+                  "explanation": "কারখানার অভ্যন্তরীণ যেকোনো বড় যান্ত্রিক বা কাঠামোগত বিপর্যয়ের আইনি নোটিশ সরাসরি প্রধান পরিদর্শকের দপ্তরেই সাবমিট করতে হয়।",
+                  "narrative": "💡 হিন্ট: এই নোটিশটি পাওয়ার পর প্রধান পরিদর্শক দল কারখানার ওই ক্রেন বা জেনারেটরের মেকানিক্যাল ফিটনেস সার্টিফিকেট যাচাই করার জন্য লোক পাঠান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "68919cc7-90aa-4726-8c7c-7b95b459af2e",
+                      "question_id": "6c236172-06ad-4a8b-8305-66097cab85bd",
+                      "option_text": "প্রধান কারখানা পরিদর্শক (Chief Inspector)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "8f1361ce-f01c-4bd2-b55a-190fb3b3aba0",
+                      "question_id": "6c236172-06ad-4a8b-8305-66097cab85bd",
+                      "option_text": "স্থানীয় কাস্টমস অফিস",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "b51076c2-a52c-4d51-ada2-d4990826c035",
+                      "question_id": "6c236172-06ad-4a8b-8305-66097cab85bd",
+                      "option_text": "বাংলাদেশ ব্যাংক",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "0ac137e0-0ae2-455d-8a54-d20f3531f1b3",
+              "chapter_id": "a5c12d3f-cfa2-4177-bd0e-356ddd3d89e5",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "57b2af2e-b043-4565-bbde-9a53068083d1",
+                  "learning_point_id": "0ac137e0-0ae2-455d-8a54-d20f3531f1b3",
+                  "question_text": "মারাত্মক নোটিফিকেশনযোগ্য ঘটনার আইনি কমপ্লায়েন্স ঠিক রাখতে সেফটি অফিসারের কী করণীয়? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "আলামত ধ্বংস বা পুড়িয়ে ফেলা দণ্ডনীয় অপরাধ; সঠিক নোটিশ দেওয়া এবং তদন্তের জন্য জায়গাটি ব্যারিকেড দিয়ে রাখাই আইনসম্মত কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট কারখানায় মেকানিক্যাল ফেইলিউরের ঘটনাগুলোর জন্য মূল নোটিশের পাশাপাশি একটি ইন্টারনাল 'নিয়ার-মিস' (Near-Miss Record) ডক রাখা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "25bbb0b9-09d1-4469-8967-ccd2ff37af96",
+                      "question_id": "57b2af2e-b043-4565-bbde-9a53068083d1",
+                      "option_text": "ঘটনা ঘটার সাথে সাথে তার ছবি ও বিবরণসহ আইনি ফর্মে ডিরেক্ট রিপোর্ট করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "3089e644-4ff4-47bf-87be-14de377ac4d0",
+                      "question_id": "57b2af2e-b043-4565-bbde-9a53068083d1",
+                      "option_text": "সংশ্লিষ্ট মেশিন বা ভাঙা কাঠামোর এরিয়াটি তদন্ত শেষ না হওয়া পর্যন্ত কর্ডন (Lock) করে রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "dfed6e21-b222-4a4b-ac67-b7a167a5f6d2",
+                      "question_id": "57b2af2e-b043-4565-bbde-9a53068083d1",
+                      "option_text": "বায়ার অডিটের ভয়ে ভাঙা ক্রেনের তার রাতের অন্ধকারে পুড়িয়ে ফেলা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
             }
           ]
         },
@@ -26207,14 +26555,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "64494c0b-bbc3-428e-8a77-a496cfc6d03c",
+              "id": "8eb2bc55-5a39-4e6f-bc1d-05e761f07722",
               "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কতিপয় বিপদের ক্ষেত্রে পরিদর্শকের ক্ষমতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:00.182136+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:31:19.473Z",
+              "mcq_questions": [
+                {
+                  "id": "c095179c-8fb6-4aae-97c3-9bd49fe83f2d",
+                  "learning_point_id": "8eb2bc55-5a39-4e6f-bc1d-05e761f07722",
+                  "question_text": "কোনো বড় কারখানার দুর্ঘটনায় ব্যাপক প্রাণহানি ঘটলে, সরকার কি তার কারণ অনুসন্ধানে বিশেষ 'তদন্ত আদালত' (Court of Inquiry) গঠন করার অধিকার রাখে?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৮৩-৮৪ অনুযায়ী, সরকার যদি মনে করে কোনো দুর্ঘটনার কারণ ও তীব্রতা ব্যাপক, তবে আনুষ্ঠানিক গেজেট বিজ্ঞপ্তির মাধ্যমে বিশেষ তদন্ত কমিটি বা তদন্ত আদালত গঠন করতে পারে।",
+                  "narrative": "💡 হিন্ট: কারখানায় যদি কোনো বড় আকারের বিপর্যয় ঘটে, তবে সাধারণ পরিদর্শনের বাইরেও সরকার একটি বিশেষ উচ্চ ক্ষমতাসম্পন্ন তদন্ত কমিটি বা কোর্ট অব ইনকোয়ারি গঠন করতে পারে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "2effea3d-0eba-46c8-aef7-d436f09591f7",
+                      "question_id": "c095179c-8fb6-4aae-97c3-9bd49fe83f2d",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    },
+                    {
+                      "id": "7d81e02d-1d3a-4721-a8d9-51432d303172",
+                      "question_id": "c095179c-8fb6-4aae-97c3-9bd49fe83f2d",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.473Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.473Z"
+                }
+              ]
+            },
+            {
+              "id": "63db057f-9f75-4683-9013-81b7588e98d5",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "e4919fda-617f-4bea-979a-2f4e85c8e105",
+                  "learning_point_id": "63db057f-9f75-4683-9013-81b7588e98d5",
+                  "question_text": "দুর্ঘটনা স্থলের বিশেষ তদন্ত কমিটির কোন প্রধান আইনি ক্ষমতাটি রয়েছে?",
+                  "question_type": "mcq",
+                  "explanation": "দেওয়ানি কার্যবিধি অনুযায়ী, এই বিশেষ তদন্ত আদালতের সাক্ষীকে হাজির করতে বাধ্য করার এবং কারখানার যেকোনো গোপন নথিপত্র বা খাতা তলব করার পূর্ণ আইনি ক্ষমতা রয়েছে।",
+                  "narrative": "💡 হিন্ট: এই বিশেষ তদন্ত আদালতের কাছে সাধারণ আদালতের মতোই তীব্র আইনি ক্ষমতা থাকে, যার মাধ্যমে তারা যেকোনো ব্যক্তিকে তলব করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "8ba4b500-676c-40ba-b49d-505f85636057",
+                      "question_id": "e4919fda-617f-4bea-979a-2f4e85c8e105",
+                      "option_text": "যেকোনো সাক্ষীকে তলব করা এবং শপথপূর্বক জবানবন্দী (Summon Witnesses) গ্রহণ করা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "77f4a9fd-70c8-4919-819f-53c560ce98e7",
+                      "question_id": "e4919fda-617f-4bea-979a-2f4e85c8e105",
+                      "option_text": "কারখানার মালিকের সমস্ত ব্যক্তিগত জমি বাজেয়াপ্ত করা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "35cff6d2-a7b3-4286-83de-93bf899bdcd1",
+                      "question_id": "e4919fda-617f-4bea-979a-2f4e85c8e105",
+                      "option_text": "শ্রমিকদের এক বছরের জন্য বিনা বেতনে কাজ করানোর নির্দেশ দেওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "1bf723a8-7a1e-450b-8a4b-bf8ab7d9e7b6",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "dfb0feb4-a49e-40b4-a265-cdc428d16d41",
+                  "learning_point_id": "1bf723a8-7a1e-450b-8a4b-bf8ab7d9e7b6",
+                  "question_text": "বিশেষ তদন্ত আদালতের দেওয়া চূড়ান্ত রিপোর্টের প্রধান বৈশিষ্ট্যগুলো কী কী? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "রিপোর্টের মূল উদ্দেশ্য হলো আইনি দায় নির্ধারণ এবং ফিউচার সেফটি কমপ্লায়েন্স গাইডলাইন তৈরি করা।",
+                  "narrative": "💡 হিন্ট: তদন্ত কমিটি কেবল রিপোর্ট তৈরিই করে না, বরং এই রিপোর্টে দুর্ঘটনার জন্য কে দায়ী এবং ভবিষ্যতে তা এড়াতে কী করা উচিত—তার স্পষ্ট সুপারিশ থাকে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "601e7dd4-f7ac-429c-9f7a-b65c95c9ff81",
+                      "question_id": "dfb0feb4-a49e-40b4-a265-cdc428d16d41",
+                      "option_text": "দুর্ঘটনার মূল কারণ এবং তার জন্য দায়ী কর্মকর্তাদের নাম সুনির্দিষ্ট করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "b69a72be-e8ed-48f4-84df-62cd81d6bf43",
+                      "question_id": "dfb0feb4-a49e-40b4-a265-cdc428d16d41",
+                      "option_text": "ভবিষ্যতে একই দুর্ঘটনা রোধে কী কী মেকানিক্যাল ও আইনি পদক্ষেপ নিতে হবে তার সুপারিশ।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "aa610864-8944-4811-8d9e-22af5f8f78e8",
+                      "question_id": "dfb0feb4-a49e-40b4-a265-cdc428d16d41",
+                      "option_text": "কারখানার উৎপাদিত পণ্যের আন্তর্জাতিক বাজার মূল্য নির্ধারণ করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "27a37f0d-e1d2-49d5-8a99-7779eae399af",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "2789277c-6d1c-4a2a-8595-257ad67d7f56",
+                  "learning_point_id": "27a37f0d-e1d2-49d5-8a99-7779eae399af",
+                  "question_text": "তানিয়ার আইনি সতর্কতা অনুযায়ী, বিশেষ তদন্ত কমিটির চাওয়া নথি বা খাতা সরবরাহ না করার আইনি পরিণতি কী?",
+                  "question_type": "storytelling",
+                  "explanation": "ধারা ৮৩-৮৪ এর অধীন গঠিত সরকারি তদন্ত কমিটিকে তদন্তে বাধা দেওয়া বা আইনি নথিপত্র লুকাতে চেষ্টা করা একটি গুরুতর অপরাধ।",
+                  "narrative": "💬 দৃশ্য ১:\nরনি: আমাদের বয়লার ব্লাস্টে ৩ জন মারা যাওয়ার পর সরকারি যে বিশেষ তদন্ত কমিটি এসেছে, ওনারা ওএইচএস (OHS) ট্রেইনিংয়ের খাতা আর মেইনটেন্যান্স লগবুক চাচ্ছেন।\nতানিয়া: রনি ভাই, ওনাদের সব নথি দিয়ে দিন. বিশেষ তদন্ত আদালতের নির্দেশ অমান্য করলে বা খাতা লুকালে সরাসরি দেওয়ানি আদালত অবমাননার দায়ে জেল হয়ে যাবে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "a66f5b23-d3da-4851-805f-4fce71d56f25",
+                      "question_id": "2789277c-6d1c-4a2a-8595-257ad67d7f56",
+                      "option_text": "আদালত অবমাননা ও তথ্য গোপনের দায়ে সরাসরি কঠোর আইনি শাস্তি ও মামলা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "6bb21a94-ec0c-4d61-859f-3ec87a92fc18",
+                      "question_id": "2789277c-6d1c-4a2a-8595-257ad67d7f56",
+                      "option_text": "কারখানার ওভারটাইম বোনাস বাতিল হওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "b6719be1-54c4-412d-9e20-1851552199d2",
+                      "question_id": "2789277c-6d1c-4a2a-8595-257ad67d7f56",
+                      "option_text": "পরিদর্শক দল कारखाना অন্য কোম্পানির কাছে বিক্রি করে দেওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "14af1812-259a-4a90-b019-d7d5df62a71c",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "f0282b00-3c7e-4df6-bfea-4aa5c60e2706",
+                  "learning_point_id": "14af1812-259a-4a90-b019-d7d5df62a71c",
+                  "question_text": "বাম পাশের পর্যায়ের সাথে ডান পাশের আইনি প্রক্রিয়ার মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "ঘটনাস্থল সিল করা আলামত রক্ষার প্রাথমিক কাজ, সাক্ষী তলবে সমন জারি হয় এবং চূড়ান্ত রিপোর্ট সরকার গেজেটের মাধ্যমে প্রকাশ করে আইনি একশন নেয়।",
+                  "narrative": "💡 হিন্ট: তদন্তের পর্যায় এবং তার আইনি প্রক্রিয়ার সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "ঘটনাস্থল পরিমাপ ও সিল",
+                        "right": "আলামত সুরক্ষায় তদন্ত কমিটির প্রাথমিক কাজ"
+                      },
+                      {
+                        "left": "সাক্ষীদের তলব ও জবানবন্দী",
+                        "right": "দেওয়ানি আদালতের মতো সমন বা নোটিশ জারি"
+                      },
+                      {
+                        "left": "চূড়ান্ত রিপোর্ট প্রকাশ",
+                        "right": "সরকার কর্তৃক গেজেটে প্রকাশ ও আইনি একশন"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "4e04b829-dee9-4f73-98d6-b28ebe32c993",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "24a22a0e-5f4f-4e3e-b1e3-c0fe06318f1f",
+                  "learning_point_id": "4e04b829-dee9-4f73-98d6-b28ebe32c993",
+                  "question_text": "বিশেষ তদন্ত কমিটি কি কারখানার যেকোনো সন্দেহজনক মেকানিক্যাল যন্ত্রাংশ পরীক্ষার জন্য জব্দ (Seize) করার অধিকার রাখে?",
+                  "question_type": "boolean",
+                  "explanation": "আলামত জব্দ করা এবং ফরেনসিক বা ল্যাব টেস্টের মাধ্যমে দুর্ঘটনার বাস্তব কারিগরী ত্রুটি খুঁজে বের করা তদন্ত আদালতের আইনি ক্ষমতার অন্তর্ভুক্ত।",
+                  "narrative": "💡 হিন্ট: তদন্ত আদালত বা কমিটি যদি মনে করে কারখানার ভেতর কোনো বিশেষ মেশিন পরীক্ষার জন্য ল্যাবরেটরিতে পাঠানো দরকার, তবে মালিক তা আটকাতে পারেন না।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "dacaf93e-26eb-4281-8bb7-279977e1cac2",
+                      "question_id": "24a22a0e-5f4f-4e3e-b1e3-c0fe06318f1f",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "193f0fde-4ceb-4f36-8729-e09f374106b7",
+                      "question_id": "24a22a0e-5f4f-4e3e-b1e3-c0fe06318f1f",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "ac5509d9-81bf-49c8-ade2-972e9fb089ed",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "0f29a24b-220c-4b38-9d0c-f488c64b5d8a",
+                  "learning_point_id": "ac5509d9-81bf-49c8-ade2-972e9fb089ed",
+                  "question_text": "তদন্তের চূড়ান্ত রিপোর্টটি প্রকাশের পর, সরকার দোষী ব্যক্তিদের বিরুদ্ধে কোন আদালতে ফৌজদারি চার্জশিট গঠন করে?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের অধীন গঠিত বিশেষ তদন্ত রিপোর্টের ভিত্তিতে দোষী সাব্যস্ত মালিক বা কর্মকর্তাদের বিচার একমাত্র শ্রম আদালতেই সম্পন্ন হয়।",
+                  "narrative": "💡 হিন্ট: শ্রম আইনের অধীন গঠিত বিশেষ তদন্ত রিপোর্টের ভিত্তিতে দোষী সাব্যস্ত মালিক বা কর্মকর্তাদের বিচার একমাত্র শ্রম আদালতেই সম্পন্ন হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "983ac54a-e5b8-4f79-b007-7166d93382f1",
+                      "question_id": "0f29a24b-220c-4b38-9d0c-f488c64b5d8a",
+                      "option_text": "সংশ্লিষ্ট শ্রম আদালতে (Labor Court)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "1edb31de-789c-48aa-b412-a5298b439fa8",
+                      "question_id": "0f29a24b-220c-4b38-9d0c-f488c64b5d8a",
+                      "option_text": "সাধারণ পারিবারিক আদালতে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "4179a95e-a0fc-40a9-b104-45efa998501c",
+                      "question_id": "0f29a24b-220c-4b38-9d0c-f488c64b5d8a",
+                      "option_text": "ট্যাক্স কমিশনারের দপ্তরে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "61479262-698f-454d-9bb7-fd75fc2a3252",
+              "chapter_id": "057ac3c8-a633-4b82-a8cd-05295631e2db",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "35ce86a9-2554-4215-a93d-bcbe854dd7cc",
+                  "learning_point_id": "61479262-698f-454d-9bb7-fd75fc2a3252",
+                  "question_text": "বিশেষ তদন্তের সময় কোম্পানির লিগ্যাল ও এডমিন বিভাগের কোন কোন বিষয়ে সহযোগিতা করা উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "মেমোরি কার্ড নষ্ট করা মারাত্মক ফৌজদারি অপরাধ ও আলামত ধ্বংসের শামিল; স্বচ্ছতা ও সঠিক তথ্য পেশ করাই আইনসম্মত পথ।",
+                  "narrative": "💡 হিন্ট: একটি কমপ্লায়েন্ট প্রতিষ্ঠানে যেকোনো সরকারি তদন্তের সময় কোম্পানির পক্ষ থেকে একজন লিগ্যাল অ্যাডভাইজার বা ল ইয়ার উপস্থিত থাকেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d524106d-5401-44ea-b841-de240fb6666b",
+                      "question_id": "35ce86a9-2554-4215-a93d-bcbe854dd7cc",
+                      "option_text": "তদন্ত কমিটির প্রতিটি নোটিশের আইনি জবাব সময়মতো ও নির্ভুলভাবে দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "127d3b4f-51b4-467c-a76e-4223a5eed788",
+                      "question_id": "35ce86a9-2554-4215-a93d-bcbe854dd7cc",
+                      "option_text": "ফলোরের সিসিটিভি (CCTV) ফুটেজ ও লগবুকের ডাটা সম্পূর্ণ অক্ষত অবস্থায় কমিটির কাছে পেশ করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "e155da41-d7f2-4239-b978-190918edbbfc",
+                      "question_id": "35ce86a9-2554-4215-a93d-bcbe854dd7cc",
+                      "option_text": "তদন্তকারীদের বিভ্রান্ত করতে সিসিটিভি ক্যামেরার মেমোরি কার্ডটি পানিতে ভিজিয়ে নষ্ট করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
             }
           ]
         },
@@ -26232,14 +26928,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "1aa16bc7-8911-4a30-b3d4-e3e700002771",
+              "id": "0f672b66-f294-45a1-a5a1-aae3a65e48b7",
               "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে বিপজ্জনক ভবন এবং যন্ত্রপাতি সম্বন্ধে তথ্য প্রদান নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:00.182136+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "d8818e87-5cda-45db-b439-b4298943f9a6",
+                  "learning_point_id": "0f672b66-f294-45a1-a5a1-aae3a65e48b7",
+                  "question_text": "বিপজ্জনক কেমিক্যালের বোতল বা ড্রামের গায়ে কোন আইনি তথ্যপত্রটি (Safety Document) সংযুক্ত থাকা বাধ্যতামূলক?",
+                  "question_type": "mcq",
+                  "explanation": "গ্লোবাল হারমোনাইজড সিস্টেম (GHS) এবং শ্রম বিধিমালা অনুযায়ী, প্রতিটি বিপজ্জনক রাসায়নিকের ড্রামের গায়ে এমএসডিএস (MSDS) এবং সঠিক বিপদের নোটিশ বা লেবেল থাকা অলঙ্ঘনীয় বাধ্যবাধকতা।",
+                  "narrative": "💡 হিন্ট: কারখানায় ব্যবহৃত প্রতিটি রাসায়নিক বা কেমিক্যালের ড্রামের গায়ে তার বিপদ, ব্যবহার বিধি এবং ফার্স্ট এইডের বিবরণ সম্বলিত একটি আন্তর্জাতিক আইনি ডকুমেন্ট থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6bdd48f4-13e7-448e-88be-2ae2892c2125",
+                      "question_id": "d8818e87-5cda-45db-b439-b4298943f9a6",
+                      "option_text": "ম্যাটেরিয়াল সেফটি ডাটা শিট বা এমএসডিএস (MSDS / SDS)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "5b220132-c52b-4db1-bb10-8832e7c09aaf",
+                      "question_id": "d8818e87-5cda-45db-b439-b4298943f9a6",
+                      "option_text": "কারখানার বাৎসরিক ট্যাক্স রিটার্ন সার্টিফিকেট",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "2f5ff95e-23ce-4619-81e8-3d31110ac4fa",
+                      "question_id": "d8818e87-5cda-45db-b439-b4298943f9a6",
+                      "option_text": "কেমিক্যালের আমদানিকৃত জাহাজের নাম",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "0ac89ce6-ed4a-4ba0-8e23-12145b3932ed",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "cf1e78a6-1cd7-4ef0-9a0a-e20e2d9c0fdf",
+                  "learning_point_id": "0ac89ce6-ed4a-4ba0-8e23-12145b3932ed",
+                  "question_text": "রাসায়নিকের ড্রামের ওপর সতর্কবার্তা এবং বিষাক্ততার চিহ্ন কি স্পষ্ট বাংলায় লিখে লেবেলিং করা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "আইন অনুযায়ী, যে প্রতিষ্ঠানে কেমিক্যাল ব্যবহার করা হয়, সেখানকার সাধারণ শ্রমিকদের বোঝার সুবিধার্থে লেবেল ও সতর্কবার্তা অবশ্যই মাতৃভাষা বাংলায় স্পষ্ট অক্ষরে প্রদর্শিত হতে হবে।",
+                  "narrative": "💡 হিন্ট: কেমিক্যালের ড্রামে কেবল ইংরেজিতে ডেঞ্জার (Danger) লেখা থাকলে হবে না। সাধারণ শ্রমিকরা যেন তা পড়তে পারেন, সেজন্য স্থানীয় ভাষার ব্যবহার আবশ্যক।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5efa0ac1-cb32-4e53-97ff-945b860cbf5e",
+                      "question_id": "cf1e78a6-1cd7-4ef0-9a0a-e20e2d9c0fdf",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "b60215d7-2e34-41e3-a20e-5b5c20c0e35a",
+                      "question_id": "cf1e78a6-1cd7-4ef0-9a0a-e20e2d9c0fdf",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "d027bc22-3bc4-468b-b259-c970b516ea21",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "00e18407-b0be-4206-8cd6-3a005cda4fb7",
+                  "learning_point_id": "d027bc22-3bc4-468b-b259-c970b516ea21",
+                  "question_text": "কেমিক্যাল গুদাম বা স্টোরেজ রুমের ক্ষেত্রে কোন কোন আইনি কমপ্লায়েন্স মানা বাধ্যতামূলক? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "এসিডের কাছে পানি রাখা চরম বিপজ্জনক ও বেআইনি; স্পিল প্রটেকশন ও এক্সজস্ট ফ্যান সচল রাখাই হলো আইনি কমপ্লায়েন্স।",
+                  "narrative": "💡 হিন্ট: বিষাক্ত এসিড বা ক্ষার যেখানে সংরক্ষণ করা হয় (Chemical Store), সেই গুদামের মেঝে এবং ভেন্টিলেশন সাধারণ সুতার গুদাম থেকে সম্পূর্ণ আলাদা হতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "6bdeadd5-3748-4a49-be17-5d525c74f264",
+                      "question_id": "00e18407-b0be-4206-8cd6-3a005cda4fb7",
+                      "option_text": "কেমিক্যাল লিক বা ছড়িয়ে পড়া রোধে মেঝের চারপাশে বিশেষ আইনি স্পিল কিট (Spill Kit) ও বাঁধ বা ডাইক (Dike) রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "701fbd45-9df1-455e-96c4-4f678e12eee6",
+                      "question_id": "00e18407-b0be-4206-8cd6-3a005cda4fb7",
+                      "option_text": "গুদামের ভেতরে ২৪ ঘণ্টা সচল এক্সজস্ট ফ্যান বা বিশেষ এয়ার ভেন্টিলেশন সিস্টেম রাখা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "fe0a40cf-2a66-491f-9d83-13d661c76f61",
+                      "question_id": "00e18407-b0be-4206-8cd6-3a005cda4fb7",
+                      "option_text": "জায়গা বাঁচাতে এসিডের ড্রামের ঠিক ওপরেই খাবারের পানির ফিল্টার বসানো।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "343e4c83-5ade-4334-bda1-3b79fbdde42f",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "6ee0ad3e-7853-4d24-a696-ab8c0cc58657",
+                  "learning_point_id": "343e4c83-5ade-4334-bda1-3b79fbdde42f",
+                  "question_text": "নাসরিনের আইনি ও সেফটি তাগিদ অনুযায়ী, এসিডের বোতলে লেবেল না লাগানোর প্রধান ঝুঁকি কোনটি?",
+                  "question_type": "storytelling",
+                  "explanation": "কেমিক্যাল সেফটির মূল ভিত্তি হলো প্রপার লেবেলিং ও আইডেন্টিফিকেশন, যাতে ভুল ব্যবহারের কারণে কোনো কর্মীর চোখে বা শরীরে এসিড বার্ন (Acid Burn) না ঘটে।",
+                  "narrative": "💬 দৃশ্য ১:\nকামাল: আমাদের ওয়াশিং প্ল্যান্টের নতুন এসিডের জারগুলোর গায়ে কোনো নাম বা স্টিকার নেই। সাদা বোতলে পানি ভেবে ভুল হতে পারে।\nনাসরিন: কামাল ভাই, এটা ব্লেড বা আগুনের চেয়েও বিপজ্জনক! নামহীন কেমিক্যাল বোতল রাখা মারাত্মক আইনি অপরাধ। অবিলম্বে এমএসডিএস (MSDS) দেখে বোতলের গায়ে লাল রঙে \"বিপদ: তীব্র এসিড\" লেবেল লাগান।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "9da118d5-66c0-4e43-a8e8-52cc097c75f8",
+                      "question_id": "6ee0ad3e-7853-4d24-a696-ab8c0cc58657",
+                      "option_text": "শ্রমিকরা ভুলবশত এটিকে সাধারণ পানি বা অন্য কিছু ভেবে দুর্ঘটনা ঘটানোর তীব্র ঝুঁকি রয়েছে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "47a36767-fa8e-4c88-88dc-a815cc0c6b54",
+                      "question_id": "6ee0ad3e-7853-4d24-a696-ab8c0cc58657",
+                      "option_text": "বোতলের প্লাস্টিক নষ্ট হয়ে যাওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "3e292557-fe5e-4c05-b632-3ba4ab7d2b28",
+                      "question_id": "6ee0ad3e-7853-4d24-a696-ab8c0cc58657",
+                      "option_text": "কারখানার ওভারটাইম হিসাব ভুল হওয়া",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "15483eca-fc60-44e5-b32d-782b424192a3",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "90903742-74d8-420e-b000-a687a190c187",
+                  "learning_point_id": "15483eca-fc60-44e5-b32d-782b424192a3",
+                  "question_text": "বাম পাশের উপাদানের সাথে ডান পাশের আইনি উদ্দেশ্যের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "এমএসডিএস ঝুঁকি ও ফার্স্ট এইড জানায়, গগলস চোখে ছিটকে আসা রোধ করে এবং আইওয়াশ স্টেশন চোখে কেমিক্যাল পড়লে দ্রুত ধোয়ার ব্যবস্থা করে।",
+                  "narrative": "💡 হিন্ট: কেমিক্যাল সুরক্ষার উপাদান এবং তাদের ব্যবহারিক আইনি উদ্দেশ্যের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "আইনি এমএসডিএস (MSDS)",
+                        "right": "কেমিক্যালের উপাদান, ঝুঁকি ও ফার্স্ট এইড জানা"
+                      },
+                      {
+                        "left": "কেমিক্যাল সেফটি গগলস",
+                        "right": "চোখে ছিটকে আসা কেমিক্যাল প্রতিরোধ"
+                      },
+                      {
+                        "left": "আইওয়াশ স্টেশন (Eyewash)",
+                        "right": "চোখে কেমিক্যাল পড়লে তাৎক্ষণিক ধোবার ব্যবস্থা"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "4badbdac-c9c1-44aa-a3eb-6dd2e80d2cec",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "05dc1932-7f35-44de-a863-bac6906525ff",
+                  "learning_point_id": "4badbdac-c9c1-44aa-a3eb-6dd2e80d2cec",
+                  "question_text": "কেমিক্যাল মিক্সিংয়ের সময় কি সাধারণ সুতির পোশাকের ওপরে কেমিক্যাল-প্রুফ রাবার বা পিভিসি অ্যাপ্রন এবং গ্লাভস পরা আইনি বাধ্যবাধকতা?",
+                  "question_type": "boolean",
+                  "explanation": "কেমিক্যাল সেফটি গাইডলাইন অনুযায়ী, উপযুক্ত পিভিসি গ্লাভস, গগলস এবং কেমিক্যাল রেজিস্ট্যান্ট অ্যাপ্রন ছাড়া বিষাক্ত এসিড নাড়াচাড়া করা সম্পূর্ণ আইনবহির্ভূত।",
+                  "narrative": "💡 হিন্ট: কেমিক্যাল হ্যান্ডলিং বা এসিড রিফিল করার সময় সাধারণ কাপড়ের ইউনিফর্ম গলে যেতে পারে, তাই কেমিক্যাল রেজিস্ট্যান্ট বিশেষ অ্যাপ্রন বা স্যুট পরা বাধ্যতামূলক।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "1ee84776-f087-4441-a892-e55e39ada7d2",
+                      "question_id": "05dc1932-7f35-44de-a863-bac6906525ff",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "551b8efc-e79e-4e69-82e9-3250dc40e396",
+                      "question_id": "05dc1932-7f35-44de-a863-bac6906525ff",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "c1008bef-2646-4791-a99a-8ab8d3e8c121",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "d75ab033-6508-442b-b2e1-e366526f128a",
+                  "learning_point_id": "c1008bef-2646-4791-a99a-8ab8d3e8c121",
+                  "question_text": "রাসায়নিক ও বিষাক্ত পদার্থের নিরাপত্তা বিধি লঙ্ঘন করলে সর্বোচ্চ শাস্তি কী হতে পারে?",
+                  "question_type": "mcq",
+                  "explanation": "বিপজ্জনক কেমিক্যাল কমপ্লায়েন্স অমান্য করা কারখানার অভ্যন্তরে বড় ধরনের পরিবেশ ও জীবনের ঝুঁকি তৈরি করে, যা সরাসরি শ্রম আদালতে বিচারযোগ্য অপরাধ।",
+                  "narrative": "💡 হিন্ট: যদি কোনো টেক্সটাইল বা ডাইং মিলে লেবেল ছাড়া বা খোলা ড্রামে বিষাক্ত কেমিক্যাল রাখা হয়, তবে কারখানা পরিদর্শক দল মালিকের বিরুদ্ধে সরাসরি ফাইনাল চার্জ করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "95189eea-be64-4761-90db-1cdc03f05d86",
+                      "question_id": "d75ab033-6508-442b-b2e1-e366526f128a",
+                      "option_text": "শ্রম আইনের অধীনে সরাসরি মামলা, আর্থিক জরিমানা ও প্রতিষ্ঠানের লাইসেন্স স্থগিত",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "3f74e0f5-27fb-46d1-a10e-0f1bb6d7bf5c",
+                      "question_id": "d75ab033-6508-442b-b2e1-e366526f128a",
+                      "option_text": "কারখানার প্রধান হিসাবরক্ষকের বেতন কেটে নেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "f9e4797c-b340-4ec7-9bcb-d02f17ee0602",
+                      "question_id": "d75ab033-6508-442b-b2e1-e366526f128a",
+                      "option_text": "কোনো শাস্তি হবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "8e40a69b-a416-4252-bda1-08403f85d4cb",
+              "chapter_id": "1e1ce2f2-83d2-4fa8-892c-5c2523df4051",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "1c24fa46-aa52-4acc-a2f0-e72b5ec3dc95",
+                  "learning_point_id": "8e40a69b-a416-4252-bda1-08403f85d4cb",
+                  "question_text": "কেমিক্যালের সঠিক আইনি কমপ্লায়েন্স বজায় রাখতে সেফটি কমিটির কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "করিডোরে খোলা ড্রাম রাখা বেআইনি ও চরম বিপজ্জনক; আইওয়াশ স্টেশন সচল রাখা এবং কর্মীদের ট্রেইনিং দেওয়াই হলো আইনসম্মত সঠিক পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় কেমিক্যাল জোনের ঠিক পাশেই ১ সেকেন্ডের মধ্যে চাপ দিলে পানি বের হয় এমন আইওয়াশ শাওয়ার (Eyewash Shower) বসানো থাকে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "89a37769-75fd-4276-93c0-23176a24a7f9",
+                      "question_id": "1c24fa46-aa52-4acc-a2f0-e72b5ec3dc95",
+                      "option_text": "কেমিক্যাল ব্যবহারের স্থানে ২৪ ঘণ্টা কার্যকর আইওয়াশ স্টেশন (Eyewash Station) সচল রাখা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "8bf74e46-d6eb-4248-a483-02142470179d",
+                      "question_id": "1c24fa46-aa52-4acc-a2f0-e72b5ec3dc95",
+                      "option_text": "ফলোরের সকল শ্রমিককে কেমিক্যালের এমএসডিএস (MSDS) ও ঝুঁকির ওপর বিশেষ ট্রেইনিং দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "60077471-1a7c-46e7-a4a6-3d7ef171edd0",
+                      "question_id": "1c24fa46-aa52-4acc-a2f0-e72b5ec3dc95",
+                      "option_text": "কেমিক্যালের ড্রামগুলো খোলা অবস্থায় ফ্রন্ট অফিসের করিডোরে রেখে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
             }
           ]
         },
@@ -26257,14 +27301,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "64f08b4e-b086-409a-aff1-f7990a28b4a4",
+              "id": "c5126797-1dc0-49f9-b843-f98514380415",
               "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে কতিপয় কাজে নারীগণের নিয়োগে বাধা-নিষেধ নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:00.182136+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "6373077a-b922-40ce-a07e-4645584c2e07",
+                  "learning_point_id": "c5126797-1dc0-49f9-b843-f98514380415",
+                  "question_text": "বাংলাদেশ শ্রম বিধিমালা অনুযায়ী, একটি নির্দিষ্ট সংখ্যার বেশি শ্রমিক থাকলে কি কারখানায় 'পেশাগত স্বাস্থ্য ও নিরাপত্তা কমিটি' (সেফটি কমিটি) গঠন করা বাধ্যতামূলক?",
+                  "question_type": "boolean",
+                  "explanation": "শ্রম আইন ও বিধিমালার সুনির্দিষ্ট নিয়ম অনুযায়ী, ৫০ জন বা তার বেশি শ্রমিক নিযুক্ত থাকলে প্রতিটি কারখানায় মালিক ও শ্রমিকের সমসংখ্যক প্রতিনিধি নিয়ে একটি সক্রিয় সেফটি কমিটি গঠন করা অলঙ্ঘনীয় আইনি বাধ্যবাধকতা।",
+                  "narrative": "💡 হিন্ট: কারখানার স্বাস্থ্য ও নিরাপত্তা ব্যবস্থা তদারকি করতে মালিক এবং শ্রমিকদের যৌথ অংশগ্রহণে একটি বিশেষ আইনি কমিটি গঠন করতে হয়, যাকে সেফটি কমিটি (Safety Committee) বলা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "43b3ffa7-66cd-468e-8d2a-101b661327a4",
+                      "question_id": "6373077a-b922-40ce-a07e-4645584c2e07",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "9478bd05-e5bb-4b1f-9262-ffd01bc7311c",
+                      "question_id": "6373077a-b922-40ce-a07e-4645584c2e07",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "ee970ed3-1bb3-4629-b3bf-d0af5ad3b8cb",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "d3a576a2-833e-4ce0-a7c3-5d913a137180",
+                  "learning_point_id": "ee970ed3-1bb3-4629-b3bf-d0af5ad3b8cb",
+                  "question_text": "পেশাগত স্বাস্থ্য ও নিরাপত্তা কমিটিতে (Safety Committee) সদস্য বিন্যাসের আইনি অনুপাত কোনটি?",
+                  "question_type": "mcq",
+                  "explanation": "আইন অনুযায়ী, সেফটি কমিটিতে মালিক পক্ষ থেকে যতজন প্রতিনিধি মনোনীত হবেন, ঠিক ততজন প্রতিনিধি শ্রমিকদের পক্ষ থেকে (সাধারণত party বা ট্রেড ইউনিয়ন দ্বারা) নির্বাচিত হয়ে আসতে হবে।",
+                  "narrative": "💡 হিন্ট: এই সেফটি কমিটিতে শুধু মালিকের লোকজন থাকলেই চলে না; এর ভেতরের সদস্য সংখ্যার অনুপাতে মালিক ও শ্রমিকের একটি সুনির্দিষ্ট আইনি ভারসাম্য থাকতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "f3936da3-2e88-46f3-9005-5d706cff7c54",
+                      "question_id": "d3a576a2-833e-4ce0-a7c3-5d913a137180",
+                      "option_text": "মালিক পক্ষ এবং শ্রমিক পক্ষের সমসংখ্যক (Equal Number) প্রতিনিধি থাকতে হবে",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "7da4b2b4-9dc5-4b4a-860d-24284b2bfff0",
+                      "question_id": "d3a576a2-833e-4ce0-a7c3-5d913a137180",
+                      "option_text": "কেবল মালিক পক্ষের ম্যানেজাররা থাকবেন, কোনো শ্রমিক থাকবে না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "79934f5d-1d85-4ad6-a82b-901634287d74",
+                      "question_id": "d3a576a2-833e-4ce0-a7c3-5d913a137180",
+                      "option_text": "কেবল বাইরের ফায়ার সার্ভিসের কর্মকর্তারা থাকবেন",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "8a215bec-6e85-4dd8-8c70-e20471959f76",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "e9b69667-c94e-4090-b5b1-ecd64dee4a61",
+                  "learning_point_id": "8a215bec-6e85-4dd8-8c70-e20471959f76",
+                  "question_text": "সেফটি কমিটির আইনি কার্যক্রম ও সভার ক্ষেত্রে কোন কোন নিয়ম মেনে চলা বাধ্যতামূলক? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "সেফটি কমিটির একমাত্র কাজ হলো হেলথ অ্যান্ড সেফটি অডিট ও সংস্কার নিশ্চিত করা; বাণিজ্যিক মুনাফা বা সেলস নিয়ে আলোচনার এখতিয়ার এই কমিটির নেই।",
+                  "narrative": "💡 হিন্ট: সেফটি কমিটি কেবল কাগজে-কলমে থাকলেই হয় না, তাদের প্রতি নির্দিষ্ট মাস পর পর বৈঠক বা সভা করতে হয় এবং তার কার্যবিবরণী (Minutes) খাতায় লিখে রাখতে হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "95b47bfa-222b-424f-9d76-20fc912756e6",
+                      "question_id": "e9b69667-c94e-4090-b5b1-ecd64dee4a61",
+                      "option_text": "প্রতি ৩ মাসে অন্তত একবার কমিটির অফিশিয়াল সাধারণ সভা বা মিটিং করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "dec5ab35-a6b6-4070-a342-c8f72902c91b",
+                      "question_id": "e9b69667-c94e-4090-b5b1-ecd64dee4a61",
+                      "option_text": "কারখানার ফ্লোর পরিদর্শন করে স্বাস্থ্য ও নিরাপত্তা ত্রুটিগুলো চিহ্নিত করা এবং মালিককে সমাধানের সুপারিশ দেওয়া।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "15fec00e-d862-466d-af5e-50faaac3930e",
+                      "question_id": "e9b69667-c94e-4090-b5b1-ecd64dee4a61",
+                      "option_text": "মিটিংয়ের সময় কেবল কারখানার বাৎসরিক মুনাফা ও পণ্য বিক্রির হিসাব করা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "27bea04a-827a-45dd-854c-e02f6806245b",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "ad0cdff7-7a13-497f-ba0f-70148f64c8b4",
+                  "learning_point_id": "27bea04a-827a-45dd-854c-e02f6806245b",
+                  "question_text": "মনিরার আইনি তাগিদ অনুযায়ী, সেফটি কমিটির দুটি সাধারণ সভার মধ্যবর্তী সর্বোচ্চ সময়সীমা কত মাস?",
+                  "question_type": "storytelling",
+                  "explanation": "আইন অনুযায়ী, সেফটি কমিটির কার্যক্রম সচল রাখতে প্রতি কোয়ার্টারে বা ৩ মাসে অন্তত একটি বৈঠক করা বাধ্যতামূলক।",
+                  "narrative": "💬 দৃশ্য ১:\nআসিফ: আমাদের ফ্যাক্টরির সেফটি কমিটির লাস্ট মিটিং হয়েছিল ৬ মাস আগে। কাজের চাপে নতুন মিটিংয়ের ডেট ফিক্সড করা যাচ্ছে না।\nমনিরা: আসিফ সাহেব, এটা বড় আইনি বিচ্যুতি! বিধিমালা অনুযায়ী প্রতি ৩ মাসে অন্তত একবার সেফটি কমিটির মিটিং হওয়া এবং তার মিনিটস প্রধান পরিদর্শকের কাছে পাঠানো আইনি দায়িত্ব। অবিলম্বে মিটিং কল করুন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "23b00f3e-440b-45f4-a231-9b7115738ae6",
+                      "question_id": "ad0cdff7-7a13-497f-ba0f-70148f64c8b4",
+                      "option_text": "৩ মাস (3 Months)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "9992e5ee-cb32-4ff0-a1e3-c1fcdfc33a46",
+                      "question_id": "ad0cdff7-7a13-497f-ba0f-70148f64c8b4",
+                      "option_text": "৬ মাস (6 Months)",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "0adb717a-fd79-4894-922a-daecf6aa14b2",
+                      "question_id": "ad0cdff7-7a13-497f-ba0f-70148f64c8b4",
+                      "option_text": "১২ মাস (12 Months)",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "46da3113-a5a2-41f3-84d8-dafdd1ea14dc",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "320b8b58-df87-427e-9db1-dabf91a7d163",
+                  "learning_point_id": "46da3113-a5a2-41f3-84d8-dafdd1ea14dc",
+                  "question_text": "বাম পাশের বিষয়ের সাথে ডান পাশের আইনি মেয়াদের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "কমিটির সভা ৩ মাসে একবার হয়, সেফটি কমিটির মোট কার্যকাল বা লাইফ-টাইম ২ বছর এবং সভার মিনিটস নির্দিষ্ট মেয়াদের মধ্যে প্রধান পরিদর্শকের কাছে রিপোর্ট করতে হয়।",
+                  "narrative": "💡 হিন্ট: সেফটি কমিটির মেয়াদ এবং তাদের আইনি কাঠামোর সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "সেফটি কমিটির সভাকাল",
+                        "right": "প্রতি ৩ মাসে অন্তত একবার"
+                      },
+                      {
+                        "left": "কমিটির মোট কার্যকাল বা মেয়াদ",
+                        "right": "২ বছর (২৪ মাস) পর্যন্ত"
+                      },
+                      {
+                        "left": "পরিদর্শকের কাছে রিপোর্ট জমা",
+                        "right": "সভার পরবর্তী নির্দিষ্ট মেয়াদের মধ্যে"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "31185b08-39a6-4fa5-8e5e-a05f4b81b3b0",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "c7d49f72-46e9-4e78-93a4-d0a43287910f",
+                  "learning_point_id": "31185b08-39a6-4fa5-8e5e-a05f4b81b3b0",
+                  "question_text": "সেফটি কমিটির সুপারিশকৃত নিরাপত্তা ত্রুটিগুলো কি মালিক পক্ষ আইনি অগ্রাধিকার দিয়ে দ্রুত বাস্তবায়ন করতে বাধ্য?",
+                  "question_type": "boolean",
+                  "explanation": "সেফটি কমিটি একটি আইনসম্মত সংবিধিবদ্ধ বডি। তাদের চিহ্নিত করা নিরাপত্তা ঝুঁকি অবহেলা করলে পরবর্তীতে দুর্ঘটনা ঘটলে মালিকের ওপর কঠোর ফৌজদারি দায় বর্তায়।",
+                  "narrative": "💡 হিন্ট: সেফটি কমিটির শ্রমিক প্রতিনিধিরা যদি ফ্লোরে কোনো বড় অগ্নিনিরাপত্তা ঝুঁকি বা পতন ঝুঁকি খুঁজে পান, তবে তারা মালিককে লিখিতভাবে তা দ্রুত দূর করার নোটিশ দিতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "5115f2ae-4565-40ee-b6a2-2f983f5116f9",
+                      "question_id": "c7d49f72-46e9-4e78-93a4-d0a43287910f",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "cba7c070-eb63-4940-896f-dafe9e1e165f",
+                      "question_id": "c7d49f72-46e9-4e78-93a4-d0a43287910f",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "8b028542-b185-4210-b78f-18d994b0f411",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "486d2451-bf5a-4c63-8da8-57493db92afd",
+                  "learning_point_id": "8b028542-b185-4210-b78f-18d994b0f411",
+                  "question_text": "৫০ জনের বেশি শ্রমিক থাকা সত্ত্বেও 'পেশাগত স্বাস্থ্য ও নিরাপত্তা কমিটি' গঠন না করলে মালিকের বিরুদ্ধে কী আইনি ব্যবস্থা নেওয়া যায়?",
+                  "question_type": "mcq",
+                  "explanation": "সেফটি কমিটি গঠন না করা শ্রম বিধিমালা ও আইনের সরাসরি লঙ্ঘন, যা সরাসরি শ্রম আদালতের মাধ্যমে দণ্ডনীয় অপরাধ।",
+                  "narrative": "💡 হিন্ট: বায়ার বা সরকারি অডিটের সময় যদি দেখা যায় কারখানায় কোনো সেফটি কমিটিই গঠন করা হয়নি, তবে প্রতিষ্ঠান কমপ্লায়েন্স রেটিংয়ে ফেল করে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "fa27468e-c178-4e37-88d2-916202c3bf26",
+                      "question_id": "486d2451-bf5a-4c63-8da8-57493db92afd",
+                      "option_text": "শ্রম আইনের সুনির্দিষ্ট বিধি লঙ্ঘনের দায়ে মামলা ও আর্থিক জরিমানা",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "c82756fc-ed10-4898-91ec-f500cc207ff4",
+                      "question_id": "486d2451-bf5a-4c63-8da8-57493db92afd",
+                      "option_text": "কারখানার মেইন জেনারেটর বাজেয়াপ্ত করা",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "c47a6a8a-224f-4495-8e48-2b36804d20f3",
+                      "question_id": "486d2451-bf5a-4c63-8da8-57493db92afd",
+                      "option_text": "কোনো ব্যবস্থা নেওয়া যাবে না",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "8012d6a0-3f10-4ebc-8a42-924658867524",
+              "chapter_id": "3ca483b9-10a8-46ce-9b7b-40180da19fd1",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "0ee884ea-e404-47c4-8fa3-70d35e71942a",
+                  "learning_point_id": "8012d6a0-3f10-4ebc-8a42-924658867524",
+                  "question_text": "সেফটি কমিটির আইনি কার্যকারিতা অক্ষত রাখতে এডমিন বিভাগের কোন কোন পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "স্বাক্ষর জালিয়াতি করা ফৌজদারি জালিয়াতির অপরাধ; বাস্তব মিটিং ও সদস্যদের দক্ষতা বাড়ানোই হলো সঠিক আইনি কমপ্লায়েন্স পদ্ধতি।",
+                  "narrative": "💡 হিন্ট: একটি আদর্শ কারখানায় সেফটি কমিটির সভার রেজোলিউশন বা মিনিটস বই (Minutes Book) অত্যন্ত যত্ন সহকারে এইচআর ফাইলে আর্কাইভ করে রাখা হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "cb79f561-de9d-48c2-a093-11a507cdf68e",
+                      "question_id": "0ee884ea-e404-47c4-8fa3-70d35e71942a",
+                      "option_text": "মিটিংয়ের রেজোলিউশন বইতে মালিক ও শ্রমিক—উভয় পক্ষের প্রতিনিধির স্বাক্ষর নিশ্চিত করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "52ed6dc7-4daf-40f3-ba20-454d1a8766bc",
+                      "question_id": "0ee884ea-e404-47c4-8fa3-70d35e71942a",
+                      "option_text": "কমিটির সদস্যদের ফায়ার সেফটি ও ফার্স্ট এইডের ওপর সার্টিফাইড এডভান্সড ট্রেইনিং দেওয়ানো।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "4453ae70-0968-48b7-924b-377abba2521f",
+                      "question_id": "0ee884ea-e404-47c4-8fa3-70d35e71942a",
+                      "option_text": "পরিদর্শক এলে দেখানোর জন্য মিটিং না করেই ভুয়া রেজোলিউশন বা স্বাক্ষর জালিয়াতি করে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
             }
           ]
         },
@@ -26282,14 +27674,362 @@
           "estimated_time": "10 মিনিট",
           "learning_points": [
             {
-              "id": "c275506b-bf50-4f86-ab55-d3618a21bf6c",
+              "id": "74a40441-7908-43a4-87bb-f5e7606db48c",
               "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
-              "title": "অধ্যায়ের আলোচনা",
-              "content": "এই অধ্যায়ে অধ্যায়ের অনুপূরক বিধি প্রণয়নের ক্ষমতা নিয়ে বিস্তারিত আলোচনা করা হবে।",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
               "order_index": 1,
-              "created_at": "2026-02-18T13:53:00.182136+00:00",
               "type": "standard",
-              "mcq_questions": []
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "9166bb39-03f7-40ce-9ef2-04edcff8e8b4",
+                  "learning_point_id": "74a40441-7908-43a4-87bb-f5e7606db48c",
+                  "question_text": "কোনো মালিক যদি এই অধ্যায়ের অধীন স্বাস্থ্য, নিরাপত্তা ও দুর্ঘটনা নোটিশ সংক্রান্ত আইনি বিধিমালা প্রথমবার লঙ্ঘন করেন, তবে সর্বোচ্চ কত টাকা জরিমানার বিধান রয়েছে?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইনের ধারা ২৮৪-এর সাধারণ দণ্ড অনুযায়ী, এই আইনের অধীনে স্বাস্থ্য, কল্যাণ ও নিরাপত্তা সংক্রান্ত কোনো বিধান প্রথমবার অমান্য বা লঙ্ঘন করলে অনধিক ৫,০০০ টাকা পর্যন্ত অর্থদণ্ডের আইনি বিধান রয়েছে।",
+                  "narrative": "💡 হিন্ট: মডিউল ৭-এর যেকোনো স্বাস্থ্য ও নিরাপত্তা সংক্রান্ত বিশেষ বিধান (যেমন পিপিই না দেওয়া, দুর্ঘটনা লুকানো বা সেফটি কমিটি না করা) অমান্য করলে শ্রম আইনে সুনির্দিষ্ট আর্থিক জরিমানার পরিমাণ নির্ধারিত আছে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "ad2a983a-ae52-441e-bcdc-1567e745e023",
+                      "question_id": "9166bb39-03f7-40ce-9ef2-04edcff8e8b4",
+                      "option_text": "অনধিক ৫,০০০ টাকা পর্যন্ত",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "dea8de3f-9967-44bc-b340-77a96887cd3b",
+                      "question_id": "9166bb39-03f7-40ce-9ef2-04edcff8e8b4",
+                      "option_text": "৫০,০০০ টাকা পর্যন্ত",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "14c4cf6c-63e1-4062-8d48-3479ae0e14a2",
+                      "question_id": "9166bb39-03f7-40ce-9ef2-04edcff8e8b4",
+                      "option_text": "চাকুরীর লাইসেন্স আজীবনের জন্য ফ্রি করা হবে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "8b6d5335-d281-4013-be36-e76a1ec85e31",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 2,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "1c6a0186-241f-4e62-8870-3cd9bd7009b9",
+                  "learning_point_id": "8b6d5335-d281-4013-be36-e76a1ec85e31",
+                  "question_text": "প্রথমবার অপরাধের দণ্ড পাওয়ার পরও যদি আইন লঙ্ঘন বা ত্রুটি সংশোধন না করে তা অব্যাহত রাখা হয়, তবে কি প্রতিদিনের জন্য অতিরিক্ত দৈনিক জরিমানা (Daily fine) হবে?",
+                  "question_type": "boolean",
+                  "explanation": "ধারা ৩০৭ এবং সংশ্লিষ্ট আইনি বিধি অনুযায়ী, চলমান বা ধারাবাহিক অপরাধের ক্ষেত্রে প্রথম দিনের দণ্ডের পর প্রতি অতিরিক্ত দিনের জন্য সুনির্দিষ্ট হারে দৈনিক জরিমানার কঠোর নিয়ম রয়েছে।",
+                  "narrative": "💡 হিন্ট: যদি কোনো কারখানায় পরিদর্শকের নোটিশ বা কোর্টের ফাইন পাওয়ার পরও দুর্ঘটনার তথ্য লুকানো অব্যাহত রাখা হয়, তবে প্রতিদিনের জন্য আলাদা পেনাল্টি চার্জ হয়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "826eed16-f296-4ef2-8827-18346098d18f",
+                      "question_id": "1c6a0186-241f-4e62-8870-3cd9bd7009b9",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "74661ae1-0e9d-44ba-b774-99813752a1fa",
+                      "question_id": "1c6a0186-241f-4e62-8870-3cd9bd7009b9",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "a1c36d29-477f-4f6c-835b-61bb79bb11ad",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 3,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "4215b636-a376-4ae1-b61a-3fc8418ff46c",
+                  "learning_point_id": "a1c36d29-477f-4f6c-835b-61bb79bb11ad",
+                  "question_text": "বিশেষ নিরাপত্তা ও দুর্ঘটনা নোটিশের আইন বারবার বা দ্বিতীয়বার লঙ্ঘন করলে কী কী আইনি শাস্তি হতে পারে? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "অপরাধের পুনরাবৃত্তি ঘটলে শ্রম আইনের ধারা ৩০৭ এবং সাধারণ দণ্ডবিধি অনুযায়ী শাস্তির মাত্রা বহুগুণ বাড়িয়ে দেওয়া হয় এবং বাণিজ্যিক লাইসেন্স বাতিলের ঝুঁকি থাকে।",
+                  "narrative": "💡 হিন্ট: একই কারখানা যদি দুর্ঘটনার নোটিশ ২ ঘণ্টার মধ্যে না দেওয়ার অপরাধ বা পিপিই না দেওয়ার অপরাধ বারবার করতে থাকে, তবে আইনগত শাস্তি বহুগুণ বৃদ্ধি পায়।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "323a5c72-c65a-40dd-b3e1-43950cc183f3",
+                      "question_id": "4215b636-a376-4ae1-b61a-3fc8418ff46c",
+                      "option_text": "দ্বিতীয় বা পরবর্তী অপরাধের জন্য দ্বিগুণ জরিমানা বা সরাসরি কারাদণ্ডের ব্যবস্থা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "22c86e2b-efdb-438e-8f41-67afb65bcaa1",
+                      "question_id": "4215b636-a376-4ae1-b61a-3fc8418ff46c",
+                      "option_text": "প্রতিষ্ঠানের কারখানা লাইসেন্স ও বাণিজ্যিক নিবন্ধন সাময়িক বা স্থায়ীভাবে বাতিলকরণ।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "561c85d1-e2bf-42d6-8032-317d0fc9cbb0",
+                      "question_id": "4215b636-a376-4ae1-b61a-3fc8418ff46c",
+                      "option_text": "পরিদর্শক তাকে সরকারি তহবিল থেকে অনুদান দেওয়ার সুপারিশ করবেন।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "2f3ed139-3a60-457a-8e51-8e31ca4fb69e",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "স্টোরিটেলিং",
+              "content": "স্টোরিটেলিং",
+              "order_index": 4,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "261064cf-0349-48b6-b989-5798f619e045",
+                  "learning_point_id": "2f3ed139-3a60-457a-8e51-8e31ca4fb69e",
+                  "question_text": "নাদিয়ার বক্তব্য অনুযায়ী, কারখানার কেমিক্যাল বিস্ফোরণ ও ইনজুরির ঘটনা নোটিশ না দিয়ে চেপে যাওয়া কোন আইনের লঙ্ঘন?",
+                  "question_type": "storytelling",
+                  "explanation": "কারখানার অভ্যন্তরে যেকোনো বড় দুর্ঘটনা বা ইনজুরি নোটিশ না দিয়ে গোপন রাখা শ্রম আইনের দৃষ্টিতে একটি গুরুতর ও দণ্ডনীয় ফৌজদারি অপরাধ।",
+                  "narrative": "💬 দৃশ্য ১:\nআসলাম: আমাদের কারখানায় রাসায়নিক বিস্ফোরণে ২ জন আহত হওয়ার ঘটনাটি ম্যানেজার সাহেব গোপন রেখেছিলেন। আজ ইন্সপেক্টর সাহেব এসে তা ধরে ফেলেছেন।\nনাদিয়া: আসলাম ভাই, ওনারা বড় বিপদে পড়বেন। দুর্ঘটনার নোটিশ গোপন করা এবং আলামত ঢাকা ধারা ৮০-৮১-এর গুরুতর লঙ্ঘন। এবার শ্রম আদালতে ভারী জরিমানা ও ম্যানেজারের জেলের আদেশ হতে পারে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "e32cea93-c2a7-4c17-b87d-e470982d568f",
+                      "question_id": "261064cf-0349-48b6-b989-5798f619e045",
+                      "option_text": "আকস্মিক দুর্ঘটনার নোটিশ পদ্ধতি (ধারা ৮০-৮১)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "d2e96100-1d97-43d4-8797-0cb2ace876b1",
+                      "question_id": "261064cf-0349-48b6-b989-5798f619e045",
+                      "option_text": "বাৎসরিক উৎসব ছুটির সাধারণ নিয়ম",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "1fc1dbfb-a9fb-4dcd-8579-9d8458bd50ea",
+                      "question_id": "261064cf-0349-48b6-b989-5798f619e045",
+                      "option_text": "প্রসূতি কল্যাণ সুবিধার সাধারণ ফরম্যাট",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "9330fce8-d1a4-46f2-8771-69ce35c19b09",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "ম্যাচিং",
+              "content": "ম্যাচিং",
+              "order_index": 5,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "041e3b5a-ff1d-427f-9839-318c33fef3ba",
+                  "learning_point_id": "9330fce8-d1a4-46f2-8771-69ce35c19b09",
+                  "question_text": "BAM পাশের অপরাধের সাথে ডান পাশের আইনি ফলাফলের মিল কর।",
+                  "question_type": "matching",
+                  "explanation": "দুর্ঘটনা গোপন করলে ধারা ৮০-৮১ ভঙ্গের মামলা হয়, পিপিই না দিলে প্রথমবার ৫,০০০ টাকা পর্যন্ত ফাইন হয় এবং রেজোলিউশন জালিয়াতি করলে কঠোর জালিয়াতির ফৌজদারি দণ্ড প্রযোজ্য হয়।",
+                  "narrative": "💡 হিন্ট: আইন লঙ্ঘন এবং তার জন্য নির্ধারিত আইনি ফলাফলের সঠিক সম্পর্কটি মেলাও।",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "দুর্ঘটনার নোটিশ গোপন করা",
+                        "right": "ধারা ৮০-৮১ এর সুনির্দিষ্ট লঙ্ঘন ও মামলা"
+                      },
+                      {
+                        "left": "প্রথমবার পিপিই সরবরাহ না করা",
+                        "right": "অনধিক ৫,০০০ টাকা অর্থদণ্ড (ধারা ২৮৪)"
+                      },
+                      {
+                        "left": "সভার রেজোলিউশন বা মিনিটস জালিয়াতি",
+                        "right": "দেওয়ানি ও ফৌজদারি জালিয়াতির কঠোর দণ্ড"
+                      }
+                    ]
+                  },
+                  "mcq_options": [],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "8f8fb731-932b-48c3-8fe3-6427aa638352",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "হ্যাঁ/না (Boolean)",
+              "content": "হ্যাঁ/না (Boolean)",
+              "order_index": 6,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "72dc29b8-97d9-4d36-aa27-c344373675b9",
+                  "learning_point_id": "8f8fb731-932b-48c3-8fe3-6427aa638352",
+                  "question_text": "বিশেষ তদন্ত কমিটির ডাকে সাড়া না দেওয়া বা সমন অমান্য করা কি সরাসরি জামিন অযোগ্য আইনি অপরাধ হিসেবে গণ্য হবে?",
+                  "question_type": "boolean",
+                  "explanation": "দেওয়ানি কার্যবিধি অনুযায়ী সরকারি তদন্ত আদালতের সমন বা আদেশ অমান্য করা সরাসরি আদালত অবমাননা ও গ্রেপ্তারি পরোয়ানাযোগ্য গুরুতর অপরাধ।",
+                  "narrative": "💡 হিন্ট: যদি কোনো মালিক বা ম্যানেজার বিশেষ তদন্ত আদালতের দেওয়া সমন বা নোটিশ পেয়েও আদালতে হাজির না হন, তবে আদালত তার বিরুদ্ধে গ্রেপ্তারি পরোয়ানা জারি করতে পারেন।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "52f0b750-06ac-43dc-93f7-71e91ee4a8bb",
+                      "question_id": "72dc29b8-97d9-4d36-aa27-c344373675b9",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "4a04542e-c654-4f00-96d0-5ff6f3ac7bd9",
+                      "question_id": "72dc29b8-97d9-4d36-aa27-c344373675b9",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "37f6de86-2a6c-40a4-a7fe-7f3520655a89",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "স্ট্যান্ডার্ড MCQ",
+              "content": "স্ট্যান্ডার্ড MCQ",
+              "order_index": 7,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "bc0fa45f-c2b7-4f0b-be19-83d800862227",
+                  "learning_point_id": "37f6de86-2a6c-40a4-a7fe-7f3520655a89",
+                  "question_text": "মডিউল ৭-এর এই বিশেষ সেফটি ও দুর্ঘটনা সংক্রান্ত আইনি লঙ্ঘনের মামলাগুলো কোন বিশেষ আদালতে দায়ের এবং নিষ্পত্তি করা হয়?",
+                  "question_type": "mcq",
+                  "explanation": "শ্রম আইন, ২০০৬-এর অধীন যেকোনো ধারা, নিরাপত্তা বিধি বা দুর্ঘটনা সংক্রান্ত তথ্য গোপনের বিচার করার একমাত্র আইনগত এখতিয়ার হলো দেশের শ্রম আদালতের।",
+                  "narrative": "💡 হিন্ট: মডিউল ৭-এর এই বিশেষ সেফটি ও দুর্ঘটনা সংক্রান্ত আইনি লঙ্ঘনের মামলাগুলো কোন বিশেষ আদালতে দায়ের এবং নিষ্পত্তি করা হয়?",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "2a68c98a-7e47-40a7-8ddc-1cce2224a6b2",
+                      "question_id": "bc0fa45f-c2b7-4f0b-be19-83d800862227",
+                      "option_text": "সংশ্লিষ্ট শ্রম আদালতে (Labor Court)",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "c48baa19-c1e9-4206-9a53-5c2e2cdc0d1d",
+                      "question_id": "bc0fa45f-c2b7-4f0b-be19-83d800862227",
+                      "option_text": "সাধারণ পারিবারিক দেওয়ানি ট্রাইব্যুনালে",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "3d7f41c6-37a6-43d9-88a5-f56e17bb7094",
+                      "question_id": "bc0fa45f-c2b7-4f0b-be19-83d800862227",
+                      "option_text": "স্থানীয় সালিশি বা গ্রাম্য আদালতে",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
+            },
+            {
+              "id": "16cb1ef2-a72e-4e1a-988f-c05bb88311c0",
+              "chapter_id": "bb6273c2-0f11-4b58-833c-e65fd969ae62",
+              "title": "চেকমার্ক MCQ",
+              "content": "চেকমার্ক MCQ",
+              "order_index": 8,
+              "type": "standard",
+              "created_at": "2026-06-20T08:31:19.474Z",
+              "mcq_questions": [
+                {
+                  "id": "d407f7da-7198-4311-b99d-900227d07da8",
+                  "learning_point_id": "16cb1ef2-a72e-4e1a-988f-c05bb88311c0",
+                  "question_text": "নিরাপত্তা ও দুর্ঘটনা আইনের মামলা ও বড় জরিমানা থেকে বাঁচতে মালিক পক্ষের কোন কোন সঠিক পদক্ষেপ নেওয়া উচিত? (টিক দিন)",
+                  "question_type": "checkmark",
+                  "explanation": "গেটে তালা মেরে লাইট বন্ধ করা আইন প্রয়োগে বাধা দেওয়ার শামিল যা দণ্ডনীয় অপরাধ; সঠিক নোটিশ এবং ঝুঁকি দূর করাই হলো শাস্তি থেকে বাঁচার একমাত্র আইনসম্মত উপায়।",
+                  "narrative": "💡 হিন্ট: একটি দূরদর্শী প্রতিষ্ঠানের কমপ্লায়েন্স টিম বড় মামলা বা আইনি শাস্তি থেকে বাঁচতে সর্বদা প্রতিরোধমূলক বা প্রিভেন্টিভ মেজারস গ্রহণ করে।",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "fe3054cf-b1b3-457f-a2e2-3ae64440e5bd",
+                      "question_id": "d407f7da-7198-4311-b99d-900227d07da8",
+                      "option_text": "কারখানায় ছোট-বড় যেকোনো ঘটনা বা নিয়ার-মিস হওয়া মাত্রই আইনি সময়সীমা মেনে দ্রুত নোটিশ সাবমিট করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "9cec2756-ce7c-42fd-b3fa-057d29e29ac4",
+                      "question_id": "d407f7da-7198-4311-b99d-900227d07da8",
+                      "option_text": "সেফটি কমিটির সুপারিশ অনুযায়ী ফ্লোরের সকল মেকানিক্যাল ও কেমিক্যাল ঝুঁকি দ্রুততম সময়ে দূর করা।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    },
+                    {
+                      "id": "5cf2992a-06a8-43c3-97b8-826d9f9aef1a",
+                      "question_id": "d407f7da-7198-4311-b99d-900227d07da8",
+                      "option_text": "পরিদর্শনের সময় জরিমানার টাকা বাঁচাতে ফ্যাক্টরির গেটে তালা মেরে ভেতর থেকে লাইট বন্ধ করে রাখা।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T08:31:19.474Z"
+                    }
+                  ],
+                  "order_index": 1,
+                  "created_at": "2026-06-20T08:31:19.474Z"
+                }
+              ]
             }
           ]
         }

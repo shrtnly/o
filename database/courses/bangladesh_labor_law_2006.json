@@ -5245,7 +5245,446 @@
           "title": "ডিসচার্জ ও অবসর",
           "order_index": 8,
           "created_at": "2026-06-19T21:07:01.309Z",
-          "learning_points": []
+          "learning_points": [
+            {
+              "id": "ba4b0e9b-1352-452a-9b47-d097cb4e422f",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "শারীরিক অসুস্থতায় ডিসচার্জ",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 1,
+              "created_at": "2026-06-20T05:17:41.817Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "14b4478e-40c4-4f31-a074-d352e32a2487",
+                  "learning_point_id": "ba4b0e9b-1352-452a-9b47-d097cb4e422f",
+                  "question_text": "অনবরত শারীরিক অসুস্থতার কারণে শ্রমিককে অব্যাহতি দেওয়াকে কি 'ডিসচার্জ' বলা হয়?",
+                  "explanation": "চিকিৎসকের সনদ অনুযায়ী দীর্ঘস্থায়ী অসুস্থতায় কাজ করতে অক্ষম হলে তাকে ডিসচার্জ বা অব্যাহতি দেওয়া হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.817Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: শ্রম আইন অনুযায়ী, একজন শ্রমিকের শারীরিক বা মানসিক অসুস্থতা যখন দীর্ঘস্থায়ী রূপ ধারণ করে এবং তার পক্ষে আর কাজ করা সম্ভব হয় না, তখন মালিক পক্ষ তাকে অব্যাহতি দিতে পারেন।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "90f6057d-d3b7-4c59-b526-a45714115ec0",
+                      "question_id": "14b4478e-40c4-4f31-a074-d352e32a2487",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.813Z"
+                    },
+                    {
+                      "id": "47331873-a23a-4ecc-b1f3-482f0c0ef62c",
+                      "question_id": "14b4478e-40c4-4f31-a074-d352e32a2487",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.817Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "6422fa90-8b83-430e-88f4-87007069702e",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "অবসরের সংজ্ঞা",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 2,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "9e01f820-01ee-44ee-838f-d0fb3d31b697",
+                  "learning_point_id": "6422fa90-8b83-430e-88f4-87007069702e",
+                  "question_text": "শ্রমিকের নির্দিষ্ট বয়স পূর্ণ হওয়ার পর স্বাভাবিক চাকরি অবসানকে আইনি ভাষায় কী বলে?",
+                  "explanation": "আইন নির্ধারিত বয়সসীমায় পৌঁছালে শ্রমিকের স্বাভাবিক অবসর গ্রহণ সম্পন্ন হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: কর্মজীবনের একটি নির্দিষ্ট পর্যায়ে পৌঁছানোর পর শ্রমিকের যে স্বাভাবিক সমাপ্তি ঘটে, তা মূলত আইন ও প্রতিষ্ঠানের বয়সসীমার ওপর ভিত্তি করে নির্ধারিত হয়।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "b6bdb8c6-774f-480e-8c4a-52fa9faa5f84",
+                      "question_id": "9e01f820-01ee-44ee-838f-d0fb3d31b697",
+                      "option_text": "অবসর",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.817Z"
+                    },
+                    {
+                      "id": "b0919acd-9f15-40e0-9da4-804d09a51651",
+                      "question_id": "9e01f820-01ee-44ee-838f-d0fb3d31b697",
+                      "option_text": "ডিসচার্জ",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.817Z"
+                    },
+                    {
+                      "id": "42d38aca-5634-4499-8bb1-214e53067723",
+                      "question_id": "9e01f820-01ee-44ee-838f-d0fb3d31b697",
+                      "option_text": "বরখাস্ত",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "9ac7caa3-9674-4651-a7ee-43d162a9d554",
+                      "question_id": "9e01f820-01ee-44ee-838f-d0fb3d31b697",
+                      "option_text": "ইস্তফা",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "560afe4f-c1dc-4c30-a7a9-bd3d2db9a429",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "অক্ষমতার জন্য ডিসচার্জ",
+              "content": "[{\"avatar\":\"rakib\",\"text\":\"রতন: আমি বিগত ২০ বছর ধরে কাজ করছি, ডাক্তার বলেছেন আমার হার্টের সমস্যার কারণে ভারী কাজ করা আর সম্ভব নয়।\"},{\"avatar\":\"lisa\",\"text\":\"মিতা: তোমার সমস্যার বিষয়টি যদি মেডিকেল সার্টিফিকেট দিয়ে প্রমাণ করতে পারো, তবে নিয়ম অনুযায়ী মালিক তোমাকে ডিসচার্জ করতে পারেন এবং আইনি প্রাপ্য সুবিধাগুলো দিতে বাধ্য থাকবেন।\"}]",
+              "order_index": 3,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "storytelling",
+              "mcq_questions": [
+                {
+                  "id": "22c4b1ea-8d05-4cd0-a996-c1571099bda9",
+                  "learning_point_id": "560afe4f-c1dc-4c30-a7a9-bd3d2db9a429",
+                  "question_text": "রতনের বর্তমান পরিস্থিতিতে তার চাকরি অবসানের প্রক্রিয়াটি কী হতে পারে?",
+                  "explanation": "শারীরিক অক্ষমতা বা দীর্ঘস্থায়ী অসুস্থতার কারণে চাকরি অবসানই হলো ডিসচার্জ।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "[{\"avatar\":\"rakib\",\"text\":\"রতন: আমি বিগত ২০ বছর ধরে কাজ করছি, ডাক্তার বলেছেন আমার হার্টের সমস্যার কারণে ভারী কাজ করা আর সম্ভব নয়।\"},{\"avatar\":\"lisa\",\"text\":\"মিতা: তোমার সমস্যার বিষয়টি যদি মেডিকেল সার্টিফিকেট দিয়ে প্রমাণ করতে পারো, তবে নিয়ম অনুযায়ী মালিক তোমাকে ডিসচার্জ করতে পারেন এবং আইনি প্রাপ্য সুবিধাগুলো দিতে বাধ্য থাকবেন।\"}]",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "841beb62-ef69-4783-b2af-fc271c32f9bb",
+                      "question_id": "22c4b1ea-8d05-4cd0-a996-c1571099bda9",
+                      "option_text": "ডিসচার্জ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "97cef580-9c73-4e9e-b081-e4609e14b1ed",
+                      "question_id": "22c4b1ea-8d05-4cd0-a996-c1571099bda9",
+                      "option_text": "বরখাস্ত",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "e897b231-6129-428a-a088-baef08da29a4",
+                      "question_id": "22c4b1ea-8d05-4cd0-a996-c1571099bda9",
+                      "option_text": "ছাঁটাই",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "3d5c2692-5c08-4c3f-888e-21bc45311f1f",
+                      "question_id": "22c4b1ea-8d05-4cd0-a996-c1571099bda9",
+                      "option_text": "লে-অফ",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "7c921717-6038-49f7-b2ff-220d7578f065",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "অবসরকালীন সুবিধা",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 4,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "559ec33b-e7e8-4953-8940-a524aaa1e566",
+                  "learning_point_id": "7c921717-6038-49f7-b2ff-220d7578f065",
+                  "question_text": "একজন শ্রমিক অবসরে যাওয়ার সময় সাধারণত কোন কোন সুবিধা পাওয়ার যোগ্য? (টিক দিন)",
+                  "explanation": "অবসরের সময় শ্রমিক তার গ্র্যাচুইটি ও অন্যান্য অর্জিত পাওনা পাওয়ার অধিকার রাখেন।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অবসর গ্রহণের সময় শ্রমিকের যে পাওনাগুলো থাকে, তা তার দীর্ঘদিনের সেবার স্বীকৃতিস্বরূপ প্রদান করা হয়, যা মালিকের আইনি বাধ্যবাধকতা।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "d4ecba27-7ad8-4b0e-ac54-26dfee265ba5",
+                      "question_id": "559ec33b-e7e8-4953-8940-a524aaa1e566",
+                      "option_text": "গ্র্যাচুইটি বা অবসরকালীন আর্থিক সুবিধা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "28710c8a-f676-49eb-a075-7cfd9f898c03",
+                      "question_id": "559ec33b-e7e8-4953-8940-a524aaa1e566",
+                      "option_text": "বকেয়া ছুটির অর্থের মূল্য।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "0b4a2a79-d233-4eac-89c4-d05dbbe6ddc3",
+                      "question_id": "559ec33b-e7e8-4953-8940-a524aaa1e566",
+                      "option_text": "পরবর্তী ১০০ বছরের বেতন।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "a286c8b2-867c-491c-83b3-59af5680c980",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "অবসর ও ডিসচার্জ মিলকরণ",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 5,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "0a10d32d-24d9-4b68-9c28-8485fe1397b8",
+                  "learning_point_id": "a286c8b2-867c-491c-83b3-59af5680c980",
+                  "question_text": "বাম পাশের পরিস্থিতির সাথে ডান পাশের আইনি অবস্থার মিল কর।",
+                  "explanation": "বয়স পূর্ণ হলে অবসর, অসুস্থতায় ডিসচার্জ এবং অবসরের সময় গ্র্যাচুইটি প্রদান করা হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অবসরের ক্ষেত্রে বয়সের সীমা এবং ডিসচার্জের ক্ষেত্রে স্বাস্থ্যের অবস্থাই হলো প্রধান নিয়ামক।",
+                  "question_type": "matching",
+                  "metadata": {
+                    "pairs": [
+                      {
+                        "left": "বয়সসীমা পূর্ণ হওয়া",
+                        "right": "অবসর"
+                      },
+                      {
+                        "left": "দীর্ঘস্থায়ী অসুস্থতা",
+                        "right": "ডিসচার্জ"
+                      },
+                      {
+                        "left": "অবসর গ্রহণ",
+                        "right": "গ্র্যাচুইটি প্রাপ্তি"
+                      }
+                    ]
+                  },
+                  "mcq_options": []
+                }
+              ]
+            },
+            {
+              "id": "4ae584ef-0c8d-4dfd-8ba1-84af7c2ed93f",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "চিকিৎসকের সনদের গুরুত্ব",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 6,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "53d89625-c275-4a4b-8f4c-b3445f34f567",
+                  "learning_point_id": "4ae584ef-0c8d-4dfd-8ba1-84af7c2ed93f",
+                  "question_text": "ডিসচার্জ করার সময় কি মালিকের কাছে চিকিৎসকের দেওয়া সনদ থাকা প্রয়োজন?",
+                  "explanation": "শারীরিক অযোগ্যতার প্রমাণস্বরূপ চিকিৎসকের সনদ থাকা বাধ্যতামূলক।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: মালিক যদি কোনো শ্রমিককে ডিসচার্জ করতে চান, তবে তাকে অবশ্যই অনুমোদিত চিকিৎসকের রিপোর্ট বা মেডিকেল সার্টিফিকেট যাচাই করতে হয়।",
+                  "question_type": "boolean",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "49c9c42e-67b9-4b04-8a02-94637a3d90ab",
+                      "question_id": "53d89625-c275-4a4b-8f4c-b3445f34f567",
+                      "option_text": "হ্যাঁ",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "62996f6b-4698-48c9-8307-8149e8e8244a",
+                      "question_id": "53d89625-c275-4a4b-8f4c-b3445f34f567",
+                      "option_text": "না",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "b5194451-8260-4468-bcd0-09a031a896c0",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "বাধ্যতামূলক অবসরের বয়স",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 7,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "1513082f-f22b-4ddd-aa3f-567659e29c69",
+                  "learning_point_id": "b5194451-8260-4468-bcd0-09a031a896c0",
+                  "question_text": "সাধারণত বাংলাদেশের শ্রম আইন অনুযায়ী একজন শ্রমিকের বাধ্যতামূলক অবসরের বয়স কত বছর হতে পারে?",
+                  "explanation": "অধিকাংশ ক্ষেত্রে ৬০ বছর বয়সকে অবসরের মানদণ্ড ধরা হয়।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: বাংলাদেশের শ্রম আইনে অবসরের বয়সসীমা সাধারণত এমনভাবে নির্ধারণ করা হয় যাতে শ্রমিক তার শেষ জীবনে আর্থিক নিরাপত্তা পান।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "bad5d17d-d251-4fa5-8649-e863bbe7a6de",
+                      "question_id": "1513082f-f22b-4ddd-aa3f-567659e29c69",
+                      "option_text": "৬০ বছর",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "6b090d49-2257-439c-993e-f73884f71398",
+                      "question_id": "1513082f-f22b-4ddd-aa3f-567659e29c69",
+                      "option_text": "৫০ বছর",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "d5338ec3-671c-4091-9590-15c81661f48b",
+                      "question_id": "1513082f-f22b-4ddd-aa3f-567659e29c69",
+                      "option_text": "৫৫ বছর",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "68b4c5e7-f3e6-441f-bc7c-a8cb73a5248b",
+                      "question_id": "1513082f-f22b-4ddd-aa3f-567659e29c69",
+                      "option_text": "৬৫ বছর",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ec50fa3a-d266-4b95-a58a-069235bdbeee",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "ডিসচার্জের সময় মালিকের দায়",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 8,
+              "created_at": "2026-06-20T05:17:41.818Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "fb6216bb-a43a-4b6d-bdd0-a83931201aaa",
+                  "learning_point_id": "ec50fa3a-d266-4b95-a58a-069235bdbeee",
+                  "question_text": "ডিসচার্জের সময় মালিকের কোন দায়িত্বগুলো পালন করা উচিত? (টিক দিন)",
+                  "explanation": "ডিসচার্জের কারণ জানানো এবং পাওনা মেটানো মালিকের আইনি দায়িত্ব।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.818Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: ডিসচার্জের ক্ষেত্রে মালিককে অবশ্যই শ্রমিকের প্রাপ্য পাওনাগুলো পরিশোধ করতে হয়, অন্যথায় এটি বেআইনি ডিসচার্জ হিসেবে গণ্য হতে পারে।",
+                  "question_type": "checkmark",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "854a49da-bb49-43d1-a043-0b35ac811996",
+                      "question_id": "fb6216bb-a43a-4b6d-bdd0-a83931201aaa",
+                      "option_text": "পাওনা পরিশোধ করা।",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "d790a92c-bf9c-4507-ade9-c1555253f408",
+                      "question_id": "fb6216bb-a43a-4b6d-bdd0-a83931201aaa",
+                      "option_text": "লিখিতভাবে কারণ জানানো।",
+                      "is_correct": true,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    },
+                    {
+                      "id": "11e0d0ee-5e7c-4fe7-ba84-2db411646ff6",
+                      "question_id": "fb6216bb-a43a-4b6d-bdd0-a83931201aaa",
+                      "option_text": "শ্রমিককে নতুন চাকুরী খুঁজে দেওয়া।",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:17:41.818Z"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "6d2aa228-fda8-4b9a-988d-fbc377e1f06f",
+              "chapter_id": "b27efcf5-1958-4601-9759-e88f8f2d9e72",
+              "title": "অবসরের মূল উদ্দেশ্য",
+              "content": "ডিসচার্জ ও অবসর",
+              "order_index": 9,
+              "created_at": "2026-06-20T05:17:41.821Z",
+              "type": "standard",
+              "mcq_questions": [
+                {
+                  "id": "71af6fa8-3168-4ed0-ad57-da673567ba2d",
+                  "learning_point_id": "6d2aa228-fda8-4b9a-988d-fbc377e1f06f",
+                  "question_text": "অবসরের মূল উদ্দেশ্য কী?",
+                  "explanation": "দীর্ঘ কর্মজীবনের পর একজন শ্রমিকের জন্য বিশ্রাম ও আর্থিক নিরাপত্তা নিশ্চিত করাই অবসরের মূল উদ্দেশ্য।",
+                  "order_index": 1,
+                  "created_at": "2026-06-20T05:17:41.821Z",
+                  "narrative": "💡 পড়াশোনার বিষয়/হিন্ট: অবসর ও ডিসচার্জের মধ্যে পার্থক্য হলো, অবসর একটি পরিকল্পিত প্রক্রিয়া আর ডিসচার্জ পরিস্থিতির কারণে ঘটে যাওয়া একটি প্রক্রিয়া।",
+                  "question_type": "mcq",
+                  "metadata": {},
+                  "mcq_options": [
+                    {
+                      "id": "21de198d-d8b0-4f09-a48b-ec0853b1584c",
+                      "question_id": "71af6fa8-3168-4ed0-ad57-da673567ba2d",
+                      "option_text": "শ্রমিককে সুস্থ জীবনে বিশ্রামের সুযোগ দেওয়া",
+                      "is_correct": true,
+                      "order_index": 1,
+                      "created_at": "2026-06-20T05:17:41.821Z"
+                    },
+                    {
+                      "id": "a4143c04-e5ef-4559-84dd-48d5040b6232",
+                      "question_id": "71af6fa8-3168-4ed0-ad57-da673567ba2d",
+                      "option_text": "শ্রমিককে শাস্তি দেওয়া",
+                      "is_correct": false,
+                      "order_index": 2,
+                      "created_at": "2026-06-20T05:17:41.821Z"
+                    },
+                    {
+                      "id": "cf1771ed-e3b8-463e-a952-a96aeea7f58f",
+                      "question_id": "71af6fa8-3168-4ed0-ad57-da673567ba2d",
+                      "option_text": "কারখানার উৎপাদন কমানো",
+                      "is_correct": false,
+                      "order_index": 3,
+                      "created_at": "2026-06-20T05:17:41.821Z"
+                    },
+                    {
+                      "id": "10754325-fef1-4776-b16a-781da7223187",
+                      "question_id": "71af6fa8-3168-4ed0-ad57-da673567ba2d",
+                      "option_text": "খরচ কমানো",
+                      "is_correct": false,
+                      "order_index": 4,
+                      "created_at": "2026-06-20T05:17:41.821Z"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         {
           "id": "9f8143be-6e31-47d7-bcfe-5922c0e0ff9e",

@@ -652,7 +652,8 @@ const LearningPage = () => {
                             const pos = getNodePos(cIdx, nodesPerRow);
                             const isCompleted = completedChapterIds.has(chapter.id);
                             const isActive = chapter.id === activeChapterId;
-                            const isLocked = !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
+                            const isAdmin = profile?.role?.toLowerCase() === 'admin' || authProfile?.role?.toLowerCase() === 'admin';
+                            const isLocked = !isAdmin && !isCompleted && !isActive && allChapters.findIndex(c => c.id === chapter.id) > allChapters.findIndex(c => c.id === activeChapterId);
 
                             return (
                                 <ChapterNode
@@ -673,7 +674,7 @@ const LearningPage = () => {
                 </section>
             </React.Fragment>
         );
-    }), [unitsWithChapters, completedChapterIds, activeChapterId, nodesPerRow, allChapters, handleChapterClick]);
+    }), [unitsWithChapters, completedChapterIds, activeChapterId, nodesPerRow, allChapters, handleChapterClick, profile, authProfile]);
 
     const refreshProfile = useCallback(async () => {
         if (!user) return;

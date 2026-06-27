@@ -81,6 +81,16 @@ const AvatarImage = ({ seed, className }) => {
     );
 };
 
+// For storytelling questions, the answer portion can be any type (mcq/boolean/checkmark).
+// The `metadata.answer_type` field stores the intended answer interaction type.
+const getEffectiveAnswerType = (q) => {
+    if (!q) return 'mcq';
+    if (q.question_type === 'storytelling' && q.metadata?.answer_type) {
+        return q.metadata.answer_type;
+    }
+    return q.question_type || 'mcq';
+};
+
 const StorytellingDisplay = ({ content, visibleCount }) => {
     let dialogues = [];
     try {
@@ -214,8 +224,9 @@ const StudyPage = () => {
     const [flashingMatches, setFlashingMatches] = useState(new Set()); // leftIdx keys currently flashing green
 
     const dialogues = React.useMemo(() => {
-        if (questions[currentIndex]?.type === 'storytelling') {
-            try { return JSON.parse(questions[currentIndex].narrative || '[]'); } catch (e) { return []; }
+        const currentQ = questions[currentIndex];
+        if (currentQ?.type === 'storytelling' || currentQ?.question_type === 'storytelling') {
+            try { return JSON.parse(currentQ.narrative || '[]'); } catch (e) { return []; }
         }
         return [];
     }, [questions, currentIndex]);
@@ -235,7 +246,8 @@ const StudyPage = () => {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    const isStoryInProgress = questions[currentIndex]?.type === 'storytelling' && activeDialogueIndex < dialogues.length;
+    const currentQ = questions[currentIndex];
+    const isStoryInProgress = (currentQ?.type === 'storytelling' || currentQ?.question_type === 'storytelling') && activeDialogueIndex < dialogues.length;
 
     // Auto-scroll: ensures active content is visible above footer when it expands or changes
     useEffect(() => {
@@ -660,8 +672,9 @@ const StudyPage = () => {
 
     const handleCheck = React.useCallback(async () => {
         const currentQuestion = questions[currentIndex];
-        const isMatching = currentQuestion.question_type === 'matching';
-        const isCheckmark = currentQuestion.question_type === 'checkmark';
+        const effectiveType = getEffectiveAnswerType(currentQuestion);
+        const isMatching = effectiveType === 'matching';
+        const isCheckmark = effectiveType === 'checkmark';
 
         if (isMatching) return;
 
@@ -1168,7 +1181,7 @@ const StudyPage = () => {
                                     return questions.slice(startIdx, currentIndex + 1).map((q, arrayIdx) => {
                                         const globalIdx = startIdx + arrayIdx;
                                         const isLatest = globalIdx === currentIndex;
-                                        const isStory = q.type === 'storytelling';
+                                        const isStory = q.type === 'storytelling' || q.question_type === 'storytelling';
                                         const answer = answersHistory[globalIdx];
 
                                         // Narrative logic: Only show narrative if it changed or it's the start of the node
@@ -1265,8 +1278,8 @@ const StudyPage = () => {
                                                             {q.question_text}
                                                         </h2>
 
-                                                        <div className={cn(styles.optionsList, q.question_type === 'boolean' && styles.booleanRow)}>
-                                                            {q.question_type === 'matching' ? (
+                                                        <div className={cn(styles.optionsList, getEffectiveAnswerType(q) === 'boolean' && styles.booleanRow)}>
+                                                            {getEffectiveAnswerType(q) === 'matching' ? (
                                                                  <div className={styles.matchingContainer}>
                                                                      {(q.metadata?.pairs || []).map((pair, pIdx) => {
                                                                          const isMatched = matches[pIdx] !== undefined;
@@ -1328,7 +1341,7 @@ const StudyPage = () => {
                                                                  </div>
                                                              ) : (
                                                                 (q.mcq_options || []).map((option, optIdx) => {
-                                                                    const isCheckmark = q.question_type === 'checkmark';
+                                                                    const isCheckmark = getEffectiveAnswerType(q) === 'checkmark';
                                                                     // For checkmark: use selectedOptions Set; for others: single selectedOption
                                                                     const isSelected = isCheckmark
                                                                         ? (isLatest ? selectedOptions.has(option.id) : answer?.selectedOptions?.includes(option.id))
@@ -1358,7 +1371,7 @@ const StudyPage = () => {
                                                                                 showCorrect && styles.correct,
                                                                                 isWrongSelected || isFailed ? styles.incorrect : ''
                                                                             )}
-                                                                            onClick={() => isLatest && handleOptionSelect(option.id, q.question_type)}
+                                                                            onClick={() => isLatest && handleOptionSelect(option.id, getEffectiveAnswerType(q))}
                                                                             disabled={!isLatest || isAnswered || isFailed}
                                                                         >
                                                                             <div className={styles.optionIndex}>
@@ -1438,7 +1451,7 @@ const StudyPage = () => {
                                         setLastInteractionWasFooter(true);
                                         handleNext();
                                     }}>এগিয়ে যান</button>
-                                    {questions[currentIndex]?.question_type === 'matching' ? (
+                                    {getEffectiveAnswerType(questions[currentIndex]) === 'matching' ? (
                                         <button
                                             className={`${styles.checkBtn} ${Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0) ? styles.checkBtnDisabled : ''}`}
                                             aria-disabled={Object.keys(matches).length < (questions[currentIndex]?.metadata?.pairs?.length || 0)}
@@ -1452,18 +1465,18 @@ const StudyPage = () => {
                                     ) : (
                                         <button
                                             className={`${styles.checkBtn} ${
-                                                questions[currentIndex]?.question_type === 'checkmark'
+                                                getEffectiveAnswerType(questions[currentIndex]) === 'checkmark'
                                                     ? selectedOptions.size === 0 ? styles.checkBtnDisabled : ''
                                                     : !selectedOption ? styles.checkBtnDisabled : ''
                                             }`}
                                             aria-disabled={
-                                                questions[currentIndex]?.question_type === 'checkmark'
+                                                getEffectiveAnswerType(questions[currentIndex]) === 'checkmark'
                                                     ? selectedOptions.size === 0
                                                     : !selectedOption
                                             }
                                             onClick={() => {
                                                 setLastInteractionWasFooter(true);
-                                                const hasSelection = questions[currentIndex]?.question_type === 'checkmark'
+                                                const hasSelection = getEffectiveAnswerType(questions[currentIndex]) === 'checkmark'
                                                     ? selectedOptions.size > 0
                                                     : !!selectedOption;
                                                 if (hasSelection) handleCheck();

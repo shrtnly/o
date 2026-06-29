@@ -37,3 +37,38 @@
 ## 🚀 Next Steps (When resuming work)
 - The core Labor Law 2006 course content is fully finalized.
 - Any future work should focus on UI enhancements, creating new courses, or adding new features to the learning platform itself, rather than course content generation for this specific subject.
+
+---
+
+# Freelancing & Online Income - Course Generation History
+
+## 🎯 Current Status
+**Status:** 100% Completed, Cleaned, and Deployed.
+**Last Updated:** June 29, 2026
+**Target Course ID:** `7e1b1550-f7e8-4f0c-8ecb-db7020510959`
+**Database Backup Location:** `scratch/freelancing_course_backup.json` (Synced to Supabase)
+
+## 📊 Course Statistics
+- **Total Modules (Units):** 5
+- **Total Chapters:** 161
+- **Total Learning Points (LPs):** 1,288
+- **Total Questions:** 1,288 (100% unique, validated with 0 duplicates)
+- **Total Options:** 3,059
+
+## 🛠️ Work Completed in This Session
+1. **Module Cleanups & Structure Optimization:**
+   - Removed quiz chapters at the end of each module (e.g., "অধ্যায় ১: কুইজ", "অধ্যায় 2: কুইজ") to streamline the course structure.
+   - Restructured Module 3 through Module 10 to ensure comprehensive, clean topic coverage.
+   
+2. **High-Quality Chapter 1 & 2 Customization:**
+   - Overhauled Module 1, Chapter 1 ("ফ্রিল্যান্সিং কী?") and Chapter 2 ("মার্কেটপ্লেস পরিচিতি") to replace generic template-based text with specific, highly engaging, and educational questions.
+   - Built custom dialogue-based storytelling scenarios (Rakib & Lisa) focusing on timezone management, Escrow payment security, Upwork vs Fiverr models, direct client communication risks, and preventing scam clicks.
+
+3. **Study Page UI Enhancements (StudyPage.jsx):**
+   - Configured the hint/reading content block to be hidden by default on load, focusing the user's screen space on the question and options.
+   - Implemented a clean, toggleable "হিন্ট দেখুন" / "হিন্ট লুকান" action button with an animated Lightbulb icon. When clicked, it smoothly displays/hides the target reading context or question explanation.
+
+4. **Syncing & DB Publishing:**
+   - Synced all 1,288 unique learning points and questions to Supabase via `scripts/sync_freelancing_course.js`.
+   - Verified that all questions contain unique text, preventing duplicate title collisions.
+

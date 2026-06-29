@@ -1229,29 +1229,23 @@ const StudyPage = () => {
                                                         )}
 
                                                         {!isStory && (q.narrative || q.explanation) && (
-                                                             <div className={styles.contextText}>
+                                                             <div className="flex justify-end mb-3">
                                                                  <button
-                                                                     className={`${styles.hintEyeBtn} ${hintEnabled ? styles.bulbAnimated : ''}`}
-                                                                     onClick={() => {
-                                                                         setHintEnabled(!hintEnabled);
-                                                                     }}
+                                                                     onClick={() => setHintEnabled(!hintEnabled)}
+                                                                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all bg-[#1a2226] hover:bg-[#253036] text-[#ffa202] border border-[#ffa202]/30 active:scale-95 shadow-[0_2px_0_rgba(0,0,0,0.2)]"
                                                                      title="Toggle Hint"
                                                                  >
-                                                                     {hintEnabled ? (
-                                                                         <Eye size={20} color="#ffa202" />
-                                                                     ) : (
-                                                                         <EyeOff size={20} color="#5a6e7f" />
-                                                                     )}
+                                                                     <Lightbulb size={13} className={hintEnabled ? styles.bulbAnimated : ''} />
+                                                                     <span>{hintEnabled ? "হিন্ট লুকান" : "হিন্ট দেখুন"}</span>
                                                                  </button>
-                                                                 {hintEnabled ? (
-                                                                     <span style={{ flex: 1 }}>
-                                                                         {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || "মনোযোগ দিয়ে পড়ুন..."}
-                                                                     </span>
-                                                                 ) : (
-                                                                     <span style={{ flex: 1, opacity: 0.8 }}>
-                                                                         সহায়তা নিন...
-                                                                     </span>
-                                                                 )}
+                                                             </div>
+                                                         )}
+
+                                                         {hintEnabled && !isStory && (q.narrative || q.explanation) && (
+                                                             <div className={styles.contextText}>
+                                                                 <span style={{ flex: 1 }}>
+                                                                     {q.narrative?.replace(/^💡\s*পড়াশোনার বিষয়\/হিন্ট:\s*/, '').trim() || q.explanation || "মনোযোগ দিয়ে পড়ুন..."}
+                                                                 </span>
                                                              </div>
                                                          )}
 

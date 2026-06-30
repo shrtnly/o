@@ -72,3 +72,37 @@
    - Synced all 1,288 unique learning points and questions to Supabase via `scripts/sync_freelancing_course.js`.
    - Verified that all questions contain unique text, preventing duplicate title collisions.
 
+---
+
+# সাইবার থ্রেট ও স্ক্যাম - Course Generation History
+
+## 🎯 Current Status
+**Status:** 100% Completed, Cleaned, and Deployed.
+**Last Updated:** June 30, 2026
+**Target Course ID:** `dc6652a7-f5a9-4f50-a97c-cefa9bac2b15`
+**Database Backup Location:** `scratch/cyber_course_backup.json` (Synced to Supabase)
+**Production Database File:** `database/courses/cyber_threat_and_scam.json`
+
+## 📊 Course Statistics
+- **Total Modules (Units):** 6
+- **Total Chapters:** 46
+- **Total Learning Points (LPs):** 368
+- **Total Questions:** 368 (100% unique, validated with 0 duplicates)
+- **Total Options:** 828
+
+## 🛠️ Work Completed in This Session
+1. **Course Consolidation & ID Mapping:**
+   - Overwrote the original, empty course template (`dc6652a7-f5a9-4f50-a97c-cefa9bac2b15`) with the newly designed 46-chapter curriculum.
+   - De-duplicated the courses by deleting the temporary duplicate course (`76fe1c17-9906-457f-8d7e-11bc8ee3eed0`).
+   - Set the category to `'Digital Literacy & Security'` to ensure correct visibility on the homepage filters.
+
+2. **Quality & Formatting Alignment:**
+   - Populated exactly 8 chapters per module, each with 8 learning points and 8 corresponding questions.
+   - Question types are mixed randomly: MCQ, Boolean, Checkmark, Matching, and Storytelling.
+   - Storytelling options have 3 options (MCQ/Checkmark style) and 2 options (Boolean style).
+   - Storytelling `narrative` field has been fully populated.
+
+3. **Production Syncing:**
+   - Deep-cleaned existing tables and synced the finalized database structure to Supabase using `scripts/sync_cyber_course.js`.
+
+

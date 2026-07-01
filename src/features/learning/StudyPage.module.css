@@ -2271,29 +2271,38 @@
 
     /* ── Main content ── */
     .mainContent {
-        padding: 100px 12px 140px;
-        /* Increase from 84px - guarantee space below 52px header */
-        padding-top: calc(100px + env(safe-area-inset-top, 0px));
-        scroll-padding-top: 100px;
+        padding: 76px 12px 140px;
+        /* 52px header + 24px gap */
+        padding-top: calc(76px + env(safe-area-inset-top, 0px));
+        scroll-padding-top: 76px;
         scroll-padding-bottom: 140px;
     }
 
-    /* Added Spacer for storytelling boxes and header clearance */
+    /* Mobile spacer: small gap just to clear header border */
     .mobileTopSpacer {
         display: block;
-        height: 68px;
+        height: 20px;
         width: 100%;
         background: transparent;
         pointer-events: none;
     }
 
     .questionSection {
-        scroll-margin-top: 68px;
+        scroll-margin-top: 64px;
         scroll-margin-bottom: 140px;
     }
 
     .scrollAnchor {
         scroll-margin-bottom: 160px;
+    }
+
+    /* Override Tailwind space-y utilities for compact mobile layout */
+    :global(.space-y-12) > * + * {
+        margin-top: 24px !important;
+    }
+
+    :global(.space-y-8) > * + * {
+        margin-top: 16px !important;
     }
 
     .questionTitle {

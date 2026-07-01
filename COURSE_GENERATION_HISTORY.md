@@ -106,3 +106,36 @@
    - Deep-cleaned existing tables and synced the finalized database structure to Supabase using `scripts/sync_cyber_course.js`.
 
 
+
+# পাসওয়ার্ড ও অ্যাকাউন্ট সুরক্ষা - Course Generation History
+
+## 🎯 Current Status
+**Status:** 100% Completed, Cleaned, and Deployed.
+**Last Updated:** July 1, 2026
+**Target Course ID:** `9372bb76-c1eb-4c2f-bcde-96400a579880`
+**Database Backup Location:** `scratch/password_and_account_security_backup.json` (Synced to Supabase)
+**Production Database File:** `database/courses/password_and_account_security.json`
+
+## 📊 Course Statistics
+- **Total Modules (Units):** 6
+- **Total Chapters:** 48
+- **Total Learning Points (LPs):** 384
+- **Total Questions:** 384 (100% unique, validated with 0 duplicates)
+- **Total Options:** 912
+
+## 🛠️ Work Completed in This Session
+1. **Course Overhaul & Overwrite:**
+   - Overwrote the original placeholder units/chapters for course `9372bb76-c1eb-4c2f-bcde-96400a579880` (which had 314 chapters with empty placeholders) with a clean, fully populated 6-unit, 48-chapter curriculum.
+   - Designed comprehensive, clean topic coverage for all key aspects of password and account security (2FA, managers, social media safety, mobile/online banking, etc.).
+
+2. **Quality & Formatting Alignment:**
+   - Populated exactly 8 chapters per module, each with 8 learning points and 8 corresponding questions.
+   - Question types are mixed randomly: MCQ, Boolean, Checkmark, Matching, and Storytelling.
+   - Storytelling options have 3 options (MCQ/Checkmark style) and 2 options (Boolean style).
+   - Storytelling `narrative` field has been fully populated.
+
+3. **Production Syncing:**
+   - Deep-cleaned existing placeholder tables and synced the finalized database structure to Supabase using `scripts/sync_password_course.js`.
+
+
+

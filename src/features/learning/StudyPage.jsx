@@ -749,7 +749,6 @@ const StudyPage = () => {
         const isSkip = !isAnswered;
         const isCurrentRetry = !!questions[currentIndex]?.isRetry;
         const isWrongAnswer = isAnswered && !isCorrect;
-
         // Accumulate retries for original questions only
         let updatedRetries = pendingRetries;
         if (!isCurrentRetry && (isSkip || isWrongAnswer)) {
@@ -772,6 +771,7 @@ const StudyPage = () => {
             setIsAnswered(false);
             setIsCorrect(false);
             setActiveDialogueIndex(0);
+            setFailedOptions([]);
         } else if (isAtLastOriginal && updatedRetries.size > 0) {
             // Just finished last ORIGINAL question — append retry round
             const retryQuestionsToAdd = [...updatedRetries]
@@ -789,6 +789,7 @@ const StudyPage = () => {
             setIsAnswered(false);
             setIsCorrect(false);
             setActiveDialogueIndex(0);
+            setFailedOptions([]);
         } else {
             if (isProcessingResults) return;
             setIsProcessingResults(true);

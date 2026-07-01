@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Lightbulb, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, CheckSquare, User, Share2, Eye, EyeOff } from 'lucide-react';
+import { X, Lightbulb, RotateCcw, Star, ArrowRight, Clock, Infinity, Zap, ShoppingBag, CreditCard, Loader2, Sparkles, CircleCheckBig, CircleX, Square, Circle, CheckSquare, User, Share2, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { supabase } from '../../lib/supabaseClient';
@@ -1209,39 +1209,30 @@ const StudyPage = () => {
 
                                                 {showMCQ && (
                                                     <div className="space-y-8">
-                                                        {/* ── Retry banner ── */}
-                                                        {isLatest && q.isRetry && (
-                                                            <div style={{
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: 8,
-                                                                padding: '7px 12px',
-                                                                borderRadius: 10,
-                                                                background: 'rgba(255, 184, 0,0.06)',
-                                                                border: '1px solid rgba(255, 184, 0,0.2)',
-                                                                marginBottom: 4,
-                                                            }}>
-                                                                <span style={{ fontSize: '1rem' }}>🔄</span>
-                                                                <div>
-                                                                    <span style={{ fontSize: '0.82rem', fontWeight: 700, color: '#FFB800' }}>{t('re_practice')}</span>
-                                                                </div>
-                                                            </div>
-                                                        )}
-
-                                                        {!isStory && (q.narrative || q.explanation) && (
-                                                             <div className="flex justify-end mb-3">
-                                                                 <button
-                                                                     onClick={() => setHintEnabled(!hintEnabled)}
-                                                                     className={cn(
-                                                                         "flex items-center justify-center p-2 rounded-xl transition-all active:scale-95",
-                                                                         hintEnabled
-                                                                             ? "bg-slate-800/30 text-slate-600 border border-slate-700/20 opacity-50"
-                                                                             : "bg-[#1a2226] hover:bg-[#253036] text-[#ffa202] border border-[#ffa202]/30 shadow-[0_2px_0_rgba(0,0,0,0.2)]"
-                                                                     )}
-                                                                     title="Toggle Hint"
-                                                                 >
-                                                                     <Lightbulb size={16} className={hintEnabled ? '' : styles.bulbAnimated} />
-                                                                 </button>
+                                                        {((isLatest && q.isRetry) || (!isStory && (q.narrative || q.explanation))) && (
+                                                             <div className="flex justify-end items-center gap-2 mb-3">
+                                                                 {isLatest && q.isRetry && (
+                                                                     <div
+                                                                         className="flex items-center justify-center p-2 text-[#FFB800] opacity-80"
+                                                                         title="পুনরায় অনুশীলন"
+                                                                     >
+                                                                         <RotateCcw size={16} />
+                                                                     </div>
+                                                                 )}
+                                                                 {!isStory && (q.narrative || q.explanation) && (
+                                                                     <button
+                                                                         onClick={() => setHintEnabled(!hintEnabled)}
+                                                                         className={cn(
+                                                                             "flex items-center justify-center p-2 rounded-xl transition-all active:scale-95",
+                                                                             hintEnabled
+                                                                                 ? "bg-slate-800/30 text-slate-600 border border-slate-700/20 opacity-50"
+                                                                                 : "bg-[#1a2226] hover:bg-[#253036] text-[#ffa202] border border-[#ffa202]/30 shadow-[0_2px_0_rgba(0,0,0,0.2)]"
+                                                                         )}
+                                                                         title="Toggle Hint"
+                                                                     >
+                                                                         <Lightbulb size={16} className={hintEnabled ? '' : styles.bulbAnimated} />
+                                                                     </button>
+                                                                 )}
                                                              </div>
                                                          )}
 

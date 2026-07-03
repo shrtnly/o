@@ -810,36 +810,43 @@ const StudyPage = () => {
                 setResultLoadingProgress(progress);
             }, 180);
 
+            const accuracy = stats.correct / (stats.total || 1);
+            const hasPassed = accuracy >= 0.60;
+
             if (user && courseId && chapterId) {
                 try {
-                    // Reward Logic: XP (Max 10), Pollen (Max 14 — first completion only)
-                    const earnedXp = Math.round((stats.correct / (stats.total || 1)) * 10);
-                    const earnedPollen = isFirstCompletion.current
-                        ? Math.round((stats.correct / (stats.total || 1)) * 14)
+                    // Reward Logic: XP (Max 10), Pollen (Max 6 — first completion only)
+                    // If fail, pollen and XP count 0
+                    const earnedXp = hasPassed ? Math.round(accuracy * 10) : 0;
+                    const earnedPollen = (hasPassed && isFirstCompletion.current)
+                        ? Math.round(accuracy * 6)
                         : 0;
 
-                    // Update user progress via Atomic RPC for better reliability and RLS bypass
-                    const { error: rpcErr } = await supabase.rpc('upsert_user_progress', {
-                        p_user_id: user.id,
-                        p_course_id: courseId,
-                        p_chapter_id: chapterId,
-                        p_total_questions: stats.total,
-                        p_correct_answers: stats.correct,
-                        p_xp_earned: earnedXp
-                    });
+                    // If fail, do NOT upsert progress so next chapter stays locked
+                    if (hasPassed) {
+                        // Update user progress via Atomic RPC for better reliability and RLS bypass
+                        const { error: rpcErr } = await supabase.rpc('upsert_user_progress', {
+                            p_user_id: user.id,
+                            p_course_id: courseId,
+                            p_chapter_id: chapterId,
+                            p_total_questions: stats.total,
+                            p_correct_answers: stats.correct,
+                            p_xp_earned: earnedXp
+                        });
 
-                    if (rpcErr) throw rpcErr;
+                        if (rpcErr) throw rpcErr;
+                    }
 
                     // Update Profile Stats & Streak via Reward Service
-                    if (user?.id) {
-                        // This awards XP, logs activity, and updates streaks (always)
+                    if (user?.id && hasPassed) {
+                        // This awards XP, logs activity, and updates streaks (always on pass)
                         await rewardService.awardXP(user.id, earnedXp, 'chapter_complete', {
                             courseId,
                             chapterId,
-                            accuracy: stats.correct / (stats.total || 1)
+                            accuracy: accuracy
                         });
 
-                        // This awards pollen — only on first completion
+                        // This awards pollen — only on first completion and pass
                         if (earnedPollen > 0) {
                             await rewardService.awardGems(user.id, earnedPollen, 'chapter_complete', {
                                 courseId,
@@ -858,7 +865,7 @@ const StudyPage = () => {
             setTimeTaken(durationMins);
 
             // Refetch streak to show updated streak if it was incremented
-            if (user?.id) {
+            if (user?.id && hasPassed) {
                 rewardService.getUserStreak(user.id).then(s => {
                     if (s) setStreakInfo(s);
                 });
@@ -866,7 +873,7 @@ const StudyPage = () => {
 
             // Play completion sound
             const soundEnabled = soundEnabledRef.current;
-            if (completeAudio.current && soundEnabled) {
+            if (hasPassed && completeAudio.current && soundEnabled) {
                 try {
                     completeAudio.current.currentTime = 0;
                     completeAudio.current.play().catch(e => {
@@ -1043,29 +1050,42 @@ const StudyPage = () => {
                                 transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
                                 className={styles.inlineResultCard}
                             >
-                                {/* ── Fireworks celebration animation ── */}
-                                <div className={styles.fireworksWrap}>
-                                    <DotLottieReact
-                                        src="/models/Fireworks.lottie"
-                                        autoplay
-                                        loop
-                                        className={styles.fireworksAnim}
-                                    />
-                                </div>
+                                {/* ── Fireworks celebration animation (only if passed) ── */}
+                                {((stats.correct / (stats.total || 1)) >= 0.60) && (
+                                    <div className={styles.fireworksWrap}>
+                                        <DotLottieReact
+                                            src="/models/Fireworks.lottie"
+                                            autoplay
+                                            loop
+                                            className={styles.fireworksAnim}
+                                        />
+                                    </div>
+                                )}
 
                                 <div className={styles.beeHeader}>
                                     <DotLottieReact
                                         src={
-                                            (stats.correct / (stats.total || 1)) >= 0.67
+                                            (stats.correct / (stats.total || 1)) >= 0.60
                                                 ? "/models/Honey bee.lottie"
-                                                : (stats.correct / (stats.total || 1)) >= 0.34
-                                                    ? "/models/Bee looking.lottie"
-                                                    : "/models/awkward bee.lottie"
+                                                : "/models/awkward bee.lottie"
                                         }
                                         autoplay
                                         loop
                                         className={styles.resultBee}
                                     />
+                                </div>
+
+                                <div className={styles.completionStatusText}>
+                                    {((stats.correct / (stats.total || 1)) >= 0.60) ? (
+                                        <h2 className={styles.passHeader}>অভিনন্দন! আপনি পাস করেছেন 🎉</h2>
+                                    ) : (
+                                        <h2 className={styles.failHeader}>দুঃখিত! আপনি পাস করতে পারেননি 😢</h2>
+                                    )}
+                                    <p className={styles.passSubtext}>
+                                        {((stats.correct / (stats.total || 1)) >= 0.60)
+                                            ? "পরবর্তী চ্যাপ্টারটি আনলক হয়েছে।"
+                                            : "পরবর্তী চ্যাপ্টার আনলক করতে ন্যূনতম ৬০% সঠিক উত্তর প্রয়োজন। আবার চেষ্টা করুন!"}
+                                    </p>
                                 </div>
 
                                 <div className={styles.resultDivider} />
@@ -1104,11 +1124,12 @@ const StudyPage = () => {
                                             {(() => {
                                                 const ARC = 125.7;
                                                 const accuracy = stats.correct / (stats.total || 1);
+                                                const hasPassed = accuracy >= 0.60;
                                                 const showPollen = isFirstCompletion.current;
-                                                const earnedPollen = showPollen ? Math.round(accuracy * 14) : 0;
-                                                const earnedXp = Math.round(accuracy * 10);
-                                                // Normalizer: 24 when pollen shown, 10 when xp-only
-                                                const TOTAL = showPollen ? 24 : 10;
+                                                const earnedPollen = (hasPassed && showPollen) ? Math.round(accuracy * 6) : 0;
+                                                const earnedXp = hasPassed ? Math.round(accuracy * 10) : 0;
+                                                // Normalizer: 16 when pollen shown, 10 when xp-only
+                                                const TOTAL = showPollen ? 16 : 10;
                                                 const pollenArc = (earnedPollen / TOTAL) * ARC;
                                                 const xpArc = (earnedXp / TOTAL) * ARC;
                                                 return (
@@ -1151,12 +1172,12 @@ const StudyPage = () => {
                                                     {isFirstCompletion.current && (
                                                         <div className={styles.rewardIconGroup}>
                                                             <PollenIcon size={13} />
-                                                            <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 14)}</span>
+                                                            <span className={styles.rewardValSmall}>+{((stats.correct / (stats.total || 1)) >= 0.60) ? Math.round((stats.correct / (stats.total || 1)) * 6) : 0}</span>
                                                         </div>
                                                     )}
                                                     <div className={styles.rewardIconGroup}>
                                                         <Zap size={13} fill="#1cb0f6" stroke="none" />
-                                                        <span className={styles.rewardValSmall}>+{Math.round((stats.correct / (stats.total || 1)) * 10)}</span>
+                                                        <span className={styles.rewardValSmall}>+{((stats.correct / (stats.total || 1)) >= 0.60) ? Math.round((stats.correct / (stats.total || 1)) * 10) : 0}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1224,10 +1245,8 @@ const StudyPage = () => {
                                                                      <button
                                                                          onClick={() => setHintEnabled(!hintEnabled)}
                                                                          className={cn(
-                                                                             "flex items-center justify-center p-2 rounded-xl transition-all active:scale-95",
-                                                                             hintEnabled
-                                                                                 ? "bg-slate-800/30 text-slate-600 border border-slate-700/20 opacity-50"
-                                                                                 : "bg-[#1a2226] hover:bg-[#253036] text-[#ffa202] border border-[#ffa202]/30 shadow-[0_2px_0_rgba(0,0,0,0.2)]"
+                                                                             styles.hintBtn,
+                                                                             hintEnabled && styles.hintBtnActive
                                                                          )}
                                                                          title="Toggle Hint"
                                                                      >
@@ -1417,7 +1436,7 @@ const StudyPage = () => {
                                     className={styles.continueFinishBtn}
                                     onClick={() => navigate(`/learn/${courseId}`)}
                                 >
-                                    অব্যাহত রাখুন
+                                    {((stats.correct / (stats.total || 1)) >= 0.60) ? 'অব্যাহত রাখুন' : 'আবার চেষ্টা করুন'}
                                 </button>
                             )}
                         </div>

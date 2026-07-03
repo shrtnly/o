@@ -116,6 +116,32 @@
     color: var(--color-text);
 }
 
+.courseMeta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 2px;
+}
+
+.courseStat {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-muted, rgba(255,255,255,0.45));
+    white-space: nowrap;
+}
+
+:global(.light) .courseStat {
+    color: #94a3b8;
+}
+
+.starIcon {
+    color: #FFB800;
+    fill: #FFB800;
+}
+
 /* Arrow buttons */
 .arrowBtn {
     position: absolute;

@@ -6,9 +6,13 @@ const filePaths = [
   path.join(process.cwd(), 'database', 'courses', 'bangladesh_labor_law_2006.json'),
   path.join(process.cwd(), 'database', 'courses', 'cyber_threat_and_scam.json'),
   path.join(process.cwd(), 'database', 'courses', 'password_and_account_security.json'),
+  path.join(process.cwd(), 'database', 'courses', 'cyberbullying_and_harassment.json'),
+  path.join(process.cwd(), 'database', 'courses', 'productivity_and_time_management.json'),
   path.join(process.cwd(), 'scratch', 'cv_course_backup.json'),
   path.join(process.cwd(), 'scratch', 'cyber_course_backup.json'),
-  path.join(process.cwd(), 'scratch', 'password_and_account_security_backup.json')
+  path.join(process.cwd(), 'scratch', 'password_and_account_security_backup.json'),
+  path.join(process.cwd(), 'scratch', 'cyberbullying_and_harassment_backup.json'),
+  path.join(process.cwd(), 'scratch', 'productivity_and_time_management_backup.json')
 ];
 
 const mcqVariations = [
@@ -178,12 +182,18 @@ for (const filePath of filePaths) {
                   qCount++;
                 }
 
-                // Strip old prefix if present
+                // Strip old prefix if present (loop to remove duplicates)
                 let cleanExp = oldExp;
-                for (const oldPrefix of oldPrefixes) {
-                  if (cleanExp.startsWith(oldPrefix)) {
-                    cleanExp = cleanExp.substring(oldPrefix.length);
-                    break;
+                const allPrefixes = Array.from(new Set([...oldPrefixes, ...explanationPrefixes]));
+                let found = true;
+                while (found) {
+                  found = false;
+                  for (const oldPrefix of allPrefixes) {
+                    if (cleanExp.startsWith(oldPrefix)) {
+                      cleanExp = cleanExp.substring(oldPrefix.length);
+                      found = true;
+                      break;
+                    }
                   }
                 }
 

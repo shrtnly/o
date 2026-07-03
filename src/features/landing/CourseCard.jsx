@@ -3,15 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { Users, Star, CheckCircle2 } from 'lucide-react';
 import { courseService } from '../../services/courseService';
 import { useLanguage } from '../../context/LanguageContext';
+import { getCourseBaseStats } from '../../utils/courseBaseStats';
 import styles from './CourseCard.module.css';
 
 const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
     const { t, language } = useLanguage();
     const navigate = useNavigate();
 
-    // Use values from course object, fallback to 0
-    const rating = parseFloat(course.rating) || 0;
-    const students = Number(course.students_count) || 0;
+    // Merge dummy base stats with real DB values
+    // displayed students = dummy base + real enrolled count from DB
+    // displayed rating   = real DB rating if non-zero, otherwise dummy base rating
+    const { baseStudents, baseRating } = getCourseBaseStats(course.title || '');
+    const realStudents = Number(course.students_count) || 0;
+    const students = baseStudents + realStudents;
+    const realRating = parseFloat(course.rating) || 0;
+    const rating = realRating > 0 ? realRating : baseRating;
 
     const displayTitle = (language === 'en' && course.title_en) ? course.title_en : course.title;
 

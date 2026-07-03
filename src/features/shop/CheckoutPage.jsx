@@ -2,22 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
     ArrowLeft, 
-    CreditCard, 
     ShieldCheck, 
     ArrowRight,
-
     CheckCircle2,
-    Tag,
     AlertCircle,
     Loader2,
-    Info,
     X
 } from 'lucide-react';
-import bkashLogo from '../../assets/payments/bkash.png';
-import nagadLogo from '../../assets/payments/nagad.png';
-import visaLogo from '../../assets/payments/visa.png';
-import mastercardLogo from '../../assets/payments/mastercard.png';
-import amexLogo from '../../assets/payments/amex.png';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { shopService } from '../../services/shopService';
@@ -39,6 +30,10 @@ const CheckoutPage = () => {
     const [processing, setProcessing] = useState(false);
     const [profile, setProfile] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('bkash');
+    
+    // Custom manual payment states
+    const [transactionId, setTransactionId] = useState('');
+    const [userEmail, setUserEmail] = useState('');
     
     // Promo Code State
     const [promoCode, setPromoCode] = useState('');
@@ -80,6 +75,9 @@ const CheckoutPage = () => {
                     .eq('id', user.id)
                     .single();
                 setProfile(data);
+                if (user.email) {
+                    setUserEmail(user.email);
+                }
             } catch (err) {
                 console.error(err);
             } finally {
@@ -89,6 +87,33 @@ const CheckoutPage = () => {
 
         fetchProfile();
     }, [user, checkoutData, navigate]);
+
+    const getPurchaseTypeName = () => {
+        if (type === 'subscription') {
+            const isFemale = profile?.gender === 'female' || profile?.gender === 'নারী';
+            if (language === 'bn') {
+                return isFemale ? 'সুপার কুইন বি' : 'সুপার কিং বি';
+            }
+            return isFemale ? 'Super Queen Bee' : 'Super King Bee';
+        }
+        if (type === '1day') {
+            return language === 'bn' ? 'কুইক হানি ড্রপ (১ দিন)' : 'Quick Honey Drop (1 Day)';
+        }
+        return checkoutData?.label || (language === 'bn' ? 'অন্যান্য' : 'Other');
+    };
+
+    const getValidityName = () => {
+        if (type === 'subscription') {
+            if (planType === 'yearly') {
+                return language === 'bn' ? 'বার্ষিক (১ বছর)' : 'Yearly (1 Year)';
+            }
+            return language === 'bn' ? 'মাসিক (৩০ দিন)' : 'Monthly (30 Days)';
+        }
+        if (type === '1day') {
+            return language === 'bn' ? '১ দিন' : '1 Day';
+        }
+        return language === 'bn' ? 'লাইফটাইম / এককালীন' : 'Lifetime / One-time';
+    };
 
     const handleApplyPromo = async () => {
         if (!promoCode.trim()) return;
@@ -115,6 +140,24 @@ const CheckoutPage = () => {
                 throw new Error(`${t('min_purchase_required') || 'Minimum purchase of'} ৳${data.min_purchase}`);
             }
 
+            // Check promo code applicability
+            if (data.applicable_to && data.applicable_to !== 'all') {
+                if (data.applicable_to === 'subscription' && !isSubscription) {
+                    throw new Error(
+                        language === 'bn' 
+                            ? 'এই প্রোমো কোডটি শুধুমাত্র সুপার বি প্রিমিয়াম-এর জন্য প্রযোজ্য' 
+                            : 'This promo code is only applicable to Super Bee Premium'
+                    );
+                }
+                if (data.applicable_to === '1day' && type !== '1day') {
+                    throw new Error(
+                        language === 'bn' 
+                            ? 'এই প্রোমো কোডটি শুধুমাত্র কুইক হানি ড্রপ (১ দিন)-এর জন্য প্রযোজ্য' 
+                            : 'This promo code is only applicable to Quick Honey Drop (1 Day)'
+                    );
+                }
+            }
+
             setAppliedPromo(data);
         } catch (err) {
             setPromoError(err.message);
@@ -124,37 +167,59 @@ const CheckoutPage = () => {
     };
 
     const handleCompleteCheckout = async () => {
+        if (!transactionId.trim()) {
+            toast.error(language === 'bn' ? 'অনুগ্রহ করে ট্রানজেকশন আইডি প্রদান করুন!' : 'Please enter a transaction ID!');
+            return;
+        }
+        if (!userEmail.trim()) {
+            toast.error(language === 'bn' ? 'অনুগ্রহ করে আপনার ইমেইল প্রদান করুন!' : 'Please enter your email!');
+            return;
+        }
+
         if (processing) return;
         
         setProcessing(true);
-        const toastId = toast.loading(t('payment_processing') || 'পেমেন্ট প্রসেস হচ্ছে...');
+        const toastId = toast.loading(language === 'bn' ? 'আপনার পেমেন্ট রিকোয়েস্ট পাঠানো হচ্ছে...' : 'Submitting payment request...');
 
         try {
-            let result;
-            const originalPrice = basePrice;
-            const promoId = appliedPromo?.id;
+            const planTypeVal = type === 'subscription' ? planType : type;
+            const subTypeVal = getPurchaseTypeName();
 
-            if (type === 'gems') {
-                result = await shopService.buyGems(user.id, checkoutData.amount, finalPrice, checkoutData.id, originalPrice, promoId);
-            } else if (type === 'subscription') {
-                result = await shopService.subscribeToPremium(user.id, planType, finalPrice, originalPrice, promoId);
-            } else if (type === '1day') {
-                result = await shopService.buy1DayPremium(user.id, finalPrice, originalPrice, promoId);
-            } else if (type === 'hearts') {
-                result = await shopService.buyHearts(user.id, checkoutData.amount, finalPrice, checkoutData.id, originalPrice, promoId);
-            }
+            const { error } = await supabase
+                .from('Payment')
+                .insert([
+                    {
+                        user_id: user.id,
+                        email: userEmail.trim(),
+                        transaction_id: transactionId.trim(),
+                        amount: finalPrice,
+                        plan_type: planTypeVal,
+                        subscription_type: subTypeVal,
+                        status: 'pending'
+                    }
+                ]);
 
-            if (result?.success) {
-                toast.success(t('purchase_success') || 'সফলভাবে কেনা হয়েছে!', { id: toastId });
-                setTimeout(() => {
-                    navigate('/shop', { replace: true });
-                }, 1500);
-            } else {
-                throw new Error(result?.message || 'Something went wrong');
-            }
+            if (error) throw error;
+
+            toast.success(
+                language === 'bn' 
+                    ? 'পেমেন্ট সফলভাবে সাবমিট করা হয়েছে! শীঘ্রই আপনার অ্যাকাউন্ট সচল করা হবে।' 
+                    : 'Payment details submitted successfully! Your account will be activated shortly.', 
+                { id: toastId }
+            );
+
+            setTimeout(() => {
+                navigate('/shop', { replace: true });
+            }, 2000);
+
         } catch (err) {
             console.error('Checkout error:', err);
-            toast.error(t('payment_failed') || 'পেমেন্ট ব্যর্থ হয়েছে', { id: toastId });
+            toast.error(
+                language === 'bn' 
+                    ? `পেমেন্ট সাবমিট করতে ত্রুটি হয়েছে: ${err.message}` 
+                    : `Error submitting payment: ${err.message}`, 
+                { id: toastId }
+            );
             setProcessing(false);
         }
     };
@@ -172,7 +237,7 @@ const CheckoutPage = () => {
                     <button onClick={() => navigate(-1)} className={styles.backBtn}>
                         <ArrowLeft size={24} />
                     </button>
-                    <h1 className={`${styles.pageTitle} ${isSubscription ? styles.premiumTitle : ''}`}>
+                    <h1 className={`${styles.pageTitle} ${(isSubscription || type === '1day') ? styles.premiumTitle : ''}`}>
                         {isSubscription ? (t('super_bee_title') || 'Super Bee') : checkoutData.label}
                     </h1>
                 </div>
@@ -213,14 +278,17 @@ const CheckoutPage = () => {
                     <div className={styles.detailsList}>
                         <div className={styles.detailRow}>
                             <div className={styles.detailLabel}>
-                                <span className={`${styles.itemName} ${isSubscription ? styles.premiumTitle : ''}`}>
+                                <span className={`${styles.itemName} ${(isSubscription || type === '1day') ? styles.premiumTitle : ''}`}>
                                     {isSubscription 
                                         ? (profile?.gender === 'female' || profile?.gender === 'নারী' ? t('queen_bee_mode') || 'Queen Bee' : t('king_bee_mode') || 'King Bee')
                                         : checkoutData.label
                                     }
                                 </span>
                                 <span className={styles.itemSub}>
-                                    {isSubscription ? (planType === 'yearly' ? t('yearly') : t('monthly')) : (t('one_time_purchase') || 'One-time purchase')}
+                                    {isSubscription 
+                                        ? (planType === 'yearly' ? t('yearly') : t('monthly')) 
+                                        : (type === '1day' ? '' : (t('one_time_purchase') || 'One-time purchase'))
+                                    }
                                 </span>
                             </div>
                             <div className={styles.itemPrice}>
@@ -305,40 +373,84 @@ const CheckoutPage = () => {
                     </div>
                 </div>
 
-                {/* Payment Method Section */}
+                {/* Payment Instruction & Inputs */}
                 <section className={styles.sectionCard}>
-                    <h2 className={styles.sectionHeading}>{t('payment_method') || 'Payment method'}</h2>
+                    <h2 className={styles.sectionHeading}>
+                        {language === 'bn' ? 'পেমেন্ট নির্দেশনাবলী' : 'Payment Instructions'}
+                    </h2>
 
-                    <div className={styles.paymentGrid}>
-                        <button 
-                            className={`${styles.methodCard} ${paymentMethod === 'bkash' ? styles.active : ''}`}
-                            onClick={() => setPaymentMethod('bkash')}
-                        >
-                            <div className={styles.radioIndicator} />
-                            <div className={styles.methodLogo}>
-                                <img src={bkashLogo} alt="bKash" />
-                            </div>
-                        </button>
-                        <button 
-                            className={`${styles.methodCard} ${paymentMethod === 'nagad' ? styles.active : ''}`}
-                            onClick={() => setPaymentMethod('nagad')}
-                        >
-                            <div className={styles.radioIndicator} />
-                            <div className={styles.methodLogo}>
-                                <img src={nagadLogo} alt="Nagad" />
-                            </div>
-                        </button>
-                        <button 
-                            className={`${styles.methodCard} ${paymentMethod === 'card' ? styles.active : ''}`}
-                            onClick={() => setPaymentMethod('card')}
-                        >
-                            <div className={styles.radioIndicator} />
-                            <div className={styles.methodLogoGroup}>
-                                <img src={visaLogo} alt="Visa" />
-                                <img src={mastercardLogo} alt="Mastercard" />
-                                <img src={amexLogo} alt="Amex" />
-                            </div>
-                        </button>
+                    <div className={styles.instructionContainer}>
+                        <p className={styles.instructionHeader}>
+                            {language === 'bn' 
+                                ? 'প্রিয় লার্নার সাবস্ক্রিপশন নিতে অনুগ্রহ করে নিচের বিস্তারিত দেখুন :' 
+                                : 'Dear Learner, please check the details below to purchase your subscription:'}
+                        </p>
+                        
+                        <ul className={styles.instructionList}>
+                            <li>
+                                <span>{language === 'bn' ? '• সাবস্ক্রিপশন টাইপ :' : '• Subscription Type:'}</span>
+                                <strong>{getPurchaseTypeName()}</strong>
+                            </li>
+                            <li>
+                                <span>{language === 'bn' ? '• মেয়াদ :' : '• Validity:'}</span>
+                                <strong>{getValidityName()}</strong>
+                            </li>
+                            <li>
+                                <span>{language === 'bn' ? '• টাকা :' : '• Amount:'}</span>
+                                <strong className={styles.amountHighlight}>৳{formatNumber(finalPrice)}</strong>
+                            </li>
+                            <li>
+                                <span>{language === 'bn' ? '• সেন্ড মানি :' : '• Send Money:'}</span>
+                                <strong className={styles.phoneHighlight}>০১৮১৫-৩১১২৩২</strong>
+                            </li>
+                            <li>
+                                <span>{language === 'bn' ? '• পেমেন্ট মেথড :' : '• Payment Method:'}</span>
+                                <strong>{language === 'bn' ? 'বিকাশ , রকেট এবং নগদ' : 'bKash, Rocket and Nagad'}</strong>
+                            </li>
+                            <li>
+                                <span className={styles.infoHighlight}>
+                                    {language === 'bn' 
+                                        ? '• পেমেন্ট শেষ করে আপনার ট্রানজিশন আইডি এবং ইউজার ইমেইল নিচে সাবমিট করুন' 
+                                        : '• Submit your Transaction ID and User Email below after payment'}
+                                </span>
+                            </li>
+                            <li>
+                                <span className={styles.infoHighlight}>
+                                    {language === 'bn' 
+                                        ? '• শীঘ্রই আপনার সাবস্ক্রিপশনটি একটিভ হবে' 
+                                        : '• Soon your subscription will be active'}
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div className={styles.paymentForm}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="transactionId">
+                                {language === 'bn' ? 'ট্রানজেকশন আইডি (Transaction ID) *' : 'Transaction ID *'}
+                            </label>
+                            <input 
+                                id="transactionId"
+                                type="text"
+                                className={styles.formInput}
+                                placeholder={language === 'bn' ? 'এখানে ট্রানজেকশন আইডি দিন' : 'Enter Transaction ID'}
+                                value={transactionId}
+                                onChange={(e) => setTransactionId(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="userEmail">
+                                {language === 'bn' ? 'ইমেইল (Email) *' : 'Email *'}
+                            </label>
+                            <input 
+                                id="userEmail"
+                                type="email"
+                                className={styles.formInput}
+                                placeholder={language === 'bn' ? 'এখানে ইমেইল দিন' : 'Enter Email'}
+                                value={userEmail}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                            />
+                        </div>
                     </div>
                 </section>
 
@@ -353,7 +465,7 @@ const CheckoutPage = () => {
                             <Loader2 className={styles.spinner} />
                         ) : (
                             <>
-                                <span>{t('confirm_payment') || 'Confirm and Pay'}</span>
+                                <span>{language === 'bn' ? 'সাবমিট করুন' : 'Submit'}</span>
                                 <ArrowRight size={20} />
                             </>
                         )}

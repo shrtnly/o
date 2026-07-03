@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, UserCheck, ShieldAlert, Coins, Copyright, RefreshCw } from 'lucide-react';
+import { ChevronLeft, UserCheck, ShieldAlert, Coins, Copyright, RefreshCw, Mail, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import styles from './TermsPage.module.css';
 
@@ -14,6 +14,7 @@ const TermsPage = () => {
         { id: 3, title: 't_section_3_title', desc: 't_section_3_desc', icon: Coins },
         { id: 4, title: 't_section_4_title', desc: 't_section_4_desc', icon: Copyright },
         { id: 5, title: 't_section_5_title', desc: 't_section_5_desc', icon: RefreshCw },
+        { id: 6, title: 't_section_6_title', desc: 't_section_6_desc', icon: AlertTriangle },
     ];
 
     return (
@@ -48,7 +49,10 @@ const TermsPage = () => {
                     })}
                 </div>
 
-
+                <div className={styles.contact}>
+                    <Mail size={24} style={{ marginBottom: '12px', opacity: 0.8 }} />
+                    <p>{t('p_contact_us')}</p>
+                </div>
             </div>
         </div>
     );

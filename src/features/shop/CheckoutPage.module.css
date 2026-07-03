@@ -804,3 +804,118 @@
     background: var(--color-border);
 }
 
+.instructionContainer {
+    background: var(--color-bg-deep);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px dashed var(--color-border);
+}
+
+.instructionHeader {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--color-text);
+}
+
+.instructionList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.instructionList li {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.instructionList li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.amountHighlight {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.phoneHighlight {
+    color: #3b82f6;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.infoHighlight {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.paymentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.formInput {
+    background: var(--color-bg-deep);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--color-text);
+    font-size: 0.95rem;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: var(--color-bg-alt);
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+/* Light Mode Overrides */
+:global(.light) .instructionContainer {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+:global(.light) .instructionList li {
+    border-bottom-color: #e2e8f0;
+}
+
+:global(.light) .formInput {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+:global(.light) .formInput:focus {
+    background: #fff;
+}
+
+

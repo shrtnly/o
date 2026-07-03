@@ -31,7 +31,8 @@ const PromoCodeManager = () => {
         max_discount_amount: '',
         valid_until: '',
         usage_limit: '',
-        is_active: true
+        is_active: true,
+        applicable_to: 'all'
     });
 
     useEffect(() => {
@@ -93,7 +94,8 @@ const PromoCodeManager = () => {
                 max_discount_amount: '',
                 valid_until: '',
                 usage_limit: '',
-                is_active: true
+                is_active: true,
+                applicable_to: 'all'
             });
             fetchPromoCodes();
         } catch (err) {
@@ -141,7 +143,8 @@ const PromoCodeManager = () => {
             max_discount_amount: code.max_discount_amount || '',
             valid_until: code.valid_until ? new Date(code.valid_until).toISOString().split('T')[0] : '',
             usage_limit: code.usage_limit || '',
-            is_active: code.is_active
+            is_active: code.is_active,
+            applicable_to: code.applicable_to || 'all'
         });
         setEditingId(code.id);
         setIsAdding(true);
@@ -183,6 +186,19 @@ const PromoCodeManager = () => {
                                 required
                                 className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 transition-all uppercase"
                             />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold uppercase text-slate-400 tracking-wider">Applicable To</label>
+                            <select 
+                                value={formData.applicable_to}
+                                onChange={e => setFormData({...formData, applicable_to: e.target.value})}
+                                className="w-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="all">All Products</option>
+                                <option value="subscription">সুপার বি প্রিমিয়াম (Subscription)</option>
+                                <option value="1day">কুইক হানি ড্রপ (১ দিন) (1-Day Premium)</option>
+                            </select>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
@@ -333,6 +349,15 @@ const PromoCodeManager = () => {
                                             {code.max_discount_amount && (
                                                 <p className="text-[10px] text-slate-400 font-bold uppercase">Max Dist: ৳{code.max_discount_amount}</p>
                                             )}
+                                            <p className="text-[10px] text-blue-500 font-bold uppercase">
+                                                Applies: {
+                                                    code.applicable_to === 'subscription' 
+                                                        ? 'সুপার বি প্রিমিয়াম' 
+                                                        : code.applicable_to === '1day' 
+                                                            ? 'কুইক হানি ড্রপ (১ দিন)' 
+                                                            : 'All Products'
+                                                }
+                                            </p>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4">

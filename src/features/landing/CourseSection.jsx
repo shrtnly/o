@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronRight, Users, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/ui/Button';
 import { courseService } from '../../services/courseService';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { supabase } from '../../lib/supabaseClient';
+import { getCourseBaseStats } from '../../utils/courseBaseStats';
 import styles from './CourseSection.module.css';
 
 const CourseSection = () => {
@@ -16,6 +17,29 @@ const CourseSection = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const scrollRef = useRef(null);
+
+    // Desired display order — matched by title substring (case-insensitive)
+    const DISPLAY_ORDER = [
+        'শ্রম আইন',
+        'সিভি',
+        'সাইবার',
+        'প্রোডাক্টিভিটি',
+        'পাসওয়ার্ড',
+    ];
+
+    const sortCourses = (list) => {
+        return [...list].sort((a, b) => {
+            const aIdx = DISPLAY_ORDER.findIndex(kw =>
+                (a.title || '').includes(kw) || (a.title_en || '').toLowerCase().includes(kw.toLowerCase())
+            );
+            const bIdx = DISPLAY_ORDER.findIndex(kw =>
+                (b.title || '').includes(kw) || (b.title_en || '').toLowerCase().includes(kw.toLowerCase())
+            );
+            const aOrder = aIdx === -1 ? DISPLAY_ORDER.length : aIdx;
+            const bOrder = bIdx === -1 ? DISPLAY_ORDER.length : bIdx;
+            return aOrder - bOrder;
+        });
+    };
 
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const [showRightArrow, setShowRightArrow] = useState(true);
@@ -28,7 +52,7 @@ const CourseSection = () => {
                     user ? supabase.from('user_courses').select('course_id').eq('user_id', user.id) : { data: [] }
                 ]);
 
-                setCourses(data || []);
+                setCourses(sortCourses(data || []));
                 if (enrolledData?.data) {
                     setEnrolledCourseIds(new Set(enrolledData.data.map(d => d.course_id)));
                 }
@@ -112,6 +136,11 @@ const CourseSection = () => {
                         ) : (
                             courses.map(course => {
                                 const displayTitle = (language === 'en' && course.title_en) ? course.title_en : course.title;
+                                const { baseStudents, baseRating } = getCourseBaseStats(course.title || '');
+                                const realStudents = Number(course.students_count) || 0;
+                                const displayStudents = baseStudents + realStudents;
+                                const realRating = parseFloat(course.rating) || 0;
+                                const displayRating = realRating > 0 ? realRating : baseRating;
                                 return (
                                     <div 
                                         key={course.id} 
@@ -124,6 +153,16 @@ const CourseSection = () => {
                                             className={styles.courseIcon} 
                                         />
                                         <span className={styles.courseTitle}>{displayTitle}</span>
+                                        <div className={styles.courseMeta}>
+                                            <span className={styles.courseStat}>
+                                                <Users size={11} />
+                                                {displayStudents}
+                                            </span>
+                                            <span className={styles.courseStat}>
+                                                <Star size={11} className={styles.starIcon} />
+                                                {displayRating.toFixed(1)}
+                                            </span>
+                                        </div>
                                     </div>
                                 );
                             })

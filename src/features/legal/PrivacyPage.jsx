@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Info, Activity, Shield, Eye, Settings } from 'lucide-react';
+import { ChevronLeft, Info, Activity, Shield, Eye, Settings, Mail } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import styles from './PrivacyPage.module.css';
 
@@ -48,7 +48,10 @@ const PrivacyPage = () => {
                     })}
                 </div>
 
-
+                <div className={styles.contact}>
+                    <Mail size={24} style={{ marginBottom: '12px', opacity: 0.8 }} />
+                    <p>{t('p_contact_us')}</p>
+                </div>
             </div>
         </div>
     );

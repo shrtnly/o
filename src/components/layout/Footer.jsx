@@ -14,7 +14,7 @@ const Footer = () => {
                 <div className={styles.top}>
                     <div className={styles.brand}>
                         <Link to="/" className={styles.logoWrapper}>
-                            <img src={logo} alt="O-Sekha" className={styles.logo} />
+                            <img src={logo} alt="BeeLesson" className={styles.logo} />
                         </Link>
                         <p className={styles.brandDesc}>
                             {language === 'bn' 

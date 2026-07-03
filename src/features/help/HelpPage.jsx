@@ -14,179 +14,148 @@ const HelpPage = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
 
     const categories = [
-        { id: 'start', title: language === 'bn' ? 'শুরু করা' : 'Getting Started', icon: Zap, count: 6, color: '#FFB800' },
-        { id: 'course', title: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership', icon: BookOpen, count: 4, color: '#3498db' },
-        { id: 'payment', title: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing', icon: CreditCard, count: 3, color: '#2ecc71' },
-        { id: 'tech', title: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues', icon: Wrench, count: 3, color: '#e74c3c' },
-        { id: 'about', title: language === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us', icon: Globe, count: 2, color: '#e67e22' },
-        { id: 'battle', title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge', icon: Swords, count: 4, color: '#9b59b6' }
+        { id: 'start', title: language === 'bn' ? 'শুরু করা' : 'Getting Started', icon: Zap, color: '#FFB800' },
+        { id: 'course', title: language === 'bn' ? 'কোর্স ও সার্টিফিকেট' : 'Courses & Certificates', icon: BookOpen, color: '#3498db' },
+        { id: 'battle', title: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge', icon: Swords, color: '#9b59b6' },
+        { id: 'shop', title: language === 'bn' ? 'শপ ও মেম্বারশিপ' : 'Shop & Membership', icon: CreditCard, color: '#2ecc71' },
+        { id: 'tech', title: language === 'bn' ? 'অ্যাকাউন্ট ও টেকনিক্যাল' : 'Account & Technical', icon: Wrench, color: '#e74c3c' }
     ];
 
     const faqs = [
         // শুরু করা (Getting Started)
         { 
-            q: language === 'bn' ? 'বি লেসন (BeeLesson) কি?' : 'What is BeeLesson?', 
+            q: language === 'bn' ? 'বি লেসন (BeeLesson) কী?' : 'What is BeeLesson?', 
             a: language === 'bn' 
-                ? 'বি লেসন একটি আধুনিক ইসলামিক অনলাইন লার্নিং প্ল্যাটফর্ম যেখানে আপনি সহজভাবে কুরআন, হাদিস এবং ইসলামের মৌলিক বিষয়গুলো শিখতে পারেন। আমাদের লক্ষ্য হলো প্রযুক্তির মাধ্যমে দ্বীনি শিক্ষাকে সবার কাছে সহজলভ্য করা।'
-                : 'BeeLesson is a modern Islamic online learning platform where you can easily learn the Quran, Hadith, and basic Islamic principles. Our goal is to make religious education accessible to everyone through technology.',
+                ? 'বি লেসন (BeeLesson) হলো বাংলাদেশের প্রথম সম্পূর্ণ গেমিফাইড লার্নিং প্ল্যাটফর্ম। গেম খেলার মতো সহজ এবং আনন্দদায়ক উপায়ে এখানে আপনি বাস্তব জীবন ও পেশাদার ক্যারিয়ারের জন্য অত্যন্ত প্রয়োজনীয় বিভিন্ন দক্ষতা অর্জন করতে পারবেন।'
+                : 'BeeLesson is Bangladesh\'s first fully gamified learning platform. Here, you can acquire essential real-world and professional skills in an easy, interactive, and game-like environment.',
             cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
         },
         { 
-            q: language === 'bn' ? 'হানি ড্রপ (Honey Drop) এর কাজ কি?' : 'What is the purpose of Honey Drop?', 
+            q: language === 'bn' ? 'হানি ড্রপ (Honey Drop) কী এবং কীভাবে কাজ করে?' : 'What is Honey Drop and how does it work?', 
             a: language === 'bn'
-                ? 'হানি ড্রপ হলো আমাদের প্ল্যাটফর্মের এনার্জি সিস্টেম। কুইজে ভুল উত্তর দিলে আপনার হানি ড্রপ কমে যাবে। হানি ড্রপ শেষ হয়ে গেলে আপনি কুইজে অংশ নিতে পারবেন না। প্রতিদিন নতুন হানি ড্রপ পাওয়া যায় অথবা স্টোর থেকে অর্জন করা যায়।'
-                : 'Honey Drop is our platform\'s energy system. If you give wrong answers in quizzes, your Honey Drops will decrease. If you run out, you won\'t be able to take more quizzes. You get new ones every day or can earn them from the store.',
+                ? 'হানি ড্রপ হলো আমাদের প্ল্যাটফর্মের এনার্জি বা লাইফ সিস্টেম। কুইজে ভুল উত্তর দিলে আপনার ১টি করে হানি ড্রপ কমে যাবে। হানি ড্রপ সম্পূর্ণ শেষ হয়ে গেলে আপনি নতুন কুইজে অংশ নিতে পারবেন না। প্রতিদিন এটি স্বয়ংক্রিয়ভাবে রিফিল হয়, অথবা মধুরেণু (Pollen) এক্সচেঞ্জ করে শপ থেকে অর্জন করা যায়।'
+                : 'Honey Drop is our platform\'s energy or life system. A wrong answer in quizzes will reduce your Honey Drops by 1. If you run out, you cannot take new quizzes. They regenerate daily, or you can purchase/refill them from the shop using Pollen.',
             cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
         },
         { 
-            q: language === 'bn' ? 'কিভাবে অ্যাকাউন্ট খুলবো?' : 'How do I open an account?', 
+            q: language === 'bn' ? 'মধু (XP) এবং মধুরেণু (Pollen) এর মধ্যে পার্থক্য কী?' : 'What is the difference between XP and Pollen?', 
             a: language === 'bn'
-                ? 'অ্যাকাউন্ট খুলতে আমাদের ওয়েবসাইটের মেনু থেকে "লগইন" বাটনে ক্লিক করুন, তারপর "সাইন আপ" অপশনে যান। আপনার ইমেইল এবং একটি পাসওয়ার্ড দিয়ে খুব সহজেই অ্যাকাউন্ট তৈরি করতে পারবেন।'
-                : 'To open an account, click "Login" from the menu, then go to "Sign Up". You can easily create an account with your email and a password.',
+                ? 'মধু (XP) হলো আপনার শেখার প্রগতির পরিমাপক। প্রতিটি চ্যাপ্টার ও কুইজ সম্পন্ন করলে আপনি মধু (XP) পাবেন, যা লিডারবোর্ডে আপনার র‍্যাঙ্ক বাড়াতে সাহায্য করে। আর মধুরেণু (Pollen) হলো আমাদের প্ল্যাটফর্মের ভার্চুয়াল রিওয়ার্ড কারেন্সি, যা দিয়ে আপনি শপে হানি ড্রপ রিফিল কিনতে পারবেন।'
+                : 'XP is the measure of your learning progress. Completing chapters and quizzes awards you XP, which determines your leaderboard rank. Pollen is our virtual reward currency, which can be exchanged in the shop for Honey Drops.',
             cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
         },
         { 
-            q: language === 'bn' ? 'স্ট্রিক (Streak) কি?' : 'What is a Streak?', 
+            q: language === 'bn' ? 'দৈনিক স্ট্রিক (Streak) ও স্ট্রিক স্কোর কীভাবে কাজ করে?' : 'How do Streak and Streak Score work?', 
             a: language === 'bn'
-                ? 'স্ট্রিক হলো আপনার প্রতিদিনের পড়ার ধারাবাহিকতা। আপনি যদি প্রতিদিন অন্তত একটি লেসন বা কুইজ সম্পন্ন করেন, তবে আপনার স্ট্রিক ১ দিন করে বাড়বে। কোনো দিন বাদ দিলে স্ট্রিক শূন্য (০) হয়ে যাবে।'
-                : 'A streak is your daily learning consistency. If you complete at least one lesson or quiz every day, your streak will increase by 1 day. If you miss a day, your streak will reset to zero (0).',
-            cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
-        },
-        { 
-            q: language === 'bn' ? 'স্ট্রিক স্কোর (Streak Score) কি?' : 'What is a Streak Score?', 
-            a: language === 'bn'
-                ? 'স্ট্রিক স্কোর আপনার বর্তমান মাসের ধারাবাহিকতার একটি পরিমাপ। এটি আপনার সক্রিয় দিন এবং মাসের মোট দিনের অনুপাতের ওপর ভিত্তি করে হিসাব করা হয়, যা আপনাকে নিয়মিত পড়াশোনায় উৎসাহিত করে।'
-                : 'Streak Score is a measure of your consistency for the current month. It is calculated based on the ratio of your active days to the total days in the month, encouraging you to study regularly.',
-            cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
-        },
-        { 
-            q: language === 'bn' ? 'ইনভাইট লিঙ্ক (Invite Link) কীভাবে কাজ করে?' : 'How does the Invite Link work?', 
-            a: language === 'bn'
-                ? 'আপনার প্রোফাইল পেজে একটি ইউনিক ইনভাইট লিঙ্ক পাবেন। কোনো বন্ধু যদি আপনার লিঙ্কে ক্লিক করে সাইন আপ করে, তবে আপনি বনাস হিসেবে ৫টি হানি ড্রপ (Honey Drop) পাবেন। এভাবে আপনি যত খুশি বন্ধুকে ইনভাইট করতে পারেন!'
-                : 'You will find a unique invite link on your profile page. If a friend signs up using your link, you will receive 5 Honey Drops as a bonus. You can invite as many friends as you want!',
+                ? 'প্রতিদিন অন্তত একটি লেসন বা কুইজ সম্পন্ন করলে আপনার দৈনিক স্ট্রিক ১ দিন করে বাড়বে। কোনো দিন বাদ দিলে স্ট্রিক শূন্য (০) হয়ে যাবে। স্ট্রিক স্কোর আপনার বর্তমান মাসের ধারাবাহিকতার একটি পরিমাপ, যা আপনার সক্রিয় দিন ও মাসের মোট দিনের অনুপাতের ওপর ভিত্তি করে হিসাব করা হয়।'
+                : 'Completing at least one lesson or quiz daily increases your daily streak by 1 day. Missing a day resets it to zero (0). Streak Score measures your monthly consistency based on the ratio of active learning days to total days.',
             cat: language === 'bn' ? 'শুরু করা' : 'Getting Started'
         },
 
-        // কোর্স ও মেম্বারশিপ (Courses & Membership)
+        // কোর্স ও সার্টিফিকেট (Courses & Certificates)
         { 
-            q: language === 'bn' ? 'কিভাবে নতুন কোর্সে ভর্তি হবো?' : 'How do I enroll in a new course?', 
+            q: language === 'bn' ? 'বি লেসন প্ল্যাটফর্মে বর্তমানে কী কী কোর্স আছে?' : 'What courses are currently available on BeeLesson?', 
             a: language === 'bn'
-                ? 'লগইন করার পর "কোর্সসমূহ" ট্যাবে যান, আপনার পছন্দের কোর্সটি সিলেক্ট করুন এবং "এনরোল করুন" বাটনে ক্লিক করলেই আপনি কোর্সটি শুরু করতে পারবেন। বেশিরভাগ কোর্সই আমাদের প্ল্যাটফর্মে ফ্রি।'
-                : 'After logging in, go to the "Courses" tab, select your preferred course, and click "Enroll" to start. Most courses on our platform are free.',
-            cat: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership'
+                ? 'আমাদের প্ল্যাটফর্মে বর্তমানে ৫টি বিশেষায়িত কোর্স রয়েছে: ১. সিভি ও ইন্টারভিউ প্রস্তুতি, ২. বাংলাদেশ শ্রম আইন, ৩. সাইবার সিকিউরিটি ও স্ক্যাম, ৪. প্রোডাক্টিভিটি হ্যাকস ও টাইম ম্যানেজমেন্ট এবং ৫. পাসওয়ার্ড ও অ্যাকাউন্ট সিকিউরিটি। প্রতিটি কোর্স বাস্তবমুখী উদাহরণ ও কুইজ দিয়ে সাজানো হয়েছে।'
+                : 'We currently offer 5 specialized courses: 1. CV & Interview Preparation, 2. Bangladesh Labour Law, 3. Cyber Security & Scam, 4. Productivity Hacks & Time Management, and 5. Password & Account Security.',
+            cat: language === 'bn' ? 'কোর্স ও সার্টিফিকেট' : 'Courses & Certificates'
         },
         { 
-            q: language === 'bn' ? 'সার্টিফিকেট কিভাবে পাওয়া যাবে?' : 'How to get a certificate?', 
+            q: language === 'bn' ? 'কোর্স শেষে কীভাবে সার্টিফিকেট ডাউনলোড করবো?' : 'How to get and download a certificate after course completion?', 
             a: language === 'bn'
-                ? 'একটি কোর্সের সকল লেসন এবং কুইজ সফলভাবে সম্পন্ন করার পর আপনি আপনার প্রোফাইল থেকে ওই কোর্সের জন্য একটি ডিজিটাল সার্টিফিকেট ডাউনলোড করতে পারবেন। সার্টিফিকেটটি আপনি লিঙ্কডইন বা অন্য কোথাও শেয়ার করতে পারবেন।'
-                : 'After successfully completing all lessons and quizzes of a course, you can download a digital certificate from your profile. You can share the certificate on LinkedIn or elsewhere.',
-            cat: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership'
+                ? 'একটি কোর্সের সকল লেসন, লার্নিং পয়েন্ট এবং কুইজ ১০০% সম্পন্ন করার পর আপনার প্রোফাইল পেজের "সার্টিফিকেট" ট্যাব থেকে ওই কোর্সের জন্য একটি সুন্দর ডিজিটাল সার্টিফিকেট জেনারেট হবে। আপনি এটি সরাসরি পিডিএফ আকারে ডাউনলোড করে আপনার সিভি বা লিঙ্কডইনে শেয়ার করতে পারবেন।'
+                : 'Upon 100% completion of all lessons and quizzes in a course, a digital certificate will generate in the "Certificates" tab of your profile. You can download it directly as a PDF for your resume or LinkedIn.',
+            cat: language === 'bn' ? 'কোর্স ও সার্টিফিকেট' : 'Courses & Certificates'
         },
         { 
-            q: language === 'bn' ? 'আমি কি একই সাথে একাধিক কোর্স করতে পারি?' : 'Can I take multiple courses at the same time?', 
+            q: language === 'bn' ? 'আমি কি আমার কোনো কোর্সের প্রগতি রিসেট করতে পারি?' : 'Can I reset my progress in a course?', 
             a: language === 'bn'
-                ? 'হ্যাঁ, আপনি একই সাথে যত খুশি কোর্স করতে পারেন। আপনার প্রোফাইলে সকল এনরোল করা কোর্সের প্রগতি আলাদাভাবে দেখতে পাবেন।'
-                : 'Yes, you can take as many courses as you want simultaneously. You can track the progress of all enrolled courses separately from your profile.',
-            cat: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership'
-        },
-        { 
-            q: language === 'bn' ? 'সুপার মেম্বারশিপ এর সুবিধা কি?' : 'What are the benefits of Super Membership?', 
-            a: language === 'bn'
-                ? 'সুপার মেম্বারশিপ নিলে আপনি আনলিমিটেড হানি ড্রপ পাবেন, কোনো অ্যাড থাকবে না এবং স্পেশাল ব্যাজ পাবেন। এটি আপনার শেখার গতিকে আরও বাড়িয়ে দেবে।'
-                : 'With Super Membership, you get unlimited Honey Drops, an ad-free experience, and special badges. It will boost your learning speed.',
-            cat: language === 'bn' ? 'কোর্স ও মেম্বারশিপ' : 'Courses & Membership'
+                ? 'হ্যাঁ, আপনি যদি কোনো কোর্স একদম নতুন করে শুরু করতে চান, তবে প্রোফাইলের সেটিংস থেকে "কোর্স সেটিংস" অপশনে গিয়ে উক্ত কোর্সের প্রগতি রিসেট করতে পারবেন। তবে মনে রাখবেন, রিসেট করলে ওই কোর্সের আগের সকল প্রোগ্রেস ও কুইজ রেকর্ড স্থায়ীভাবে মুছে যাবে।'
+                : 'Yes, if you wish to start a course from scratch, go to Profile Settings -> Course Settings to reset it. Please note that this action is permanent and will delete all previous progress and quiz records for that course.',
+            cat: language === 'bn' ? 'কোর্স ও সার্টিফিকেট' : 'Courses & Certificates'
         },
 
-        // পেমেন্ট ও বিলিং (Payment & Billing)
-        { 
-            q: language === 'bn' ? 'পেমেন্ট এর জন্য কি কি মাধ্যম আছে?' : 'What payment methods are available?', 
-            a: language === 'bn'
-                ? 'আমরা বিকাশ, নগদ এবং সকল প্রকার ডেবিট/ক্রেডিট কার্ড সাপোর্ট করি। আমাদের পেমেন্ট গেটওয়ের মাধ্যমে আপনি খুব সহজেই এবং নিরাপদে পেমেন্ট সম্পন্ন করতে পারবেন।'
-                : 'We support Bkash, Nagad, and all types of Debit/Credit cards. You can easily and securely complete payments through our payment gateway.',
-            cat: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing'
-        },
-        { 
-            q: language === 'bn' ? 'পেমেন্ট এর পর প্রিমিয়াম এক্সেস পেতে কত সময় লাগে?' : 'How long does it take to get premium access after payment?', 
-            a: language === 'bn'
-                ? 'পেমেন্ট সফল হওয়ার সাথে সাথেই আপনার অ্যাকাউন্ট প্রিমিয়াম বা "সুপার" মেম্বারশিপে আপডেট হয়ে যাবে। কোনো কারণে দেরি হলে আমাদের সাপোর্ট টিমে যোগাযোগ করুন।'
-                : 'Your account will be updated to Premium or "Super" immediately after a successful payment. If there\'s any delay, please contact our support team.',
-            cat: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing'
-        },
-        { 
-            q: language === 'bn' ? 'পেমেন্ট রিফান্ড পলিসি কি?' : 'What is the refund policy?', 
-            a: language === 'bn'
-                ? 'যদি পেমেন্টে কোনো সমস্যা হয় বা ভুল অ্যাকাউন্টে টাকা কাটে, তবে ৪৮ ঘণ্টার মধ্যে আবেদন করলে আমরা বিষয়টি খতিয়ে দেখে রিফান্ড নিশ্চিত করি।'
-                : 'If there\'s any payment issue or money is deducted from the wrong account, we ensure a refund after investigating if you apply within 48 hours.',
-            cat: language === 'bn' ? 'পেমেন্ট ও বিলিং' : 'Payment & Billing'
-        },
-
-        // টেকনিক্যাল ইস্যু (Technical Issues)
-        { 
-            q: language === 'bn' ? 'ভিডিও লোড হচ্ছে না, কি করবো?' : 'Video is not loading, what to do?', 
-            a: language === 'bn'
-                ? 'প্রথমে আপনার ইন্টারনেট কানেকশন চেক করুন। ব্রাউজারের ক্যাশ ফাইল ক্লিয়ার করে আবার চেষ্টা করুন। যদি কাজ না করে, তবে অন্য কোনো ব্রাউজার (যেমন: ক্রোম বা ফায়ারফক্স) ব্যবহার করে দেখুন।'
-                : 'First, check your internet connection. Try clearing your browser cache. If it doesn\'t work, try a different browser like Chrome or Firefox.',
-            cat: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues'
-        },
-        { 
-            q: language === 'bn' ? 'মোবাইল অ্যাপ কি আছে?' : 'Is there a mobile app?', 
-            a: language === 'bn'
-                ? 'বর্তমানে আমরা একটি রেসপন্সিভ ওয়েব প্ল্যাটফর্ম হিসেবে কাজ করছি, যা আপনার ফোনের ব্রাউজারে অ্যাপের মতোই সাবলীলভাবে কাজ করবে। শীঘ্রই আমাদের ডেডিকেটেড মোবাইল অ্যাপ উন্মুক্ত করা হবে।'
-                : 'Currently, we operate as a responsive web platform that works smoothly as an app in your phone\'s browser. A dedicated mobile app will be released soon.',
-            cat: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues'
-        },
-        { 
-            q: language === 'bn' ? 'পাসওয়ার্ড ভুলে গেলে কি করবো?' : 'What if I forget my password?', 
-            a: language === 'bn'
-                ? 'লগইন পেজে গিয়ে "ফোরগট পাসওয়ার্ড" লিঙ্কে ক্লিক করুন। আপনার রেজিস্টার্ড ইমেইল এড্রেসটি দিলে একটি পাসওয়ার্ড রিসেট লিঙ্ক পাঠানো হবে।'
-                : 'Go to the login page and click "Forgot Password". A reset link will be sent to your registered email address.',
-            cat: language === 'bn' ? 'টেকনিক্যাল ইস্যু' : 'Technical Issues'
-        },
-
-        // আমাদের সম্পর্কে (About Us)
-        { 
-            q: language === 'bn' ? 'বি লেসন (BeeLesson) এর উদ্দেশ্য কি?' : 'What is the goal of BeeLesson?', 
-            a: language === 'bn'
-                ? 'আমাদের মূল উদ্দেশ্য হলো নির্ভরযোগ্য ইসলামিক তথ্য এবং শিক্ষাকে প্রযুক্তির মাধ্যমে সবার ঘরে ঘরে পৌঁছে দেওয়া। আমরা চাই মানুষ যাতে সহজ এবং আনন্দদায়ক উপায়ে ইসলামের মৌলিক বিষয়গুলো শিখতে পারে।'
-                : 'Our main goal is to deliver reliable Islamic information and education to every home through technology. We want people to learn basic Islamic principles in an easy and enjoyable way.',
-            cat: language === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us'
-        },
-        { 
-            q: language === 'bn' ? 'কিভাবে কন্ট্রিবিউট করতে পারি?' : 'How can I contribute?', 
-            a: language === 'bn'
-                ? 'আপনি যদি এই প্রজেক্টে কন্ট্রিবিউট করতে চান বা কোনো ফিডব্যাক দিতে চান, তবে আমাদের ইমেইল (support@beelesson.com) করুন। আপনার পরামর্শ আমাদের জন্য অত্যন্ত মূল্যবান।'
-                : 'If you want to contribute to this project or give feedback, email us at support@beelesson.com. Your suggestions are highly valuable to us.',
-            cat: language === 'bn' ? 'আমাদের সম্পর্কে' : 'About Us'
-        },
-        
         // ব্যাটেল চ্যালেঞ্জ (Battle Challenge)
         { 
-            q: language === 'bn' ? 'ব্যাটেল (Battle) কি?' : 'What is Battle?', 
+            q: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ (Battle Challenge) কী?' : 'What is Battle Challenge?', 
             a: language === 'bn'
-                ? 'ব্যাটেল হলো একটি রিয়েল-টাইম কুইজ প্রতিযোগিতা যেখানে আপনি অন্য একজন শিক্ষার্থীর সাথে সরাসরি লড়তে পারেন। নির্দিষ্ট সময়ের মধ্যে বেশি সঠিক উত্তর দিয়ে আপনি জয়ী হতে পারেন এবং অতিরিক্ত পুরষ্কার অর্জন করতে পারেন।'
-                : 'Battle is a real-time quiz competition where you can compete directly with another learner. You can win and earn extra rewards by giving more correct answers within a specified time.',
+                ? 'ব্যাটেল চ্যালেঞ্জ হলো বি লেসন-এর একটি অন্যতম রোমাঞ্চকর ফিচার। এটি একটি রিয়েল-টাইম কুইজ প্রতিযোগিতা যেখানে আপনি অন্য একজন সক্রিয় শিক্ষার্থীর সাথে সরাসরি নির্দিষ্ট মডিউলের ওপর লড়াই করতে পারেন এবং নিজের মেধা যাচাই করতে পারেন।'
+                : 'Battle Challenge is one of the most exciting features of BeeLesson. It is a real-time multiplayer quiz competition where you can compete directly against another active learner on specific modules.',
             cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
         },
         { 
-            q: language === 'bn' ? 'ব্যাটেল শুরু করবো কীভাবে?' : 'How to start a Battle?', 
+            q: language === 'bn' ? 'কীভাবে অন্য কোনো শিক্ষার্থীর সাথে ব্যাটেল শুরু করবো?' : 'How do I start a battle with another learner?', 
             a: language === 'bn'
-                ? 'আপনি কানেকশন ট্যাব থেকে যেকোনো শিক্ষার্থীকে চ্যালেঞ্জ পাঠাতে পারেন অথবা সরাসরি ব্যাটেল লবিতে গিয়ে "র‍্যান্ডম ম্যাচ" বা "রুম কোড" ব্যবহার করে নতুন ব্যাটেল শুরু করতে পারেন।'
-                : 'You can send a challenge to any learner from the connections tab or directly go to the battle lobby and start a new battle using "Random Match" or a "Room Code".',
+                ? 'আপনি প্রোফাইলের "ব্যাটেল রুম" ট্যাব থেকে রুম তৈরি করে বন্ধুদের আমন্ত্রণ জানাতে পারেন। এছাড়া ব্যাটেল লবি থেকে সরাসরি "র্যান্ডম ম্যাচ" শুরু করতে পারেন অথবা একটি ইউনিক "রুম কোড" ব্যবহার করে বন্ধুকে আপনার তৈরি করা রুমে যুক্ত করতে পারেন।'
+                : 'You can create a room from the "Battle Room" tab and invite friends. Alternatively, you can start a "Random Match" from the battle lobby or share a unique "Room Code" to join the same room.',
             cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
         },
         { 
-            q: language === 'bn' ? 'ব্যাটেল মোড (Battle Mode) অন/অফ করা যায়?' : 'Can I turn off Battle Mode?', 
+            q: language === 'bn' ? 'ব্যাটেল মোড (Battle Mode) বন্ধ করার কোনো উপায় আছে কি?' : 'Is there a way to turn off Battle Mode?', 
             a: language === 'bn'
-                ? 'হ্যাঁ, আপনি যদি কারো চ্যালেঞ্জ পেতে না চান, তবে ব্যাটেল লবিতে গিয়ে "ব্যাটেল মোড" সুইচটি অফ করে রাখতে পারেন। মোড অফ থাকলে কেউ আপনাকে চ্যালেঞ্জ পাঠাতে পারবে না এবং আপনি গ্লোবাল চ্যালেঞ্জ নোটিফিকেশন পাবেন না।'
-                : 'Yes, if you don\'t want to receive challenges, you can turn off the "Battle Mode" switch in the battle lobby. When off, no one can send you challenges and you won\'t receive global challenge notifications.',
+                ? 'হ্যাঁ, আপনি যদি কোনো চ্যালেঞ্জের নোটিফিকেশন পেতে না চান, তবে ব্যাটেল লবিতে গিয়ে "ব্যাটেল মোড" সুইচটি অফ করে রাখতে পারেন। নিষ্ক্রিয় অবস্থায় থাকলে কেউ আপনাকে ব্যাটেল চ্যালেঞ্জ পাঠাতে পারবে না।'
+                : 'Yes, if you do not wish to receive challenge requests, you can turn off the "Battle Mode" switch in the battle lobby. When disabled, other users will not be able to challenge you.',
             cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
         },
         { 
-            q: language === 'bn' ? 'ব্যাটেল জিতলে কি পুরস্কার পাওয়া যায়?' : 'What rewards do I get for winning?', 
+            q: language === 'bn' ? 'ব্যাটেল জিতলে কী পুরস্কার দেওয়া হয়?' : 'What rewards are given for winning a battle?', 
             a: language === 'bn'
-                ? 'ব্যাটেল জিতলে আপনি অতিরিক্ত XP এবং মধুরেণু (Pollen) পুরস্কার হিসেবে পাবেন। কমপক্ষে ৫০% নির্ভুল উত্তর দিলে আপনি এই পুরস্কারগুলো পাবেন। এটি আপনার লিডারবোর্ড র‍্যাঙ্ক বাড়াতে দারুণ সাহায্য করবে।'
-                : 'Winning a battle awards you extra XP and Pollen. You will receive these rewards if you achieve at least 50% accuracy. This significantly helps in increasing your leaderboard rank.',
+                ? 'ব্যাটেল জিতলে আপনি বোনাস হিসেবে অতিরিক্ত XP (মধু) এবং মধুরেণু (Pollen) পুরস্কার পাবেন। তবে পুরস্কারের দাবিদার হতে আপনাকে প্রতিযোগিতায় কমপক্ষে ৫০% নির্ভুল উত্তর দিতে হবে।'
+                : 'Winning a battle awards you extra XP and Pollen. However, you must achieve at least 50% accuracy during the competition to claim these rewards.',
             cat: language === 'bn' ? 'ব্যাটেল চ্যালেঞ্জ' : 'Battle Challenge'
+        },
+
+        // শপ ও মেম্বারশিপ (Shop & Membership)
+        { 
+            q: language === 'bn' ? 'বি লেসন শপ (Shop) থেকে কী কী কেনা যায়?' : 'What can I purchase from the BeeLesson Shop?', 
+            a: language === 'bn'
+                ? 'শপ থেকে আপনি আপনার অর্জিত মধুরেণু (Pollen) এক্সচেঞ্জ করে হানি ড্রপ রিফিল কিনতে পারেন, অথবা সরাসরি ১ দিনের জন্য আনলিমিটেড হানি ড্রপ সক্রিয় করতে পারেন। এছাড়া আপনি সুপার মেম্বারশিপের জন্য সাবস্ক্রিপশন কিনতে পারেন।'
+                : 'From the shop, you can exchange your Pollen to refill Honey Drops, or activate 1-day unlimited Honey Drops. You can also purchase a Super Membership subscription.',
+            cat: language === 'bn' ? 'শপ ও মেম্বারশিপ' : 'Shop & Membership'
+        },
+        { 
+            q: language === 'bn' ? 'সুপার মেম্বারশিপ (Super Membership) এর সুবিধা কী?' : 'What are the benefits of Super Membership?', 
+            a: language === 'bn'
+                ? 'সুপার মেম্বারশিপের গ্রাহকেরা সম্পূর্ণ আনলিমিটেড হানি ড্রপ সুবিধা পান, যার ফলে ভুল উত্তরের জন্য আপনার শেখার প্রগতি থেমে থাকে না। এছাড়া বিজ্ঞাপন-মুক্ত অভিজ্ঞতার পাশাপাশি আপনার প্রোফাইলে একটি বিশেষ সুপার ব্যাজ প্রদর্শিত হয়।'
+                : 'Super Membership subscribers enjoy unlimited Honey Drops (no learning interruption for wrong answers), an ad-free learning environment, and a special premium badge on their profile.',
+            cat: language === 'bn' ? 'শপ ও মেম্বারশিপ' : 'Shop & Membership'
+        },
+        { 
+            q: language === 'bn' ? 'পেমেন্ট করার পর সুপার এক্সেস পেতে কত সময় লাগে?' : 'How long does it take to get super access after payment?', 
+            a: language === 'bn'
+                ? 'আমাদের গেটওয়ের মাধ্যমে পেমেন্ট (বিকাশ, নগদ বা কার্ড) সফল হওয়ার সাথে সাথেই আপনার অ্যাকাউন্ট সুপার মেম্বারশিপে উন্নীত হবে। কোনো সমস্যা হলে আমাদের সাপোর্ট টিমে সরাসরি ইমেইল করুন।'
+                : 'Your account will be upgraded immediately after a successful payment via bKash, Nagad, or cards. In case of any technical delays, please email our support team directly.',
+            cat: language === 'bn' ? 'শপ ও মেম্বারশিপ' : 'Shop & Membership'
+        },
+
+        // অ্যাকাউন্ট ও টেকনিক্যাল (Account & Technical)
+        { 
+            q: language === 'bn' ? 'পাসওয়ার্ড ভুলে গেলে কীভাবে অ্যাকাউন্ট উদ্ধার করবো?' : 'How do I recover my account if I forget my password?', 
+            a: language === 'bn'
+                ? 'লগইন পেজে গিয়ে "পাসওয়ার্ড ভুলে গেছেন?" লিঙ্কে ক্লিক করুন। আপনার রেজিস্টার্ড ইমেইল এড্রেসটি দিলে সেখানে একটি নিরাপদ পাসওয়ার্ড রিসেট করার লিঙ্ক পাঠানো হবে। লিঙ্কে ক্লিক করে আপনি নতুন পাসওয়ার্ড সেট করতে পারবেন।'
+                : 'Go to the login page and click "Forgot Password?". Enter your registered email address to receive a secure password reset link, where you can easily set a new password.',
+            cat: language === 'bn' ? 'অ্যাকাউন্ট ও টেকনিক্যাল' : 'Account & Technical'
+        },
+        { 
+            q: language === 'bn' ? 'পাবলিক প্রোফাইল ও প্রাইভেট প্রোফাইলের মধ্যে পার্থক্য কী?' : 'What is the difference between Public and Private profiles?', 
+            a: language === 'bn'
+                ? 'পাবলিক প্রোফাইল থাকলে অন্যান্য শিক্ষার্থীরা লিডারবোর্ডে আপনার প্রগতি দেখতে পারবে এবং আপনাকে ফ্রেন্ড রিকোয়েস্ট পাঠাতে পারবে। প্রোফাইল প্রাইভেট করে রাখলে আপনার কোনো তথ্য অন্য কেউ দেখতে পাবে না এবং কেউ চ্যালেঞ্জ পাঠাতে পারবে না।'
+                : 'A public profile allows other users to view your progress on the leaderboard and send connection requests. A private profile hides your progress and prevents others from challenging you.',
+            cat: language === 'bn' ? 'অ্যাকাউন্ট ও টেকনিক্যাল' : 'Account & Technical'
+        },
+        { 
+            q: language === 'bn' ? 'প্রোফাইল ছবি এবং মৌমাছি অ্যানিমেশন কীভাবে কাস্টমাইজ করবো?' : 'How do I customize my profile picture and bee animation?', 
+            a: language === 'bn'
+                ? 'আপনার প্রোফাইলের "সম্পাদন করুন" (Edit Profile) বাটনে ক্লিক করে কভার ছবি, ডিসপ্লে পিকচার পরিবর্তন করতে পারবেন। এছাড়া সেটিংসের "ব্যক্তিগত অভিজ্ঞতা" থেকে পড়াশোনার সময় আপনার পছন্দের মৌমাছি অ্যানিমেশন ও সাউন্ড সিলেক্ট করতে পারবেন।'
+                : 'Click "Edit Profile" on your profile page to change your cover photo or avatar. Additionally, go to Settings -> Preferences to choose your favorite bee animation and customize sounds.',
+            cat: language === 'bn' ? 'অ্যাকাউন্ট ও টেকনিক্যাল' : 'Account & Technical'
+        },
+        { 
+            q: language === 'bn' ? 'অ্যাপের বর্তমান সংস্করণ কত এবং কোনো কারিগরি ত্রুটি বা কন্টেন্টে ভুল পেলে কীভাবে রিপোর্ট করবো?' : 'What is the current app version and how do I report technical errors or content mistakes?', 
+            a: language === 'bn'
+                ? 'আমাদের প্ল্যাটফর্মটি বর্তমানে প্রাথমিক কারিগরি সংস্করণ ১.০ (Version 1.0) রিলিজ হিসেবে চলছে। অ্যাপে যেকোনো ধরনের কারিগরি ত্রুটি (technical bug/error) পেলে অথবা কোনো কুইজ প্রশ্ন ও কনটেন্টে কোনো ভুল খুঁজে পেলে সরাসরি support@beelesson.com ইমেইলে আমাদের রিপোর্ট করুন।'
+                : 'Our platform is currently running its initial technical release version 1.0. If you find any type of technical error or bug, or if any quiz question or learning content is incorrect, please report it directly to support@beelesson.com.',
+            cat: language === 'bn' ? 'অ্যাকাউন্ট ও টেকনিক্যাল' : 'Account & Technical'
         }
     ];
 
@@ -221,7 +190,11 @@ const HelpPage = () => {
         <div className={styles.helpPage}>
             <section className={styles.heroSection}>
                 <div className={styles.heroContent}>
-                    
+                    <div className={styles.heroIconWrap}>
+                        <BookOpen size={40} />
+                    </div>
+                    <h1>{t('help_center')}</h1>
+                    <p>{t('how_can_we_help')}</p>
                     <div className={styles.searchContainer}>
                         <Search className={styles.searchIcon} size={20} />
                         <input 

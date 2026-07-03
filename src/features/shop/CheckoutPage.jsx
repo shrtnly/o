@@ -60,6 +60,9 @@ const CheckoutPage = () => {
 
     const finalPrice = Math.max(0, basePrice - discountAmount);
 
+    // True when promo covers 100% — no payment needed
+    const isFreeCheckout = finalPrice === 0 && appliedPromo !== null;
+
     useEffect(() => {
         if (!checkoutData) {
             navigate('/shop');
@@ -167,7 +170,8 @@ const CheckoutPage = () => {
     };
 
     const handleCompleteCheckout = async () => {
-        if (!transactionId.trim()) {
+        // For free checkout (100% discount), only email is required
+        if (!isFreeCheckout && !transactionId.trim()) {
             toast.error(language === 'bn' ? 'অনুগ্রহ করে ট্রানজেকশন আইডি প্রদান করুন!' : 'Please enter a transaction ID!');
             return;
         }
@@ -177,47 +181,76 @@ const CheckoutPage = () => {
         }
 
         if (processing) return;
-        
         setProcessing(true);
-        const toastId = toast.loading(language === 'bn' ? 'আপনার পেমেন্ট রিকোয়েস্ট পাঠানো হচ্ছে...' : 'Submitting payment request...');
 
+        // FREE CHECKOUT (100% promo discount)
+        if (isFreeCheckout) {
+            const toastId = toast.loading(language === 'bn' ? 'সাবস্ক্রিপশন একটিভ করা হচ্ছে...' : 'Activating your subscription...');
+            try {
+                if (isSubscription) {
+                    await shopService.subscribeToPremium(user.id, planType, 0, basePrice, appliedPromo?.id || null);
+                } else if (type === '1day') {
+                    await shopService.buy1DayPremium(user.id, 0, basePrice, appliedPromo?.id || null);
+                }
+                await supabase.from('Payment').insert([{
+                    user_id: user.id,
+                    email: userEmail.trim(),
+                    transaction_id: `PROMO-${appliedPromo?.code || 'FREE'}-${Date.now()}`,
+                    amount: 0,
+                    plan_type: type === 'subscription' ? planType : type,
+                    subscription_type: getPurchaseTypeName(),
+                    status: 'approved'
+                }]);
+                toast.success(
+                    language === 'bn'
+                        ? '🎉 আপনার সাবস্ক্রিপশন সফলভাবে একটিভ হয়েছে!'
+                        : '🎉 Your subscription has been activated successfully!',
+                    { id: toastId }
+                );
+                setTimeout(() => navigate('/shop', { replace: true }), 2000);
+            } catch (err) {
+                console.error('Free checkout error:', err);
+                toast.error(
+                    language === 'bn'
+                        ? `একটিভ করতে সমস্যা হয়েছে: ${err.message}`
+                        : `Activation failed: ${err.message}`,
+                    { id: toastId }
+                );
+                setProcessing(false);
+            }
+            return;
+        }
+
+        // PAID CHECKOUT
+        const toastId = toast.loading(language === 'bn' ? 'আপনার পেমেন্ট রিকোয়েস্ট পাঠানো হচ্ছে...' : 'Submitting payment request...');
         try {
             const planTypeVal = type === 'subscription' ? planType : type;
             const subTypeVal = getPurchaseTypeName();
-
             const { error } = await supabase
                 .from('Payment')
-                .insert([
-                    {
-                        user_id: user.id,
-                        email: userEmail.trim(),
-                        transaction_id: transactionId.trim(),
-                        amount: finalPrice,
-                        plan_type: planTypeVal,
-                        subscription_type: subTypeVal,
-                        status: 'pending'
-                    }
-                ]);
-
+                .insert([{
+                    user_id: user.id,
+                    email: userEmail.trim(),
+                    transaction_id: transactionId.trim(),
+                    amount: finalPrice,
+                    plan_type: planTypeVal,
+                    subscription_type: subTypeVal,
+                    status: 'pending'
+                }]);
             if (error) throw error;
-
             toast.success(
-                language === 'bn' 
-                    ? 'পেমেন্ট সফলভাবে সাবমিট করা হয়েছে! শীঘ্রই আপনার অ্যাকাউন্ট সচল করা হবে।' 
-                    : 'Payment details submitted successfully! Your account will be activated shortly.', 
+                language === 'bn'
+                    ? 'পেমেন্ট সফলভাবে সাবমিট করা হয়েছে! শীঘ্রই আপনার অ্যাকাউন্ট সচল করা হবে।'
+                    : 'Payment details submitted successfully! Your account will be activated shortly.',
                 { id: toastId }
             );
-
-            setTimeout(() => {
-                navigate('/shop', { replace: true });
-            }, 2000);
-
+            setTimeout(() => navigate('/shop', { replace: true }), 2000);
         } catch (err) {
             console.error('Checkout error:', err);
             toast.error(
-                language === 'bn' 
-                    ? `পেমেন্ট সাবমিট করতে ত্রুটি হয়েছে: ${err.message}` 
-                    : `Error submitting payment: ${err.message}`, 
+                language === 'bn'
+                    ? `পেমেন্ট সাবমিট করতে ত্রুটি হয়েছে: ${err.message}`
+                    : `Error submitting payment: ${err.message}`,
                 { id: toastId }
             );
             setProcessing(false);
@@ -399,45 +432,66 @@ const CheckoutPage = () => {
                                 <span>{language === 'bn' ? '• টাকা :' : '• Amount:'}</span>
                                 <strong className={styles.amountHighlight}>৳{formatNumber(finalPrice)}</strong>
                             </li>
-                            <li>
-                                <span>{language === 'bn' ? '• সেন্ড মানি :' : '• Send Money:'}</span>
-                                <strong className={styles.phoneHighlight}>০১৮১৫-৩১১২৩২</strong>
-                            </li>
-                            <li>
-                                <span>{language === 'bn' ? '• পেমেন্ট মেথড :' : '• Payment Method:'}</span>
-                                <strong>{language === 'bn' ? 'বিকাশ , রকেট এবং নগদ' : 'bKash, Rocket and Nagad'}</strong>
-                            </li>
-                            <li>
-                                <span className={styles.infoHighlight}>
-                                    {language === 'bn' 
-                                        ? '• পেমেন্ট শেষ করে আপনার ট্রানজিশন আইডি এবং ইউজার ইমেইল নিচে সাবমিট করুন' 
-                                        : '• Submit your Transaction ID and User Email below after payment'}
-                                </span>
-                            </li>
-                            <li>
-                                <span className={styles.infoHighlight}>
-                                    {language === 'bn' 
-                                        ? '• শীঘ্রই আপনার সাবস্ক্রিপশনটি একটিভ হবে' 
-                                        : '• Soon your subscription will be active'}
-                                </span>
-                            </li>
+                            {!isFreeCheckout && (
+                                <li>
+                                    <span>{language === 'bn' ? '• সেন্ড মানি :' : '• Send Money:'}</span>
+                                    <strong className={styles.phoneHighlight}>০১৮১৫-৩১১২৩২</strong>
+                                </li>
+                            )}
+                            {!isFreeCheckout && (
+                                <li>
+                                    <span>{language === 'bn' ? '• পেমেন্ট মেথড :' : '• Payment Method:'}</span>
+                                    <strong>{language === 'bn' ? 'বিকাশ , রকেট এবং নগদ' : 'bKash, Rocket and Nagad'}</strong>
+                                </li>
+                            )}
+                            {!isFreeCheckout && (
+                                <li>
+                                    <span className={styles.infoHighlight}>
+                                        {language === 'bn' 
+                                            ? '• পেমেন্ট শেষ করে আপনার ট্রানজিশন আইডি এবং ইউজার ইমেইল নিচে সাবমিট করুন' 
+                                            : '• Submit your Transaction ID and User Email below after payment'}
+                                    </span>
+                                </li>
+                            )}
+                            {!isFreeCheckout && (
+                                <li>
+                                    <span className={styles.infoHighlight}>
+                                        {language === 'bn' 
+                                            ? '• শীঘ্রই আপনার সাবস্ক্রিপশনটি একটিভ হবে' 
+                                            : '• Soon your subscription will be active'}
+                                    </span>
+                                </li>
+                            )}
+                            {isFreeCheckout && (
+                                <li>
+                                    <span className={styles.infoHighlight} style={{ color: '#4ade80', fontWeight: 700 }}>
+                                        {language === 'bn' 
+                                            ? '• ১০০% ডিসকাউন্ট প্রযোজ্য! সাবমিট করুন এবং আপনার সাবস্ক্রিপশন তাৎক্ষণিকভাবে একটিভ হবে।' 
+                                            : '• 100% discount applied! Submit and your subscription will be activated instantly.'}
+                                    </span>
+                                </li>
+                            )}
                         </ul>
                     </div>
 
                     <div className={styles.paymentForm}>
-                        <div className={styles.formGroup}>
-                            <label htmlFor="transactionId">
-                                {language === 'bn' ? 'ট্রানজেকশন আইডি (Transaction ID) *' : 'Transaction ID *'}
-                            </label>
-                            <input 
-                                id="transactionId"
-                                type="text"
-                                className={styles.formInput}
-                                placeholder={language === 'bn' ? 'এখানে ট্রানজেকশন আইডি দিন' : 'Enter Transaction ID'}
-                                value={transactionId}
-                                onChange={(e) => setTransactionId(e.target.value)}
-                            />
-                        </div>
+                        {/* Transaction ID hidden for 100% promo */}
+                        {!isFreeCheckout && (
+                            <div className={styles.formGroup}>
+                                <label htmlFor="transactionId">
+                                    {language === 'bn' ? 'ট্রানজেকশন আইডি (Transaction ID) *' : 'Transaction ID *'}
+                                </label>
+                                <input 
+                                    id="transactionId"
+                                    type="text"
+                                    className={styles.formInput}
+                                    placeholder={language === 'bn' ? 'এখানে ট্রানজেকশন আইডি দিন' : 'Enter Transaction ID'}
+                                    value={transactionId}
+                                    onChange={(e) => setTransactionId(e.target.value)}
+                                />
+                            </div>
+                        )}
+
                         <div className={styles.formGroup}>
                             <label htmlFor="userEmail">
                                 {language === 'bn' ? 'ইমেইল (Email) *' : 'Email *'}

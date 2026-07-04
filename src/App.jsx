@@ -36,6 +36,8 @@ import { Toaster } from 'sonner';
 
 import LandingPage from './features/landing/LandingPage';
 import AdminRoute from './components/routing/AdminRoute';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 const HomePage = () => {
   const { user } = useAuth();
@@ -149,6 +151,8 @@ function App() {
           <ThemeProvider>
             <Toaster position="top-right" expand={true} visibleToasts={5} theme="light" richColors duration={3000} />
             <AppContent />
+            <Analytics />
+            <SpeedInsights />
           </ThemeProvider>
         </NotificationProvider>
       </LanguageProvider>

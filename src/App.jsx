@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './components/layout/Navbar';
 import AuthPage from './features/auth/AuthPage';
 
@@ -149,6 +150,7 @@ function App() {
           <ThemeProvider>
             <Toaster position="top-right" expand={true} visibleToasts={5} theme="light" richColors duration={3000} />
             <AppContent />
+            <Analytics />
           </ThemeProvider>
         </NotificationProvider>
       </LanguageProvider>

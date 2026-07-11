@@ -7,13 +7,10 @@ const MotionDiv = motion.div;
 const MotionSpan = motion.span;
 
 const animatedWords = [
-    "ক্যারিয়ার গাইড",
-    "আইনি সচেতনতা",
-    "শ্রম আইন",
-    "ডিজিটাল নিরাপত্তা",
-    "নাগরিক অধিকার",
-    "আর্থিক সচেতনতা",
-    "স্মার্ট ব্যাংকিং"
+    "একাডেমিক",
+    "নন -একাডেমিক",
+    "নলেজ-বেজড বই",
+
 ];
 
 const Hero = () => {
@@ -87,10 +84,10 @@ const Hero = () => {
                         animate={shouldReduceMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
                         transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        <img 
-                            src="/beelessonhero.webp" 
-                            alt="BeeLesson Hero" 
-                            className={styles.heroImg} 
+                        <img
+                            src="/beelessonhero.webp"
+                            alt="BeeLesson Hero"
+                            className={styles.heroImg}
                             loading="eager"
                         />
                     </MotionDiv>

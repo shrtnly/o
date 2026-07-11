@@ -22,7 +22,7 @@ const Footer = () => {
                                 : 'Gamified learning platform in Bangladesh.'}
                         </p>
                         <div className={styles.socials}>
-                            <a href="#" className={styles.socialLink} aria-label="Facebook"><Facebook size={18} /></a>
+                            <a href="https://www.facebook.com/beelesson.play" target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="Facebook"><Facebook size={18} /></a>
                             <a href="#" className={styles.socialLink} aria-label="Twitter"><Twitter size={18} /></a>
                             <a href="#" className={styles.socialLink} aria-label="Instagram"><Instagram size={18} /></a>
                             <a href="#" className={styles.socialLink} aria-label="Youtube"><Youtube size={18} /></a>

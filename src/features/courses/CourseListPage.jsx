@@ -21,7 +21,7 @@ const getCategories = (t) => [
 
 const CourseListPage = () => {
     const { user, loading: authLoading } = useAuth();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
     const [dataLoading, setDataLoading] = useState(true);

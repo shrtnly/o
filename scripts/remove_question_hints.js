@@ -8,11 +8,13 @@ const filePaths = [
   path.join(process.cwd(), 'database', 'courses', 'password_and_account_security.json'),
   path.join(process.cwd(), 'database', 'courses', 'cyberbullying_and_harassment.json'),
   path.join(process.cwd(), 'database', 'courses', 'productivity_and_time_management.json'),
+  path.join(process.cwd(), 'database', 'courses', 'ict_class_11_12.json'),
   path.join(process.cwd(), 'scratch', 'cv_course_backup.json'),
   path.join(process.cwd(), 'scratch', 'cyber_course_backup.json'),
   path.join(process.cwd(), 'scratch', 'password_and_account_security_backup.json'),
   path.join(process.cwd(), 'scratch', 'cyberbullying_and_harassment_backup.json'),
-  path.join(process.cwd(), 'scratch', 'productivity_and_time_management_backup.json')
+  path.join(process.cwd(), 'scratch', 'productivity_and_time_management_backup.json'),
+  path.join(process.cwd(), 'scratch', 'ict_class_11_12_backup.json')
 ];
 
 // Regex to match: (সবগুলো সিলেক্ট করুন), (টিক দিন), (সবগুলো সিলেক্ট করুন) in parentheses/brackets

@@ -247,6 +247,10 @@
 }
 
 @media (max-width: 768px) {
+    .section {
+        display: none;
+    }
+
     .container {
         padding: 0 16px;
     }

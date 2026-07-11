@@ -107,6 +107,7 @@ const AppContent = () => {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/survey/:courseId" element={<Survey />} />
           <Route path="/verify/:code" element={<CertificateVerificationPage />} />
+          <Route path="/landing" element={<LandingPage />} />
 
           {/* All protected routes inside MainLayout to ensure Sidebar stays stable */}
           <Route element={<MainLayout />}>

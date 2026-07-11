@@ -24,7 +24,8 @@ function chunkArray(array, size) {
 }
 
 async function syncCourse() {
-  const filePath = path.join(process.cwd(), 'database', 'courses', 'bangladesh_labor_law_2006.json');
+  const filename = process.argv[2] || 'bangladesh_labor_law_2006.json';
+  const filePath = path.join(process.cwd(), 'database', 'courses', filename);
   
   if (!fs.existsSync(filePath)) {
     console.error(`Error: File not found at ${filePath}`);

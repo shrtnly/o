@@ -139,3 +139,39 @@
 
 
 
+
+# তথ্য ও যোগাযোগ প্রযুক্তি (একাদশ-দ্বাদশ শ্রেণি) - Course Generation History
+
+## 🎯 Current Status
+**Status:** 100% Completed, Cleaned, and Deployed.
+**Last Updated:** July 11, 2026
+**Target Course ID:** `a0f7e436-1e9a-4c2f-bcde-96400a579899`
+**Database Backup Location:** `scratch/ict_class_11_12_backup.json` (Synced to Supabase)
+**Production Database File:** `database/courses/ict_class_11_12.json`
+
+## 📊 Course Statistics
+- **Total Modules (Units):** 6
+- **Total Chapters:** 72 (Expanded from 48 to ensure full syllabus coverage)
+- **Total Learning Points (LPs):** 576 (8 per chapter)
+- **Total Questions:** 576 (100% unique, validated with 0 duplicates)
+- **Total Options:** 1,368
+
+## 🛠️ Work Completed in This Session
+1. **Curriculum Expansion:**
+   - Expanded each of the 6 modules from 8 chapters to **12 chapters** (72 chapters total).
+   - This covers crucial and formerly missing NCTB topics: wireless technologies (Bluetooth, Wi-Fi, WiMax), Boolean algebra simplification, digital logic gates, database design, indexing, SQL queries, programming structure, and genetic engineering.
+   
+2. **Quality & Formatting Alignment:**
+   - Each chapter contains exactly 8 learning points and 8 corresponding questions.
+   - Question types are mixed: MCQ, Boolean, Checkmark, Matching, and Storytelling.
+   - Option limits: MCQs, checkmarks, matching, and storytelling have exactly 3 options (1 correct, 2 incorrect). Boolean has exactly 2 options ("সত্য" and "মিথ্যা").
+   - Added random shuffling and indexing on options to ensure variety.
+
+3. **Multi-Stage Post-Processing & Syncing:**
+   - Successfully compiled the 72-chapter data structure using the updated generator.
+   - Pushed the compiled data to Supabase database tables using `scripts/sync_ict_course.js`, replacing all old chapters with the newly expanded set.
+
+
+
+
+

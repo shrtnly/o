@@ -151,15 +151,21 @@
 
 ## 📊 Course Statistics
 - **Total Modules (Units):** 6
-- **Total Chapters:** 72 (Expanded from 48 to ensure full syllabus coverage)
-- **Total Learning Points (LPs):** 576 (8 per chapter)
-- **Total Questions:** 576 (100% unique, validated with 0 duplicates)
-- **Total Options:** 1,368
+- **Total Chapters:** 96 (Expanded from 72 to ensure full NCTB syllabus coverage)
+- **Total Learning Points (LPs):** 768 (8 per chapter)
+- **Total Questions:** 768 (100% unique, validated with 0 duplicates)
+- **Total Options:** 1,824
 
 ## 🛠️ Work Completed in This Session
 1. **Curriculum Expansion:**
-   - Expanded each of the 6 modules from 8 chapters to **12 chapters** (72 chapters total).
-   - This covers crucial and formerly missing NCTB topics: wireless technologies (Bluetooth, Wi-Fi, WiMax), Boolean algebra simplification, digital logic gates, database design, indexing, SQL queries, programming structure, and genetic engineering.
+   - Expanded each of the 6 modules from 12 chapters to **16 chapters** (96 chapters total).
+   - Added the following crucial NCTB topics to cover every aspect of the syllabus:
+     - **Unit 1**: Space Exploration & Defense, Office Automation & Smart Home, Plagiarism & Software Piracy, and Safe Social Media & Hacking.
+     - **Unit 2**: Submarine Cables & Gateways, Mobile Generations (1G to 5G), Network Security & Firewalls, and Wi-Fi vs WiMAX technical comparison.
+     - **Unit 3**: Flip-Flop Circuits, Half vs Full Adder implementation, Code Converters (BCD, Gray), and Practical Logic ICs (7408, 7432).
+     - **Unit 4**: HTML Layouts & Semantic structure (iFrames, div), SEO and HTML Meta tags, Dynamic Web Page Scripting (Client vs Server), and DNS/HTTP browser-server workflow.
+     - **Unit 5**: C Language Header Files & Libraries, 2D Arrays & Matrices, C File Handling operations, and Syntax/Runtime errors debugging.
+     - **Unit 6**: Database Normalization (1NF, 2NF, 3NF), SQL Joins (INNER, LEFT, RIGHT), Database Transactions & ACID properties, and Data Warehousing/Data Mining.
    
 2. **Quality & Formatting Alignment:**
    - Each chapter contains exactly 8 learning points and 8 corresponding questions.
@@ -168,8 +174,8 @@
    - Added random shuffling and indexing on options to ensure variety.
 
 3. **Multi-Stage Post-Processing & Syncing:**
-   - Successfully compiled the 72-chapter data structure using the updated generator.
-   - Pushed the compiled data to Supabase database tables using `scripts/sync_ict_course.js`, replacing all old chapters with the newly expanded set.
+   - Successfully compiled the 96-chapter data structure using the updated generator.
+   - Pushed the compiled data to Supabase database tables using `scripts/sync_ict_course.js`, performing a clean wipe and refresh of the course.
 
 
 

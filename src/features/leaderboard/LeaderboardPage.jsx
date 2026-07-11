@@ -11,6 +11,7 @@ import ShieldIcon from '../../components/ShieldIcon';
 import { supabase } from '../../lib/supabaseClient';
 import styles from './LeaderboardPage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
+import SEO from '../../components/SEO';
 
 import { getShieldLevel, getLevelProgress, SHIELD_LEVELS } from '../../utils/shieldSystem';
 
@@ -117,8 +118,18 @@ const LeaderboardPage = () => {
     /* ================================================
        RENDER
        ================================================ */
+    const isBn = language === 'bn';
+    const seoTitle = isBn 
+        ? 'লিডারবোর্ড | অন্যান্য শিক্ষার্থীদের সাথে প্রতিযোগিতা করুন' 
+        : 'Leaderboard | Compete with Other Learners';
+        
+    const seoDescription = isBn 
+        ? 'বি লেসন লিডারবোর্ডে আপনার অবস্থান দেখুন! পড়াশোনা সম্পন্ন করে মধু (XP) অর্জন করুন এবং বিভিন্ন টিয়ারে উন্নীত হয়ে শীর্ষস্থানে পৌঁছান।' 
+        : 'Check your rank on the BeeLesson leaderboard! Complete lessons to earn XP and rank up across tiers to reach the top.';
+
     return (
         <div className={styles.container}>
+            <SEO title={seoTitle} description={seoDescription} />
             <main className={styles.mainContent}>
                 
                 {/* Mobile Header with minimal cross button */}

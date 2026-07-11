@@ -8,6 +8,7 @@ import CourseCard from '../landing/CourseCard';
 import CourseSkeleton from '../landing/CourseSkeleton';
 import styles from './CourseListPage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
+import SEO from '../../components/SEO';
 
 const getCategories = (t) => [
     { id: 'All', name: t('all_courses') },
@@ -170,8 +171,44 @@ const CourseListPage = () => {
         return 0; // Maintain default order
     });
 
+    const isBn = language === 'bn';
+    const seoTitle = isBn 
+        ? 'আমাদের কোর্সসমূহ | বি লেসন (BeeLesson)' 
+        : 'Explore Courses | BeeLesson';
+        
+    const seoDescription = isBn 
+        ? 'ডিজিটাল নিরাপত্তা, আইনি সচেতনতা, ক্যারিয়ার স্কিলস, মানসিক স্বাস্থ্য ও আর্থিক সচেতনতার ওপর আমাদের চমৎকার গেমিফাইড কোর্সগুলো দেখুন।' 
+        : 'Explore our gamified courses on digital security, legal rights, career skills, mental health, and smart banking on BeeLesson.';
+
+    const courseSchema = courses.length > 0 ? {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "numberOfItems": courses.length,
+        "itemListElement": courses.map((course, idx) => ({
+            "@type": "ListItem",
+            "position": idx + 1,
+            "item": {
+                "@type": "Course",
+                "name": isBn ? (course.title || course.name) : (course.title_en || course.name_en || course.title),
+                "description": isBn 
+                    ? (course.description || course.summary || '') 
+                    : (course.description_en || course.summary_en || course.description || ''),
+                "provider": {
+                    "@type": "Organization",
+                    "name": "BeeLesson",
+                    "sameAs": "https://www.beelesson.com"
+                }
+            }
+        }))
+    } : null;
+
     return (
         <div className={styles.pageWrapper}>
+            <SEO 
+                title={seoTitle} 
+                description={seoDescription} 
+                schema={courseSchema}
+            />
             <div className={styles.mainContainer}>
                 <div className={styles.container}>
                     {(dataLoading || authLoading) ? (

@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Info, Activity, Shield, Eye, Settings, Mail } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import styles from './PrivacyPage.module.css';
+import SEO from '../../components/SEO';
 
 const PrivacyPage = () => {
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const sections = [
         { id: 1, title: 'p_section_1_title', desc: 'p_section_1_desc', icon: Info },
@@ -16,8 +17,18 @@ const PrivacyPage = () => {
         { id: 5, title: 'p_section_5_title', desc: 'p_section_5_desc', icon: Settings },
     ];
 
+    const isBn = language === 'bn';
+    const seoTitle = isBn 
+        ? 'প্রাইভেসি পলিসি | বি লেসন (BeeLesson)' 
+        : 'Privacy Policy | BeeLesson';
+        
+    const seoDescription = isBn 
+        ? 'বি লেসন (BeeLesson) ব্যবহারকারীদের ব্যক্তিগত তথ্যের গোপনীয়তা ও সুরক্ষা সংক্রান্ত নীতিমালা জানুন।' 
+        : 'Read the Privacy Policy of BeeLesson, and understand how we secure your data.';
+
     return (
         <div className={styles.privacyPage}>
+            <SEO title={seoTitle} description={seoDescription} />
             <div className={styles.container}>
                 <button
                     onClick={() => navigate('/settings?tab=legal')}

@@ -6,6 +6,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './HelpPage.module.css';
 import { useLanguage } from '../../context/LanguageContext'; // Assuming this path
+import SEO from '../../components/SEO';
 
 const HelpPage = () => {
     const { t, language } = useLanguage();
@@ -186,8 +187,35 @@ const HelpPage = () => {
         setActiveFaq(null);
     };
 
+    const isBn = language === 'bn';
+    const seoTitle = isBn 
+        ? 'হেল্প সেন্টার | বি লেসন (BeeLesson)' 
+        : 'Help Center | BeeLesson';
+        
+    const seoDescription = isBn 
+        ? 'সার্টিফিকেট, পেমেন্ট, অ্যাকাউন্ট বা কোর্স সম্পর্কিত যেকোনো প্রশ্নের উত্তর পেতে বি লেসন হেল্প সেন্টারে চোখ রাখুন অথবা সরাসরি সাপোর্ট টিমের সাথে যোগাযোগ করুন।' 
+        : 'Find answers about certificates, payments, accounts, or courses at the BeeLesson Help Center or contact support.';
+
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.q,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.a
+            }
+        }))
+    };
+
     return (
         <div className={styles.helpPage}>
+            <SEO 
+                title={seoTitle} 
+                description={seoDescription} 
+                schema={faqSchema}
+            />
             <section className={styles.heroSection}>
                 <div className={styles.heroContent}>
                     <div className={styles.heroIconWrap}>

@@ -16,6 +16,7 @@ import HoneyDropIcon from '../../components/HoneyDropIcon';
 import PollenIcon from '../../components/PollenIcon';
 import { toast } from 'sonner';
 import ShopSkeleton from './ShopSkeleton';
+import SEO from '../../components/SEO';
 
 
 
@@ -274,8 +275,18 @@ const ShopPage = () => {
         }
     };
 
+    const isBn = language === 'bn';
+    const seoTitle = isBn 
+        ? 'বি লেসন শপ | সুপার মেম্বারশিপ ও ভার্চুয়াল রিওয়ার্ডস' 
+        : 'BeeLesson Shop | Super Membership & Virtual Rewards';
+        
+    const seoDescription = isBn 
+        ? 'বি লেসন শপে যান! মধুরেণু এক্সচেঞ্জ করে হানি ড্রপ রিফিল করুন এবং সুপার বি মেম্বারশিপ নিয়ে আনলিমিটেড লাইভস ও বিজ্ঞাপনহীন শেখার সুবিধা উপভোগ করুন।' 
+        : 'Visit the BeeLesson shop to exchange pollen for honey drops and upgrade to Super Bee for unlimited lives and ad-free learning.';
+
     return (
         <main className={styles.mainContent}>
+            <SEO title={seoTitle} description={seoDescription} />
             <div className={styles.innerContent}>
                 {loading ? (
                     <ShopSkeleton />

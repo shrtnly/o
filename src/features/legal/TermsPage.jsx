@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, UserCheck, ShieldAlert, Coins, Copyright, RefreshCw, Mail, AlertTriangle } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import styles from './TermsPage.module.css';
+import SEO from '../../components/SEO';
 
 const TermsPage = () => {
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
 
     const sections = [
         { id: 1, title: 't_section_1_title', desc: 't_section_1_desc', icon: UserCheck },
@@ -17,8 +18,18 @@ const TermsPage = () => {
         { id: 6, title: 't_section_6_title', desc: 't_section_6_desc', icon: AlertTriangle },
     ];
 
+    const isBn = language === 'bn';
+    const seoTitle = isBn 
+        ? 'টার্মস এবং কন্ডিশনস | বি লেসন (BeeLesson)' 
+        : 'Terms and Conditions | BeeLesson';
+        
+    const seoDescription = isBn 
+        ? 'বি লেসন (BeeLesson)-এর ব্যবহারিক শর্তাবলী এবং নিয়মকানুনসমূহ পড়ুন।' 
+        : 'Read the terms of service and user agreements for BeeLesson.';
+
     return (
         <div className={styles.termsPage}>
+            <SEO title={seoTitle} description={seoDescription} />
             <div className={styles.container}>
                 <button
                     onClick={() => navigate('/settings?tab=legal')}

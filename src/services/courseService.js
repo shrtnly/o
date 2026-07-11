@@ -422,7 +422,7 @@ export const courseService = {
         try {
             const { data, error } = await supabase
                 .from('course_public_stats')
-                .select('course_id, enrolled_count, average_rating');
+                .select('course_id, enrolled_count, average_rating, review_count');
             
             if (error) throw error;
 
@@ -430,7 +430,8 @@ export const courseService = {
             data.forEach(s => {
                 stats[s.course_id] = {
                     count: s.enrolled_count || 0,
-                    rating: s.average_rating || 0
+                    rating: s.average_rating || 0,
+                    reviewCount: s.review_count || 0
                 };
             });
 

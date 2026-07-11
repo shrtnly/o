@@ -136,11 +136,14 @@ const CourseSection = () => {
                         ) : (
                             courses.map(course => {
                                 const displayTitle = (language === 'en' && course.title_en) ? course.title_en : course.title;
-                                const { baseStudents, baseRating } = getCourseBaseStats(course.title || '');
+                                const { baseStudents, baseRating, minReviews } = getCourseBaseStats(course.title || '');
                                 const realStudents = Number(course.students_count) || 0;
                                 const displayStudents = baseStudents + realStudents;
                                 const realRating = parseFloat(course.rating) || 0;
-                                const displayRating = realRating > 0 ? realRating : baseRating;
+                                const reviewCount = Number(course.review_count) || 0;
+                                const displayRating = (reviewCount >= minReviews && minReviews > 0 && realRating > 0)
+                                    ? realRating
+                                    : (baseRating > 0 ? baseRating : realRating);
                                 return (
                                     <div 
                                         key={course.id} 

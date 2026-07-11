@@ -73,7 +73,7 @@ const Survey = () => {
                     if (user) {
                         navigate('/learning');
                     } else {
-                        navigate('/auth');
+                        navigate('/auth?mode=signup', { state: { mode: 'signup' } });
                     }
                 }, duration + 600); 
             };

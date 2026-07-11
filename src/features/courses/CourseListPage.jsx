@@ -9,6 +9,7 @@ import CourseSkeleton from '../landing/CourseSkeleton';
 import styles from './CourseListPage.module.css';
 import { useLanguage } from '../../context/LanguageContext';
 import SEO from '../../components/SEO';
+import { getCourseBaseStats } from '../../utils/courseBaseStats';
 
 const getCategories = (t) => [
     { id: 'All', name: t('all_courses') },
@@ -107,7 +108,8 @@ const CourseListPage = () => {
                 const updatedCourses = allCourses.map(course => ({
                     ...course,
                     students_count: bulkStats[course.id]?.count || course.students_count || 0,
-                    rating: bulkStats[course.id]?.rating || course.rating || 0
+                    rating: bulkStats[course.id]?.rating || course.rating || 0,
+                    review_count: bulkStats[course.id]?.reviewCount || 0
                 }));
 
                 setCourses(updatedCourses);
@@ -159,16 +161,34 @@ const CourseListPage = () => {
         
         return matchesCategory && matchesSearch;
     }).sort((a, b) => {
-        // Always prioritize featured courses
-        if (a.is_featured && !b.is_featured) return -1;
-        if (!a.is_featured && b.is_featured) return 1;
+        // Compute effective displayed enrollment count (base dummy + real enrolled)
+        const getEffectiveCount = (course) => {
+            const { baseStudents } = getCourseBaseStats(course.title || '');
+            return (baseStudents || 0) + (Number(course.students_count) || 0);
+        };
+        // Compute effective displayed rating (respects minReviews threshold)
+        const getEffectiveRating = (course) => {
+            const { baseRating, minReviews } = getCourseBaseStats(course.title || '');
+            const realRating = parseFloat(course.rating) || 0;
+            const reviewCount = Number(course.review_count) || 0;
+            return (reviewCount >= minReviews && minReviews > 0 && realRating > 0)
+                ? realRating
+                : (baseRating > 0 ? baseRating : realRating);
+        };
 
         if (sortBy === 'rating') {
-            return (b.rating || 0) - (a.rating || 0);
-        } else if (sortBy === 'popularity') {
-            return (b.students_count || 0) - (a.students_count || 0);
+            const ratingDiff = getEffectiveRating(b) - getEffectiveRating(a);
+            if (ratingDiff !== 0) return ratingDiff;
+            // Tiebreak by enrollment count
+            return getEffectiveCount(b) - getEffectiveCount(a);
         }
-        return 0; // Maintain default order
+        // Default: sort by effective enrolled count, highest first
+        const countDiff = getEffectiveCount(b) - getEffectiveCount(a);
+        if (countDiff !== 0) return countDiff;
+        // Tiebreak: featured courses first, then by title
+        if (a.is_featured && !b.is_featured) return -1;
+        if (!a.is_featured && b.is_featured) return 1;
+        return 0;
     });
 
     const isBn = language === 'bn';

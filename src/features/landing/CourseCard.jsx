@@ -12,12 +12,15 @@ const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
 
     // Merge dummy base stats with real DB values
     // displayed students = dummy base + real enrolled count from DB
-    // displayed rating   = real DB rating if non-zero, otherwise dummy base rating
-    const { baseStudents, baseRating } = getCourseBaseStats(course.title || '');
+    // displayed rating   = baseRating until `minReviews` real reviews accumulate, then real DB rating
+    const { baseStudents, baseRating, minReviews } = getCourseBaseStats(course.title || '');
     const realStudents = Number(course.students_count) || 0;
     const students = baseStudents + realStudents;
     const realRating = parseFloat(course.rating) || 0;
-    const rating = realRating > 0 ? realRating : baseRating;
+    const reviewCount = Number(course.review_count) || 0;
+    const rating = (reviewCount >= minReviews && minReviews > 0 && realRating > 0)
+        ? realRating
+        : (baseRating > 0 ? baseRating : realRating);
 
     const displayTitle = (language === 'en' && course.title_en) ? course.title_en : course.title;
 

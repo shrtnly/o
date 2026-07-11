@@ -31,7 +31,18 @@ const LOCATION_OPTIONS = [
 ];
 
 const AuthPage = () => {
-    const [isLogin, setIsLogin] = useState(true);
+    const locationHook = useLocation();
+    const { user, signIn, signUp, signInWithOAuth } = useAuth();
+    const { language, t } = useLanguage();
+    const navigate = useNavigate();
+
+    // Parse initial isLogin from URL parameter or navigation state
+    const [isLogin, setIsLogin] = useState(() => {
+        const params = new URLSearchParams(locationHook.search);
+        if (params.get('mode') === 'signup') return false;
+        if (locationHook.state?.mode === 'signup') return false;
+        return true;
+    });
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -46,11 +57,6 @@ const AuthPage = () => {
     const [success, setSuccess] = useState('');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [fieldErrors, setFieldErrors] = useState([]);
-
-    const { user, signIn, signUp, signInWithOAuth } = useAuth();
-    const { language, t } = useLanguage();
-    const navigate = useNavigate();
-    const locationHook = useLocation();
 
     // Capture referral from URL
     React.useEffect(() => {

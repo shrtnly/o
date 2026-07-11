@@ -119,9 +119,7 @@ const LeaderboardPage = () => {
        RENDER
        ================================================ */
     const isBn = language === 'bn';
-    const seoTitle = isBn 
-        ? 'লিডারবোর্ড | অন্যান্য শিক্ষার্থীদের সাথে প্রতিযোগিতা করুন' 
-        : 'Leaderboard | Compete with Other Learners';
+    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'বি লেসন লিডারবোর্ডে আপনার অবস্থান দেখুন! পড়াশোনা সম্পন্ন করে মধু (XP) অর্জন করুন এবং বিভিন্ন টিয়ারে উন্নীত হয়ে শীর্ষস্থানে পৌঁছান।' 

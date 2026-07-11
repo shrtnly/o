@@ -20,12 +20,12 @@ const SEO = ({
     // Default translations/fallbacks for general SEO
     const defaults = {
         bn: {
-            title: 'বি লেসন (BeeLesson) | গেম খেলে শিখুন ক্যারিয়ার ও আইনি সচেতনতা',
+            title: 'BeeLesson | গেম খেলে শিখুন',
             description: 'বি লেসন (BeeLesson) বাংলাদেশের প্রথম গ্যামিফাইড লার্নিং প্ল্যাটফর্ম। ইন্টারেক্টিভ কুইজ ও গেম খেলার মাধ্যমে ফ্রিতে শিখুন ক্যারিয়ার গাইড, আইনি সচেতনতা, ডিজিটাল নিরাপত্তা ও স্মার্ট ব্যাংকিং।',
             keywords: 'বি লেসন, BeeLesson, ও-শেখা, গ্যামিফাইড লার্নিং, আইনি সচেতনতা, ডিজিটাল নিরাপত্তা, ক্যারিয়ার গাইড, স্মার্ট ব্যাংকিং, বাংলাদেশ শিক্ষা, ইন্টারেক্টিভ কুইজ',
         },
         en: {
-            title: 'BeeLesson | Gamified Learning Platform for Career & Legal Skills',
+            title: 'BeeLesson | গেম খেলে শিখুন',
             description: 'BeeLesson is Bangladesh\'s first gamified learning platform. Learn career skills, legal awareness, digital security, and smart banking through interactive stories, quizzes, and games.',
             keywords: 'BeeLesson, O-sekha, gamified learning Bangladesh, legal awareness app, digital safety course, career guidance Bangla, smart banking interactive, interactive quizzes',
         }

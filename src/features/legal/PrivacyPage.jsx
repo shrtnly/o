@@ -18,9 +18,7 @@ const PrivacyPage = () => {
     ];
 
     const isBn = language === 'bn';
-    const seoTitle = isBn 
-        ? 'প্রাইভেসি পলিসি | বি লেসন (BeeLesson)' 
-        : 'Privacy Policy | BeeLesson';
+    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'বি লেসন (BeeLesson) ব্যবহারকারীদের ব্যক্তিগত তথ্যের গোপনীয়তা ও সুরক্ষা সংক্রান্ত নীতিমালা জানুন।' 

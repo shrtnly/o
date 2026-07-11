@@ -276,9 +276,7 @@ const ShopPage = () => {
     };
 
     const isBn = language === 'bn';
-    const seoTitle = isBn 
-        ? 'বি লেসন শপ | সুপার মেম্বারশিপ ও ভার্চুয়াল রিওয়ার্ডস' 
-        : 'BeeLesson Shop | Super Membership & Virtual Rewards';
+    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'বি লেসন শপে যান! মধুরেণু এক্সচেঞ্জ করে হানি ড্রপ রিফিল করুন এবং সুপার বি মেম্বারশিপ নিয়ে আনলিমিটেড লাইভস ও বিজ্ঞাপনহীন শেখার সুবিধা উপভোগ করুন।' 

@@ -192,9 +192,7 @@ const CourseListPage = () => {
     });
 
     const isBn = language === 'bn';
-    const seoTitle = isBn 
-        ? 'আমাদের কোর্সসমূহ | বি লেসন (BeeLesson)' 
-        : 'Explore Courses | BeeLesson';
+    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'ডিজিটাল নিরাপত্তা, আইনি সচেতনতা, ক্যারিয়ার স্কিলস, মানসিক স্বাস্থ্য ও আর্থিক সচেতনতার ওপর আমাদের চমৎকার গেমিফাইড কোর্সগুলো দেখুন।' 

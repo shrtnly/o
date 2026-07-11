@@ -19,9 +19,7 @@ const TermsPage = () => {
     ];
 
     const isBn = language === 'bn';
-    const seoTitle = isBn 
-        ? 'টার্মস এবং কন্ডিশনস | বি লেসন (BeeLesson)' 
-        : 'Terms and Conditions | BeeLesson';
+    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'বি লেসন (BeeLesson)-এর ব্যবহারিক শর্তাবলী এবং নিয়মকানুনসমূহ পড়ুন।' 

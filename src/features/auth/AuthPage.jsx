@@ -11,6 +11,7 @@ import { supabase } from '../../lib/supabaseClient';
 import ConfirmationModal from './ConfirmationModal';
 import CustomSelect from '../../components/ui/CustomSelect';
 import { useLanguage } from '../../context/LanguageContext';
+import SEO from '../../components/SEO';
 
 const GENDER_OPTIONS = [
     { value: 'male', label: 'পুরুষ' },
@@ -349,6 +350,7 @@ const AuthPage = () => {
 
     return (
         <div className={styles.authWrapper}>
+            <SEO title="BeeLesson | গেম খেলে শিখুন" />
             <button className={styles.closeBtn} onClick={() => navigate('/')} aria-label="Close">
                 <X size={24} />
             </button>

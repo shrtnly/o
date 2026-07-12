@@ -1609,7 +1609,7 @@ const StudyPage = () => {
                                                 id: '1day',
                                                 amount: 1,
                                                 price: 50,
-                                                label: 'কুইক হানি ড্রপ (১ দিন)'
+                                                label: 'বি প্রিমিয়াম'
                                             };
                                             if (!user) {
                                                 localStorage.setItem('pending_purchase', JSON.stringify({ type: '1day', checkoutData }));

@@ -1605,7 +1605,7 @@ const StudyPage = () => {
                                         onClick={() => { setShowNoHeartsModal(false); navigate('/shop'); }}
                                     >
                                         <Zap size={18} fill="currentColor" strokeWidth={0} />
-                                        <span>আনলিমিটেড 24 ঘন্টা - মাত্র 4 টাকা</span>
+                                        <span>বি প্রিমিয়াম - মাত্র ৫০ টাকা</span>
                                     </button>
 
                                     <button

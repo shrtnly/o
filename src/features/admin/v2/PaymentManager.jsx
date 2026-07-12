@@ -49,110 +49,18 @@ const PaymentManager = () => {
         const toastId = toast.loading(`Updating status to ${newStatus}...`);
 
         try {
-            // If approving, activate the subscription/recharge directly in profile
-            if (newStatus === 'approved' && payment.status !== 'approved') {
-                const plan = payment.plan_type;
-                
-                // Fetch current user profile first to calculate correct expiry date
-                const { data: profile, error: profileErr } = await supabase
-                    .from('profiles')
-                    .select('is_1day_premium, one_day_premium_until, is_premium, premium_until')
-                    .eq('id', payment.user_id)
-                    .single();
-
-                if (profileErr) throw new Error(`Could not fetch user profile: ${profileErr.message}`);
-
-                const now = new Date();
-
-                if (plan === '1day' || plan === '10day') {
-                    // Calculate 10-day active premium expiry
-                    let currentExpiry = profile.one_day_premium_until ? new Date(profile.one_day_premium_until) : null;
-                    let newExpiry;
-                    if (profile.is_1day_premium && currentExpiry && currentExpiry > now) {
-                        newExpiry = new Date(currentExpiry.getTime() + 10 * 24 * 60 * 60 * 1000);
-                    } else {
-                        newExpiry = new Date(now.getTime() + 10 * 24 * 60 * 60 * 1000);
-                    }
-
-                    // Update user profile directly
-                    const { error: updateErr } = await supabase
-                        .from('profiles')
-                        .update({
-                            is_1day_premium: true,
-                            one_day_premium_until: newExpiry.toISOString()
-                        })
-                        .eq('id', payment.user_id);
-
-                    if (updateErr) throw new Error(`Failed to activate premium: ${updateErr.message}`);
-
-                    // Send real-time notification
-                    await supabase.from('notifications').insert({
-                        user_id: payment.user_id,
-                        actor_id: payment.user_id,
-                        title: 'বি প্রিমিয়াম সক্রিয়!',
-                        message: 'আপনার বি প্রিমিয়াম (১০ দিন) মেম্বারশিপ সক্রিয় করা হয়েছে। ১০ দিন আনলিমিটেড হানি ড্রপ উপভোগ করুন!',
-                        type: 'unlock',
-                        is_read: false,
-                        data: {
-                            type: 'subscription_approved',
-                            display_title: 'বি প্রিমিয়াম সক্রিয়! 🎉',
-                            display_msg: '১০ দিন আনলিমিটেড হানি ড্রপ উপভোগ করুন!'
-                        }
-                    });
-
-                    toast.success('Bee Premium (10-Day) subscription activated for user!');
-
-                } else if (plan === 'monthly' || plan === 'yearly') {
-                    // Calculate membership expiry (monthly = 30 days, yearly = 365 days)
-                    const daysToAdd = plan === 'monthly' ? 30 : 365;
-                    let currentExpiry = profile.premium_until ? new Date(profile.premium_until) : null;
-                    let newExpiry;
-                    if (profile.is_premium && currentExpiry && currentExpiry > now) {
-                        newExpiry = new Date(currentExpiry.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
-                    } else {
-                        newExpiry = new Date(now.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
-                    }
-
-                    // Update user profile directly
-                    const { error: updateErr } = await supabase
-                        .from('profiles')
-                        .update({
-                            is_premium: true,
-                            premium_until: newExpiry.toISOString(),
-                            premium_status: 'active'
-                        })
-                        .eq('id', payment.user_id);
-
-                    if (updateErr) throw new Error(`Failed to activate subscription: ${updateErr.message}`);
-
-                    // Send real-time notification
-                    await supabase.from('notifications').insert({
-                        user_id: payment.user_id,
-                        actor_id: payment.user_id,
-                        title: 'সুপার বি সক্রিয়!',
-                        message: `আপনার সুপার বি (${plan === 'monthly' ? 'মাসিক' : 'বাৎসরিক'}) মেম্বারশিপ সক্রিয় করা হয়েছে।`,
-                        type: 'unlock',
-                        is_read: false,
-                        data: {
-                            type: 'subscription_approved',
-                            display_title: 'সুপার বি সক্রিয়! 👑',
-                            display_msg: `সুপার বি (${plan === 'monthly' ? 'মাসিক' : 'বাৎসরিক'}) মেম্বারশিপ সক্রিয়!`
-                        }
-                    });
-
-                    toast.success(`Super Bee (${plan}) subscription activated for user!`);
-                }
-            }
-
-            // Update status in public.Payment table
-            const { error } = await supabase
-                .from('Payment')
-                .update({ status: newStatus })
-                .eq('id', paymentId);
+            // Call the SECURITY DEFINER RPC to securely process the payment approval/rejection
+            const { data, error } = await supabase.rpc('process_payment_approval', {
+                p_payment_id: paymentId,
+                p_status: newStatus
+            });
 
             if (error) throw error;
+            if (data && !data.success) {
+                throw new Error(data.error || 'Failed to update payment');
+            }
 
-            toast.success('Payment status updated successfully', { id: toastId });
+            toast.success(`Payment status updated to "${newStatus}" successfully`, { id: toastId });
             fetchPayments();
         } catch (err) {
             console.error('Error updating payment status:', err);

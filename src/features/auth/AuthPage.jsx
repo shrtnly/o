@@ -183,6 +183,24 @@ const AuthPage = () => {
                     }
                 }
 
+                const pendingPurchase = localStorage.getItem('pending_purchase');
+                if (pendingPurchase) {
+                    try {
+                        const { type, checkoutData } = JSON.parse(pendingPurchase);
+                        localStorage.removeItem('pending_purchase');
+                        navigate('/checkout', {
+                            state: {
+                                checkoutData,
+                                type,
+                                planType: type === 'subscription' ? 'monthly' : '1day'
+                            }
+                        });
+                        return;
+                    } catch (err) {
+                        console.error('Error in post-auth pending purchase:', err);
+                    }
+                }
+
                 if (courseIdToRedirect) {
                     navigate(`/learn/${courseIdToRedirect}`);
                 } else {

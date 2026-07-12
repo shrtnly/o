@@ -15,6 +15,7 @@ import InlineLoader from '../../components/ui/InlineLoader';
 import CourseFeedbackCard from './components/CourseFeedbackCard';
 import StudySkeleton from './components/StudySkeleton';
 import { courseService } from '../../services/courseService';
+import { toast } from 'sonner';
 
 import { createAvatar } from '@dicebear/core';
 import { lorelei } from '@dicebear/collection';
@@ -1602,7 +1603,28 @@ const StudyPage = () => {
                                 <div className={styles.noHeartsButtons}>
                                     <button
                                         className={`${styles.btn3d} ${styles.instantRefillBtn}`}
-                                        onClick={() => { setShowNoHeartsModal(false); navigate('/shop'); }}
+                                        onClick={() => {
+                                            setShowNoHeartsModal(false);
+                                            const checkoutData = {
+                                                id: '1day',
+                                                amount: 1,
+                                                price: 50,
+                                                label: 'কুইক হানি ড্রপ (১ দিন)'
+                                            };
+                                            if (!user) {
+                                                localStorage.setItem('pending_purchase', JSON.stringify({ type: '1day', checkoutData }));
+                                                toast.info('পেমেন্ট করতে অনুগ্রহ করে প্রথমে সাইন আপ করুন।');
+                                                navigate('/auth?mode=signup', { state: { mode: 'signup' } });
+                                            } else {
+                                                navigate('/checkout', {
+                                                    state: {
+                                                        checkoutData,
+                                                        type: '1day',
+                                                        planType: '1day'
+                                                    }
+                                                });
+                                            }
+                                        }}
                                     >
                                         <Zap size={18} fill="currentColor" strokeWidth={0} />
                                         <span>বি প্রিমিয়াম - মাত্র ৫০ টাকা</span>
@@ -1610,7 +1632,28 @@ const StudyPage = () => {
 
                                     <button
                                         className={`${styles.btn3d} ${styles.premiumCardBtn}`}
-                                        onClick={() => handleNoHeartsCheckout('subscription')}
+                                        onClick={() => {
+                                            setShowNoHeartsModal(false);
+                                            const checkoutData = {
+                                                id: 'premium',
+                                                amount: 1,
+                                                price: 99,
+                                                label: 'সুপার বি প্রিমিয়াম'
+                                            };
+                                            if (!user) {
+                                                localStorage.setItem('pending_purchase', JSON.stringify({ type: 'subscription', checkoutData }));
+                                                toast.info('পেমেন্ট করতে অনুগ্রহ করে প্রথমে সাইন আপ করুন।');
+                                                navigate('/auth?mode=signup', { state: { mode: 'signup' } });
+                                            } else {
+                                                navigate('/checkout', {
+                                                    state: {
+                                                        checkoutData,
+                                                        type: 'subscription',
+                                                        planType: 'monthly'
+                                                    }
+                                                });
+                                            }
+                                        }}
                                     >
                                         <span>👑</span>
                                         <span>{profile?.gender === 'male' ? t('king_bee_mode') : t('queen_bee_mode')} — যাত্রা মাত্র 99 টাকা</span>

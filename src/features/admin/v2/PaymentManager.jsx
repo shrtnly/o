@@ -84,6 +84,22 @@ const PaymentManager = () => {
                         .eq('id', payment.user_id);
 
                     if (updateErr) throw new Error(`Failed to activate premium: ${updateErr.message}`);
+
+                    // Send real-time notification
+                    await supabase.from('notifications').insert({
+                        user_id: payment.user_id,
+                        actor_id: payment.user_id,
+                        title: 'বি প্রিমিয়াম সক্রিয়!',
+                        message: 'আপনার বি প্রিমিয়াম (১০ দিন) মেম্বারশিপ সক্রিয় করা হয়েছে। ১০ দিন আনলিমিটেড হানি ড্রপ উপভোগ করুন!',
+                        type: 'unlock',
+                        is_read: false,
+                        data: {
+                            type: 'subscription_approved',
+                            display_title: 'বি প্রিমিয়াম সক্রিয়! 🎉',
+                            display_msg: '১০ দিন আনলিমিটেড হানি ড্রপ উপভোগ করুন!'
+                        }
+                    });
+
                     toast.success('Bee Premium (10-Day) subscription activated for user!');
 
                 } else if (plan === 'monthly' || plan === 'yearly') {
@@ -108,6 +124,22 @@ const PaymentManager = () => {
                         .eq('id', payment.user_id);
 
                     if (updateErr) throw new Error(`Failed to activate subscription: ${updateErr.message}`);
+
+                    // Send real-time notification
+                    await supabase.from('notifications').insert({
+                        user_id: payment.user_id,
+                        actor_id: payment.user_id,
+                        title: 'সুপার বি সক্রিয়!',
+                        message: `আপনার সুপার বি (${plan === 'monthly' ? 'মাসিক' : 'বাৎসরিক'}) মেম্বারশিপ সক্রিয় করা হয়েছে।`,
+                        type: 'unlock',
+                        is_read: false,
+                        data: {
+                            type: 'subscription_approved',
+                            display_title: 'সুপার বি সক্রিয়! 👑',
+                            display_msg: `সুপার বি (${plan === 'monthly' ? 'মাসিক' : 'বাৎসরিক'}) মেম্বারশিপ সক্রিয়!`
+                        }
+                    });
+
                     toast.success(`Super Bee (${plan}) subscription activated for user!`);
                 }
             }

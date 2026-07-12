@@ -251,8 +251,8 @@ const ShopPage = () => {
                 checkoutData = {
                     id: '1day',
                     amount: 1,
-                    price: 10,
-                    label: (language === 'bn' ? 'কুইক হানি ড্রপ (১ দিন)' : 'Quick Honey Drop (1 Day)')
+                    price: 50,
+                    label: (language === 'bn' ? 'বি প্রিমিয়াম' : 'Bee Premium')
                 };
             } else if (dataArg) {
                 checkoutData = {

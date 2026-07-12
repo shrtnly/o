@@ -101,7 +101,7 @@ const CheckoutPage = () => {
             return isFemale ? 'Super Queen Bee' : 'Super King Bee';
         }
         if (type === '1day') {
-            return language === 'bn' ? 'কুইক হানি ড্রপ (১ দিন)' : 'Quick Honey Drop (1 Day)';
+            return language === 'bn' ? 'বি প্রিমিয়াম' : 'Bee Premium';
         }
         return checkoutData?.label || (language === 'bn' ? 'অন্যান্য' : 'Other');
     };
@@ -114,7 +114,7 @@ const CheckoutPage = () => {
             return language === 'bn' ? 'মাসিক (৩০ দিন)' : 'Monthly (30 Days)';
         }
         if (type === '1day') {
-            return language === 'bn' ? '১ দিন' : '1 Day';
+            return language === 'bn' ? '১০ দিন' : '10 Days';
         }
         return language === 'bn' ? 'লাইফটাইম / এককালীন' : 'Lifetime / One-time';
     };
@@ -156,8 +156,8 @@ const CheckoutPage = () => {
                 if (data.applicable_to === '1day' && type !== '1day') {
                     throw new Error(
                         language === 'bn' 
-                            ? 'এই প্রোমো কোডটি শুধুমাত্র কুইক হানি ড্রপ (১ দিন)-এর জন্য প্রযোজ্য' 
-                            : 'This promo code is only applicable to Quick Honey Drop (1 Day)'
+                            ? 'এই প্রোমো কোডটি শুধুমাত্র বি প্রিমিয়াম-এর জন্য প্রযোজ্য' 
+                            : 'This promo code is only applicable to Bee Premium'
                     );
                 }
             }

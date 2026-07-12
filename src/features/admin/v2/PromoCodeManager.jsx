@@ -197,7 +197,7 @@ const PromoCodeManager = () => {
                             >
                                 <option value="all">All Products</option>
                                 <option value="subscription">সুপার বি প্রিমিয়াম (Subscription)</option>
-                                <option value="1day">কুইক হানি ড্রপ (১ দিন) (1-Day Premium)</option>
+                                <option value="1day">বি প্রিমিয়াম (10-Day Premium)</option>
                             </select>
                         </div>
 
@@ -354,7 +354,7 @@ const PromoCodeManager = () => {
                                                     code.applicable_to === 'subscription' 
                                                         ? 'সুপার বি প্রিমিয়াম' 
                                                         : code.applicable_to === '1day' 
-                                                            ? 'কুইক হানি ড্রপ (১ দিন)' 
+                                                            ? 'বি প্রিমিয়াম' 
                                                             : 'All Products'
                                                 }
                                             </p>

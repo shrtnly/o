@@ -283,24 +283,28 @@ export const NotificationProvider = ({ children }) => {
                         });
                         refreshUnreadCount();
 
+                        // Check if dark mode is active on document element
+                        const isDark = document.documentElement.classList.contains('dark');
+
                         // Show Premium Custom Toast
                         toast.custom((t) => (
                             <div style={{
-                                background: '#ffffff',
+                                background: isDark ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.95)',
                                 padding: '10px 14px',
                                 borderRadius: '16px',
-                                border: '1px solid #e2e8f0',
+                                border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                                 backdropFilter: 'blur(16px)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '12px',
-                                width: '320px',
-                                minWidth: '280px',
-                                color: '#1e293b',
-                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+                                width: '90vw',
+                                maxWidth: '340px',
+                                color: isDark ? '#f8fafc' : '#1e293b',
+                                boxShadow: isDark ? '0 12px 40px rgba(0, 0, 0, 0.4)' : '0 8px 32px rgba(0, 0, 0, 0.08)',
                                 fontFamily: '"Hind Siliguri", sans-serif',
                                 position: 'relative',
-                                overflow: 'hidden'
+                                overflow: 'hidden',
+                                transition: 'all 0.3s ease'
                             }}>
                                 {/* Icon/Avatar */}
                                 <div style={{
@@ -308,9 +312,9 @@ export const NotificationProvider = ({ children }) => {
                                     height: '38px',
                                     borderRadius: '12px',
                                     overflow: 'hidden',
-                                    background: '#f8fafc',
+                                    background: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f8fafc',
                                     flexShrink: 0,
-                                    border: '1px solid #e2e8f0',
+                                    border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid #e2e8f0',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
@@ -320,7 +324,8 @@ export const NotificationProvider = ({ children }) => {
                                     {actorProfile?.avatar_url ? (
                                         <img src={actorProfile.avatar_url} crossOrigin="anonymous" referrerPolicy="no-referrer" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                                     ) : (
-                                        <div style={{ background: 'var(--color-primary-soft)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                        <div style={{ background: isDark ? 'rgba(255, 184, 0, 0.1)' : 'var(--color-primary-soft)', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            {newNotif.data?.type === 'subscription_approved' && <span style={{ fontSize: '18px' }}>👑</span>}
                                             {newNotif.type === 'reward' && <span style={{ fontSize: '16px' }}>🌕</span>}
                                             {newNotif.type === 'streak' && <span style={{ fontSize: '16px' }}>🔥</span>}
                                             {newNotif.type === 'course' && (
@@ -329,7 +334,7 @@ export const NotificationProvider = ({ children }) => {
                                                      newNotif.data?.type === 'module_complete' ? '🌟' : '📚'}
                                                 </span>
                                             )}
-                                            {newNotif.type === 'unlock' && (
+                                            {newNotif.type === 'unlock' && newNotif.data?.type !== 'subscription_approved' && (
                                                 <span style={{ fontSize: '16px' }}>
                                                     {newNotif.data?.unlock_type === 'shield_gold' ? '🏆' :
                                                      newNotif.data?.unlock_type === 'shield_platinum' ? '💎' :
@@ -342,7 +347,7 @@ export const NotificationProvider = ({ children }) => {
                                                     <span style={{ fontSize: '18px' }}>{newNotif.data?.is_winner ? '🏆' : '⚔️'}</span>
                                                 </div>
                                             )}
-                                            {(!['reward', 'streak', 'course', 'unlock', 'battle_result'].includes(newNotif.type)) && <span style={{ fontSize: '16px' }}>🔔</span>}
+                                            {(!['reward', 'streak', 'course', 'unlock', 'battle_result'].includes(newNotif.type) && newNotif.data?.type !== 'subscription_approved') && <span style={{ fontSize: '16px' }}>🔔</span>}
                                         </div>
                                     )}
                                 </div>
@@ -354,11 +359,13 @@ export const NotificationProvider = ({ children }) => {
                                         alignItems: 'center',
                                         gap: '4px',
                                         fontSize: '10px', 
-                                        color: newNotif.type === 'battle_invite'
-                                            ? 'var(--color-primary-dark)'
-                                            : newNotif.type === 'battle_result'
-                                                ? (newNotif.data?.is_winner ? '#d97706' : '#dc2626')
-                                                : '#64748b', 
+                                        color: newNotif.data?.type === 'subscription_approved'
+                                            ? '#f59e0b'
+                                            : newNotif.type === 'battle_invite'
+                                                ? 'var(--color-primary-dark)'
+                                                : newNotif.type === 'battle_result'
+                                                    ? (newNotif.data?.is_winner ? '#d97706' : '#dc2626')
+                                                    : isDark ? '#f59e0b' : '#64748b', 
                                         fontWeight: '800', 
                                         textTransform: 'uppercase', 
                                         letterSpacing: '1px', 
@@ -369,7 +376,7 @@ export const NotificationProvider = ({ children }) => {
                                     <div style={{ 
                                         fontSize: '0.8rem', 
                                         fontWeight: '600', 
-                                        color: '#0f172a', 
+                                        color: isDark ? '#f1f5f9' : '#0f172a', 
                                         lineHeight: '1.4',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',
@@ -380,7 +387,7 @@ export const NotificationProvider = ({ children }) => {
                                     {newNotif.data?.course_name && (
                                         <div style={{ 
                                             fontSize: '10px', 
-                                            color: '#64748b',
+                                            color: isDark ? '#94a3b8' : '#64748b',
                                             marginTop: '1px',
                                             fontWeight: '500',
                                             overflow: 'hidden',
@@ -432,8 +439,8 @@ export const NotificationProvider = ({ children }) => {
                                                 toast.dismiss(t);
                                             }}
                                             style={{
-                                                background: '#f1f5f9',
-                                                border: '1px solid #e2e8f0',
+                                                background: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9',
+                                                border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0',
                                                 borderRadius: '8px',
                                                 width: '28px',
                                                 height: '28px',
@@ -441,15 +448,15 @@ export const NotificationProvider = ({ children }) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                color: '#64748b'
+                                                color: isDark ? '#94a3b8' : '#64748b'
                                             }}
                                             onMouseEnter={(e) => {
-                                                e.currentTarget.style.background = '#e2e8f0';
-                                                e.currentTarget.style.color = '#0f172a';
+                                                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.1)' : '#e2e8f0';
+                                                e.currentTarget.style.color = isDark ? '#fff' : '#0f172a';
                                             }}
                                             onMouseLeave={(e) => {
-                                                e.currentTarget.style.background = '#f1f5f9';
-                                                e.currentTarget.style.color = '#64748b';
+                                                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9';
+                                                e.currentTarget.style.color = isDark ? '#94a3b8' : '#64748b';
                                             }}
                                         >
                                             <X size={16} />
@@ -495,8 +502,8 @@ export const NotificationProvider = ({ children }) => {
                                                 toast.dismiss(t);
                                             }}
                                             style={{
-                                                background: '#f1f5f9',
-                                                border: '1px solid #e2e8f0',
+                                                background: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9',
+                                                border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0',
                                                 borderRadius: '10px',
                                                 width: '34px',
                                                 height: '34px',
@@ -504,20 +511,20 @@ export const NotificationProvider = ({ children }) => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 cursor: 'pointer',
-                                                color: '#64748b',
+                                                color: isDark ? '#94a3b8' : '#64748b',
                                                 transition: 'all 0.2s',
                                                 position: 'relative',
                                                 zIndex: 1
                                             }}
                                             onMouseEnter={(e) => {
-                                                e.currentTarget.style.background = '#fee2e2';
+                                                e.currentTarget.style.background = isDark ? 'rgba(239, 68, 68, 0.2)' : '#fee2e2';
                                                 e.currentTarget.style.color = '#ef4444';
-                                                e.currentTarget.style.borderColor = '#fca5a5';
+                                                e.currentTarget.style.borderColor = isDark ? 'rgba(239, 68, 68, 0.4)' : '#fca5a5';
                                             }}
                                             onMouseLeave={(e) => {
-                                                e.currentTarget.style.background = '#f1f5f9';
-                                                e.currentTarget.style.color = '#64748b';
-                                                e.currentTarget.style.borderColor = '#e2e8f0';
+                                                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9';
+                                                e.currentTarget.style.color = isDark ? '#94a3b8' : '#64748b';
+                                                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.08)' : '#e2e8f0';
                                             }}
                                         >
                                             <X size={16} />
@@ -528,8 +535,8 @@ export const NotificationProvider = ({ children }) => {
                                     <button
                                         onClick={() => toast.dismiss(t)}
                                         style={{
-                                            background: newNotif.data?.is_winner ? 'rgba(255, 184, 0,0.15)' : 'rgba(231,76,60,0.15)',
-                                            border: `1px solid ${newNotif.data?.is_winner ? 'rgba(255, 184, 0,0.3)' : 'rgba(231,76,60,0.3)'}`,
+                                            background: newNotif.data?.is_winner ? 'rgba(255, 184, 0, 0.15)' : 'rgba(231, 76, 60, 0.15)',
+                                            border: `1px solid ${newNotif.data?.is_winner ? 'rgba(255, 184, 0, 0.3)' : 'rgba(231, 76, 60, 0.3)'}`,
                                             borderRadius: '10px',
                                             width: '34px',
                                             height: '34px',
@@ -547,9 +554,9 @@ export const NotificationProvider = ({ children }) => {
                                     <button 
                                         onClick={() => toast.dismiss(t)} 
                                         style={{ 
-                                            background: '#f1f5f9', 
-                                            border: '1px solid #e2e8f0', 
-                                            color: '#64748b', 
+                                            background: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9', 
+                                            border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid #e2e8f0', 
+                                            color: isDark ? '#94a3b8' : '#64748b', 
                                             cursor: 'pointer', 
                                             padding: '4px',
                                             borderRadius: '6px',
@@ -561,12 +568,12 @@ export const NotificationProvider = ({ children }) => {
                                             zIndex: 1
                                         }}
                                         onMouseEnter={(e) => {
-                                            e.currentTarget.style.background = '#e2e8f0';
-                                            e.currentTarget.style.color = '#0f172a';
+                                            e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.1)' : '#e2e8f0';
+                                            e.currentTarget.style.color = isDark ? '#fff' : '#0f172a';
                                         }}
                                         onMouseLeave={(e) => {
-                                            e.currentTarget.style.background = '#f1f5f9';
-                                            e.currentTarget.style.color = '#64748b';
+                                            e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.05)' : '#f1f5f9';
+                                            e.currentTarget.style.color = isDark ? '#94a3b8' : '#64748b';
                                         }}
                                     >
                                         <X size={14} />

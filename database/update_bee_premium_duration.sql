@@ -114,7 +114,7 @@ BEGIN
         email, 
         'BEE-PREMIUM-' || substring(gen_random_uuid()::text from 1 for 8), 
         p_amount, 
-        '1day', 
+        '10day', 
         'bee_premium', 
         'approved'
     FROM public.profiles

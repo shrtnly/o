@@ -198,7 +198,7 @@ const CheckoutPage = () => {
                     email: userEmail.trim(),
                     transaction_id: `PROMO-${appliedPromo?.code || 'FREE'}-${Date.now()}`,
                     amount: 0,
-                    plan_type: type === 'subscription' ? planType : type,
+                    plan_type: type === 'subscription' ? planType : (type === '1day' ? '10day' : type),
                     subscription_type: getPurchaseTypeName(),
                     status: 'approved'
                 }]);
@@ -225,7 +225,7 @@ const CheckoutPage = () => {
         // PAID CHECKOUT
         const toastId = toast.loading(language === 'bn' ? 'আপনার পেমেন্ট রিকোয়েস্ট পাঠানো হচ্ছে...' : 'Submitting payment request...');
         try {
-            const planTypeVal = type === 'subscription' ? planType : type;
+            const planTypeVal = type === 'subscription' ? planType : (type === '1day' ? '10day' : type);
             const subTypeVal = getPurchaseTypeName();
             const { error } = await supabase
                 .from('Payment')

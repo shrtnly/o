@@ -860,7 +860,9 @@ const SettingsPage = () => {
                 );
             case 'subscription':
                 const isPremium = !!fullProfile?.is_premium || !!fullProfile?.is_1day_premium;
+                const is1DayActive = !!fullProfile?.is_1day_premium;
                 const isCancelled = fullProfile?.is_premium && fullProfile?.premium_status === 'cancelled';
+                const activeUntil = is1DayActive ? (fullProfile?.one_day_premium_until || fullProfile?.premium_until) : fullProfile?.premium_until;
                 
                 return (
                     <div className={styles.tabContent}>
@@ -877,7 +879,7 @@ const SettingsPage = () => {
                                         <h3>{isPremium ? t('active_membership') : t('no_active_membership')}</h3>
                                         <p>
                                             {isPremium 
-                                                ? `${t('expires_on')}: ${new Date(fullProfile?.premium_until).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US')}` 
+                                                ? `${t('expires_on')}: ${activeUntil ? new Date(activeUntil).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US') : ''}` 
                                                 : t('unlock_premium_visit_shop')
                                             }
                                         </p>

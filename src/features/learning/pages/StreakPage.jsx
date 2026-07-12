@@ -6,6 +6,7 @@ import { useLanguage } from '../../../context/LanguageContext';
 import { rewardService } from '../../../services/rewardService';
 import ConsistencyTracker from '../components/ConsistencyTracker';
 import styles from './StreakPage.module.css';
+import SEO from '../../../components/SEO';
 
 const StreakPage = () => {
     const navigate = useNavigate();

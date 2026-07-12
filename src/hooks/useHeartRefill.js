@@ -89,7 +89,11 @@ export const useHeartRefill = (userId) => {
      * Deduct hearts (called when user answers incorrectly)
      */
     const deductHeart = useCallback(async (amount = 1) => {
-        if (!userId) return { success: false, newHearts: hearts };
+        if (!userId) {
+            const newHearts = Math.max(0, hearts - amount);
+            setHearts(newHearts);
+            return { success: true, newHearts };
+        }
 
         // Skip deduction for premium users
         if (isPremium) {
@@ -207,6 +211,8 @@ export const useHeartRefill = (userId) => {
     useEffect(() => {
         if (userId) {
             checkAndRefillHearts();
+        } else {
+            setLoading(false);
         }
     }, [userId, checkAndRefillHearts]);
 

@@ -70,11 +70,7 @@ const Survey = () => {
 
             const finalizeTransition = () => {
                 setTimeout(() => {
-                    if (user) {
-                        navigate('/learning');
-                    } else {
-                        navigate('/auth?mode=signup', { state: { mode: 'signup' } });
-                    }
+                    navigate(`/learn/${courseId}`);
                 }, duration + 600); 
             };
 

@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabaseClient';
 import { Loader2, Eye, EyeOff, CheckCircle2, ShieldAlert } from 'lucide-react';
 import styles from './AuthPage.module.css';
 import logo from '../../assets/shields/Logo_BeeLesson.png';
+import SEO from '../../components/SEO';
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');

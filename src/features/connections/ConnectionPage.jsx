@@ -10,6 +10,7 @@ import styles from './ConnectionPage.module.css';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swords } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
+import SEO from '../../components/SEO';
 
 const ConnectionPage = () => {
     const { user } = useAuth();

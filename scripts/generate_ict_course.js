@@ -915,131 +915,333 @@ const courseMetadata = [
 ];
 
 // Function to generate expanded chapters with 8 LPs each
-function expandChapters(chaptersMetadata) {
-  return chaptersMetadata.map(ch => {
+function expandChapters(chaptersMetadata, uIdx) {
+  return chaptersMetadata.map((ch, idx) => {
+    // If it is Unit 1 (uIdx === 0) and Chapter 1 (idx === 0)
+    if (uIdx === 0 && idx === 0) {
+      const lps = [
+        // LP 1: mcq
+        {
+          title: "বিশ্বগ্রাম কী?",
+          qType: "mcq",
+          content: "বিশ্বগ্রাম (Global Village) হলো এমন এক ধারণা যেখানে আধুনিক তথ্য প্রযুক্তির সাহায্যে পুরো বিশ্বের মানুষ একটি একক পরিবারের মতো সংযুক্ত থাকে।",
+          qText: "নিচের কোনটি বিশ্বগ্রামের মূল ধারণা?",
+          explanation: "বিশ্বগ্রামের মাধ্যমে পৃথিবীর সব মানুষ ইন্টারনেটের সাহায্যে খুব সহজে একে অপরের সাথে যুক্ত হতে পারে।",
+          options: [
+            { text: "পুরো বিশ্বকে একটি একক পরিবারের মতো সংযুক্ত করা", is_correct: true },
+            { text: "শুধুমাত্র নিজ গ্রামের মানুষের সাথে যোগাযোগ রাখা", is_correct: false },
+            { text: "কম্পিউটার নেটওয়ার্ক বন্ধ করে রাখা", is_correct: false }
+          ]
+        },
+        // LP 2: boolean
+        {
+          title: "ইন্টারনেটের ভূমিকা",
+          qType: "boolean",
+          content: "বিশ্বগ্রাম গড়ে তোলার পেছনে সবচেয়ে বড় ভূমিকা রেখেছে ইন্টারনেট এবং আধুনিক যোগাযোগ প্রযুক্তি। ইন্টারনেট ছাড়া বিশ্বগ্রাম অসম্ভব।",
+          qText: '"ইন্টারনেট ছাড়া বিশ্বগ্রামের ধারণা অবাস্তব" — এই কথাটি কি সত্য?',
+          explanation: "ইন্টারনেটই বিশ্বগ্রামের মূল চালিকাশক্তি, যা আমাদের বিশ্বব্যাপী যোগাযোগ স্থাপন করতে সাহায্য করে।",
+          options: [
+            { text: "না, উক্তিটি মিথ্যা", is_correct: false },
+            { text: "হ্যাঁ, উক্তিটি সত্য", is_correct: true }
+          ]
+        },
+        // LP 3: storytelling (mcq)
+        {
+          title: "যোগাযোগ ও বিশ্বগ্রাম",
+          qType: "storytelling",
+          content: "বাস্তব জীবনে বিশ্বগ্রামের সুবিধা কীভাবে আমাদের কাজে লাগে তা এই কথোপকথন থেকে জানব।",
+          qText: "লিসার কথা অনুযায়ী, রাকিব ঘরে বসে বিদেশের বন্ধুর সাথে সহজে কথা বলতে পারছে কোন সুবিধার কারণে?",
+          explanation: "বিশ্বগ্রামের কল্যাণে যেকোনো স্থান থেকে পৃথিবীর যেকোনো প্রান্তে মুহূর্তের মধ্যে যোগাযোগ করা সম্ভব।",
+          narrative: [
+            { avatar: "rakib", text: "লিসা আপু, আমি ঘরে বসেই আমেরিকার এক বন্ধুর সাথে ফেসটাইমে কথা বললাম! এটা কীভাবে সম্ভব হলো?" },
+            { avatar: "lisa", text: "রাকিব, এটাই তো বিশ্বগ্রামের জাদু! তথ্যপ্রযুক্তির কল্যাণে পুরো পৃথিবী এখন আমাদের হাতের মুঠোয়।" },
+            { avatar: "rakib", text: "অসাধারণ! তাহলে বিশ্বগ্রাম আমাদের একে অপরের খুব কাছে নিয়ে এসেছে।" }
+          ],
+          options: [
+            { text: "বিশ্বগ্রাম ও তথ্যপ্রযুক্তির উন্নয়ন", is_correct: true },
+            { text: "ডাকযোগে চিঠি পাঠানো", is_correct: false },
+            { text: "দেশের সীমান্ত বন্ধ রাখা", is_correct: false }
+          ]
+        },
+        // LP 4: checkmark
+        {
+          title: "বিশ্বগ্রামের উপাদান",
+          qType: "checkmark",
+          content: "বিশ্বগ্রাম প্রতিষ্ঠার জন্য প্রধান উপাদানগুলো হলো: হার্ডওয়্যার, সফটওয়্যার, নেটওয়ার্ক বা কানেক্টিভিটি, ডেটা এবং মানুষের সক্ষমতা।",
+          qText: "বিশ্বগ্রামের প্রধান উপাদান কোনগুলো? সঠিক অপশনগুলো সিলেক্ট করুন:",
+          explanation: "ইন্টারনেট কানেক্টিভিটি, উপযুক্ত ডিভাইস এবং মানুষের দক্ষতা হলো বিশ্বগ্রামের মূল ভিত্তি।",
+          options: [
+            { text: "ইন্টারনেট কানেক্টিভিটি ও উপযুক্ত ডিভাইস", is_correct: true },
+            { text: "মানুষের আইসিটি ব্যবহারের সক্ষমতা", is_correct: true },
+            { text: "প্রাচীন চিঠি ও ডাক ব্যবস্থা", is_correct: false }
+          ]
+        },
+        // LP 5: matching
+        {
+          title: "উপাদান ও কাজ",
+          qType: "matching",
+          content: "বিশ্বগ্রামের বিভিন্ন উপাদান ও তাদের সঠিক ব্যবহারের মিল তৈরি করুন।",
+          qText: "বিশ্বগ্রামের উপাদান ও সেগুলোর সঠিক ব্যবহার মেলাও:",
+          explanation: "কম্পিউটার বা ফোন হলো হার্ডওয়্যার, ইন্টারনেট হলো কানেক্টিভিটি এবং মানুষ নিজে হলো হিউম্যানওয়্যার।",
+          pairs: [
+            { left: "১. হার্ডওয়্যার", right: "কম্পিউটার ও স্মার্টফোন" },
+            { left: "২. কানেক্টিভিটি", right: "ইন্টারনেট সংযোগ" },
+            { left: "৩. হিউম্যানওয়্যার", right: "আইসিটি ব্যবহারে দক্ষ ব্যবহারকারী" }
+          ],
+          options: []
+        },
+        // LP 6: storytelling (boolean)
+        {
+          title: "তথ্য আদান-প্রদান",
+          qType: "storytelling",
+          content: "বিশ্বগ্রামে তথ্যের প্রবাহ নিয়ে একটি ছোট্ট আলোচনা নিচে দেওয়া হলো।",
+          qText: "লিসার কথা অনুযায়ী, বিশ্বগ্রামে কি মুহূর্তেই তথ্য আদান-প্রদান করা সম্ভব?",
+          explanation: "ইন্টারনেটের কারণে এখন মুহূর্তেই যেকোনো ফাইল বা মেসেজ আদান-প্রদান করা সম্ভব।",
+          narrative: [
+            { avatar: "rakib", text: "লিসা আপু, বিশ্বগ্রামে তথ্য আদান-প্রদান করতে কি অনেক দিন সময় লাগে?" },
+            { avatar: "lisa", text: "একদমই না, রাকিব! ইন্টারনেট ব্যবহার করে চোখের পলকে যেকোনো তথ্য বিশ্বের যেকোনো প্রান্তে পাঠানো যায়।" },
+            { avatar: "rakib", text: "বাহ, তাহলে তো তথ্যের আদান-প্রদান এখন খুবই সহজ ও দ্রুত!" }
+          ],
+          options: [
+            { text: "না, এটি মিথ্যা", is_correct: false },
+            { text: "হ্যাঁ, এটি সত্য", is_correct: true }
+          ]
+        },
+        // LP 7: mcq
+        {
+          title: "বিশ্বগ্রামের সুবিধা",
+          qType: "mcq",
+          content: "বিশ্বগ্রামের ফলে আমরা ঘরে বসেই দূরশিক্ষণ বা অনলাইনে ক্লাস করতে পারি এবং ই-মেইলের মাধ্যমে তাৎক্ষণিক যোগাযোগ করতে পারি।",
+          qText: "নিচের কোনটি বিশ্বগ্রামের একটি বড় সুবিধা?",
+          explanation: "দূরশিক্ষণ বা অনলাইন এডুকেশন বিশ্বগ্রামের অন্যতম প্রধান সুবিধা।",
+          options: [
+            { text: "ঘরে বসেই অনলাইনে ক্লাস ও শিক্ষা গ্রহণ করা", is_correct: true },
+            { text: "অন্যের গোপন ব্যক্তিগত তথ্য চুরি করা", is_correct: false },
+            { text: "লাইব্রেরিতে গিয়ে ঘণ্টার পর ঘণ্টা বই খোঁজা", is_correct: false }
+          ]
+        },
+        // LP 8: checkmark
+        {
+          title: "ক্ষতিকর দিক",
+          qType: "checkmark",
+          content: "বিশ্বগ্রামের সুবিধার পাশাপাশি কিছু অপব্যবহারও রয়েছে, যেমন সাইবার ক্রাইম, হ্যাকিং, এবং মিথ্যা গুজব ছড়ানো।",
+          qText: "বিশ্বগ্রামের নেতিবাচক প্রভাব বা ক্ষতিকর দিক কোনগুলো? সঠিক অপশনগুলো সিলেক্ট করুন:",
+          explanation: "সাইবার ক্রাইম ও গুজব ছড়ানো বিশ্বগ্রামের নেতিবাচক দিক, যা আমাদের এড়িয়ে চলা উচিত।",
+          options: [
+            { text: "সাইবার অপরাধ ও গুজব ছড়ানো", is_correct: true },
+            { text: "ব্যক্তিগত তথ্যের গোপনীয়তা নষ্ট হওয়া", is_correct: true },
+            { text: "সারা বিশ্বের সাথে মুহূর্তের মধ্যে যোগাযোগ করা", is_correct: false }
+          ]
+        }
+      ];
+
+      return {
+        title: ch.title,
+        lps: lps
+      };
+    }
+
+    // Collect other chapters in the same unit to pull realistic distractors
+    const others = chaptersMetadata.filter((_, i) => i !== idx);
+    const getRandomOther = (key) => {
+      if (others.length === 0) return "অন্য কোনো অপ্রাসঙ্গিক তথ্য বা পদক্ষেপ";
+      const randomCh = others[Math.floor(Math.random() * others.length)];
+      return randomCh[key];
+    };
+
+    // Varied choices for boolean (true/false) questions
+    const booleanOptionsList = [
+      { trueText: "সত্য", falseText: "মিথ্যা" },
+      { trueText: "উক্তিটি সত্য", falseText: "উক্তিটি মিথ্যা" },
+      { trueText: "ধারণাটি সঠিক", falseText: "ধারণাটি ভুল" },
+      { trueText: "হ্যাঁ, এটি সত্য", falseText: "না, এটি মিথ্যা" },
+      { trueText: "কথাটি সত্যি", falseText: "কথাটি মিথ্যা" },
+      { trueText: "উক্তিটি সঠিক", falseText: "উক্তিটি ভুল" }
+    ];
+    
+    const getBooleanOptions = (isTrueCorrect) => {
+      const style = booleanOptionsList[(ch.title.length + idx) % booleanOptionsList.length];
+      return [
+        { text: style.falseText, is_correct: !isTrueCorrect },
+        { text: style.trueText, is_correct: isTrueCorrect }
+      ];
+    };
+
+    // Varied labels for matching columns
+    const matchingLabelsList = [
+      ["১. সঠিক পদক্ষেপ", "২. সঠিক তথ্য", "৩. ভুল ধারণা"],
+      ["১. করণীয় কাজ", "২. বাস্তব সত্য", "৩. অসত্য ধারণা"],
+      ["১. কাজের সঠিক উপায়", "২. আসল সত্য ঘটনা", "৩. ভ্রান্ত উক্তি"],
+      ["১. সঠিক চর্চা", "২. প্রধান সঠিক তথ্য", "৩. ভিত্তিহীন কথা"],
+      ["১. সঠিক সিদ্ধান্ত", "২. পরম সত্য তথ্য", "৩. অপ্রাসঙ্গিক ধারণা"]
+    ];
+    
+    const getMatchingPairs = () => {
+      const labels = matchingLabelsList[(ch.title.length + idx) % matchingLabelsList.length];
+      return [
+        { left: labels[0], right: ch.cAct },
+        { left: labels[1], right: ch.cFact },
+        { left: labels[2], right: ch.wFact }
+      ];
+    };
+
     const lps = [
       // LP 1: mcq
       {
         title: "মূল ধারণা",
         qType: "mcq",
-        content: `${ch.noun} সম্পর্কে বিস্তারিত জানা এবং এর সঠিক প্রয়োগ আধুনিক তথ্যপ্রযুক্তি ও শিক্ষার জন্য অত্যন্ত গুরুত্বপূর্ণ। যেমন, ${ch.cFact}।`,
-        qText: `${ch.noun} নিয়ে নিচের কোন তথ্যটি সঠিক?`,
-        explanation: `${ch.cFact}। তাই এই বিষয়টি আমাদের সবসময় খেয়াল রাখা উচিত।`,
+        content: `${ch.noun} এর মূল ধারণা: ${ch.cFact}।`,
+        qText: `${ch.noun} নিয়ে নিচের কোনটি সঠিক?`,
+        explanation: `${ch.cFact}।`,
         options: [
           { text: ch.cFact, is_correct: true },
           { text: ch.wFact, is_correct: false },
-          { text: "এটির কোনো গুরুত্ব বা প্রয়োজনীয়তা নেই", is_correct: false }
+          { text: getRandomOther('cFact'), is_correct: false }
         ]
       },
       // LP 2: boolean
       {
         title: "গুরুত্ব ও সত্যতা",
         qType: "boolean",
-        content: `${ch.noun} এর গুরুত্ব অনুধাবন করা প্রতিটি সচেতন মানুষের জন্য আবশ্যক। কারণ সঠিক তথ্য না জানলে নানা প্রযুক্তিগত সমস্যা ও ভুলের সম্মুখীন হতে হয়।`,
-        qText: `"${ch.wFact}" — এই ধারণাটি কি সঠিক বা সত্য?`,
-        explanation: `ধারণাটি সম্পূর্ণ অসত্য ও মিথ্যা। কারণ ${ch.cFact}।`,
-        options: [
-          { text: "মিথ্যা", is_correct: true },
-          { text: "সত্য", is_correct: false }
-        ]
+        content: `${ch.noun} সম্পর্কে সঠিক তথ্য জানা জরুরি।`,
+        qText: `"${ch.wFact}" — এই কথাটি কি সত্য?`,
+        explanation: `না, এটি সম্পূর্ণ ভুল। সঠিক তথ্য হলো: ${ch.cFact}।`,
+        options: getBooleanOptions(false)
       },
       // LP 3: checkmark
       {
         title: "সঠিক গাইডলাইন",
         qType: "checkmark",
-        content: `${ch.noun} এর ক্ষেত্রে সঠিক গাইডলাইন ও পদ্ধতি মেনে চলা জরুরি। এর ফলে যেকোনো কাজ ও শিক্ষা সহজ এবং ত্রুটিমুক্ত থাকে।`,
-        qText: `${ch.noun} সংক্রান্ত সঠিক ও নিরাপদ পদক্ষেপগুলো সিলেক্ট করুন:`,
-        explanation: `সঠিক গাইডলাইন হলো: ${ch.cAct}। অন্যদিকে ${ch.wAct1} অথবা ${ch.wAct2} করা অনিরাপদ ভুল পদক্ষেপ।`,
+        content: `${ch.noun} এর ক্ষেত্রে সঠিক গাইডলাইন মেনে চলা প্রয়োজন।`,
+        qText: `${ch.noun} সংক্রান্ত সঠিক পদক্ষেপগুলো বেছে নিন:`,
+        explanation: `সঠিক উপায়: ${ch.cAct}। কিন্তু অন্যগুলো ভুল পদক্ষেপ।`,
         options: [
           { text: ch.cAct, is_correct: true },
           { text: ch.wAct1, is_correct: false },
-          { text: ch.wAct2, is_correct: false }
+          { text: getRandomOther('wAct2'), is_correct: false }
         ]
       },
       // LP 4: matching
       {
         title: "জোড়া মেলানো",
         qType: "matching",
-        content: `${ch.noun} এর সঠিক পদ্ধতি এবং ভুল ধারণাগুলোর মধ্যে মিল তৈরি করে আপনার ধারণাকে আরও স্পষ্ট করুন।`,
-        qText: `${ch.noun} সম্পর্কিত উপাদানগুলোর সঠিক মিল করুন:`,
-        explanation: `সঠিক পদক্ষেপ হলো "${ch.cAct}", সঠিক তথ্য হলো "${ch.cFact}" এবং ভুল ধারণা হলো "${ch.wFact}"।`,
-        pairs: [
-          { left: "১. সঠিক কাজ", right: ch.cAct },
-          { left: "২. সঠিক তথ্য", right: ch.cFact },
-          { left: "৩. ভুল ধারণা", right: ch.wFact }
-        ],
+        content: `${ch.noun} এর উপাদানগুলোর সঠিক মিল তৈরি করুন।`,
+        qText: `${ch.noun} সম্পর্কিত নিচের তথ্যগুলোর সঠিক মিল করুন:`,
+        explanation: `সঠিক জোড়া: "${ch.cAct}", "${ch.cFact}" এবং "${ch.wFact}"।`,
+        pairs: getMatchingPairs(),
         options: []
       },
       // LP 5: storytelling (mcq)
       {
         title: "বাস্তব উদাহরণ",
         qType: "storytelling",
-        content: `বাস্তব ক্ষেত্রে কীভাবে এই বিষয়টি সামলানো হয় তা বুঝতে নিচের সংলাপটি পড়ুন।`,
-        qText: `লিসার কথা অনুযায়ী, ${ch.noun} এর ক্ষেত্রে রাকিবের জন্য কোনটি সঠিক পদক্ষেপ হবে?`,
-        explanation: `লিসার কথা অনুযায়ী সঠিক পদক্ষেপ হলো ${ch.cAct}।`,
+        content: `${ch.noun} এর বাস্তব উদাহরণ বুঝতে নিচের সংলাপটি পড়ুন।`,
+        qText: `সংলাপ অনুযায়ী, ${ch.noun} এর ক্ষেত্রে রাকিবের জন্য কোনটি করা উচিত?`,
+        explanation: `লিসার উপদেশ অনুযায়ী সঠিক কাজ হলো ${ch.cAct}।`,
         narrative: [
-          { avatar: "rakib", text: `লিসা আপু, আমি ${ch.noun} নিয়ে ভাবছিলাম। আমার কি ${ch.wAct1} করা উচিত?` },
-          { avatar: "lisa", text: `একদমই না রাকিব। ${ch.noun} এর জন্য সবসময় ${ch.cAct} উচিত।` },
-          { avatar: "rakib", text: `বুঝতে পেরেছি আপু। তাহলে আমি ${ch.wAct1} পরিহার করে ${ch.cAct} চেষ্টা করব।` }
+          { avatar: "rakib", text: `আপু, ${ch.noun} এর সময় কি ${ch.wAct1} করা ঠিক?` },
+          { avatar: "lisa", text: `না রাকিব, সবসময় ${ch.cAct} উচিত।` },
+          { avatar: "rakib", text: `আচ্ছা আপু, আমি এভাবেই চেষ্টা করব।` }
         ],
         options: [
           { text: ch.cAct, is_correct: true },
           { text: ch.wAct1, is_correct: false },
-          { text: ch.wAct2, is_correct: false }
+          { text: getRandomOther('wAct1'), is_correct: false }
         ]
       },
       // LP 6: storytelling (boolean)
       {
         title: "বাস্তব কেস স্টাডি",
         qType: "storytelling",
-        content: `একটি পরিস্থিতিভিত্তিক আলোচনার মাধ্যমে আপনার জ্ঞানকে আরও ঝালাই করে নিন।`,
-        qText: `লিসার বক্তব্য অনুযায়ী, "${ch.wFact}" — এই কথাটি কি যুক্তিযুক্ত ও সত্য?`,
-        explanation: `উক্তিটি সম্পূর্ণ অযৌক্তিক ও মিথ্যা। কারণ ${ch.cFact}।`,
+        content: `বাস্তব ক্ষেত্রে সঠিক তথ্য যাচাই করতে নিচের সংলাপটি পড়ুন।`,
+        qText: `লিসার কথা অনুযায়ী, "${ch.wFact}" — এই উক্তিটি কি সঠিক?`,
+        explanation: `উক্তিটি ভুল। সঠিক তথ্য হলো: ${ch.cFact}।`,
         narrative: [
-          { avatar: "rakib", text: `আপু, আমার এক ফ্রেন্ড বলছিল যে ${ch.noun} এর সময় ${ch.wFact} নাকি অনেক ভালো। এটা কি ঠিক?` },
-          { avatar: "lisa", text: `না রাকিব, এটা একটা ভুল ধারণা। মনে রাখবে, ${ch.cFact}।` },
-          { avatar: "rakib", text: `ওহ, আচ্ছা! ভালো হলো যে আমি সঠিক তথ্যটি জানতে পারলাম।` }
+          { avatar: "rakib", text: `আপু, অনেকে বলে যে ${ch.noun} মানে ${ch.wFact}। এটা কি ঠিক?` },
+          { avatar: "lisa", text: `না রাকিব, এটা ভুল ধারণা। সঠিক হলো: ${ch.cFact}।` },
+          { avatar: "rakib", text: `ওহ, বুঝতে পারলাম আপু।` }
         ],
-        options: [
-          { text: "মিথ্যা", is_correct: true },
-          { text: "সত্য", is_correct: false }
-        ]
+        options: getBooleanOptions(false)
       },
       // LP 7: mcq
       {
         title: "সর্বোত্তম অনুশীলন",
         qType: "mcq",
-        content: `${ch.noun} এর ক্ষেত্রে আমাদের সঠিক সিদ্ধান্ত এবং কাজের ওপর আইসিটির সফলতা ও নিরাপত্তা অনেকাংশে নির্ভর করে।`,
-        qText: `${ch.noun} এ সাফল্য ও দক্ষতা বজায় রাখার জন্য নিচের কোন অভ্যাসটি বর্জন করা বাধ্যতামুলক?`,
-        explanation: `আইসিটিতে দক্ষতা ও সঠিক পদ্ধতি বজায় রাখার জন্য ${ch.wAct2} করা সম্পূর্ণ পরিহার করতে হবে।`,
+        content: `${ch.noun} এর ক্ষেত্রে আমাদের সর্বদা সচেতন থাকা প্রয়োজন।`,
+        qText: `${ch.noun} এ দক্ষতা বজায় রাখার জন্য কোনটি বর্জন করা উচিত?`,
+        explanation: `${ch.wAct2} করা বর্জন করা উচিত।`,
         options: [
           { text: ch.wAct2, is_correct: true },
-          { text: ch.cAct, is_correct: false },
-          { text: ch.cFact, is_correct: false }
+          { text: getRandomOther('cAct'), is_correct: false },
+          { text: getRandomOther('cFact'), is_correct: false }
         ]
       },
       // LP 8: checkmark (identifying errors)
       {
         title: "সাধারণ ভুলসমূহ",
         qType: "checkmark",
-        content: `${ch.noun} এর ক্ষেত্রে অসচেতনতা বা যথাযথ তথ্য না জানার কারণে অনেকেই ভুল করে থাকেন, যা পড়ালেখা ও ব্যবহারিক কাজের ওপর নেতিবাচক প্রভাব ফেলে।`,
-        qText: `${ch.noun} এর সময় কোন বিষয়গুলো পরিহার করা উচিত?`,
-        explanation: `"${ch.wFact}" এবং "${ch.wAct1}" হলো সাধারণ ভুল যা পরিহার করা উচিত। আর "${ch.cAct}" হলো সঠিক উপায়।`,
+        content: `${ch.noun} এর ক্ষেত্রে অসচেতনতা বা যথাযথ তথ্য না জানার কারণে অনেকেই ভুল করে থাকেন।`,
+        qText: `${ch.noun} এর সময় কোন ভুলগুলো পরিহার করা উচিত?`,
+        explanation: `ভুল ধারণা "${ch.wFact}" এবং ভুল কাজ "${ch.wAct1}" পরিহার করতে হবে।`,
         options: [
           { text: ch.wFact, is_correct: true },
           { text: ch.wAct1, is_correct: true },
-          { text: ch.cAct, is_correct: false }
+          { text: getRandomOther('cAct'), is_correct: false }
         ]
       }
     ];
 
+    // Ensure matching type question never comes first and always comes minimum after 4 questions (index 4, 5, 6, or 7)
+    // Also guarantee no two consecutive questions are of the same type.
+    const isValidArrangement = (arr) => {
+      for (let i = 0; i < arr.length - 1; i++) {
+        if (arr[i].qType === arr[i + 1].qType) {
+          return false;
+        }
+      }
+      const matchIdx = arr.findIndex(lp => lp.qType === 'matching');
+      if (matchIdx < 4) {
+        return false;
+      }
+      return true;
+    };
+
+    let attempts = 0;
+    let finalLps = null;
+    while (attempts < 1000) {
+      const shuffled = shuffle(lps);
+      if (isValidArrangement(shuffled)) {
+        finalLps = shuffled;
+        break;
+      }
+      attempts++;
+    }
+
+    if (!finalLps) {
+      // Fallback arrangement to guarantee success
+      const mcqs = lps.filter(lp => lp.qType === 'mcq');
+      const booleans = lps.filter(lp => lp.qType === 'boolean');
+      const checkmarks = lps.filter(lp => lp.qType === 'checkmark');
+      const matchings = lps.filter(lp => lp.qType === 'matching');
+      const storytellings = lps.filter(lp => lp.qType === 'storytelling');
+      finalLps = [
+        mcqs[0],
+        booleans[0],
+        storytellings[0],
+        checkmarks[0],
+        matchings[0],
+        storytellings[1],
+        mcqs[1],
+        checkmarks[1]
+      ];
+    }
+
     return {
       title: ch.title,
-      lps: shuffle(lps)
+      lps: finalLps
     };
   });
 }
-
 function compileCourse() {
   console.log('🚀 Generating ICT Class 11-12 course...');
 
@@ -1048,7 +1250,7 @@ function compileCourse() {
 
   courseMetadata.forEach((unitMeta, uIdx) => {
     const unitId = uid();
-    const expandedChapters = expandChapters(unitMeta.chapters);
+    const expandedChapters = expandChapters(unitMeta.chapters, uIdx);
 
     const chapters = expandedChapters.map((ch, chIdx) => {
       const chapterId = uid();

@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import CheckoutSkeleton from './CheckoutSkeleton';
 
 import styles from './CheckoutPage.module.css';
+import SEO from '../../components/SEO';
 
 const CheckoutPage = () => {
 

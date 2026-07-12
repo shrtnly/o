@@ -7,6 +7,7 @@ import styles from './AuthPage.module.css';
 import { useAuth } from '../../context/AuthContext';
 import { courseService } from '../../services/courseService';
 import { surveyService } from '../../services/surveyService';
+import { rewardService } from '../../services/rewardService';
 import { supabase } from '../../lib/supabaseClient';
 import ConfirmationModal from './ConfirmationModal';
 import CustomSelect from '../../components/ui/CustomSelect';
@@ -116,9 +117,14 @@ const AuthPage = () => {
         const checkPendingAction = async () => {
             if (user && !success) { // Don't redirect if we're showing a success message
                 const pendingEnrollment = localStorage.getItem('pending_enrollment');
+                const pendingChapterReward = localStorage.getItem('pending_chapter_reward');
+                
+                let courseIdToRedirect = null;
+
                 if (pendingEnrollment) {
                     try {
                         const { courseId, selections } = JSON.parse(pendingEnrollment);
+                        courseIdToRedirect = courseId;
 
                         // If we have survey selections, use surveyService which saves both survey and enrollment
                         if (selections) {
@@ -129,13 +135,59 @@ const AuthPage = () => {
                         }
 
                         localStorage.removeItem('pending_enrollment');
-                        navigate(`/learn/${courseId}`);
-                        return;
                     } catch (err) {
                         console.error('Error in post-auth enrollment:', err);
                     }
                 }
-                navigate('/');
+
+                if (pendingChapterReward) {
+                    try {
+                        const { courseId, chapterId, xpEarned, pollenEarned, accuracy, totalQuestions, correctAnswers } = JSON.parse(pendingChapterReward);
+                        courseIdToRedirect = courseId;
+
+                        // Enroll user first (idempotent)
+                        await courseService.enrollUserInCourse(user.id, courseId);
+
+                        // Save progress
+                        const { error: rpcErr } = await supabase.rpc('upsert_user_progress', {
+                            p_user_id: user.id,
+                            p_course_id: courseId,
+                            p_chapter_id: chapterId,
+                            p_total_questions: totalQuestions,
+                            p_correct_answers: correctAnswers,
+                            p_xp_earned: xpEarned
+                        });
+
+                        if (rpcErr) throw rpcErr;
+
+                        // Award XP
+                        if (xpEarned > 0) {
+                            await rewardService.awardXP(user.id, xpEarned, 'chapter_complete', {
+                                courseId,
+                                chapterId,
+                                accuracy: accuracy
+                            });
+                        }
+
+                        // Award Pollen
+                        if (pollenEarned > 0) {
+                            await rewardService.awardGems(user.id, pollenEarned, 'chapter_complete', {
+                                courseId,
+                                chapterId
+                            });
+                        }
+
+                        localStorage.removeItem('pending_chapter_reward');
+                    } catch (err) {
+                        console.error('Error in post-auth chapter reward application:', err);
+                    }
+                }
+
+                if (courseIdToRedirect) {
+                    navigate(`/learn/${courseIdToRedirect}`);
+                } else {
+                    navigate('/');
+                }
             }
         };
         checkPendingAction();

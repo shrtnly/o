@@ -20,6 +20,7 @@ import InlineLoader from '../../components/ui/InlineLoader';
 import Skeleton from '../../components/ui/Skeleton';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './NotificationPage.module.css';
+import SEO from '../../components/SEO';
 
 const NotificationPage = () => {
     const { user } = useAuth();

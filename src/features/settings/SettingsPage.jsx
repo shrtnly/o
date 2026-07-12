@@ -13,6 +13,7 @@ import { storageService } from '../../services/storageService';
 import { useLanguage } from '../../context/LanguageContext';
 import { supabase } from '../../lib/supabaseClient';
 import CustomSelect from '../../components/ui/CustomSelect';
+import SEO from '../../components/SEO';
 
 const SettingsPage = () => {
     const { isDark, toggleTheme } = useTheme();

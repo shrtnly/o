@@ -202,6 +202,7 @@ const StudyPage = () => {
     });
 
     const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+    const [showSignUpModal, setShowSignUpModal] = useState(false);
     const [isProcessingResults, setIsProcessingResults] = useState(false);
     const [resultLoadingProgress, setResultLoadingProgress] = useState(0);
     const [showReview, setShowReview] = useState(false);
@@ -498,7 +499,7 @@ const StudyPage = () => {
             }
         };
 
-        if (chapterId && user?.id) fetchContent();
+        if (chapterId) fetchContent();
     }, [chapterId, user?.id]);
 
     // Check if user has already rated this course (DB check + localStorage fallback)
@@ -856,6 +857,22 @@ const StudyPage = () => {
                     }
                 } catch (err) {
                     console.error('Error updating progress:', err);
+                }
+            } else if (!user && hasPassed && courseId && chapterId) {
+                try {
+                    const earnedXp = Math.round(accuracy * 10);
+                    const earnedPollen = Math.round(accuracy * 6);
+                    localStorage.setItem('pending_chapter_reward', JSON.stringify({
+                        courseId,
+                        chapterId,
+                        xpEarned: earnedXp,
+                        pollenEarned: earnedPollen,
+                        accuracy,
+                        totalQuestions: stats.total,
+                        correctAnswers: stats.correct
+                    }));
+                } catch (err) {
+                    console.error('Error saving guest pending rewards:', err);
                 }
             }
 
@@ -1434,7 +1451,13 @@ const StudyPage = () => {
                             {!showReview && (
                                 <button
                                     className={styles.continueFinishBtn}
-                                    onClick={() => navigate(`/learn/${courseId}`)}
+                                    onClick={() => {
+                                        if (!user && ((stats.correct / (stats.total || 1)) >= 0.60)) {
+                                            setShowSignUpModal(true);
+                                        } else {
+                                            navigate(`/learn/${courseId}`);
+                                        }
+                                    }}
                                 >
                                     {((stats.correct / (stats.total || 1)) >= 0.60) ? 'অব্যাহত রাখুন' : 'আবার চেষ্টা করুন'}
                                 </button>
@@ -1759,6 +1782,66 @@ const StudyPage = () => {
                             })}
                         </div>
                     </motion.div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {showSignUpModal && (
+                    <div className={styles.confirmModalOverlay} onClick={() => setShowSignUpModal(false)}>
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className={styles.confirmCard}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <div className={styles.confirmMascot}>
+                                <DotLottieReact
+                                    src="/models/awkward bee.lottie"
+                                    autoplay
+                                    loop
+                                    style={{ width: 140, height: 140 }}
+                                />
+                            </div>
+                            <h2 className={styles.confirmTitle}>
+                                অগ্রগতি ও পয়েন্ট সংরক্ষণ করুন! 🏆
+                            </h2>
+                            <p className={styles.confirmDesc}>
+                                অভিনন্দন! আপনি ১ম চ্যাপ্টারটি সফলভাবে সম্পন্ন করেছেন। <br />
+                                আপনার অর্জিত <strong>{Math.round((stats.correct / (stats.total || 1)) * 10)} XP</strong> এবং <strong>{Math.round((stats.correct / (stats.total || 1)) * 6)} পলিন পয়েন্ট</strong> প্রোফাইলে যোগ করতে এবং পরবর্তী চ্যাপ্টারগুলো আনলক করতে এখনই সাইন আপ বা লগইন করুন!
+                            </p>
+                            <div className={styles.confirmActions}>
+                                <button
+                                    className={styles.stayBtn}
+                                    onClick={() => {
+                                        setShowSignUpModal(false);
+                                        navigate('/auth?mode=signup');
+                                    }}
+                                >
+                                    সাইন আপ করুন (ফ্রি)
+                                </button>
+                                <button
+                                    className={styles.stayBtn}
+                                    style={{ background: 'transparent', border: '1px solid rgba(255, 255, 255, 0.2)', color: '#fff', boxShadow: 'none' }}
+                                    onClick={() => {
+                                        setShowSignUpModal(false);
+                                        navigate('/auth?mode=login');
+                                    }}
+                                >
+                                    লগইন করুন
+                                </button>
+                                <button
+                                    className={styles.leaveBtn}
+                                    onClick={() => {
+                                        setShowSignUpModal(false);
+                                        navigate(`/learn/${courseId}`);
+                                    }}
+                                >
+                                    পরে করবো
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
                 )}
             </AnimatePresence>
 

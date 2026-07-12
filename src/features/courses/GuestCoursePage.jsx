@@ -4,6 +4,7 @@ import Navbar from '../../components/layout/Navbar';
 import CourseListPage from './CourseListPage';
 import styles from './CourseListPage.module.css';
 import { useAuth } from '../../context/AuthContext';
+import SEO from '../../components/SEO';
 
 const GuestCoursePage = () => {
     const { user, loading } = useAuth();

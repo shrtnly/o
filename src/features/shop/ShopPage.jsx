@@ -113,45 +113,7 @@ const ShopPage = () => {
     // For universal features (like unlimited hearts)
     const isPremium = isQueenBee || is1DayActive;
 
-    // Countdown Logic for 1-Day Recharge
-    useEffect(() => {
-        // Source priority: local state -> dedicated 1-day column -> standard premium column
-        const endGoal = oneDayExpiry || profile?.one_day_premium_until || (profile?.is_1day_premium ? profile.premium_until : null);
-
-        if (!is1DayActive || !endGoal) {
-            setTimeLeft("");
-            return;
-        }
-
-        const tick = () => {
-            const now = new Date();
-            const end = new Date(endGoal);
-            const diff = end - now;
-
-            if (diff <= 0) {
-                setTimeLeft("");
-                fetchProfile();
-                fetchActivePlan();
-                return false;
-            }
-
-            const h = Math.floor(diff / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-            const format = (num) => num.toString().padStart(2, '0');
-            // Capped at 24 hours for display logic safety
-            const displayH = h >= 24 ? 24 : h;
-            setTimeLeft(`${format(displayH)}:${format(m)}:${format(s)}`);
-            return true;
-        };
-
-        const hasTime = tick();
-        if (!hasTime) return;
-
-        const timer = setInterval(tick, 1000);
-        return () => clearInterval(timer);
-    }, [is1DayActive, profile?.premium_until]);
+    // Countdown Logic removed per request
 
     // Debugging logic (attach to window for testing if needed)
     useEffect(() => {
@@ -338,9 +300,9 @@ const ShopPage = () => {
                                 <div className={styles.qbCardRight}>
                                     <button
                                         id="queen-bee-activate-btn"
-                                        className={`${styles.qbActivateBtn} ${isQueenBee ? styles.activeBtnStyle : ''}`}
+                                        className={`${styles.qbActivateBtn} ${(isQueenBee || is1DayActive) ? styles.activeBtnStyle : ''}`}
                                         onClick={() => handlePurchase('subscription')}
-                                        disabled={processing || isQueenBee}
+                                        disabled={processing || isQueenBee || is1DayActive}
                                     >
                                         {isQueenBee
                                             ? t('active')
@@ -375,11 +337,9 @@ const ShopPage = () => {
                                         onClick={() => handlePurchase('1day')}
                                         disabled={processing || isQueenBee || is1DayActive}
                                     >
-                                        {is1DayActive && timeLeft
-                                            ? timeLeft
-                                            : (isQueenBee || is1DayActive)
-                                                ? t('active')
-                                                : t('recharge_1day')
+                                        {(isQueenBee || is1DayActive)
+                                            ? t('active')
+                                            : t('recharge_1day')
                                         }
                                     </button>
                                 </div>

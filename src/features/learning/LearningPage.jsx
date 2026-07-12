@@ -459,12 +459,25 @@ const LearningPage = () => {
                     return;
                 }
 
-                const hours = Math.floor(diff / (1000 * 60 * 60));
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-                const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                setPremiumTimeRemaining(language === 'bn' ? toBengaliDigits(display) : display);
+                let display = '';
+                if (language === 'bn') {
+                    if (days > 0) {
+                        display = `${toBengaliDigits(days)} দিন ${toBengaliDigits(hours)} ঘণ্টা`;
+                    } else {
+                        display = `${toBengaliDigits(hours)} ঘণ্টা ${toBengaliDigits(minutes)} মিনিট`;
+                    }
+                } else {
+                    if (days > 0) {
+                        display = `${days} day${days > 1 ? 's' : ''} ${hours} hour${hours > 1 ? 's' : ''}`;
+                    } else {
+                        display = `${hours} hour${hours > 1 ? 's' : ''} ${minutes} minute${minutes > 1 ? 's' : ''}`;
+                    }
+                }
+                setPremiumTimeRemaining(display);
             } catch (err) {
                 console.error("Countdown error:", err);
                 setPremiumTimeRemaining('');

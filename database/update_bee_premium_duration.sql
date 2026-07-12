@@ -1,13 +1,45 @@
 -- ============================================
--- UPDATE BEE PREMIUM DURATION FROM 1 TO 10 DAYS
--- Run this in your Supabase SQL Editor
+-- 1. CREATE PAYMENT TABLE (IF NOT EXISTS)
 -- ============================================
 
--- 1. Drop existing overloaded functions to avoid conflicts
+CREATE TABLE IF NOT EXISTS public."Payment" (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    email TEXT NOT NULL,
+    transaction_id TEXT NOT NULL,
+    amount NUMERIC NOT NULL,
+    plan_type TEXT NOT NULL,          -- 'monthly', 'yearly', '1day', 'gems', 'hearts'
+    subscription_type TEXT NOT NULL,  -- e.g., 'super_bee_king', 'super_bee_queen', 'bee_premium', etc.
+    status TEXT DEFAULT 'pending' NOT NULL, -- 'pending', 'approved', 'rejected'
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL
+);
+
+-- Enable RLS
+ALTER TABLE public."Payment" ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist to avoid duplication errors
+DROP POLICY IF EXISTS "Users can view their own payments" ON public."Payment";
+DROP POLICY IF EXISTS "Users can insert their own payments" ON public."Payment";
+
+-- Create RLS Policies
+CREATE POLICY "Users can view their own payments" 
+ON public."Payment" FOR SELECT 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own payments" 
+ON public."Payment" FOR INSERT 
+WITH CHECK (auth.uid() = user_id);
+
+
+-- ============================================
+-- 2. UPDATE BEE PREMIUM DURATION FUNCTIONS
+-- ============================================
+
+-- Drop existing overloaded functions to avoid conflicts
 DROP FUNCTION IF EXISTS public.process_1day_premium_purchase(UUID, INTEGER);
 DROP FUNCTION IF EXISTS public.process_1day_premium_purchase(UUID, NUMERIC, NUMERIC, UUID);
 
--- 2. Re-create function for 2-parameter signature (user_id, amount)
+-- Re-create function for 2-parameter signature (user_id, amount)
 CREATE OR REPLACE FUNCTION public.process_1day_premium_purchase(
     p_user_id UUID,
     p_amount INTEGER
@@ -46,7 +78,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- 3. Re-create function for 4-parameter signature (user_id, amount, original_price, promo_id)
+-- Re-create function for 4-parameter signature (user_id, amount, original_price, promo_id)
 CREATE OR REPLACE FUNCTION public.process_1day_premium_purchase(
     p_user_id UUID,
     p_amount NUMERIC,
@@ -95,7 +127,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- 4. Grant permissions so the functions can be invoked from the application client
+-- Grant permissions so the functions can be invoked from the application client
 GRANT EXECUTE ON FUNCTION public.process_1day_premium_purchase(UUID, INTEGER) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.process_1day_premium_purchase(UUID, INTEGER) TO anon;
 GRANT EXECUTE ON FUNCTION public.process_1day_premium_purchase(UUID, NUMERIC, NUMERIC, UUID) TO authenticated;

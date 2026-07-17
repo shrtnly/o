@@ -188,7 +188,7 @@ const HelpPage = () => {
     };
 
     const isBn = language === 'bn';
-    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
+    const seoTitle = 'BeeLesson | গেমস খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'সার্টিফিকেট, পেমেন্ট, অ্যাকাউন্ট বা কোর্স সম্পর্কিত যেকোনো প্রশ্নের উত্তর পেতে বি লেসন হেল্প সেন্টারে চোখ রাখুন অথবা সরাসরি সাপোর্ট টিমের সাথে যোগাযোগ করুন।' 

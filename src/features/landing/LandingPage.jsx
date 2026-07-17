@@ -16,7 +16,7 @@ const LandingPage = () => {
     const { language } = useLanguage();
     const isBn = language === 'bn';
 
-    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
+    const seoTitle = 'BeeLesson | গেমস খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'বি লেসন (BeeLesson) বাংলাদেশের প্রথম গ্যামিফাইড লার্নিং প্ল্যাটফর্ম। ইন্টারেক্টিভ কুইজ ও গেম খেলার মাধ্যমে ফ্রিতে শিখুন ক্যারিয়ার গাইড, আইনি সচেতনতা, ডিজিটাল নিরাপত্তা ও স্মার্ট ব্যাংকিং।' 

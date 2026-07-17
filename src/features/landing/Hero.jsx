@@ -49,7 +49,7 @@ const Hero = () => {
                 <div className={styles.content}>
                     <div className={styles.textContent}>
                         <h1 className={styles.title}>
-                            <span className={styles.titleLine}>গেম খেলে শিখুন</span>
+                            <span className={styles.titleLine}>গেমস খেলে শিখুন</span>
                             <span className={styles.wordWrapper}>
                                 <AnimatePresence mode="wait">
                                     <MotionSpan

@@ -19,7 +19,7 @@ const TermsPage = () => {
     ];
 
     const isBn = language === 'bn';
-    const seoTitle = 'BeeLesson | গেম খেলে শিখুন';
+    const seoTitle = 'BeeLesson | গেমস খেলে শিখুন';
         
     const seoDescription = isBn 
         ? 'বি লেসন (BeeLesson)-এর ব্যবহারিক শর্তাবলী এবং নিয়মকানুনসমূহ পড়ুন।' 

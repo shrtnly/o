@@ -420,7 +420,7 @@ const AuthPage = () => {
 
     return (
         <div className={styles.authWrapper}>
-            <SEO title="BeeLesson | গেম খেলে শিখুন" />
+            <SEO title="BeeLesson | গেমস খেলে শিখুন" />
             <button className={styles.closeBtn} onClick={() => navigate('/')} aria-label="Close">
                 <X size={24} />
             </button>

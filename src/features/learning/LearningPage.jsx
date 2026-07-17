@@ -330,7 +330,25 @@ const LearningPage = () => {
                 setLoading(true);
             }
             try {
-                // 1. Fetch units
+                // 1. Fetch course details to check status and visibility
+                const { data: courseData, error: courseError } = await supabase
+                    .from('courses')
+                    .select('status')
+                    .eq('id', courseId)
+                    .single();
+
+                if (courseError || !courseData) {
+                    throw new Error('Course not found');
+                }
+
+                const isAdmin = authProfile?.role === 'admin' || profile?.role === 'admin';
+                if (courseData.status !== 'published' && !isAdmin) {
+                    console.log('Access denied: Hidden course.');
+                    navigate('/courses', { replace: true });
+                    return;
+                }
+
+                // 2. Fetch units
                 const { data: unitsData, error: unitsError } = await supabase
                     .from('units')
                     .select('*')

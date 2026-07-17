@@ -19,13 +19,22 @@ const Survey = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [selections, setSelections] = useState({});
     const [loading, setLoading] = useState(true);
-    const { user } = useAuth();
+    const { user, profile } = useAuth();
     const [isPreparing, setIsPreparing] = useState(false);
     const [prepareProgress, setPrepareProgress] = useState(0);
 
     useEffect(() => {
         const loadQuestions = async () => {
             try {
+                // 1. Fetch course details to check status and visibility
+                const courseData = await courseService.getCourseById(courseId).catch(() => null);
+                const isAdmin = profile?.role === 'admin';
+                if (courseData && courseData.status !== 'published' && !isAdmin) {
+                    console.log('Access denied: Hidden course survey.');
+                    navigate('/courses', { replace: true });
+                    return;
+                }
+
                 const data = await surveyService.getQuestionsByCourse(courseId);
                 setQuestions(data);
             } catch (error) {
@@ -35,7 +44,7 @@ const Survey = () => {
             }
         };
         loadQuestions();
-    }, [courseId]);
+    }, [courseId, profile, navigate]);
 
     const handleSelect = (optionId) => {
         setSelections({

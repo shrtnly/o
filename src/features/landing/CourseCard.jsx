@@ -3,12 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { Users, Star, CheckCircle2 } from 'lucide-react';
 import { courseService } from '../../services/courseService';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import { getCourseBaseStats } from '../../utils/courseBaseStats';
 import styles from './CourseCard.module.css';
 
 const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
     const { t, language } = useLanguage();
+    const { profile } = useAuth();
     const navigate = useNavigate();
+    const isAdmin = profile?.role === 'admin';
+    const isPublished = course.status === 'published';
 
     // Merge dummy base stats with real DB values
     // displayed students = dummy base + real enrolled count from DB
@@ -37,6 +41,11 @@ const CourseCard = ({ course, isEnrolled, viewType = 'grid' }) => {
             {isEnrolled && (
                 <div className={styles.enrolledBadge}>
                     <CheckCircle2 size={12} />
+                </div>
+            )}
+            {!isPublished && isAdmin && (
+                <div className={styles.draftBadge}>
+                    {language === 'bn' ? 'ড্রাফট' : 'Draft'}
                 </div>
             )}
             <div className={styles.imageWrapper}>

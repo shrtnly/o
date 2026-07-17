@@ -21,7 +21,7 @@ const getCategories = (t) => [
 ];
 
 const CourseListPage = () => {
-    const { user, loading: authLoading } = useAuth();
+    const { user, profile, loading: authLoading } = useAuth();
     const { t, language } = useLanguage();
     const [courses, setCourses] = useState([]);
     const [enrolledCourseIds, setEnrolledCourseIds] = useState(new Set());
@@ -141,7 +141,14 @@ const CourseListPage = () => {
 
 
     // Compute filtered and sorted courses
+    const isAdmin = profile?.role === 'admin';
     const filteredCourses = courses.filter(course => {
+        // Visibility check: only admins can see hidden (non-published) courses
+        const isPublished = course.status === 'published';
+        if (!isPublished && !isAdmin) {
+            return false;
+        }
+
         const isEnrolled = enrolledCourseIds.has(course.id);
         
         // Category filtering
